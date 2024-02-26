@@ -152,6 +152,50 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Tech System:
   - Tech tree is now vastly different, being split into two, need to decide what techs go where and even pare techs apart.
   - come up with eurekas
+### FFH Tree:
+x                   |-> Message from the Deep (w/ Mysticism) -> Mind Stapling
+Exploration ---> Fishing ---> Sailing -> Optics -> Astronomy (with Mathematics)
+                                  |                             |-> Honor (w/ Way of Wise)
+                                  |--> Trade (w/ Writing) ------|
+                                  |                             |-> Deception (w/ Way of Wicked)
+x                                 |------------> Stirrups (w/ Archery)
+x      |---> Animal Husbandry -> Horseback Riding -> Warhorses (w/ Iron Working)
+Agriculture -> Calender -> Festivals -> Drama
+        |----------|                     ^
+                   v   /-----------------|
+Ancient Chants -> Education -> Warfare --> Military Strategy (With Philosophy)
+                   |     |--> Writing --> Mathematics -----------> Engineering (w/ Construction) -> Machinery (w/ Bowyers)
+                   |                              |-----v                                   |----> Blasting Powder (w/ Iron Working)
+                   |--> Code of Laws -->  Currency --> Taxation --> Mercantalism / Guilds
+                             |-> Orders from Heaven (w/ Way of Wise)
+                             
+Ancient Chants->Mysticism->KotE->(4 spell types)->Sorcery(Wr)->Arcane Lore->Strength of Will / Pass thru Ether->Omniscience->FutureTech
+                             |-> Corruption of Spirit (w/ Way of Wicked)
+                             
+Ancient Chants->Philosophy->Priesthood(w Edu)-> Fanatacism --> Rage (w/ Iron Working)
+                    |              |
+                    |              |-----------> Religious Law --> Theology
+                    |
+                    |-> Way of Wise   --> Righteousness (W/ fanaticism)
+                    |-> Way of Wicked --> Malevolent Designs (W/ fanaticism)
+                    
+x                  |-> Poisons
+x                  |-> Archery -> Bowyers (w/ Bronze working) -> Precision (w/ Military Strategy)
+|-> Cartography    |
+Exploration -> Hunting -> Animal Handling (w/ Animal Husbandry) -> Feral Bond -> Animal Mastery (w/ Iron Working)
+                |                                                     |-------> Commune with Nature (w/ Priesthood)
+                |-> Way of the Forests (w/ Mysticism) -> Hidden Paths
+
+x                         |-> Sanitation
+Crafting -> Mining -> Bronze Working -> Smelting -> Iron Working -> Mithril Working (w/ Engineering) -> Mithril Weapons
+              |-> Runes of Kilmorph (w/ Mysticism)                            |-> Divine Essence (w/ Theology)
+
+Crafting -> Masonry -> Construction -> Sanitation -> Medicine (w/ Education)
+
+### Full tech List:
+Agriculture : null
+Alteration : Knowledge of the Ether
+
 ## Leader Trait System:
   - civ iv had boilerplate leader traits, civ vi has bespoke traits per leader that are far more specific.
 ## City System:
