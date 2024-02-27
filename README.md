@@ -213,3 +213,9 @@ Alteration : Knowledge of the Ether
 ## Over/Undercouncil:
   - world congress but without inclusive participation : bonus feature really
 ## Agendas for leaders:
+
+### New Victory types:
+#### Altar of Luonnotar
+seems ez, just lua system of buildings, klep someones national wonders code, then a final project
+#### Tower of Mastery
+needs mana system in place, launching space missions requires preexisting other space missions, in a similar way to the Towers. Piggyback
