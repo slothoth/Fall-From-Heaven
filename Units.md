@@ -300,6 +300,7 @@ Units
 - Galleon
 - Man o War
 - Arcane Barge
+- queen of the line
 ### Hero
 - The Black Wind
 ### Civ-specific
@@ -333,3 +334,25 @@ Puppet
 Supplies
 Worker
 Work Boat
+
+Units we are reusing:
+builder
+scout
+warrior
+archer
+swordsman
+knight
+horseman
+horse archer (Saka)
+crossbowman
+chariot
+war elephant (varu)
+cannon (bombard)
+trebuchet
+catapult
+
+galley
+trireme
+caravel
+frigate
+privateer
