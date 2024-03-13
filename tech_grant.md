@@ -82,9 +82,6 @@ Way of the Wicked: Slavery policy, Scourge promotion, Prophecy of Ragnarok, Snak
 Way of the Wise: Reliquary building, Demon Slaying/Undead Slaying promotion
 Writing: Library, Great Library
 
-
-
-
 Issues:
 Cartography: Map Trading
 Code of Laws: Winter Palace
@@ -93,3 +90,107 @@ Drama: can adjust Culture rate.
 Fishing: Workboat, trade on rivers
 Sailing: Trade on coast
 Trade: Technology Trading
+
+-- MISSING_REQS that we can use INSPIRATIONS for: 
+-- Agriculture for Education, 
+-- Calendar for Festivals,
+-- Mithril working for Divine Essence, 
+-- mathematics for taxation,
+-- ANIMAL HANDLING for FERAL BOND
+-- Trade for DECEPTION		HONOR 		TRADE
+-- Mining for WAY_OF_EARTHMOTHER, 
+-- Fishing for MESSAGE OF THE DEEP, 
+-- Hunting for WAY FOREST
+-- KoTE for Corruption of spirit, 
+-- Iron Working for Rage,
+-- bronze working for WARFARE
+
+-- MISSING_REQS that we can use EUREKAS for:
+-- HUNTING requires EXPLORATION
+-- KNOWLEDGE_OF_THE_ETHER requires MYSTICISM
+-- WRITING requirs EDUCATION
+-- ANIMAL_MASTERY requires FERAL_BOND
+-- MEDICINE requires EDUCATION
+-- OMNISCIENCE requires COMMUNE_WITH_NATURE
+-- PRECISION requires MILITARY_STRATEGY
+
+
+# Unbuildable
+Angel (mercurian good death mechanic)
+Ice_Elemental
+Mistform
+Skeleton
+Spectre
+Air_Elemental
+Lightning_Elemental
+Aurealis
+Earth_Elemental
+Fire_Elemental
+Treant
+Water_Elemental
+Wraith
+Flesh_Golem
+Fireball
+Chaos_Marauder (sheaim, planar gate)
+Minotaur (sheaim, planar gate)
+Succubus (sheaim, planar gate)
+Manticore (sheaim, planar gate)
+Hill_Giant
+Azer
+Brigit
+Ira
+Muirin
+Orthus
+Avatar_of_Wrath
+Baby_Spider
+Bear
+Polar_Bear
+Elephant
+Giant_Spider
+Giant_Tortoise
+Gorilla
+Griffon
+Lion
+Lion_Pride
+Scorpion
+Sea_Serpent
+Tiger
+Wolf
+Wolf_Pack
+Acheron_the_Red_Dragon
+Gurid
+Margalard
+Leviathan
+Kraken
+Ravenous_Werewolf
+Blooded_Werewolf
+Greater_Werewolf
+Pit_Beast
+Sand_Lion
+Lucian
+Hyborem
+Mary_Morbus
+Drifa_the_White_Dragon
+Host_of_the_Einherjar
+Tar_Demon (planar gate)
+Ars_Moriendi
+Buboes
+Stephanos
+Yersinia
+Frostling_rider
+Frostling
+Mounted_Mercenary( mercenary, hippus)
+Lich
+Gaelan (unbuildable)
+Mobius Witch ( sheaim, planar gate)
+Sons_of_the_inferno
+Mokka
+Djinn
+Sailors Dirge
+Battering_Ram (summon)
+Floating Eye
+Guardian Vines
+Puppet
+Mercenary
+Adventurer
+Revelers (sheaim, planar gate)

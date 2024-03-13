@@ -129,28 +129,6 @@ VALUES
 ('CIVIC_ORDERS_FROM_HEAVEN', 'CIVIC_WAY_OF_THE_WISE'),
 ('CIVIC_CORRUPTION_OF_SPIRIT', 'CIVIC_WAY_OF_WICKED');
 
--- MISSING_REQS that we can use INSPIRATIONS for: 
--- Agriculture for Education, 
--- Calendar for Festivals,
--- Mithril working for Divine Essence, 
--- mathematics for taxation,
--- ANIMAL HANDLING for FERAL BOND
--- Trade for DECEPTION		HONOR 		TRADE
--- Mining for WAY_OF_EARTHMOTHER, 
--- Fishing for MESSAGE OF THE DEEP, 
--- Hunting for WAY FOREST
--- KoTE for Corruption of spirit, 
--- Iron Working for Rage,
--- bronze working for WARFARE
-
--- MISSING_REQS that we can use EUREKAS for:
--- HUNTING requires EXPLORATION
--- KNOWLEDGE_OF_THE_ETHER requires MYSTICISM
--- WRITING requirs EDUCATION
--- ANIMAL_MASTERY requires FERAL_BOND
--- MEDICINE requires EDUCATION
--- OMNISCIENCE requires COMMUNE_WITH_NATURE
--- PRECISION requires MILITARY_STRATEGY
 
 
 INSERT INTO TechnologyPrereqs
