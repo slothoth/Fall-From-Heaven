@@ -1,27 +1,10 @@
 from itertools import groupby
+from typing import final
 import xmltodict
-# import pandas as pd
-def small_dict(big_dict):
-	four_to_six_map = {'Class': 'UnitType', 'Type': 'Name', 'Description': 'Description', 'iMoves': 'BaseMoves','iCost': 'Cost', 'Advisor': 'AdvisorType','iCombat': 'Combat', 'Combat':'RangedCombat', 'Domain': 'Domain','PromotionClass': 'Combat', 'Maintenance': 'bMilitarySupport','PrereqTech': 'PrereqTech'}
-	smaller_dict = {four_to_six_map[j]: big_dict[j] for j in big_dict if j in four_to_six_map}
-	return smaller_dict
-
-# pd.read_csv('unit_tech_or_civic_reqs.csv')
-# Open the XML file
-with open('CIV4UnitInfos.xml', 'r') as file:
-	xml_dict = xmltodict.parse(file.read())
-
-infos = xml_dict['Civ4UnitInfos']['UnitInfos'][('UnitInfo')]
-six_style_dict = [small_dict(i) for i in infos]
-no_equipment_units = [i for i in six_style_dict if not('EQUIPMENT' in i['Name'])]
-buildable_only = [i for i in six_style_dict if not(i['Cost'] == '-1')]
-# how to filter out barbarian only
-unbuildable_only = [i for i in six_style_dict if i['Cost'] == '-1']
-# [i.get('Name', 'not_found') for i in buildable_only]
 
 unique_units = """Eater_of_Dreams, Sheaim
 Moroi, Calabim
-Pyre_Zombie, Sheaim
+Pyre_Zombie, Sheaimp
 Devout, Elohim
 Chanter, Amurite
 Ghost, Sidar
@@ -176,16 +159,62 @@ NIGHTWATCH, COUNCIL_OF_ESUS
 GIBBON, COUNCIL_OF_ESUS
 SHADOW, COUNCIL_OF_ESUS"""
 
+units_to_keep_in_six = ['UNIT_SETTLER', 'UNIT_BUILDER', 'UNIT_TRADER', 'UNIT_GREAT_GENERAL', 'UNIT_GREAT_ENGINEER',
+                        'UNIT_GREAT_MERCHANT', 'UNIT_GREAT_PROPHET', 'UNIT_GREAT_SCIENTIST', 'UNIT_GREAT_ARTIST',
+                        'UNIT_SCOUT', 'UNIT_WARRIOR', 'UNIT_ARCHER', 'UNIT_GALLEY', 'UNIT_HORSEBACK_RIDING',
+                        'UNIT_CROSSBOWMAN']
+
+units_changed_tech = ['UNIT_CATAPULT', 'UNIT_SWORDSMAN', 'UNIT_KNIGHT',
+                      'UNIT_FRIGATE', 'UNIT_CARAVEL', 'UNIT_PRIVATEER']
+
+units_but_for_unique_civs = ['UNIT_TREBUCHET']
+
+compat_units = ['UNIT_GREAT_ADMIRAL', 'UNIT_GREAT_WRITER', 'UNIT_GREAT_MUSICIAN']
+
+to_keep_but_modify = {'UNIT_SLINGER': 'UNIT_DWARVEN_SLINGER', 'UNIT_HEAVY_CHARIOT': 'UNIT_CHARIOT',
+                      'UNIT_BOMBARD': 'UNIT_CANNON', 'UNIT_MUSKETMAN': 'UNIT_ARQUEBUS',
+                      'UNIT_MAN_AT_ARMS': 'UNIT_CHAMPION', 'UNIT_NORWEGIAN_BERSERKER': 'UNIT_BERSERKER',
+                      'UNIT_SCYTHIAN_HORSE_ARCHER': 'UNIT_HORSE_ARCHER',
+                      'UNIT_SKIRMISHER': 'UNIT_LONGBOWMAN'}
+
+keep_art_for = {'UNIT_VAMPIRE': 'UNIT_VAMPIRE_LORD'}
+
+excludes_from_four = ['UNIT_WORKBOAT', 'UNIT_WORKER']
+
+
+def small_dict(big_dict):
+    four_to_six_map = {'Class': 'UnitType', 'Type': 'Name', 'Description': 'Description', 'iMoves': 'BaseMoves',
+                       'iCost': 'Cost', 'Advisor': 'AdvisorType', 'iCombat': 'Combat', 'Combat': 'RangedCombat',
+                       'Domain': 'Domain', 'PromotionClass': 'Combat', 'Maintenance': 'bMilitarySupport',
+                       'PrereqTech': 'PrereqTech'}
+    smaller_dict = {four_to_six_map[j]: big_dict[j] for j in big_dict if j in four_to_six_map}
+    return smaller_dict
+
+
+# pd.read_csv('unit_tech_or_civic_reqs.csv')
+# Open the XML file
+with open('CIV4UnitInfos.xml', 'r') as file:
+    xml_dict = xmltodict.parse(file.read())
+
+infos = xml_dict['Civ4UnitInfos']['UnitInfos'][('UnitInfo')]
+six_style_dict = [small_dict(i) for i in infos]
+no_equipment_units = [i for i in six_style_dict if not ('EQUIPMENT' in i['Name'])]
+buildable_only = [i for i in six_style_dict if not (i['Cost'] == '-1')]
+# how to filter out barbarian only
+unbuildable_only = [i for i in six_style_dict if i['Cost'] == '-1']
+# [i.get('Name', 'not_found') for i in buildable_only]
+
+
 # Conversions for civ vi
 for i in buildable_only:
-	if i['RangedCombat'] == 'UNIT_COMBAT_NAVAL':
-		i['Domain'] = 'DOMAIN_SEA'
+    if i['RangedCombat'] == 'UNIT_COMBAT_NAVAL':
+        i['Domain'] = 'DOMAIN_SEA'
 
-	if any([element == i['RangedCombat'] for element in ['UNITCOMBAT_ARCHER', 'UNITCOMBAT_ADEPT', 'UNITCOMBAT_SIEGE']]):
-		i['RangedCombat'] = i['Combat']
-	else:
-		i['RangedCombat'] = 0
-	i['TraitType'] = "NULL"
+    if any([element == i['RangedCombat'] for element in ['UNITCOMBAT_ARCHER', 'UNITCOMBAT_ADEPT', 'UNITCOMBAT_SIEGE']]):
+        i['RangedCombat'] = i['Combat']
+    else:
+        i['RangedCombat'] = 0
+    i['TraitType'] = "NULL"
 
 # now we are gonna filter out those civs we arent doing stuff with
 civs = ['AMURITE', 'CALABIM', 'LUCHUIRP']
@@ -200,7 +229,7 @@ two_civs_units = [[f'UNIT_{i[0].strip().upper()}', i[1].strip().upper(), i[2].st
 religious = [s.split(',') for s in religious_units_str.split('\n')]
 religious = [[f'UNIT_{i[0].strip().upper()}', i[1].strip().upper()] for i in religious]
 equipment = [i for i in unbuildable_only if 'EQUIP' in i['Name']]
-summons = [i for i in unbuildable_only if not('EQUIP' in i['Name'])]
+summons = [i for i in unbuildable_only if not ('EQUIP' in i['Name'])]
 
 # From infos remove unique units not based on another generic
 unique_civ_units = [i for i in infos if i.get('PrereqCiv', '')]
@@ -209,55 +238,116 @@ unique_civ_units_by_type = [[j['Type'] for j in unique_civ_units if i == j['Prer
 
 # Make dictionaries of units to remove
 not_civ_units, civ_units = {i[0]: i[1] for i in uu if not (i[1] in civs)}, {i[0]: i[1] for i in uu if i[1] in civs}
-not_civ_heroes, civ_heroes = {i[0]: i[1] for i in heroes if not (i[1] in civs)}, {i[0]: i[1] for i in heroes if i[1] in civs}
+not_civ_heroes, civ_heroes = {i[0]: i[1] for i in heroes if not (i[1] in civs)}, {i[0]: i[1] for i in heroes if
+                                                                                  i[1] in civs}
 not_double_civ_units = [i[0] for i in two_civs_units if not any([j in civs for j in i])]
 double_civ_units = {i[0]: [j for j in i if j in civs][0] for i in two_civs_units if any([j in civs for j in i])}
-not_religious_units, religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}, {i[0]: i[1] for i in religious if i[1] in religions}
+not_religious_units, religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}, {i[0]: i[1] for i in
+                                                                                                    religious if
+                                                                                                    i[1] in religions}
 # Filter the units based on dictionaries
 final_units = [i for i in buildable_only if not (i['Name'] in not_civ_units)]
-final_units = [i for i in final_units if not (i['Name'] in not_civ_heroes)]		# heroes removal
-final_units = [i for i in final_units if not (i['Name'] in [j['Type'] for j in unique_civ_units])]		# units removal
+final_units = [i for i in final_units if not (i['Name'] in not_civ_heroes)]  # heroes removal
+final_units = [i for i in final_units if not (i['Name'] in [j['Type'] for j in unique_civ_units])]  # units removal
 final_units = [i for i in final_units if not i['Name'] in not_double_civ_units]
 final_units = [i for i in final_units if not (i['Name'] in not_religious_units)]
+final_units = [i for i in final_units if not i['Name'] in excludes_from_four]
+final_units, never = [i for i in final_units if i['PrereqTech'] != 'TECH_NEVER'], [i for i in final_units if i['PrereqTech'] == 'TECH_NEVER']
 
+# now do formatting for 6 style tables
+replaces = {}
+for unit in final_units:
+    unit['UnitType'] = unit['UnitType'].replace('UNITCLASS', 'UNIT')
+    if unit['UnitType'] != unit['Name']:
+        replaces[unit['Name']] = unit['UnitType']
+        unit['UnitType'] = unit['Name']
+    unit['Name'] = 'LOC_' + unit['Name'] + '_NAME'
+    unit['Description'] = unit['Description'].replace('TXT_KEY', 'LOC') + '_DESCRIPTION'
+    if unit['AdvisorType'] in ['ADVISOR_MILITARY', 'ADVISOR_RELIGION']:
+        unit['AdvisorType'] = 'ADVISOR_CONQUEST'
+    if unit['AdvisorType'] in ['ADVISOR_ECONOMY', 'ADVISOR_GROWTH']:
+        unit['AdvisorType'] = 'ADVISOR_GENERIC'
+    if unit['PrereqTech'] == 'NONE':
+        unit['PrereqTech'] = 'NULL'
+
+# do tech - civic prereqs Conversions
+with open('../Core/techs.sql', 'r') as file:
+    techsql = file.read()
+
+techsql = techsql.splitlines()
+defined_civic_and_traits = techsql[2:85]
+civics = {}
+techs = []
+for line in defined_civic_and_traits:
+    formatted = line[2:-3].split("', '")
+    if 'TECH' in formatted[1]:
+        techs.append(formatted[0])
+    elif 'CIVIC' in formatted[1]:
+        civics['TECH' + formatted[0][5:]] = formatted[0]
+
+for unit in final_units:
+    if unit['PrereqTech'] in civics:
+        unit['PrereqCivic'] = civics[unit['PrereqTech']]
+        unit['PrereqTech'] = 'NULL'
+    else:
+        unit['PrereqCivic'] = 'NULL'
+
+
+trait_types_to_define: list[str] = []
 # Insert TraitType for civ-unique units
 trait_types_heroes = [[unit for unit, civ in civ_heroes.items() if civ == civ_name] for civ_name in civs]
 trait_types_units = [[unit for unit, civ in civ_units.items() if civ == civ_name] for civ_name in civs]
-trait_types_double_civ_units = [[unit for unit, civ in double_civ_units.items() if civ == civ_name] for civ_name in civs]
+trait_types_double_civ_units = [[unit for unit, civ in double_civ_units.items() if civ == civ_name] for civ_name in
+                                civs]
 trait_types = [x + y + z for x, y, z in zip(trait_types_heroes, trait_types_units, trait_types_double_civ_units)]
-trait_types = {i:j for i, j in zip(civs, trait_types)}
+trait_types = {i: j for i, j in zip(civs, trait_types)}
 
 count = 0
 for idx, civ in enumerate(civs):
-	for i in final_units:
-		if i['Name'] in trait_types[civs[idx]]:
-			i['TraitType'] = f'TRAIT_CIVILIZATION_UNIT_{civ}{i["Name"][4:]}'
+    for i in final_units:
+        if i['UnitType'] in trait_types[civs[idx]]:
+            trait_str = f'TRAIT_CIVILIZATION_UNIT{i["UnitType"][4:]}'
+            i['TraitType'] = trait_str
+            trait_types_to_define.append(trait_str)
 # Insert TraitType for religion units
-trait_types_religion = {religion_name: [unit for unit, civ in religious_units.items() if civ == religion_name] for religion_name in religions}
+trait_types_religion = {religion_name: [unit for unit, civ in religious_units.items() if civ == religion_name] for
+                        religion_name in religions}
 for idx, religion in enumerate(religions):
-	for i in final_units:
-		if i['Name'] in trait_types_religion[religions[idx]]:
-			i['TraitType'] = f'TRAIT_RELIGION_UNIT_{religion}{i["Name"][4:]}'
+    for i in final_units:
+        if i['UnitType'] in trait_types_religion[religions[idx]]:
+            trait_str = f'TRAIT_RELIGION_UNIT{i["UnitType"][4:]}'
+            i['TraitType'] = trait_str
+            trait_types_to_define.append(trait_str)
 
+final_string = f"DELETE FROM Types\n WHERE KIND = 'KIND_TECH'\nAND Type NOT IN ({', '.join(techs)});\n"
+final_string += f"DELETE FROM Types\n WHERE KIND = 'KIND_CIVIC'\nAND Type NOT IN ({', '.join(civics)});\n"
+final_string += f"DELETE FROM Units\n WHERE UnitType NOT IN ({', '.join(units_to_keep_in_six)});\n"
+final_string += f"DELETE FROM Technologies\n WHERE TechnologyType NOT IN ({', '.join(techs)});\n"
+final_string += f"DELETE FROM Civics\n WHERE CivicType NOT IN ({', '.join(civics)});\n"
+final_string += "DELETE FROM TechnologyPrereqs;\n"
+final_string += "DELETE FROM CivicPrereqs;\n"
 
-# ONCE I have traits worked out, we need to save the list of traittypes to implement
-final_string = "INSERT INTO Types(Type, Kind) VALUES"
+final_string += "INSERT INTO Types(Type, Kind) VALUES"
 
 for unit in final_units:
-	name = unit['Name']
-	final_string += f"\n('{name}', 'KIND_UNIT'),"
+    name = unit['UnitType']
+    final_string += f"\n('{name}', 'KIND_UNIT'),"
+
+for trait in trait_types_to_define:
+    final_string += f"\n('{trait}', 'KIND_TRAIT'),"
 
 final_string = final_string[:-1] + ';\n'
+prereq_techs_and_civics = '\n'.join(techsql[86:88]) + ',\n'.join(techsql[88:]) + '\n'
 schema_string = '('
-for schema_key in [i for i in buildable_only[0]]:
-	schema_string += f'{schema_key}, '
+for schema_key in [i for i in final_units[0]]:
+    schema_string += f'{schema_key}, '
 schema_string = schema_string[:-2] + ') VALUES\n'
 unit_table_string = "INSERT INTO UNITS" + schema_string
-for unit in buildable_only:
-	unit_table_string += "("
-	for attribute in unit:
-		unit_table_string += f"'{unit[attribute]}', "
-	unit_table_string = unit_table_string[:-2] + "),\n"
+for unit in final_units:
+    unit_table_string += "("
+    for attribute in unit:
+        unit_table_string += f"'{unit[attribute]}', "
+    unit_table_string = unit_table_string[:-2] + "),\n"
 unit_table_string = unit_table_string[:-2] + ";"
 with open('initial_units.sql', 'w') as file:
-	file.write(final_string + unit_table_string)
+    file.write(final_string + prereq_techs_and_civics + unit_table_string)
