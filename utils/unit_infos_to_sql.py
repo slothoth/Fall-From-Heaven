@@ -238,6 +238,14 @@ upgrade_tree = {'UNIT_WARRIOR': ['UNIT_ARCHER', 'UNIT_AXEMAN'],
                 'UNIT_PRIEST_OF_WINTER': ['UNIT_HIGH_PRIEST_OF_WINTER'],
                 }
 
+kept_civics = ['CIVIC_CODE_OF_LAWS', 'CIVIC_EXPLORATION', 'CIVIC_FEUDALISM', 'CIVIC_GUILDS', 'CIVIC_MERCANTILISM',
+               'CIVIC_MYSTICISM', 'CIVIC_THEOLOGY']
+
+kept_techs = ['TECH_ANIMAL_HUSBANDRY', 'TECH_ARCHERY', 'TECH_ASTRONOMY', 'TECH_BRONZE_WORKING', 'TECH_CARTOGRAPHY',
+              'TECH_CONSTRUCTION', 'TECH_ENGINEERING', 'TECH_FUTURE_TECH', 'TECH_HORSEBACK_RIDING', 'TECH_IRON_WORKING',
+              'TECH_MACHINERY', 'TECH_MASONRY', 'TECH_MATHEMATICS', 'TECH_MINING', 'TECH_SAILING', 'TECH_SANITATION',
+              'TECH_STIRRUPS', 'TECH_WRITING']
+
 
 def small_dict(big_dict):
     four_to_six_map = {'Class': 'UnitType', 'Type': 'Name', 'Description': 'Description', 'iMoves': 'BaseMoves',
@@ -451,13 +459,15 @@ loc_string = loc_string[:-2] + ';'
 with open('../Core/localization.sql', 'w') as file:
     file.write(loc_string)
 
-tech_list = "'" + "', '".join(techs) + "'"
-civic_list = "'" + "', '".join(civics) + "'"
+tech_list = "'" + "', '".join(kept_techs) + "'"
+civic_list = "'" + "', '".join(kept_civics) + "'"
 tech_string = f"DELETE FROM Adjacency_YieldChanges WHERE PrereqTech NOT IN ({tech_list});\n"
 tech_string += f"DELETE FROM Adjacency_YieldChanges WHERE PrereqCivic NOT IN ({civic_list});\n"
 tech_string += f"DELETE FROM Adjacency_YieldChanges WHERE ObsoleteTech NOT IN ({tech_list});\n"
 tech_string += (f"DELETE FROM Adjacency_YieldChanges "
                 f"WHERE ObsoleteCivic NOT IN ({civic_list});\n")
+tech_string += f"DELETE FROM Technologies\n WHERE TechnologyType NOT IN ({tech_list});\n"
+tech_string += f"DELETE FROM Civics\n WHERE CivicType NOT IN ({civic_list});\n"
 tech_string += """DELETE FROM TechnologyPrereqs WHERE PrereqTech is not null;
 DELETE FROM Technologies_XP2 WHERE TechnologyType is not null;
 DELETE FROM Civics_XP2 WHERE CivicType is not null;
