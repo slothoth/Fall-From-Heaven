@@ -1,5 +1,3 @@
-from itertools import groupby
-from typing import final
 import xmltodict
 
 unique_units = """Eater_of_Dreams, Sheaim
@@ -181,6 +179,65 @@ keep_art_for = {'UNIT_VAMPIRE': 'UNIT_VAMPIRE_LORD'}
 
 excludes_from_four = ['UNIT_WORKBOAT', 'UNIT_WORKER']
 
+upgrade_tree = {'UNIT_WARRIOR': ['UNIT_ARCHER', 'UNIT_AXEMAN'],
+                'UNIT_AXEMAN': ['UNIT_CHAMPION', 'UNIT_CHARIOT'],
+                'UNIT_CHAMPION': ['UNIT_EIDOLON', 'UNIT_PALADIN', 'UNIT_BERSERKER', 'UNIT_IMMORTAL', 'UNIT_PHALANX',
+                                  'UNIT_KNIGHT'],
+                'UNIT_ARCHER': ['UNIT_LONGBOWMAN', 'UNIT_CROSSBOWMAN', 'UNIT_HORSE_ARCHER'],
+                'UNIT_LONGBOWMAN': ['UNIT_CROSSBOWMAN', 'UNIT_ARQUEBUS', 'UNIT_MARKSMAN'],
+                'UNIT_ADEPT': ['UNIT_MAGE'],
+                'UNIT_MAGE': ['UNIT_ARCHMAGE'],
+                'UNIT_CHARIOT': ['UNIT_KNIGHT'],
+                'UNIT_HORSEMAN': ['UNIT_CHARIOT', 'UNIT_HORSE_ARCHER'],
+                'UNIT_HORSE_ARCHER': ['UNIT_KNIGHT'],
+                'UNIT_SCOUT': ['UNIT_HUNTER', 'UNIT_HORSEMAN'],
+                'UNIT_HUNTER': ['UNIT_RANGER', 'UNIT_ASSASSIN'],
+                'UNIT_RANGER': ['UNIT_BEASTMASTER', 'UNIT_DRUID'],
+                'UNIT_ASSASSIN': ['UNIT_MARKSMAN', 'UNIT_SHADOW'],
+                'UNIT_CATAPULT': ['UNIT_CANNON'],
+                'UNIT_GALLEY': ['UNIT_CARAVEL', 'UNIT_PRIVATEER', 'UNIT_FRIGATE'],
+                'UNIT_TRIREME': ['UNIT_PRIVATEER', 'UNIT_FRIGATE'],
+                'UNIT_CARAVEL': ['UNIT_GALLEON'],
+                'UNIT_FRIGATE': ['UNIT_MAN_O_WAR', 'UNIT_QUEEN_OF_THE_LINE'],
+                'UNIT_SAVANT': ['UNIT_RITUALIST', 'UNIT_MAGE'],
+                'UNIT_RITUALIST': ['UNIT_PROFANE', 'UNIT_EIDOLON', 'UNIT_DRUID', 'UNIT_PALADIN'],
+                'UNIT_DISEASED_CORPES': ['UNIT_EIDOLON'],
+                'UNIT_ECCLESIASTIC': ['UNIT_VICAR'],
+                'UNIT_VICAR': ['UNIT_LURIDUS', 'UNIT_PALADIN', 'UNIT_DRUID', 'UNIT_EIDOLON'],
+                'UNIT_RADIANT_GUARD': ['UNIT_RATHA', 'UNIT_CHAMPION'],
+                'UNIT_RATHA': ['UNIT_KNIGHT'],
+                'UNIT_DISCIPLE_OCTOPUS_OVERLORD': ['UNIT_PRIEST_OF_THE_OVERLORDS', 'UNIT_STYGIAN_GUARD'],
+                'UNIT_PRIEST_OF_THE_OVERLORDS': ['UNIT_HIGH_PRIEST_OF_THE_OVERLORDS', 'UNIT_EIDOLON', 'UNIT_DRUID',
+                                                 'UNIT_PALADIN'],
+                'UNIT_DROWN': ['UNIT_STYGIAN_GUARD'],
+                'UNIT_STYGIAN_GUARD': ['UNIT_EIDOLON'],
+                'UNIT_LUNATIC': ['UNIT_BERSERKER'],
+                'UNIT_NIGHTWATCH': ['UNIT_ASSASSIN', 'UNIT_SHADOWRIDER'],
+                'UNIT_DISCIPLE_OF_LEAVES': ['UNIT_PRIEST_OF_LEAVES', 'UNIT_RANGER'],
+                'UNIT_PRIEST_OF_LEAVES': ['UNIT_HIGH_PRIEST_OF_LEAVES', 'UNIT_EIDOLON', 'UNIT_DRUID', 'UNIT_PALADIN'],
+                'UNIT_FAWN': ['UNIT_SATYR'],
+                'UNIT_DISCIPLE_THE_ORDER': ['UNIT_PRIEST_OF_THE_ORDER', 'UNIT_CRUSADER'],
+                'UNIT_PRIEST_OF_THE_ORDER': ['UNIT_HIGH_PRIEST_OF_THE_ORDER', 'UNIT_EIDOLON', 'UNIT_DRUID',
+                                             'UNIT_PALADIN'],
+                'UNIT_CRUSADER': ['UNIT_PALADIN'],
+                'UNIT_DISCIPLE_RUNES_OF_KILMORPH': ['UNIT_PRIEST_OF_KILMORPH', "UNIT_PARAMANDER"],
+                'UNIT_PRIEST_OF_KILMORPH': ['UNIT_HIGH_PRIEST_OF_KILMORPH', 'UNIT_EIDOLON', 'UNIT_DRUID',
+                                            'UNIT_PALADIN'],
+                'UNIT_DWARVEN_SOLDIER_RUNES': ['UNIT_PARAMANDER'],
+                'UNIT_PARAMANDER': ['UNIT_PALADIN'],
+                'UNIT_ROYAL_GUARD': ['UNIT_KNIGHT'],
+                'UNIT_ADVENTURER': ['UNIT_WARRIOR', 'UNIT_SCOUT', 'UNIT_ADEPT'],
+                'UNIT_ANGEL': ['UNIT_ANGEL_OF_DEATH', 'UNIT_HERALD', 'UNIT_OPHANIM', 'UNIT_REPENTANT_ANGEL', 'UNIT_SERAPH', 'UNIT_VALKYRIE'],
+                'UNIT_DISCIPLE_OF_ACHERON': ['UNIT_SONS_OF_THE_INFERNO'],
+                'UNIT_FREAK': ['UNIT_ARCHER', 'UNIT_AXEMAN', 'UNIT_HUNTER'],
+                'UNIT_GRIGORI_MEDIC': ['UNIT_DRUID'],
+                'UNIT_LIGHTBRINGER': ['UNIT_DISCIPLE_EMPYREAN', 'UNIT_DISCIPLE_OF_LEAVES',
+                                      'UNIT_DISCIPLE_OCTOPUS_OVERLORDS', 'UNIT_DISCIPLE_RUNES_OF_KILMORPH',
+                                      'UNIT_DISCIPLE_THE_ASHEN_VEIL', 'UNIT_DISCIPLE_THE_ORDER'],
+                'UNIT_MONK': ['UNIT_PALADIN', 'UNIT_IMMORTAL'],
+                'UNIT_PRIEST_OF_WINTER': ['UNIT_HIGH_PRIEST_OF_WINTER'],
+                }
+
 
 def small_dict(big_dict):
     four_to_six_map = {'Class': 'UnitType', 'Type': 'Name', 'Description': 'Description', 'iMoves': 'BaseMoves',
@@ -207,14 +264,21 @@ unbuildable_only = [i for i in six_style_dict if i['Cost'] == '-1']
 
 # Conversions for civ vi
 for i in buildable_only:
+    i['TraitType'] = "NULL"
+    i['BaseSightRange'] = 2
     if i['RangedCombat'] == 'UNIT_COMBAT_NAVAL':
         i['Domain'] = 'DOMAIN_SEA'
+        i['FormationClass'] = 'FORMATION_CLASS_NAVAL'
 
     if any([element == i['RangedCombat'] for element in ['UNITCOMBAT_ARCHER', 'UNITCOMBAT_ADEPT', 'UNITCOMBAT_SIEGE']]):
         i['RangedCombat'] = i['Combat']
     else:
         i['RangedCombat'] = 0
-    i['TraitType'] = "NULL"
+
+    if i['Combat'] == '0':
+        i['FormationClass'] = 'FORMATION_CLASS_CIVILIAN'
+    else:
+        i['FormationClass'] = 'FORMATION_CLASS_LAND_COMBAT'
 
 # now we are gonna filter out those civs we arent doing stuff with
 civs = ['AMURITE', 'CALABIM', 'LUCHUIRP']
@@ -254,6 +318,19 @@ final_units = [i for i in final_units if not (i['Name'] in not_religious_units)]
 final_units = [i for i in final_units if not i['Name'] in excludes_from_four]
 final_units, never = [i for i in final_units if i['PrereqTech'] != 'TECH_NEVER'], [i for i in final_units if i['PrereqTech'] == 'TECH_NEVER']
 
+# filter for our upgrades table too
+to_pop = []
+names = [i['Name'] for i in final_units]
+for unit, upgrade in upgrade_tree.items():
+    if unit in names:
+        viable_upgrades = [i for i in upgrade if i in names]
+        upgrade_tree[unit] = viable_upgrades
+    else:
+        to_pop.append(unit)
+
+for unit in to_pop:
+    upgrade_tree.pop(unit)
+
 # now do formatting for 6 style tables
 replaces = {}
 for unit in final_units:
@@ -270,8 +347,9 @@ for unit in final_units:
     if unit['PrereqTech'] == 'NONE':
         unit['PrereqTech'] = 'NULL'
 
+
 # do tech - civic prereqs Conversions
-with open('../Core/techs.sql', 'r') as file:
+with open('techs.sql', 'r') as file:
     techsql = file.read()
 
 techsql = techsql.splitlines()
@@ -319,14 +397,15 @@ for idx, religion in enumerate(religions):
             i['TraitType'] = trait_str
             trait_types_to_define.append(trait_str)
 
-final_string = f"DELETE FROM Types\n WHERE KIND = 'KIND_TECH'\nAND Type NOT IN ({', '.join(techs)});\n"
-final_string += f"DELETE FROM Types\n WHERE KIND = 'KIND_CIVIC'\nAND Type NOT IN ({', '.join(civics)});\n"
-final_string += f"DELETE FROM Units\n WHERE UnitType NOT IN ({', '.join(units_to_keep_in_six)});\n"
-final_string += f"DELETE FROM Technologies\n WHERE TechnologyType NOT IN ({', '.join(techs)});\n"
-final_string += f"DELETE FROM Civics\n WHERE CivicType NOT IN ({', '.join(civics)});\n"
-final_string += "DELETE FROM TechnologyPrereqs;\n"
-final_string += "DELETE FROM CivicPrereqs;\n"
-
+military_engineer_issues = ['Improvement_ValidBuildUnits.UnitType', "Route_ValidBuildUnits",
+                            "Building_BuildChargeProductions", "District_BuildChargeProductions"]
+string_list = "'" + "', '".join(units_to_keep_in_six + compat_units) + "'"
+final_string = f"DELETE FROM Units\n WHERE UnitType NOT IN ({string_list});\n"
+final_string += f"DELETE FROM UnitReplaces WHERE CivUniqueUnitType is not null;\n"
+final_string += f"DELETE FROM UnitUpgrades WHERE Unit is not null;\n"
+final_string += f"DELETE FROM Units_XP2 WHERE UnitType is not null;\n"
+final_string += ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
+                 "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
 final_string += "INSERT INTO Types(Type, Kind) VALUES"
 
 for unit in final_units:
@@ -337,7 +416,6 @@ for trait in trait_types_to_define:
     final_string += f"\n('{trait}', 'KIND_TRAIT'),"
 
 final_string = final_string[:-1] + ';\n'
-prereq_techs_and_civics = '\n'.join(techsql[86:88]) + ',\n'.join(techsql[88:]) + '\n'
 schema_string = '('
 for schema_key in [i for i in final_units[0]]:
     schema_string += f'{schema_key}, '
@@ -348,6 +426,60 @@ for unit in final_units:
     for attribute in unit:
         unit_table_string += f"'{unit[attribute]}', "
     unit_table_string = unit_table_string[:-2] + "),\n"
-unit_table_string = unit_table_string[:-2] + ";"
-with open('initial_units.sql', 'w') as file:
-    file.write(final_string + prereq_techs_and_civics + unit_table_string)
+unit_table_string = unit_table_string[:-2] + ";\n"
+replacements_string = 'INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES\n'
+for unique_unit, original_unit in replaces.items():
+    replacements_string += f"('{unique_unit}', '{original_unit}'),\n"
+replacements_string = replacements_string[:-2] + ";\n"
+upgrades_string = 'INSERT INTO UnitUpgrades(unit, upgradeunit) VALUES\n'
+# upgrade tree
+for unit, upgrades in upgrade_tree.items():
+    for upgrade in upgrades:
+        upgrades_string += f"('{unit}', '{upgrade}'),\n"
+upgrades_string = upgrades_string[:-2] + ";\n"
+with open('../Core/initial_units.sql', 'w') as file:
+    file.write(final_string + unit_table_string + replacements_string + upgrades_string)
+
+loc_string = 'INSERT OR REPLACE INTO LocalizedText (Language, Tag, Text)\n VALUES\n'
+for unit in final_units:
+    en_name = ' '.join([word.capitalize() for word in unit['Name'][4:-4].split('_')])[:-1]
+    loc_string += f"('en_us', '{unit['Name']}', '{en_name}'),\n"
+    loc_string += f"('en_us', '{unit['Description']}',  'Description'),\n"
+    loc_string += f"('en_us', 'LOC_PEDIA_UNITS_PAGE_{unit['Name'][4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
+loc_string = loc_string[:-2] + ';'
+
+with open('../Core/localization.sql', 'w') as file:
+    file.write(loc_string)
+
+tech_list = "'" + "', '".join(techs) + "'"
+civic_list = "'" + "', '".join(civics) + "'"
+tech_string = f"DELETE FROM Types\n WHERE KIND = 'KIND_TECH'\nAND Type NOT IN ({tech_list});\n"
+tech_string += f"DELETE FROM Types\n WHERE KIND = 'KIND_CIVIC'\nAND Type NOT IN ({civic_list});\n"
+tech_string += f"DELETE FROM Technologies\n WHERE TechnologyType NOT IN ({tech_list});\n"
+tech_string += f"DELETE FROM Civics\n WHERE CivicType NOT IN ({civic_list});\n"
+tech_string += f"DELETE FROM Adjacency_YieldChanges\n WHERE PrereqTech NOT IN ({tech_list});\n"
+tech_string += f"DELETE FROM Adjacency_YieldChanges\n WHERE PrereqCivic NOT IN ({civic_list});\n"
+tech_string += f"DELETE FROM Adjacency_YieldChanges\n WHERE ObsoleteTech NOT IN ({tech_list});\n"
+tech_string += (f"DELETE FROM Adjacency_YieldChanges\n "
+                f"WHERE ObsoleteCivic NOT IN ({civic_list});\n")
+tech_string += """DELETE FROM TechnologyPrereqs WHERE PrereqTech is not null;
+DELETE FROM CivicPrereqs WHERE Civic is not null;
+DELETE FROM Technologies_XP2 WHERE TechnologyType is not null;
+DELETE FROM Civics_XP2 WHERE CivicType is not null;
+DELETE FROM Boosts WHERE Boost is not null;
+DELETE FROM CivicModifiers WHERE CivicType is not null;
+DELETE FROM TechnologyModifiers WHERE TechnologyType is not null;
+DELETE FROM Improvement_BonusYieldChanges WHERE Id is not null;
+DELETE FROM Improvement_Tourism WHERE ImprovementType is not null;
+DELETE FROM Policies WHERE PolicyType is not null;
+DELETE FROM Policies_XP1 WHERE PolicyType is not null;
+DELETE FROM Policy_GovernmentExclusives_XP2 WHERE PolicyType is not null;"""
+# misc patches
+tech_string += f"UPDATE Resource_Harvests\nSET PrereqTech = 'TECH_AGRICULTURE'\nWHERE PrereqTech = 'TECH_POTTERY';\n"
+tech_string += f"UPDATE Units\nSET PrereqTech = 'NULL' WHERE ObsoleteTech NOT IN ({tech_list});\n"
+tech_string += f"UPDATE Units\nSET PrereqCivic = 'NULL' WHERE ObsoleteCivic NOT IN ({civic_list});\n"
+tech_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
+for tech_type_to_add in techsql:
+    tech_string += tech_type_to_add + '\n'
+with open('../Core/techs_civics.sql', 'w') as file:
+    file.write(tech_string)
