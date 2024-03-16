@@ -1,5 +1,3 @@
-from itertools import groupby
-from typing import final
 import xmltodict
 
 unique_units = """Eater_of_Dreams, Sheaim
@@ -406,8 +404,8 @@ final_string = f"DELETE FROM Units\n WHERE UnitType NOT IN ({string_list});\n"
 final_string += f"DELETE FROM UnitReplaces WHERE CivUniqueUnitType is not null;\n"
 final_string += f"DELETE FROM UnitUpgrades WHERE Unit is not null;\n"
 final_string += f"DELETE FROM Units_XP2 WHERE UnitType is not null;\n"
-final_string += ("UPDATE RandomAgendaCivicTags\nSET CivicType = 'CIVIC_FEUDALISM'"
-                 "\nWHERE CivicType = 'CIVIC_NATIONALISM';\n")
+final_string += ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
+                 "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
 final_string += "INSERT INTO Types(Type, Kind) VALUES"
 
 for unit in final_units:
@@ -422,7 +420,7 @@ schema_string = '('
 for schema_key in [i for i in final_units[0]]:
     schema_string += f'{schema_key}, '
 schema_string = schema_string[:-2] + ') VALUES\n'
-unit_table_string = "INSERT INTO UNITS" + schema_string
+unit_table_string = "INSERT INTO Units" + schema_string
 for unit in final_units:
     unit_table_string += "("
     for attribute in unit:
@@ -455,33 +453,27 @@ with open('../Core/localization.sql', 'w') as file:
 
 tech_list = "'" + "', '".join(techs) + "'"
 civic_list = "'" + "', '".join(civics) + "'"
-tech_string = f"DELETE FROM Types\n WHERE KIND = 'KIND_TECH'\nAND Type NOT IN ({tech_list});\n"
-tech_string += f"DELETE FROM Types\n WHERE KIND = 'KIND_CIVIC'\nAND Type NOT IN ({civic_list});\n"
-tech_string += f"DELETE FROM Technologies\n WHERE TechnologyType NOT IN ({tech_list});\n"
-tech_string += f"DELETE FROM Civics\n WHERE CivicType NOT IN ({civic_list});\n"
-tech_string += f"DELETE FROM Adjacency_YieldChanges\n WHERE PrereqTech NOT IN ({tech_list});\n"
-tech_string += f"DELETE FROM Adjacency_YieldChanges\n WHERE PrereqCivic NOT IN ({civic_list});\n"
-tech_string += f"DELETE FROM Adjacency_YieldChanges\n WHERE ObsoleteTech NOT IN ({tech_list});\n"
-tech_string += (f"DELETE FROM Adjacency_YieldChanges\n "
+tech_string = f"DELETE FROM Adjacency_YieldChanges WHERE PrereqTech NOT IN ({tech_list});\n"
+tech_string += f"DELETE FROM Adjacency_YieldChanges WHERE PrereqCivic NOT IN ({civic_list});\n"
+tech_string += f"DELETE FROM Adjacency_YieldChanges WHERE ObsoleteTech NOT IN ({tech_list});\n"
+tech_string += (f"DELETE FROM Adjacency_YieldChanges "
                 f"WHERE ObsoleteCivic NOT IN ({civic_list});\n")
 tech_string += """DELETE FROM TechnologyPrereqs WHERE PrereqTech is not null;
-DELETE FROM CivicPrereqs WHERE Civic is not null;
 DELETE FROM Technologies_XP2 WHERE TechnologyType is not null;
 DELETE FROM Civics_XP2 WHERE CivicType is not null;
-DELETE FROM Boosts WHERE Boost is not null;
 DELETE FROM CivicModifiers WHERE CivicType is not null;
 DELETE FROM TechnologyModifiers WHERE TechnologyType is not null;
 DELETE FROM Improvement_BonusYieldChanges WHERE Id is not null;
 DELETE FROM Improvement_Tourism WHERE ImprovementType is not null;
 DELETE FROM Policies WHERE PolicyType is not null;
 DELETE FROM Policies_XP1 WHERE PolicyType is not null;
-DELETE FROM Policy_GovernmentExclusives_XP2 WHERE PolicyType is not null;"""
+DELETE FROM Policy_GovernmentExclusives_XP2 WHERE PolicyType is not null;\n"""
 # misc patches
-tech_string += f"UPDATE Resource_Harvests\nSET PrereqTech = 'TECH_AGRICULTURE'\nWHERE PrereqTech = 'TECH_POTTERY';\n"
-tech_string += f"UPDATE Units\nSET PrereqTech = 'NULL' WHERE ObsoleteTech NOT IN ({tech_list}"
-tech_string += f"UPDATE Units\nSET PrereqCivic = 'NULL' WHERE ObsoleteCivic NOT IN ({civic_list})"
-tech_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER'"
+tech_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
+tech_string += f"UPDATE Units SET PrereqTech = 'NULL' WHERE ObsoleteTech NOT IN ({tech_list});\n"
+tech_string += f"UPDATE Units SET PrereqCivic = 'NULL' WHERE ObsoleteCivic NOT IN ({civic_list});\n"
+tech_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
 for tech_type_to_add in techsql:
     tech_string += tech_type_to_add + '\n'
 with open('../Core/techs_civics.sql', 'w') as file:
-    file.write(tech_string)
+    file.write(tech_string + '\n' + final_string + unit_table_string + replacements_string + upgrades_string)
