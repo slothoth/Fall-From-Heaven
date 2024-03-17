@@ -243,13 +243,15 @@ upgrade_tree = {'UNIT_WARRIOR': ['UNIT_AXEMAN', 'UNIT_ARCHER'],
                 'UNIT_PRIEST_OF_WINTER': ['UNIT_HIGH_PRIEST_OF_WINTER'],
                 }
 
-kept_civics = ['CIVIC_CODE_OF_LAWS', 'CIVIC_EXPLORATION', 'CIVIC_FEUDALISM', 'CIVIC_GUILDS', 'CIVIC_MERCANTILISM',
+kept_civics = ['CIVIC_CODE_OF_LAWS', 'CIVIC_FEUDALISM', 'CIVIC_GUILDS', 'CIVIC_MERCANTILISM',
                'CIVIC_MYSTICISM', 'CIVIC_THEOLOGY']
 
 kept_techs = ['TECH_ANIMAL_HUSBANDRY', 'TECH_ARCHERY', 'TECH_ASTRONOMY', 'TECH_BRONZE_WORKING', 'TECH_CARTOGRAPHY',
               'TECH_CONSTRUCTION', 'TECH_ENGINEERING', 'TECH_FUTURE_TECH', 'TECH_HORSEBACK_RIDING', 'TECH_IRON_WORKING',
               'TECH_MACHINERY', 'TECH_MASONRY', 'TECH_MATHEMATICS', 'TECH_MINING', 'TECH_SAILING', 'TECH_SANITATION',
               'TECH_STIRRUPS', 'TECH_WRITING']
+
+kept_prereqs = {'TECH_BRONZE_WORKING': 'TECH_MINING', 'TECH_CONSTRUCTION': 'TECH_MASONRY'}
 
 native_prereqtechs = """DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_WRITING' AND PrereqTech LIKE 'TECH_POTTERY';
 UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_THE_WHEEL' AND PrereqTech LIKE 'TECH_MINING';
@@ -546,6 +548,7 @@ for unit in final_units:
         unit['AdvisorType'] = 'ADVISOR_GENERIC'
     if unit['PrereqTech'] == 'NONE':
         unit['PrereqTech'] = 'NULL'
+    unit['bMilitarySupport'] = 1
 # patch
 replaces.pop('UNIT_SWORDSMAN')
 replaces['UNIT_MUD_GOLEM'] = 'UNIT_BUILDER'
@@ -674,8 +677,8 @@ tech_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\
 with open('prereqstechs.sql', 'r') as file:
     prereqs_string = file.read()
 
-prereqs_string = prereqs_string[:-2] + ",\n    ('TECH_ASTROLOGY', 'TECH_FUTURE_TECH'),"
-prereqs_string += "\n    ('TECH_POTTERY', 'TECH_FUTURE_TECH');\n"
+prereqs_string = prereqs_string[:-2] + ",\n('TECH_ASTROLOGY', 'TECH_FUTURE_TECH'),"
+prereqs_string += "\n('TECH_POTTERY', 'TECH_FUTURE_TECH');\n"
 
 with open('prereqscivics.sql', 'r') as file:
     prereqs_string += file.read() + "\n"
