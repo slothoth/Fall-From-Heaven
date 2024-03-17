@@ -11,40 +11,16 @@
     <CompatibleVersions>1.2,2.0</CompatibleVersions>
   </Properties>
   <InGameActions>
-    <UpdateArt id="Art">
-      <File>ModernInfantry.dep</File>
-    </UpdateArt>
     <UpdateDatabase id="Gameplay">
       <File>Core/techs_civics.sql</File>
     </UpdateDatabase>
-    <UpdateIcons id="Icons">
-      <File>Core/ModernInfantry_Icons.xml</File>
-    </UpdateIcons>
     <UpdateText id="Text">
       <File>Core/localization.sql</File>
     </UpdateText>
   </InGameActions>
   <Files>
-    <File>ArtDefs/Units.artdef</File>
-    <File>ArtDefs/UserInterface.artdef</File>
-    <File>Core/ModernInfantry_Icons.xml</File>
     <File>Core/localization.sql</File>
     <File>Core/techs_civics.sql</File>
     <File>ModernInfantry.dep</File>
-    <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
-    <File>Textures/ModernInfantryUnitFlag22.dds</File>
-    <File>Textures/ModernInfantryUnitFlag22.tex</File>
-    <File>Textures/ModernInfantryUnitFlag256.dds</File>
-    <File>Textures/ModernInfantryUnitFlag256.tex</File>
-    <File>Textures/ModernInfantryUnitFlag32.dds</File>
-    <File>Textures/ModernInfantryUnitFlag32.tex</File>
-    <File>Textures/ModernInfantryUnitFlag38.dds</File>
-    <File>Textures/ModernInfantryUnitFlag38.tex</File>
-    <File>Textures/ModernInfantryUnitFlag50.dds</File>
-    <File>Textures/ModernInfantryUnitFlag50.tex</File>
-    <File>Textures/ModernInfantryUnitFlag80.dds</File>
-    <File>Textures/ModernInfantryUnitFlag80.tex</File>
-    <File>Textures/ModernInfantryUnitPortrait95.dds</File>
-    <File>Textures/ModernInfantryUnitPortrait95.tex</File>
   </Files>
 </Mod>
