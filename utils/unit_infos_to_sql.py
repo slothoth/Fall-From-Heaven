@@ -1,5 +1,6 @@
 import xmltodict
 
+debug_string = ""
 unique_units = """Eater_of_Dreams, Sheaim
 Moroi, Calabim
 Pyre_Zombie, Sheaimp
@@ -157,17 +158,21 @@ NIGHTWATCH, COUNCIL_OF_ESUS
 GIBBON, COUNCIL_OF_ESUS
 SHADOW, COUNCIL_OF_ESUS"""
 
-units_to_keep_in_six = ['UNIT_SETTLER', 'UNIT_BUILDER', 'UNIT_TRADER', 'UNIT_GREAT_GENERAL', 'UNIT_GREAT_ENGINEER',
-                        'UNIT_GREAT_MERCHANT', 'UNIT_GREAT_PROPHET', 'UNIT_GREAT_SCIENTIST', 'UNIT_GREAT_ARTIST',
-                        'UNIT_SCOUT', 'UNIT_WARRIOR', 'UNIT_ARCHER', 'UNIT_GALLEY', 'UNIT_HORSEBACK_RIDING',
-                        'UNIT_CROSSBOWMAN']
+kept_units = ['UNIT_SETTLER', 'UNIT_BUILDER', 'UNIT_TRADER', 'UNIT_GREAT_GENERAL', 'UNIT_GREAT_ENGINEER',
+              'UNIT_GREAT_MERCHANT', 'UNIT_GREAT_PROPHET', 'UNIT_GREAT_SCIENTIST', 'UNIT_GREAT_ARTIST',
+              'UNIT_SCOUT', 'UNIT_WARRIOR', 'UNIT_ARCHER', 'UNIT_GALLEY', 'UNIT_HORSEMAN',
+              'UNIT_CROSSBOWMAN']
 
-units_changed_tech = ['UNIT_CATAPULT', 'UNIT_SWORDSMAN', 'UNIT_KNIGHT',
+units_changed_tech = ['UNIT_CATAPULT', 'UNIT_SWORDSMAN', 'UNIT_KNIGHT', 'UNIT_RANGER',
                       'UNIT_FRIGATE', 'UNIT_CARAVEL', 'UNIT_PRIVATEER']
 
 units_but_for_unique_civs = ['UNIT_TREBUCHET']
 
 compat_units = ['UNIT_GREAT_ADMIRAL', 'UNIT_GREAT_WRITER', 'UNIT_GREAT_MUSICIAN']
+
+kept_units.extend(units_changed_tech)
+kept_units.extend(units_but_for_unique_civs)
+kept_units.extend(compat_units)
 
 to_keep_but_modify = {'UNIT_SLINGER': 'UNIT_DWARVEN_SLINGER', 'UNIT_HEAVY_CHARIOT': 'UNIT_CHARIOT',
                       'UNIT_BOMBARD': 'UNIT_CANNON', 'UNIT_MUSKETMAN': 'UNIT_ARQUEBUS',
@@ -179,9 +184,9 @@ keep_art_for = {'UNIT_VAMPIRE': 'UNIT_VAMPIRE_LORD'}
 
 excludes_from_four = ['UNIT_WORKBOAT', 'UNIT_WORKER']
 
-upgrade_tree = {'UNIT_WARRIOR': ['UNIT_ARCHER', 'UNIT_AXEMAN'],
+upgrade_tree = {'UNIT_WARRIOR': ['UNIT_AXEMAN', 'UNIT_ARCHER'],
                 'UNIT_AXEMAN': ['UNIT_CHAMPION', 'UNIT_CHARIOT'],
-                'UNIT_CHAMPION': ['UNIT_EIDOLON', 'UNIT_PALADIN', 'UNIT_BERSERKER', 'UNIT_IMMORTAL', 'UNIT_PHALANX',
+                'UNIT_CHAMPION': ['UNIT_IMMORTAL', 'UNIT_EIDOLON', 'UNIT_PALADIN', 'UNIT_BERSERKER', 'UNIT_PHALANX',
                                   'UNIT_KNIGHT'],
                 'UNIT_ARCHER': ['UNIT_LONGBOWMAN', 'UNIT_CROSSBOWMAN', 'UNIT_HORSE_ARCHER'],
                 'UNIT_LONGBOWMAN': ['UNIT_CROSSBOWMAN', 'UNIT_ARQUEBUS', 'UNIT_MARKSMAN'],
@@ -246,13 +251,192 @@ kept_techs = ['TECH_ANIMAL_HUSBANDRY', 'TECH_ARCHERY', 'TECH_ASTRONOMY', 'TECH_B
               'TECH_MACHINERY', 'TECH_MASONRY', 'TECH_MATHEMATICS', 'TECH_MINING', 'TECH_SAILING', 'TECH_SANITATION',
               'TECH_STIRRUPS', 'TECH_WRITING']
 
+native_prereqtechs = """DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_WRITING' AND PrereqTech LIKE 'TECH_POTTERY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_THE_WHEEL' AND PrereqTech LIKE 'TECH_MINING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_TELECOMMUNICATIONS' AND PrereqTech LIKE 'TECH_COMPUTERS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_SYNTHETIC_MATERIALS' AND PrereqTech LIKE 'TECH_PLASTICS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_STIRRUPS' AND PrereqTech LIKE 'TECH_APPRENTICESHIP';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_STEEL' AND PrereqTech LIKE 'TECH_RIFLING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_STEAM_POWER' AND PrereqTech LIKE 'TECH_INDUSTRIALIZATION';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_STEALTH_TECHNOLOGY' AND PrereqTech LIKE 'TECH_SYNTHETIC_MATERIALS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_SQUARE_RIGGING' AND PrereqTech LIKE 'TECH_CARTOGRAPHY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_SIEGE_TACTICS' AND PrereqTech LIKE 'TECH_CASTLES';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_SHIPBUILDING' AND PrereqTech LIKE 'TECH_SAILING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_SCIENTIFIC_THEORY' AND PrereqTech LIKE 'TECH_BANKING';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_SCIENTIFIC_THEORY' AND PrereqTech LIKE 'TECH_ASTRONOMY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_SATELLITES' AND PrereqTech LIKE 'TECH_ROCKETRY';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_SATELLITES' AND PrereqTech LIKE 'TECH_ADVANCED_FLIGHT';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_SANITATION' AND PrereqTech LIKE 'TECH_SCIENTIFIC_THEORY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_ROCKETRY' AND PrereqTech LIKE 'TECH_RADIO';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ROCKETRY' AND PrereqTech LIKE 'TECH_CHEMISTRY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_ROBOTICS' AND PrereqTech LIKE 'TECH_SATELLITES';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ROBOTICS' AND PrereqTech LIKE 'TECH_LASERS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ROBOTICS' AND PrereqTech LIKE 'TECH_GUIDANCE_SYSTEMS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ROBOTICS' AND PrereqTech LIKE 'TECH_COMPUTERS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_RIFLING' AND PrereqTech LIKE 'TECH_MILITARY_SCIENCE';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_RIFLING' AND PrereqTech LIKE 'TECH_BALLISTICS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_REPLACEABLE_PARTS' AND PrereqTech LIKE 'TECH_ECONOMICS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_REFINING' AND PrereqTech LIKE 'TECH_RIFLING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_RADIO' AND PrereqTech LIKE 'TECH_STEAM_POWER';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_RADIO' AND PrereqTech LIKE 'TECH_FLIGHT';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_PRINTING' AND PrereqTech LIKE 'TECH_MACHINERY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_PLASTICS' AND PrereqTech LIKE 'TECH_COMBUSTION';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_NUCLEAR_FUSION' AND PrereqTech LIKE 'TECH_LASERS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_NUCLEAR_FISSION' AND PrereqTech LIKE 'TECH_COMBINED_ARMS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_NUCLEAR_FISSION' AND PrereqTech LIKE 'TECH_ADVANCED_BALLISTICS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_NANOTECHNOLOGY' AND PrereqTech LIKE 'TECH_COMPOSITES';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_MILITARY_TACTICS' AND PrereqTech LIKE 'TECH_MATHEMATICS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_MILITARY_SCIENCE' AND PrereqTech LIKE 'TECH_SIEGE_TACTICS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_MILITARY_SCIENCE' AND PrereqTech LIKE 'TECH_PRINTING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_MILITARY_ENGINEERING' AND PrereqTech LIKE 'TECH_CONSTRUCTION';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_METAL_CASTING' AND PrereqTech LIKE 'TECH_GUNPOWDER';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_MATHEMATICS' AND PrereqTech LIKE 'TECH_CURRENCY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_MASS_PRODUCTION' AND PrereqTech LIKE 'TECH_MILITARY_TACTICS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_MASS_PRODUCTION' AND PrereqTech LIKE 'TECH_EDUCATION';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_MASS_PRODUCTION' AND PrereqTech LIKE 'TECH_BUTTRESS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_MACHINERY' AND PrereqTech LIKE 'TECH_IRON_WORKING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_LASERS' AND PrereqTech LIKE 'TECH_NUCLEAR_FISSION';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_IRRIGATION' AND PrereqTech LIKE 'TECH_POTTERY';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_IRON_WORKING' AND PrereqTech LIKE 'TECH_BRONZE_WORKING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_INDUSTRIALIZATION' AND PrereqTech LIKE 'TECH_SQUARE_RIGGING';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_INDUSTRIALIZATION' AND PrereqTech LIKE 'TECH_MASS_PRODUCTION';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_HORSEBACK_RIDING' AND PrereqTech LIKE 'TECH_ARCHERY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_GUNPOWDER' AND PrereqTech LIKE 'TECH_STIRRUPS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_GUNPOWDER' AND PrereqTech LIKE 'TECH_MILITARY_ENGINEERING';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_GUNPOWDER' AND PrereqTech LIKE 'TECH_APPRENTICESHIP';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_GUIDANCE_SYSTEMS' AND PrereqTech LIKE 'TECH_ROCKETRY';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_GUIDANCE_SYSTEMS' AND PrereqTech LIKE 'TECH_ADVANCED_BALLISTICS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_FLIGHT' AND PrereqTech LIKE 'TECH_SCIENTIFIC_THEORY';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_FLIGHT' AND PrereqTech LIKE 'TECH_INDUSTRIALIZATION';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ENGINEERING' AND PrereqTech LIKE 'TECH_THE_WHEEL';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_ELECTRICITY' AND PrereqTech LIKE 'TECH_STEAM_POWER';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_EDUCATION' AND PrereqTech LIKE 'TECH_MATHEMATICS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_EDUCATION' AND PrereqTech LIKE 'TECH_APPRENTICESHIP';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_ECONOMICS' AND PrereqTech LIKE 'TECH_SCIENTIFIC_THEORY';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ECONOMICS' AND PrereqTech LIKE 'TECH_METAL_CASTING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_CURRENCY' AND PrereqTech LIKE 'TECH_WRITING';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_CONSTRUCTION' AND PrereqTech LIKE 'TECH_HORSEBACK_RIDING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_COMPUTERS' AND PrereqTech LIKE 'TECH_RADIO';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_COMPUTERS' AND PrereqTech LIKE 'TECH_ELECTRICITY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_COMPOSITES' AND PrereqTech LIKE 'TECH_SYNTHETIC_MATERIALS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_COMBUSTION' AND PrereqTech LIKE 'TECH_STEEL';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_COMBUSTION' AND PrereqTech LIKE 'TECH_REFINING';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_COMBINED_ARMS' AND PrereqTech LIKE 'TECH_STEEL';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_COMBINED_ARMS' AND PrereqTech LIKE 'TECH_COMBUSTION';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_CHEMISTRY' AND PrereqTech LIKE 'TECH_SANITATION';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_CHEMISTRY' AND PrereqTech LIKE 'TECH_REPLACEABLE_PARTS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_CELESTIAL_NAVIGATION' AND PrereqTech LIKE 'TECH_SAILING';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_CELESTIAL_NAVIGATION' AND PrereqTech LIKE 'TECH_ASTROLOGY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_CASTLES' AND PrereqTech LIKE 'TECH_CONSTRUCTION';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_CARTOGRAPHY' AND PrereqTech LIKE 'TECH_BUTTRESS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_BUTTRESS' AND PrereqTech LIKE 'TECH_SHIPBUILDING';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_BUTTRESS' AND PrereqTech LIKE 'TECH_MATHEMATICS';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_BANKING' AND PrereqTech LIKE 'TECH_STIRRUPS';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_BANKING' AND PrereqTech LIKE 'TECH_EDUCATION';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_BALLISTICS' AND PrereqTech LIKE 'TECH_METAL_CASTING';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ASTRONOMY' AND PrereqTech LIKE 'TECH_EDUCATION';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ARCHERY' AND PrereqTech LIKE 'TECH_ANIMAL_HUSBANDRY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_APPRENTICESHIP' AND PrereqTech LIKE 'TECH_HORSEBACK_RIDING';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_APPRENTICESHIP' AND PrereqTech LIKE 'TECH_CURRENCY';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_ADVANCED_FLIGHT' AND PrereqTech LIKE 'TECH_RADIO';
+DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_ADVANCED_BALLISTICS' AND PrereqTech LIKE 'TECH_STEEL';
+UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_ADVANCED_BALLISTICS' AND PrereqTech LIKE 'TECH_REPLACEABLE_PARTS';
+"""
 
-def small_dict(big_dict):
-    four_to_six_map = {'Class': 'UnitType', 'Type': 'Name', 'Description': 'Description', 'iMoves': 'BaseMoves',
-                       'iCost': 'Cost', 'Advisor': 'AdvisorType', 'iCombat': 'Combat', 'Combat': 'RangedCombat',
-                       'Domain': 'Domain', 'PromotionClass': 'Combat', 'Maintenance': 'bMilitarySupport',
-                       'PrereqTech': 'PrereqTech'}
-    smaller_dict = {four_to_six_map[j]: big_dict[j] for j in big_dict if j in four_to_six_map}
+native_prereq_civics = """UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_CRAFTSMANSHIP' AND PrereqCivic = 'CIVIC_CODE_OF_LAWS';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_FOREIGN_TRADE' AND PrereqCivic = 'CIVIC_CODE_OF_LAWS';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_MILITARY_TRADITION' AND PrereqCivic = 'CIVIC_CRAFTSMANSHIP';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_STATE_WORKFORCE' AND PrereqCivic = 'CIVIC_CRAFTSMANSHIP';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_EARLY_EMPIRE' AND PrereqCivic = 'CIVIC_FOREIGN_TRADE';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_MYSTICISM' AND PrereqCivic = 'CIVIC_FOREIGN_TRADE';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_GAMES_RECREATION' AND PrereqCivic = 'CIVIC_STATE_WORKFORCE';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_POLITICAL_PHILOSOPHY' AND PrereqCivic = 'CIVIC_STATE_WORKFORCE';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_POLITICAL_PHILOSOPHY' AND PrereqCivic = 'CIVIC_EARLY_EMPIRE';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_DRAMA_POETRY' AND PrereqCivic = 'CIVIC_EARLY_EMPIRE';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_MILITARY_TRAINING' AND PrereqCivic = 'CIVIC_MILITARY_TRADITION';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_MILITARY_TRAINING' AND PrereqCivic = 'CIVIC_GAMES_RECREATION';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_DEFENSIVE_TACTICS' AND PrereqCivic = 'CIVIC_GAMES_RECREATION';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_DEFENSIVE_TACTICS' AND PrereqCivic = 'CIVIC_POLITICAL_PHILOSOPHY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_RECORDED_HISTORY' AND PrereqCivic = 'CIVIC_POLITICAL_PHILOSOPHY';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_RECORDED_HISTORY' AND PrereqCivic = 'CIVIC_DRAMA_POETRY';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_THEOLOGY' AND PrereqCivic = 'CIVIC_DRAMA_POETRY';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_THEOLOGY' AND PrereqCivic = 'CIVIC_MYSTICISM';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_NAVAL_TRADITION' AND PrereqCivic = 'CIVIC_DEFENSIVE_TACTICS';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_FEUDALISM' AND PrereqCivic = 'CIVIC_DEFENSIVE_TACTICS';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_CIVIL_SERVICE' AND PrereqCivic = 'CIVIC_DEFENSIVE_TACTICS';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_CIVIL_SERVICE' AND PrereqCivic = 'CIVIC_RECORDED_HISTORY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_MERCENARIES' AND PrereqCivic = 'CIVIC_MILITARY_TRAINING';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_MERCENARIES' AND PrereqCivic = 'CIVIC_FEUDALISM';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_MEDIEVAL_FAIRES' AND PrereqCivic = 'CIVIC_FEUDALISM';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_GUILDS' AND PrereqCivic = 'CIVIC_FEUDALISM';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_GUILDS' AND PrereqCivic = 'CIVIC_CIVIL_SERVICE';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_DIVINE_RIGHT' AND PrereqCivic = 'CIVIC_CIVIL_SERVICE';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_DIVINE_RIGHT' AND PrereqCivic = 'CIVIC_THEOLOGY';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_EXPLORATION' AND PrereqCivic = 'CIVIC_MERCENARIES';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_EXPLORATION' AND PrereqCivic = 'CIVIC_MEDIEVAL_FAIRES';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_HUMANISM' AND PrereqCivic = 'CIVIC_MEDIEVAL_FAIRES';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_HUMANISM' AND PrereqCivic = 'CIVIC_GUILDS';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_DIPLOMATIC_SERVICE' AND PrereqCivic = 'CIVIC_GUILDS';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_REFORMED_CHURCH' AND PrereqCivic = 'CIVIC_GUILDS';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_REFORMED_CHURCH' AND PrereqCivic = 'CIVIC_DIVINE_RIGHT';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_MERCANTILISM' AND PrereqCivic = 'CIVIC_HUMANISM';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_THE_ENLIGHTENMENT' AND PrereqCivic = 'CIVIC_HUMANISM';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_THE_ENLIGHTENMENT' AND PrereqCivic = 'CIVIC_DIPLOMATIC_SERVICE';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_COLONIALISM' AND PrereqCivic = 'CIVIC_MERCANTILISM';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_CIVIL_ENGINEERING' AND PrereqCivic = 'CIVIC_MERCANTILISM';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_NATIONALISM' AND PrereqCivic = 'CIVIC_THE_ENLIGHTENMENT';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_OPERA_BALLET' AND PrereqCivic = 'CIVIC_THE_ENLIGHTENMENT';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_NATURAL_HISTORY' AND PrereqCivic = 'CIVIC_COLONIALISM';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_SCORCHED_EARTH' AND PrereqCivic = 'CIVIC_NATIONALISM';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_URBANIZATION' AND PrereqCivic = 'CIVIC_CIVIL_ENGINEERING';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_URBANIZATION' AND PrereqCivic = 'CIVIC_NATIONALISM';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_CONSERVATION' AND PrereqCivic = 'CIVIC_NATURAL_HISTORY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_MASS_MEDIA' AND PrereqCivic = 'CIVIC_NATURAL_HISTORY';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_MASS_MEDIA' AND PrereqCivic = 'CIVIC_URBANIZATION';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_CAPITALISM' AND PrereqCivic = 'CIVIC_MASS_MEDIA';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_MOBILIZATION' AND PrereqCivic = 'CIVIC_URBANIZATION';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_IDEOLOGY' AND PrereqCivic = 'CIVIC_MASS_MEDIA';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_IDEOLOGY' AND PrereqCivic = 'CIVIC_MOBILIZATION';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_NUCLEAR_PROGRAM' AND PrereqCivic = 'CIVIC_IDEOLOGY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_SUFFRAGE' AND PrereqCivic = 'CIVIC_IDEOLOGY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_TOTALITARIANISM' AND PrereqCivic = 'CIVIC_IDEOLOGY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_CLASS_STRUGGLE' AND PrereqCivic = 'CIVIC_IDEOLOGY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_COLD_WAR' AND PrereqCivic = 'CIVIC_IDEOLOGY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_PROFESSIONAL_SPORTS' AND PrereqCivic = 'CIVIC_IDEOLOGY';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_CULTURAL_HERITAGE' AND PrereqCivic = 'CIVIC_CONSERVATION';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_RAPID_DEPLOYMENT' AND PrereqCivic = 'CIVIC_COLD_WAR';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_SPACE_RACE' AND PrereqCivic = 'CIVIC_COLD_WAR';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_GLOBALIZATION' AND PrereqCivic = 'CIVIC_RAPID_DEPLOYMENT';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_GLOBALIZATION' AND PrereqCivic = 'CIVIC_SPACE_RACE';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_SOCIAL_MEDIA' AND PrereqCivic = 'CIVIC_SPACE_RACE';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_SOCIAL_MEDIA' AND PrereqCivic = 'CIVIC_PROFESSIONAL_SPORTS';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_FUTURE_CIVIC' AND PrereqCivic = 'CIVIC_GLOBALIZATION';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_FUTURE_CIVIC' AND PrereqCivic = 'CIVIC_SOCIAL_MEDIA';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_MOBILIZATION' AND PrereqCivic = 'CIVIC_SCORCHED_EARTH';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_ENVIRONMENTALISM' AND PrereqCivic = 'CIVIC_CULTURAL_HERITAGE';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_ENVIRONMENTALISM' AND PrereqCivic = 'CIVIC_RAPID_DEPLOYMENT';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_CORPORATE_LIBERTARIANISM' AND PrereqCivic = 'CIVIC_GLOBALIZATION';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_CORPORATE_LIBERTARIANISM' AND PrereqCivic = 'CIVIC_SOCIAL_MEDIA';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_DIGITAL_DEMOCRACY' AND PrereqCivic = 'CIVIC_GLOBALIZATION';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_DIGITAL_DEMOCRACY' AND PrereqCivic = 'CIVIC_SOCIAL_MEDIA';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_SYNTHETIC_TECHNOCRACY' AND PrereqCivic = 'CIVIC_GLOBALIZATION';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_SYNTHETIC_TECHNOCRACY' AND PrereqCivic = 'CIVIC_SOCIAL_MEDIA';
+UPDATE CivicPrereqs SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE Civic = 'CIVIC_NEAR_FUTURE_GOVERNANCE' AND PrereqCivic = 'CIVIC_ENVIRONMENTALISM';
+DELETE FROM CivicPrereqs WHERE Civic = 'CIVIC_NEAR_FUTURE_GOVERNANCE' AND PrereqCivic = 'CIVIC_GLOBALIZATION';
+"""
+
+
+def small_dict(big_dict, four_to_six_map):
+    # smaller_dict = {four_to_six_map[j]: big_dict[j] for j in big_dict if j in four_to_six_map}
+    smaller_dict = {}
+    for j in big_dict:
+        if j in four_to_six_map:
+            smaller_dict[four_to_six_map[j]] = big_dict[j]
+
+    for to_insert, default_value in four_to_six_map.items():
+        if default_value not in smaller_dict:
+            smaller_dict[to_insert] = default_value
+
     return smaller_dict
 
 
@@ -261,8 +445,16 @@ def small_dict(big_dict):
 with open('CIV4UnitInfos.xml', 'r') as file:
     xml_dict = xmltodict.parse(file.read())
 
+with open('CIV4TechInfos.xml', 'r') as file:
+    xml_tech_dict = xmltodict.parse(file.read())
+
+tech_infos = xml_tech_dict['Civ4TechInfos']['TechInfos']['TechInfo']
 infos = xml_dict['Civ4UnitInfos']['UnitInfos'][('UnitInfo')]
-six_style_dict = [small_dict(i) for i in infos]
+unit_dict = {'Class': 'UnitType', 'Type': 'Name', 'Description': 'Description', 'iMoves': 'BaseMoves',
+             'iCost': 'Cost', 'Advisor': 'AdvisorType', 'iCombat': 'Combat', 'Combat': 'RangedCombat',
+             'Domain': 'Domain', 'PromotionClass': 'Combat', 'Maintenance': 'bMilitarySupport',
+             'PrereqTech': 'PrereqTech'}
+six_style_dict = [small_dict(i, unit_dict) for i in infos]
 no_equipment_units = [i for i in six_style_dict if not ('EQUIPMENT' in i['Name'])]
 buildable_only = [i for i in six_style_dict if not (i['Cost'] == '-1')]
 # how to filter out barbarian only
@@ -354,7 +546,9 @@ for unit in final_units:
         unit['AdvisorType'] = 'ADVISOR_GENERIC'
     if unit['PrereqTech'] == 'NONE':
         unit['PrereqTech'] = 'NULL'
-
+# patch
+replaces.pop('UNIT_SWORDSMAN')
+replaces['UNIT_MUD_GOLEM'] = 'UNIT_BUILDER'
 
 # do tech - civic prereqs Conversions
 with open('techs.sql', 'r') as file:
@@ -405,48 +599,52 @@ for idx, religion in enumerate(religions):
             i['TraitType'] = trait_str
             trait_types_to_define.append(trait_str)
 
-military_engineer_issues = ['Improvement_ValidBuildUnits.UnitType', "Route_ValidBuildUnits",
-                            "Building_BuildChargeProductions", "District_BuildChargeProductions"]
-string_list = "'" + "', '".join(units_to_keep_in_six + compat_units) + "'"
-final_string = f"DELETE FROM Units\n WHERE UnitType NOT IN ({string_list});\n"
-final_string += f"DELETE FROM UnitReplaces WHERE CivUniqueUnitType is not null;\n"
-final_string += f"DELETE FROM UnitUpgrades WHERE Unit is not null;\n"
-final_string += f"DELETE FROM Units_XP2 WHERE UnitType is not null;\n"
-final_string += ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
-                 "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
-final_string += "INSERT INTO Types(Type, Kind) VALUES"
+unit_military_engineer_issues = ['Improvement_ValidBuildUnits', "Route_ValidBuildUnits",
+                                 "Building_BuildChargeProductions", "District_BuildChargeProductions"]
+update_string = ""
+for table in unit_military_engineer_issues:
+    update_string += f"UPDATE {table} SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';\n"
+unit_list = "'" + "', '".join(kept_units) + "'"
+delete_string = ""
+update_string += f"UPDATE Boosts SET Unit1Type = NULL WHERE Unit1Type NOT IN ({unit_list});\n"
+# delete_string += f"DELETE FROM UnitReplaces WHERE CivUniqueUnitType is not null;\n"
+# delete_string += f"DELETE FROM Units_XP2 WHERE UnitType is not null;\n"
+# delete_string += f"DELETE FROM Units WHERE UnitType NOT IN ({unit_list});\n"
 
-for unit in final_units:
-    name = unit['UnitType']
-    final_string += f"\n('{name}', 'KIND_UNIT'),"
+delete_string += ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
+                  "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
 
-for trait in trait_types_to_define:
-    final_string += f"\n('{trait}', 'KIND_TRAIT'),"
-
-final_string = final_string[:-1] + ';\n'
 schema_string = '('
 for schema_key in [i for i in final_units[0]]:
     schema_string += f'{schema_key}, '
 schema_string = schema_string[:-2] + ') VALUES\n'
 unit_table_string = "INSERT INTO Units" + schema_string
 for unit in final_units:
-    unit_table_string += "("
-    for attribute in unit:
-        unit_table_string += f"'{unit[attribute]}', "
-    unit_table_string = unit_table_string[:-2] + "),\n"
+    if unit['UnitType'] not in kept_units:
+        unit_table_string += "("
+        for attribute in unit:
+            unit_table_string += f"'{unit[attribute]}', "
+        unit_table_string = unit_table_string[:-2] + "),\n"
 unit_table_string = unit_table_string[:-2] + ";\n"
 replacements_string = 'INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES\n'
 for unique_unit, original_unit in replaces.items():
     replacements_string += f"('{unique_unit}', '{original_unit}'),\n"
+    debug_string += f"('{unique_unit}',"
+debug_string += "\n"
 replacements_string = replacements_string[:-2] + ";\n"
-upgrades_string = 'INSERT INTO UnitUpgrades(unit, upgradeunit) VALUES\n'
-# upgrade tree
+upgrades_string = "INSERT INTO UnitUpgrades(Unit, Upgradeunit) VALUES\n"
+# upgrade tree, commented out for multiple upgrades, whicn is not supported in 6
 for unit, upgrades in upgrade_tree.items():
-    for upgrade in upgrades:
-        upgrades_string += f"('{unit}', '{upgrade}'),\n"
+    # for upgrade in upgrades:
+        # upgrades_string += f"('{unit}', '{upgrade}'),\n"
+    if unit in kept_units:
+        update_string += f"UPDATE UnitUpgrades SET UpgradeUnit = '{upgrades[0]}' WHERE Unit LIKE '{unit}';\n"
+    else:
+        upgrades_string += f"('{unit}', '{upgrades[0]}'),\n"
 upgrades_string = upgrades_string[:-2] + ";\n"
+
 with open('../Core/initial_units.sql', 'w') as file:
-    file.write(final_string + unit_table_string + replacements_string + upgrades_string)
+    file.write(delete_string + unit_table_string + replacements_string + upgrades_string)
 
 loc_string = 'INSERT OR REPLACE INTO LocalizedText (Language, Tag, Text)\n VALUES\n'
 for unit in final_units:
@@ -461,29 +659,111 @@ with open('../Core/localization.sql', 'w') as file:
 
 tech_list = "'" + "', '".join(kept_techs) + "'"
 civic_list = "'" + "', '".join(kept_civics) + "'"
-tech_string = f"DELETE FROM Adjacency_YieldChanges WHERE PrereqTech NOT IN ({tech_list});\n"
-tech_string += f"DELETE FROM Adjacency_YieldChanges WHERE PrereqCivic NOT IN ({civic_list});\n"
-tech_string += f"DELETE FROM Adjacency_YieldChanges WHERE ObsoleteTech NOT IN ({tech_list});\n"
-tech_string += (f"DELETE FROM Adjacency_YieldChanges "
-                f"WHERE ObsoleteCivic NOT IN ({civic_list});\n")
-tech_string += f"DELETE FROM Technologies\n WHERE TechnologyType NOT IN ({tech_list});\n"
-tech_string += f"DELETE FROM Civics\n WHERE CivicType NOT IN ({civic_list});\n"
-tech_string += """DELETE FROM TechnologyPrereqs WHERE PrereqTech is not null;
-DELETE FROM Technologies_XP2 WHERE TechnologyType is not null;
-DELETE FROM Civics_XP2 WHERE CivicType is not null;
-DELETE FROM CivicModifiers WHERE CivicType is not null;
-DELETE FROM TechnologyModifiers WHERE TechnologyType is not null;
-DELETE FROM Improvement_BonusYieldChanges WHERE Id is not null;
-DELETE FROM Improvement_Tourism WHERE ImprovementType is not null;
-DELETE FROM Policies WHERE PolicyType is not null;
-DELETE FROM Policies_XP1 WHERE PolicyType is not null;
-DELETE FROM Policy_GovernmentExclusives_XP2 WHERE PolicyType is not null;\n"""
+tech_string = ""
+tech_string += native_prereqtechs + '\n'
+tech_string += native_prereq_civics + '\n'
+tech_string += "UPDATE Civics SET EraType = 'ERA_FUTURE' WHERE EraType is not null;\n"
+tech_string += "UPDATE Technologies SET EraType = 'ERA_FUTURE' WHERE EraType is not null;\n"
 # misc patches
-tech_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
-tech_string += f"UPDATE Units SET PrereqTech = 'NULL' WHERE ObsoleteTech NOT IN ({tech_list});\n"
-tech_string += f"UPDATE Units SET PrereqCivic = 'NULL' WHERE ObsoleteCivic NOT IN ({civic_list});\n"
+tech_string += f"UPDATE Units SET ObsoleteTech = 'NULL' WHERE ObsoleteTech NOT IN ({tech_list});\n"
+tech_string += f"UPDATE Units SET ObsoleteCivic = 'NULL' WHERE ObsoleteCivic NOT IN ({civic_list});\n"
+tech_string += f"UPDATE Units SET PrereqTech = 'TECH_FUTURE_TECH' WHERE UnitType NOT IN ({unit_list});\n"
+tech_string += f"UPDATE Units SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE UnitType NOT IN ({unit_list});\n"
 tech_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
+
+with open('prereqstechs.sql', 'r') as file:
+    prereqs_string = file.read()
+
+prereqs_string = prereqs_string[:-2] + ",\n    ('TECH_ASTROLOGY', 'TECH_FUTURE_TECH'),"
+prereqs_string += "\n    ('TECH_POTTERY', 'TECH_FUTURE_TECH');\n"
+
+with open('prereqscivics.sql', 'r') as file:
+    prereqs_string += file.read() + "\n"
+
+techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Cost', 'Repeatable': 0,
+                'EmbarkUnitType': 'NULL', 'EmbarkAll': 0, 'Description': 'Description', 'EraType': 'ERA_ANCIENT',
+                'Critical': 0, 'BarbarianFree': 0, 'UITreeRow': 0, 'AdvisorType': 'ADVISOR_GENERIC'}
+six_techs = [small_dict(i, techs_4_to_6) for i in tech_infos]
+six_style_techs = [i for i in six_techs if i['TechnologyType'] in techs]
+for tech in six_style_techs:
+    tech['Name'] = 'LOC_' + tech['TechnologyType'] + '_NAME'
+    tech['Description'] = 'LOC_' + tech['TechnologyType'] + '_DESCRIPTION'
+six_style_techs = [i for i in six_style_techs if not i['TechnologyType'] in kept_techs]
+
+six_style_civics = [i for i in six_techs if i['TechnologyType'] in civics]
+for civic in six_style_civics:
+    civic['CivicType'] = civics[civic['TechnologyType']]
+    civic.pop('TechnologyType')
+    civic.pop('Critical')
+    civic['Description'] = 'LOC_' + civic['CivicType'] + '_DESCRIPTION'
+    civic['Name'] = 'LOC_' + civic['CivicType'] + '_NAME'
+
+six_style_civics = [i for i in six_style_civics if not i['CivicType'] in kept_civics]
+civics_4_to_6 = {'Type': 'CivicType', 'Name': 'CivicType', 'iCost': 'Cost', 'Repeatable': 0,
+                 'Description': 'Description', 'EraType': 'ERA_ANCIENT', 'BarbarianFree': 0, 'UITreeRow': 0,
+                 'Advisor': 'AdvisorType', 'EmbarkAll': 0, 'EmbarkUnitType': 'NULL'}
+
+schema_string_tech = '('
+for schema_key in [i for i in six_style_techs[0]]:
+    schema_string_tech += f'{schema_key}, '
+schema_string_tech = schema_string_tech[:-2] + ') VALUES\n'
+tech_table_string = "INSERT INTO Technologies" + schema_string_tech
+
+for tech in six_style_techs:
+    tech_table_string += "("
+    for tech_attribute in tech.values():
+        tech_table_string += f"'{tech_attribute}', "
+    tech_table_string = tech_table_string[:-2]
+    tech_table_string += "),\n"
+tech_table_string = tech_table_string[:-2]
+tech_table_string += ";\n"
+
+schema_string_civic = '('
+for schema_key in [i for i in six_style_civics[0]]:
+    schema_string_civic += f'{schema_key}, '
+schema_string_civic = schema_string_civic[:-2] + ') VALUES\n'
+civic_table_string = "INSERT INTO Civics" + schema_string_civic
+
+for civic in six_style_civics:
+    civic_table_string += "("
+    for civic_attribute in civic.values():
+        civic_table_string += f"'{civic_attribute}', "
+    civic_table_string = civic_table_string[:-2]
+    civic_table_string += "),\n"
+civic_table_string = civic_table_string[:-2]
+civic_table_string += ";\n"
+civic_table_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
+
+kind_string = ""
 for tech_type_to_add in techsql:
-    tech_string += tech_type_to_add + '\n'
+    first_val = tech_type_to_add[2:].split("',")[0]
+    if not ('TECH' in first_val or 'CIVIC' in first_val):
+        kind_string += tech_type_to_add + '\n'
+    elif not (first_val in kept_techs or first_val in kept_civics):
+        kind_string += tech_type_to_add + '\n'
+        debug_string += f"'{first_val}',"
+
+kind_string = kind_string[:-2] + ","
+for unit in final_units:
+    name = unit['UnitType']
+    if name not in kept_units:
+        kind_string += f"\n('{name}', 'KIND_UNIT'),"
+        debug_string += f"'{name}',"
+
+traits_string = "INSERT INTO Traits(TraitType, Name, Description, InternalOnly) VALUES"
+for trait in trait_types_to_define:
+    kind_string += f"\n('{trait}', 'KIND_TRAIT'),"
+    traits_string += f"\n('{trait}', '{'LOC_'+ trait + '_NAME'}', NULL, 0),"
+    debug_string += f"'{trait}',"
+
+traits_string = traits_string[:-1] + ";\n"
+kind_string = kind_string[:-1] + ';\n'
+
+with open('test.txt', 'w') as file:
+    file.write(debug_string)
+
+total = (kind_string + tech_string + '\n' + tech_table_string + civic_table_string + prereqs_string + update_string
+         + delete_string + traits_string + unit_table_string + replacements_string + upgrades_string)
+total_with_null = total.replace("'NULL'", "NULL")
 with open('../Core/techs_civics.sql', 'w') as file:
-    file.write(tech_string + '\n' + final_string + unit_table_string + replacements_string + upgrades_string)
+    file.write(total_with_null)
