@@ -1,5 +1,5 @@
 import xmltodict
-
+import pandas as pd
 debug_string = ""
 unique_units = """Eater_of_Dreams, Sheaim
 Moroi, Calabim
@@ -184,6 +184,17 @@ keep_art_for = {'UNIT_VAMPIRE': 'UNIT_VAMPIRE_LORD'}
 
 excludes_from_four = ['UNIT_WORKBOAT', 'UNIT_WORKER']
 
+kept_civics = ['CIVIC_CODE_OF_LAWS', 'CIVIC_FEUDALISM', 'CIVIC_GUILDS', 'CIVIC_MERCANTILISM',
+               'CIVIC_MYSTICISM', 'CIVIC_THEOLOGY']
+
+kept_techs = ['TECH_ANIMAL_HUSBANDRY', 'TECH_ARCHERY', 'TECH_ASTRONOMY', 'TECH_BRONZE_WORKING', 'TECH_CARTOGRAPHY',
+              'TECH_CONSTRUCTION', 'TECH_ENGINEERING', 'TECH_FUTURE_TECH', 'TECH_HORSEBACK_RIDING', 'TECH_IRON_WORKING',
+              'TECH_MACHINERY', 'TECH_MASONRY', 'TECH_MATHEMATICS', 'TECH_MINING', 'TECH_SAILING', 'TECH_SANITATION',
+              'TECH_STIRRUPS', 'TECH_WRITING']
+
+kept_prereqs = [('TECH_BRONZE_WORKING', 'TECH_MINING'), ('TECH_CONSTRUCTION', 'TECH_MASONRY'),
+                ('TECH_MACHINERY', 'TECH_ENGINEERING'), ('TECH_STIRRUPS','TECH_HORSEBACK_RIDING')]
+
 upgrade_tree = {'UNIT_WARRIOR': ['UNIT_AXEMAN', 'UNIT_ARCHER'],
                 'UNIT_AXEMAN': ['UNIT_CHAMPION', 'UNIT_CHARIOT'],
                 'UNIT_CHAMPION': ['UNIT_IMMORTAL', 'UNIT_EIDOLON', 'UNIT_PALADIN', 'UNIT_BERSERKER', 'UNIT_PHALANX',
@@ -242,16 +253,6 @@ upgrade_tree = {'UNIT_WARRIOR': ['UNIT_AXEMAN', 'UNIT_ARCHER'],
                 'UNIT_MONK': ['UNIT_PALADIN', 'UNIT_IMMORTAL'],
                 'UNIT_PRIEST_OF_WINTER': ['UNIT_HIGH_PRIEST_OF_WINTER'],
                 }
-
-kept_civics = ['CIVIC_CODE_OF_LAWS', 'CIVIC_FEUDALISM', 'CIVIC_GUILDS', 'CIVIC_MERCANTILISM',
-               'CIVIC_MYSTICISM', 'CIVIC_THEOLOGY']
-
-kept_techs = ['TECH_ANIMAL_HUSBANDRY', 'TECH_ARCHERY', 'TECH_ASTRONOMY', 'TECH_BRONZE_WORKING', 'TECH_CARTOGRAPHY',
-              'TECH_CONSTRUCTION', 'TECH_ENGINEERING', 'TECH_FUTURE_TECH', 'TECH_HORSEBACK_RIDING', 'TECH_IRON_WORKING',
-              'TECH_MACHINERY', 'TECH_MASONRY', 'TECH_MATHEMATICS', 'TECH_MINING', 'TECH_SAILING', 'TECH_SANITATION',
-              'TECH_STIRRUPS', 'TECH_WRITING']
-
-kept_prereqs = [('TECH_BRONZE_WORKING', 'TECH_MINING'), ('TECH_CONSTRUCTION', 'TECH_MASONRY')]
 
 native_prereqtechs = """DELETE FROM TechnologyPrereqs WHERE Technology LIKE 'TECH_WRITING' AND PrereqTech LIKE 'TECH_POTTERY';
 UPDATE TechnologyPrereqs SET PrereqTech = 'TECH_FUTURE_TECH' WHERE Technology LIKE 'TECH_THE_WHEEL' AND PrereqTech LIKE 'TECH_MINING';
@@ -660,6 +661,13 @@ loc_string = loc_string[:-2] + ';'
 with open('../Core/localization.sql', 'w') as file:
     file.write(loc_string)
 
+ui_tree_map = pd.read_csv('ui_tree.csv')
+
+ui_tree_map = ui_tree_map.set_index('tech').apply(lambda x: x.tolist(), axis=1).to_dict()
+era_map = ['ERA_ANCIENT', 'ERA_CLASSICAL', 'ERA_MEDIEVAL', 'ERA_RENAISSANCE', 'ERA_INDUSTRIAL', 'ERA_MODERN', 'ERA_ATOMIC', 'ERA_INFORMATION']
+
+
+
 tech_list = "'" + "', '".join(kept_techs) + "'"
 civic_list = "'" + "', '".join(kept_civics) + "'"
 tech_string = ""
@@ -667,6 +675,9 @@ tech_string += native_prereqtechs + '\n'
 tech_string += native_prereq_civics + '\n'
 tech_string += "UPDATE Civics SET EraType = 'ERA_FUTURE' WHERE EraType is not null;\n"
 tech_string += "UPDATE Technologies SET EraType = 'ERA_FUTURE' WHERE EraType is not null;\n"
+for tech in kept_techs:
+    tech_string += (f"UPDATE Technologies SET EraType = '{era_map[int(ui_tree_map[tech][1])]}', "
+                    f"UITreeRow = '{ui_tree_map[tech][0]}' WHERE TechnologyType is '{tech}';\n")
 # misc patches
 tech_string += f"UPDATE Units SET ObsoleteTech = 'NULL' WHERE ObsoleteTech NOT IN ({tech_list});\n"
 tech_string += f"UPDATE Units SET ObsoleteCivic = 'NULL' WHERE ObsoleteCivic NOT IN ({civic_list});\n"
@@ -693,7 +704,12 @@ six_style_techs = [i for i in six_techs if i['TechnologyType'] in techs]
 for tech in six_style_techs:
     tech['Name'] = 'LOC_' + tech['TechnologyType'] + '_NAME'
     tech['Description'] = 'LOC_' + tech['TechnologyType'] + '_DESCRIPTION'
+    tech['Cost'] = int(int(tech['Cost']) / 4)
 six_style_techs = [i for i in six_style_techs if not i['TechnologyType'] in kept_techs]
+
+for i in six_style_techs:
+    i['UITreeRow'] = ui_tree_map[i['TechnologyType']][0]
+    i['EraType'] = era_map[int(ui_tree_map[i['TechnologyType']][1])]
 
 six_style_civics = [i for i in six_techs if i['TechnologyType'] in civics]
 for civic in six_style_civics:
