@@ -12,10 +12,10 @@ def parse(tech):
         return None
     return tree
 
-with open('prereqstechs.sql', 'r') as file:
+with open('data/prereqstechs.sql', 'r') as file:
     prereqs = file.readlines()
 
-with open('techs.sql', 'r') as file:
+with open('data/techs.sql', 'r') as file:
     techs = file.readlines()
 
 graphviz_string = "digraph G {\n"
