@@ -1,50 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mod id="88437b31-15d2-48da-b71f-2f13b34e6b42" version="1">
   <Properties>
-    <Name>Modern Infantry</Name>
-    <Description>MODERN INFANTRY[NEWLINE]Unit[NEWLINE]Promotion Class: Recon Hybrid[NEWLINE]Base Cost: 620 [ICON_Production] Production[NEWLINE]Maintenance: 7 [ICON_Gold] Gold[NEWLINE]Required Tech: Synthetic Materials[NEWLINE][NEWLINE]Atomic era melee unit. +5 [ICON_Strength] Combat Strength in Hills, Woods and Rainforest terrain.[NEWLINE][NEWLINE][ICON_Strength] Melee Strength: 80[NEWLINE][ICON_Movement] Movement: 3[NEWLINE][NEWLINE]PROMOTION TREE: RECON HYBRID[NEWLINE]Tier I: Ranger, Alpine[NEWLINE]Tier II: Commando, Amphibious[NEWLINE]Tier III: Hardened, Urban Warfare[NEWLINE]Tier IV: Elite Guard[NEWLINE][NEWLINE]MISC CHANGES[NEWLINE]- Mechanized Infantry [ICON_Movement] Movement increased, from 3 to 4.</Description>
+    <Name>AAAA Sam</Name>
+    <Description>a whole ass mod</Description>
     <Created>1588793116</Created>
     <Teaser>modifier of modern infantry by slothOth</Teaser>
-    <Authors>Shadow (a.k.a. Lord Shadow @ CFC)</Authors>
-    <SpecialThanks>Deliverator, MakinDay</SpecialThanks>
-    <Homepage>https://forums.civfanatics.com/threads/modern-infantry.652682/</Homepage>
+    <Authors>Slothoth</Authors>
+    <SpecialThanks>slothoth</SpecialThanks>
+    <Homepage>cheese</Homepage>
     <CompatibleVersions>1.2,2.0</CompatibleVersions>
   </Properties>
   <InGameActions>
-    <UpdateArt id="Art">
-      <File>ModernInfantry.dep</File>
-    </UpdateArt>
     <UpdateDatabase id="Gameplay">
-      <File>Core/ModernInfantry_Config.sql</File>
+      <Properties>
+        <LoadOrder>100</LoadOrder>
+      </Properties>
+      <File>Core/techs_civics.sql</File>
     </UpdateDatabase>
-    <UpdateIcons id="Icons">
-      <File>Core/ModernInfantry_Icons.xml</File>
-    </UpdateIcons>
     <UpdateText id="Text">
-      <File>Core/ModernInfantry_TextEN.sql</File>
+      <File>Core/localization.sql</File>
     </UpdateText>
   </InGameActions>
   <Files>
-    <File>ArtDefs/Units.artdef</File>
-    <File>ArtDefs/UserInterface.artdef</File>
-    <File>Core/ModernInfantry_Config.sql</File>
-    <File>Core/ModernInfantry_Icons.xml</File>
-    <File>Core/ModernInfantry_TextEN.sql</File>
+    <File>Core/localization.sql</File>
+    <File>Core/techs_civics.sql</File>
     <File>ModernInfantry.dep</File>
-    <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
-    <File>Textures/ModernInfantryUnitFlag22.dds</File>
-    <File>Textures/ModernInfantryUnitFlag22.tex</File>
-    <File>Textures/ModernInfantryUnitFlag256.dds</File>
-    <File>Textures/ModernInfantryUnitFlag256.tex</File>
-    <File>Textures/ModernInfantryUnitFlag32.dds</File>
-    <File>Textures/ModernInfantryUnitFlag32.tex</File>
-    <File>Textures/ModernInfantryUnitFlag38.dds</File>
-    <File>Textures/ModernInfantryUnitFlag38.tex</File>
-    <File>Textures/ModernInfantryUnitFlag50.dds</File>
-    <File>Textures/ModernInfantryUnitFlag50.tex</File>
-    <File>Textures/ModernInfantryUnitFlag80.dds</File>
-    <File>Textures/ModernInfantryUnitFlag80.tex</File>
-    <File>Textures/ModernInfantryUnitPortrait95.dds</File>
-    <File>Textures/ModernInfantryUnitPortrait95.tex</File>
   </Files>
 </Mod>
