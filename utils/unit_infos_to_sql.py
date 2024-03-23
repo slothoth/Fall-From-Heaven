@@ -17,6 +17,23 @@ def small_dict(big_dict, four_to_six_map):
     return smaller_dict
 
 
+def build_sql_table(list_of_dicts, table_name):
+    schema_string = '('
+    for schema_key in [i for i in list_of_dicts[0]]:
+        schema_string += f'{schema_key}, '
+    schema_string = schema_string[:-2] + ') VALUES\n'
+    table_string = f"INSERT INTO {table_name}" + schema_string
+
+    for item in list_of_dicts:
+        table_string += "("
+        for item_attribute in item.values():
+            table_string += f"'{item_attribute}', "
+        table_string = table_string[:-2]
+        table_string += "),\n"
+    table_string = table_string[:-2]
+    table_string += ";\n"
+    return table_string
+
 debug_string = ""
 
 with open("data/kept.json", 'r') as json_file:
@@ -33,6 +50,8 @@ with open('data/CIV4TechInfos.xml', 'r') as file:
     xml_tech_dict = xmltodict.parse(file.read())
 with open('data/CIV4BuildingInfos.xml', 'r') as file:
     xml_building_dict = xmltodict.parse(file.read())
+with open('data/CIV4CivilizationInfos.xml', 'r') as file:
+    xml_civ_dict = xmltodict.parse(file.read())['Civ4CivilizationInfos']['CivilizationInfos']['CivilizationInfo']
 with open("data/unique_units.json", 'r') as json_file:
     uu = json.load(json_file)
 with open("data/heroes_civs.json", 'r') as json_file:
@@ -359,91 +378,33 @@ commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 building_yield_changes = []
 for building in six_style_build_dict:
     if building.get('YieldType', None):
-        for idx, amount in enumerate(building['YieldType']):
-            building_yield_changes.append({'BuildingType': building['BuildingType'], 'YieldType': commerce_map[idx],
+        for idx, amount in enumerate(building['YieldType']['iCommerce']):
+            if int(amount) != 0:
+                building_yield_changes.append({'BuildingType': building['BuildingType'], 'YieldType': commerce_map[idx],
                                            'YieldChange': amount})
 
 building_great_person_points = []
 for building in six_style_build_dict:
-    if building.get('GreatPersonClassType', None):
+    if building['GreatPersonClassType'] != 'NONE':
         building_great_person_points.append({'BuildingType': building['BuildingType'],
                                              'GreatPersonClassType': building['GreatPersonClassType'],
                                              'PointsPerTurn': building['PointsPerTurn']})
 
+for d in six_style_build_dict:
+    for key in ['GreatPersonClassType', 'PointsPerTurn', 'YieldType']:
+        d.pop(key, None)
+
 six_style_build_dict = [i for i in six_style_build_dict if int(i['Cost']) > 0]
 
-schema_string_tech = '('
-for schema_key in [i for i in six_style_techs[0]]:
-    schema_string_tech += f'{schema_key}, '
-schema_string_tech = schema_string_tech[:-2] + ') VALUES\n'
-tech_table_string = "INSERT INTO Technologies" + schema_string_tech
+tech_table_string = build_sql_table(six_style_techs, 'Technologies')
 
-for tech in six_style_techs:
-    tech_table_string += "("
-    for tech_attribute in tech.values():
-        tech_table_string += f"'{tech_attribute}', "
-    tech_table_string = tech_table_string[:-2]
-    tech_table_string += "),\n"
-tech_table_string = tech_table_string[:-2]
-tech_table_string += ";\n"
-
-schema_string_civic = '('
-for schema_key in [i for i in six_style_civics[0]]:
-    schema_string_civic += f'{schema_key}, '
-schema_string_civic = schema_string_civic[:-2] + ') VALUES\n'
-civic_table_string = "INSERT INTO Civics" + schema_string_civic
-
-for civic in six_style_civics:
-    civic_table_string += "("
-    for civic_attribute in civic.values():
-        civic_table_string += f"'{civic_attribute}', "
-    civic_table_string = civic_table_string[:-2]
-    civic_table_string += "),\n"
-civic_table_string = civic_table_string[:-2]
-civic_table_string += ";\n"
+civic_table_string = build_sql_table(six_style_civics, 'Civics')
 civic_table_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
 
-schema_string_building = '('
-for schema_key in [i for i in six_style_build_dict[0]]:
-    schema_string_building += f'{schema_key}, '
-schema_string_building = schema_string_building [:-2] + ') VALUES\n'
-building_table_string = "INSERT INTO Buildings" + schema_string_building
+building_table_string = build_sql_table(six_style_build_dict, 'Buildings')
+building_table_string += build_sql_table(building_great_person_points, 'Building_GreatPersonPoints')
+building_table_string += build_sql_table(building_yield_changes, 'Building_YieldChanges')
 
-for building in six_style_build_dict:
-    building_table_string += "("
-    for building_attribute in building.values():
-        building_table_string += f"'{building_attribute}', "
-    building_table_string = building_table_string[:-2]
-    building_table_string += "),\n"
-building_table_string = building_table_string[:-2]
-building_table_string += ";\n"
-
-def build_sql_table(list_of_dicts):
-    schema_string = '('
-    for schema_key in [i for i in six_style_build_dict[0]]:
-        schema_string += f'{schema_key}, '
-    schema_string = schema_string[:-2] + ') VALUES\n'
-    table_string = "INSERT INTO Buildings" + schema_string
-
-    for item in list_of_dicts:
-        table_string += "("
-        for item_attribute in item.values():
-            table_string += f"'{item_attribute}', "
-        table_string = table_string[:-2]
-        table_string += "),\n"
-    table_string = table_string[:-2]
-    table_string += ";\n"
-    return table_string
-
-misc_buildings_string = ""
-for building in building_great_person_points:
-    misc_buildings_string += "(
-    for building_attribute in building.values():
-        misc_buildings_string += f"'{building_attribute}', "
-    misc_buildings_string = misc_buildings_string[:-2]
-    misc_buildings_string += "),\n"
-misc_buildings_string = misc_buildings_string[:-2]
-misc_buildings_string += ";\n"
 
 kind_string = ""
 for tech_type_to_add in techsql:
