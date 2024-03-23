@@ -1,0 +1,96 @@
+{
+  "units_as_is": [
+    "UNIT_SETTLER",
+    "UNIT_BUILDER",
+    "UNIT_TRADER",
+    "UNIT_GREAT_GENERAL",
+    "UNIT_GREAT_ENGINEER",
+    "UNIT_GREAT_MERCHANT",
+    "UNIT_GREAT_PROPHET",
+    "UNIT_GREAT_SCIENTIST",
+    "UNIT_GREAT_ARTIST",
+    "UNIT_SCOUT",
+    "UNIT_WARRIOR",
+    "UNIT_ARCHER",
+    "UNIT_GALLEY",
+    "UNIT_HORSEMAN",
+    "UNIT_CROSSBOWMAN"
+  ],
+  "units_tech_change": [
+    "UNIT_CATAPULT",
+    "UNIT_SWORDSMAN",
+    "UNIT_KNIGHT",
+    "UNIT_RANGER",
+    "UNIT_FRIGATE",
+    "UNIT_CARAVEL",
+    "UNIT_PRIVATEER"
+  ],
+  "units_unique_civ": [
+    "UNIT_TREBUCHET"
+  ],
+  "compat_for_VI": [
+    "UNIT_GREAT_ADMIRAL",
+    "UNIT_GREAT_WRITER",
+    "UNIT_GREAT_MUSICIAN"
+  ],
+  "units_but_modify_name": {
+    "UNIT_SLINGER": "UNIT_DWARVEN_SLINGER",
+    "UNIT_HEAVY_CHARIOT": "UNIT_CHARIOT",
+    "UNIT_BOMBARD": "UNIT_CANNON",
+    "UNIT_MUSKETMAN": "UNIT_ARQUEBUS",
+    "UNIT_MAN_AT_ARMS": "UNIT_CHAMPION",
+    "UNIT_NORWEGIAN_BERSERKER": "UNIT_BERSERKER",
+    "UNIT_SCYTHIAN_HORSE_ARCHER": "UNIT_HORSE_ARCHER",
+    "UNIT_SKIRMISHER": "UNIT_LONGBOWMAN"
+  },
+  "exclude_from_IV": [
+    "UNIT_WORKBOAT",
+    "UNIT_WORKER"
+  ],
+  "civics": [
+    "CIVIC_CODE_OF_LAWS",
+    "CIVIC_FEUDALISM",
+    "CIVIC_GUILDS",
+    "CIVIC_MERCANTILISM",
+    "CIVIC_MYSTICISM",
+    "CIVIC_THEOLOGY"
+  ],
+  "techs": [
+    "TECH_ANIMAL_HUSBANDRY",
+    "TECH_ARCHERY",
+    "TECH_ASTRONOMY",
+    "TECH_BRONZE_WORKING",
+    "TECH_CARTOGRAPHY",
+    "TECH_CONSTRUCTION",
+    "TECH_ENGINEERING",
+    "TECH_FUTURE_TECH",
+    "TECH_HORSEBACK_RIDING",
+    "TECH_IRON_WORKING",
+    "TECH_MACHINERY",
+    "TECH_MASONRY",
+    "TECH_MATHEMATICS",
+    "TECH_MINING",
+    "TECH_SAILING",
+    "TECH_SANITATION",
+    "TECH_STIRRUPS",
+    "TECH_WRITING"
+  ],
+  "kept_tech_prerequisites": [
+    [
+      "TECH_BRONZE_WORKING",
+      "TECH_MINING"
+    ],
+    [
+      "TECH_CONSTRUCTION",
+      "TECH_MASONRY"
+    ],
+    [
+      "TECH_MACHINERY",
+      "TECH_ENGINEERING"
+    ],
+    [
+      "TECH_STIRRUPS",
+      "TECH_HORSEBACK_RIDING"
+    ]
+  ]
+}
