@@ -12,6 +12,9 @@
   </Properties>
   <InGameActions>
     <UpdateDatabase id="Gameplay">
+      <Properties>
+        <LoadOrder>100</LoadOrder>
+      </Properties>
       <File>Core/techs_civics.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">

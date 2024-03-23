@@ -1,19 +1,16 @@
 import xmltodict
 import pandas as pd
 import json
-
+import sqlite3
 
 def small_dict(big_dict, four_to_six_map):
-    # smaller_dict = {four_to_six_map[j]: big_dict[j] for j in big_dict if j in four_to_six_map}
     smaller_dict = {}
     for j in big_dict:
         if j in four_to_six_map:
             smaller_dict[four_to_six_map[j]] = big_dict[j]
-
     for to_insert, default_value in four_to_six_map.items():
         if default_value not in smaller_dict:
             smaller_dict[to_insert] = default_value
-
     return smaller_dict
 
 
@@ -35,6 +32,17 @@ def build_sql_table(list_of_dicts, table_name):
     return table_string
 
 debug_string = ""
+
+conn = sqlite3.connect('DebugGameplay.sqlite')
+cursor = conn.cursor()
+cursor.execute(f"SELECT BuildingType FROM Buildings")
+existing_buildings = [i[0] for i in cursor.fetchall()]
+cursor.execute(f"SELECT BuildingType FROM Building_GreatPersonPoints")
+existing_buildings_gpp = [i[0] for i in cursor.fetchall()]
+cursor.execute(f"SELECT BuildingType FROM Building_YieldChanges")
+existing_buildings_yields = [i[0] for i in cursor.fetchall()]
+conn.close()
+
 
 with open("data/kept.json", 'r') as json_file:
     kept = json.load(json_file)
@@ -187,7 +195,7 @@ with open('data/techs.sql', 'r') as file:
     techsql = file.read()
 
 techsql = techsql.splitlines()
-defined_civic_and_traits = techsql[2:85]
+defined_civic_and_traits = techsql[2:]
 civics = {}
 techs = []
 for line in defined_civic_and_traits:
@@ -359,6 +367,8 @@ for building in six_style_build_dict:
         building['PrereqTech'] = 'NULL'
     else:
         building['PrereqCivic'] = 'NULL'
+    if building['PrereqTech'] == 'NONE':
+        building['PrereqTech'] = 'NULL'
     if building['MaxPlayerInstances'] == '0':
         building['MaxPlayerInstances'] = -1
     if building.get('CitizenSlots', False):
@@ -368,12 +378,20 @@ for building in six_style_build_dict:
             building['CitizenSlots'] = specialists['iSpecialistCount']
         else:
             if "TEMPLE" in building['BuildingType']:
-                building['PrereqDistrict'] = "DISTRICTS_HOLY_SITE"
+                building['PrereqDistrict'] = "DISTRICT_HOLY_SITE"
                 building['CitizenSlots'] = 1
+            else:
+                debug_string += f"building['BuildingType'] has multiple specialists, hard to assign"
+                building['CitizenSlots'] = 0
     else:
         building['CitizenSlots'] = 'NULL'
-unbuildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) < 1]
 
+    if int(building['Cost']) < 1:
+        building['Cost'] = -1
+
+
+unbuildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) < 1]
+buildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) > 0]
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 building_yield_changes = []
 for building in six_style_build_dict:
@@ -383,23 +401,49 @@ for building in six_style_build_dict:
                 building_yield_changes.append({'BuildingType': building['BuildingType'], 'YieldType': commerce_map[idx],
                                            'YieldChange': amount})
 
+gpp_map = {'UNITCLASS_PROPHET': 'GREAT_PERSON_CLASS_PROPHET', 'UNITCLASS_COMMANDER': 'GREAT_PERSON_CLASS_GENERAL',
+           'UNITCLASS_MERCHANT': 'GREAT_PERSON_CLASS_MERCHANT', 'UNITCLASS_ENGINEER': 'GREAT_PERSON_CLASS_ENGINEER',
+           'UNITCLASS_SCIENTIST': 'GREAT_PERSON_CLASS_SCIENTIST', 'UNITCLASS_ARTIST': 'GREAT_PERSON_CLASS_ARTIST',
+           'UNITCLASS_ADVENTURER': 'GREAT_PERSON_CLASS_WRITER'}
 building_great_person_points = []
 for building in six_style_build_dict:
     if building['GreatPersonClassType'] != 'NONE':
         building_great_person_points.append({'BuildingType': building['BuildingType'],
-                                             'GreatPersonClassType': building['GreatPersonClassType'],
+                                             'GreatPersonClassType': gpp_map[building['GreatPersonClassType']],
                                              'PointsPerTurn': building['PointsPerTurn']})
 
 for d in six_style_build_dict:
     for key in ['GreatPersonClassType', 'PointsPerTurn', 'YieldType']:
         d.pop(key, None)
 
-six_style_build_dict = [i for i in six_style_build_dict if int(i['Cost']) > 0]
+# six_style_build_dict = [i for i in six_style_build_dict if int(i['Cost']) > 0]
 
 tech_table_string = build_sql_table(six_style_techs, 'Technologies')
 
 civic_table_string = build_sql_table(six_style_civics, 'Civics')
 civic_table_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
+
+buildings_dict_existing = [i for i in six_style_build_dict if i['BuildingType'] in existing_buildings]
+six_style_build_dict = [i for i in six_style_build_dict if not i['BuildingType'] in existing_buildings]
+for i in buildings_dict_existing :
+    updates = ", ".join([f"{col} = '{value}'" for col, value in i.items()])
+    delete_string += f"UPDATE Buildings SET {updates} WHERE BuildingType = '{i['BuildingType']}';\n"
+
+building_gpp_existing = [i for i in building_great_person_points if i['BuildingType'] in existing_buildings_gpp]
+building_great_person_points = [i for i in building_great_person_points if not i['BuildingType'] in existing_buildings_gpp]
+for i in building_gpp_existing:
+    updates = ", ".join([f"{col} = '{value}'" for col, value in i.items()])
+    if i['BuildingType'] == 'BUILDING_GREAT_LIBRARY':
+        delete_string += f"UPDATE Building_GreatPersonPoints SET {updates} WHERE BuildingType = '{i['BuildingType']}' AND GreatPersonClassType = 'GREAT_PERSON_CLASS_SCIENTIST';\n"
+        delete_string += f"DELETE FROM Building_GreatPersonPoints WHERE BuildingType = '{i['BuildingType']}' AND GreatPersonClassType = 'GREAT_PERSON_CLASS_WRITER';\n"
+    else:
+        delete_string += f"UPDATE Building_GreatPersonPoints SET {updates} WHERE BuildingType = '{i['BuildingType']}';\n"
+
+building_yield_existing = [i for i in building_yield_changes if i['BuildingType'] in existing_buildings_yields]
+building_yield_changes = [i for i in building_yield_changes if not i['BuildingType'] in existing_buildings_yields]
+for i in building_yield_existing:
+    updates = ", ".join([f"{col} = '{value}'" for col, value in i.items()])
+    delete_string += f"UPDATE Building_YieldChanges SET {updates} WHERE BuildingType = '{i['BuildingType']}';\n"
 
 building_table_string = build_sql_table(six_style_build_dict, 'Buildings')
 building_table_string += build_sql_table(building_great_person_points, 'Building_GreatPersonPoints')
@@ -427,6 +471,9 @@ for trait in trait_types_to_define:
     kind_string += f"\n('{trait}', 'KIND_TRAIT'),"
     traits_string += f"\n('{trait}', '{'LOC_' + trait + '_NAME'}', NULL, 0),"
     debug_string += f"'{trait}',"
+
+for building in six_style_build_dict:
+    kind_string += f"\n('{building['BuildingType']}', 'KIND_BUILDING'),"
 
 traits_string = traits_string[:-1] + ";\n"
 kind_string = kind_string[:-1] + ';\n'
