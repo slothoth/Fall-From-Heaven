@@ -1,7 +1,7 @@
 import xmltodict
 import pandas as pd
 import json
-import sqlite3
+
 
 def small_dict(big_dict, four_to_six_map):
     smaller_dict = {}
@@ -32,18 +32,12 @@ def build_sql_table(list_of_dicts, table_name):
     return table_string
 
 debug_string = ""
+patch_string = ""
 
-conn = sqlite3.connect('DebugGameplay.sqlite')
-cursor = conn.cursor()
-cursor.execute(f"SELECT BuildingType FROM Buildings")
-existing_buildings = [i[0] for i in cursor.fetchall()]
-cursor.execute(f"SELECT BuildingType FROM Building_GreatPersonPoints")
-existing_buildings_gpp = [i[0] for i in cursor.fetchall()]
-cursor.execute(f"SELECT BuildingType FROM Building_YieldChanges")
-existing_buildings_yields = [i[0] for i in cursor.fetchall()]
-conn.close()
-
-
+# conn = sqlite3.connect('DebugGameplay.sqlite')
+# cursor = conn.cursor()
+# cursor.execute(f"SELECT BuildingType FROM Buildings")
+#  = [i[0] for i in cursor.fetchall()]
 with open("data/kept.json", 'r') as json_file:
     kept = json.load(json_file)
 with open("data/upgrade_tree_units.json", 'r') as json_file:
@@ -59,7 +53,7 @@ with open('data/CIV4TechInfos.xml', 'r') as file:
 with open('data/CIV4BuildingInfos.xml', 'r') as file:
     xml_building_dict = xmltodict.parse(file.read())
 with open('data/CIV4CivilizationInfos.xml', 'r') as file:
-    xml_civ_dict = xmltodict.parse(file.read())['Civ4CivilizationInfos']['CivilizationInfos']['CivilizationInfo']
+    civ_dict = xmltodict.parse(file.read())['Civ4CivilizationInfos']['CivilizationInfos']['CivilizationInfo']
 with open("data/unique_units.json", 'r') as json_file:
     uu = json.load(json_file)
 with open("data/heroes_civs.json", 'r') as json_file:
@@ -68,11 +62,16 @@ with open("data/two_civ_units.json", 'r') as json_file:
     two_civs_units = json.load(json_file)
 with open("data/religious_units.json", 'r') as json_file:
     religious = json.load(json_file)
+with open("data/existing_buildings.json", 'r') as json_file:
+    exist_dict = json.load(json_file)
 
 kept_civics, kept_techs, kept_prereqs = kept['civics'], kept['techs'], kept['kept_tech_prerequisites']
 excludes_from_four, to_keep_but_modify = kept['exclude_from_IV'], kept['units_but_modify_name']
 kept_units, units_changed_tech, = kept['units_as_is'], kept['units_tech_change']
 units_but_for_unique_civs, compat_units = kept['units_unique_civ'], kept['compat_for_VI']
+existing_buildings = exist_dict['existing_buildings']
+existing_buildings_gpp = exist_dict['existing_buildings_gpp']
+existing_buildings_yields = exist_dict['existing_buildings_yields']
 
 kept_units.extend(units_changed_tech)
 kept_units.extend(units_but_for_unique_civs)
@@ -95,9 +94,7 @@ techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Co
 buildings_4_to_6 = {'Type': 'BuildingType', 'PrereqTech': 'PrereqTech', 'iCost': 'Cost',
                     'MaxWorldInstances': -1, 'bCapital': 'MaxPlayerInstances', 'PrereqDistrict': 'DISTRICT_CITY_CENTER',
                     'iHealth': 'Housing', 'iHappiness': 'Entertainment', 'SpecialistCounts': 'CitizenSlots',
-                    'Advisor': 'AdvisorType', 'GreatPeopleUnitClass': 'GreatPersonClassType',
-                    'iGreatPeopleRateChange': 'PointsPerTurn', 'CommerceChanges': 'YieldType'}
-
+                    'Advisor': 'AdvisorType'}
 
 advisor_mapping = {'ADVISOR_MILITARY': 'ADVISOR_CONQUEST', 'ADVISOR_RELIGION': 'ADVISOR_RELIGIOUS',
                    'ADVISOR_ECONOMY': 'ADVISOR_GENERIC', 'ADVISOR_GROWTH': 'ADVISOR_GENERIC',
@@ -129,7 +126,48 @@ for i in buildable_only:
         i['FormationClass'] = 'FORMATION_CLASS_LAND_COMBAT'
 
 # now we are gonna filter out those civs we arent doing stuff with
-civs = ['AMURITE', 'CALABIM', 'LUCHUIRP']
+
+civs = ['AMURITES', 'CALABIM', 'LUCHUIRP', 'BARBARIAN']
+unique_buildings_to_remove = []
+unique_units_to_remove = []
+unique_buildings_not_remove = []
+unique_units_not_remove = []
+for civ in civ_dict:
+    if civ['Type'][13:] in civs:
+        for unique_building in civ['Buildings']['Building']:
+            unique_buildings_not_remove.append(unique_building['BuildingType'])
+        for unique_unit in civ['Units']['Unit']:
+            if unique_unit['UnitType'] != 'NONE':
+                unique_units_not_remove.append(unique_unit['UnitType'])
+
+for civ in civ_dict:
+    if civ['Type'][13:] not in civs:
+        for unique_unit in civ['Units']['Unit']:
+            if unique_unit['UnitType'] != 'NONE':
+                if unique_unit['UnitType'] not in unique_units_not_remove:
+                    unique_units_to_remove.append(unique_unit['UnitType'])
+        if civ['Hero'] != 'NONE':
+            unique_units_to_remove.append(civ['Hero'])
+
+        if civ.get('Buildings', False):
+            if isinstance(civ['Buildings']['Building'], dict):
+                unique_buildings_to_remove.append(civ['Buildings']['Building']['BuildingType'])
+            else:
+                for unique_building in civ['Buildings']['Building']:
+                    if unique_building['BuildingType'] != 'NONE':
+                        unique_buildings_to_remove.append(unique_building['BuildingType'])
+
+# patch mercurian angels..., demagog, lightbearer
+civ_patch = {'MERCURIANS': ['UNIT_ANGEL_OF_DEATH', 'UNIT_OPHANIM', 'UNIT_SERAPH', 'UNIT_REPENTANT_ANGEL',
+                            'UNIT_VALKYRIE', 'UNIT_HERALD'],
+             'BANNOR': ['UNIT_DEMAGOG', 'UNIT_FLAGBEARER'], 'BALSERAPHS': ['UNIT_FREAK'],
+             'ILLIANS': ['UNIT_HIGH_PRIEST_OF_WINTER'], 'KURIOTATES': ['UNIT_HERNE'], 'DOVIELLO': ['UNIT_LUCIAN'],
+             'LANUN': ['UNIT_BLACK_WIND']}
+for civ, units in civ_patch.items():
+    if civ not in civs:
+        for weird_unit in units:
+            unique_units_to_remove.append(weird_unit)
+
 religions = ['RUNES_OF_KILMORPH', 'OCTOPUS_OVERLORDS', 'THE_ORDER']
 # Filter out civ units, processing strings
 equipment = [i for i in unbuildable_only if 'EQUIP' in i['Name']]
@@ -141,24 +179,15 @@ has_unique_units = {uunit['PrereqCiv'] for uunit in unique_civ_units}
 unique_civ_units_by_type = [[j['Type'] for j in unique_civ_units if i == j['PrereqCiv']] for i in has_unique_units]
 
 # Make dictionaries of units to remove
-not_civ_units, civ_units = {i[0]: i[1] for i in uu if not (i[1] in civs)}, {i[0]: i[1] for i in uu if i[1] in civs}
-not_civ_heroes, civ_heroes = {i[0]: i[1] for i in heroes if not (i[1] in civs)}, {i[0]: i[1] for i in heroes if
-                                                                                  i[1] in civs}
-not_double_civ_units = [i[0] for i in two_civs_units if not any([j in civs for j in i])]
+civ_units = {i[0]: i[1] for i in uu if i[1] in civs}
+civ_heroes = {i[0]: i[1] for i in heroes if i[1] in civs}
 double_civ_units = {i[0]: [j for j in i if j in civs][0] for i in two_civs_units if any([j in civs for j in i])}
-not_religious_units, religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}, {i[0]: i[1] for i in
-                                                                                                    religious if
-                                                                                                    i[1] in religions}
+not_religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}
+religious_units = {i[0]: i[1] for i in religious if i[1] in religions}
 # Filter the units based on dictionaries
-final_units = [i for i in buildable_only if not (i['Name'] in not_civ_units)]
-final_units = [i for i in final_units if not (i['Name'] in not_civ_heroes)]  # heroes removal
-final_units = [i for i in final_units if not (i['Name'] in [j['Type'] for j in unique_civ_units])]  # units removal
-final_units = [i for i in final_units if not i['Name'] in not_double_civ_units]
+final_units = [i for i in buildable_only if not (i['Name'] in unique_units_to_remove)]
 final_units = [i for i in final_units if not (i['Name'] in not_religious_units)]
 final_units = [i for i in final_units if not i['Name'] in excludes_from_four]
-final_units, never = [i for i in final_units if i['PrereqTech'] != 'TECH_NEVER'], [i for i in final_units if
-                                                                                   i['PrereqTech'] == 'TECH_NEVER']
-
 # filter for our upgrades table too
 to_pop = []
 names = [i['Name'] for i in final_units]
@@ -184,6 +213,9 @@ for unit in final_units:
     unit['AdvisorType'] = advisor_mapping[unit['AdvisorType']]
     if unit['PrereqTech'] == 'NONE':
         unit['PrereqTech'] = 'NULL'
+    if unit['PrereqTech'] == 'TECH_NEVER':
+        unit['PrereqTech'] = 'NULL'
+        unit['Cost'] = -1
     unit['Maintenance'] = 1
 # patch
 
@@ -238,20 +270,38 @@ for idx, religion in enumerate(religions):
             i['TraitType'] = trait_str
             trait_types_to_define.append(trait_str)
 
+final_units = [i for i in final_units if i['UnitType'] not in compat_units]
 unit_military_engineer_issues = ['Improvement_ValidBuildUnits', "Route_ValidBuildUnits",
                                  "Building_BuildChargeProductions", "District_BuildChargeProductions"]
 update_string = ""
 for table in unit_military_engineer_issues:
-    update_string += f"UPDATE {table} SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';\n"
-unit_list = "'" + "', '".join(kept_units) + "'"
+    patch_string += f"UPDATE {table} SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';\n"
 delete_string = ""
-update_string += f"UPDATE Boosts SET Unit1Type = NULL WHERE Unit1Type NOT IN ({unit_list});\n"
+delete_string += """DELETE FROM Technologies;
+DELETE FROM TechnologyPrereqs;
+DELETE FROM Technologies_XP2;
+DELETE FROM Civics;
+DELETE FROM CivicPrereqs;
+DELETE FROM Civics_XP2;
+DELETE FROM Buildings;
+DELETE FROM Building_YieldChanges;
+DELETE FROM Building_GreatPersonPoints;
+DELETE FROM Unit_BuildingPrereqs;
+DELETE FROM UnitUpgrades;
+DELETE FROM Boosts;
+"""
+
+delete_string += f"DELETE FROM Units WHERE UnitType NOT IN ("
+for unit in compat_units:
+    delete_string += f"'{unit}', "
+delete_string = delete_string[:-2] + ');\n'
 # delete_string += f"DELETE FROM UnitReplaces WHERE CivUniqueUnitType is not null;\n"
 # delete_string += f"DELETE FROM Units_XP2 WHERE UnitType is not null;\n"
 # delete_string += f"DELETE FROM Units WHERE UnitType NOT IN ({unit_list});\n"
 
-delete_string += ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
+patch_string += ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
                   "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
+patch_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
 
 schema_string = '('
 for schema_key in [i for i in final_units[0]]:
@@ -259,11 +309,10 @@ for schema_key in [i for i in final_units[0]]:
 schema_string = schema_string[:-2] + ') VALUES\n'
 unit_table_string = "INSERT INTO Units" + schema_string
 for unit in final_units:
-    if unit['UnitType'] not in kept_units:
-        unit_table_string += "("
-        for attribute in unit:
-            unit_table_string += f"'{unit[attribute]}', "
-        unit_table_string = unit_table_string[:-2] + "),\n"
+    unit_table_string += "("
+    for attribute in unit:
+        unit_table_string += f"'{unit[attribute]}', "
+    unit_table_string = unit_table_string[:-2] + "),\n"
 unit_table_string = unit_table_string[:-2] + ";\n"
 replacements_string = 'INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES\n'
 for unique_unit, original_unit in replaces.items():
@@ -276,10 +325,7 @@ upgrades_string = "INSERT INTO UnitUpgrades(Unit, Upgradeunit) VALUES\n"
 for unit, upgrades in upgrade_tree.items():
     # for upgrade in upgrades:
     # upgrades_string += f"('{unit}', '{upgrade}'),\n"
-    if unit in kept_units:
-        update_string += f"UPDATE UnitUpgrades SET UpgradeUnit = '{upgrades[0]}' WHERE Unit LIKE '{unit}';\n"
-    else:
-        upgrades_string += f"('{unit}', '{upgrades[0]}'),\n"
+    upgrades_string += f"('{unit}', '{upgrades[0]}'),\n"
 upgrades_string = upgrades_string[:-2] + ";\n"
 
 with open('../Core/initial_units.sql', 'w') as file:
@@ -297,38 +343,12 @@ with open('../Core/localization.sql', 'w') as file:
     file.write(loc_string)
 
 ui_tree_map = pd.read_csv('data/ui_tree.csv')
-
 ui_tree_map = ui_tree_map.set_index('tech').apply(lambda x: x.tolist(), axis=1).to_dict()
+ui_civic_tree = pd.read_csv('data/civic_ui_tree.csv')
+ui_civic_tree = ui_civic_tree.set_index('civic').apply(lambda x: x.tolist(), axis=1).to_dict()
 era_map = ['ERA_ANCIENT', 'ERA_CLASSICAL', 'ERA_MEDIEVAL', 'ERA_RENAISSANCE', 'ERA_INDUSTRIAL', 'ERA_MODERN',
            'ERA_ATOMIC', 'ERA_INFORMATION']
-
-tech_list = "'" + "', '".join(kept_techs) + "'"
-civic_list = "'" + "', '".join(kept_civics) + "'"
 tech_string = ""
-tech_string += native_prereqtechs + '\n'
-tech_string += native_prereq_civics + '\n'
-tech_string += "UPDATE Civics SET EraType = 'ERA_FUTURE' WHERE EraType is not null;\n"
-tech_string += "UPDATE Technologies SET EraType = 'ERA_FUTURE' WHERE EraType is not null;\n"
-for tech in kept_techs:
-    tech_string += (f"UPDATE Technologies SET EraType = '{era_map[int(ui_tree_map[tech][1])]}', "
-                    f"UITreeRow = '{ui_tree_map[tech][0]}' WHERE TechnologyType is '{tech}';\n")
-# misc patches
-tech_string += f"UPDATE Units SET ObsoleteTech = 'NULL' WHERE ObsoleteTech NOT IN ({tech_list});\n"
-tech_string += f"UPDATE Units SET ObsoleteCivic = 'NULL' WHERE ObsoleteCivic NOT IN ({civic_list});\n"
-tech_string += f"UPDATE Units SET PrereqTech = 'TECH_FUTURE_TECH' WHERE UnitType NOT IN ({unit_list});\n"
-tech_string += f"UPDATE Units SET PrereqCivic = 'CIVIC_FUTURE_CIVIC' WHERE UnitType NOT IN ({unit_list});\n"
-tech_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
-
-with open('data/prereqstechs.sql', 'r') as file:
-    prereqs_tech = file.readlines()
-    prereqs_string = "".join(prereqs_tech[:2])
-    prereqs_string += "".join([i for i in prereqs_tech[2:] if [i.split("'")[1], i.split("'")[3]] not in kept_prereqs])
-
-prereqs_string = prereqs_string[:-1] + ",\n('TECH_ASTROLOGY', 'TECH_FUTURE_TECH'),"
-prereqs_string += "\n('TECH_POTTERY', 'TECH_FUTURE_TECH');\n"
-
-with open('data/prereqscivics.sql', 'r') as file:
-    prereqs_string += file.read() + "\n"
 
 six_techs = [small_dict(i, techs_4_to_6) for i in tech_infos]
 six_style_techs = [i for i in six_techs if i['TechnologyType'] in techs]
@@ -336,11 +356,8 @@ for tech in six_style_techs:
     tech['Name'] = 'LOC_' + tech['TechnologyType'] + '_NAME'
     tech['Description'] = 'LOC_' + tech['TechnologyType'] + '_DESCRIPTION'
     tech['Cost'] = int(int(tech['Cost']) / 4)
-six_style_techs = [i for i in six_style_techs if not i['TechnologyType'] in kept_techs]
-
-for i in six_style_techs:
-    i['UITreeRow'] = ui_tree_map[i['TechnologyType']][0]
-    i['EraType'] = era_map[int(ui_tree_map[i['TechnologyType']][1])]
+    tech['UITreeRow'] = ui_tree_map[tech['TechnologyType']][0]
+    tech['EraType'] = era_map[int(ui_tree_map[tech['TechnologyType']][1])]
 
 six_style_civics = [i for i in six_techs if i['TechnologyType'] in civics]
 for civic in six_style_civics:
@@ -349,11 +366,15 @@ for civic in six_style_civics:
     civic.pop('Critical')
     civic['Description'] = 'LOC_' + civic['CivicType'] + '_DESCRIPTION'
     civic['Name'] = 'LOC_' + civic['CivicType'] + '_NAME'
+    civic['UITreeRow'] = ui_civic_tree[civic['CivicType']][0]
+    civic['EraType'] = era_map[int(ui_civic_tree[civic['CivicType']][1])]
 
-six_style_civics = [i for i in six_style_civics if not i['CivicType'] in kept_civics]
-
+extras_building_map = {'Type': 'BuildingType', 'GreatPeopleUnitClass': 'GreatPersonClassType',
+                       'iGreatPeopleRateChange': 'PointsPerTurn', 'CommerceChanges': 'YieldType',
+                       'YieldModifiers': 'YieldModifiers', 'CommerceModifiers': 'CommerceModifiers'}
 civ_only_buildings = [i for i in building_infos if not 'BUILDING' + i['BuildingClass'][13:] == i['Type']]
 six_style_build_dict = [small_dict(i, buildings_4_to_6) for i in building_infos]
+six_style_build_extras = [small_dict(i, extras_building_map) for i in building_infos]
 map_specialists = {'SPECIALIST_SCIENTIST': 'DISTRICT_CAMPUS', 'SPECIALIST_ENGINEER': 'DISTRICT_INDUSTRIAL_ZONE',
                    'SPECIALIST_PRIEST': 'DISTRICT_HOLY_SITE', 'SPECIALIST_ARTIST': 'DISTRICT_THEATER',
                    'SPECIALIST_MERCHANT': 'DISTRICT_COMMERCIAL_HUB'}
@@ -389,77 +410,86 @@ for building in six_style_build_dict:
     if int(building['Cost']) < 1:
         building['Cost'] = -1
 
-
 unbuildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) < 1]
 buildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) > 0]
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
-building_yield_changes = []
-for building in six_style_build_dict:
-    if building.get('YieldType', None):
-        for idx, amount in enumerate(building['YieldType']['iCommerce']):
-            if int(amount) != 0:
-                building_yield_changes.append({'BuildingType': building['BuildingType'], 'YieldType': commerce_map[idx],
-                                           'YieldChange': amount})
-
+yield_map = ['SDM_UNKNOWN', 'YIELD_PRODUCTION', 'SDM_UNKNOWN']
 gpp_map = {'UNITCLASS_PROPHET': 'GREAT_PERSON_CLASS_PROPHET', 'UNITCLASS_COMMANDER': 'GREAT_PERSON_CLASS_GENERAL',
            'UNITCLASS_MERCHANT': 'GREAT_PERSON_CLASS_MERCHANT', 'UNITCLASS_ENGINEER': 'GREAT_PERSON_CLASS_ENGINEER',
            'UNITCLASS_SCIENTIST': 'GREAT_PERSON_CLASS_SCIENTIST', 'UNITCLASS_ARTIST': 'GREAT_PERSON_CLASS_ARTIST',
            'UNITCLASS_ADVENTURER': 'GREAT_PERSON_CLASS_WRITER'}
-building_great_person_points = []
-for building in six_style_build_dict:
-    if building['GreatPersonClassType'] != 'NONE':
-        building_great_person_points.append({'BuildingType': building['BuildingType'],
+building_great_person_points, building_yield_changes, building_modifier_yield, modifier_table = [], [], [], []
+modifier_arguments = []
+
+for building in six_style_build_extras:
+    name = building['BuildingType']
+    if building.get('YieldType', None) is not None and building['YieldType'] != 'NONE':
+        for idx, amount in enumerate(building['YieldType']['iCommerce']):
+            if int(amount) != 0:
+                building_yield_changes.append({'BuildingType': name, 'YieldType': commerce_map[idx],
+                                           'YieldChange': amount})
+    if building.get('GreatPersonClassType', 'NONE') != 'NONE':
+        building_great_person_points.append({'BuildingType': name,
                                              'GreatPersonClassType': gpp_map[building['GreatPersonClassType']],
                                              'PointsPerTurn': building['PointsPerTurn']})
+    if building.get('YieldModifiers', None) is not None and building['YieldModifiers'] != 'NONE':
+        for idx, amount in enumerate(building['YieldModifiers']['iYield']):
+            if int(amount) != 0:
+                name = building['BuildingType']
+                modifier_id = f"{name[9:]}_ADD{yield_map[idx][5:]}YIELD"
+                building_modifier_yield.append({'BuildingType': name, 'ModifierId': modifier_id})
+                modifier_table.append({'ModifierId': modifier_id,
+                                       'ModifierType': 'MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER'})
+                modifier_arguments.append({'ModifierID': modifier_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                                           'Value': amount})
+                modifier_arguments.append({'ModifierID': modifier_id, 'Name': 'YieldType', 'Type': 'ARGTYPE_IDENTITY',
+                                           'Value': yield_map[idx]})
 
-for d in six_style_build_dict:
-    for key in ['GreatPersonClassType', 'PointsPerTurn', 'YieldType']:
-        d.pop(key, None)
+    if building.get('CommerceModifier', None) is not None and building['CommerceModifier'] != 'NONE':
+        for idx, amount in enumerate(building['CommerceModifier']['iCommerce']):
+            if int(amount) != 0:
+                modifier_id = f"{name[9:]}_ADD{commerce_map[idx][5:]}YIELD"
+                building_modifier_yield.append({'BuildingType': name, 'ModifierId': modifier_id})
+                modifier_table.append({'ModifierId': modifier_id,
+                                       'ModifierType': 'MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER'})
+                modifier_arguments.append({'ModifierID': modifier_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                                           'Value': amount})
+                modifier_arguments.append({'ModifierID': modifier_id, 'Name': 'YieldType', 'Type': 'ARGTYPE_IDENTITY',
+                                           'Value': commerce_map[idx]})
 
 # six_style_build_dict = [i for i in six_style_build_dict if int(i['Cost']) > 0]
 
 tech_table_string = build_sql_table(six_style_techs, 'Technologies')
 
 civic_table_string = build_sql_table(six_style_civics, 'Civics')
-civic_table_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
+patch_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
 
 buildings_dict_existing = [i for i in six_style_build_dict if i['BuildingType'] in existing_buildings]
 six_style_build_dict = [i for i in six_style_build_dict if not i['BuildingType'] in existing_buildings]
-for i in buildings_dict_existing :
-    updates = ", ".join([f"{col} = '{value}'" for col, value in i.items()])
-    delete_string += f"UPDATE Buildings SET {updates} WHERE BuildingType = '{i['BuildingType']}';\n"
 
 building_gpp_existing = [i for i in building_great_person_points if i['BuildingType'] in existing_buildings_gpp]
 building_great_person_points = [i for i in building_great_person_points if not i['BuildingType'] in existing_buildings_gpp]
-for i in building_gpp_existing:
-    updates = ", ".join([f"{col} = '{value}'" for col, value in i.items()])
-    if i['BuildingType'] == 'BUILDING_GREAT_LIBRARY':
-        delete_string += f"UPDATE Building_GreatPersonPoints SET {updates} WHERE BuildingType = '{i['BuildingType']}' AND GreatPersonClassType = 'GREAT_PERSON_CLASS_SCIENTIST';\n"
-        delete_string += f"DELETE FROM Building_GreatPersonPoints WHERE BuildingType = '{i['BuildingType']}' AND GreatPersonClassType = 'GREAT_PERSON_CLASS_WRITER';\n"
-    else:
-        delete_string += f"UPDATE Building_GreatPersonPoints SET {updates} WHERE BuildingType = '{i['BuildingType']}';\n"
 
 building_yield_existing = [i for i in building_yield_changes if i['BuildingType'] in existing_buildings_yields]
 building_yield_changes = [i for i in building_yield_changes if not i['BuildingType'] in existing_buildings_yields]
-for i in building_yield_existing:
-    updates = ", ".join([f"{col} = '{value}'" for col, value in i.items()])
-    delete_string += f"UPDATE Building_YieldChanges SET {updates} WHERE BuildingType = '{i['BuildingType']}';\n"
 
 building_table_string = build_sql_table(six_style_build_dict, 'Buildings')
 building_table_string += build_sql_table(building_great_person_points, 'Building_GreatPersonPoints')
 building_table_string += build_sql_table(building_yield_changes, 'Building_YieldChanges')
-
-
+building_table_string += build_sql_table(building_modifier_yield, 'BuildingModifiers')
+building_table_string += build_sql_table(modifier_table, 'Modifiers')
+building_table_string += build_sql_table(modifier_arguments, 'ModifierArguments')
 kind_string = ""
+
 for tech_type_to_add in techsql:
     first_val = tech_type_to_add[2:].split("',")[0]
     if not ('TECH' in first_val or 'CIVIC' in first_val):
         kind_string += tech_type_to_add + '\n'
     elif not (first_val in kept_techs or first_val in kept_civics):
         kind_string += tech_type_to_add + '\n'
-        debug_string += f"'{first_val}',"
 
-kind_string = kind_string[:-2] + ","
+kind_string = kind_string[:-2] + ','
+
 for unit in final_units:
     name = unit['UnitType']
     if name not in kept_units:
@@ -478,12 +508,22 @@ for building in six_style_build_dict:
 traits_string = traits_string[:-1] + ";\n"
 kind_string = kind_string[:-1] + ';\n'
 
+with open('data/prereqstechs.sql', 'r') as file:
+    prereqs_tech = file.readlines()
+    prereqs_string = "".join(prereqs_tech[:2])
+    prereqs_string += "".join([i for i in prereqs_tech[2:]])
+
+prereqs_string = prereqs_string[:-1] + ";\n"
+with open('data/prereqscivics.sql', 'r') as file:
+    prereqs_string += file.read() + "\n"
+
+
 with open('debug.txt', 'w') as file:
     file.write(debug_string)
 
-total = (kind_string + tech_string + '\n' + tech_table_string + civic_table_string + building_table_string
-         + prereqs_string + update_string + delete_string + traits_string + unit_table_string + replacements_string
-         + upgrades_string)
+total = (delete_string + kind_string + tech_string + '\n' + tech_table_string + civic_table_string + prereqs_string
+         + building_table_string + update_string + traits_string + unit_table_string + replacements_string
+         + upgrades_string + patch_string)
 total_with_null = total.replace("'NULL'", "NULL")
 with open('../Core/techs_civics.sql', 'w') as file:
     file.write(total_with_null)
