@@ -53,7 +53,7 @@ with open('data/CIV4TechInfos.xml', 'r') as file:
 with open('data/CIV4BuildingInfos.xml', 'r') as file:
     xml_building_dict = xmltodict.parse(file.read())
 with open('data/CIV4CivilizationInfos.xml', 'r') as file:
-    xml_civ_dict = xmltodict.parse(file.read())['Civ4CivilizationInfos']['CivilizationInfos']['CivilizationInfo']
+    civ_dict = xmltodict.parse(file.read())['Civ4CivilizationInfos']['CivilizationInfos']['CivilizationInfo']
 with open("data/unique_units.json", 'r') as json_file:
     uu = json.load(json_file)
 with open("data/heroes_civs.json", 'r') as json_file:
@@ -94,9 +94,7 @@ techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Co
 buildings_4_to_6 = {'Type': 'BuildingType', 'PrereqTech': 'PrereqTech', 'iCost': 'Cost',
                     'MaxWorldInstances': -1, 'bCapital': 'MaxPlayerInstances', 'PrereqDistrict': 'DISTRICT_CITY_CENTER',
                     'iHealth': 'Housing', 'iHappiness': 'Entertainment', 'SpecialistCounts': 'CitizenSlots',
-                    'Advisor': 'AdvisorType', 'GreatPeopleUnitClass': 'GreatPersonClassType',
-                    'iGreatPeopleRateChange': 'PointsPerTurn', 'CommerceChanges': 'YieldType'}
-
+                    'Advisor': 'AdvisorType'}
 
 advisor_mapping = {'ADVISOR_MILITARY': 'ADVISOR_CONQUEST', 'ADVISOR_RELIGION': 'ADVISOR_RELIGIOUS',
                    'ADVISOR_ECONOMY': 'ADVISOR_GENERIC', 'ADVISOR_GROWTH': 'ADVISOR_GENERIC',
@@ -128,7 +126,48 @@ for i in buildable_only:
         i['FormationClass'] = 'FORMATION_CLASS_LAND_COMBAT'
 
 # now we are gonna filter out those civs we arent doing stuff with
-civs = ['AMURITE', 'CALABIM', 'LUCHUIRP']
+
+civs = ['AMURITES', 'CALABIM', 'LUCHUIRP', 'BARBARIAN']
+unique_buildings_to_remove = []
+unique_units_to_remove = []
+unique_buildings_not_remove = []
+unique_units_not_remove = []
+for civ in civ_dict:
+    if civ['Type'][13:] in civs:
+        for unique_building in civ['Buildings']['Building']:
+            unique_buildings_not_remove.append(unique_building['BuildingType'])
+        for unique_unit in civ['Units']['Unit']:
+            if unique_unit['UnitType'] != 'NONE':
+                unique_units_not_remove.append(unique_unit['UnitType'])
+
+for civ in civ_dict:
+    if civ['Type'][13:] not in civs:
+        for unique_unit in civ['Units']['Unit']:
+            if unique_unit['UnitType'] != 'NONE':
+                if unique_unit['UnitType'] not in unique_units_not_remove:
+                    unique_units_to_remove.append(unique_unit['UnitType'])
+        if civ['Hero'] != 'NONE':
+            unique_units_to_remove.append(civ['Hero'])
+
+        if civ.get('Buildings', False):
+            if isinstance(civ['Buildings']['Building'], dict):
+                unique_buildings_to_remove.append(civ['Buildings']['Building']['BuildingType'])
+            else:
+                for unique_building in civ['Buildings']['Building']:
+                    if unique_building['BuildingType'] != 'NONE':
+                        unique_buildings_to_remove.append(unique_building['BuildingType'])
+
+# patch mercurian angels..., demagog, lightbearer
+civ_patch = {'MERCURIANS': ['UNIT_ANGEL_OF_DEATH', 'UNIT_OPHANIM', 'UNIT_SERAPH', 'UNIT_REPENTANT_ANGEL',
+                            'UNIT_VALKYRIE', 'UNIT_HERALD'],
+             'BANNOR': ['UNIT_DEMAGOG', 'UNIT_FLAGBEARER'], 'BALSERAPHS': ['UNIT_FREAK'],
+             'ILLIANS': ['UNIT_HIGH_PRIEST_OF_WINTER'], 'KURIOTATES': ['UNIT_HERNE'], 'DOVIELLO': ['UNIT_LUCIAN'],
+             'LANUN': ['UNIT_BLACK_WIND']}
+for civ, units in civ_patch.items():
+    if civ not in civs:
+        for weird_unit in units:
+            unique_units_to_remove.append(weird_unit)
+
 religions = ['RUNES_OF_KILMORPH', 'OCTOPUS_OVERLORDS', 'THE_ORDER']
 # Filter out civ units, processing strings
 equipment = [i for i in unbuildable_only if 'EQUIP' in i['Name']]
@@ -140,24 +179,15 @@ has_unique_units = {uunit['PrereqCiv'] for uunit in unique_civ_units}
 unique_civ_units_by_type = [[j['Type'] for j in unique_civ_units if i == j['PrereqCiv']] for i in has_unique_units]
 
 # Make dictionaries of units to remove
-not_civ_units, civ_units = {i[0]: i[1] for i in uu if not (i[1] in civs)}, {i[0]: i[1] for i in uu if i[1] in civs}
-not_civ_heroes, civ_heroes = {i[0]: i[1] for i in heroes if not (i[1] in civs)}, {i[0]: i[1] for i in heroes if
-                                                                                  i[1] in civs}
-not_double_civ_units = [i[0] for i in two_civs_units if not any([j in civs for j in i])]
+civ_units = {i[0]: i[1] for i in uu if i[1] in civs}
+civ_heroes = {i[0]: i[1] for i in heroes if i[1] in civs}
 double_civ_units = {i[0]: [j for j in i if j in civs][0] for i in two_civs_units if any([j in civs for j in i])}
-not_religious_units, religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}, {i[0]: i[1] for i in
-                                                                                                    religious if
-                                                                                                    i[1] in religions}
+not_religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}
+religious_units = {i[0]: i[1] for i in religious if i[1] in religions}
 # Filter the units based on dictionaries
-final_units = [i for i in buildable_only if not (i['Name'] in not_civ_units)]
-final_units = [i for i in final_units if not (i['Name'] in not_civ_heroes)]  # heroes removal
-final_units = [i for i in final_units if not (i['Name'] in [j['Type'] for j in unique_civ_units])]  # units removal
-final_units = [i for i in final_units if not i['Name'] in not_double_civ_units]
+final_units = [i for i in buildable_only if not (i['Name'] in unique_units_to_remove)]
 final_units = [i for i in final_units if not (i['Name'] in not_religious_units)]
 final_units = [i for i in final_units if not i['Name'] in excludes_from_four]
-final_units, never = [i for i in final_units if i['PrereqTech'] != 'TECH_NEVER'], [i for i in final_units if
-                                                                                   i['PrereqTech'] == 'TECH_NEVER']
-
 # filter for our upgrades table too
 to_pop = []
 names = [i['Name'] for i in final_units]
@@ -183,6 +213,9 @@ for unit in final_units:
     unit['AdvisorType'] = advisor_mapping[unit['AdvisorType']]
     if unit['PrereqTech'] == 'NONE':
         unit['PrereqTech'] = 'NULL'
+    if unit['PrereqTech'] == 'TECH_NEVER':
+        unit['PrereqTech'] = 'NULL'
+        unit['Cost'] = -1
     unit['Maintenance'] = 1
 # patch
 
@@ -336,8 +369,12 @@ for civic in six_style_civics:
     civic['UITreeRow'] = ui_civic_tree[civic['CivicType']][0]
     civic['EraType'] = era_map[int(ui_civic_tree[civic['CivicType']][1])]
 
+extras_building_map = {'Type': 'BuildingType', 'GreatPeopleUnitClass': 'GreatPersonClassType',
+                       'iGreatPeopleRateChange': 'PointsPerTurn', 'CommerceChanges': 'YieldType',
+                       'YieldModifiers': 'YieldModifiers', 'CommerceModifiers': 'CommerceModifiers'}
 civ_only_buildings = [i for i in building_infos if not 'BUILDING' + i['BuildingClass'][13:] == i['Type']]
 six_style_build_dict = [small_dict(i, buildings_4_to_6) for i in building_infos]
+six_style_build_extras = [small_dict(i, extras_building_map) for i in building_infos]
 map_specialists = {'SPECIALIST_SCIENTIST': 'DISTRICT_CAMPUS', 'SPECIALIST_ENGINEER': 'DISTRICT_INDUSTRIAL_ZONE',
                    'SPECIALIST_PRIEST': 'DISTRICT_HOLY_SITE', 'SPECIALIST_ARTIST': 'DISTRICT_THEATER',
                    'SPECIALIST_MERCHANT': 'DISTRICT_COMMERCIAL_HUB'}
@@ -373,32 +410,52 @@ for building in six_style_build_dict:
     if int(building['Cost']) < 1:
         building['Cost'] = -1
 
-
 unbuildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) < 1]
 buildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) > 0]
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
-building_yield_changes = []
-for building in six_style_build_dict:
-    if building.get('YieldType', None):
-        for idx, amount in enumerate(building['YieldType']['iCommerce']):
-            if int(amount) != 0:
-                building_yield_changes.append({'BuildingType': building['BuildingType'], 'YieldType': commerce_map[idx],
-                                           'YieldChange': amount})
-
+yield_map = ['SDM_UNKNOWN', 'YIELD_PRODUCTION', 'SDM_UNKNOWN']
 gpp_map = {'UNITCLASS_PROPHET': 'GREAT_PERSON_CLASS_PROPHET', 'UNITCLASS_COMMANDER': 'GREAT_PERSON_CLASS_GENERAL',
            'UNITCLASS_MERCHANT': 'GREAT_PERSON_CLASS_MERCHANT', 'UNITCLASS_ENGINEER': 'GREAT_PERSON_CLASS_ENGINEER',
            'UNITCLASS_SCIENTIST': 'GREAT_PERSON_CLASS_SCIENTIST', 'UNITCLASS_ARTIST': 'GREAT_PERSON_CLASS_ARTIST',
            'UNITCLASS_ADVENTURER': 'GREAT_PERSON_CLASS_WRITER'}
-building_great_person_points = []
-for building in six_style_build_dict:
-    if building['GreatPersonClassType'] != 'NONE':
-        building_great_person_points.append({'BuildingType': building['BuildingType'],
+building_great_person_points, building_yield_changes, building_modifier_yield, modifier_table = [], [], [], []
+modifier_arguments = []
+
+for building in six_style_build_extras:
+    name = building['BuildingType']
+    if building.get('YieldType', None) is not None and building['YieldType'] != 'NONE':
+        for idx, amount in enumerate(building['YieldType']['iCommerce']):
+            if int(amount) != 0:
+                building_yield_changes.append({'BuildingType': name, 'YieldType': commerce_map[idx],
+                                           'YieldChange': amount})
+    if building.get('GreatPersonClassType', 'NONE') != 'NONE':
+        building_great_person_points.append({'BuildingType': name,
                                              'GreatPersonClassType': gpp_map[building['GreatPersonClassType']],
                                              'PointsPerTurn': building['PointsPerTurn']})
+    if building.get('YieldModifiers', None) is not None and building['YieldModifiers'] != 'NONE':
+        for idx, amount in enumerate(building['YieldModifiers']['iYield']):
+            if int(amount) != 0:
+                name = building['BuildingType']
+                modifier_id = f"{name[9:]}_ADD{yield_map[idx][5:]}YIELD"
+                building_modifier_yield.append({'BuildingType': name, 'ModifierId': modifier_id})
+                modifier_table.append({'ModifierId': modifier_id,
+                                       'ModifierType': 'MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER'})
+                modifier_arguments.append({'ModifierID': modifier_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                                           'Value': amount})
+                modifier_arguments.append({'ModifierID': modifier_id, 'Name': 'YieldType', 'Type': 'ARGTYPE_IDENTITY',
+                                           'Value': yield_map[idx]})
 
-for d in six_style_build_dict:
-    for key in ['GreatPersonClassType', 'PointsPerTurn', 'YieldType']:
-        d.pop(key, None)
+    if building.get('CommerceModifier', None) is not None and building['CommerceModifier'] != 'NONE':
+        for idx, amount in enumerate(building['CommerceModifier']['iCommerce']):
+            if int(amount) != 0:
+                modifier_id = f"{name[9:]}_ADD{commerce_map[idx][5:]}YIELD"
+                building_modifier_yield.append({'BuildingType': name, 'ModifierId': modifier_id})
+                modifier_table.append({'ModifierId': modifier_id,
+                                       'ModifierType': 'MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER'})
+                modifier_arguments.append({'ModifierID': modifier_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                                           'Value': amount})
+                modifier_arguments.append({'ModifierID': modifier_id, 'Name': 'YieldType', 'Type': 'ARGTYPE_IDENTITY',
+                                           'Value': commerce_map[idx]})
 
 # six_style_build_dict = [i for i in six_style_build_dict if int(i['Cost']) > 0]
 
@@ -419,8 +476,9 @@ building_yield_changes = [i for i in building_yield_changes if not i['BuildingTy
 building_table_string = build_sql_table(six_style_build_dict, 'Buildings')
 building_table_string += build_sql_table(building_great_person_points, 'Building_GreatPersonPoints')
 building_table_string += build_sql_table(building_yield_changes, 'Building_YieldChanges')
-
-
+building_table_string += build_sql_table(building_modifier_yield, 'BuildingModifiers')
+building_table_string += build_sql_table(modifier_table, 'Modifiers')
+building_table_string += build_sql_table(modifier_arguments, 'ModifierArguments')
 kind_string = ""
 
 for tech_type_to_add in techsql:
