@@ -1,7 +1,7 @@
 from civilizations import civilizations
 from units import units_sql
 from techs import techs_sql, prereq_techs
-from buildings import buildings_sql
+from buildings import Buildings
 from delete_n_patch import delete_rows, patch_string_generate, traits_string_generate
 
 import json
@@ -21,7 +21,7 @@ def main():
     delete_string = delete_rows(kept)
     patch_string = patch_string_generate()
     traits_string, kind_string = traits_string_generate(trait_types_to_define, kind_string)
-    building_table_string, kind_string = buildings_sql(civics, kind_string)
+    building_table_string, kind_string = Buildings().buildings_sql(civics, kind_string)
 
     kind_string = kind_string[:-1] + ';'
     total = (delete_string + kind_string + '\n' + tech_table_string + civic_table_string + prereqs_string
@@ -32,8 +32,10 @@ def main():
     with open('../Core/techs_civics.sql', 'w') as file:
         file.write(total_with_null)
 
-    with open('../Core/localization.sql', 'a') as file:
-        file.write(';')
+    with open('../Core/localization.sql', 'r') as file:
+        localization_file = file.read()[:-2] + ';'
+    with open('../Core/localization.sql', 'w') as file:
+        file.write(localization_file)
 
 
 if __name__ == "__main__":
