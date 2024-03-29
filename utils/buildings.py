@@ -42,7 +42,7 @@ class Buildings:
 
     def buildings_sql(self, civics, kind_string):
         debug_string = ''
-        with open('data/CIV4BuildingInfos.xml', 'r') as file:
+        with open('data/XML/Buildings/CIV4BuildingInfos.xml', 'r') as file:
             building_infos = xmltodict.parse(file.read())['Civ4BuildingInfos']['BuildingInfos']['BuildingInfo']
 
         with open("data/existing_buildings.json", 'r') as json_file:
@@ -102,7 +102,6 @@ class Buildings:
         print(debug_string)
 
         return building_table_string, kind_string
-
 
     def building_features(self, six_style_build_extras, exist_dict):
         existing_buildings_gpp = exist_dict['existing_buildings_gpp']

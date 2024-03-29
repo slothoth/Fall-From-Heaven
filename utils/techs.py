@@ -16,7 +16,7 @@ def techs_sql(kind_string, kept):
     ui_civic_tree = pd.read_csv('data/civic_ui_tree.csv')
     ui_civic_tree = ui_civic_tree.set_index('civic').apply(lambda x: x.tolist(), axis=1).to_dict()
 
-    with open('data/CIV4TechInfos.xml', 'r') as file:
+    with open('data/XML/Technologies/CIV4TechInfos.xml', 'r') as file:
         tech_infos = xmltodict.parse(file.read())['Civ4TechInfos']['TechInfos']['TechInfo']
     with open('data/techs.sql', 'r') as file:
         techsql = file.read()
