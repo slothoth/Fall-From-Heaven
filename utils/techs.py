@@ -10,7 +10,7 @@ era_map = ['ERA_ANCIENT', 'ERA_CLASSICAL', 'ERA_MEDIEVAL', 'ERA_RENAISSANCE', 'E
                'ERA_ATOMIC', 'ERA_INFORMATION']
 
 
-def techs_sql(kind_string, kept):
+def techs_sql(kinds, kept):
     ui_tree_map = pd.read_csv('data/ui_tree.csv')
     ui_tree_map = ui_tree_map.set_index('tech').apply(lambda x: x.tolist(), axis=1).to_dict()
     ui_civic_tree = pd.read_csv('data/civic_ui_tree.csv')
@@ -56,18 +56,17 @@ def techs_sql(kind_string, kept):
     tech_table_string = build_sql_table(six_style_techs, 'Technologies')
     civic_table_string = build_sql_table(six_style_civics, 'Civics')
 
-    for tech_type_to_add in techsql:
-        first_val = tech_type_to_add[2:].split("',")[0]
-        if not ('TECH' in first_val or 'CIVIC' in first_val):
-            kind_string += tech_type_to_add + '\n'
-        elif not (first_val in kept_techs or first_val in kept_civics):
-            kind_string += tech_type_to_add + '\n'
-    kind_string = kind_string[:-2] + ','
+    for tech_type_to_add in techsql[2:]:
+        tech_split = tech_type_to_add.split("'")
+        if not ('TECH' in tech_split[1] or 'CIVIC' in tech_split[1]):
+            kinds[tech_split[1]] = tech_split[3]
+        elif not (tech_split[1] in kept_techs or tech_split[1] in kept_civics):
+            kinds[tech_split[1]] = tech_split[3]
 
     localization(six_style_techs)
     localization(six_style_civics)
 
-    return tech_table_string, civic_table_string, civics, kind_string
+    return tech_table_string, civic_table_string, civics, kinds
 
 def prereq_techs():
     with open('data/prereqstechs.sql', 'r') as file:

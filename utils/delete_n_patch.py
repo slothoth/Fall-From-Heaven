@@ -30,11 +30,11 @@ def patch_string_generate():
     return patch_string
 
 
-def traits_string_generate(trait_types_to_define, kind_string):
+def traits_string_generate(trait_types_to_define, kinds):
     traits_string = "INSERT INTO Traits(TraitType, Name, Description, InternalOnly) VALUES"
     for trait in trait_types_to_define:
         traits_string += f"\n('{trait}', '{'LOC_' + trait + '_NAME'}', NULL, 0),"
-        kind_string += f"\n('{trait}', 'KIND_TRAIT'),"
+        kinds[trait] = 'KIND_TRAIT'
     traits_string = traits_string[:-1] + ";\n"
 
-    return traits_string, kind_string
+    return traits_string, kinds
