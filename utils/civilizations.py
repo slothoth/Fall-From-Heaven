@@ -8,7 +8,7 @@ civ_patch = {'MERCURIANS': ['UNIT_ANGEL_OF_DEATH', 'UNIT_OPHANIM', 'UNIT_SERAPH'
 
 
 def civilizations(civs):
-    with open('data/CIV4CivilizationInfos.xml', 'r') as file:
+    with open('data/XML/Civilizations/CIV4CivilizationInfos.xml', 'r') as file:
         civ_dict = xmltodict.parse(file.read())['Civ4CivilizationInfos']['CivilizationInfos']['CivilizationInfo']
 
     unique_buildings_to_remove = []
