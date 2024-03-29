@@ -17,7 +17,7 @@ advisor_mapping = {'ADVISOR_MILITARY': 'ADVISOR_CONQUEST', 'ADVISOR_RELIGION': '
                    'ADVISOR_SCIENCE': 'ADVISOR_TECHNOLOGY', 'ADVISOR_CULTURE': 'ADVISOR_CULTURE'}
 
 
-def units_sql(civs, unique_units_to_remove, civics, kind_string, kept):
+def units_sql(civs, unique_units_to_remove, civics, kinds, kept):
     debug_string = ""
 
     with open('data/CIV4UnitInfos.xml', 'r') as file:
@@ -125,7 +125,7 @@ def units_sql(civs, unique_units_to_remove, civics, kind_string, kept):
     for unit in final_units:
         name = unit['UnitType']
         if name not in kept_units:
-            kind_string += f"\n('{name}', 'KIND_UNIT'),"
+            kinds[name] = 'KIND_UNIT'
             debug_string += f"'{name}',"
 
     replaces.pop('UNIT_SWORDSMAN')
@@ -185,4 +185,4 @@ def units_sql(civs, unique_units_to_remove, civics, kind_string, kept):
 
     localization(final_units)
 
-    return unit_table_string, replacements_string, upgrades_string, trait_types_to_define, kind_string
+    return unit_table_string, replacements_string, upgrades_string, trait_types_to_define, kinds

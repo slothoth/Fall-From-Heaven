@@ -30,11 +30,27 @@ def build_sql_table(list_of_dicts, table_name):
     return table_string
 
 
+def update_sql_table(list_of_dicts, table_name, columns_to_select):
+    table_string = ''
+
+    for item in list_of_dicts:
+        table_string += f"UPDATE {table_name} SET "
+        for key, value in item.items():
+            if key not in columns_to_select:
+                table_string += f"{key} = '{value}', "
+        table_string = table_string[:-2]
+        table_string += f" WHERE {columns_to_select[0]} = '{item[columns_to_select[0]]}'"
+        for column in columns_to_select[1:]:
+            table_string += f" AND {column} = '{item[column]}'"
+        table_string += ";\n"
+    return table_string
+
+
 def sql_check(tablename):
     conn = sqlite3.connect('DebugGameplay.sqlite')
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM {tablename}")
-    sql_column_values = [i[0] for i in cursor.fetchall()]
+    sql_column_values = cursor.fetchall()
     cursor.close()
     return sql_column_values
 

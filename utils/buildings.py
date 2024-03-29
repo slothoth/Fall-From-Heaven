@@ -40,7 +40,7 @@ class Buildings:
         self.building_modifiers, self.modifier_table = [], []
         self.modifier_arguments, self.dynamic_modifiers = [], []
 
-    def buildings_sql(self, civics, kind_string):
+    def buildings_sql(self, civics, kinds):
         debug_string = ''
         with open('data/XML/Buildings/CIV4BuildingInfos.xml', 'r') as file:
             building_infos = xmltodict.parse(file.read())['Civ4BuildingInfos']['BuildingInfos']['BuildingInfo']
@@ -93,7 +93,7 @@ class Buildings:
 
         for building in six_style_build_dict:
             if not building['BuildingType'] in existing_buildings:
-                kind_string += f"\n('{building['BuildingType']}', 'KIND_BUILDING'),"
+                kinds[building['BuildingType']] = 'KIND_BUILDING'
 
         building_table_string = build_sql_table(six_style_build_dict, 'Buildings')
         building_table_string += self.building_features(six_style_build_extras, exist_dict)
@@ -101,7 +101,7 @@ class Buildings:
         localization(six_style_build_dict)
         print(debug_string)
 
-        return building_table_string, kind_string
+        return building_table_string, kinds
 
     def building_features(self, six_style_build_extras, exist_dict):
         existing_buildings_gpp = exist_dict['existing_buildings_gpp']
