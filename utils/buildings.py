@@ -1,4 +1,4 @@
-from utils import small_dict, build_sql_table
+from utils import small_dict, build_sql_table, localization
 import xmltodict
 import json
 
@@ -33,6 +33,7 @@ gpp_map = {'UNITCLASS_PROPHET': 'GREAT_PERSON_CLASS_PROPHET', 'UNITCLASS_COMMAND
 advisor_mapping = {'ADVISOR_MILITARY': 'ADVISOR_CONQUEST', 'ADVISOR_RELIGION': 'ADVISOR_RELIGIOUS',
                    'ADVISOR_ECONOMY': 'ADVISOR_GENERIC', 'ADVISOR_GROWTH': 'ADVISOR_GENERIC',
                    'ADVISOR_SCIENCE': 'ADVISOR_TECHNOLOGY', 'ADVISOR_CULTURE': 'ADVISOR_CULTURE'}
+
 
 def buildings_sql(civics, kind_string):
     debug_string = ''
@@ -215,6 +216,7 @@ def buildings_sql(civics, kind_string):
     building_table_string += build_sql_table(modifier_table, 'Modifiers')
     building_table_string += build_sql_table(modifier_arguments, 'ModifierArguments')
 
+    localization(six_style_build_dict)
     print(debug_string)
 
     return building_table_string, kind_string

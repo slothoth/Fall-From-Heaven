@@ -1,4 +1,4 @@
-from utils import small_dict
+from utils import small_dict, localization
 import xmltodict
 import json
 
@@ -182,5 +182,7 @@ def units_sql(civs, unique_units_to_remove, civics, kind_string, kept):
         # upgrades_string += f"('{unit}', '{upgrade}'),\n"
         upgrades_string += f"('{unit}', '{upgrades[0]}'),\n"
     upgrades_string = upgrades_string[:-2] + ";\n"
+
+    localization(final_units)
 
     return unit_table_string, replacements_string, upgrades_string, trait_types_to_define, kind_string

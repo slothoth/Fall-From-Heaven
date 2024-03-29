@@ -39,14 +39,18 @@ def sql_check(tablename):
     return sql_column_values
 
 
-def localization(final_units):
-    loc_string = 'INSERT OR REPLACE INTO LocalizedText (Language, Tag, Text)\n VALUES\n'
-    for unit in final_units:
-        en_name = ' '.join([word.capitalize() for word in unit['Name'][4:-4].split('_')])[:-1]
-        loc_string += f"('en_us', '{unit['Name']}', '{en_name}'),\n"
-        loc_string += f"('en_us', '{unit['Description']}',  'Description'),\n"
-        loc_string += f"('en_us', 'LOC_PEDIA_UNITS_PAGE_{unit['Name'][4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
-    loc_string = loc_string[:-2] + ';'
+def localization(names):
+    loc_string = ''
+    type_description = 'LOC_PEDIA_UNITS_PAGE'
+    if 'UnitType' in names[0]:
+        type_description = 'LOC_PEDIA_UNITS_PAGE'
+    elif 'BuildingType' in names[0]:
+        type_description = 'LOC_PEDIA_BUILDINGS_PAGE'
+    for item in names:
+        en_name = ' '.join([word.capitalize() for word in item['Name'].split('_')][2:-1])
+        loc_string += f"('en_us', '{item['Name']}', '{en_name}'),\n"
+        loc_string += f"('en_us', '{item['Description']}',  'Description'),\n"
+        loc_string += f"('en_us', '{type_description}_{item['Name'][4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
 
-    with open('../Core/localization.sql', 'w') as file:
+    with open('../Core/localization.sql', 'a') as file:
         file.write(loc_string)

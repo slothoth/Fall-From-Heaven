@@ -1,6 +1,6 @@
 import pandas as pd
 import xmltodict
-from utils import small_dict, build_sql_table
+from utils import small_dict, build_sql_table, localization
 
 techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Cost', 'Repeatable': 0,
                 'EmbarkUnitType': 'NULL', 'EmbarkAll': 0, 'Description': 'Description', 'EraType': 'ERA_ANCIENT',
@@ -63,6 +63,9 @@ def techs_sql(kind_string, kept):
         elif not (first_val in kept_techs or first_val in kept_civics):
             kind_string += tech_type_to_add + '\n'
     kind_string = kind_string[:-2] + ','
+
+    localization(six_style_techs)
+    localization(six_style_civics)
 
     return tech_table_string, civic_table_string, civics, kind_string
 
