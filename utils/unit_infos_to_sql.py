@@ -1,7 +1,7 @@
 from civilizations import civilizations
 from units import units_sql
 from techs import techs_sql, prereq_techs
-from buildings import Buildings
+from buildings import Buildings, districts_build
 from delete_n_patch import delete_rows, patch_string_generate, traits_string_generate
 from misc import build_resource_string, build_terrains_string, build_sql_table, build_features_string
 from db_checker import db_checker
@@ -27,9 +27,10 @@ def main():
     patch_string = patch_string_generate()
     traits_string, kinds = traits_string_generate(trait_types_to_define, kinds)
     building_table_string, kinds = Buildings().buildings_sql(civics, kinds)
+    districts_string = districts_build()
     kind_string = build_sql_table([{'Type': key, 'Kind': value} for key, value in kinds.items()], 'Types')
     total = (delete_string + kind_string + '\n' + tech_table_string + civic_table_string + prereqs_string
-             + building_table_string + traits_string + unit_table_string + replacements_string
+             + building_table_string + districts_string + traits_string + unit_table_string + replacements_string
              + upgrades_string + resource_string + terrain_string + features_string + patch_string)
 
     total_with_null = total.replace("'NULL'", "NULL")

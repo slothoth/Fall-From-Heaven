@@ -1,4 +1,4 @@
-from utils import small_dict, build_sql_table, localization
+from utils import small_dict, build_sql_table, localization, update_sql_table
 import xmltodict
 import json
 
@@ -218,3 +218,21 @@ class Buildings:
         for name, value in zip(modifier_names, modifier_values):
             self.modifier_arguments.append({'ModifierId': modifier_id, 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
                                             'Value': value})
+
+
+def districts_build():
+    district_changes = [{'DistrictType': 'DISTRICT_HOLY_SITE', 'PrereqCivic': 'CIVIC_MYSTICISM'},
+                      {'DistrictType': 'DISTRICT_CAMPUS', 'PrereqCivic': 'CIVIC_MYSTICISM'},
+                      {'DistrictType': 'DISTRICT_ENCAMPMENT', 'PrereqTech': 'TECH_BRONZE_WORKING'},
+                      {'DistrictType': 'DISTRICT_HARBOR', 'PrereqTech': 'TECH_FISHING'},
+                      {'DistrictType': 'DISTRICT_COMMERCIAL_HUB', 'PrereqCivic': 'CIVIC_FESTIVALS'},
+                      {'DistrictType': 'DISTRICT_ENTERTAINMENT_COMPLEX', 'PrereqCivic': 'CIVIC_DRAMA'},
+                      {'DistrictType': 'DISTRICT_THEATER', 'PrereqCivic': 'CIVIC_FESTIVALS'},
+                      {'DistrictType': 'DISTRICT_INDUSTRIAL_ZONE', 'PrereqTech': 'TECH_SMELTING'},
+                      {'DistrictType': 'DISTRICT_AQUEDUCT', 'PrereqTech': 'TECH_SANITATION'}]
+
+
+    to_keep = "', '".join([i['DistrictType'] for i in district_changes] + ['DISTRICT_CITY_CENTER', 'DISTRICT_WONDER'])
+    districts_string = f"DELETE FROM Districts WHERE DistrictType NOT IN ('{to_keep}');\n"
+    districts_string += update_sql_table(district_changes, 'Districts', ['DistrictType'])
+    return districts_string
