@@ -1,4 +1,5 @@
 import xmltodict
+from utils import small_dict, build_sql_table
 
 
 def delete_rows(kept):
@@ -17,7 +18,7 @@ def delete_rows(kept):
 
 def patch_string_generate():
     patch_string = ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
-                     "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
+                    "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
     patch_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
     patch_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
 
@@ -37,15 +38,3 @@ def traits_string_generate(trait_types_to_define, kind_string):
     traits_string = traits_string[:-1] + ";\n"
 
     return traits_string, kind_string
-
-
-def resource_string():
-    resource_renames = {'HORSE': 'HORSES', 'GUNPOWDER': 'NITER', 'BANANA': 'BANANAS', 'CORN': 'MAIZE', 'COW': 'CATTLE',
-                        'GEMS': 'DIAMONDS', 'CRAB': 'CRABS', 'DYE': 'DYES', 'FUR': 'FURS', 'WHALE': 'WHALES',
-                        'PEARL': 'PEARLS'}
-    artdef_resources = {'PIG': 'TRUFFLES', 'MITHRIL': 'SILVER', 'FRUIT_OF_YGGDRASIL': 'CITRUS', 'REAGENTS': 'SPICES',
-                        'SHEUT_STONE': 'JADE', 'RAZORWEED': 'OLIVES', 'GULAGARM': 'TOBACCO', 'GOLD': 'GYPSUM',
-                        'CLAM': 'TURTLES', 'NIGHTMARE': 'AMBER', 'TOAD': 'HONEY'}
-
-    with open('data/CIV4BonusInfos.xml', 'r') as file:
-        bonuses_dict = xmltodict.parse(file.read())['Civ4BonusInfos']['BonusInfos']['BonusInfo']
