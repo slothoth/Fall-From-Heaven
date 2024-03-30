@@ -30,7 +30,7 @@ def build_sql_table(list_of_dicts, table_name):
     return table_string
 
 
-def update_sql_table(list_of_dicts, table_name, columns_to_select):
+def update_sql_table(list_of_dicts: list, table_name: str, columns_to_select: list):
     table_string = ''
 
     for item in list_of_dicts:
