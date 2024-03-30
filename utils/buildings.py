@@ -86,17 +86,36 @@ class Buildings:
                 building['CitizenSlots'] = 'NULL'
 
             if int(building['Cost']) < 1:
-                building['Cost'] = -1
-
-        unbuildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) < 1]
-        buildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) > 0]
+                building['Cost'] = 1
 
         for building in six_style_build_dict:
             if not building['BuildingType'] in existing_buildings:
                 kinds[building['BuildingType']] = 'KIND_BUILDING'
 
+        unbuildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) <= 1]
+        building_conditions = []
+        for building in unbuildable_buildings:
+            name = building['BuildingType']
+            modifier_id = f'UNBUILDABLE_{name}'
+            self.modifier_table.append(
+                {'ModifierId': modifier_id, 'ModifierType': 'MODIFIER_PLAYER_ADJUST_VALID_BUILDING'})
+            self.modifier_arguments.append({'ModifierId': modifier_id, 'Name': 'BuildingType', 'Type': 'ARGTYPE_IDENTITY',
+                                            'Value': name})
+            building_conditions.append({'BuildingType': name, 'UnlocksFromEffect': 1})
+
+        """DynamicModifier Table: insert if not present
+        MODIFIER_PLAYER_ADJUST_VALID_BUILDING, COLLECTION_OWNER, EFFECT_ADJUST_PLAYER_VALID_BUILDING
+        Modifiers
+        GOVERNOR_PROMOTION_VOIDSINGERS_1_UNLOCK_OLD_GOD_OBELISK', 'MODIFIER_PLAYER_ADJUST_VALID_BUILDING', '0',
+               '0', '0', '0', 'NULL', 'NULL', 'NULL', 'NULL'
+        ModifierArguments:
+        GOVERNOR_PROMOTION_VOIDSINGERS_1_UNLOCK_OLD_GOD_OBELISK BuildingType ARGTYPE_IDENTITY BUILDING_OLD_GOD_OBELISK
+        GOVERNOR_PROMOTION_VOIDSINGERS_1_UNLOCK_OLD_GOD_OBELISK BuildingTypeToReplace ARGTYPE_IDENTITY BUILDING_MONUMENT
+        INSERT INTO BuildingConditions(BuildingType, UnlocksFromEffect) VALUES (BUILDING, 1);"""
+
         building_table_string = build_sql_table(six_style_build_dict, 'Buildings')
         building_table_string += self.building_features(six_style_build_extras, exist_dict)
+        building_table_string += build_sql_table(building_conditions, 'BuildingConditions')
 
         localization(six_style_build_dict)
         print(debug_string)

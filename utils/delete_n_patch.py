@@ -9,7 +9,7 @@ def delete_rows(kept):
     delete_string += 'DELETE FROM Building_GreatPersonPoints;\nDELETE FROM Unit_BuildingPrereqs;\n'
     delete_string += 'DELETE FROM UnitUpgrades;\nDELETE FROM Boosts;\n'
     delete_string += f"DELETE FROM Units WHERE UnitType NOT IN ("
-    for unit in kept['compat_for_VI']:
+    for unit in kept['compat_for_VI'] + kept['units_as_is']:
         delete_string += f"'{unit}', "
     delete_string = delete_string[:-2] + ');\n'
 

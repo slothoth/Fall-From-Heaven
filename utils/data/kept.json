@@ -1,20 +1,13 @@
 {
   "units_as_is": [
-    "UNIT_SETTLER",
-    "UNIT_BUILDER",
-    "UNIT_TRADER",
-    "UNIT_GREAT_GENERAL",
-    "UNIT_GREAT_ENGINEER",
-    "UNIT_GREAT_MERCHANT",
-    "UNIT_GREAT_PROPHET",
-    "UNIT_GREAT_SCIENTIST",
-    "UNIT_GREAT_ARTIST",
     "UNIT_SCOUT",
     "UNIT_WARRIOR",
     "UNIT_ARCHER",
     "UNIT_GALLEY",
     "UNIT_HORSEMAN",
-    "UNIT_CROSSBOWMAN"
+    "UNIT_CROSSBOWMAN",
+    "UNIT_BATTERING_RAM",
+    "UNIT_VAMPIRE"
   ],
   "units_tech_change": [
     "UNIT_CATAPULT",
@@ -39,8 +32,8 @@
     "UNIT_GREAT_ARTIST",
     "UNIT_GREAT_MUSICIAN",
     "UNIT_BUILDER",
-    "UNIT_SETTLER",
-    "UNIT_WARRIOR"
+    "UNIT_TRADER",
+    "UNIT_SETTLER"
   ],
   "units_but_modify_name": {
     "UNIT_SLINGER": "UNIT_DWARVEN_SLINGER",
