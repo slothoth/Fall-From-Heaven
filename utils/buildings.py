@@ -11,17 +11,17 @@ extras_building_map = {'Type': 'BuildingType', 'GreatPeopleUnitClass': 'GreatPer
                        'DomainProductionModifiers': 'DomainProductionModifiers',
                        'iGlobalSpaceProductionModifier': 'iGlobalSpaceProductionModifier',
                        'iTradeRouteModifier': 'iTradeRouteModifier', 'iFreePromotionPick': 'iFreePromotionPick',
-                       }
+                       'PrereqCiv': 'PrereqCiv'}
 
 buildings_4_to_6 = {'Type': 'BuildingType', 'PrereqTech': 'PrereqTech', 'iCost': 'Cost',
-                        'MaxWorldInstances': -1, 'bCapital': 'MaxPlayerInstances',
-                        'PrereqDistrict': 'DISTRICT_CITY_CENTER',
-                        'iHealth': 'Housing', 'iHappiness': 'Entertainment', 'SpecialistCounts': 'CitizenSlots',
-                        'Advisor': 'AdvisorType'}
+                    'MaxWorldInstances': -1, 'bCapital': 'MaxPlayerInstances',
+                    'PrereqDistrict': 'DISTRICT_CITY_CENTER',
+                    'iHealth': 'Housing', 'iHappiness': 'Entertainment', 'SpecialistCounts': 'CitizenSlots',
+                    'Advisor': 'AdvisorType'}
 
 map_specialists = {'SPECIALIST_SCIENTIST': 'DISTRICT_CAMPUS', 'SPECIALIST_ENGINEER': 'DISTRICT_INDUSTRIAL_ZONE',
-                       'SPECIALIST_PRIEST': 'DISTRICT_HOLY_SITE', 'SPECIALIST_ARTIST': 'DISTRICT_THEATER',
-                       'SPECIALIST_MERCHANT': 'DISTRICT_COMMERCIAL_HUB'}
+                   'SPECIALIST_PRIEST': 'DISTRICT_HOLY_SITE', 'SPECIALIST_ARTIST': 'DISTRICT_THEATER',
+                   'SPECIALIST_MERCHANT': 'DISTRICT_COMMERCIAL_HUB'}
 
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 yield_map = ['SDM_UNKNOWN', 'YIELD_PRODUCTION', 'YIELD_GOLD']
@@ -34,13 +34,18 @@ advisor_mapping = {'ADVISOR_MILITARY': 'ADVISOR_CONQUEST', 'ADVISOR_RELIGION': '
                    'ADVISOR_ECONOMY': 'ADVISOR_GENERIC', 'ADVISOR_GROWTH': 'ADVISOR_GENERIC',
                    'ADVISOR_SCIENCE': 'ADVISOR_TECHNOLOGY', 'ADVISOR_CULTURE': 'ADVISOR_CULTURE'}
 
+patch = {'Modifier': {'BUILDING_FORBIDDEN_PALACE': 'MODIFIER_ENABLE_BUILDING_FORBIDDEN_PALACE',
+         'BUILDING_SHRINE_OF_THE_CHAMPION': 'MODIFIER_BUILDING_SHRINE_OF_THE_CHAMPION'}}
+
 
 class Buildings:
-    def __init__(self):
+    def __init__(self, civs):
         self.building_modifiers, self.modifier_table = [], []
         self.modifier_arguments, self.dynamic_modifiers = [], []
+        self.requirements, self.requirement_arguments, self.requirement_set_reqs, self.requirement_set = [], [], [], []
+        self.civs = civs
 
-    def buildings_sql(self, civics, kinds):
+    def buildings_sql(self, civics, unique_buildings, kinds):
         debug_string = ''
         with open('data/XML/Buildings/CIV4BuildingInfos.xml', 'r') as file:
             building_infos = xmltodict.parse(file.read())['Civ4BuildingInfos']['BuildingInfos']['BuildingInfo']
@@ -88,49 +93,78 @@ class Buildings:
             if int(building['Cost']) < 1:
                 building['Cost'] = 1
 
-        for building in six_style_build_dict:
-            if not building['BuildingType'] in existing_buildings:
-                kinds[building['BuildingType']] = 'KIND_BUILDING'
+        for civ_buildings in unique_buildings['remove'].values():
+            six_style_build_dict = [i for i in six_style_build_dict
+                                    if i['BuildingType'] not in [j for j in civ_buildings]]
+            six_style_build_extras = [i for i in six_style_build_extras
+                                      if i['BuildingType'] not in [j for j in civ_buildings]]
 
         unbuildable_buildings = [i for i in six_style_build_dict if int(i['Cost']) <= 1]
         building_conditions = []
         for building in unbuildable_buildings:
             name = building['BuildingType']
-            modifier_id = f'UNBUILDABLE_{name}'
+            modifier_id = f'MODIFIER_UNBUILDABLE_{name}'
             self.modifier_table.append(
                 {'ModifierId': modifier_id, 'ModifierType': 'MODIFIER_PLAYER_ADJUST_VALID_BUILDING'})
             self.modifier_arguments.append({'ModifierId': modifier_id, 'Name': 'BuildingType', 'Type': 'ARGTYPE_IDENTITY',
                                             'Value': name})
             building_conditions.append({'BuildingType': name, 'UnlocksFromEffect': 1})
 
-        """DynamicModifier Table: insert if not present
-        MODIFIER_PLAYER_ADJUST_VALID_BUILDING, COLLECTION_OWNER, EFFECT_ADJUST_PLAYER_VALID_BUILDING
-        Modifiers
-        GOVERNOR_PROMOTION_VOIDSINGERS_1_UNLOCK_OLD_GOD_OBELISK', 'MODIFIER_PLAYER_ADJUST_VALID_BUILDING', '0',
-               '0', '0', '0', 'NULL', 'NULL', 'NULL', 'NULL'
-        ModifierArguments:
-        GOVERNOR_PROMOTION_VOIDSINGERS_1_UNLOCK_OLD_GOD_OBELISK BuildingType ARGTYPE_IDENTITY BUILDING_OLD_GOD_OBELISK
-        GOVERNOR_PROMOTION_VOIDSINGERS_1_UNLOCK_OLD_GOD_OBELISK BuildingTypeToReplace ARGTYPE_IDENTITY BUILDING_MONUMENT
-        INSERT INTO BuildingConditions(BuildingType, UnlocksFromEffect) VALUES (BUILDING, 1);"""
+        for building, modifier_id in patch['Modifier'].items():
+            self.modifier_table.append(
+                {'ModifierId': modifier_id, 'ModifierType': 'MODIFIER_PLAYER_ADJUST_VALID_BUILDING'})
+            self.modifier_arguments.append(
+                {'ModifierId': modifier_id, 'Name': 'BuildingType', 'Type': 'ARGTYPE_IDENTITY',
+                 'Value': building}) # 'SubjectRequirementSetId': 'PLAYER_HAS_AT_LEAST_TWELVE_CITIES_REQUIREMENTS'
+            building_conditions.append({'BuildingType': building, 'UnlocksFromEffect': 1})
+            # "INSERT INTO Requirements(RequirementId, RequirementType, ProgressWeight) VALUES ('REQUIRES_PLAYER_HAS_AT_LEAST_TWELVE_CITIES', 'REQUIREMENT_PLAYER_HAS_AT_LEAST_NUMBER_CITIES', '1')"
+            # "INSERT INTO RequirementArguments(RequirementId, Name, Type, Value) VALUES ('REQUIRES_PLAYER_HAS_AT_LEAST_TWELVE_CITIES', 'Amount', 'ARGTYPE_IDENTITY', '1')"
+            # "INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES('PLAYER_HAS_AT_LEAST_TWELVE_CITIES_REQUIREMENTS', 'REQUIRES_PLAYER_HAS_AT_LEAST_TWELVE_CITIES')"
+            # "INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES('PLAYER_HAS_AT_LEAST_TWELVE_CITIES_REQUIREMENTS', 'REQUIRES_PLAYER_HAS_AT_LEAST_TWELVE_CITIES')"
+
+        building_replaces, civ_trait_additions = [], []
+        for civ, civ_building_dict in unique_buildings['replace'].items():
+            if civ[13:] in self.civs:
+                for value in civ_building_dict:
+                    civ_trait_additions.append(value['BuildingType'])
+                    if 'BUILDINGCLASS_CIV_BUILDING' not in value['BuildingClassType']:
+                        value['ReplacesBuildingType'] = f"BUILDING_{value.pop('BuildingClassType')[14:]}"
+                        value['CivUniqueBuildingType'] = value.pop('BuildingType')
+                        building_replaces.append(value)
+
+        for building in six_style_build_dict:
+            building['TraitType'] = 'NULL'
+            if building['BuildingType'] in civ_trait_additions:
+                building['TraitType'] = f"TRAIT_CIVILIZATION_{building['BuildingType']}"
+
+        update_buildings = [building for building in six_style_build_dict
+                            if building['BuildingType'] in existing_buildings]
+        six_style_build_dict = [building for building in six_style_build_dict
+                                if building['BuildingType'] not in existing_buildings]
+        for building in six_style_build_dict:
+            kinds[building['BuildingType']] = 'KIND_BUILDING'
 
         building_table_string = build_sql_table(six_style_build_dict, 'Buildings')
+        building_table_string += update_sql_table(update_buildings, 'Buildings', ['BuildingType'])
         building_table_string += self.building_features(six_style_build_extras, exist_dict)
         building_table_string += build_sql_table(building_conditions, 'BuildingConditions')
+        building_table_string += build_sql_table(building_replaces, 'BuildingReplaces')
 
         localization(six_style_build_dict)
         print(debug_string)
 
-        return building_table_string, kinds
+        return building_table_string, kinds, [i['BuildingType'] for i in update_buildings]
 
     def building_features(self, six_style_build_extras, exist_dict):
         existing_buildings_gpp = exist_dict['existing_buildings_gpp']
         existing_buildings_yields = exist_dict['existing_buildings_yields']
-        building_great_person_points, building_yield_changes, dynamic_modifiers = [], [], []
+        building_great_person_points, building_yield_changes, dynamic_modifiers, building_replaces = [], [], [], []
 
         building_great_person_points = [i for i in building_great_person_points if
                                         not i['BuildingType'] in existing_buildings_gpp]
 
-        building_yield_changes = [i for i in building_yield_changes if not i['BuildingType'] in existing_buildings_yields]
+        building_yield_changes = [i for i in building_yield_changes
+                                  if not i['BuildingType'] in existing_buildings_yields]
 
         for building in six_style_build_extras:
             name = building['BuildingType']
@@ -144,10 +178,13 @@ class Buildings:
                                                      'GreatPersonClassType': gpp_map[building['GreatPersonClassType']],
                                                      'PointsPerTurn': building['PointsPerTurn']})
 
+            if building.get('PrereqCiv', 'NONE') != 'NONE':
+                building_replaces.append({'CivUniqueBuildingType': '', 'ReplacesBuildingType': ''})
+
             if building.get('YieldModifiers', None) is not None and building['YieldModifiers'] != 'NONE':
                 for idx, amount in enumerate(building['YieldModifiers']['iYield']):
                     if int(amount) != 0:
-                        self.add_to_modifiers(name=name, modifier_id=f"{name[9:]}_ADD{yield_map[idx][5:]}YIELD",
+                        self.add_to_modifiers(name=name, modifier_id=f"MODIFIER_{name[9:]}_ADD{yield_map[idx][5:]}YIELD",
                                               modifier_names=['Amount', 'YieldType'],
                                               modifier_values=[amount, yield_map[idx]],
                                               modifier_type='MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER')
@@ -155,7 +192,7 @@ class Buildings:
             if building.get('CommerceModifier', None) is not None and building['CommerceModifier'] != 'NONE':
                 for idx, amount in enumerate(building['CommerceModifier']['iCommerce']):
                     if int(amount) != 0:
-                        self.add_to_modifiers(name=name, modifier_id=f"{name[9:]}_ADD{commerce_map[idx][5:]}YIELD",
+                        self.add_to_modifiers(name=name, modifier_id=f"MODIFIER_{name[9:]}_ADD{commerce_map[idx][5:]}YIELD",
                                               modifier_names=['Amount', 'YieldType'],
                                               modifier_values=[amount, commerce_map[idx]],
                                               modifier_type='MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER')
@@ -165,7 +202,7 @@ class Buildings:
                     for idx, amount in enumerate(resource['YieldModifiers']['iYield']):
                         if int(amount) != 0:
                             self.add_to_modifiers(name=name,
-                                                  modifier_id=f"{name[9:]}_{resource['BonusType']}_MULT_YIELD",
+                                                  modifier_id=f"MODIFIER_{name[9:]}_{resource['BonusType']}_MULT_YIELD",
                                                   modifier_names=['Amount', 'YieldType'],
                                                   modifier_values=[amount, yield_map[idx]],
                                                   modifier_type='MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER')
@@ -173,14 +210,14 @@ class Buildings:
 
             if building.get('iTradeRouteModifier', None) is not None and building['iTradeRouteModifier'] != '0':
                 trade_route_modifier = 'MODIFIER_CITY_ADJUST_TRADE_ROUTE_YIELD_FOR_INTERNATIONAL'
-                modifier_id = f"{name[9:]}_TRADE_ROUTE_YIELD_MULT"
+                modifier_id = f"MODIFIER_{name[9:]}_TRADE_ROUTE_YIELD_MULT"
                 vt = building['iTradeRouteModifier']
                 if trade_route_modifier not in [i for i in dynamic_modifiers]:
                     dynamic_modifiers.append({'ModifierType': trade_route_modifier,
                                               'CollectionType': 'COLLECTION_OWNER',
                                               'EffectType': 'EFFECT_ADJUST_CITY_TRADE_ROUTE_YIELD_FOR_INTERNATIONAL'})
                 self.add_to_modifiers(name=name,
-                                      modifier_id=f"{name[9:]}_TRADE_ROUTE_YIELD_MULT",
+                                      modifier_id=f"MODIFIER_{name[9:]}_TRADE_ROUTE_YIELD_MULT",
                                       modifier_names=['YieldType', 'Amount'],
                                       modifier_values=['YIELD_PRODUCTION, YIELD_FOOD, YIELD_SCIENCE, YIELD_CULTURE, '
                                                        'YIELD_GOLD, YIELD_FAITH', f'{vt}, {vt}, {vt}, {vt}, {vt}, {vt}'
@@ -189,7 +226,7 @@ class Buildings:
 
             if building.get('FreeBonus', None) is not None and building['FreeBonus'] != 'NONE':
                 self.add_to_modifiers(name=name,
-                                      modifier_id= f"{name[9:]}_GRANT_{building['FreeBonus'][6:]}",
+                                      modifier_id= f"MODIFIER_{name[9:]}_GRANT_{building['FreeBonus'][6:]}",
                                       modifier_names=['ResourceType', 'Amount'],
                                       modifier_values=[f"RESOURCE_{building['FreeBonus'][6:]}",
                                                        f"{building['iNumFreeBonuses']}"],
@@ -198,7 +235,7 @@ class Buildings:
 
             if building.get('FreeBonus2', None) is not None and building['FreeBonus2'] != 'NONE':
                 self.add_to_modifiers(name=name,
-                                      modifier_id=f"{name[9:]}_GRANT_{building['FreeBonus2'][6:]}",
+                                      modifier_id=f"MODIFIER_{name[9:]}_GRANT_{building['FreeBonus2'][6:]}",
                                       modifier_names=['ResourceType', 'Amount'],
                                       modifier_values=[f"RESOURCE_{building['FreeBonus2'][6:]}",
                                                        f"{building['iNumFreeBonuses']}"],
@@ -206,7 +243,7 @@ class Buildings:
 
             if building.get('FreeBonus3', None) is not None and building['FreeBonus3'] != 'NONE':
                 self.add_to_modifiers(name=name,
-                                      modifier_id=f"{name[9:]}_GRANT_{building['FreeBonus3'][6:]}",
+                                      modifier_id=f"MODIFIER_{name[9:]}_GRANT_{building['FreeBonus3'][6:]}",
                                       modifier_names=['ResourceType', 'Amount'],
                                       modifier_values=[f"RESOURCE_{building['FreeBonus3'][6:]}",
                                                        f"{building['iNumFreeBonuses']}"],

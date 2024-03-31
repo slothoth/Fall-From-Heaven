@@ -163,7 +163,6 @@ def build_terrains_string(kinds):
             hills_terrain['Name'] = hills_terrain['Name'] + '_HILLS'
             hills.append(hills_terrain)
 
-    # TODO make Mountains for new terrains
     # TODO Marsh is treated as terrain not feature in civ 4, we will have compat issues
     six_style_terrain_dict.extend(hills)
 
