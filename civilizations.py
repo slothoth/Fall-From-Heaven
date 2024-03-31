@@ -38,7 +38,7 @@ class Civilizations:
             unique_units_not_remove[civ['Type']] = []
             if civ['Type'][13:] in civs:
                 for unique_building in civ['Buildings']['Building']:
-                    if unique_building['BuildingType'] != 'NONE':
+                    if unique_building['BuildingType'] != 'NONE' and 'PALACE_' not in unique_building['BuildingType']:
                         unique_buildings_not_remove[civ['Type']].append({'BuildingType': unique_building['BuildingType'],
                                                                          'BuildingClassType':  unique_building['BuildingClassType']})
                 for unique_unit in civ['Units']['Unit']:
