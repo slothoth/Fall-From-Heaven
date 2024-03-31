@@ -17,8 +17,10 @@ advisor_mapping = {'ADVISOR_MILITARY': 'ADVISOR_CONQUEST', 'ADVISOR_RELIGION': '
                    'ADVISOR_SCIENCE': 'ADVISOR_TECHNOLOGY', 'ADVISOR_CULTURE': 'ADVISOR_CULTURE',
                    'NONE': 'NULL'}
 
+exceptions = {'UNIT_LOKI': {}, 'UNIT_LUCIAN': {'CanTrain': 0}}
 
-def units_sql(civs, unique_units_to_remove, civics, kinds, kept):
+
+def units_sql(civs, unique_units_to_remove, civics, kinds, trait_types, kept):
     debug_string = ""
 
     with open('data/CIV4UnitInfos.xml', 'r') as file:
@@ -38,9 +40,9 @@ def units_sql(civs, unique_units_to_remove, civics, kinds, kept):
     excludes_from_four, to_keep_but_modify = kept['exclude_from_IV'], kept['units_but_modify_name']
     units_to_update, units_changed_tech, = kept['units_as_is'], kept['units_tech_change']
     units_but_for_unique_civs, compat_units = kept['units_unique_civ'], kept['compat_for_VI']
+    units_to_update.extend(units_but_for_unique_civs)
     kept_units = units_to_update
     kept_units.extend(units_changed_tech)
-    kept_units.extend(units_but_for_unique_civs)
     kept_units.extend(compat_units)
     six_style_dict = [small_dict(i, unit_dict) for i in infos]
     no_equipment_units = [i for i in six_style_dict if not ('EQUIPMENT' in i['Name'])]
@@ -87,9 +89,15 @@ def units_sql(civs, unique_units_to_remove, civics, kinds, kept):
     not_religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}
     religious_units = {i[0]: i[1] for i in religious if i[1] in religions}
     # Filter the units based on dictionaries
-    final_units = [i for i in six_style_dict if not (i['Name'] in unique_units_to_remove)]
-    final_units = [i for i in final_units if not (i['Name'] in not_religious_units)]
+    final_units = [i for i in six_style_dict if not (i['Name'] in not_religious_units)]
+    unique_units_to_remove = {key: [i for i in j if i not in [k for k in double_civ_units]]
+                              for key, j in unique_units_to_remove.items()}
+    for civ, civ_units_to_remove in unique_units_to_remove.items():
+        if civ[13:] not in civs:
+            final_units = [i for i in final_units if i['Name'] not in [j for j in civ_units_to_remove]]
+
     final_units = [i for i in final_units if not i['Name'] in excludes_from_four]
+
     buildable_only = [i for i in final_units if not (i['Cost'] == '-1')]
     # filter for our upgrades table too
     to_pop = []
@@ -127,6 +135,12 @@ def units_sql(civs, unique_units_to_remove, civics, kinds, kept):
         else:
             unit['PrereqCivic'] = 'NULL'
     # patch
+    for unit, changes in exceptions.items():
+        idx = [idx for idx, i in enumerate(final_units) if unit == i['UnitType']]
+        if len(idx) > 0:
+            idx = idx[0]
+            for change_name, change_value in changes.items():
+                final_units[idx][change_name] = change_value
 
     for unit in final_units:
         name = unit['UnitType']
@@ -136,21 +150,11 @@ def units_sql(civs, unique_units_to_remove, civics, kinds, kept):
 
     replaces.append({'CivUniqueUnitType': 'UNIT_MUD_GOLEM', 'ReplacesUnitType': 'UNIT_BUILDER'})
 
-    trait_types_to_define: list[str] = []
-    # Insert TraitType for civ-unique units
-    trait_types_heroes = [[unit for unit, civ in civ_heroes.items() if civ == civ_name] for civ_name in civs]
-    trait_types_units = [[unit for unit, civ in civ_units.items() if civ == civ_name] for civ_name in civs]
-    trait_types_double_civ_units = [[unit for unit, civ in double_civ_units.items() if civ == civ_name] for civ_name in
-                                    civs]
-    trait_types = [x + y + z for x, y, z in zip(trait_types_heroes, trait_types_units, trait_types_double_civ_units)]
-    trait_types = {i: j for i, j in zip(civs, trait_types)}
-
     for idx, civ in enumerate(civs):
         for i in final_units:
-            if i['UnitType'] in trait_types[civs[idx]]:
+            if i['UnitType'] in [j['TraitType'][19:] for j in trait_types]:
                 trait_str = f'TRAIT_CIVILIZATION_UNIT{i["UnitType"][4:]}'
                 i['TraitType'] = trait_str
-                trait_types_to_define.append(trait_str)
     # Insert TraitType for religion units
     trait_types_religion = {religion_name: [unit for unit, civ in religious_units.items() if civ == religion_name] for
                             religion_name in religions}
@@ -159,25 +163,13 @@ def units_sql(civs, unique_units_to_remove, civics, kinds, kept):
             if i['UnitType'] in trait_types_religion[religions[idx]]:
                 trait_str = f'TRAIT_RELIGION_UNIT{i["UnitType"][4:]}'
                 i['TraitType'] = trait_str
-                trait_types_to_define.append(trait_str)
+                trait_types.append({'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME', 'Description': 'NULL'})
+                kinds[trait_str] = 'KIND_TRAIT'
 
     final_units = [i for i in final_units if i['UnitType'] not in compat_units]
     update_units = [i for i in final_units if i['UnitType'] in units_to_update]
     final_units = [i for i in final_units if i['UnitType'] not in units_to_update]
 
-    schema_string = '('
-    for schema_key in [i for i in final_units[0]]:
-        schema_string += f'{schema_key}, '
-    schema_string = schema_string[:-2] + ') VALUES\n'
-    unit_table_string = "INSERT INTO Units" + schema_string
-    for unit in final_units:
-        unit_table_string += "("
-        for attribute in unit:
-            unit_table_string += f"'{unit[attribute]}', "
-        unit_table_string = unit_table_string[:-2] + "),\n"
-    unit_table_string = unit_table_string[:-2] + ";\n"
-    unit_table_string = build_sql_table(final_units, 'Units')
-    replacements_string = build_sql_table(replaces, 'UnitReplaces')
     upgrades_string = "INSERT INTO UnitUpgrades(Unit, Upgradeunit) VALUES\n"
     # upgrade tree, commented out for multiple upgrades, whicn is not supported in 6
     for unit, upgrades in upgrade_tree.items():
@@ -186,8 +178,11 @@ def units_sql(civs, unique_units_to_remove, civics, kinds, kept):
         upgrades_string += f"('{unit}', '{upgrades[0]}'),\n"
     upgrades_string = upgrades_string[:-2] + ";\n"
 
+    # patch khazad cuz im mad
+    update_units.append({'UnitType':'UNIT_TREBUCHET', 'TraitType': 'TRAIT_CIVILIZATION_UNIT_TREBUCHET'})
+    unit_table_string = build_sql_table(final_units, 'Units')
     unit_table_string += update_sql_table(update_units, 'Units', ['UnitType'])
+    replacements_string = build_sql_table(replaces, 'UnitReplaces')
 
     localization(final_units)
-
-    return unit_table_string, replacements_string, upgrades_string, trait_types_to_define, kinds
+    return unit_table_string, replacements_string, upgrades_string, trait_types, kinds

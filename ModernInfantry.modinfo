@@ -10,6 +10,14 @@
     <Homepage>cheese</Homepage>
     <CompatibleVersions>1.2,2.0</CompatibleVersions>
   </Properties>
+  <FrontEndActions>
+    <UpdateDatabase id="config">
+      <Properties>
+        <LoadOrder>100</LoadOrder>
+      </Properties>
+      <File>Core/frontend_config.sql</File>
+    </UpdateDatabase>
+   </FrontEndActions>
   <InGameActions>
     <UpdateDatabase id="Gameplay">
       <Properties>
@@ -24,6 +32,7 @@
   <Files>
     <File>Core/localization.sql</File>
     <File>Core/techs_civics.sql</File>
+    <File>Core/frontend_config.sql</File>
     <File>ModernInfantry.dep</File>
   </Files>
 </Mod>
