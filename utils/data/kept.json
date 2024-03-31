@@ -94,5 +94,6 @@
       "TECH_STIRRUPS",
       "TECH_HORSEBACK_RIDING"
     ]
-  ]
+  ],
+  "buildings": ["BUILDING_PALACE"]
 }
