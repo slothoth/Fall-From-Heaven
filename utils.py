@@ -13,6 +13,8 @@ def small_dict(big_dict, four_to_six_map):
 
 
 def build_sql_table(list_of_dicts, table_name):
+    if isinstance(list_of_dicts, dict):
+        list_of_dicts = [value for value in list_of_dicts.values()]
     schema_string = '('
     for schema_key in [i for i in list_of_dicts[0]]:
         schema_string += f'{schema_key}, '
@@ -30,7 +32,9 @@ def build_sql_table(list_of_dicts, table_name):
     return table_string
 
 
-def update_sql_table(list_of_dicts: list, table_name: str, columns_to_select: list):
+def update_sql_table(list_of_dicts, table_name: str, columns_to_select: list):
+    if isinstance(list_of_dicts, dict):
+        list_of_dicts = [value for value in list_of_dicts.values()]
     table_string = ''
 
     for item in list_of_dicts:
@@ -58,6 +62,8 @@ def sql_check(tablename):
 def localization(names):
     loc_string = ''
     type_description = 'LOC_PEDIA_UNITS_PAGE'
+    if isinstance(names, dict):
+        names = [i for i in names.values()]
     if 'UnitType' in names[0]:
         type_description = 'LOC_PEDIA_UNITS_PAGE'
     elif 'BuildingType' in names[0]:
