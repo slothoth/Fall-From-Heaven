@@ -1,4 +1,4 @@
-from civilizations import civilizations
+from civilizations import Civilizations
 from units import units_sql
 from techs import techs_sql, prereq_techs
 from buildings import Buildings, districts_build
@@ -16,22 +16,26 @@ def main():
         kept = json.load(json_file)
     with open('../Core/localization.sql', 'w') as file:
         file.write('INSERT OR REPLACE INTO LocalizedText (Language, Tag, Text)\nVALUES\n')
-    unique_units_to_remove, unique_buildings_to_remove = civilizations(civs)
+    civilizations = Civilizations()
+    civ_string, unique_units_to_remove, unique_buildings_to_remove, kinds, traits = civilizations.civilizations(civs, kinds)
     tech_table_string, civic_table_string, civics, kinds = techs_sql(kinds, kept)
-    unit_table_string, replacements_string, upgrades_string, trait_types_to_define, kinds = units_sql(civs, unique_units_to_remove, civics, kinds, kept)
+    unit_table_string, replacements_string, upgrades_string, traits, kinds = units_sql(civs, unique_units_to_remove, civics, kinds, traits, kept)
     resource_string, kinds = build_resource_string(civics, kinds)
     terrain_string, kinds = build_terrains_string(kinds)
     features_string, kinds = build_features_string(kinds)
     prereqs_string = prereq_techs()
-    delete_string = delete_rows(kept)
     patch_string = patch_string_generate()
-    traits_string, kinds = traits_string_generate(trait_types_to_define, kinds)
-    building_table_string, kinds = Buildings().buildings_sql(civics, kinds)
+    building_table_string, kinds, calculated_to_keep = Buildings(civs).buildings_sql(civics, unique_buildings_to_remove, kinds)
     districts_string = districts_build()
+    delete_string = delete_rows(kept, calculated_to_keep)
+    traits_string = build_sql_table(traits, 'Traits')
     kind_string = build_sql_table([{'Type': key, 'Kind': value} for key, value in kinds.items()], 'Types')
     total = (delete_string + kind_string + '\n' + tech_table_string + civic_table_string + prereqs_string
-             + building_table_string + districts_string + traits_string + unit_table_string + replacements_string
-             + upgrades_string + resource_string + terrain_string + features_string + patch_string)
+             + building_table_string + districts_string + civ_string + traits_string + unit_table_string
+             + replacements_string + upgrades_string + resource_string + terrain_string + features_string
+             + patch_string)
+
+    frontend_config_string = civilizations.config_builder(civs)
 
     total_with_null = total.replace("'NULL'", "NULL")
     with open('../Core/techs_civics.sql', 'w') as file:
@@ -41,6 +45,9 @@ def main():
         localization_file = file.read()[:-2] + ';'
     with open('../Core/localization.sql', 'w') as file:
         file.write(localization_file)
+
+    with open('../Core/frontend_config.sql', 'w') as file:
+        file.write(frontend_config_string)
 
     db_checker([i for i in kinds])
 

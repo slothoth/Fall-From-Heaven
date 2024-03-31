@@ -2,15 +2,19 @@ import xmltodict
 from utils import small_dict, build_sql_table
 
 
-def delete_rows(kept):
+def delete_rows(kept, calculated_to_keep):
     delete_string = 'DELETE FROM Technologies;\nDELETE FROM TechnologyPrereqs;\n'
     delete_string += 'DELETE FROM Technologies_XP2;\nDELETE FROM Civics;\nDELETE FROM CivicPrereqs;\n'
-    delete_string += 'DELETE FROM Civics_XP2;\nDELETE FROM Buildings;\nDELETE FROM Building_YieldChanges;\n'
+    delete_string += 'DELETE FROM Civics_XP2;\nDELETE FROM Building_YieldChanges;\n'
     delete_string += 'DELETE FROM Building_GreatPersonPoints;\nDELETE FROM Unit_BuildingPrereqs;\n'
     delete_string += 'DELETE FROM UnitUpgrades;\nDELETE FROM Boosts;\n'
     delete_string += f"DELETE FROM Units WHERE UnitType NOT IN ("
     for unit in kept['compat_for_VI'] + kept['units_as_is']:
         delete_string += f"'{unit}', "
+    delete_string = delete_string[:-2] + ');\n'
+    delete_string += f"DELETE FROM Buildings WHERE BuildingType NOT IN ("
+    for building in calculated_to_keep + ['BUILDING_PALACE']:
+        delete_string += f"'{building}', "
     delete_string = delete_string[:-2] + ');\n'
 
     return delete_string
