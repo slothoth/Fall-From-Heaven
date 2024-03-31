@@ -2,7 +2,7 @@ from civilizations import Civilizations
 from units import units_sql
 from techs import techs_sql, prereq_techs
 from buildings import Buildings, districts_build
-from delete_n_patch import delete_rows, patch_string_generate, traits_string_generate
+from delete_n_patch import delete_rows, patch_string_generate
 from misc import build_resource_string, build_terrains_string, build_sql_table, build_features_string
 from db_checker import db_checker
 
@@ -14,7 +14,7 @@ def main():
     kinds = {}
     with open("data/kept.json", 'r') as json_file:
         kept = json.load(json_file)
-    with open('../Core/localization.sql', 'w') as file:
+    with open('../FallFromHeaven/Core/localization.sql', 'w') as file:
         file.write('INSERT OR REPLACE INTO LocalizedText (Language, Tag, Text)\nVALUES\n')
     civilizations = Civilizations()
     civ_string, unique_units_to_remove, unique_buildings_to_remove, kinds, traits = civilizations.civilizations(civs, kinds)
@@ -38,15 +38,15 @@ def main():
     frontend_config_string = civilizations.config_builder(civs)
 
     total_with_null = total.replace("'NULL'", "NULL")
-    with open('../Core/techs_civics.sql', 'w') as file:
+    with open('../FallFromHeaven/Core/main.sql', 'w') as file:
         file.write(total_with_null)
 
-    with open('../Core/localization.sql', 'r') as file:
+    with open('../FallFromHeaven/Core/localization.sql', 'r') as file:
         localization_file = file.read()[:-2] + ';'
-    with open('../Core/localization.sql', 'w') as file:
+    with open('../FallFromHeaven/Core/localization.sql', 'w') as file:
         file.write(localization_file)
 
-    with open('../Core/frontend_config.sql', 'w') as file:
+    with open('../FallFromHeaven/Core/frontend_config.sql', 'w') as file:
         file.write(frontend_config_string)
 
     db_checker([i for i in kinds])
