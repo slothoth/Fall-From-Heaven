@@ -68,5 +68,5 @@ def localization(names):
         loc_string += f"('en_us', '{item['Description']}',  'Description'),\n"
         loc_string += f"('en_us', '{type_description}_{item['Name'][4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
 
-    with open('../Core/localization.sql', 'a') as file:
+    with open('../FallFromHeaven/Core/localization.sql', 'a') as file:
         file.write(loc_string)
