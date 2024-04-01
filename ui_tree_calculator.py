@@ -42,5 +42,5 @@ for i in no_pre_reqs:
 
 graphviz_string += "}"
 
-with open('civictree_graphviz.dot', 'w') as file:
+with open('data/civictree_graphviz.dot', 'w') as file:
     file.write(graphviz_string)
