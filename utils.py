@@ -17,6 +17,8 @@ def build_sql_table(list_of_dicts, table_name):
         list_of_dicts = [value for value in list_of_dicts.values()]
     schema_string = '('
     for schema_key in [i for i in list_of_dicts[0]]:
+        if schema_key == 'Column':                              # SQL reserved keyword
+            schema_key = '"Column"'
         schema_string += f'{schema_key}, '
     schema_string = schema_string[:-2] + ') VALUES\n'
     table_string = f"INSERT INTO {table_name}" + schema_string
@@ -74,12 +76,37 @@ def localization(names):
     type_description = 'LOC_PEDIA_UNITS_PAGE'
     if isinstance(names, dict):
         names = [i for i in names.values()]
+    obj_type = [i for i in names[0] if 'Type' in i][0]
     if 'UnitType' in names[0]:
         type_description = 'LOC_PEDIA_UNITS_PAGE'
     elif 'BuildingType' in names[0]:
         type_description = 'LOC_PEDIA_BUILDINGS_PAGE'
     for item in names:
+        name = item.get('Name', item[obj_type])
+        description = item.get('Description', item[obj_type])
         en_name = ' '.join([word.capitalize() for word in item['Name'].split('_')][2:-1])
+        loc_string += f"('en_us', '{name}', '{en_name}'),\n"
+        loc_string += f"('en_us', '{description}',  'Description'),\n"
+        loc_string += f"('en_us', '{type_description}_{name[4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
+
+    with open('../FallFromHeaven/Core/localization.sql', 'a') as file:
+        file.write(loc_string)
+
+
+def localization_changes(names):
+    loc_string = ''
+    type_description = 'LOC_PEDIA_UNITS_PAGE'
+    if isinstance(names, dict):
+        names = [i for i in names.values()]
+    if 'UnitType' in names[0]:
+        type_description = 'LOC_PEDIA_UNITS_PAGE'
+    elif 'BuildingType' in names[0]:
+        type_description = 'LOC_PEDIA_BUILDINGS_PAGE'
+    for item in names:
+        en_name = [word.capitalize() for word in item['Name'].split('_')][2:-2]
+        if en_name[-1] in ['NAVAL', 'LIGHT']:
+            en_name = en_name[:-1]
+        en_name = ' '.join(en_name)
         loc_string += f"('en_us', '{item['Name']}', '{en_name}'),\n"
         loc_string += f"('en_us', '{item['Description']}',  'Description'),\n"
         loc_string += f"('en_us', '{type_description}_{item['Name'][4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
