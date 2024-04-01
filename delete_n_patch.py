@@ -16,6 +16,17 @@ def delete_rows(kept, calculated_to_keep):
                                      ['PROMOTION_CLASS_MELEE', 'PROMOTION_CLASS_RANGED',
                                       'PROMOTION_CLASS_RECON', 'PROMOTION_CLASS_LIGHT_CAVALRY',
                                       'PROMOTION_CLASS_NAVAL_MELEE', 'PROMOTION_CLASS_SIEGE'])
+    delete_string += delete_from_gen('Projects', 'ProjectType',
+                                     ['PROJECT_ENHANCE_DISTRICT_ENCAMPMENT', 'PROJECT_ENHANCE_DISTRICT_HARBOR',
+                                      'PROJECT_ENHANCE_DISTRICT_INDUSTRIAL_ZONE',
+                                      'PROJECT_ENHANCE_DISTRICT_COMMERCIAL_HUB',
+                                      'PROJECT_ENHANCE_DISTRICT_HOLY_SITE', 'PROJECT_ENHANCE_DISTRICT_CAMPUS',
+                                      'PROJECT_ENHANCE_DISTRICT_THEATER', 'PROJECT_BREAD_AND_CIRCUSES',
+                                      'PROJECT_LAUNCH_EARTH_SATELLITE', 'PROJECT_LAUNCH_MOON_LANDING'])         #DEBUG
+    delete_string += delete_from_gen('Resources', 'ResourceType', ['RESOURCE_COPPER', 'RESOURCE_IRON', 'RESOURCE_MARBLE', 'RESOURCE_DEER', 'RESOURCE_FISH',
+                    'RESOURCE_RICE', 'RESOURCE_SHEEP', 'RESOURCE_WHEAT', 'RESOURCE_INCENSE', 'RESOURCE_IVORY',
+                    'RESOURCE_SILK', 'RESOURCE_SUGAR', 'RESOURCE_WINE', 'RESOURCE_COTTON'])
+
     # delete_string += 'DELETE FROM Building_YieldChanges;'
 
     return delete_string
