@@ -59,6 +59,16 @@ def sql_check(tablename):
     return sql_column_values
 
 
+def split_dict(dictionary, condition, equalto=None):
+    if equalto is not None:
+        has_condition = {key: i for key, i in dictionary.items() if i.get(condition, False) == equalto}
+        hasnt_condition = {key: i for key, i in dictionary.items() if i.get(condition, False) != equalto}
+    else:
+        has_condition = {key: i for key, i in dictionary.items() if i.get(condition, False)}
+        hasnt_condition = {key: i for key, i in dictionary.items() if not i.get(condition, False)}
+    return has_condition, hasnt_condition
+
+
 def localization(names):
     loc_string = ''
     type_description = 'LOC_PEDIA_UNITS_PAGE'
