@@ -18,7 +18,7 @@ if not os.path.exists('data/tables'):
 
     conn.close()
 
-substring = 'TRAIT_SHRINE_WRITING_POINTS'
+substring = 'PROMOTION'
 records = {}
 for i in os.listdir('data/tables/'):
     if i == 'Kinds.csv':
@@ -29,5 +29,8 @@ for i in os.listdir('data/tables/'):
         for column in df.columns:
             if df[column].apply(lambda x: isinstance(x, str)).any():
                 if df[column].str.contains(substring, case=False).any():
-                    chs = df[df[column].str.contains(substring, case=False)]
-                    records['i'].append(df[df[column].str.contains(substring, case=False)])
+                    try:
+                        chs = df[df[column].str.contains(substring, case=False).fillna(False)]
+                        records['i'].append(df[df[column].str.contains(substring, case=False).fillna(False)])
+                    except Exception as e:
+                        print(f'failed read on {i}.{column} with error {e}')
