@@ -5,6 +5,7 @@ from buildings import Buildings, districts_build
 from delete_n_patch import delete_rows, patch_string_generate
 from misc import build_resource_string, build_terrains_string, build_sql_table, build_features_string
 from db_checker import db_checker
+from promotions import Promotions
 
 import json
 
@@ -20,6 +21,7 @@ def main():
     civ_string, unique_units_to_remove, unique_buildings_to_remove, kinds, traits = civilizations.civilizations(civs, kinds)
     tech_table_string, civic_table_string, civics, kinds = techs_sql(kinds, kept)
     unit_table_string, replacements_string, upgrades_string, traits, kinds = units_sql(civs, unique_units_to_remove, civics, kinds, traits, kept)
+    promotions_string, kinds = Promotions().promotion_miner(kinds)
     resource_string, kinds = build_resource_string(civics, kinds)
     terrain_string, kinds = build_terrains_string(kinds)
     features_string, kinds = build_features_string(kinds)
@@ -32,8 +34,15 @@ def main():
     kind_string = build_sql_table([{'Type': key, 'Kind': value} for key, value in kinds.items()], 'Types')
     total = (delete_string + kind_string + '\n' + tech_table_string + civic_table_string + prereqs_string
              + building_table_string + districts_string + civ_string + traits_string + unit_table_string
-             + replacements_string + upgrades_string + resource_string + terrain_string + features_string
+             + replacements_string + upgrades_string + promotions_string + resource_string + terrain_string + features_string
              + patch_string)
+
+    # debug_super palace
+    total += """UPDATE Building_YieldChanges SET YieldChange = 100 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
+UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
+UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
+UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';"""
+
 
     frontend_config_string = civilizations.config_builder(civs)
 

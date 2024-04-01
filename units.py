@@ -17,6 +17,13 @@ advisor_mapping = {'ADVISOR_MILITARY': 'ADVISOR_CONQUEST', 'ADVISOR_RELIGION': '
                    'ADVISOR_SCIENCE': 'ADVISOR_TECHNOLOGY', 'ADVISOR_CULTURE': 'ADVISOR_CULTURE',
                    'NONE': 'NULL'}
 
+combat_map = {'UNITCOMBAT_NAVAL': 'PROMOTION_CLASS_NAVAL_MELEE', 'UNITCOMBAT_SIEGE': 'PROMOTION_CLASS_SIEGE',
+              'UNITCOMBAT_MELEE': 'PROMOTION_CLASS_MELEE', 'UNITCOMBAT_ARCHER': 'PROMOTION_CLASS_RANGED',
+              'UNITCOMBAT_MOUNTED': 'PROMOTION_CLASS_LIGHT_CAVALRY', 'UNITCOMBAT_RECON': 'PROMOTION_CLASS_RECON',
+              'UNITCOMBAT_ANIMAL': 'PROMOTION_CLASS_ANIMAL', 'UNITCOMBAT_BEAST': 'PROMOTION_CLASS_BEAST',
+              'UNITCOMBAT_DISCIPLE': 'PROMOTION_CLASS_DISCIPLE', 'UNITCOMBAT_ADEPT': 'PROMOTION_CLASS_ADEPT',
+              'NONE': 'NULL'}
+
 exceptions = {'UNIT_LOKI': {}, 'UNIT_LUCIAN': {'CanTrain': 0}}
 
 
@@ -53,6 +60,7 @@ def units_sql(civs, unique_units_to_remove, civics, kinds, trait_types, kept):
     for i in six_style_dict:
         i['TraitType'] = "NULL"
         i['BaseSightRange'] = 2
+        i['PromotionClass'] = combat_map[i['RangedCombat']]
         if i['RangedCombat'] == 'UNIT_COMBAT_NAVAL':
             i['Domain'] = 'DOMAIN_SEA'
             i['FormationClass'] = 'FORMATION_CLASS_NAVAL'
