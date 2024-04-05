@@ -14,7 +14,7 @@ testing workspace for finding the feasability of certain features needed to fait
 - [ ] Summoning Buildings : This was always a bit hacky in civ iv, a unit being present in a city does have modifiers, with Garrison affecting combat. Another issue is that the              nonstacking makes keeping a mage on the city less feasible. Could we do a single charge based system, and allow a city to unbuild a building, if it has the                             prerequisite building, and that would give the charge back to the unit? if we can have two active abilities, (himiko), then could have one ability that adds it,            with a single charge, and one context dependant ability that only works on cities with the building, that removes the building and adds a charge back.
   
 ## Hero System:
-- [ ] one of a kind units : implemented by existing heroes, just need to remove Lifespans. Heroes are made using City Projects where a monument is present, these projects are probably       what is one of a kind, and maybe tie that hero reference to that monument
+- [ ] one of a kind units : implemented by existing heroes, just need to remove Lifespans. Heroes are made using City Projects where a monument is present, these projects are probably what is one of a kind, and maybe tie that hero reference to that monument
 - [ ] XP per turn: multiple types of xp gain exist, notice scouts get it for spotting natural wonders. Care that base Heroes do not get xp
 - [ ] Resurrection System
 - [ ] hero abandonment if leave religion
@@ -150,24 +150,29 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 # Design choices and required changes:
 ## Tech System:
-  - Tech tree is now vastly different, being split into two, need to decide what techs go where and even pare techs apart.
-  - come up with eurekas
+  - [x] Tech tree is now vastly different, being split into two, need to decide what techs go where and even pare techs apart.
+  - [ ] come up with eurekas
 
 
 ## Leader Trait System:
   - civ iv had boilerplate leader traits, civ vi has bespoke traits per leader that are far more specific.
+  - [ ] Implement modifiers for each of the civ iv leader traits (organized etc.) Apply to relevant leaders
 ## City System:
-  - District system means we need to change a lot of buildings, categorise them by District, then reexamine if that buildings path makes sense.
+  - [x] District system means we need to change a lot of buildings, categorise them by District, 
+  - [ ] Reexamine if that buildings path makes sense.
 ## Religion System:
-  - due to custom religions being a thing, how do we incorporate the veil, Order, kilmorph?  : this will need a lot of research, see how other grand conversions deal with this. Could implement it as Secret Societies.
+  - [ ] due to custom religions being a thing, how do we incorporate the veil, Order, kilmorph?  : this will need a lot of research, see how other grand conversions deal with this. Could implement it as Secret Societies.
 ## Governer System:
-  - existing governers arent very flavourful to the ffh universe, but this is an added extra
+  - [ ] Make sure governers arent broken
+  - [ ] existing governers arent very flavourful to the ffh universe, but this is an added extra
 ## Great People System:
-  - gp are very unique in civ vi, need to parse which i have to remove.
+  - [ ] Duplicate Great people so they all are basically the same, as for civ iv.
+  - [ ] Grigori Great Adventurer issue, put under Great Writer, and then change its requirements
 ## City State System:
   - didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 ## Wonder System:
-  - need to port existing wonders to outside the city and adjust as needed.
+  - [ ] Find why we cant find filter wonders in buildinginfos
+  - [ ] Extra: port existing wonders to outside the city and adjust as needed.
 ## Over/Undercouncil:
   - world congress but without inclusive participation : bonus feature really
 ## Agendas for leaders:
@@ -177,9 +182,3 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 seems ez, just lua system of buildings, klep someones national wonders code, then a final project
 #### Tower of Mastery
 needs mana system in place, launching space missions requires preexisting other space missions, in a similar way to the Towers. Piggyback
-
-Feral Bond, needs a civic
-Festivals, needs a civic
-Writing, needs a tech
-Knowledge of the Ether, needs a tech
-Need to sort out if tech is in exploration
