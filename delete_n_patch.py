@@ -3,13 +3,16 @@ from utils import small_dict, build_sql_table
 
 
 def delete_rows(kept, calculated_to_keep):
-    delete_string = 'DELETE FROM Technologies;\nDELETE FROM TechnologyPrereqs;\n'
+    delete_string = ''
+    delete_string += f"UPDATE MajorStartingUnits SET Unit = 'SLTH_UNIT_WARRIOR' WHERE Unit = 'UNIT_WARRIOR';\n"
+    delete_string += 'DELETE FROM Technologies;\nDELETE FROM TechnologyPrereqs;\n'
     delete_string += 'DELETE FROM Technologies_XP2;\nDELETE FROM Civics;\nDELETE FROM CivicPrereqs;\n'
     delete_string += 'DELETE FROM Civics_XP2;\n'
     delete_string += 'DELETE FROM Building_GreatPersonPoints;\nDELETE FROM Unit_BuildingPrereqs;\n'
     delete_string += 'DELETE FROM UnitUpgrades;\nDELETE FROM Boosts;\nDELETE FROM UnitPromotions;\n'
     delete_string += 'DELETE FROM UnitPromotionPrereqs;\nDELETE FROM UnitPromotionModifiers;\n'
-    delete_string += delete_from_gen('Units', 'UnitType', kept['compat_for_VI'] + kept['units_as_is'])
+    delete_string += 'DELETE FROM Policies;\n'
+    delete_string += delete_from_gen('Units', 'UnitType', kept['compat_for_VI'])
     delete_string += delete_from_gen('Buildings', 'BuildingType', calculated_to_keep + ['BUILDING_PALACE'])
     delete_string += delete_from_gen('Building_YieldChanges', 'BuildingType', ['BUILDING_PALACE'])
     delete_string += delete_from_gen('UnitPromotionClasses', 'PromotionClassType',
@@ -26,9 +29,9 @@ def delete_rows(kept, calculated_to_keep):
     delete_string += delete_from_gen('Resources', 'ResourceType', ['RESOURCE_COPPER', 'RESOURCE_IRON', 'RESOURCE_MARBLE', 'RESOURCE_DEER', 'RESOURCE_FISH',
                     'RESOURCE_RICE', 'RESOURCE_SHEEP', 'RESOURCE_WHEAT', 'RESOURCE_INCENSE', 'RESOURCE_IVORY',
                     'RESOURCE_SILK', 'RESOURCE_SUGAR', 'RESOURCE_WINE', 'RESOURCE_COTTON'])
-
+    delete_string += delete_from_gen('Governments', 'GovernmentType', ['GOVERNMENT_AUTOCRACY',
+                                                                       'GOVERNMENT_CHIEFDOM'])
     # delete_string += 'DELETE FROM Building_YieldChanges;'
-
     return delete_string
 
 
