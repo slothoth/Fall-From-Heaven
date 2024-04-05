@@ -241,3 +241,47 @@ def build_features_string(kinds):
         kinds[features['FeatureType']] = 'KIND_FEATURE'
 
     return features_string, kinds
+
+
+def build_policies(civics, kinds):
+    with open('data/XML/Gameinfo/CIV4CivicInfos.xml', 'r') as file:
+        policy_dict = xmltodict.parse(file.read())['Civ4CivicInfos']['CivicInfos']['CivicInfo']
+
+    remove = ['CIVIC_NO_MEMBERSHIP', 'CIVIC_OVERCOUNCIL', 'CIVIC_UNDERCOUNCIL']
+    policy_mapper = {'Type': 'PolicyType', 'Description': 'Description', 'TechPrereq': 'PrereqTech',
+                     'CivicOptionType': 'GovernmentSlotType'}
+    gov_slot_mapper = {'CIVICOPTION_LABOR': 'SLOT_MILITARY', 'CIVICOPTION_CULTURAL_VALUES': 'SLOT_ECONOMIC',
+                       'CIVICOPTION_GOVERNMENT': 'SLOT_DIPLOMATIC', 'CIVICOPTION_ECONOMY': 'SLOT_GREAT_PERSON'}
+    old_policy_dict = {i['Type']:i for i in policy_dict}
+    six_policy_dict = {i['Type']: small_dict(i, policy_mapper) for i in policy_dict}
+    six_policy_dict = {key: val for key, val in six_policy_dict.items() if key not in remove}
+    useful_infos = {key:{key: value for key, value in i.items() if value != 'NONE' and value != None and value != '0'} for key, i in
+        old_policy_dict.items()}
+    useful_infos = {key: val for key, val in useful_infos.items() if key not in remove}
+    pop_list = ['Button', 'Description', 'Strategy', 'iAnarchyLength', 'iAIWeight', 'CivicOptionType', 'WeLoveTheKing',
+                'TechPrereq', 'Type', 'Civilopedia']
+    for i in useful_infos.values():
+        for j in pop_list:
+            i.pop(j, None)
+    for i in six_policy_dict.values():
+        i['GovernmentSlotType'] = gov_slot_mapper[i['GovernmentSlotType']]
+        i['PolicyType'] = 'POLICY_' + i['PolicyType'][6:]
+        i['Name'] = f"LOC_{i['PolicyType']}_NAME"
+        i['PrereqCivic'] = 'NULL'
+        if i['PolicyType'] != 'POLICY_GOD_KING':
+            kinds[i['PolicyType']] = 'KIND_POLICY'
+        if i['PrereqTech'] in civics:
+            i['PrereqCivic'] = f"CIVIC_{i['PrereqTech'][5:]}"
+            i['PrereqTech'] = 'NULL'
+        elif i['PrereqTech'] == 'NONE':
+            i['PrereqTech'] = 'NULL'
+
+    for i in useful_infos.values():
+        for key, val in i.items():
+            if 'prereq' not in key.lower() or 'block' not in key.lower():
+                print(f"Do a modifier on {key} with value {val}")
+                # standard modifier tables: PolicyModifiers, Modifiers, ModifierArguments, DynamicModifiers if needed
+
+    policy_string = build_sql_table(six_policy_dict, 'Policies')
+
+    return policy_string, kinds
