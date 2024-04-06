@@ -1,5 +1,6 @@
 import xmltodict
 from utils import small_dict, build_sql_table, update_sql_table, sql_check
+from modifiers import Modifiers
 
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
 
@@ -243,7 +244,7 @@ def build_features_string(kinds):
     return features_string, kinds
 
 
-def build_policies(civics, kinds):
+def build_policies(civics, kinds, modifiers):
     with open('data/XML/Gameinfo/CIV4CivicInfos.xml', 'r') as file:
         policy_dict = xmltodict.parse(file.read())['Civ4CivicInfos']['CivicInfos']['CivicInfo']
 
@@ -290,21 +291,17 @@ def build_policies(civics, kinds):
     # none of 4 0,1 are 1 except builder extra builds
     # OwnerRequirementSetId is always null,
     mod_types = set()
-    policy_modifiers, modifier_args = [], []
-    modifiers = {}
+    policy_modifiers =  []
     for policy, i in useful_infos.items():
         for key, val in i.items():
-            if 'prereq' not in key.lower() or 'block' not in key.lower():
-                print(f"Do a modifier on {key} with value {val}")
-                """modifier_id = f'MODIFIER_SLTH_{policy}_{key}'
-                policy_modifiers.append({'PolicyType': policy, 'ModifierId': modifier_id})
-                modifiers[modifier_id] = {'ModifierId': modifier_id, 'ModifierType': '', 'RunOnce': 0, 'NewOnly': 0,
-                                          'Permanent': 0, 'Repeatable': 0, 'OwnerRequirementSetId': 'NULL',
-                                          'SubjectRequirementSetId': 'NULL'}
-                modifier_args.append()"""
+            modifier_ids = modifiers.generate_modifier(val, key, policy[6:])
+            if modifier_ids is not None:
+                for modifier_id in modifier_ids:
+                    policy_modifiers.append({'PolicyType': f"POLICY_{policy[6:]}".upper(),
+                                             'ModifierId': modifier_id})
 
-                # standard modifier tables: PolicyModifiers, Modifiers, ModifierArguments, DynamicModifiers if needed
 
     policy_string = build_sql_table(six_policy_dict, 'Policies')
+    policy_modifiers_string = build_sql_table(policy_modifiers, 'PolicyModifiers')
 
-    return policy_string, kinds
+    return policy_string, policy_modifiers_string, kinds
