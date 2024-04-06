@@ -1,3 +1,5 @@
+from utils import build_sql_table
+
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
 gpp_map = {'UNITCLASS_PROPHET': 'GREAT_PERSON_CLASS_PROPHET', 'UNITCLASS_COMMANDER': 'GREAT_PERSON_CLASS_GENERAL',
@@ -14,194 +16,299 @@ class Modifiers:
         self.modifiers = {}
         self.dynamic_modifiers = {}
         self.modifier_arguments = []
+        self.traits = {}
         self.trait_modifiers = []
 
         self.requirements = {}
-        self.requirement_arguments = []
+        self.requirements_arguments = []
         self.requirement_set_reqs = []
         self.requirement_set = []
 
         self.complete_set = {}
 
-        modifier_map = {'CapitalCommerceModifiers': self.capital_commerce_modifier,
-                        'CapitalYieldModifiers': self.capital_yield_modifier,        # dummy
-                        'iWarWearinessModifier': self.war_weariness_modifier,
-                        'CommerceModifiers': self.commerce_modifier,
-                        'ImprovementYieldChanges': self.improvement_yield_modifier,
-                        'SpecialistValids': self.unlimited_specialists_modifier,
-                        'SpecialistExtraCommerces': self.specialist_yield_modifier,
-                        'iGreatPeopleRateModifier': self.gpp_rate_modifier,
-                        'iCivicPercentAnger': self.no_fucking_clue,
-                        'iExtraHealth': self.housing_modifier,
-                        'iHappyPerMilitaryUnit': self.no_fucking_clue,
-                        'BuildingHappinessChanges': self.buildings_amenities_modifier,
-                        'iMilitaryProductionModifier': self.military_prod_modifier,
-                        'iFoodConsumptionPerPopulation': self.food_use_modifier,
-                        'iFreeExperience': self.free_xp_modifier,
-                        'iEnslavementChance': self.slave_taking_modifier,
-                        'iWorkerSpeedModifier': self.builder_charge_modifier,
-                        'bMilitaryFoodProduction': self.units_made_with_food,
-                        'bNoForeignTrade': self.no_foreign_trade,
-                        'iTradeRoutes': self.trade_route_count_modifier,
-                        'iCoastalTradeRoutes': self.trade_route_count_sea_modifier,
-                        'FeatureHappinessChanges': self.feature_happiness_modifier}
+        self.modifier_map = {'CapitalCommerceModifiers': self.capital_commerce_modifier,
+                             'CapitalYieldModifiers': self.capital_yield_modifier,  # dummy
+                             'iWarWearinessModifier': self.war_weariness_modifier,
+                             'CommerceModifiers': self.commerce_modifier,
+                             'ImprovementYieldChanges': self.improvement_yield_modifier,
+                             'SpecialistValids': self.specialistImplement,
+                             'SpecialistExtraCommerces': self.specialistImplement,
+                             'iGreatPeopleRateModifier': self.gpp_rate_modifier,
+                             'iCivicPercentAnger': self.no_fucking_clue,
+                             'iExtraHealth': self.housing_modifier,
+                             'iHappyPerMilitaryUnit': self.no_fucking_clue,
+                             'BuildingHappinessChanges': self.buildings_amenities_modifier,
+                             'iMilitaryProductionModifier': self.military_prod_modifier,
+                             'iFoodConsumptionPerPopulation': self.cantImplement,
+                             'iFreeExperience': self.free_xp_modifier,
+                             'iEnslavementChance': self.slave_taking_modifier,
+                             'iWorkerSpeedModifier': self.builder_charge_modifier,
+                             'bMilitaryFoodProduction': self.cantImplement,
+                             'bNoForeignTrade': self.no_foreign_trade,
+                             'iTradeRoutes': self.trade_route_count_modifier,
+                             'iCoastalTradeRoutes': self.trade_route_count_sea_modifier,
+                             'FeatureHappinessChanges': self.feature_happiness_modifier,
+                             'Upkeep': self.maintenanceImplement,
+                             'iNumCitiesMaintenanceModifier': self.maintenanceImplement,
+                             'iDistanceMaintenanceModifier': self.maintenanceImplement,
+                             'iFreeUnitsPopulationPercent': self.maintenanceImplement,
+                             'bNoNonStateReligionSpread': self.religionImplement,
+                             'bStateReligion': self.religionImplement,
+                             'iStateReligionHappiness': self.religionImplement,
+                             'iStateReligionFreeExperience': self.religionImplement,
+                             'iStateReligionUnitProductionModifier': self.religionImplement,
+                             'iStateReligionGreatPeopleRateModifier': self.religionImplement,
+                             'bPrereqReligion': self.religionImplement,
+                             'BlockAlignment': self.alignmentImplement,
+                             'bPrereqWar': self.prereqImplement,
+                             'iLargestCityHappiness': self.otherSystemImplement,
+                             'bNoDiplomacyWithEnemies': self.otherSystemImplement,
+                             'Hurrys': self.cantImplement,
+                             'iMaxConscript': self.cantImplement,
+                             'PrereqReligion': self.prereqImplement,
+                             'PrereqCivilization': self.prereqImplement,
+                             'iFreeSpecialist': self.specialistImplement
+                             }
 
     def capital_commerce_modifier(self, civ4_target, name):
-        self.commerce_modifier(civ4_target, name,
-                               modifier_type='MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER')
+        return self.commerce_modifier(civ4_target, name,
+                                      modifier_type='MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER')
 
     def capital_yield_modifier(self, civ4_target, name):
-        self.commerce_modifier(civ4_target, name, mapper=yield_map,
-                               modifier_type='MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER')
+        return self.commerce_modifier(civ4_target, name, mapper=yield_map,
+                                      modifier_type='MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER')
 
     def war_weariness_modifier(self, civ4_target, name):
         modifier = {'ModifierId': f"MODIFIER_{name}_ADJUST_WAR_WEARINESS",
                     'ModifierType': 'MODIFIER_PLAYER_ADJUST_WAR_WEARINESS'}
         modifier_args = []
-        for name, value in zip([('Amount', civ4_target), ('Overall', 1)]):
+        for name, value in [('Amount', civ4_target), ('Overall', 1)]:
             modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
                                   'Value': value})
         self.organize(modifier, modifier_args)
+        return [modifier['ModifierId']]
 
-    def commerce_modifier(self, civ4_target, name, mapper=None, modifier_type='MODIFIER_PLAYER_CITIES_ADJUST_CITY_YIELD_MODIFIER'):
+    def commerce_modifier(self, civ4_target, name, mapper=None,
+                          modifier_type='MODIFIER_PLAYER_CITIES_ADJUST_CITY_YIELD_MODIFIER'):
         if mapper is None:
             mapper = commerce_map
-        for idx, amount in enumerate(civ4_target):
+
+        modifiers = []
+        modifier_args = []
+        yield_changes = next(iter(civ4_target.values()))
+        for idx, amount in enumerate(yield_changes):
             if int(amount) != 0:
-                modifier = {'ModifierId': f"MODIFIER_{name[14:]}_ADD_{mapper[idx][6:]}YIELD",
+                modifier = {'ModifierId': f"MODIFIER_{name}_ADD_{mapper[idx][6:]}YIELD",
                             'ModifierType': modifier_type}
-                modifier_args = []
-                for name, value in zip([('Amount', amount), ('YieldType', mapper[idx])]):
-                    modifier_args.append(
-                        {'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
-                         'Value': value})
-                self.organize(modifier, modifier_args)
+                modifiers.append(modifier)
+                for name, value in [('Amount', amount), ('YieldType', mapper[idx])]:
+                    modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name,
+                                          'Type': 'ARGTYPE_IDENTITY', 'Value': value})
+
+        self.organize(modifiers, modifier_args)
+        return [i['ModifierId'] for i in modifiers]
 
     def improvement_yield_modifier(self, civ4_target, name):
-        improvement = name[12:]
-        for idx, amount in enumerate(civ4_target):
+        improvement = civ4_target['ImprovementYieldChange']['ImprovementType']
+        modifiers = []
+        modifier_args = []
+        yield_changes = civ4_target['ImprovementYieldChange']['ImprovementYields']['iYield']
+        for idx, amount in enumerate(yield_changes):
             if int(amount) != 0:
-                modifier = {'ModifierId': f"MODIFIER_{name}_{improvement}_{yield_map[idx][6:]}",
+                modifier = {'ModifierId': f"MODIFIER_{name}_{improvement[12:]}_{yield_map[idx][6:]}",
                             'ModifierType': 'MODIFIER_PLAYER_ADJUST_PLOT_YIELD',
-                            'SubjectRequirementSetId': f'PLOT_HAS_{improvement}_REQUIREMENTS'}
-                modifier_args = []
-                for name, value in zip([('Amount', amount), ('YieldType', yield_map[idx])]):
-                    modifier_args.append(
-                        {'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
-                         'Value': value})
-                self.organize(modifier, modifier_args)
+                            'SubjectRequirementSetId': f'PLOT_HAS_{improvement[12:]}_REQUIREMENTS'}
+                modifiers.append(modifier)
+                for name, value in [('Amount', amount), ('YieldType', yield_map[idx])]:
+                    modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name,
+                                          'Type': 'ARGTYPE_IDENTITY', 'Value': value})
+
+        self.organize(modifiers, modifier_args)
+        return [i['ModifierId'] for i in modifiers]
 
     def gpp_rate_modifier(self, civ4_target, name):
-        modifier = {'ModifierId':  f"MODIFIER_{name[14:]}_INCREASE_GPP_MULT",
+        modifier = {'ModifierId': f"MODIFIER_{name}_INCREASE_GPP_MULT",
                     'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_GREAT_PERSON_POINT_BONUS'}
 
-        modifier_args = {'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
-                         'Value': civ4_target['value']}
+        modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target}]
         self.organize(modifier, modifier_args)
+        return [modifier['ModifierId']]
 
     def buildings_amenities_modifier(self, civ4_target, name):
-        buildings = civ4_target['BuildingHappinessChanges']['BuildingHappinessChange']
-        for building, amount in buildings:
-            building = building.replace('BUILDINGCLASS', 'BUILDING')
-            modifier = {'ModifierId': f"MODIFIER_{name}_{building}_ADD_AMENITIES",
+        buildings = civ4_target['BuildingHappinessChange']
+        modifiers, modifier_args, requirements, requirement_arguments, requirement_set = [], [], [], [], []
+        if not isinstance(buildings, list):
+            buildings = [buildings]
+        for building in buildings:
+            building_name = building.pop('BuildingType')
+            amount = next(iter(building.values()))
+            building_name = building_name.replace('BUILDINGCLASS', 'BUILDING')
+            modifier = {'ModifierId': f"MODIFIER_{name}_{building_name}_ADD_AMENITIES",
                         'ModifierType': 'MODIFIER_SINGLE_CITY_ADJUST_ENTERTAINMENT',
-                        'SubjectRequirementSetId': f'REQUIRES_CITY_HAS_{building}'}
-            modifier_args = {'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
-                            'Value': amount}
-            requirements = {'RequirementId': f'REQUIRES_CITY_HAS_{building}',
-                            'RequirementType': 'REQUIREMENT_CITY_HAS_BUILDING'}
-            requirement_arguments = {'RequirementId': requirements['RequirementId'], 'Name': 'BuildingType',
-                                     'Type': 'ARGTYPE_IDENTITY', 'Value': building}
-            self.organize(modifier, modifier_args, requirements, requirement_arguments)
+                        'SubjectRequirementSetId': f'SLTH_REQUIRES_CITY_HAS_{building_name[9:]}'}
+            modifiers.append(modifier)
+            modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
+                                  'Value': amount})
+            requirements_ = {'RequirementId': modifier['SubjectRequirementSetId'],
+                             'RequirementType': 'REQUIREMENT_CITY_HAS_BUILDING'}
+            requirements.append(requirements_)
+            requirement_arguments.append({'RequirementId': requirements_['RequirementId'], 'Name': 'BuildingType',
+                                          'Type': 'ARGTYPE_IDENTITY', 'Value': building_name})
+            requirement_set.append({'RequirementSetId': requirements_['RequirementId'],
+                                    'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'})
+        self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
+                      requirements_set=requirement_set)
 
         """RequirementSetRequirements(RequirementSetId, RequirementId)
                 VALUES('BUILDING_IS_FACTORY', 'REQUIRES_CITY_HAS_FACTORY');"""
+        return [i['ModifierId'] for i in modifiers]
 
     def military_prod_modifier(self, civ4_target, name):
         modifier = {'ModifierId': f"MODIFIER_{name}_MILITARY_PRODUCTION",
                     'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_MILITARY_UNITS_PRODUCTION'}
-        modifier_args = {'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                         'Value': civ4_target['value']}
+        modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target}]
         self.organize(modifier, modifier_args)
+        return [modifier['ModifierId']]
 
     def free_xp_modifier(self, civ4_target, name):
-        print('cgd')
+        modifier = {'ModifierId': f"MODIFIER_{name}_MILITARY_EXPERIENCE",
+                    'ModifierType': 'MODIFIER_CITY_TRAINED_UNITS_ADJUST_GRANT_EXPERIENCE'}
+        modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': -1}]
+        self.organize(modifier, modifier_args)  # this just gives promo, cant seem to find method for part xp
+        return [modifier['ModifierId']]
 
     def slave_taking_modifier(self, civ4_target, name):
-        print('dsc')
+        modifiers = [{'ModifierId': f"MODIFIER_{name}_SLAVE_TAKING_MODIFIER",
+                      'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_UNIT_CAPTURE'},
+                     {'ModifierId': f"MODIFIER_{name}_SLAVE_TAKING",
+                      'ModifierType': 'MODIFIER_PLAYER_UNITS_ATTACH_MODIFIER'}]
+        modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'CanCapture', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': 1},
+                         {'ModifierId': modifiers[0]['ModifierId'], 'Name': 'UnitType',
+                          'Type': 'ARGTYPE_IDENTITY', 'Value': 'UNIT_SLAVE'},
+                         {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'ModifierId',
+                          'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']}]
+
+        self.organize(modifiers, modifier_args)
+        # do i need this?, also maybe need to alter probability of slave taking
+        """MY_TABLE(UnitAbilityType, Name, Description, Inactive, ShowFloatTextWhenEarned, Permanent)
+        VALUES('ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY', 'LOC_ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY_NAME',
+               'LOC_ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY_DESCRIPTION', '1', '0', '1');"""
+
+        return [modifiers[1]['ModifierId']]
 
     def builder_charge_modifier(self, civ4_target, name):
-        print(name)
+        # closest thing to worker speed modifier
+        modifier = {'ModifierId': f"MODIFIER_{name}_BUILD_CHARGES",
+                    'ModifierType': 'MODIFIER_PLAYER_TRAINED_UNITS_ADJUST_BUILDER_CHARGES', 'Permanent': '1',
+                    'SubjectRequirementSetId': 'UNIT_IS_BUILDER'}
+        modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': 2}]  # hardcoded value at the moment, unless we see other instances
+        self.organize(modifier, modifier_args)
+        return [modifier['ModifierId']]
 
     def housing_modifier(self, civ4_target, name):
-        print(name)
 
-    def units_made_with_food(self, civ4_target, name):
-        print(name)
+        modifier = {'ModifierId': f"MODIFIER_{name}_ADJUST_HOUSING",
+                    'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_POLICY_HOUSING'}
+        modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target}]  # hardcoded value at the moment, unless we see other instances
+        self.organize(modifier, modifier_args)
+        return [modifier['ModifierId']]
 
     def no_foreign_trade(self, civ4_target, name):
-        print(name)
+        # cant ban them, can set them to 0
+        modifier = {'ModifierId': f"MODIFIER_{name}_FOREIGN_TRADE_SET_TO_ZERO",
+                    'ModifierType': 'MODIFIER_PLAYER_ADJUST_INTERNATIONAL_TRADE_ROUTE_YIELD_MODIFIER_WARLORDS'}
+        modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'YieldType', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': 'YIELD_PRODUCTION, YIELD_FOOD, YIELD_SCIENCE, YIELD_CULTURE, YIELD_GOLD, YIELD_FAITH'},
+                         {'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': '-100, -100, -100, -100, -100, -100'}]
+        self.organize(modifier, modifier_args)
+        return [modifier['ModifierId']]
 
     def trade_route_count_modifier(self, civ4_target, name):
-        print(name)
+        modifier = {'ModifierId': f"MODIFIER_{name}_ADJUST_TRADE_ROUTE_CAPACITY",
+                    'ModifierType': 'MODIFIER_PLAYER_ADJUST_TRADE_ROUTE_CAPACITY'}
+        modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target}]  # hardcoded value at the moment, unless we see other instances
+        self.organize(modifier, modifier_args)
+        return [modifier['ModifierId']]
 
     def trade_route_count_sea_modifier(self, civ4_target, name):
-        print(name)
+        # Since Civ4 just gives you trade routes per city, and this gives extra trade routes on coastal cities
+        # We can implement it, but it will kinda be op
+        # A modifier that applies a modifer to all cities in our civ, with requirement the city is coastal
+        # That modifier adds a trade route
 
+        modifiers = [{'ModifierId': f"MODIFIER_{name}_ADJUST_TRADE_ROUTE_CAPACITY_COASTAL_PER_CITY",
+                      'ModifierType': 'MODIFIER_PLAYER_ADJUST_TRADE_ROUTE_CAPACITY',
+                      'SubjectRequirementSetId': 'PLOT_IS_ADJACENT_TO_COAST'},
+                     {'ModifierId': f"MODIFIER_{name}_ADJUST_TRADE_ROUTE_CAPACITY_COASTAL",
+                      'ModifierType': 'MODIFIER_PLAYER_CITIES_ATTACH_MODIFIER'}]
+        modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target},
+                         {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'ModifierId', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': modifiers[0]['ModifierId']}]
+        self.organize(modifiers, modifier_args)
+        return [modifiers[1]['ModifierId']]
 
     def feature_happiness_modifier(self, civ4_target, name):
-        print(name)
+        print(f"{name} not implemented")
 
-    def unlimited_specialists_modifier(self, civ4_target, name):
-        specialist_classes = civ4_target['SpecialistValids']['SpecialistValid']
-        for i in specialist_classes:
-            district = map_specialists[i['SpecialistType']]
-        modifier = {'ModifierId': f"MODIFIER_{name}_UNLIMITED_SPECIALIST_{district}",
-                    'ModifierType': 'ISSUE_IS_NO_ADJUST_DISTRICT/BUILDING/CITY_CITIZEN_SLOTS'}
+    def specialistImplement(self, civ4_target, name):
+        print(f"{name} not implemented")
+        # for idx, amount in enumerate(civ4_target['iCommerce']):
+        # if int(amount) != 0:
+        # yieldtype = commerce_map[idx]
+
+        # specialist_classes = civ4_target['SpecialistValid']
+        # for i in specialist_classes:
+        #    district = map_specialists[i['SpecialistType']]
+        # modifier = {'ModifierId': f"MODIFIER_{name}_UNLIMITED_SPECIALIST_{district}",
+        #            'ModifierType': 'ISSUE_IS_NO_ADJUST_DISTRICT/BUILDING/CITY_CITIZEN_SLOTS'}
         # map_citizen_slot to district. Make player that district have 94 CitizenSlots
 
-    def specialist_yield_modifier(self, civ4_target, name):
-        district = map_specialists[civ4_target['specialist']]
-        print('chs')
+    def no_fucking_clue(self, civ4_target, name):
+        print(f"{name} not implemented")
 
-    def no_fucking_clue(self):
-        print('didnt do it')
+    def maintenanceImplement(self, civ4_target, name):
+        print(f"{name} not implemented as needs Maintenance Rework")
 
-    def food_use_modifier(self, civ4_target, name):
-        # GlobalParameters (Name: 'CITY_FOOD_CONSUMPTION_PER_POPULATION', "Value": '2.0')
+    def religionImplement(self, civ4_target, name):
+        print(f"{name} not implemented as needs Religion Rework")
 
-    """{'CIVIC_DESPOTISM': {'Upkeep': 'UPKEEP_LOW', 'iNumCitiesMaintenanceModifier': '25', 'iWarWearinessModifier': '-50'},
-     'CIVIC_CITY_STATES': {'Upkeep': 'UPKEEP_LOW', 'iDistanceMaintenanceModifier': '-80', 'iNumCitiesMaintenanceModifier': '-25', 'iWarWearinessModifier': '25', 'CommerceModifiers': {'iCommerce': ['0', '0', '-20']}},
-      'CIVIC_GOD_KING': {'Upkeep': 'UPKEEP_HIGH', 'iDistanceMaintenanceModifier': '10', 'CapitalYieldModifiers': {'iYield': ['0', '50', '0']}, 'CapitalCommerceModifiers': {'iCommerce': ['50', '0', '0']}},
-       'CIVIC_ARISTOCRACY': {'Upkeep': 'UPKEEP_LOW', 'iDistanceMaintenanceModifier': '-40', 'ImprovementYieldChanges': {'ImprovementYieldChange': {'ImprovementType': 'IMPROVEMENT_FARM', 'ImprovementYields': {'iYield': ['-1', '0', '2']}}}}, 
-       'CIVIC_THEOCRACY': {'Upkeep': 'UPKEEP_MEDIUM', 'bNoNonStateReligionSpread': '1', 'iStateReligionHappiness': '1', 'iStateReligionFreeExperience': '2', 'SpecialistValids': {'SpecialistValid': {'SpecialistType': 'SPECIALIST_PRIEST', 'bValid': '1'}}},
-        'CIVIC_REPUBLIC': {'Upkeep': 'UPKEEP_MEDIUM', 'iGreatPeopleRateModifier': '25', 'iLargestCityHappiness': '3', 'iCivicPercentAnger': '200', 'CommerceModifiers': {'iCommerce': ['0', '0', '20']}}, 
-        'CIVIC_RELIGION': {'Upkeep': 'UPKEEP_LOW', 'bStateReligion': '1', 'iStateReligionHappiness': '1', 'CommerceModifiers': {'iCommerce': ['0', '0', '10']}, 'BuildingHappinessChanges': {'BuildingHappinessChange': [{'BuildingType': 'BUILDINGCLASS_TEMPLE_OF_KILMORPH', 'iHappinessChange': '1'}, {'BuildingType': 'BUILDINGCLASS_TEMPLE_OF_LEAVES', 'iHappinessChange': '1'}, {'BuildingType': 'BUILDINGCLASS_TEMPLE_OF_THE_ORDER', 'iHappinessChange': '1'}, {'BuildingType': 'BUILDINGCLASS_TEMPLE_OF_THE_OVERLORDS', 'iHappinessChange': '1'}, {'BuildingType': 'BUILDINGCLASS_TEMPLE_OF_THE_VEIL', 'iHappinessChange': '1'}, {'BuildingType': 'BUILDINGCLASS_TEMPLE_OF_THE_EMPYREAN', 'iHappinessChange': '1'}]}}, 
-        'CIVIC_PACIFISM': {'Upkeep': 'UPKEEP_LOW', 'iGreatPeopleRateModifier': '50', 'iMilitaryProductionModifier': '-20', 'iWarWearinessModifier': '25', 'bStateReligion': '1'}, 
-        'CIVIC_NATIONHOOD': {'Upkeep': 'UPKEEP_LOW', 'iMilitaryProductionModifier': '10', 'iWarWearinessModifier': '-25', 'bStateReligion': '1', 'BuildingHappinessChanges': {'BuildingHappinessChange': {'BuildingType': 'BUILDINGCLASS_TRAINING_YARD', 'iHappinessChange': '1'}}},
-         'CIVIC_SACRIFICE_THE_WEAK': {'iGreatPeopleRateModifier': '-20', 'iExtraHealth': '-4', 'bStateReligion': '1', 'CommerceModifiers': {'iCommerce': ['10', '0', '0']}, 'iFoodConsumptionPerPopulation': '1', 'PrereqReligion': 'RELIGION_THE_ASHEN_VEIL'}, 
-         'CIVIC_SOCIAL_ORDER': {'Upkeep': 'UPKEEP_LOW', 'iHappyPerMilitaryUnit': '1', 'bStateReligion': '1', 'BuildingHappinessChanges': {'BuildingHappinessChange': [{'BuildingType': 'BUILDINGCLASS_COURTHOUSE', 'iHappinessChange': '1'}, {'BuildingType': 'BUILDINGCLASS_BASILICA', 'iHappinessChange': '1'}]}, 'PrereqReligion': 'RELIGION_THE_ORDER'},
-          'CIVIC_CONSUMPTION': {'Upkeep': 'UPKEEP_MEDIUM', 'bStateReligion': '1', 'CommerceModifiers': {'iCommerce': ['20', '0', '0']}, 'BuildingHappinessChanges': {'BuildingHappinessChange': [{'BuildingType': 'BUILDINGCLASS_MARKET', 'iHappinessChange': '1'}, {'BuildingType': 'BUILDINGCLASS_TAVERN', 'iHappinessChange': '1'}, {'BuildingType': 'BUILDINGCLASS_THEATRE', 'iHappinessChange': '1'}]}},
-           'CIVIC_SCHOLARSHIP': {'Upkeep': 'UPKEEP_HIGH', 'iWarWearinessModifier': '20', 'bStateReligion': '1', 'CommerceModifiers': {'iCommerce': ['0', '10', '0']}, 'SpecialistExtraCommerces': {'iCommerce': ['0', '1', '0']}, 'SpecialistValids': {'SpecialistValid': {'SpecialistType': 'SPECIALIST_SCIENTIST', 'bValid': '1'}}, 'BuildingHappinessChanges': {'BuildingHappinessChange': {'BuildingType': 'BUILDINGCLASS_LIBRARY', 'iHappinessChange': '1'}}},
-            'CIVIC_LIBERTY': {'Upkeep': 'UPKEEP_MEDIUM', 'iWarWearinessModifier': '50', 'iFreeSpecialist': '1', 'bStateReligion': '1', 'CommerceModifiers': {'iCommerce': ['0', '0', '100']}, 'SpecialistValids': {'SpecialistValid': {'SpecialistType': 'SPECIALIST_ARTIST', 'bValid': '1'}}},
-             'CIVIC_CRUSADE': {'Upkeep': 'UPKEEP_MEDIUM', 'iFreeUnitsPopulationPercent': '50', 'iWarWearinessModifier': '-75', 'bStateReligion': '1', 'iStateReligionHappiness': '2', 'iStateReligionUnitProductionModifier': '25', 'bNoDiplomacyWithEnemies': '1', 'bPrereqWar': '1', 'PrereqCivilization': 'CIVILIZATION_BANNOR'},
-              'CIVIC_TRIBALISM': {'Upkeep': 'UPKEEP_LOW'},
-               'CIVIC_APPRENTICESHIP': {'Upkeep': 'UPKEEP_LOW', 'iFreeExperience': '2', 'iMilitaryProductionModifier': '-10'},
-                'CIVIC_SLAVERY': {'Upkeep': 'UPKEEP_LOW', 'Hurrys': {'Hurry': {'HurryType': 'HURRY_POPULATION', 'bHurry': '1'}}, 'ImprovementYieldChanges': {'ImprovementYieldChange': {'ImprovementType': 'IMPROVEMENT_QUARRY', 'ImprovementYields': {'iYield': ['0', '1', '0']}}}, 'iEnslavementChance': '25', 'BlockAlignment': 'ALIGNMENT_GOOD'},
-                 'CIVIC_ARETE': {'Upkeep': 'UPKEEP_MEDIUM', 'iStateReligionGreatPeopleRateModifier': '20', 'Hurrys': {'Hurry': {'HurryType': 'HURRY_GOLD', 'bHurry': '1'}}, 'ImprovementYieldChanges': {'ImprovementYieldChange': {'ImprovementType': 'IMPROVEMENT_MINE', 'ImprovementYields': {'iYield': ['0', '1', '0']}}}, 'PrereqReligion': 'RELIGION_RUNES_OF_KILMORPH'},
-                  'CIVIC_MILITARY_STATE': {'Upkeep': 'UPKEEP_HIGH', 'iMilitaryProductionModifier': '15', 'iFreeUnitsPopulationPercent': '20', 'iMaxConscript': '3', 'CommerceModifiers': {'iCommerce': ['0', '0', '-25']}, 'Hurrys': {'Hurry': {'HurryType': 'HURRY_GOLD', 'bHurry': '1'}}},
-                   'CIVIC_CASTE_SYSTEM': {'Upkeep': 'UPKEEP_MEDIUM', 'iWorkerSpeedModifier': '50', 'iLargestCityHappiness': '-1', 'SpecialistExtraCommerces': {'iCommerce': ['0', '1', '2']}, 'Hurrys': {'Hurry': {'HurryType': 'HURRY_GOLD', 'bHurry': '1'}}}, 
-                   'CIVIC_GUILDS': {'Upkeep': 'UPKEEP_MEDIUM', 'Hurrys': {'Hurry': {'HurryType': 'HURRY_GOLD', 'bHurry': '1'}}, 'SpecialistValids': {'SpecialistValid': [{'SpecialistType': 'SPECIALIST_ARTIST', 'bValid': '1'}, {'SpecialistType': 'SPECIALIST_ENGINEER', 'bValid': '1'}, {'SpecialistType': 'SPECIALIST_MERCHANT', 'bValid': '1'}, {'SpecialistType': 'SPECIALIST_SCIENTIST', 'bValid': '1'}]}}, 
-                   'CIVIC_DECENTRALIZATION': {'Upkeep': 'UPKEEP_LOW'},
-                    'CIVIC_AGRARIANISM': {'Upkeep': 'UPKEEP_MEDIUM', 'iExtraHealth': '1', 'ImprovementYieldChanges': {'ImprovementYieldChange': {'ImprovementType': 'IMPROVEMENT_FARM', 'ImprovementYields': {'iYield': ['1', '-1', '0']}}}},
-                     'CIVIC_CONQUEST': {'Upkeep': 'UPKEEP_MEDIUM', 'iFreeExperience': '2', 'bMilitaryFoodProduction': '1'},
-                    'CIVIC_MERCANTILISM': {'Upkeep': 'UPKEEP_LOW', 'bNoForeignTrade': '1', 'CommerceModifiers': {'iCommerce': ['20', '0', '0']}, 'BuildingHappinessChanges': {'BuildingHappinessChange': {'BuildingType': 'BUILDINGCLASS_MARKET', 'iHappinessChange': '1'}}}, 
-                    'CIVIC_FOREIGN_TRADE': {'Upkeep': 'UPKEEP_LOW', 'iTradeRoutes': '1', 'CommerceModifiers': {'iCommerce': ['-10', '0', '20']}, 'iCoastalTradeRoutes': '1'}, 
-                    'CIVIC_GUARDIAN_OF_NATURE': {'Upkeep': 'UPKEEP_HIGH', 'iExtraHealth': '5', 'iMilitaryProductionModifier': '-10', 'BuildingHappinessChanges': {'BuildingHappinessChange': {'BuildingType': 'BUILDINGCLASS_GROVE', 'iHappinessChange': '2'}}, 'FeatureHappinessChanges': {'FeatureHappinessChange': [{'FeatureType': 'FEATURE_JUNGLE', 'iHappinessChange': '1'}, {'FeatureType': 'FEATURE_FOREST', 'iHappinessChange': '1'}, {'FeatureType': 'FEATURE_FOREST_ANCIENT', 'iHappinessChange': '1'}]}, 'PrereqReligion': 'RELIGION_FELLOWSHIP_OF_LEAVES'}}"""
+    def alignmentImplement(self, civ4_target, name):
+        print(f"{name} not implemented as needs Alignment Module")
 
-    def organize(self, modifier, modifier_arguments, dynamic_modifier=None, trait_modifiers=None, requirements=None, requirements_arguments=None):
-        self.complete_set[modifier['ModifierId']] = [modifier, modifier_arguments, dynamic_modifier, trait_modifiers,
-                                                     requirements, requirements_arguments]
+    def otherSystemImplement(self, civ4_target, name):
+        print(f"{name} not implemented as needs some other thing")
+        # Stuck on SpecialistValids, iLargestCityHappiness as no concept of largest cities in civ,
+        # bNoDiplomacyWithEnemies, bPrereqWar
+
+    def prereqImplement(self, civ4_target, name):
+        print(f"{name} not implemented as it is a prerequisite, how can we apply this to a policy")
+
+    def cantImplement(self, civ4_target, name):
+        print(f"{name} not implemented as it is a concept too far outside of civ vi")
+        # use food for prod this concept doesnt exist in civ vi, the closest is losing a pop on making the unit.
+        # but then would need
+        # to program a production associated bonus, also not sure i could assign that as a player modifier
+        # half food requirements GlobalParameters (Name: 'CITY_FOOD_CONSUMPTION_PER_POPULATION', "Value": '2.0')
+
+    def organize(self, modifier, modifier_arguments, dynamic_modifier=None, trait_modifiers=None, trait=None,
+                 requirements=None, requirements_arguments=None, requirements_set=None):
+        modifiers = modifier
+        if isinstance(modifier, list):
+            for mod in modifier:
+                self.modifiers[mod['ModifierId']] = mod
+            modifier = modifier[0]
+
+        self.complete_set[modifier['ModifierId']] = [modifiers, modifier_arguments, dynamic_modifier, trait_modifiers,
+                                                     trait, requirements, requirements_arguments, requirements_set]
 
         self.modifiers[modifier['ModifierId']] = modifier
         self.modifier_arguments.extend(modifier_arguments)
@@ -210,26 +317,33 @@ class Modifiers:
         if trait_modifiers:
             self.trait_modifiers.extend(trait_modifiers)
         if requirements:
-            self.requirements[requirements['RequirementId']] = requirements
+            for requirement in requirements:
+                self.requirements[requirement['RequirementId']] = requirement
         if requirements_arguments:
             self.requirements_arguments.extend(requirements_arguments)
+        if requirements_set:
+            self.requirement_set.extend(requirements_set)
 
-    def modifier_master(self, civ4_target):
-        run_target = self.modifier_map[civ4_target]
-        runtarget()
+    def generate_modifier(self, civ4_target, name, civ6_target):
+        modifier_id = self.modifier_map[name](civ4_target, civ6_target)
+        return modifier_id
 
-# ALIGNMENT REWORK: BlockAlignment
-# MAINTENANCE_REWORK rework: Upkeep, iNumCitiesMaintenanceModifier, iDistanceMaintenanceModifier, iFreeUnitsPopulationPercent
-# RELIGION_REWORK bNoNonStateReligionSpread, iStateReligionHappiness, iStateReligionFreeExperience, iStateReligionUnitProductionModifier, iStateReligionGreatPeopleRateModifier
-# Prebuilt Religions: bPrereqReligion
-# Stuck on SpecialistValids, iLargestCityHappiness as no concept of largest cities in civ, bNoDiplomacyWithEnemies, bPrereqWar
-# Hurry already in base game so... reduce cost? For slaveey it supposed to cost pops too, iMaxConscript
+    def big_get(self):
+        modifier_string = ''
+        for i in [(self.modifier_arguments, 'ModifierArguments'),
+                 (self.modifiers, 'Modifiers'),
+                 (self.dynamic_modifiers, 'DynamicModifiers'),
+                 (self.requirements, 'Requirements'),
+                 (self.requirement_set, 'RequirementSets'),
+                 (self.requirement_set_reqs, 'RequirementSetRequirements'),
+                 (self.requirements_arguments, 'RequirementArguments')]:
 
-"""def upkeep_modifier(self, civ4_target, name, value):
-            modifier = {'ModifierId': f"MODIFIER_{name}_ADJUST_WAR_WEARINESS",
-                        'ModifierType': ''}
-            modifier_args = []
-            for name, value in zip([('Amount', value), ('Overall', 1)]):
-                modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
-                                      'Value': value})
-            self.organize(modifier, modifier_args)"""
+            if isinstance(i[0], dict):
+                unique_tuples = set(tuple(sorted(d.items())) for d in i[0].values())
+                unique_dicts = {key: dict(t) for key, t in zip(i[0].keys(), unique_tuples)}
+            else:
+                unique_tuples = set(tuple(sorted(d.items())) for d in i[0])
+                unique_dicts = [dict(t) for t in unique_tuples]
+            modifier_string += build_sql_table(unique_dicts, i[1])
+        return modifier_string
+        
