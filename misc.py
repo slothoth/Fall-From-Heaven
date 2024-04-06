@@ -276,10 +276,33 @@ def build_policies(civics, kinds):
         elif i['PrereqTech'] == 'NONE':
             i['PrereqTech'] = 'NULL'
 
+    # reused : iGreatPeopleRateModifier,
+
+    all_mods = {j for sublist in [[j for j in i] for policy, i in useful_infos.items()] for j in sublist}
+
+    all_modifiers_full = []
     for i in useful_infos.values():
+        for key, j in i.items():
+            all_modifiers_full.append((key,j))
+
+
+    #{'iDistanceMaintenanceModifier':, 'Upkeep':, 'CommerceModifiers'}
+    # none of 4 0,1 are 1 except builder extra builds
+    # OwnerRequirementSetId is always null,
+    mod_types = set()
+    policy_modifiers, modifier_args = [], []
+    modifiers = {}
+    for policy, i in useful_infos.items():
         for key, val in i.items():
             if 'prereq' not in key.lower() or 'block' not in key.lower():
                 print(f"Do a modifier on {key} with value {val}")
+                """modifier_id = f'MODIFIER_SLTH_{policy}_{key}'
+                policy_modifiers.append({'PolicyType': policy, 'ModifierId': modifier_id})
+                modifiers[modifier_id] = {'ModifierId': modifier_id, 'ModifierType': '', 'RunOnce': 0, 'NewOnly': 0,
+                                          'Permanent': 0, 'Repeatable': 0, 'OwnerRequirementSetId': 'NULL',
+                                          'SubjectRequirementSetId': 'NULL'}
+                modifier_args.append()"""
+
                 # standard modifier tables: PolicyModifiers, Modifiers, ModifierArguments, DynamicModifiers if needed
 
     policy_string = build_sql_table(six_policy_dict, 'Policies')
