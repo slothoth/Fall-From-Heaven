@@ -15,8 +15,24 @@ def small_dict(big_dict, four_to_six_map):
 def build_sql_table(list_of_dicts, table_name):
     if isinstance(list_of_dicts, dict):
         list_of_dicts = [value for value in list_of_dicts.values()]
+    if len(list_of_dicts) == 0:
+        return ''
     schema_string = '('
-    for schema_key in [i for i in list_of_dicts[0]]:
+    longest_index = max(range(len(list_of_dicts)), key=lambda i: len(list_of_dicts[i]))
+    master_dict = list_of_dicts[longest_index].copy()
+    for key, val in master_dict.items():
+        try:
+            val = int(val)
+        except ValueError:
+            silent_string = 'string staying silent'
+        if isinstance(val, str):
+            master_dict[key] = 'NULL'
+        elif isinstance(val, int):
+            master_dict[key] = 0
+        else:
+            print(type(val))
+            print('timallenbuehhh?')
+    for schema_key in master_dict:
         if schema_key == 'Column':                              # SQL reserved keyword
             schema_key = '"Column"'
         schema_string += f'{schema_key}, '
@@ -25,8 +41,8 @@ def build_sql_table(list_of_dicts, table_name):
 
     for item in list_of_dicts:
         table_string += "("
-        for item_attribute in item.values():
-            table_string += f"'{item_attribute}', "
+        for schema_key in master_dict:
+            table_string += f"'{item.get(schema_key, master_dict[schema_key])}', "
         table_string = table_string[:-2]
         table_string += "),\n"
     table_string = table_string[:-2]
