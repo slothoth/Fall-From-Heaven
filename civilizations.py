@@ -22,6 +22,7 @@ class Civilizations:
 
     # TODO implement FreeTech system from ffh. Look at how Quo's spheres of intrigue /better balanced game did that
     #  thing where babylon starts with writing unlocked, or Phoenicia with Celestial Navigation
+    # INSERT INTO MY_TABLE(ModifierId, Name, Type, "Value") VALUES ('OPPIDUM_GRANT_TECH_APPRENTICESHIP', 'TechType', 'ARGTYPE_IDENTITY', 'TECH_APPRENTICESHIP');
 
     def civilizations(self, civs_to_keep, kinds):
         with open('data/XML/Civilizations/CIV4CivilizationInfos.xml', 'r') as file:
