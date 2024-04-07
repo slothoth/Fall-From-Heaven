@@ -49,9 +49,6 @@ class Civilizations:
             i['Units']['Unit'] = {j['UnitClassType']:j['UnitType'] for j in i['Units']['Unit']}
         civ_dict.pop('CIVILIZATION_RANDOM')
 
-        dev_null = {'units': {}, 'buildings': {}}
-    
-        unique_units_to_remove = {}
         string_counts = Counter()
         civ_traits, civ_building_replace = [], []
         no_access_building, building_replaces, traits, barb_unit_traits, not_barb = {}, {}, {}, {}, {}
@@ -67,7 +64,6 @@ class Civilizations:
             building_replaces[civ_name] = [build for build in civ['Buildings']['Building']
                                       if 'CIV_BUILDING' not in build['BuildingClassType']
                                       and 'NONE' not in build['BuildingType']]
-
 
             no_access = [i['Class'] for i in default if
                          i['Class'] in [unitclass for unitclass, unittype in civ['Units']['Unit'].items()
