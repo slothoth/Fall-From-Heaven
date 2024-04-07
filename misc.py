@@ -291,7 +291,7 @@ def build_policies(civics, kinds, modifiers):
     # none of 4 0,1 are 1 except builder extra builds
     # OwnerRequirementSetId is always null,
     mod_types = set()
-    policy_modifiers =  []
+    policy_modifiers = []
     for policy, i in useful_infos.items():
         for key, val in i.items():
             modifier_ids = modifiers.generate_modifier(val, key, policy[6:])

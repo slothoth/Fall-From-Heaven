@@ -12,7 +12,7 @@ def small_dict(big_dict, four_to_six_map):
     return smaller_dict
 
 
-def build_sql_table(list_of_dicts, table_name):
+def old_build_sql_table(list_of_dicts, table_name):
     if isinstance(list_of_dicts, dict):
         list_of_dicts = [value for value in list_of_dicts.values()]
     if len(list_of_dicts) == 0:
@@ -129,3 +129,29 @@ def localization_changes(names):
 
     with open('../FallFromHeaven/Core/localization.sql', 'a') as file:
         file.write(loc_string)
+
+
+def build_sql_table(list_of_dicts, table_name):
+    if isinstance(list_of_dicts, dict):
+        list_of_dicts = [value for value in list_of_dicts.values()]
+    if len(list_of_dicts) == 0:
+        return ''
+
+    table_string = ''
+
+    for item in list_of_dicts:
+        column_names = []
+        value_names = []
+        for column, value in item.items():
+            column_names.append(column)
+            value_names.append(str(value))
+
+        column_names = "'" + "', '".join(column_names) + "'"
+        value_names = "'" + "', '".join(value_names) + "'"
+
+        table_string += f"INSERT INTO {table_name} ({column_names}) VALUES ({value_names});\n"
+
+    table_string = table_string[:-2]
+    table_string += ";\n"
+    return table_string
+
