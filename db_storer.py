@@ -17,14 +17,12 @@ if not os.path.exists('data/tables'):
         dfs[table].to_csv(f"data/tables/{table}.csv", index=False)
 
     conn.close()
-# EFFECT_ADJUST_CITY_GREAT_PERSON_POINTS_MODIFIER
 # wtf is this sorcery
 # ModifierArguments(ModifierId, Name, Type, "Value")
 # ('MODIFIER_SHRINE_CITY_HERO_EXTRA_LIFESPAN', 'Key', 'ARGTYPE_IDENTITY', 'CityHeroExtraLifespan');
 # This to me implies that CityHeroExtraLifeSpan is a key to an internal dictionary of city properties: MODIFIER_SINGLE_CITY_ADJUST_PROPERTY
-# could we find hidden keys that are exposed but undocumented?
-# MODIFIER_PLAYER_DISTRICTS_ADJUST_DISTRICT_AMENITY
-substring = 'mainten'
+# could we find hidden keys that are exposed but undocumented? Apparently you can find it in a lua property
+substring = 'VICTORY'
 records = {}
 for i in os.listdir('data/tables/'):
     if i == 'Kinds.csv':
