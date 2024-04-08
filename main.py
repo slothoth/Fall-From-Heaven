@@ -33,7 +33,7 @@ def main():
     features_string, kinds = build_features_string(kinds)
     prereqs_string = prereq_techs()
     patch_string = patch_string_generate()
-    building_table_string, kinds, calculated_to_keep = Buildings(civs).buildings_sql(civics, civ_buildings, kinds)
+    building_table_string, kinds, calculated_to_keep = Buildings(civs).buildings_sql(civics, civ_buildings, kinds, modifiers)
     districts_string = districts_build()
     delete_string = delete_rows(kept, calculated_to_keep)
     traits_string = build_sql_table(traits, 'Traits')
