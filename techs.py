@@ -1,6 +1,6 @@
 import pandas as pd
 import xmltodict
-from utils import small_dict, build_sql_table, localization
+from utils import small_dict, localization
 
 techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Cost', 'Repeatable': 0,
                 'EmbarkUnitType': 'NULL', 'EmbarkAll': 0, 'Description': 'Description', 'EraType': 'ERA_ANCIENT',
@@ -10,7 +10,7 @@ era_map = ['ERA_ANCIENT', 'ERA_CLASSICAL', 'ERA_MEDIEVAL', 'ERA_RENAISSANCE', 'E
                'ERA_ATOMIC', 'ERA_INFORMATION']
 
 
-def techs_sql(kinds, kept):
+def techs_sql(model_obj, kept):
     ui_tree_map = pd.read_csv('data/ui_tree.csv')
     ui_tree_map = ui_tree_map.set_index('tech').apply(lambda x: x.tolist(), axis=1).to_dict()
     ui_civic_tree = pd.read_csv('data/civic_ui_tree.csv')
@@ -53,22 +53,26 @@ def techs_sql(kinds, kept):
         civic['UITreeRow'] = ui_civic_tree[civic['CivicType']][0]
         civic['EraType'] = era_map[int(ui_civic_tree[civic['CivicType']][1])]
 
-    tech_table_string = build_sql_table(six_style_techs, 'Technologies')
-    civic_table_string = build_sql_table(six_style_civics, 'Civics')
+    tech_table_string = model_obj['sql'].build_sql_table(six_style_techs, 'Technologies')
+    civic_table_string = model_obj['sql'].build_sql_table(six_style_civics, 'Civics')
 
     for tech_type_to_add in techsql[2:]:
         tech_split = tech_type_to_add.split("'")
         if not ('TECH' in tech_split[1] or 'CIVIC' in tech_split[1]):
-            kinds[tech_split[1]] = tech_split[3]
+            model_obj['kinds'][tech_split[1]] = tech_split[3]
         elif not (tech_split[1] in kept_techs or tech_split[1] in kept_civics):
-            kinds[tech_split[1]] = tech_split[3]
+            model_obj['kinds'][tech_split[1]] = tech_split[3]
 
     localization(six_style_techs)
     localization(six_style_civics)
 
-    return tech_table_string, civic_table_string, civics, kinds
+    model_obj['sql_strings'].append(tech_table_string)
+    model_obj['sql_strings'].append(civic_table_string)
+    model_obj['civics'] = civics
+    return model_obj
 
-def prereq_techs():
+
+def prereq_techs(model_obj_str):
     with open('data/prereqstechs.sql', 'r') as file:
         prereqs_tech = file.readlines()
         prereqs_string = "".join(prereqs_tech[:2])
@@ -77,5 +81,4 @@ def prereq_techs():
     prereqs_string = prereqs_string[:-1] + ";\n"
     with open('data/prereqscivics.sql', 'r') as file:
         prereqs_string += file.read() + "\n"
-
-    return prereqs_string
+    model_obj_str.append(prereqs_string)
