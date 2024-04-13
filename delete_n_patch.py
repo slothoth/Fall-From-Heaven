@@ -5,13 +5,13 @@ from utils import small_dict, build_sql_table
 def delete_rows(kept, calculated_to_keep):
     delete_string = ''
     delete_string += f"UPDATE MajorStartingUnits SET Unit = 'SLTH_UNIT_WARRIOR' WHERE Unit = 'UNIT_WARRIOR';\n"
-    delete_string += 'DELETE FROM Technologies;\nDELETE FROM TechnologyPrereqs;\n'
-    delete_string += 'DELETE FROM Technologies_XP2;\nDELETE FROM Civics;\nDELETE FROM CivicPrereqs;\n'
-    delete_string += 'DELETE FROM Civics_XP2;\n'
-    delete_string += 'DELETE FROM Building_GreatPersonPoints;\nDELETE FROM Unit_BuildingPrereqs;\n'
-    delete_string += 'DELETE FROM UnitUpgrades;\nDELETE FROM Boosts;\nDELETE FROM UnitPromotions;\n'
-    delete_string += 'DELETE FROM UnitPromotionPrereqs;\nDELETE FROM UnitPromotionModifiers;\n'
-    delete_string += 'DELETE FROM Policies;\n'
+    delete_string += 'DELETE FROM Technologies WHERE 1=1;\nDELETE FROM TechnologyPrereqs WHERE 1=1;\n'
+    delete_string += 'DELETE FROM Technologies_XP2 WHERE 1=1;\nDELETE FROM Civics WHERE 1=1;\n'
+    delete_string += 'DELETE FROM CivicPrereqs WHERE 1=1;\nDELETE FROM Civics_XP2 WHERE 1=1;\n'
+    delete_string += 'DELETE FROM Building_GreatPersonPoints WHERE 1=1;\nDELETE FROM Unit_BuildingPrereqs WHERE 1=1;\n'
+    delete_string += 'DELETE FROM UnitUpgrades WHERE 1=1;\nDELETE FROM Boosts WHERE 1=1;\n'
+    delete_string += 'DELETE FROM UnitPromotionPrereqs WHERE 1=1;\nDELETE FROM UnitPromotionModifiers WHERE 1=1;\n'
+    delete_string += 'DELETE FROM Policies WHERE 1=1;\nDELETE FROM UnitPromotions WHERE 1=1;\n'
     delete_string += delete_from_gen('Units', 'UnitType', kept['compat_for_VI'])
     delete_string += delete_from_gen('Buildings', 'BuildingType', calculated_to_keep + ['BUILDING_PALACE'])
     delete_string += delete_from_gen('Building_YieldChanges', 'BuildingType', ['BUILDING_PALACE'])

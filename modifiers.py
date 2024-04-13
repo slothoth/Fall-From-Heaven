@@ -251,17 +251,18 @@ class Modifiers:
         return [i['ModifierId'] for i in modifiers]
 
     def free_xp_modifier_promo_class_specific(self, civ4_target, name):
-        modifier = {'ModifierId': f"MODIFIER_MILITARY_EXPERIENCE_PROMO_{civ4_target}",
+        target_name = civ4_target['DomainFreeExperience']['DomainType']
+        modifier = {'ModifierId': f"MODIFIER_MILITARY_EXPERIENCE_PROMO_{target_name}",
                     'ModifierType': 'MODIFIER_CITY_TRAINED_UNITS_ADJUST_GRANT_EXPERIENCE',
                     'SubjectRequirementSetId': 'REQUIREMENT_UNIT_IS_RANGED'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': -1}]
 
-        requirements = {'RequirementId': f'REQUIREMENT_UNIT_{civ4_target}',
+        requirements = {'RequirementId': f'REQUIREMENT_UNIT_{target_name}',
                         'RequirementType': 'REQUIREMENT_UNIT_PROMOTION_CLASS_MATCHES', 'ProgressWeight': '1'}
 
         requirements_arguments = {'RequirementId': requirements['RequirementId'], 'Name': 'UnitPromotionClass',
-                                  'Type': 'ARGTYPE_IDENTITY', 'Value': f'PROMOTION_CLASS_{civ4_target}'}
+                                  'Type': 'ARGTYPE_IDENTITY', 'Value': f'PROMOTION_CLASS_{target_name}'}
 
         requirements_set = {'RequirementSetId': f'{name}_UNIT_REQUIREMENTS',
                             'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'}

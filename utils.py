@@ -1,5 +1,5 @@
 import sqlite3
-
+import pandas as pd
 
 def small_dict(big_dict, four_to_six_map):
     smaller_dict = {}
@@ -66,15 +66,6 @@ def update_sql_table(list_of_dicts, table_name: str, columns_to_select: list):
             table_string += f" AND {column} = '{item[column]}'"
         table_string += ";\n"
     return table_string
-
-
-def sql_check(tablename):
-    conn = sqlite3.connect('DebugGameplay.sqlite')
-    cursor = conn.cursor()
-    cursor.execute(f"SELECT * FROM {tablename}")
-    sql_column_values = cursor.fetchall()
-    cursor.close()
-    return sql_column_values
 
 
 def split_dict(dictionary, condition, equalto=None):
