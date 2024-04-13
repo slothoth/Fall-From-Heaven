@@ -1,5 +1,3 @@
-from utils import build_sql_table
-
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
 gpp_map = {'UNITCLASS_PROPHET': 'GREAT_PERSON_CLASS_PROPHET', 'UNITCLASS_COMMANDER': 'GREAT_PERSON_CLASS_GENERAL',
@@ -555,7 +553,7 @@ class Modifiers:
         modifier_id = self.modifier_map[name](civ4_target, civ6_target)
         return modifier_id
 
-    def big_get(self):
+    def big_get(self, model_obj):
         modifier_string = ''
         for i in [(self.modifier_arguments, 'ModifierArguments'),
                   (self.modifiers, 'Modifiers'),
@@ -573,5 +571,5 @@ class Modifiers:
                 problem_tuples = [i for i in tuples if any([any([isinstance(k, dict) for k in j]) for j in i])]
                 unique_tuples = set(tuple(sorted(d.items())) for d in i[0])
                 unique_dicts = [dict(t) for t in unique_tuples]
-            modifier_string += build_sql_table(unique_dicts, i[1])
+            modifier_string += model_obj['sql'].build_sql_table(unique_dicts, i[1])
         return modifier_string

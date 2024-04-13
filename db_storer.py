@@ -1,22 +1,6 @@
-import sqlite3
 import pandas as pd
 import os
 
-if not os.path.exists('data/tables'):
-    # ran once, to convert database to pandas for conversion
-    conn = sqlite3.connect('DebugGameplay.sqlite')
-    cursor = conn.cursor()
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    table_names = cursor.fetchall()
-    tables = [table[0] for table in table_names]
-    dfs = {}
-    os.makedirs('data/tables', exist_ok=True)
-    for table in tables:
-        query = f"SELECT * FROM {table}"
-        dfs[table] = pd.read_sql_query(query, conn)
-        dfs[table].to_csv(f"data/tables/{table}.csv", index=False)
-
-    conn.close()
 # wtf is this sorcery
 # ModifierArguments(ModifierId, Name, Type, "Value")
 # ('MODIFIER_SHRINE_CITY_HERO_EXTRA_LIFESPAN', 'Key', 'ARGTYPE_IDENTITY', 'CityHeroExtraLifespan');

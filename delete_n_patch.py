@@ -1,8 +1,8 @@
 import xmltodict
-from utils import small_dict, build_sql_table
+from utils import small_dict
 
 
-def delete_rows(kept, calculated_to_keep):
+def delete_rows(model_obj, kept):
     delete_string = ''
     delete_string += f"UPDATE MajorStartingUnits SET Unit = 'SLTH_UNIT_WARRIOR' WHERE Unit = 'UNIT_WARRIOR';\n"
     delete_string += 'DELETE FROM Technologies WHERE 1=1;\nDELETE FROM TechnologyPrereqs WHERE 1=1;\n'
@@ -13,7 +13,7 @@ def delete_rows(kept, calculated_to_keep):
     delete_string += 'DELETE FROM UnitPromotionPrereqs WHERE 1=1;\nDELETE FROM UnitPromotionModifiers WHERE 1=1;\n'
     delete_string += 'DELETE FROM Policies WHERE 1=1;\nDELETE FROM UnitPromotions WHERE 1=1;\n'
     delete_string += delete_from_gen('Units', 'UnitType', kept['compat_for_VI'])
-    delete_string += delete_from_gen('Buildings', 'BuildingType', calculated_to_keep + ['BUILDING_PALACE'])
+    delete_string += delete_from_gen('Buildings', 'BuildingType', model_obj['update_build'] + ['BUILDING_PALACE'])
     delete_string += delete_from_gen('Building_YieldChanges', 'BuildingType', ['BUILDING_PALACE'])
     delete_string += delete_from_gen('UnitPromotionClasses', 'PromotionClassType',
                                      ['PROMOTION_CLASS_MELEE', 'PROMOTION_CLASS_RANGED',
@@ -32,10 +32,11 @@ def delete_rows(kept, calculated_to_keep):
     delete_string += delete_from_gen('Governments', 'GovernmentType', ['GOVERNMENT_AUTOCRACY',
                                                                        'GOVERNMENT_CHIEFDOM'])
     # delete_string += 'DELETE FROM Building_YieldChanges;'
+    model_obj['sql_strings'].append(delete_string)
     return delete_string
 
 
-def patch_string_generate():
+def patch_string_generate(model_obj_str):
     patch_string = ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
                     "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
     patch_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
@@ -45,8 +46,7 @@ def patch_string_generate():
                                      "Building_BuildChargeProductions", "District_BuildChargeProductions"]
     for table in unit_military_engineer_issues:
         patch_string += f"UPDATE {table} SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';\n"
-
-    return patch_string
+    model_obj_str.append(patch_string)
 
 
 def traits_string_generate(trait_types_to_define, kinds):

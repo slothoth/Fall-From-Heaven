@@ -1,4 +1,4 @@
-from utils import small_dict, build_sql_table, localization, update_sql_table
+from utils import small_dict, localization
 import xmltodict
 import json
 
@@ -78,9 +78,10 @@ class Buildings:
         self.civilization_traits, self.traits, self.trait_modifiers = [], {}, []
         self.building_great_person_points, self.building_yield_changes = [], []
         self.civs = civs
+        self.kinds = {}
 
-    def buildings_sql(self, civics, civ_data, kinds, modifiers):
-        self.kinds = kinds
+    def buildings_sql(self, model_obj):
+        self.kinds = model_obj['kinds']
         debug_string = ''
         with open('data/XML/Buildings/CIV4BuildingInfos.xml', 'r') as file:
             building_infos = xmltodict.parse(file.read())['Civ4BuildingInfos']['BuildingInfos']['BuildingInfo']
@@ -112,7 +113,7 @@ class Buildings:
 
         for build_name, building in only_useful_build_infos.items():
             for key, val in building.items():
-                modifier_ids = modifiers.generate_modifier(val, key, build_name[9:])
+                modifier_ids = model_obj['modifiers'].generate_modifier(val, key, build_name[9:])
                 if modifier_ids is not None:
                     for modifier_id in modifier_ids:
                         self.building_modifiers.append({'PolicyType': f"MODIFIER_BUILDING_{build_name[9:]}".upper(),
@@ -130,8 +131,8 @@ class Buildings:
             building['AdvisorType'], building['TraitType'] = advisor_mapping[building['AdvisorType']], 'NULL'
             building['Name'] = 'LOC_' + building['BuildingType'] + '_NAME'
             building['Description'] = 'LOC_' + building['BuildingType'] + '_DESCRIPTION'
-            if building['PrereqTech'] in civics:
-                building['PrereqCivic'] = civics[building['PrereqTech']]
+            if building['PrereqTech'] in model_obj['civics']:
+                building['PrereqCivic'] = model_obj['civics'][building['PrereqTech']]
                 building['PrereqTech'] = 'NULL'
             else:
                 building['PrereqCivic'] = 'NULL'
@@ -193,7 +194,7 @@ class Buildings:
             # "INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES('PLAYER_HAS_AT_LEAST_TWELVE_CITIES_REQUIREMENTS', 'REQUIRES_PLAYER_HAS_AT_LEAST_TWELVE_CITIES')"
             # "INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES('PLAYER_HAS_AT_LEAST_TWELVE_CITIES_REQUIREMENTS', 'REQUIRES_PLAYER_HAS_AT_LEAST_TWELVE_CITIES')"
 
-        for building in civ_data['civ_traits']:
+        for building in model_obj['civ_buildings']['civ_traits']:
             six_style_build_dict[building]['TraitType'] = f"SLTH_TRAIT_CIVILIZATION_{building[5:]}"
 
         palaces = {'building': {key: value for key, value in six_style_build_dict.items() if 'PALACE_' in key},
@@ -207,7 +208,7 @@ class Buildings:
                                 key not in existing_buildings}
 
         building_replaces = []
-        for civ, buildings in civ_data['dev_null'].items():
+        for civ, buildings in model_obj['civ_buildings']['dev_null'].items():
             if civ == 'CIVILIZATION_BARBARIAN':
                 continue
             for building in buildings:
@@ -220,24 +221,25 @@ class Buildings:
                 six_style_build_dict[civ_null['BuildingType']] = civ_null
                 building_replaces.append({'CivUniqueBuildingType': civ_null['BuildingType'],
                                           'ReplacesBuildingType': building})
-                kinds[civ_null['TraitType']] = 'KIND_TRAIT'
+                model_obj['kinds'][civ_null['TraitType']] = 'KIND_TRAIT'
 
         for building in six_style_build_dict:
             self.kinds[building] = 'KIND_BUILDING'
 
 
-        building_table_string = build_sql_table(six_style_build_dict, 'Buildings')
-        building_table_string += update_sql_table(update_buildings, 'Buildings', ['BuildingType'])
-        building_table_string += build_sql_table(self.building_great_person_points, 'Building_GreatPersonPoints')
-        building_table_string += build_sql_table(self.building_yield_changes, 'Building_YieldChanges')
-        building_table_string += build_sql_table(building_conditions, 'BuildingConditions')
-        building_table_string += build_sql_table(building_replaces, 'BuildingReplaces')
-        building_table_string += build_sql_table(self.traits, 'Traits')
+        building_table_string = model_obj['sql'].build_sql_table(six_style_build_dict, 'Buildings')
+        building_table_string += model_obj['sql'].update_sql_table(update_buildings, 'Buildings', ['BuildingType'])
+        building_table_string += model_obj['sql'].build_sql_table(self.building_great_person_points, 'Building_GreatPersonPoints')
+        building_table_string += model_obj['sql'].build_sql_table(self.building_yield_changes, 'Building_YieldChanges')
+        building_table_string += model_obj['sql'].build_sql_table(building_conditions, 'BuildingConditions')
+        building_table_string += model_obj['sql'].build_sql_table(building_replaces, 'BuildingReplaces')
+        building_table_string += model_obj['sql'].build_sql_table(self.traits, 'Traits')
 
         localization(six_style_build_dict)
         print(debug_string)
-
-        return building_table_string, self.kinds, [i for i in update_buildings]
+        model_obj['sql_strings'].append(building_table_string)
+        model_obj['kinds'] = self.kinds
+        model_obj['update_build'] = [i for i in update_buildings]
 
     def add_to_modifiers(self, name, modifier_id, modifier_type, modifier_names, modifier_values, is_palace=False):
         if is_palace:
@@ -343,7 +345,7 @@ class Buildings:
                                                     'Type': 'ARGTYPE_IDENTITY', 'Value': value})
 
 
-def districts_build():
+def districts_build(model_obj):
     district_changes = [{'DistrictType': 'DISTRICT_HOLY_SITE', 'PrereqCivic': 'CIVIC_MYSTICISM'},
                         {'DistrictType': 'DISTRICT_CAMPUS', 'PrereqCivic': 'CIVIC_MYSTICISM'},
                         {'DistrictType': 'DISTRICT_ENCAMPMENT', 'PrereqTech': 'TECH_BRONZE_WORKING'},
@@ -356,5 +358,5 @@ def districts_build():
 
     to_keep = "', '".join([i['DistrictType'] for i in district_changes] + ['DISTRICT_CITY_CENTER', 'DISTRICT_WONDER'])
     districts_string = f"DELETE FROM Districts WHERE DistrictType NOT IN ('{to_keep}');\n"
-    districts_string += update_sql_table(district_changes, 'Districts', ['DistrictType'])
-    return districts_string
+    districts_string += model_obj['sql'].update_sql_table(district_changes, 'Districts', ['DistrictType'])
+    model_obj['sql_strings'].append(districts_string)

@@ -1,13 +1,13 @@
 import xmltodict
 import pandas as pd
-from utils import small_dict, build_sql_table, update_sql_table
+from utils import small_dict, Sql
 from modifiers import Modifiers
 
 
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
 
 
-def build_resource_string(civics, kinds):
+def build_resource_string(model_obj):
     resource_renames = {'HORSE': 'HORSES', 'GUNPOWDER': 'NITER', 'BANANA': 'BANANAS', 'CORN': 'MAIZE', 'COW': 'CATTLE',
                         'GEMS': 'DIAMONDS', 'CRAB': 'CRABS', 'DYE': 'DYES', 'FUR': 'FURS', 'WHALE': 'WHALES',
                         'PEARL': 'PEARLS'}
@@ -52,8 +52,8 @@ def build_resource_string(civics, kinds):
         resource['PrereqCivic'] = 'NULL'
         if resource['PrereqTech'] == 'NONE':
             resource['PrereqTech'] = 'NULL'
-        elif resource['PrereqTech'] in civics:
-            resource['PrereqCivic'] = civics[resource['PrereqTech']]
+        elif resource['PrereqTech'] in model_obj['civics']:
+            resource['PrereqCivic'] = model_obj['civics'][resource['PrereqTech']]
             resource['PrereqTech'] = 'NULL'
 
     update_dict = [i for i in six_style_resource_dict if i['ResourceType'] in pre_existing]
@@ -112,20 +112,22 @@ def build_resource_string(civics, kinds):
 
     for resource in six_style_resource_dict:
         if not resource['ResourceType'][6:] in resource_renames:
-            kinds[resource['ResourceType']] = 'KIND_RESOURCE'
+            model_obj['kinds'][resource['ResourceType']] = 'KIND_RESOURCE'
             # check its actually called that
 
-    resource_string = build_sql_table(six_style_resource_dict, 'Resources')
-    resource_string += update_sql_table(update_dict, 'Resources', ['ResourceType'])
-    resource_string += build_sql_table(resource_valid_feature, 'Resource_ValidFeatures')
-    resource_string += build_sql_table(resource_valid_terrain, 'Resource_ValidTerrains')
-    resource_string += build_sql_table(resource_yield_changes, 'Resource_YieldChanges')
-    resource_string += update_sql_table(updates_yield, 'Resource_YieldChanges', ['ResourceType', 'YieldType'])
+    resource_string = model_obj['sql'].build_sql_table(six_style_resource_dict, 'Resources')
+    resource_string += model_obj['sql'].update_sql_table(update_dict, 'Resources', ['ResourceType'])
+    resource_string += model_obj['sql'].build_sql_table(resource_valid_feature, 'Resource_ValidFeatures')
+    resource_string += model_obj['sql'].build_sql_table(resource_valid_terrain, 'Resource_ValidTerrains')
+    resource_string += model_obj['sql'].build_sql_table(resource_yield_changes, 'Resource_YieldChanges')
+    resource_string += model_obj['sql'].update_sql_table(updates_yield, 'Resource_YieldChanges', ['ResourceType', 'YieldType'])
 
-    return resource_string, kinds
+    model_obj['sql_strings'].append(resource_string)
+
+    return model_obj
 
 
-def build_terrains_string(kinds):
+def build_terrains_string(model_obj):
     with open('data/XML/Terrain/CIV4TerrainInfos.xml', 'r') as file:
         terrain_dict = xmltodict.parse(file.read())['Civ4TerrainInfos']['TerrainInfos']['TerrainInfo']
 
@@ -185,16 +187,18 @@ def build_terrains_string(kinds):
                         terrain_yields.append({'TerrainType': terrain['TerrainType'] + '_HILLS',
                                                'YieldType': terrain_yield_map[idx], 'YieldChange': i})
 
-    terrain_string = build_sql_table(six_style_terrain_dict, 'Terrains')
-    terrain_string += build_sql_table(terrain_yields, 'Terrain_YieldChanges')
+    terrain_string = model_obj['sql'].build_sql_table(six_style_terrain_dict, 'Terrains')
+    terrain_string += model_obj['sql'].build_sql_table(terrain_yields, 'Terrain_YieldChanges')
 
     for terrain in six_style_terrain_dict:
-        kinds[terrain['TerrainType']] = 'KIND_TERRAIN'
+        model_obj['kinds'][terrain['TerrainType']] = 'KIND_TERRAIN'
 
-    return terrain_string, kinds
+    model_obj['sql_strings'].append(terrain_string)
+
+    return model_obj
 
 
-def build_features_string(kinds):
+def build_features_string(model_obj):
     with open('data/XML/Terrain/CIV4FeatureInfos.xml', 'r') as file:
         feature_dict = xmltodict.parse(file.read())['Civ4FeatureInfos']['FeatureInfos']['FeatureInfo']
 
@@ -235,17 +239,17 @@ def build_features_string(kinds):
                     feature_yields.append({'FeatureType': feature['FeatureType'],
                                            'YieldType': yield_map[idx], 'YieldChange': i})
 
-    features_string = build_sql_table(six_style_features, 'Features')
-    features_string += build_sql_table(feature_valid_terrain, 'Feature_ValidTerrains')
-    features_string += build_sql_table(feature_yields, 'Feature_YieldChanges')
+    features_string = model_obj['sql'].build_sql_table(six_style_features, 'Features')
+    features_string += model_obj['sql'].build_sql_table(feature_valid_terrain, 'Feature_ValidTerrains')
+    features_string += model_obj['sql'].build_sql_table(feature_yields, 'Feature_YieldChanges')
 
     for features in six_style_features:
-        kinds[features['FeatureType']] = 'KIND_FEATURE'
+        model_obj['kinds'][features['FeatureType']] = 'KIND_FEATURE'
+    model_obj['sql_strings'].append(features_string)
+    return model_obj
 
-    return features_string, kinds
 
-
-def build_policies(civics, kinds, modifiers):
+def build_policies(model_obj):
     with open('data/XML/Gameinfo/CIV4CivicInfos.xml', 'r') as file:
         policy_dict = xmltodict.parse(file.read())['Civ4CivicInfos']['CivicInfos']['CivicInfo']
 
@@ -257,8 +261,7 @@ def build_policies(civics, kinds, modifiers):
     old_policy_dict = {i['Type']:i for i in policy_dict}
     six_policy_dict = {i['Type']: small_dict(i, policy_mapper) for i in policy_dict}
     six_policy_dict = {key: val for key, val in six_policy_dict.items() if key not in remove}
-    useful_infos = {key:{key: value for key, value in i.items() if value != 'NONE' and value != None and value != '0'} for key, i in
-        old_policy_dict.items()}
+    useful_infos = {key:{key: value for key, value in i.items() if value != 'NONE' and value != None and value != '0'} for key, i in old_policy_dict.items()}
     useful_infos = {key: val for key, val in useful_infos.items() if key not in remove}
     pop_list = ['Button', 'Description', 'Strategy', 'iAnarchyLength', 'iAIWeight', 'CivicOptionType', 'WeLoveTheKing',
                 'TechPrereq', 'Type', 'Civilopedia']
@@ -271,8 +274,8 @@ def build_policies(civics, kinds, modifiers):
         i['Name'] = f"LOC_{i['PolicyType']}_NAME"
         i['PrereqCivic'] = 'NULL'
         if i['PolicyType'] != 'POLICY_GOD_KING':
-            kinds[i['PolicyType']] = 'KIND_POLICY'
-        if i['PrereqTech'] in civics:
+            model_obj['kinds'][i['PolicyType']] = 'KIND_POLICY'
+        if i['PrereqTech'] in model_obj['civics']:
             i['PrereqCivic'] = f"CIVIC_{i['PrereqTech'][5:]}"
             i['PrereqTech'] = 'NULL'
         elif i['PrereqTech'] == 'NONE':
@@ -287,7 +290,6 @@ def build_policies(civics, kinds, modifiers):
         for key, j in i.items():
             all_modifiers_full.append((key,j))
 
-
     #{'iDistanceMaintenanceModifier':, 'Upkeep':, 'CommerceModifiers'}
     # none of 4 0,1 are 1 except builder extra builds
     # OwnerRequirementSetId is always null,
@@ -295,14 +297,14 @@ def build_policies(civics, kinds, modifiers):
     policy_modifiers = []
     for policy, i in useful_infos.items():
         for key, val in i.items():
-            modifier_ids = modifiers.generate_modifier(val, key, policy[6:])
+            modifier_ids = model_obj['modifiers'].generate_modifier(val, key, policy[6:])
             if modifier_ids is not None:
                 for modifier_id in modifier_ids:
                     policy_modifiers.append({'PolicyType': f"POLICY_{policy[6:]}".upper(),
                                              'ModifierId': modifier_id})
 
-
-    policy_string = build_sql_table(six_policy_dict, 'Policies')
-    policy_modifiers_string = build_sql_table(policy_modifiers, 'PolicyModifiers')
-
-    return policy_string, policy_modifiers_string, kinds
+    policy_string = model_obj['sql'].build_sql_table(six_policy_dict, 'Policies')
+    policy_modifiers_string = model_obj['sql'].build_sql_table(policy_modifiers, 'PolicyModifiers')
+    model_obj['sql_strings'].append(policy_string)
+    model_obj['sql_strings'].append(policy_modifiers_string)
+    return model_obj
