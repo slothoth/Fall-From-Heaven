@@ -1,6 +1,6 @@
 import pandas as pd
 import xmltodict
-from utils import small_dict, localization
+from utils import small_dict, localization, make_or_add
 
 techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Cost', 'Repeatable': 0,
                 'EmbarkUnitType': 'NULL', 'EmbarkAll': 0, 'Description': 'Description', 'EraType': 'ERA_ANCIENT',
@@ -53,8 +53,8 @@ def techs_sql(model_obj, kept):
         civic['UITreeRow'] = ui_civic_tree[civic['CivicType']][0]
         civic['EraType'] = era_map[int(ui_civic_tree[civic['CivicType']][1])]
 
-    tech_table_string = model_obj['sql'].build_sql_table(six_style_techs, 'Technologies')
-    civic_table_string = model_obj['sql'].build_sql_table(six_style_civics, 'Civics')
+    make_or_add(model_obj['sql_inserts'], six_style_techs, 'Technologies')
+    make_or_add(model_obj['sql_inserts'], six_style_civics, 'Civics')
 
     for tech_type_to_add in techsql[2:]:
         tech_split = tech_type_to_add.split("'")
@@ -65,9 +65,6 @@ def techs_sql(model_obj, kept):
 
     localization(six_style_techs)
     localization(six_style_civics)
-
-    model_obj['sql_strings'].append(tech_table_string)
-    model_obj['sql_strings'].append(civic_table_string)
     model_obj['civics'] = civics
     return model_obj
 

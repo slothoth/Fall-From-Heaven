@@ -181,3 +181,34 @@ def db_checker(kinds):
     existing_types = pd.read_csv('data/tables/Types.csv')
     will_error = [i for i in kinds if i in existing_types.to_dict('list')['Type']]
     print(f'Existing Types that will be rejected:\n{will_error}')
+
+
+def make_or_add(to_sql, list_of_dicts, table_name):
+    if table_name in to_sql:
+        if isinstance(to_sql[table_name], list):
+            if not isinstance(list_of_dicts, list):
+                list_of_dicts = [list_of_dicts]
+            to_sql[table_name].extend(list_of_dicts)
+
+        else:
+            print(f'rejected append for sql table {table_name} as preexisting is {type(to_sql[table_name])} and '
+                  f'addition is {type(list_of_dicts)}')
+
+    else:
+        if not isinstance(list_of_dicts, list):
+            list_of_dicts = [list_of_dicts]
+        to_sql[table_name] = list_of_dicts
+
+
+def update_or_add(to_sql, list_of_dicts, table_name, columns_to_select):
+    if table_name in to_sql:
+        if isinstance(to_sql[table_name], type(list_of_dicts)):
+            to_sql[table_name].extend(list_of_dicts)
+        else:
+            print(f'rejected append for sql table {table_name} as preexisting is {type(to_sql[table_name])} and '
+                  f'addition is {type(list_of_dicts)}')
+
+    else:
+        if not isinstance(list_of_dicts, list):
+            list_of_dicts = [list_of_dicts]
+        to_sql[table_name] = (list_of_dicts, columns_to_select)

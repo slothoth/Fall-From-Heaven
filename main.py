@@ -1,5 +1,3 @@
-import os
-
 from civilizations import Civilizations
 from units import units_sql
 from techs import techs_sql, prereq_techs
@@ -8,7 +6,8 @@ from delete_n_patch import delete_rows, patch_string_generate
 from misc import build_resource_string, build_terrains_string, build_features_string, build_policies
 from promotions import Promotions
 from modifiers import Modifiers
-from utils import Sql, setup_tables, db_checker
+from utils import Sql, setup_tables, db_checker, make_or_add
+from db_checker import check_primary_keys
 
 import json
 
@@ -23,7 +22,7 @@ def main():
         kept = json.load(json_file)
     with open('../FallFromHeaven/Core/localization.sql', 'w') as file:
         file.write('INSERT OR REPLACE INTO LocalizedText (Language, Tag, Text)\nVALUES\n')
-    model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [],
+    model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [], 'sql_inserts': {}, 'sql_updates': {}, 'sql_config': {},
                  'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'select_civs': civs}
     model_obj['civilizations'].civilizations(model_obj)
     techs_sql(model_obj, kept)
@@ -38,13 +37,16 @@ def main():
     Buildings(civs).buildings_sql(model_obj)
     districts_build(model_obj)
     model_obj['sql_strings'].append(delete_rows(model_obj, kept))
-    model_obj['sql_strings'].append(model_obj['sql'].build_sql_table(model_obj['traits'], 'Traits'))
-    model_obj['sql_strings'].append(model_obj['modifiers'].big_get(model_obj))
-    model_obj['sql_strings'].append(model_obj['sql'].old_build_sql_table(
-        [{'Type': key, 'Kind': value, 'Hash': hash(key)} for key, value in model_obj['kinds'].items()], 'Types'))
+    make_or_add(model_obj['sql_inserts'], model_obj['traits'], 'Traits')
+    model_obj['modifiers'].big_get(model_obj)
+    make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value, 'Hash': hash(key)} for key, value
+                                           in model_obj['kinds'].items()], 'Types')
+
+    check_primary_keys(model_obj)
+
     total = ''
     for i in model_obj['sql_strings']:
-        total+= i
+        total += i
 
     # debug super palace
     total += """UPDATE Building_YieldChanges SET YieldChange = 100 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
@@ -52,7 +54,7 @@ UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDIN
 UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
 UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';"""
 
-    frontend_config_string = model_obj['civilizations'].config_builder(model_obj)
+
 
     total_with_null = total.replace("'NULL'", "NULL")
     with open('../FallFromHeaven/Core/main.sql', 'w') as file:
@@ -63,8 +65,14 @@ UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDIN
     with open('../FallFromHeaven/Core/localization.sql', 'w') as file:
         file.write(localization_file)
 
+    model_obj['civilizations'].config_builder(model_obj)
+
+    config = ''
+    for i in model_obj['sql_config']:
+        config += i
+
     with open('../FallFromHeaven/Core/frontend_config.sql', 'w') as file:
-        file.write(frontend_config_string)
+        file.write(config)
 
     db_checker([i for i in model_obj['kinds']])
 

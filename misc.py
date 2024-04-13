@@ -1,6 +1,6 @@
 import xmltodict
 import pandas as pd
-from utils import small_dict, Sql
+from utils import small_dict, Sql, make_or_add, update_or_add
 from modifiers import Modifiers
 
 
@@ -115,15 +115,12 @@ def build_resource_string(model_obj):
             model_obj['kinds'][resource['ResourceType']] = 'KIND_RESOURCE'
             # check its actually called that
 
-    resource_string = model_obj['sql'].build_sql_table(six_style_resource_dict, 'Resources')
-    resource_string += model_obj['sql'].update_sql_table(update_dict, 'Resources', ['ResourceType'])
-    resource_string += model_obj['sql'].build_sql_table(resource_valid_feature, 'Resource_ValidFeatures')
-    resource_string += model_obj['sql'].build_sql_table(resource_valid_terrain, 'Resource_ValidTerrains')
-    resource_string += model_obj['sql'].build_sql_table(resource_yield_changes, 'Resource_YieldChanges')
-    resource_string += model_obj['sql'].update_sql_table(updates_yield, 'Resource_YieldChanges', ['ResourceType', 'YieldType'])
-
-    model_obj['sql_strings'].append(resource_string)
-
+    make_or_add(model_obj['sql_inserts'], six_style_resource_dict, 'Resources')
+    update_or_add(model_obj['sql_updates'], update_dict, 'Resources', ['ResourceType'])
+    make_or_add(model_obj['sql_inserts'], resource_valid_feature, 'Resource_ValidFeatures')
+    make_or_add(model_obj['sql_inserts'], resource_valid_terrain, 'Resource_ValidTerrains')
+    make_or_add(model_obj['sql_inserts'], resource_yield_changes, 'Resource_YieldChanges')
+    update_or_add(model_obj['sql_updates'], updates_yield, 'Resource_YieldChanges', ['ResourceType', 'YieldType'])
     return model_obj
 
 
@@ -187,13 +184,11 @@ def build_terrains_string(model_obj):
                         terrain_yields.append({'TerrainType': terrain['TerrainType'] + '_HILLS',
                                                'YieldType': terrain_yield_map[idx], 'YieldChange': i})
 
-    terrain_string = model_obj['sql'].build_sql_table(six_style_terrain_dict, 'Terrains')
-    terrain_string += model_obj['sql'].build_sql_table(terrain_yields, 'Terrain_YieldChanges')
+    make_or_add(model_obj['sql_inserts'], six_style_terrain_dict, 'Terrains')
+    make_or_add(model_obj['sql_inserts'], terrain_yields, 'Terrain_YieldChanges')
 
     for terrain in six_style_terrain_dict:
         model_obj['kinds'][terrain['TerrainType']] = 'KIND_TERRAIN'
-
-    model_obj['sql_strings'].append(terrain_string)
 
     return model_obj
 
@@ -239,13 +234,12 @@ def build_features_string(model_obj):
                     feature_yields.append({'FeatureType': feature['FeatureType'],
                                            'YieldType': yield_map[idx], 'YieldChange': i})
 
-    features_string = model_obj['sql'].build_sql_table(six_style_features, 'Features')
-    features_string += model_obj['sql'].build_sql_table(feature_valid_terrain, 'Feature_ValidTerrains')
-    features_string += model_obj['sql'].build_sql_table(feature_yields, 'Feature_YieldChanges')
+    make_or_add(model_obj['sql_inserts'], six_style_features, 'Features')
+    make_or_add(model_obj['sql_inserts'], feature_valid_terrain, 'Feature_ValidTerrains')
+    make_or_add(model_obj['sql_inserts'], feature_yields, 'Feature_YieldChanges')
 
     for features in six_style_features:
         model_obj['kinds'][features['FeatureType']] = 'KIND_FEATURE'
-    model_obj['sql_strings'].append(features_string)
     return model_obj
 
 
@@ -303,8 +297,6 @@ def build_policies(model_obj):
                     policy_modifiers.append({'PolicyType': f"POLICY_{policy[6:]}".upper(),
                                              'ModifierId': modifier_id})
 
-    policy_string = model_obj['sql'].build_sql_table(six_policy_dict, 'Policies')
-    policy_modifiers_string = model_obj['sql'].build_sql_table(policy_modifiers, 'PolicyModifiers')
-    model_obj['sql_strings'].append(policy_string)
-    model_obj['sql_strings'].append(policy_modifiers_string)
+    make_or_add(model_obj['sql_inserts'], six_policy_dict, 'Policies')
+    make_or_add(model_obj['sql_inserts'], policy_modifiers, 'PolicyModifiers')
     return model_obj

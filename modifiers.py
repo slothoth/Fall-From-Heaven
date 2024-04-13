@@ -1,3 +1,5 @@
+from utils import make_or_add
+
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
 gpp_map = {'UNITCLASS_PROPHET': 'GREAT_PERSON_CLASS_PROPHET', 'UNITCLASS_COMMANDER': 'GREAT_PERSON_CLASS_GENERAL',
@@ -571,5 +573,4 @@ class Modifiers:
                 problem_tuples = [i for i in tuples if any([any([isinstance(k, dict) for k in j]) for j in i])]
                 unique_tuples = set(tuple(sorted(d.items())) for d in i[0])
                 unique_dicts = [dict(t) for t in unique_tuples]
-            modifier_string += model_obj['sql'].build_sql_table(unique_dicts, i[1])
-        return modifier_string
+            make_or_add(model_obj['sql_inserts'], unique_dicts, i[1])
