@@ -1,4 +1,4 @@
-from utils import small_dict, localization
+from utils import small_dict, localization, make_or_add, update_or_add
 import xmltodict
 import json
 
@@ -227,17 +227,16 @@ class Buildings:
             self.kinds[building] = 'KIND_BUILDING'
 
 
-        building_table_string = model_obj['sql'].build_sql_table(six_style_build_dict, 'Buildings')
-        building_table_string += model_obj['sql'].update_sql_table(update_buildings, 'Buildings', ['BuildingType'])
-        building_table_string += model_obj['sql'].build_sql_table(self.building_great_person_points, 'Building_GreatPersonPoints')
-        building_table_string += model_obj['sql'].build_sql_table(self.building_yield_changes, 'Building_YieldChanges')
-        building_table_string += model_obj['sql'].build_sql_table(building_conditions, 'BuildingConditions')
-        building_table_string += model_obj['sql'].build_sql_table(building_replaces, 'BuildingReplaces')
-        building_table_string += model_obj['sql'].build_sql_table(self.traits, 'Traits')
+        make_or_add(model_obj['sql_inserts'], six_style_build_dict, 'Buildings')
+        update_or_add(model_obj['sql_updates'], update_buildings, 'Buildings', ['BuildingType'])
+        make_or_add(model_obj['sql_inserts'], self.building_great_person_points, 'Building_GreatPersonPoints')
+        make_or_add(model_obj['sql_inserts'], self.building_yield_changes, 'Building_YieldChanges')
+        make_or_add(model_obj['sql_inserts'], building_conditions, 'BuildingConditions')
+        make_or_add(model_obj['sql_inserts'], building_replaces, 'BuildingReplaces')
+        make_or_add(model_obj['sql_inserts'], self.traits, 'Traits')
 
         localization(six_style_build_dict)
         print(debug_string)
-        model_obj['sql_strings'].append(building_table_string)
         model_obj['kinds'] = self.kinds
         model_obj['update_build'] = [i for i in update_buildings]
 
@@ -357,6 +356,4 @@ def districts_build(model_obj):
                         {'DistrictType': 'DISTRICT_AQUEDUCT', 'PrereqTech': 'TECH_SANITATION'}]
 
     to_keep = "', '".join([i['DistrictType'] for i in district_changes] + ['DISTRICT_CITY_CENTER', 'DISTRICT_WONDER'])
-    districts_string = f"DELETE FROM Districts WHERE DistrictType NOT IN ('{to_keep}');\n"
-    districts_string += model_obj['sql'].update_sql_table(district_changes, 'Districts', ['DistrictType'])
-    model_obj['sql_strings'].append(districts_string)
+    update_or_add(model_obj['sql_updates'], district_changes, 'Districts', ['DistrictType'])

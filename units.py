@@ -1,4 +1,4 @@
-from utils import small_dict, localization
+from utils import small_dict, localization, make_or_add, update_or_add
 import xmltodict
 import json
 
@@ -224,16 +224,12 @@ def units_sql(model_obj, kept):
     mud_golem['BuildCharges'], mud_golem['Combat'], mud_golem['RangedCombat'] = 5, 3, 1
 
     heros_, final_units, kinds = heros(hero_units, model_obj['kinds'], final_units)
-    heros_string = ''
     for table_name, values in heros_.items():
-        heros_string += model_obj['sql'].build_sql_table(values, table_name)
-    unit_table_string = model_obj['sql'].build_sql_table(final_units, 'Units')
-    unit_table_string += model_obj['sql'].update_sql_table(update_units, 'Units', ['UnitType'])
-    unit_table_string += heros_string
-    replacements_string = model_obj['sql'].build_sql_table(replaces, 'UnitReplaces')
+        make_or_add(model_obj['sql_inserts'], values, table_name)
+    make_or_add(model_obj['sql_inserts'], final_units, 'Units')
+    update_or_add(model_obj['sql_updates'], update_units, 'Units', ['UnitType'])
+    make_or_add(model_obj['sql_inserts'], replaces, 'UnitReplaces')
 
-    model_obj['sql_strings'].append(unit_table_string)
-    model_obj['sql_strings'].append(replacements_string)
     model_obj['sql_strings'].append(upgrades_string)
     localization(final_units)
     return model_obj

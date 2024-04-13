@@ -1,5 +1,5 @@
 import xmltodict
-from utils import small_dict
+from utils import small_dict, make_or_add
 from collections import Counter
 
 civ_patch = {'MERCURIANS': ['UNIT_ANGEL_OF_DEATH', 'UNIT_OPHANIM', 'UNIT_SERAPH', 'UNIT_REPENTANT_ANGEL',
@@ -167,13 +167,12 @@ class Civilizations:
         civ_traits.append({'TraitType': 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM',
                            'CivilizationType': "SLTH_CIVILIZATION_LUCHUIRP"})
     
-        civ_string = model_obj['sql'].build_sql_table(self.six_style_civs, 'Civilizations')
-        civ_string += model_obj['sql'].build_sql_table(civ_traits, 'CivilizationTraits')
-        civ_string += model_obj['sql'].build_sql_table(leaders, 'Leaders')
-        civ_string += model_obj['sql'].build_sql_table(self.leaders_of_civs, 'CivilizationLeaders')
-        civ_string += model_obj['sql'].build_sql_table(civ_building_replace, 'BuildingReplaces')
+        make_or_add(model_obj['sql_inserts'], self.six_style_civs, 'Civilizations')
+        make_or_add(model_obj['sql_inserts'], civ_traits, 'CivilizationTraits')
+        make_or_add(model_obj['sql_inserts'], leaders, 'Leaders')
+        make_or_add(model_obj['sql_inserts'], self.leaders_of_civs, 'CivilizationLeaders')
+        make_or_add(model_obj['sql_inserts'], civ_building_replace, 'BuildingReplaces')
 
-        model_obj['sql_strings'].append(civ_string)
         model_obj['civ_units'] = civ_units
         model_obj['civ_buildings'] = civ_buildings
 
@@ -195,5 +194,4 @@ class Civilizations:
                                 'PortraitBackground': 'NULL', 'PlayerColor': 'NULL'
                                 })
 
-        config_string += model_obj['sql'].build_sql_table(players, 'Players')
-        return config_string
+        make_or_add(model_obj['sql_config'], players, 'Players')

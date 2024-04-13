@@ -1,6 +1,6 @@
 import xmltodict, copy
 from collections import defaultdict
-from utils import small_dict, split_dict, localization_changes, localization
+from utils import small_dict, split_dict, localization_changes, localization, make_or_add
 
 promo_mapper = {'Type': 'UnitPromotionType', 'Description': 'Description', 'UnitCombats': 'PromotionClass'}
 promo_mapper_extras = {'PromotionPrereq': 'PromotionPrereq', 'PromotionPrereqOr1': 'PromotionPrereqOr1',
@@ -235,11 +235,7 @@ class Promotions:
 
         localization_changes(duplicated_promos)
         localization(promotion_classes)
-
-        promo_string = model_obj['sql'].build_sql_table(duplicated_promos, 'UnitPromotions')
-        promo_string += model_obj['sql'].build_sql_table(promo_prereqs + p1 + p2 + p3, 'UnitPromotionPrereqs')
-        promo_string += model_obj['sql'].build_sql_table(promotion_classes, 'UnitPromotionClasses')
-
-        model_obj['sql_strings'].append(promo_string)
-
+        make_or_add(model_obj['sql_inserts'], duplicated_promos, 'UnitPromotions')
+        make_or_add(model_obj['sql_inserts'], promo_prereqs + p1 + p2 + p3, 'UnitPromotionPrereqs')
+        make_or_add(model_obj['sql_inserts'], promotion_classes, 'UnitPromotionClasses')
         return model_obj
