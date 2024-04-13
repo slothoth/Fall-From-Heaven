@@ -1,6 +1,8 @@
 import xmltodict
-from utils import small_dict, build_sql_table, update_sql_table, sql_check
+import pandas as pd
+from utils import small_dict, build_sql_table, update_sql_table
 from modifiers import Modifiers
+
 
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
 
@@ -100,10 +102,9 @@ def build_resource_string(civics, kinds):
 
     # remove pre-existings
     resource_valid_feature = [i for i in resource_valid_feature if i not in existing_valid_features]
-    existing_terrains = [{'ResourceType': i[0], 'TerrainType': i[1]} for i in sql_check('Resource_ValidTerrains')]
+    existing_terrains = pd.read_csv(f'data/tables/Resource_ValidTerrains.csv').to_dict(orient='records')
     resource_valid_terrain = [i for i in resource_valid_terrain if i not in existing_terrains]
-    existing_yields = [{'ResourceType': i[0], 'YieldType': i[1], 'YieldChange': i[2]}
-                       for i in sql_check('Resource_YieldChanges')]
+    existing_yields = pd.read_csv(f'data/tables/Resource_YieldChanges.csv').to_dict(orient='records')
     changes_existing = [(i['ResourceType'], i['YieldType']) for i in existing_yields]
     updates_yield = [i for i in resource_yield_changes if (i['ResourceType'], i['YieldType']) in changes_existing]
     resource_yield_changes = [i for i in resource_yield_changes

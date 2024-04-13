@@ -7,6 +7,7 @@ from misc import build_resource_string, build_terrains_string, build_sql_table, 
 from db_checker import db_checker
 from promotions import Promotions
 from modifiers import Modifiers
+from utils import old_build_sql_table
 
 import json
 
@@ -38,7 +39,7 @@ def main():
     delete_string = delete_rows(kept, calculated_to_keep)
     traits_string = build_sql_table(traits, 'Traits')
     modifier_string = modifiers.big_get()
-    kind_string = build_sql_table([{'Type': key, 'Kind': value} for key, value in kinds.items()], 'Types')
+    kind_string = old_build_sql_table([{'Type': key, 'Kind': value, 'Hash': hash(key)} for key, value in kinds.items()], 'Types')
     total = (delete_string + kind_string + '\n' + tech_table_string + civic_table_string + prereqs_string
              + building_table_string + districts_string + civ_string + traits_string + unit_table_string
              + replacements_string + upgrades_string + promotions_string + resource_string + terrain_string
