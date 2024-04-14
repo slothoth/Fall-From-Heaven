@@ -1,5 +1,6 @@
 /.idea/*
 /data/XML/*
-/data/CIV4UnitInfos.xml
+/data/XML/Units/CIV4UnitInfos.xml
 /Debug*
 /data/tables/*
+/data/DebugGameplay.sqlite

@@ -1,6 +1,6 @@
 import xmltodict, copy
 from collections import defaultdict
-from utils import build_sql_table, small_dict, split_dict, localization_changes, localization
+from utils import small_dict, split_dict, localization_changes, localization, make_or_add
 
 promo_mapper = {'Type': 'UnitPromotionType', 'Description': 'Description', 'UnitCombats': 'PromotionClass'}
 promo_mapper_extras = {'PromotionPrereq': 'PromotionPrereq', 'PromotionPrereqOr1': 'PromotionPrereqOr1',
@@ -19,7 +19,7 @@ hard_to_filter = ['STIGMATA']
 
 class Promotions:
 
-    def promotion_miner(self, kinds):
+    def promotion_miner(self, model_obj):
         with open('data/XML/Units/CIV4PromotionInfos.xml', 'r') as file:
             promo_dict = xmltodict.parse(file.read())['Civ4PromotionInfos']['PromotionInfos']['PromotionInfo']
 
@@ -224,10 +224,10 @@ class Promotions:
                               'Name': 'LOC_PROMOTION_CLASS_DISCIPLE_NAME'}]
 
         for promotion in promotion_classes:
-            kinds[promotion['PromotionClassType']] = 'KIND_PROMOTION_CLASS'
+            model_obj['kinds'][promotion['PromotionClassType']] = 'KIND_PROMOTION_CLASS'
 
         for promotion in duplicated_promos:
-            kinds[promotion['UnitPromotionType']] = 'KIND_PROMOTION'
+            model_obj['kinds'][promotion['UnitPromotionType']] = 'KIND_PROMOTION'
 
         for promo in duplicated_promos:
             promo['Column'] = unique_positions_structured[promo['PromotionClass']][promo['oldname']].pop() + 1
@@ -235,9 +235,7 @@ class Promotions:
 
         localization_changes(duplicated_promos)
         localization(promotion_classes)
-
-        promo_string = build_sql_table(duplicated_promos, 'UnitPromotions')
-        promo_string += build_sql_table(promo_prereqs + p1 + p2 + p3, 'UnitPromotionPrereqs')
-        promo_string += build_sql_table(promotion_classes, 'UnitPromotionClasses')
-
-        return promo_string, kinds
+        make_or_add(model_obj['sql_inserts'], duplicated_promos, 'UnitPromotions')
+        make_or_add(model_obj['sql_inserts'], promo_prereqs + p1 + p2 + p3, 'UnitPromotionPrereqs')
+        make_or_add(model_obj['sql_inserts'], promotion_classes, 'UnitPromotionClasses')
+        return model_obj

@@ -1,4 +1,4 @@
-from utils import small_dict, localization, build_sql_table, update_sql_table
+from utils import small_dict, localization, make_or_add, update_or_add
 import xmltodict
 import json
 
@@ -23,8 +23,8 @@ combat_map = {'UNITCOMBAT_NAVAL': 'PROMOTION_CLASS_NAVAL_MELEE', 'UNITCOMBAT_SIE
               'UNITCOMBAT_DISCIPLE': 'PROMOTION_CLASS_DISCIPLE', 'UNITCOMBAT_ADEPT': 'PROMOTION_CLASS_ADEPT',
               'NONE': 'NULL'}
 
-exceptions = {'SLTH_UNIT_AURIC_ASCENDED': {'EnabledByReligion': 1, 'PrereqTech': 'TECH_OMNISCIENCE'},
-              'SLTH_UNIT_DRIFA': {'PrereqCivic': 'CIVIC_DIVINE_ESSENCE'}, 'SLTH_UNIT_BRIGIT': 'UNKNOWN',
+exceptions = {'SLTH_UNIT_AURIC_ASCENDED': {'EnabledByReligion': 1, 'PrereqTech': 'SLTH_TECH_OMNISCIENCE'},
+              'SLTH_UNIT_DRIFA': {'PrereqCivic': 'SLTH_CIVIC_DIVINE_ESSENCE'}, 'SLTH_UNIT_BRIGIT': 'UNKNOWN',
               'SLTH_UNIT_BRIGIT_HELD': 'UNKNOWN',
               'SLTH_UNIT_ROSIER_OATHTAKER': 'UNKNOWN', 'SLTH_UNIT_WORKER': 'UNKNOWN'}
 
@@ -36,9 +36,10 @@ UNIT_NULL = {'UnitType': 'SLTH_UNIT_NULL', 'Name': 'LOC_UNIT_NULL_NAME', 'Ranged
              'FormationClass': 'FORMATION_CLASS_LAND_COMBAT', 'CanTrain': 1, 'BuildCharges': 0, 'PrereqCivic': 'NULL'}
 
 
-def units_sql(civs, civ_data, civics, kinds, trait_types, kept):
+def units_sql(model_obj, kept):
+    civs = model_obj['select_civs']
     debug_string = ""
-    with open('data/CIV4UnitInfos.xml', 'r') as file:
+    with open('data/XML/Units/CIV4UnitInfos.xml', 'r') as file:
         infos = xmltodict.parse(file.read())['Civ4UnitInfos']['UnitInfos'][('UnitInfo')]
     with open("data/unique_units.json", 'r') as json_file:
         uu = json.load(json_file)
@@ -93,15 +94,15 @@ def units_sql(civs, civ_data, civics, kinds, trait_types, kept):
     equipment = {key: val for key, val in unbuildable_only.items() if 'EQUIP' in key}
     summons = {key: val for key, val in unbuildable_only.items() if 'EQUIP' not in key}
 
-    for unit in civ_data['barbarian']:
+    for unit in model_obj['civ_units']['barbarian']:
         if six_style_dict[unit]['TraitType'] != 'NULL':
             print(f"Unit {unit} already has a trait, so we cant set trait_barb_but_shows_up")
         six_style_dict[unit]['TraitType'] = 'TRAIT_BARBARIAN_BUT_SHOWS_UP_IN_PEDIA'
 
-    for unit in civ_data['not_barbarian']:
+    for unit in model_obj['civ_units']['not_barbarian']:
         six_style_dict[unit]['AllowBarbarians'] = 0
 
-    for unit in civ_data['civ_traits']:
+    for unit in model_obj['civ_units']['civ_traits']:
         six_style_dict[unit]['TraitType'] = f"SLTH_TRAIT_CIVILIZATION_{unit[5:]}"
 
         # Make dictionaries of units to remove
@@ -137,9 +138,9 @@ def units_sql(civs, civ_data, civics, kinds, trait_types, kept):
                 replaces.append({'CivUniqueUnitType': f"SLTH_{unit['Name']}", 'ReplacesUnitType': unit['UnitType']})
                 trait_str = f"SLTH_TRAIT_CIVILIZATION_{unit['Name']}"
                 unit['TraitType'] = trait_str
-                trait_types[trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME',
+                model_obj['traits'][trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME',
                                           'Description': 'NULL'}
-                kinds[trait_str] = 'KIND_TRAIT'
+                model_obj['kinds'][trait_str] = 'KIND_TRAIT'
             unit['UnitType'] = f"SLTH_{unit['Name']}"
         unit['Name'] = 'LOC_' + unit['Name'] + '_NAME'
         unit['Description'] = unit['Description'].replace('TXT_KEY', 'LOC') + '_DESCRIPTION'
@@ -147,12 +148,13 @@ def units_sql(civs, civ_data, civics, kinds, trait_types, kept):
         unit['Maintenance'] = 1
         if unit['PrereqTech'] == 'NONE':
             unit['PrereqTech'] = 'NULL'
-        if unit['PrereqTech'] == 'TECH_NEVER':
+        elif unit['PrereqTech'] == 'TECH_NEVER':
             unit['PrereqTech'] = 'NULL'
-            unit['Cost'] = -1
-        if unit['PrereqTech'] in civics:
-            unit['PrereqCivic'] = civics[unit['PrereqTech']]
+        elif unit['PrereqTech'] in model_obj['civics']:
+            unit['PrereqCivic'] = f"SLTH_{model_obj['civics'][unit['PrereqTech']]}"
             unit['PrereqTech'] = 'NULL'
+        else:
+            unit['PrereqTech'] = f"SLTH_{unit['PrereqTech']}"
 
     for unit, changes in exceptions.items():        # patchy
         if changes == 'UNKNOWN':
@@ -162,14 +164,13 @@ def units_sql(civs, civ_data, civics, kinds, trait_types, kept):
             for key, val in changes.items():
                 final_units[unit][key] = val
 
-    civ_traits = {}
     for key, i in final_units.items():
-        if key in [f"SLTH_{j['TraitType'][24:]}" for j in trait_types.values()]:
+        if key in [f"SLTH_{j['TraitType'][24:]}" for j in model_obj['traits'].values()]:
             trait_str = f'SLTH_TRAIT_CIVILIZATION{key[4:]}'
             i['TraitType'] = trait_str
-            trait_types[trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME',
+            model_obj['traits'][trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME',
                                       'Description': 'NULL'}
-            kinds[trait_str] = 'KIND_TRAIT'
+            model_obj['kinds'][trait_str] = 'KIND_TRAIT'
 
     # Insert TraitType for religion units
     trait_types_religion = {religion_name: [unit for unit, civ in religious_units.items() if civ == religion_name] for
@@ -179,8 +180,8 @@ def units_sql(civs, civ_data, civics, kinds, trait_types, kept):
             if key in trait_types_religion[religions[idx]]:
                 trait_str = f'SLTH_TRAIT_RELIGION_UNIT{i["UnitType"][4:]}'
                 i['TraitType'] = trait_str
-                trait_types[trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME', 'Description': 'NULL'}
-                kinds[trait_str] = 'KIND_TRAIT'
+                model_obj['traits'][trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME', 'Description': 'NULL'}
+                model_obj['kinds'][trait_str] = 'KIND_TRAIT'
 
     hero_units = {key: val for key, val in final_units.items() if val['DefaultUnitAI'] == 'UNITAI_HERO'}
     for i in final_units.values():
@@ -189,50 +190,48 @@ def units_sql(civs, civ_data, civics, kinds, trait_types, kept):
     final_units = {key: val for key, val in final_units.items() if key not in compat_units}
     update_units = {key: val for key, val in final_units.items() if key in units_to_update}
     final_units = {key: val for key, val in final_units.items() if key not in units_to_update}
-    for civ, units in civ_data['dev_null'].items():
+    for civ, units in model_obj['civ_units']['dev_null'].items():
         for unit in units:
             civ_null = UNIT_NULL.copy()
             civ_null['UnitType'] = f"{civ_null['UnitType']}_{civ}_{unit[10:]}"
             civ_null['TraitType'] = f"{civ_null['TraitType']}_{civ}"
-            trait_types[civ_null['TraitType']] = {'TraitType': civ_null['TraitType'], 'Name': f"LOC_{civ_null['TraitType']}_NAME",
+            model_obj['traits'][civ_null['TraitType']] = {'TraitType': civ_null['TraitType'], 'Name': f"LOC_{civ_null['TraitType']}_NAME",
                                               'Description': 'NULL'}
             final_units[civ_null['UnitType']] = civ_null
             replaces.append({'CivUniqueUnitType': civ_null['UnitType'], 'ReplacesUnitType': unit})
-            kinds[civ_null['TraitType']] = 'KIND_TRAIT'
+            model_obj['kinds'][civ_null['TraitType']] = 'KIND_TRAIT'
 
     for name, unit in final_units.items():
         if name not in kept_units:
-            kinds[name] = 'KIND_UNIT'
+            model_obj['kinds'][name] = 'KIND_UNIT'
             debug_string += f"'{name}',"
 
-    upgrades_string = "INSERT INTO UnitUpgrades(Unit, Upgradeunit) VALUES\n"
     # upgrade tree, commented out for multiple upgrades, whicn is not supported in 6
-    for unit, upgrades in upgrade_tree.items():
-        # for upgrade in upgrades:
-        # upgrades_string += f"('{unit}', '{upgrade}'),\n"
-        upgrades_string += f"('SLTH_{unit}', 'SLTH_{upgrades[0]}'),\n"
-    upgrades_string = upgrades_string[:-2] + ";\n"
+    simple_upgrades = {unit: {'Unit': f'SLTH_{unit}', 'UpgradeUnit': f'SLTH_{upgrades[0]}'}
+                       for unit, upgrades in upgrade_tree.items()}
 
     replaces.append({'CivUniqueUnitType': 'SLTH_UNIT_MUD_GOLEM', 'ReplacesUnitType': 'UNIT_BUILDER'})
     mud_golem = final_units['SLTH_UNIT_MUD_GOLEM']
     mud_golem['TraitType'] = 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'
-    trait_types['SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'] = {'TraitType': 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM',
+    model_obj['traits']['SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'] = {'TraitType': 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM',
                                                              'Name': 'LOC_SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM_NAME',
                                                              'Description': 'NULL'}
-    kinds['SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'] = 'KIND_TRAIT'
+    model_obj['kinds']['SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'] = 'KIND_TRAIT'
     mud_golem['BuildCharges'], mud_golem['Combat'], mud_golem['RangedCombat'] = 5, 3, 1
 
-    heros_string, final_units, kinds = heros_module(hero_units, kinds, final_units)
-    unit_table_string = build_sql_table(final_units, 'Units')
-    unit_table_string += update_sql_table(update_units, 'Units', ['UnitType'])
-    unit_table_string += heros_string
-    replacements_string = build_sql_table(replaces, 'UnitReplaces')
+    heros_, final_units, kinds = heros_builder(hero_units, model_obj['kinds'], final_units)
+    for table_name, values in heros_.items():
+        make_or_add(model_obj['sql_inserts'], values, table_name)
+    make_or_add(model_obj['sql_inserts'], final_units, 'Units')
+    update_or_add(model_obj['sql_updates'], update_units, 'Units', ['UnitType'])
+    make_or_add(model_obj['sql_inserts'], replaces, 'UnitReplaces')
+    make_or_add(model_obj['sql_inserts'], simple_upgrades, 'UnitUpgrades')
 
     localization(final_units)
-    return unit_table_string, replacements_string, upgrades_string, trait_types, kinds
+    return model_obj
 
 
-def heros_module(hero_units, kinds, final_units):
+def heros_builder(hero_units, kinds, final_units):
     # make wonders that represent the units
     heros = {'Buildings': {}, 'BuildingModifiers': {}, 'Modifiers': {}, 'ModifierArguments': []}
     for hero_name, details in hero_units.items():
@@ -258,11 +257,6 @@ def heros_module(hero_units, kinds, final_units):
         # TrackReligion, EnabledByReligion
         kinds[build_name] = 'KIND_BUILDING'
         kinds[modifier] = 'KIND_MODIFIER'
-
-    heros_string = ''
-    for table_name, values in heros.items():
-        heros_string += build_sql_table(values, table_name)
-
-    return heros_string, final_units, kinds
+    return heros, final_units, kinds
 
 
