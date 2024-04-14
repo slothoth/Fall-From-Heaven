@@ -23,8 +23,8 @@ combat_map = {'UNITCOMBAT_NAVAL': 'PROMOTION_CLASS_NAVAL_MELEE', 'UNITCOMBAT_SIE
               'UNITCOMBAT_DISCIPLE': 'PROMOTION_CLASS_DISCIPLE', 'UNITCOMBAT_ADEPT': 'PROMOTION_CLASS_ADEPT',
               'NONE': 'NULL'}
 
-exceptions = {'SLTH_UNIT_AURIC_ASCENDED': {'EnabledByReligion': 1, 'PrereqTech': 'TECH_OMNISCIENCE'},
-              'SLTH_UNIT_DRIFA': {'PrereqCivic': 'CIVIC_DIVINE_ESSENCE'}, 'SLTH_UNIT_BRIGIT': 'UNKNOWN',
+exceptions = {'SLTH_UNIT_AURIC_ASCENDED': {'EnabledByReligion': 1, 'PrereqTech': 'SLTH_TECH_OMNISCIENCE'},
+              'SLTH_UNIT_DRIFA': {'PrereqCivic': 'SLTH_CIVIC_DIVINE_ESSENCE'}, 'SLTH_UNIT_BRIGIT': 'UNKNOWN',
               'SLTH_UNIT_BRIGIT_HELD': 'UNKNOWN',
               'SLTH_UNIT_ROSIER_OATHTAKER': 'UNKNOWN', 'SLTH_UNIT_WORKER': 'UNKNOWN'}
 
@@ -148,12 +148,13 @@ def units_sql(model_obj, kept):
         unit['Maintenance'] = 1
         if unit['PrereqTech'] == 'NONE':
             unit['PrereqTech'] = 'NULL'
-        if unit['PrereqTech'] == 'TECH_NEVER':
+        elif unit['PrereqTech'] == 'TECH_NEVER':
             unit['PrereqTech'] = 'NULL'
-            unit['Cost'] = -1
-        if unit['PrereqTech'] in model_obj['civics']:
-            unit['PrereqCivic'] = model_obj['civics'][unit['PrereqTech']]
+        elif unit['PrereqTech'] in model_obj['civics']:
+            unit['PrereqCivic'] = f"SLTH_{model_obj['civics'][unit['PrereqTech']]}"
             unit['PrereqTech'] = 'NULL'
+        else:
+            unit['PrereqTech'] = f"SLTH_{unit['PrereqTech']}"
 
     for unit, changes in exceptions.items():        # patchy
         if changes == 'UNKNOWN':
@@ -163,7 +164,6 @@ def units_sql(model_obj, kept):
             for key, val in changes.items():
                 final_units[unit][key] = val
 
-    civ_traits = {}
     for key, i in final_units.items():
         if key in [f"SLTH_{j['TraitType'][24:]}" for j in model_obj['traits'].values()]:
             trait_str = f'SLTH_TRAIT_CIVILIZATION{key[4:]}'
@@ -206,13 +206,9 @@ def units_sql(model_obj, kept):
             model_obj['kinds'][name] = 'KIND_UNIT'
             debug_string += f"'{name}',"
 
-    upgrades_string = "INSERT INTO UnitUpgrades(Unit, Upgradeunit) VALUES\n"
     # upgrade tree, commented out for multiple upgrades, whicn is not supported in 6
-    for unit, upgrades in upgrade_tree.items():
-        # for upgrade in upgrades:
-        # upgrades_string += f"('{unit}', '{upgrade}'),\n"
-        upgrades_string += f"('SLTH_{unit}', 'SLTH_{upgrades[0]}'),\n"
-    upgrades_string = upgrades_string[:-2] + ";\n"
+    simple_upgrades = {unit: {'Unit': f'SLTH_{unit}', 'UpgradeUnit': f'SLTH_{upgrades[0]}'}
+                       for unit, upgrades in upgrade_tree.items()}
 
     replaces.append({'CivUniqueUnitType': 'SLTH_UNIT_MUD_GOLEM', 'ReplacesUnitType': 'UNIT_BUILDER'})
     mud_golem = final_units['SLTH_UNIT_MUD_GOLEM']
@@ -223,19 +219,19 @@ def units_sql(model_obj, kept):
     model_obj['kinds']['SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'] = 'KIND_TRAIT'
     mud_golem['BuildCharges'], mud_golem['Combat'], mud_golem['RangedCombat'] = 5, 3, 1
 
-    heros_, final_units, kinds = heros(hero_units, model_obj['kinds'], final_units)
+    heros_, final_units, kinds = heros_builder(hero_units, model_obj['kinds'], final_units)
     for table_name, values in heros_.items():
         make_or_add(model_obj['sql_inserts'], values, table_name)
     make_or_add(model_obj['sql_inserts'], final_units, 'Units')
     update_or_add(model_obj['sql_updates'], update_units, 'Units', ['UnitType'])
     make_or_add(model_obj['sql_inserts'], replaces, 'UnitReplaces')
+    make_or_add(model_obj['sql_inserts'], simple_upgrades, 'UnitUpgrades')
 
-    model_obj['sql_strings'].append(upgrades_string)
     localization(final_units)
     return model_obj
 
 
-def heros(hero_units, kinds, final_units):
+def heros_builder(hero_units, kinds, final_units):
     # make wonders that represent the units
     heros = {'Buildings': {}, 'BuildingModifiers': {}, 'Modifiers': {}, 'ModifierArguments': []}
     for hero_name, details in hero_units.items():

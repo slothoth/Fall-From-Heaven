@@ -136,7 +136,14 @@ class Modifiers:
                                       modifier_type='MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER')
 
     def war_weariness_modifier(self, civ4_target, name):
-        modifier = {'ModifierId': f"MODIFIER_{name}_ADJUST_WAR_WEARINESS",
+        mod_name = f"MODIFIER_{name}_ADJUST_WAR_WEARINESS"
+        if mod_name in self.modifiers:
+            to_change = [idx for idx, i in enumerate(self.modifier_arguments) if i['ModifierId'] == mod_name
+                                                                                   and i['Name'] == 'Amount'][0]
+            if int(self.modifier_arguments[to_change]['Value']) > int(civ4_target):     # negative is better here
+                self.modifier_arguments[to_change]['Value'] = civ4_target
+            return [mod_name]
+        modifier = {'ModifierId': mod_name,
                     'ModifierType': 'MODIFIER_PLAYER_ADJUST_WAR_WEARINESS'}
         modifier_args = []
         for name, value in [('Amount', civ4_target), ('Overall', 1)]:
@@ -574,3 +581,5 @@ class Modifiers:
                 unique_tuples = set(tuple(sorted(d.items())) for d in i[0])
                 unique_dicts = [dict(t) for t in unique_tuples]
             make_or_add(model_obj['sql_inserts'], unique_dicts, i[1])
+            for modifier in self.dynamic_modifiers:
+                model_obj['kinds'][modifier] = 'KIND_MODIFIER'

@@ -1,5 +1,6 @@
 import pandas as pd
 import xmltodict
+import re
 from utils import small_dict, localization, make_or_add
 
 techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Cost', 'Repeatable': 0,
@@ -52,16 +53,17 @@ def techs_sql(model_obj, kept):
         civic['Name'] = 'LOC_' + civic['CivicType'] + '_NAME'
         civic['UITreeRow'] = ui_civic_tree[civic['CivicType']][0]
         civic['EraType'] = era_map[int(ui_civic_tree[civic['CivicType']][1])]
+        civic['CivicType'] = f"SLTH_{civic['CivicType']}"
+
+    for tech in six_style_techs:
+        tech['TechnologyType'] = f"SLTH_{tech['TechnologyType']}"
 
     make_or_add(model_obj['sql_inserts'], six_style_techs, 'Technologies')
     make_or_add(model_obj['sql_inserts'], six_style_civics, 'Civics')
 
     for tech_type_to_add in techsql[2:]:
         tech_split = tech_type_to_add.split("'")
-        if not ('TECH' in tech_split[1] or 'CIVIC' in tech_split[1]):
-            model_obj['kinds'][tech_split[1]] = tech_split[3]
-        elif not (tech_split[1] in kept_techs or tech_split[1] in kept_civics):
-            model_obj['kinds'][tech_split[1]] = tech_split[3]
+        model_obj['kinds'][f"SLTH_{tech_split[1]}"] = tech_split[3]
 
     localization(six_style_techs)
     localization(six_style_civics)
@@ -69,13 +71,20 @@ def techs_sql(model_obj, kept):
     return model_obj
 
 
-def prereq_techs(model_obj_str):
+def prereq_techs(model_obj):
     with open('data/prereqstechs.sql', 'r') as file:
-        prereqs_tech = file.readlines()
-        prereqs_string = "".join(prereqs_tech[:2])
-        prereqs_string += "".join([i for i in prereqs_tech[2:]])
+        prereqs_tech_str = file.readlines()
+        prereq_techs, prereqs_civics = [], []
+        for i in prereqs_tech_str[2:]:
+            formatted = [re.sub(r"[^a-zA-Z_]+", "", j) for j in i.split("',")]
+            prereq_techs.append({'Technology': f'SLTH_{formatted[0]}', 'PrereqTech': f'SLTH_{formatted[1]}'})
 
-    prereqs_string = prereqs_string[:-1] + ";\n"
     with open('data/prereqscivics.sql', 'r') as file:
-        prereqs_string += file.read() + "\n"
-    model_obj_str.append(prereqs_string)
+        prereqs_civic_str = file.readlines()
+
+    for i in prereqs_civic_str[2:]:
+        formatted = [re.sub(r"[^a-zA-Z_]+", "", j) for j in i.split("',")]
+        prereqs_civics.append({'Civic': f'SLTH_{formatted[0]}', 'PrereqCivic': f'SLTH_{formatted[1]}'})
+
+    make_or_add(model_obj['sql_inserts'], prereq_techs, 'TechnologyPrereqs')
+    make_or_add(model_obj['sql_inserts'], prereqs_civics, 'CivicPrereqs')
