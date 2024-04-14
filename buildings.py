@@ -132,12 +132,14 @@ class Buildings:
             building['Name'] = 'LOC_' + building['BuildingType'] + '_NAME'
             building['Description'] = 'LOC_' + building['BuildingType'] + '_DESCRIPTION'
             if building['PrereqTech'] in model_obj['civics']:
-                building['PrereqCivic'] = model_obj['civics'][building['PrereqTech']]
+                building['PrereqCivic'] = f"SLTH_{model_obj['civics'][building['PrereqTech']]}"
                 building['PrereqTech'] = 'NULL'
             else:
                 building['PrereqCivic'] = 'NULL'
-            if building['PrereqTech'] == 'NONE':
+            if building['PrereqTech'] == 'NONE' or building['PrereqTech'] == 'NULL':
                 building['PrereqTech'] = 'NULL'
+            else:
+                building['PrereqTech'] = f"SLTH_{building['PrereqTech']}"
             if building['MaxPlayerInstances'] == '0':
                 building['MaxPlayerInstances'] = -1
             if building.get('CitizenSlots', False):
@@ -226,6 +228,16 @@ class Buildings:
         for building in six_style_build_dict:
             self.kinds[building] = 'KIND_BUILDING'
 
+        for name, building in six_style_build_extras.items():
+            if building.get('YieldType', None) is not None and building['YieldType'] != 'NONE':
+                for idx, amount in enumerate(building['YieldType']['iCommerce']):
+                    if int(amount) != 0:
+                        self.building_yield_changes.append({'BuildingType': name, 'YieldType': commerce_map[idx],
+                                                       'YieldChange': amount})
+            if building.get('GreatPersonClassType', 'NONE') != 'NONE':
+                self.building_great_person_points.append({'BuildingType': name,
+                                                     'GreatPersonClassType': gpp_map[building['GreatPersonClassType']],
+                                                     'PointsPerTurn': building['PointsPerTurn']})
 
         make_or_add(model_obj['sql_inserts'], six_style_build_dict, 'Buildings')
         update_or_add(model_obj['sql_updates'], update_buildings, 'Buildings', ['BuildingType'])
@@ -343,17 +355,39 @@ class Buildings:
                     self.modifier_arguments.append({'ModifierId': modifier_id, 'Name': m_name,
                                                     'Type': 'ARGTYPE_IDENTITY', 'Value': value})
 
+    def building_features(self, six_style_build_extras, exist_dict):
+        existing_buildings_gpp = exist_dict['existing_buildings_gpp']
+        existing_buildings_yields = exist_dict['existing_buildings_yields']
+        building_great_person_points, building_yield_changes = [], []
+
+        building_great_person_points = [i for i in building_great_person_points if
+                                        not i['BuildingType'] in existing_buildings_gpp]
+
+        building_yield_changes = [i for i in building_yield_changes if
+                                  not i['BuildingType'] in existing_buildings_yields]
+
+
+
+        building_features_string = ''
+        building_features_string += build_sql_table(building_great_person_points, 'Building_GreatPersonPoints')
+        building_features_string += build_sql_table(building_yield_changes, 'Building_YieldChanges')
+        building_features_string += build_sql_table(self.building_modifiers, 'BuildingModifiers')
+        building_features_string += build_sql_table(self.modifier_table, 'Modifiers')
+        building_features_string += build_sql_table(self.modifier_arguments, 'ModifierArguments')
+
+        return building_features_string
+
 
 def districts_build(model_obj):
-    district_changes = [{'DistrictType': 'DISTRICT_HOLY_SITE', 'PrereqCivic': 'CIVIC_MYSTICISM'},
-                        {'DistrictType': 'DISTRICT_CAMPUS', 'PrereqCivic': 'CIVIC_MYSTICISM'},
-                        {'DistrictType': 'DISTRICT_ENCAMPMENT', 'PrereqTech': 'TECH_BRONZE_WORKING'},
-                        {'DistrictType': 'DISTRICT_HARBOR', 'PrereqTech': 'TECH_FISHING'},
-                        {'DistrictType': 'DISTRICT_COMMERCIAL_HUB', 'PrereqCivic': 'CIVIC_FESTIVALS'},
-                        {'DistrictType': 'DISTRICT_ENTERTAINMENT_COMPLEX', 'PrereqCivic': 'CIVIC_DRAMA'},
-                        {'DistrictType': 'DISTRICT_THEATER', 'PrereqCivic': 'CIVIC_FESTIVALS'},
-                        {'DistrictType': 'DISTRICT_INDUSTRIAL_ZONE', 'PrereqTech': 'TECH_SMELTING'},
-                        {'DistrictType': 'DISTRICT_AQUEDUCT', 'PrereqTech': 'TECH_SANITATION'}]
+    district_changes = [{'DistrictType': 'DISTRICT_HOLY_SITE', 'PrereqCivic': 'SLTH_CIVIC_MYSTICISM'},
+                        {'DistrictType': 'DISTRICT_CAMPUS', 'PrereqCivic': 'SLTH_CIVIC_MYSTICISM'},
+                        {'DistrictType': 'DISTRICT_ENCAMPMENT', 'PrereqTech': 'SLTH_TECH_BRONZE_WORKING'},
+                        {'DistrictType': 'DISTRICT_HARBOR', 'PrereqTech': 'SLTH_TECH_FISHING'},
+                        {'DistrictType': 'DISTRICT_COMMERCIAL_HUB', 'PrereqCivic': 'SLTH_CIVIC_FESTIVALS'},
+                        {'DistrictType': 'DISTRICT_ENTERTAINMENT_COMPLEX', 'PrereqCivic': 'SLTH_CIVIC_DRAMA'},
+                        {'DistrictType': 'DISTRICT_THEATER', 'PrereqCivic': 'SLTH_CIVIC_FESTIVALS'},
+                        {'DistrictType': 'DISTRICT_INDUSTRIAL_ZONE', 'PrereqTech': 'SLTH_TECH_SMELTING'},
+                        {'DistrictType': 'DISTRICT_AQUEDUCT', 'PrereqTech': 'SLTH_TECH_SANITATION'}]
 
     to_keep = "', '".join([i['DistrictType'] for i in district_changes] + ['DISTRICT_CITY_CENTER', 'DISTRICT_WONDER'])
     update_or_add(model_obj['sql_updates'], district_changes, 'Districts', ['DistrictType'])

@@ -40,7 +40,7 @@ def patch_string_generate(model_obj_str):
     patch_string = ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
                     "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
     patch_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
-    patch_string += f"UPDATE Resource_Harvests SET PrereqTech = 'TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
+    patch_string += f"UPDATE Resource_Harvests SET PrereqTech = 'SLTH_TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
 
     unit_military_engineer_issues = ['Improvement_ValidBuildUnits', "Route_ValidBuildUnits",
                                      "Building_BuildChargeProductions", "District_BuildChargeProductions"]

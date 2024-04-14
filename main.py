@@ -6,7 +6,7 @@ from delete_n_patch import delete_rows, patch_string_generate
 from misc import build_resource_string, build_terrains_string, build_features_string, build_policies
 from promotions import Promotions
 from modifiers import Modifiers
-from utils import Sql, setup_tables, db_checker, make_or_add
+from utils import Sql, setup_tables, existing_types_checker, make_or_add
 from db_checker import check_primary_keys
 
 import json
@@ -32,18 +32,23 @@ def main():
     build_resource_string(model_obj)
     build_terrains_string(model_obj)
     build_features_string(model_obj)
-    prereq_techs(model_obj['sql_strings'])
+    prereq_techs(model_obj)
     patch_string_generate(model_obj['sql_strings'])
     Buildings(civs).buildings_sql(model_obj)
     districts_build(model_obj)
-    model_obj['sql_strings'].append(delete_rows(model_obj, kept))
+    delete_rows(model_obj, kept)
     make_or_add(model_obj['sql_inserts'], model_obj['traits'], 'Traits')
     model_obj['modifiers'].big_get(model_obj)
-    make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value, 'Hash': hash(key)} for key, value
+    make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value} for key, value
                                            in model_obj['kinds'].items()], 'Types')
 
-    check_primary_keys(model_obj)
+    # deprecated hash version
+    # make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value, 'Hash': hash(key)} for key, value
+    #                                            in model_obj['kinds'].items()], 'Types')
 
+    check_primary_keys(model_obj)
+    for table, rows in model_obj['sql_inserts'].items():
+        model_obj['sql_strings'].append(model_obj['sql'].old_build_sql_table(rows, table))
     total = ''
     for i in model_obj['sql_strings']:
         total += i
@@ -53,8 +58,6 @@ def main():
 UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
 UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
 UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';"""
-
-
 
     total_with_null = total.replace("'NULL'", "NULL")
     with open('../FallFromHeaven/Core/main.sql', 'w') as file:
@@ -67,14 +70,14 @@ UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDIN
 
     model_obj['civilizations'].config_builder(model_obj)
 
-    config = ''
-    for i in model_obj['sql_config']:
-        config += i
+    config = 'DELETE FROM Players;\n'
+    for table, rows in model_obj['sql_config'].items():
+        config += model_obj['sql'].old_build_sql_table(rows, table)
 
     with open('../FallFromHeaven/Core/frontend_config.sql', 'w') as file:
         file.write(config)
 
-    db_checker([i for i in model_obj['kinds']])
+    existing_types_checker([i for i in model_obj['kinds']])
 
 
 if __name__ == "__main__":

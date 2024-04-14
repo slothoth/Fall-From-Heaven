@@ -16,6 +16,8 @@ civ_extras_mapper = {'Type': 'CivilizationType', 'Cities': 'Cities', 'Leaders': 
 
 ethnicity_mapper = {}       # TODO design doc decision
 
+# For lanun Pearls INSERT INTO MY_TABLE(ModifierId, Name, Type, "Value") VALUES ('GOVERNOR_PROMOTION_HERMETIC_ORDER_1_UNLOCK_LEY_LINE', 'ResourceType', 'ARGTYPE_IDENTITY', 'RESOURCE_LEY_LINE');
+
 class Civilizations:
     def __init__(self):
         print('Loading Civilizations...')
@@ -127,7 +129,7 @@ class Civilizations:
             elif len(civ_list) == 21:
                 trait_belongs_to = [i for i in civ_dict if i not in civ_list][0]
                 trait_type = f"SLTH_TRAIT_CIVILIZATION_UNIT_{unit[10:]}"
-                traits[trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
+                model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
                                       'Description': 'NULL'}
                 model_obj['kinds'][trait_type] = 'KIND_TRAIT'
                 civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{trait_belongs_to}"})

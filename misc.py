@@ -50,11 +50,15 @@ def build_resource_string(model_obj):
         resource['Name'] = "LOC_" + resource['ResourceType']
         resource['ResourceClassType'] = 'RESOURCECLASS_LUXURY' if resource['Happiness'] > 0 else resource_class_map[resource['ResourceClassType']]
         resource['PrereqCivic'] = 'NULL'
-        if resource['PrereqTech'] == 'NONE':
+        if resource['PrereqTech'] == 'TECH_SEAFARING':
+            resource['PrereqTech'] = 'NULL'
+        elif resource['PrereqTech'] == 'NONE':
             resource['PrereqTech'] = 'NULL'
         elif resource['PrereqTech'] in model_obj['civics']:
-            resource['PrereqCivic'] = model_obj['civics'][resource['PrereqTech']]
+            resource['PrereqCivic'] = f"SLTH_{model_obj['civics'][resource['PrereqTech']]}"
             resource['PrereqTech'] = 'NULL'
+        else:
+            resource['PrereqTech'] = f"SLTH_{resource['PrereqTech']}"
 
     update_dict = [i for i in six_style_resource_dict if i['ResourceType'] in pre_existing]
     six_style_resource_dict = [i for i in six_style_resource_dict if not i['PrereqTech'] == 'TECH_SEAFARING']       # removes lanun tech issue
@@ -264,37 +268,25 @@ def build_policies(model_obj):
             i.pop(j, None)
     for i in six_policy_dict.values():
         i['GovernmentSlotType'] = gov_slot_mapper[i['GovernmentSlotType']]
-        i['PolicyType'] = 'POLICY_' + i['PolicyType'][6:]
+        i['PolicyType'] = 'SLTH_POLICY_' + i['PolicyType'][6:]
         i['Name'] = f"LOC_{i['PolicyType']}_NAME"
         i['PrereqCivic'] = 'NULL'
-        if i['PolicyType'] != 'POLICY_GOD_KING':
-            model_obj['kinds'][i['PolicyType']] = 'KIND_POLICY'
+        model_obj['kinds'][i['PolicyType']] = 'KIND_POLICY'
         if i['PrereqTech'] in model_obj['civics']:
-            i['PrereqCivic'] = f"CIVIC_{i['PrereqTech'][5:]}"
+            i['PrereqCivic'] = f"SLTH_CIVIC_{i['PrereqTech'][5:]}"
             i['PrereqTech'] = 'NULL'
         elif i['PrereqTech'] == 'NONE':
             i['PrereqTech'] = 'NULL'
+        else:
+            i['PrereqTech'] = f"SLTH_{i['PrereqTech']}"
 
-    # reused : iGreatPeopleRateModifier,
-
-    all_mods = {j for sublist in [[j for j in i] for policy, i in useful_infos.items()] for j in sublist}
-
-    all_modifiers_full = []
-    for i in useful_infos.values():
-        for key, j in i.items():
-            all_modifiers_full.append((key,j))
-
-    #{'iDistanceMaintenanceModifier':, 'Upkeep':, 'CommerceModifiers'}
-    # none of 4 0,1 are 1 except builder extra builds
-    # OwnerRequirementSetId is always null,
-    mod_types = set()
     policy_modifiers = []
     for policy, i in useful_infos.items():
         for key, val in i.items():
             modifier_ids = model_obj['modifiers'].generate_modifier(val, key, policy[6:])
             if modifier_ids is not None:
                 for modifier_id in modifier_ids:
-                    policy_modifiers.append({'PolicyType': f"POLICY_{policy[6:]}".upper(),
+                    policy_modifiers.append({'PolicyType': f"SLTH_POLICY_{policy[6:]}".upper(),
                                              'ModifierId': modifier_id})
 
     make_or_add(model_obj['sql_inserts'], six_policy_dict, 'Policies')

@@ -177,9 +177,10 @@ def small_dict(big_dict, four_to_six_map):
     return smaller_dict
 
 
-def db_checker(kinds):
-    existing_types = pd.read_csv('data/tables/Types.csv')
-    will_error = [i for i in kinds if i in existing_types.to_dict('list')['Type']]
+def existing_types_checker(kinds):
+    types = pd.read_csv('data/tables/Types.csv')
+    existing_types = types.to_dict('list')['Type']
+    will_error = [i for i in kinds if i in existing_types]
     print(f'Existing Types that will be rejected:\n{will_error}')
 
 
@@ -190,13 +191,13 @@ def make_or_add(to_sql, list_of_dicts, table_name):
                 list_of_dicts = [list_of_dicts]
             to_sql[table_name].extend(list_of_dicts)
 
+        elif isinstance(to_sql[table_name], dict) and isinstance(list_of_dicts, dict):
+            to_sql[table_name].update(list_of_dicts)
         else:
             print(f'rejected append for sql table {table_name} as preexisting is {type(to_sql[table_name])} and '
                   f'addition is {type(list_of_dicts)}')
 
     else:
-        if not isinstance(list_of_dicts, list):
-            list_of_dicts = [list_of_dicts]
         to_sql[table_name] = list_of_dicts
 
 
