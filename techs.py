@@ -1,6 +1,7 @@
 import pandas as pd
 import xmltodict
-from utils import small_dict, build_sql_table, localization
+import re
+from utils import small_dict, localization, make_or_add
 
 techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Cost', 'Repeatable': 0,
                 'EmbarkUnitType': 'NULL', 'EmbarkAll': 0, 'Description': 'Description', 'EraType': 'ERA_ANCIENT',
@@ -10,7 +11,7 @@ era_map = ['ERA_ANCIENT', 'ERA_CLASSICAL', 'ERA_MEDIEVAL', 'ERA_RENAISSANCE', 'E
                'ERA_ATOMIC', 'ERA_INFORMATION']
 
 
-def techs_sql(kinds, kept):
+def techs_sql(model_obj, kept):
     ui_tree_map = pd.read_csv('data/ui_tree.csv')
     ui_tree_map = ui_tree_map.set_index('tech').apply(lambda x: x.tolist(), axis=1).to_dict()
     ui_civic_tree = pd.read_csv('data/civic_ui_tree.csv')
@@ -52,30 +53,38 @@ def techs_sql(kinds, kept):
         civic['Name'] = 'LOC_' + civic['CivicType'] + '_NAME'
         civic['UITreeRow'] = ui_civic_tree[civic['CivicType']][0]
         civic['EraType'] = era_map[int(ui_civic_tree[civic['CivicType']][1])]
+        civic['CivicType'] = f"SLTH_{civic['CivicType']}"
 
-    tech_table_string = build_sql_table(six_style_techs, 'Technologies')
-    civic_table_string = build_sql_table(six_style_civics, 'Civics')
+    for tech in six_style_techs:
+        tech['TechnologyType'] = f"SLTH_{tech['TechnologyType']}"
+
+    make_or_add(model_obj['sql_inserts'], six_style_techs, 'Technologies')
+    make_or_add(model_obj['sql_inserts'], six_style_civics, 'Civics')
 
     for tech_type_to_add in techsql[2:]:
         tech_split = tech_type_to_add.split("'")
-        if not ('TECH' in tech_split[1] or 'CIVIC' in tech_split[1]):
-            kinds[tech_split[1]] = tech_split[3]
-        elif not (tech_split[1] in kept_techs or tech_split[1] in kept_civics):
-            kinds[tech_split[1]] = tech_split[3]
+        model_obj['kinds'][f"SLTH_{tech_split[1]}"] = tech_split[3]
 
     localization(six_style_techs)
     localization(six_style_civics)
+    model_obj['civics'] = civics
+    return model_obj
 
-    return tech_table_string, civic_table_string, civics, kinds
 
-def prereq_techs():
+def prereq_techs(model_obj):
     with open('data/prereqstechs.sql', 'r') as file:
-        prereqs_tech = file.readlines()
-        prereqs_string = "".join(prereqs_tech[:2])
-        prereqs_string += "".join([i for i in prereqs_tech[2:]])
+        prereqs_tech_str = file.readlines()
+        prereq_techs, prereqs_civics = [], []
+        for i in prereqs_tech_str[2:]:
+            formatted = [re.sub(r"[^a-zA-Z_]+", "", j) for j in i.split("',")]
+            prereq_techs.append({'Technology': f'SLTH_{formatted[0]}', 'PrereqTech': f'SLTH_{formatted[1]}'})
 
-    prereqs_string = prereqs_string[:-1] + ";\n"
     with open('data/prereqscivics.sql', 'r') as file:
-        prereqs_string += file.read() + "\n"
+        prereqs_civic_str = file.readlines()
 
-    return prereqs_string
+    for i in prereqs_civic_str[2:]:
+        formatted = [re.sub(r"[^a-zA-Z_]+", "", j) for j in i.split("',")]
+        prereqs_civics.append({'Civic': f'SLTH_{formatted[0]}', 'PrereqCivic': f'SLTH_{formatted[1]}'})
+
+    make_or_add(model_obj['sql_inserts'], prereq_techs, 'TechnologyPrereqs')
+    make_or_add(model_obj['sql_inserts'], prereqs_civics, 'CivicPrereqs')
