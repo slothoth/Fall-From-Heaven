@@ -140,6 +140,14 @@ class Modifiers:
                             'FeatureDefense': self.ability_feature_defense,
                             'DamageTypeResist': self.damage_type_Implementation,
                             'bHillsDoubleMove': self.ability_hills_movebuff,
+                            'SLTH_TRAIT_SPRAWLING': self.otherSystemImplement,      # yaxaclan mod
+                            'SLTH_TRAIT_AGNOSTIC': self.trait_agnostic,
+                            'SLTH_TRAIT_SUNDERED': self.ability_sundered,
+                            'SLTH_TRAIT_FALLOW': self.trait_fallow,
+                            'SLTH_TRAIT_GUARDSMAN': self.cantImplement,
+                            'SLTH_TRAIT_DEXTEROUS': self.ability_ranged_buff,
+                            'SLTH_TRAIT_SINISTER': self.trait_sinister,
+                            'SLTH_TRAIT_HORSELORD': self.trait_horselord,
                             'iWorkRateModify': self.cantImplement,
                             # difficult as build charges, would need to apply to only units with buld chargs already
                             'bImmuneToFear': self.cantImplement,  # no fear in civ6 as no tile stack
@@ -889,6 +897,26 @@ class Modifiers:
         self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
                       requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
         return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
+
+    def ability_ranged_buff(self, civ4_target, name):
+        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
+        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+
+
+    def trait_agnostic(self, civ4_target, name):
+        print(f"{name}'s {civ4_target} not implemented, use Mvemba? + NULL replace religious units")
+
+    def trait_horselord(self, civ4_target, name):
+        print(f"{name}'s {civ4_target} not implemented, copy genghis khan and then add a movespeed like columbia?")
+
+    def trait_sinister(self, civ4_target, name):
+        print(f"{name}'s {civ4_target} not implemented, copy genghis khan but for scout units requirements")
+
+    def ability_sundered(self, civ4_target, name):
+        print(f"{name}'s {civ4_target} not implemented, as needs argageddon module to function")
+
+    def trait_fallow(self, civ4_target, name):
+        print(f"{name}'s {civ4_target} not implemented, as no food growth/loss seems hard to do")
 
     def damage_type_Implementation(self, civ4_target, name):
         print(f"{name}'s {civ4_target} not implemented as needs Damage type module, probably handled in Magic")
