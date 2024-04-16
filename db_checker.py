@@ -3,6 +3,7 @@ import re
 import json
 import os
 import copy
+import pandas as pd
 
 
 def get_primary_keys():
@@ -86,68 +87,12 @@ def get_foreign_keys():
 
     return table_foreign_keys
 
+
 def check_primary_keys(model_obj):
     primary_keys = get_primary_keys()
     foreign_keys = get_foreign_keys()
-    pre_existing = {'Yields': [{'YieldType': 'YIELD_GOLD'}, {'YieldType': 'YIELD_SCIENCE'}, {'YieldType': 'YIELD_FOOD'},
-                               {'YieldType': 'YIELD_CULTURE'}, {'YieldType': 'YIELD_FAITH'},
-                               {'YieldType': 'YIELD_PRODUCTION'}],
-                    'Terrains': [{'TerrainType': 'TERRAIN_GRASS'}, {'TerrainType': 'TERRAIN_PLAINS'},
-                                 {'TerrainType': 'TERRAIN_DESERT'}, {'TerrainType': 'TERRAIN_TUNDRA'},
-                                 {'TerrainType': 'TERRAIN_SNOW'}, {'TerrainType': 'TERRAIN_GRASS_HILLS'},
-                                 {'TerrainType': 'TERRAIN_PLAINS_HILLS'}, {'TerrainType': 'TERRAIN_DESERT_HILLS'},
-                                 {'TerrainType': 'TERRAIN_TUNDRA_HILLS'}, {'TerrainType': 'TERRAIN_SNOW_HILLS'}],
-                    'Features': [{'FeatureType': 'FEATURE_FOREST'}, {'FeatureType': 'FEATURE_JUNGLE'}],
-                    'Resources': [{'ResourceType': 'RESOURCE_COPPER'}, {'ResourceType': 'RESOURCE_IRON'},
-                                  {'ResourceType': 'RESOURCE_MARBLE'}, {'ResourceType': 'RESOURCE_WINE'},
-                                  {'ResourceType': 'RESOURCE_INCENSE'}, {'ResourceType': 'RESOURCE_DEER'},
-                                  {'ResourceType': 'RESOURCE_SILK'}, {'ResourceType': 'RESOURCE_SUGAR'},
-                                  {'ResourceType': 'RESOURCE_RICE'}],
-                    'GreatPersonClasses': [{'GreatPersonClassType': 'GREAT_PERSON_CLASS_PROPHET'},
-                                           {'GreatPersonClassType': 'GREAT_PERSON_CLASS_GENERAL'},
-                                           {'GreatPersonClassType': 'GREAT_PERSON_CLASS_MERCHANT'},
-                                           {'GreatPersonClassType': 'GREAT_PERSON_CLASS_ENGINEER'},
-                                           {'GreatPersonClassType': 'GREAT_PERSON_CLASS_SCIENTIST'},
-                                           {'GreatPersonClassType': 'GREAT_PERSON_CLASS_WRITER'},
-                                           {'GreatPersonClassType': 'GREAT_PERSON_CLASS_ARTIST'}],
-                    'Leaders': [{'LeaderType': 'LEADER_DEFAULT'}],
-                    'Traits': [{'TraitType': 'TRAIT_BARBARIAN_BUT_SHOWS_UP_IN_PEDIA'}],
-                    'Eras': [{'EraType': 'ERA_ANCIENT'}, {'EraType': 'ERA_MEDIEVAL'}, {'EraType': 'ERA_CLASSICAL'},
-                             {'EraType': 'ERA_MODERN'}, {'EraType': 'ERA_INDUSTRIAL'}, {'EraType': 'ERA_RENAISSANCE'},
-                             {'EraType': 'ERA_INFORMATION'}, {'EraType': 'ERA_ATOMIC'}],
-                    'GovernmentSlots': [{'GovernmentSlotType': 'SLOT_DIPLOMATIC'},
-                                        {'GovernmentSlotType': 'SLOT_ECONOMIC'},
-                                        {'GovernmentSlotType': 'SLOT_MILITARY'},
-                                        {'GovernmentSlotType': 'SLOT_GREAT_PERSON'}],
-                    'CivilizationLevels': [{'CivilizationLevelType': 'CIVILIZATION_LEVEL_FULL_CIV'}],
-                    'Districts': [{'DistrictType': 'DISTRICT_CITY_CENTER'}, {'DistrictType': 'DISTRICT_CAMPUS'},
-                                  {'DistrictType': 'DISTRICT_HOLY_SITE'}, {'DistrictType': 'DISTRICT_COMMERCIAL_HUB'},
-                                  {'DistrictType': 'DISTRICT_THEATER'}, {'DistrictType': 'DISTRICT_INDUSTRIAL_ZONE'}],
-                    'UnitPromotionClasses': [{'PromotionClassType': 'PROMOTION_CLASS_RECON'},
-                                             {'PromotionClassType': 'PROMOTION_CLASS_MELEE'},
-                                             {'PromotionClassType': 'PROMOTION_CLASS_NAVAL_MELEE'},
-                                             {'PromotionClassType': 'PROMOTION_CLASS_RANGED'},
-                                             {'PromotionClassType': 'PROMOTION_CLASS_LIGHT_CAVALRY'},
-                                             {'PromotionClassType': 'PROMOTION_CLASS_SIEGE'}],
-                    'Kinds': [{'Kind': 'KIND_TRAIT'}, {'Kind': 'KIND_CIVILIZATION'}, {'Kind': 'KIND_LEADER'},
-                              {'Kind': 'KIND_TECH'}, {'Kind': 'KIND_CIVIC'}, {'Kind': 'KIND_POLICY'},
-                              {'Kind': 'KIND_UNIT'}, {'Kind': 'KIND_BUILDING'}, {'Kind': 'KIND_MODIFIER'},
-                              {'Kind': 'KIND_PROMOTION_CLASS'}, {'Kind': 'KIND_PROMOTION'}, {'Kind': 'KIND_RESOURCE'},
-                              {'Kind': 'KIND_TERRAIN'}, {'Kind': 'KIND_FEATURE'}],
-                    'Types': [{'Type': 'COLLECTION_OWNER'},
-                              {'Type': 'MODIFIER_CITY_ADJUST_TRADE_ROUTE_YIELD_FOR_INTERNATIONAL'},
-                              {'Type': 'EFFECT_ADJUST_CITY_TRADE_ROUTE_YIELD_FOR_INTERNATIONAL'}],
-
-                    'Units': [{'UnitType': 'UNIT_BUILDER'}],
-                    'RequirementSets': [{'RequirementSetId': 'PLOT_HAS_FARM_REQUIREMENTS'},
-                                        {'RequirementSetId': 'PLOT_HAS_COAST_REQUIREMENTS'},
-                                        {'RequirementSetId': 'PLOT_IS_ADJACENT_TO_COAST'},
-                                        {'RequirementSetId': 'PLOT_HAS_QUARRY_REQUIREMENTS'},
-                                        {'RequirementSetId': 'PLOT_HAS_MINE_REQUIREMENTS'},
-                                        {'RequirementSetId': 'REQUIREMENT_UNIT_IS_RANGED'},
-                                        {'RequirementSetId': 'UNIT_IS_BUILDER'},]}
     constraints = {}
-    succeeded_constraints, failed_constraints = 0, 0
+    succeeded_constraints, failed_constraints, mod_dupes, to_pop, vanilla_dupes = 0, [], [], [], []
     for name, insert in model_obj['sql_inserts'].items():
         # primary_inserts = [[i[j] for j in primary_keys[name]] for i in insert]
         if isinstance(insert, dict):
@@ -156,22 +101,45 @@ def check_primary_keys(model_obj):
                     prim.append([val[j] for j in primary_keys[name]])
 
             fk = [{j: val.get(j, None) for j in foreign_keys.get(name, [])} for key, val in insert.items()]
+            fk_mapper = [i for i in insert]
 
         elif isinstance(insert, list):
             prim = [[i[j] for j in primary_keys[name]] for i in insert]
             fk = [{j: i.get(j, None) for j in foreign_keys.get(name, [])} for i in insert]
+            fk_mapper = [i for i in range(len(fk))]
+
         else:
             print(f'malformed insert data structure {name}')
 
+        df = pd.read_csv(f'data/tables/{name}.csv')
+        df_prim = df[primary_keys[name]].values.tolist()
+
         uniques = []
-        for i in prim:
+        for idx, i in enumerate(prim):
             if i in uniques:
-                print(f"Duplicate in {name}: {i}")
+                mod_dupes.append(f"{name}: {i}")
+                if isinstance(insert, list):
+                    to_pop.append((name, idx))
+                else:
+                    to_pop.append((name, i[0]))
+            elif i in df_prim:
+                df_details = {i: j for i, j in df.loc[df_prim.index(i)].items()}
+                vanilla_dupes.append(f'{df_details}')
+                if isinstance(insert, list):
+                    to_pop.append((name, idx))
+                else:
+                    to_pop.append((name, i[0]))
             else:
                 uniques.append(i)
+        placeholder = fk
+        for idx, i in enumerate(fk):
+            for j in i.values():
+                for l in [k[1] for k in to_pop]:
+                    if l == j:
+                        placeholder.pop(idx)
 
-
-        for i in fk:
+        fk = placeholder
+        for idx, i in enumerate(fk):
             for native_col, constraint_req in i.items():
                 if constraint_req is None or constraint_req == 'NULL':
                     continue
@@ -182,40 +150,78 @@ def check_primary_keys(model_obj):
                 if constraint_col not in constraints[constraint_table]:
                     constraints[constraint_table][constraint_col] = {}
                 if constraint_req not in constraints[constraint_table][constraint_col]:
-                    constraints[constraint_table][constraint_col][constraint_req] = [False, [i]]
+                    constraints[constraint_table][constraint_col][constraint_req] = [False, [insert[fk_mapper[idx]]]]
                 else:
-                    constraints[constraint_table][constraint_col][constraint_req][1].append(i)
+                    constraints[constraint_table][constraint_col][constraint_req][1].append(insert[fk_mapper[idx]])
 
     # second pass to set bools
-    transient_extras = copy.deepcopy(model_obj['sql_inserts'])
-    for i in pre_existing:
-        if i in transient_extras:
-            if isinstance(transient_extras[i], list):
-                transient_extras[i].extend(pre_existing[i])
-            else:
-                transient_extras[i].update({list(i.values())[0]: i for i in pre_existing[i]})
-        else:
-            transient_extras[i] = pre_existing[i]
-    for name, insert in transient_extras.items():
+    for name, insert in model_obj['sql_inserts'].items():
         if isinstance(insert, dict):
             search = insert.values()
         elif isinstance(insert, list):
             search = insert
         else:
             raise ValueError('search was not a dict or list')
-        for col_name, column_reqs in constraints.get(name, {}).items():
-            for fk_name, constraint in column_reqs.items():
-                if fk_name in [i[col_name] for i in search] + ['NULL', None]:
-                    constraint[0] = True
+        for fk_table_name,  constraint_col in constraints.items():
+            for col_name, column_reqs in constraint_col.items():
+                for fk_name, constraint in column_reqs.items():
+                    reference_table = model_obj['sql_inserts'].get(fk_table_name, [{}])
+                    if isinstance(reference_table, list):
+                        foreign_keys_added = [i.get(col_name, None) for i in reference_table]
+                    else:
+                        foreign_keys_added = [i[col_name] for i in reference_table.values()]
+                    if fk_name in foreign_keys_added + ['NULL', None]:
+                        constraint[0] = True
+                    else:
+                        df = pd.read_csv(f'data/tables/{fk_table_name}.csv')
+                        if (df[col_name] == fk_name).any():
+                            constraint[0] = True
 
     for table_name, table in constraints.items():
         for col_name, columns in table.items():
             for value_needed, checker in columns.items():
                 if not checker[0]:
-                    print(f'CONSTRAINT FAILED: need table {table_name}, column {col_name} to have value {value_needed}'
+                    failed_constraints.append(f'FOREIGN KEY CONSTRAINT FAILED: need table {table_name}, column {col_name} to have value {value_needed}'
                           f'\nfor rows {checker[1]}\n')
-                    failed_constraints += 1
                 else:
                     succeeded_constraints += 1
 
-    print(f'Constraints -- Failed: {failed_constraints}, Succeeded: {succeeded_constraints}')
+    # remove dupes
+    to_pop_list = [i for i in to_pop if isinstance(i[1], int)]
+    new_pop_list = {}
+    for i in to_pop_list:
+        if i[0] not in new_pop_list:
+            new_pop_list[i[0]] = [i[1]]
+        else:
+            new_pop_list[i[0]].append(i[1])
+
+    to_pop_dict = [i for i in to_pop if not isinstance(i[1], int)]
+    new_pop_dict = {}
+    for i in to_pop_dict:
+        if i[0] not in new_pop_dict:
+            new_pop_dict[i[0]] = [i[1]]
+        else:
+            new_pop_dict[i[0]].append(i[1])
+
+    for table_name, indexes_to_pop in new_pop_list.items():
+        indexes_to_pop.sort(reverse=True)
+        for idx in indexes_to_pop:
+            print(f"popped from table {table_name}: {model_obj['sql_inserts'][table_name].pop(idx)}")
+
+    for table_name, keys_to_pop in new_pop_dict.items():
+        for key in keys_to_pop:
+           print(f"popped from table {table_name}: {model_obj['sql_inserts'][table_name].pop(key)}")
+
+    print('UNIQUE CONSTRAINT FAILED. Already existing record:')
+    for i in set(vanilla_dupes):
+        print(i)
+        print('\n')
+    print('\nUNIQUE CONSTRAINT FAILED. Duplicate mod records:')
+
+    for i in set(mod_dupes):
+        print(i)
+
+    print(f'Unique Constraints Failed: {len(vanilla_dupes)+ len(mod_dupes)}')
+    for i in failed_constraints:
+        print(i)
+    print(f'Foreign Key Constraints Failed: {len(failed_constraints)}, Succeeded: {succeeded_constraints}')
