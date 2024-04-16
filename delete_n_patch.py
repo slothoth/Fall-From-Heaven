@@ -5,6 +5,9 @@ from utils import small_dict
 def delete_rows(model_obj, kept):
     delete_string = ''
     delete_string += f"UPDATE MajorStartingUnits SET Unit = 'SLTH_UNIT_WARRIOR' WHERE Unit = 'UNIT_WARRIOR';\n"
+    delete_string += f"UPDATE GovernmentSlots SET AllowsAnyPolicy = 0 WHERE GovernmentSlotType = 'SLOT_WILDCARD';\n"
+    delete_string += (f"INSERT INTO Government_SlotCounts(GovernmentType, GovernmentSlotType, NumSlots) VALUES"
+                      f"('GOVERNMENT_CHIEFDOM', 'SLOT_DIPLOMATIC', 1), ('GOVERNMENT_CHIEFDOM', 'SLOT_WILDCARD', 1);")
     delete_string += 'DELETE FROM Technologies WHERE 1=1;\nDELETE FROM TechnologyPrereqs WHERE 1=1;\n'
     delete_string += 'DELETE FROM Technologies_XP2 WHERE 1=1;\nDELETE FROM Civics WHERE 1=1;\n'
     delete_string += 'DELETE FROM CivicPrereqs WHERE 1=1;\nDELETE FROM Civics_XP2 WHERE 1=1;\n'
@@ -29,8 +32,9 @@ def delete_rows(model_obj, kept):
     delete_string += delete_from_gen('Resources', 'ResourceType', ['RESOURCE_COPPER', 'RESOURCE_IRON', 'RESOURCE_MARBLE', 'RESOURCE_DEER', 'RESOURCE_FISH',
                     'RESOURCE_RICE', 'RESOURCE_SHEEP', 'RESOURCE_WHEAT', 'RESOURCE_INCENSE', 'RESOURCE_IVORY',
                     'RESOURCE_SILK', 'RESOURCE_SUGAR', 'RESOURCE_WINE', 'RESOURCE_COTTON'])
-    delete_string += delete_from_gen('Governments', 'GovernmentType', ['GOVERNMENT_AUTOCRACY',
+    delete_string += delete_from_gen('Governments', 'GovernmentType', [
                                                                        'GOVERNMENT_CHIEFDOM'])
+
     # delete_string += 'DELETE FROM Building_YieldChanges;'
     model_obj['sql_strings'].append(delete_string)
     return delete_string
