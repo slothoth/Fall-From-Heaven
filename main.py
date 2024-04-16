@@ -54,10 +54,10 @@ def main():
         total += i
 
     # debug super palace
-    total += """UPDATE Building_YieldChanges SET YieldChange = 100 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
+    total += """UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
 UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
-UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
-UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';"""
+UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
+UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';"""
 
     total_with_null = total.replace("'NULL'", "NULL")
     with open('../FallFromHeaven/Core/main.sql', 'w') as file:
@@ -76,9 +76,6 @@ UPDATE Building_YieldChanges SET YieldChange = 200 WHERE BuildingType = 'BUILDIN
 
     with open('../FallFromHeaven/Core/frontend_config.sql', 'w') as file:
         file.write(config)
-
-    existing_types_checker([i for i in model_obj['kinds']])
-
 
 if __name__ == "__main__":
     main()

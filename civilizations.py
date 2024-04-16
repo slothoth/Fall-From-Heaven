@@ -21,10 +21,10 @@ ethnicity_mapper = {}       # TODO design doc decision
 class Civilizations:
     def __init__(self):
         print('Loading Civilizations...')
-
-    # TODO implement FreeTech system from ffh. Look at how Quo's spheres of intrigue /better balanced game did that
-    #  thing where babylon starts with writing unlocked, or Phoenicia with Celestial Navigation
-    # INSERT INTO MY_TABLE(ModifierId, Name, Type, "Value") VALUES ('OPPIDUM_GRANT_TECH_APPRENTICESHIP', 'TechType', 'ARGTYPE_IDENTITY', 'TECH_APPRENTICESHIP');
+        self.trait_modifiers = []
+        self.unit_abilities = []
+        self.ability_modifiers = []
+        self.type_tags = []
 
     def civilizations(self, model_obj):
         with open('data/XML/Civilizations/CIV4CivilizationInfos.xml', 'r') as file:
@@ -52,7 +52,7 @@ class Civilizations:
         civ_dict.pop('CIVILIZATION_RANDOM')
 
         string_counts = Counter()
-        civ_traits, civ_building_replace = [], []
+        self.civ_traits, civ_building_replace = [], []
         no_access_building, building_replaces, traits, barb_unit_traits, not_barb = {}, {}, {}, {}, {}
         civ_units = {'barbarian': [], 'not_barbarian': [], 'civ_traits': [], 'dev_null': {}}
         civ_buildings = {'civ_traits': [], 'dev_null': {}}
@@ -85,7 +85,7 @@ class Civilizations:
                     model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
                                           'Description': 'NULL'}
                     model_obj['kinds'][trait_type] = 'KIND_TRAIT'
-                    civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{civ}"})
+                    self.civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{civ}"})
                     civ_building_replace.append({'ReplacesBuildingType': f"SLTH_{i['BuildingClassType'].replace('INGCLASS', 'ING')}",
                                                  'CivUniqueBuildingType': f"SLTH_{i['BuildingType']}"})
                     civ_buildings['civ_traits'].append(f"SLTH_{i['BuildingType']}")
@@ -95,7 +95,7 @@ class Civilizations:
             model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
                                   'Description': 'NULL'}
             model_obj['kinds'][trait_type] = 'KIND_TRAIT'
-            civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{civ['PrereqCiv']}"})
+            self.civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{civ['PrereqCiv']}"})
             civ_buildings['civ_traits'].append(f"SLTH_{building}")
 
         unit_not_in = {i: [] for i in string_counts.keys()}
@@ -132,7 +132,7 @@ class Civilizations:
                 model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
                                       'Description': 'NULL'}
                 model_obj['kinds'][trait_type] = 'KIND_TRAIT'
-                civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{trait_belongs_to}"})
+                self.civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{trait_belongs_to}"})
                 civ_units['civ_traits'].append(f"SLTH_UNIT_{unit[10:]}")
             else:
                 for civ in civ_list:
@@ -166,11 +166,13 @@ class Civilizations:
                                     'InheritFrom': 'LEADER_DEFAULT'})
                 model_obj['kinds'][leader_name] = 'KIND_LEADER'
 
-        civ_traits.append({'TraitType': 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM',
-                           'CivilizationType': "SLTH_CIVILIZATION_LUCHUIRP"})
+        self.civilization_modifiers(model_obj, civ_dict)
+
+        self.civ_traits.append({'TraitType': 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM',
+                                'CivilizationType': "SLTH_CIVILIZATION_LUCHUIRP"})
     
         make_or_add(model_obj['sql_inserts'], self.six_style_civs, 'Civilizations')
-        make_or_add(model_obj['sql_inserts'], civ_traits, 'CivilizationTraits')
+        make_or_add(model_obj['sql_inserts'], self.civ_traits, 'CivilizationTraits')
         make_or_add(model_obj['sql_inserts'], leaders, 'Leaders')
         make_or_add(model_obj['sql_inserts'], self.leaders_of_civs, 'CivilizationLeaders')
         make_or_add(model_obj['sql_inserts'], civ_building_replace, 'BuildingReplaces')
@@ -179,6 +181,76 @@ class Civilizations:
         model_obj['civ_buildings'] = civ_buildings
 
         return model_obj
+
+    def civilization_modifiers(self, model_obj, civ_dict):
+        modifier_stuff = {key: {'CivTrait': i.get('CivTrait'), 'FreeTechs': i.get('FreeTechs'),
+                                'DefaultRace': i.get('DefaultRace')} for key, i in civ_dict.items()
+                          if 'BARBARIAN' not in key}
+
+        with open('data/XML/Units/CIV4PromotionInfos.xml', 'r') as file:
+            promo_dict = xmltodict.parse(file.read())['Civ4PromotionInfos']['PromotionInfos']['PromotionInfo']
+
+        races = {}
+        for j in [i.get('DefaultRace') for i in civ_dict.values() if i.get('DefaultRace') != 'NONE']:
+            races[j] = [k for k in promo_dict if j in k['Type']][0]
+            races[j].pop('Description', None), races[j].pop('Sound', None), races[j].pop('TechPrereq', None),
+            races[j].pop('Button', None), races[j].pop('bRace', None), races[j].pop('UnitArtStyleType', None),
+            races[j].pop('iMinLevel', None), races[j].pop('bGraphicalOnly', None), races[j].pop('UnitCombats', None)        # Winterborn has this, why??
+        for name, promo in races.items():
+            name = promo.pop('Type', None)
+            if 'TerrainAttacks' in promo and 'TerrainDefenses' in promo:  # get rid o['TerrainDefenses']f defense if attack same
+                t_att, t_d = promo['TerrainAttacks']['TerrainAttack'], promo['TerrainDefenses']['TerrainDefense']
+                if isinstance(t_att, dict) and t_att['TerrainType'] == t_d['TerrainType']:
+                    if t_att['iTerrainAttack'] == t_d['iTerrainDefense']:
+                        promo.pop('TerrainDefenses')
+                        promo['TerrainAttacks']['Terrain_Strength'] = promo['TerrainAttacks'].pop('TerrainAttack')
+                elif [i['TerrainType'] for i in t_att] and [i['TerrainType'] for i in t_d]:
+                    if [i['iTerrainAttack'] for i in t_att] and [i['iTerrainDefense'] for i in t_d]:
+                        promo.pop('TerrainDefenses')
+                        promo['TerrainAttacks']['Terrain_Strength'] = promo['TerrainAttacks'].pop('TerrainAttack')
+
+            trait_mods = []
+            for ability_name, ability in promo.items():
+                if not isinstance(ability, dict):
+                    ability = {ability_name: ability}
+                modifiers = model_obj['modifiers'].generate_modifier(civ4_target=ability,
+                                                                     name='SLTH_DEFAULT_RACE',
+                                                                     civ6_target=name[10:])
+                if modifiers is not None:
+                    ab_name = f'{name}_ABILITY_{list(ability.keys())[0].upper()}'
+                    self.unit_abilities.append({'UnitAbilityType': ab_name, 'Name': f'LOC_{ab_name}_NAME',
+                                                'Description': f'LOC{ab_name}_DESCRIPTION', 'Inactive': 1,
+                                                'ShowFloatTextWhenEarned': 0, 'Permanent': 1})
+
+                    self.ability_modifiers.append({'UnitAbilityType': ab_name,
+                                                   'ModifierId': modifiers[0]})
+
+                    self.type_tags.append({'Type': ability_name, 'Tag': 'CLASS_ALL_UNITS'})
+                    trait_mods.append(modifiers[0])
+            promo['trait_modifier'] = trait_mods
+
+        for civ, i in modifier_stuff.items():
+            trait_type = f'SLTH_TRAIT_{civ}_COOL_NAME'
+            self.civ_traits.append({'TraitType': trait_type,
+                                    'CivilizationType': f'SLTH_{civ}'})
+            model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
+                                               'Description': 'NULL'}
+            model_obj['kinds'][trait_type] = 'KIND_TRAIT'
+            if i['CivTrait'] != 'NONE':
+                print(i['CivTrait'])
+            if i['FreeTechs'] is not None:
+                if i['FreeTechs'] == 'TECH_SEAFARING':
+                    print(i)
+                else:
+                    mod_ = model_obj['modifiers'].generate_modifier(f"SLTH_{i['FreeTechs']['FreeTech']['TechType']}",
+                                                                    'SLTH_GRANT_SPECIFIC_TECH', civ)
+                    self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
+
+            if i['DefaultRace'] != 'NONE':
+                promo = races[i['DefaultRace']]
+                for i in promo['trait_modifier']:
+                    self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': i})
+
 
     def config_builder(self, model_obj):
         config_string = 'DELETE FROM Players;\n'
