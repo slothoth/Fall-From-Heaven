@@ -6,7 +6,7 @@ import os
 # ('MODIFIER_SHRINE_CITY_HERO_EXTRA_LIFESPAN', 'Key', 'ARGTYPE_IDENTITY', 'CityHeroExtraLifespan');
 # This to me implies that CityHeroExtraLifeSpan is a key to an internal dictionary of city properties: MODIFIER_SINGLE_CITY_ADJUST_PROPERTY
 # could we find hidden keys that are exposed but undocumented? Apparently you can find it in a lua property
-substring = 'LEY_LINE'
+substring = 'DOMAIN_SEA'
 records = {}
 for i in os.listdir('data/tables/'):
     if i == 'Kinds.csv':
