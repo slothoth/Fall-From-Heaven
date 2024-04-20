@@ -251,6 +251,9 @@ def build_policies(model_obj):
     with open('data/XML/Gameinfo/CIV4CivicInfos.xml', 'r') as file:
         policy_dict = xmltodict.parse(file.read())['Civ4CivicInfos']['CivicInfos']['CivicInfo']
 
+    gov_adjust = [{'GovernmentType': 'GOVERNMENT_CHIEFDOM', 'GovernmentSlotType': 'SLOT_DIPLOMATIC', 'NumSlots': 1},
+                  {'GovernmentType': 'GOVERNMENT_CHIEFDOM', 'GovernmentSlotType': 'SLOT_WILDCARD', 'NumSlots': 1}]
+
     remove = ['CIVIC_NO_MEMBERSHIP', 'CIVIC_OVERCOUNCIL', 'CIVIC_UNDERCOUNCIL']
     policy_mapper = {'Type': 'PolicyType', 'Description': 'Description', 'TechPrereq': 'PrereqTech',
                      'CivicOptionType': 'GovernmentSlotType'}
@@ -296,4 +299,5 @@ def build_policies(model_obj):
 
     make_or_add(model_obj['sql_inserts'], six_policy_dict, 'Policies')
     make_or_add(model_obj['sql_inserts'], policy_modifiers, 'PolicyModifiers')
+    make_or_add(model_obj['sql_inserts'], gov_adjust, 'Government_SlotCounts')
     return model_obj

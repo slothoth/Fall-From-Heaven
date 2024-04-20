@@ -20,7 +20,6 @@ ethnicity_mapper = {}       # TODO design doc decision
 
 class Civilizations:
     def __init__(self):
-        print('Loading Civilizations...')
         self.trait_modifiers = []
         self.unit_abilities = []
         self.ability_modifiers = []
@@ -241,7 +240,7 @@ class Civilizations:
                     self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
             if i['FreeTechs'] is not None:
                 if i['FreeTechs'] == 'TECH_SEAFARING':
-                    print(i)
+                    logger.info(i)
                 else:
                     mod_ = model_obj['modifiers'].generate_modifier(f"SLTH_{i['FreeTechs']['FreeTech']['TechType']}",
                                                                     'SLTH_GRANT_SPECIFIC_TECH', civ)

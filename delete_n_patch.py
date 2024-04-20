@@ -1,70 +1,107 @@
-import xmltodict
-from utils import small_dict
-
-
 def delete_rows(model_obj, kept):
-    delete_string = ''
-    delete_string += f"UPDATE MajorStartingUnits SET Unit = 'SLTH_UNIT_WARRIOR' WHERE Unit = 'UNIT_WARRIOR';\n"
-    delete_string += f"UPDATE GovernmentSlots SET AllowsAnyPolicy = 0 WHERE GovernmentSlotType = 'SLOT_WILDCARD';\n"
-    delete_string += (f"INSERT INTO Government_SlotCounts(GovernmentType, GovernmentSlotType, NumSlots) VALUES"
-                      f"('GOVERNMENT_CHIEFDOM', 'SLOT_DIPLOMATIC', 1), ('GOVERNMENT_CHIEFDOM', 'SLOT_WILDCARD', 1);")
-    delete_string += 'DELETE FROM Technologies WHERE 1=1;\nDELETE FROM TechnologyPrereqs WHERE 1=1;\n'
-    delete_string += 'DELETE FROM Technologies_XP2 WHERE 1=1;\nDELETE FROM Civics WHERE 1=1;\n'
-    delete_string += 'DELETE FROM CivicPrereqs WHERE 1=1;\nDELETE FROM Civics_XP2 WHERE 1=1;\n'
-    delete_string += 'DELETE FROM Building_GreatPersonPoints WHERE 1=1;\nDELETE FROM Unit_BuildingPrereqs WHERE 1=1;\n'
-    delete_string += 'DELETE FROM UnitUpgrades WHERE 1=1;\nDELETE FROM Boosts WHERE 1=1;\n'
-    delete_string += 'DELETE FROM UnitPromotionPrereqs WHERE 1=1;\nDELETE FROM UnitPromotionModifiers WHERE 1=1;\n'
-    delete_string += 'DELETE FROM Policies WHERE 1=1;\nDELETE FROM UnitPromotions WHERE 1=1;\n'
-    delete_string += delete_from_gen('Units', 'UnitType', kept['compat_for_VI'])
-    delete_string += delete_from_gen('Buildings', 'BuildingType', model_obj['update_build'] + ['BUILDING_PALACE'])
-    delete_string += delete_from_gen('Building_YieldChanges', 'BuildingType', ['BUILDING_PALACE'])
-    delete_string += delete_from_gen('UnitPromotionClasses', 'PromotionClassType',
-                                     ['PROMOTION_CLASS_MELEE', 'PROMOTION_CLASS_RANGED',
-                                      'PROMOTION_CLASS_RECON', 'PROMOTION_CLASS_LIGHT_CAVALRY',
-                                      'PROMOTION_CLASS_NAVAL_MELEE', 'PROMOTION_CLASS_SIEGE'])
-    delete_string += delete_from_gen('Projects', 'ProjectType',
-                                     ['PROJECT_ENHANCE_DISTRICT_ENCAMPMENT', 'PROJECT_ENHANCE_DISTRICT_HARBOR',
-                                      'PROJECT_ENHANCE_DISTRICT_INDUSTRIAL_ZONE',
-                                      'PROJECT_ENHANCE_DISTRICT_COMMERCIAL_HUB',
-                                      'PROJECT_ENHANCE_DISTRICT_HOLY_SITE', 'PROJECT_ENHANCE_DISTRICT_CAMPUS',
-                                      'PROJECT_ENHANCE_DISTRICT_THEATER', 'PROJECT_BREAD_AND_CIRCUSES',
-                                      'PROJECT_LAUNCH_EARTH_SATELLITE', 'PROJECT_LAUNCH_MOON_LANDING'])         #DEBUG
-    delete_string += delete_from_gen('Resources', 'ResourceType', ['RESOURCE_COPPER', 'RESOURCE_IRON', 'RESOURCE_MARBLE', 'RESOURCE_DEER', 'RESOURCE_FISH',
-                    'RESOURCE_RICE', 'RESOURCE_SHEEP', 'RESOURCE_WHEAT', 'RESOURCE_INCENSE', 'RESOURCE_IVORY',
-                    'RESOURCE_SILK', 'RESOURCE_SUGAR', 'RESOURCE_WINE', 'RESOURCE_COTTON'])
-    delete_string += delete_from_gen('Governments', 'GovernmentType', [
-                                                                       'GOVERNMENT_CHIEFDOM'])
+    dict_insert(model_obj, 'RandomAgendaCivicTags', {'WHERE_COL': 'CivicType', 'WHERE_EQUALS': 'CIVIC_NATIONALISM',
+                                                     'SET_COL': 'CivicType', 'SET_EQUALS': 'CIVIC_FEUDALISM'})
 
-    # delete_string += 'DELETE FROM Building_YieldChanges;'
-    model_obj['sql_strings'].append(delete_string)
-    return delete_string
+    dict_insert(model_obj, 'Resource_Harvests', {'WHERE_COL': 'PrereqTech', 'WHERE_EQUALS': 'TECH_POTTERY',
+                                                 'SET_COL': 'PrereqTech', 'SET_EQUALS': 'SLTH_TECH_AGRICULTURE'})
 
-
-def patch_string_generate(model_obj_str):
-    patch_string = ("UPDATE RandomAgendaCivicTags SET CivicType = 'CIVIC_FEUDALISM' "
-                    "WHERE CivicType = 'CIVIC_NATIONALISM';\n")
-    patch_string += f"DELETE from Routes_XP2 WHERE PrereqTech is 'TECH_STEAM_POWER';\n"
-    patch_string += f"UPDATE Resource_Harvests SET PrereqTech = 'SLTH_TECH_AGRICULTURE' WHERE PrereqTech = 'TECH_POTTERY';\n"
-
-    unit_military_engineer_issues = ['Improvement_ValidBuildUnits', "Route_ValidBuildUnits",
-                                     "Building_BuildChargeProductions", "District_BuildChargeProductions"]
+    unit_military_engineer_issues = ['Improvement_ValidBuildUnits', 'Route_ValidBuildUnits',
+                                     'Building_BuildChargeProductions', 'District_BuildChargeProductions']
     for table in unit_military_engineer_issues:
-        patch_string += f"UPDATE {table} SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';\n"
-    model_obj_str.append(patch_string)
+        dict_insert(model_obj, table, {'WHERE_COL': 'UnitType', 'WHERE_EQUALS': 'UNIT_MILITARY_ENGINEER',
+                                       'SET_COL': 'UnitType', 'SET_EQUALS': 'UNIT_BUILDER'})
+
+    dict_insert(model_obj, 'Routes_XP2', {'WHERE_COL': 'PrereqTech', 'WHERE_EQUALS': 'TECH_STEAM_POWER'},
+                sql_type='deletes')
+
+    # dict_insert(model_obj, 'Beliefs', {'WHERE_COL': 'BeliefType', 'WHERE_EQUALS': 'BELIEF_WARRIOR_MONKS'},
+    #            sql_type='deletes')
+
+    dict_insert(model_obj, 'MajorStartingUnits', {'WHERE_COL': 'Unit', 'WHERE_EQUALS': 'UNIT_WARRIOR',
+                                                  'SET_COL': 'Unit', 'SET_EQUALS': 'SLTH_UNIT_WARRIOR'})
+    dict_insert(model_obj, 'GovernmentSlots', {'WHERE_COL': 'GovernmentSlotType', 'WHERE_EQUALS': 'SLOT_WILDCARD',
+                                               'SET_COL': 'AllowsAnyPolicy', 'SET_EQUALS': 0})
+
+    delete_full = ['Technologies', 'TechnologyPrereqs', 'Technologies_XP2', 'Civics', 'Boosts', 'Policies',
+                   'CivicPrereqs', 'Civics_XP2', 'Building_GreatPersonPoints', 'Unit_BuildingPrereqs',
+                   'UnitUpgrades', 'UnitPromotionPrereqs', 'UnitPromotionModifiers', 'UnitPromotions']
+    for i in delete_full:
+        dict_insert(model_obj, i, {'WHERE_COL': 1, 'WHERE_EQUALS': 1},
+                    sql_type='deletes')
+
+    dict_insert(model_obj, 'Units', {'WHERE_COL': 'UnitType', 'WHERE_EQUALS': kept['compat_for_VI']},
+                sql_type='deletes')
+    dict_insert(model_obj, 'Buildings',
+                {'WHERE_COL': 'BuildingType', 'WHERE_EQUALS': model_obj['update_build'] + ['BUILDING_PALACE']},
+                sql_type='deletes')
+    dict_insert(model_obj, 'Building_YieldChanges', {'WHERE_COL': 'BuildingType', 'WHERE_EQUALS': 'BUILDING_PALACE'},
+                sql_type='deletes')
+    dict_insert(model_obj, 'UnitPromotionClasses',
+                {'WHERE_COL': 'PromotionClassType', 'WHERE_EQUALS': ['PROMOTION_CLASS_MELEE', 'PROMOTION_CLASS_RANGED',
+                                                                     'PROMOTION_CLASS_RECON',
+                                                                     'PROMOTION_CLASS_LIGHT_CAVALRY',
+                                                                     'PROMOTION_CLASS_NAVAL_MELEE',
+                                                                     'PROMOTION_CLASS_SIEGE']},
+                sql_type='deletes')
+    dict_insert(model_obj, 'Projects',
+                {'WHERE_COL': 'ProjectType',
+                 'WHERE_EQUALS': ['PROJECT_ENHANCE_DISTRICT_ENCAMPMENT', 'PROJECT_ENHANCE_DISTRICT_HARBOR',
+                                  'PROJECT_ENHANCE_DISTRICT_INDUSTRIAL_ZONE',
+                                  'PROJECT_ENHANCE_DISTRICT_COMMERCIAL_HUB',
+                                  'PROJECT_ENHANCE_DISTRICT_HOLY_SITE', 'PROJECT_ENHANCE_DISTRICT_CAMPUS',
+                                  'PROJECT_ENHANCE_DISTRICT_THEATER', 'PROJECT_BREAD_AND_CIRCUSES']
+                                 + ['PROJECT_LAUNCH_EARTH_SATELLITE', 'PROJECT_LAUNCH_MOON_LANDING']},
+                sql_type='deletes')
+    dict_insert(model_obj, 'Resources', {'WHERE_COL':
+                                             'ResourceType',
+                                         'WHERE_EQUALS': ['RESOURCE_COPPER', 'RESOURCE_IRON', 'RESOURCE_MARBLE',
+                                                          'RESOURCE_DEER', 'RESOURCE_FISH',
+                                                          'RESOURCE_RICE', 'RESOURCE_SHEEP', 'RESOURCE_WHEAT',
+                                                          'RESOURCE_INCENSE', 'RESOURCE_IVORY',
+                                                          'RESOURCE_SILK', 'RESOURCE_SUGAR', 'RESOURCE_WINE',
+                                                          'RESOURCE_COTTON']},
+                sql_type='deletes')
+    dict_insert(model_obj, 'Governments', {'WHERE_COL': 'GovernmentType', 'WHERE_EQUALS': ['GOVERNMENT_CHIEFDOM']},
+                sql_type='deletes')
+    # delete_string += 'DELETE FROM Building_YieldChanges;'
+    update_delete_generate(model_obj)
 
 
-def traits_string_generate(trait_types_to_define, kinds):
-    traits_string = "INSERT INTO Traits(TraitType, Name, Description, InternalOnly) VALUES"
-    for trait in trait_types_to_define:
-        traits_string += f"\n('{trait}', '{'LOC_' + trait + '_NAME'}', NULL, 0),"
-        kinds[trait] = 'KIND_TRAIT'
-    traits_string = traits_string[:-1] + ";\n"
-
-    return traits_string, kinds
+def dict_insert(model_obj, table, update, sql_type='updates'):
+    if table not in model_obj[sql_type]:
+        model_obj[sql_type][table] = [update]
+    else:
+        model_obj[sql_type][table].append(update)
 
 
-def delete_from_gen(table, filter_column, kept_items):
-    delete_from_string = f"DELETE FROM {table} WHERE {filter_column} NOT IN ("
-    for unit in kept_items:
-        delete_from_string += f"'{unit}', "
-    return delete_from_string[:-2] + ');\n'
+def update_delete_generate(model_obj):
+    for table_name, table in model_obj['updates'].items():
+        for updates in table:
+            where_eq = updates['WHERE_EQUALS']
+            set_eq = updates['SET_EQUALS']
+            if isinstance(where_eq, list):
+                where_eq = "NOT IN ('" + "', '".join(where_eq) + "')"
+            elif isinstance(where_eq, int):
+                where_eq = f"= {where_eq}"
+            else:
+                where_eq = f"= '{where_eq}'"
+            if isinstance(where_eq, list):
+                set_eq = "NOT IN ('" + "', '".join(set_eq) + "')"
+            elif isinstance(where_eq, int):
+                set_eq = f"= {set_eq}"
+            else:
+                set_eq = f"= '{set_eq}'"
+            model_obj['sql_strings'].append(f"UPDATE {table_name} SET {updates['SET_COL']} {set_eq}"
+                                            f" WHERE {updates['WHERE_COL']} {where_eq};\n")
+
+    for table_name, table in model_obj['deletes'].items():
+        for deletes in table:
+            where_eq = deletes['WHERE_EQUALS']
+            if isinstance(where_eq, list):
+                where_eq = "NOT IN ('" + "', '".join(where_eq) + "')"
+            elif isinstance(where_eq, int):
+                where_eq = f"= {where_eq}"
+            else:
+                where_eq = f"!= '{where_eq}'"
+            model_obj['sql_strings'].append(
+                f"DELETE FROM {table_name} WHERE {deletes['WHERE_COL']} {where_eq};\n")
