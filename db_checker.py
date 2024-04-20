@@ -2,11 +2,11 @@ import sqlite3
 import re
 import json
 import os
-import copy
 import pandas as pd
+import logging
 
 
-def get_primary_keys():
+def get_primary_keys(logger):
     if os.path.exists('data/primary_keys.json'):
         with open('data/primary_keys.json', 'r') as file:
             table_primary_keys = json.load(file)
@@ -32,11 +32,11 @@ def get_primary_keys():
                     value_inside_parentheses = value_inside_parentheses.replace('"', '')
                     table_primary_keys[table_name] = value_inside_parentheses.split(', ')
                 else:
-                    print("No parentheses found")
+                    logger.error("No parentheses found")
             else:
-                print(f'{table_name} had no primary key')
+                logger.debug(f'{table_name} had no primary key')
         else:
-            print(f"Table '{table_name}' does not have any PRIMARY KEY")
+            logger.debug(f"Table '{table_name}' does not have any PRIMARY KEY")
 
     with open('data/primary_keys.json', 'w') as file:
         json.dump(table_primary_keys, file)
@@ -44,7 +44,7 @@ def get_primary_keys():
     return table_primary_keys
 
 
-def get_foreign_keys():
+def get_foreign_keys(logger):
     if os.path.exists('data/foreign_keys.json'):
         with open('data/foreign_keys.json', 'r') as file:
             table_foreign_keys = json.load(file)
@@ -76,11 +76,11 @@ def get_foreign_keys():
                         table_foreign_keys[table_name][value_inside_parentheses] = {'table': reference[0],
                                                                                     'column':reference[1][:-1]}
                     else:
-                        print("No parentheses found")
+                        logger.critical("No parentheses found")
             else:
-                print(f'{table_name} had no primary key')
+                logger.debug(f'{table_name} had no primary key')
         else:
-            print(f"Table '{table_name}' does not have any PRIMARY KEY")
+            logger.debug(f"Table '{table_name}' does not have any PRIMARY KEY")
 
     with open('data/foreign_keys.json', 'w') as file:
         json.dump(table_foreign_keys, file)
@@ -89,8 +89,9 @@ def get_foreign_keys():
 
 
 def check_primary_keys(model_obj):
-    primary_keys = get_primary_keys()
-    foreign_keys = get_foreign_keys()
+    logger = logging.getLogger(__name__)
+    primary_keys = get_primary_keys(logger)
+    foreign_keys = get_foreign_keys(logger)
     constraints = {}
     succeeded_constraints, failed_constraints, mod_dupes, to_pop, vanilla_dupes = 0, [], [], [], []
     for name, insert in model_obj['sql_inserts'].items():
@@ -109,7 +110,7 @@ def check_primary_keys(model_obj):
             fk_mapper = [i for i in range(len(fk))]
 
         else:
-            print(f'malformed insert data structure {name}')
+            logger.critical(f'malformed insert data structure {name}')
 
         df = pd.read_csv(f'data/tables/{name}.csv')
         df_prim = df[primary_keys[name]].values.tolist()
@@ -206,22 +207,22 @@ def check_primary_keys(model_obj):
     for table_name, indexes_to_pop in new_pop_list.items():
         indexes_to_pop.sort(reverse=True)
         for idx in indexes_to_pop:
-            print(f"popped from table {table_name}: {model_obj['sql_inserts'][table_name].pop(idx)}")
+            logger.info(f"popped from table {table_name}: {model_obj['sql_inserts'][table_name].pop(idx)}")
 
     for table_name, keys_to_pop in new_pop_dict.items():
         for key in keys_to_pop:
-           print(f"popped from table {table_name}: {model_obj['sql_inserts'][table_name].pop(key)}")
+            logger.info(f"popped from table {table_name}: {model_obj['sql_inserts'][table_name].pop(key)}")
 
-    print('UNIQUE CONSTRAINT FAILED. Already existing record:')
+    logger.info('UNIQUE CONSTRAINT FAILED. Already existing record:')
     for i in set(vanilla_dupes):
-        print(i)
-        print('\n')
-    print('\nUNIQUE CONSTRAINT FAILED. Duplicate mod records:')
+        logger.info(i)
+        logger.info('\n')
+    logger.info('\nUNIQUE CONSTRAINT FAILED. Duplicate mod records:')
 
     for i in set(mod_dupes):
-        print(i)
+        logger.info(i)
 
-    print(f'Unique Constraints Failed: {len(vanilla_dupes)+ len(mod_dupes)}')
+    logger.info(f'Unique Constraints Removed: {len(vanilla_dupes)+ len(mod_dupes)}')
     for i in failed_constraints:
-        print(i)
-    print(f'Foreign Key Constraints Failed: {len(failed_constraints)}, Succeeded: {succeeded_constraints}')
+        logger.critical(i)
+    logger.warning(f'Foreign Key Constraints Failed: {len(failed_constraints)}, Succeeded: {succeeded_constraints}')

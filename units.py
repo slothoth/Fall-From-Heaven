@@ -1,6 +1,7 @@
 from utils import small_dict, localization, make_or_add, update_or_add
 import xmltodict
 import json
+import logging
 
 unit_dict = {'Class': 'UnitType', 'Type': 'Name', 'Description': 'Description', 'iMoves': 'BaseMoves',
              'iCost': 'Cost', 'Advisor': 'AdvisorType', 'iCombat': 'Combat', 'Combat': 'RangedCombat',
@@ -37,6 +38,7 @@ UNIT_NULL = {'UnitType': 'SLTH_UNIT_NULL', 'Name': 'LOC_SLTH_UNIT_NULL_NAME', 'R
 
 
 def units_sql(model_obj, kept):
+    logger = logging.getLogger(__name__)
     civs = model_obj['select_civs']
     debug_string = ""
     with open('data/XML/Units/CIV4UnitInfos.xml', 'r') as file:
@@ -96,7 +98,7 @@ def units_sql(model_obj, kept):
 
     for unit in model_obj['civ_units']['barbarian']:
         if six_style_dict[unit]['TraitType'] != 'NULL':
-            print(f"Unit {unit} already has a trait, so we cant set trait_barb_but_shows_up")
+            logger.error(f"Unit {unit} already has a trait, so we cant set trait_barb_but_shows_up")
         six_style_dict[unit]['TraitType'] = 'TRAIT_BARBARIAN_BUT_SHOWS_UP_IN_PEDIA'
 
     for unit in model_obj['civ_units']['not_barbarian']:

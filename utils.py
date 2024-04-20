@@ -2,11 +2,13 @@ import sqlite3
 import pandas as pd
 import os
 from collections import Counter
+import logging
 
 
 class Sql:
     def __init__(self):
         self.tables = {}
+        self.logger = logging.getLogger(__name__)
 
     def old_build_sql_table(self, list_of_dicts, table_name):
         if isinstance(list_of_dicts, dict):
@@ -27,8 +29,7 @@ class Sql:
             elif isinstance(val, int):
                 master_dict[key] = 0
             else:
-                print(type(val))
-                print('timallenbuehhh?')
+                self.logger.info(f'odd data structure encountered while building sql insert string, of type: {type(val)}')
         for schema_key in master_dict:
             if schema_key == 'Column':                              # SQL reserved keyword
                 schema_key = '"Column"'
@@ -125,6 +126,7 @@ def split_dict(dictionary, condition, equalto=None):
 
 
 def localize(model_obj):
+    logger = logging.getLogger(__name__)
     tables_to_translate = ['Buildings', 'Districts', 'Improvements', 'Projects', 'Civics', 'Policies', 'Civilizations',
                            'Leaders', 'Traits', 'Resources', 'Terrains', 'Features', 'UnitPromotions', 'UnitPromotionClasses',
                            'Units', 'Abilities', 'Technologies', ]
@@ -181,7 +183,7 @@ def localize(model_obj):
                     else:
                         text = text + ' Description'
                 else:
-                    print(f'ERROR: unrecognized loc_tag {col}')
+                    logger.error(f'unrecognized loc_tag {col}')
                 if 'Mana ' in text and table_name == 'Resources':
                     text = ' '.join(text.split(' ')[::-1])
                 if 'Null' in text and 'Nullstone' not in text:
@@ -198,7 +200,7 @@ def localize(model_obj):
                     model_obj['loc'][table_name].extend(loc_entry)
                 else:
                     model_obj['loc'][table_name] = loc_entry
-    print(set(col_types))
+    logger.info(set(col_types))
 
 
 def text_convert(text_loc):
@@ -234,13 +236,6 @@ def small_dict(big_dict, four_to_six_map):
         if default_value not in smaller_dict:
             smaller_dict[to_insert] = default_value
     return smaller_dict
-
-
-def existing_types_checker(kinds):
-    types = pd.read_csv('data/tables/Types.csv')
-    existing_types = types.to_dict('list')['Type']
-    will_error = [i for i in kinds if i in existing_types]
-    print(f'Existing Types that will be rejected:\n{will_error}')
 
 
 def make_or_add(to_sql, list_of_dicts, table_name):

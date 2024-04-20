@@ -6,13 +6,15 @@ from delete_n_patch import delete_rows, patch_string_generate
 from misc import build_resource_string, build_terrains_string, build_features_string, build_policies
 from promotions import Promotions
 from modifiers import Modifiers
-from utils import Sql, setup_tables, existing_types_checker, make_or_add, localize
+from utils import Sql, setup_tables, make_or_add, localize
 from db_checker import check_primary_keys
 
 import json
+import logging
 
 
 def main():
+    logging.basicConfig(level=logging.WARNING)
     setup_tables()
     civs = ['AMURITES', 'BALSERAPHS', 'BANNOR', 'CALABIM', 'CLAN_OF_EMBERS', 'DOVIELLO', 'ELOHIM', 'GRIGORI', 'HIPPUS',
             'ILLIANS', 'INFERNAL', 'KHAZAD', 'KURIOTATES', 'LANUN', 'LJOSALFAR', 'LUCHUIRP', 'MALAKIM', 'MERCURIANS',
@@ -22,7 +24,7 @@ def main():
         kept = json.load(json_file)
     model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [], 'sql_inserts': {}, 'sql_updates': {}, 'sql_config': {},
                  'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'select_civs': civs,
-                 'loc': {}}
+                 'loc': {}, 'updates': {}, 'deletes': {}, 'metadata': {'unique_constraints': False}}
     model_obj['civilizations'].civilizations(model_obj)
     techs_sql(model_obj, kept)
     build_policies(model_obj)
@@ -32,7 +34,7 @@ def main():
     build_terrains_string(model_obj)
     build_features_string(model_obj)
     prereq_techs(model_obj)
-    patch_string_generate(model_obj['sql_strings'])
+    patch_string_generate(model_obj)
     Buildings(civs).buildings_sql(model_obj)
     districts_build(model_obj)
     delete_rows(model_obj, kept)
