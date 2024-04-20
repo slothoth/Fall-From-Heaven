@@ -38,8 +38,8 @@ def techs_sql(model_obj, kept):
     six_techs = [small_dict(i, techs_4_to_6) for i in tech_infos]
     six_style_techs = [i for i in six_techs if i['TechnologyType'] in techs]
     for tech in six_style_techs:
-        tech['Name'] = 'LOC_' + tech['TechnologyType'] + '_NAME'
-        tech['Description'] = 'LOC_' + tech['TechnologyType'] + '_DESCRIPTION'
+        tech['Name'] = 'LOC_SLTH_' + tech['TechnologyType'] + '_NAME'
+        tech['Description'] = 'LOC_SLTH_' + tech['TechnologyType'] + '_DESCRIPTION'
         tech['Cost'] = int(int(tech['Cost']) / 4)
         tech['UITreeRow'] = ui_tree_map[tech['TechnologyType']][0]
         tech['EraType'] = era_map[int(ui_tree_map[tech['TechnologyType']][1])]
@@ -49,8 +49,8 @@ def techs_sql(model_obj, kept):
         civic['CivicType'] = civics[civic['TechnologyType']]
         civic.pop('TechnologyType')
         civic.pop('Critical')
-        civic['Description'] = 'LOC_' + civic['CivicType'] + '_DESCRIPTION'
-        civic['Name'] = 'LOC_' + civic['CivicType'] + '_NAME'
+        civic['Description'] = 'LOC_SLTH_' + civic['CivicType'] + '_DESCRIPTION'
+        civic['Name'] = 'LOC_SLTH_' + civic['CivicType'] + '_NAME'
         civic['UITreeRow'] = ui_civic_tree[civic['CivicType']][0]
         civic['EraType'] = era_map[int(ui_civic_tree[civic['CivicType']][1])]
         civic['CivicType'] = f"SLTH_{civic['CivicType']}"

@@ -47,7 +47,7 @@ def build_resource_string(model_obj):
     for resource in six_style_resource_dict:
         resource['Happiness'] = 4 * int(resource['Happiness'])
         resource['ResourceType'] = f"RESOURCE_{resource['ResourceType'][6:]}"
-        resource['Name'] = "LOC_" + resource['ResourceType']
+        resource['Name'] = "LOC_SLTH_" + resource['ResourceType']
         resource['ResourceClassType'] = 'RESOURCECLASS_LUXURY' if resource['Happiness'] > 0 else resource_class_map[resource['ResourceClassType']]
         resource['PrereqCivic'] = 'NULL'
         if resource['PrereqTech'] == 'TECH_SEAFARING':
@@ -154,7 +154,7 @@ def build_terrains_string(model_obj):
 
     hills = []
     for terrain in six_style_terrain_dict:
-        terrain['Name'] = "LOC_" + "_".join(terrain['Name'].split('_')[2:])
+        terrain['Name'] = "LOC_SLTH_" + "_".join(terrain['Name'].split('_')[2:])
         if terrain['TerrainType'] == 'TERRAIN_BURNING_SANDS':
             terrain['InfluenceCost'] = 2
         if terrain['Water'] == '0':
@@ -201,7 +201,7 @@ def build_features_string(model_obj):
     with open('data/XML/Terrain/CIV4FeatureInfos.xml', 'r') as file:
         feature_dict = xmltodict.parse(file.read())['Civ4FeatureInfos']['FeatureInfos']['FeatureInfo']
 
-    feature_dict.append({'Type': 'FEATURE_SHALLOWS', 'Description': 'LOC_FEATURE_SHALLOWS', 'bNoCoast': 0,
+    feature_dict.append({'Type': 'FEATURE_SHALLOWS', 'Description': 'LOC_SLTH_FEATURE_SHALLOWS', 'bNoCoast': 0,
                          'bNoRiver': 0, 'bRequiresRiver': 0, 'bAddsFreshWater': 0, 'iSeeThrough': 0,
                          'YieldChanges': {'iYieldChange': ['1', '0', '0']},
                          'TerrainBooleans': {'TerrainBoolean': {'TerrainType': 'TERRAIN_BROKEN_LANDS'}}})
@@ -216,7 +216,7 @@ def build_features_string(model_obj):
     feature_extras = [small_dict(i, features_extras_map) for i in features]
 
     for i in six_style_features:
-        i['Name'] = "LOC_" + i['FeatureType']
+        i['Name'] = "LOC_SLTH_" + i['FeatureType']
 
     feature_yields, feature_valid_terrain = [], []
 
@@ -261,6 +261,8 @@ def build_policies(model_obj):
     six_policy_dict = {key: val for key, val in six_policy_dict.items() if key not in remove}
     useful_infos = {key:{key: value for key, value in i.items() if value != 'NONE' and value != None and value != '0'} for key, i in old_policy_dict.items()}
     useful_infos = {key: val for key, val in useful_infos.items() if key not in remove}
+    useful_infos = {'SLTH_POLICY_' + j['Type'][6:]: j for i, j in useful_infos.items()}
+
     pop_list = ['Button', 'Description', 'Strategy', 'iAnarchyLength', 'iAIWeight', 'CivicOptionType', 'WeLoveTheKing',
                 'TechPrereq', 'Type', 'Civilopedia']
     for i in useful_infos.values():
@@ -270,6 +272,7 @@ def build_policies(model_obj):
         i['GovernmentSlotType'] = gov_slot_mapper[i['GovernmentSlotType']]
         i['PolicyType'] = 'SLTH_POLICY_' + i['PolicyType'][6:]
         i['Name'] = f"LOC_{i['PolicyType']}_NAME"
+        i['Description'] = f"LOC_{i['PolicyType']}_DESCRIPTION"
         i['PrereqCivic'] = 'NULL'
         model_obj['kinds'][i['PolicyType']] = 'KIND_POLICY'
         if i['PrereqTech'] in model_obj['civics']:
@@ -280,13 +283,15 @@ def build_policies(model_obj):
         else:
             i['PrereqTech'] = f"SLTH_{i['PrereqTech']}"
 
+    six_policy_dict = {j['PolicyType']: j for i, j in six_policy_dict.items()}
+
     policy_modifiers = []
     for policy, i in useful_infos.items():
         for key, val in i.items():
-            modifier_ids = model_obj['modifiers'].generate_modifier(val, key, policy[6:])
+            modifier_ids = model_obj['modifiers'].generate_modifier(val, key, policy)
             if modifier_ids is not None:
                 for modifier_id in modifier_ids:
-                    policy_modifiers.append({'PolicyType': f"SLTH_POLICY_{policy[6:]}".upper(),
+                    policy_modifiers.append({'PolicyType': policy,
                                              'ModifierId': modifier_id})
 
     make_or_add(model_obj['sql_inserts'], six_policy_dict, 'Policies')
