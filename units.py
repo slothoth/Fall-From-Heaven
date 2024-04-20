@@ -28,8 +28,8 @@ exceptions = {'SLTH_UNIT_AURIC_ASCENDED': {'EnabledByReligion': 1, 'PrereqTech':
               'SLTH_UNIT_BRIGIT_HELD': 'UNKNOWN',
               'SLTH_UNIT_ROSIER_OATHTAKER': 'UNKNOWN', 'SLTH_UNIT_WORKER': 'UNKNOWN'}
 
-UNIT_NULL = {'UnitType': 'SLTH_UNIT_NULL', 'Name': 'LOC_UNIT_NULL_NAME', 'RangedCombat': 0, 'Domain': 'DOMAIN_LAND',
-             'Description': 'LOC_UNIT_NULL_DESCRIPTION', 'AdvisorType': 'ADVISOR_CONQUEST', 'PrereqTech': 'NULL',
+UNIT_NULL = {'UnitType': 'SLTH_UNIT_NULL', 'Name': 'LOC_SLTH_UNIT_NULL_NAME', 'RangedCombat': 0, 'Domain': 'DOMAIN_LAND',
+             'Description': 'LOC_SLTH_UNIT_NULL_DESCRIPTION', 'AdvisorType': 'ADVISOR_CONQUEST', 'PrereqTech': 'NULL',
              'Cost': '1', 'BaseMoves': '1', 'Combat': '1', 'Maintenance': 1,
              'TraitType': 'SLTH_TRAIT_CIVILIZATION_UNIT_NULL', 'AllowBarbarians': 1, 'BaseSightRange': 2,
              'EnabledByReligion': 0, 'PromotionClass': 'PROMOTION_CLASS_MELEE', 'Range': 0,
@@ -142,8 +142,8 @@ def units_sql(model_obj, kept):
                                           'Description': 'NULL'}
                 model_obj['kinds'][trait_str] = 'KIND_TRAIT'
             unit['UnitType'] = f"SLTH_{unit['Name']}"
-        unit['Name'] = 'LOC_' + unit['Name'] + '_NAME'
-        unit['Description'] = unit['Description'].replace('TXT_KEY', 'LOC') + '_DESCRIPTION'
+        unit['Name'] = 'LOC_SLTH_' + unit['Name'] + '_NAME'
+        unit['Description'] = unit['Description'].replace('TXT_KEY', 'LOC_SLTH') + '_DESCRIPTION'
         unit['AdvisorType'] = advisor_mapping[unit['AdvisorType']]
         unit['Maintenance'] = 1
         if unit['PrereqTech'] == 'NONE':
@@ -169,7 +169,7 @@ def units_sql(model_obj, kept):
             trait_str = f'SLTH_TRAIT_CIVILIZATION{key[4:]}'
             i['TraitType'] = trait_str
             model_obj['traits'][trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME',
-                                      'Description': 'NULL'}
+                                      'Description': f'LOC_{trait_str}_DESCRIPTION'}
             model_obj['kinds'][trait_str] = 'KIND_TRAIT'
 
     # Insert TraitType for religion units
@@ -178,9 +178,9 @@ def units_sql(model_obj, kept):
     for idx, religion in enumerate(religions):
         for key, i in final_units.items():
             if key in trait_types_religion[religions[idx]]:
-                trait_str = f'SLTH_TRAIT_RELIGION_UNIT{i["UnitType"][4:]}'
+                trait_str = f'SLTH_TRAIT_RELIGION{i["UnitType"][4:]}'
                 i['TraitType'] = trait_str
-                model_obj['traits'][trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME', 'Description': 'NULL'}
+                model_obj['traits'][trait_str] = {'TraitType': trait_str, 'Name': f'LOC_{trait_str}_NAME', 'Description': f'LOC_{trait_str}_DESCRIPTION'}
                 model_obj['kinds'][trait_str] = 'KIND_TRAIT'
 
     hero_units = {key: val for key, val in final_units.items() if val['DefaultUnitAI'] == 'UNITAI_HERO'}
@@ -196,7 +196,7 @@ def units_sql(model_obj, kept):
             civ_null['UnitType'] = f"{civ_null['UnitType']}_{civ}_{unit[10:]}"
             civ_null['TraitType'] = f"{civ_null['TraitType']}_{civ}"
             model_obj['traits'][civ_null['TraitType']] = {'TraitType': civ_null['TraitType'], 'Name': f"LOC_{civ_null['TraitType']}_NAME",
-                                              'Description': 'NULL'}
+                                              'Description': 'LOC_NULL'}
             final_units[civ_null['UnitType']] = civ_null
             replaces.append({'CivUniqueUnitType': civ_null['UnitType'], 'ReplacesUnitType': unit})
             model_obj['kinds'][civ_null['TraitType']] = 'KIND_TRAIT'
@@ -215,7 +215,7 @@ def units_sql(model_obj, kept):
     mud_golem['TraitType'] = 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'
     model_obj['traits']['SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'] = {'TraitType': 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM',
                                                              'Name': 'LOC_SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM_NAME',
-                                                             'Description': 'NULL'}
+                                                             'Description': f'LOC_SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM_DESCRIPTION'}
     model_obj['kinds']['SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'] = 'KIND_TRAIT'
     mud_golem['BuildCharges'], mud_golem['Combat'], mud_golem['RangedCombat'] = 5, 3, 1
 
@@ -237,10 +237,11 @@ def heros_builder(hero_units, kinds, final_units):
     for hero_name, details in hero_units.items():
         build_name = f"BUILDING_{hero_name}"
         modifier = f'GRANT_{hero_name}'
-        building = {'BuildingType': f"BUILDING_{hero_name}", 'Name': details['Name'],
-                    'PrereqTech': details['PrereqTech'],'PrereqCivic': details['PrereqCivic'], 'Cost': details['Cost'],
+        building = {'BuildingType': f"BUILDING_{hero_name}", 'Name': details['Name'] + '_BUILDING',
+                    'PrereqTech': details['PrereqTech'], 'PrereqCivic': details['PrereqCivic'], 'Cost': details['Cost'],
                     'TraitType': details['TraitType'], 'AdvisorType': details['AdvisorType'],
-                    'MaxPlayerInstances': -1, 'MaxWorldInstances': 1,  'IsWonder': 1}
+                    'MaxPlayerInstances': -1, 'MaxWorldInstances': 1,  'IsWonder': 1,
+                    'Description': details['Description'] + '_BUILDING'}
         heros['Buildings'][build_name] = building
 
         heros['BuildingModifiers'][build_name] = {'BuildingType': build_name, 'ModifierId': modifier}

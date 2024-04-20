@@ -1,6 +1,7 @@
 import sqlite3
 import pandas as pd
 import os
+from collections import Counter
 
 
 class Sql:
@@ -110,9 +111,7 @@ def localization(names):
         loc_string += f"('en_us', '{name}', '{en_name}'),\n"
         loc_string += f"('en_us', '{description}',  'Description'),\n"
         loc_string += f"('en_us', '{type_description}_{name[4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
-
-    with open('../FallFromHeaven/Core/localization.sql', 'a') as file:
-        file.write(loc_string)
+    return loc_string
 
 
 def split_dict(dictionary, condition, equalto=None):
@@ -125,26 +124,86 @@ def split_dict(dictionary, condition, equalto=None):
     return has_condition, hasnt_condition
 
 
-def localization_changes(names):
-    loc_string = ''
-    type_description = 'LOC_PEDIA_UNITS_PAGE'
-    if isinstance(names, dict):
-        names = [i for i in names.values()]
-    if 'UnitType' in names[0]:
-        type_description = 'LOC_PEDIA_UNITS_PAGE'
-    elif 'BuildingType' in names[0]:
-        type_description = 'LOC_PEDIA_BUILDINGS_PAGE'
-    for item in names:
-        en_name = [word.capitalize() for word in item['Name'].split('_')][2:-2]
-        if en_name[-1] in ['NAVAL', 'LIGHT']:
-            en_name = en_name[:-1]
-        en_name = ' '.join(en_name)
-        loc_string += f"('en_us', '{item['Name']}', '{en_name}'),\n"
-        loc_string += f"('en_us', '{item['Description']}',  'Description'),\n"
-        loc_string += f"('en_us', '{type_description}_{item['Name'][4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
+def localize(model_obj):
+    tables_to_translate = ['Buildings', 'Districts', 'Improvements', 'Projects', 'Civics', 'Policies', 'Civilizations',
+                           'Leaders', 'Traits', 'Resources', 'Terrains', 'Features', 'UnitPromotions', 'UnitPromotionClasses',
+                           'Units', 'Abilities', 'Technologies', ]
+    weird_tables = ['CityNames', 'CivilopediaConcepts', 'CivilizationFrontEnd']
+    col_types = []
+    for table_name, table in model_obj['sql_inserts'].items():
+        if table_name not in tables_to_translate:
+            continue
+        if isinstance(table, list):
+            table = {idx: i for idx, i in enumerate(table)}
+        loc_cols = [i for i, j in list(table.values())[0].items() if isinstance(j, str) and 'LOC' in j]
+        common_strings = []
+        for loc_col in loc_cols:
+            result = []
+            [result.extend(i[loc_col].split('_')) for i in table.values()]
+            common_strings.extend([name for name, count in Counter(result).items() if count > len(table) * 0.8])
+        common_strings = set(common_strings)
+        for key, row in table.items():
+            loc_entry = []
+            for col in loc_cols:
+                tag_value = row[col]
+                text = tag_value
+                for remove_str in common_strings:
+                    text = text.replace(remove_str, '')
+                text = ' '.join([i.capitalize() for i in text.replace('_', ' ').strip().split()])
+                if col == 'Name':
+                    col_types.append(col)
+                elif col == 'Adjective':
+                    col_types.append(col)
+                    if text[-1] == 's':
+                        text = text[:-1]
+                    else:
+                        text += 'ian'
+                elif col == 'Description':
+                    if isinstance(key, str) and key in model_obj['modifiers'].loc:
+                        modifier_description = ''
+                        for i in model_obj['modifiers'].loc[key]:
+                            if 'SLTH' in i:
+                                string_replace = i.split('###')
+                                string_replace[1] = string_replace[1].replace('SLTH', '')
+                                string_replace[1] = "".join([j.capitalize() for j in string_replace[1].split('_')])
+                                i = " ".join([i.strip() for i in string_replace])
+                            modifier_description += i + ' '
+                        text = modifier_description.strip()
+                    elif isinstance(key, str) and 'COOL' in key:
+                        modifier_description = ''
+                        if 'EMBERS' in key:
+                            civ = "_".join(key.split('_')[-4:-1])
+                        else:
+                            civ = key.split('_')[-2]
+                        for i in model_obj['modifiers'].loc[f"SLTH_BUILDING_PALACE_{civ}"]:
+                            modifier_description += i + ' '
+                        text = modifier_description.strip()
+                    else:
+                        text = text + ' Description'
+                else:
+                    print(f'ERROR: unrecognized loc_tag {col}')
+                if 'Mana ' in text and table_name == 'Resources':
+                    text = ' '.join(text.split(' ')[::-1])
+                if 'Null' in text and 'Nullstone' not in text:
+                    text = 'ZZ_Banned for Civ'
+                if table_name == 'Units':
+                    text = text.replace('Equipment', '').replace('Unit', '')
+                if table_name == 'UnitPromotions':
+                    text = text.replace('1', ' I').replace('2', ' II').replace('3', ' III')
+                    text = text.replace('4', ' IV').replace('5', ' V')
+                text = text.replace('+-', '-')
+                loc_entry.append({'Language': 'en_us', 'Tag': tag_value, 'Text': text.strip()})
+            if len(loc_entry) > 0:
+                if table_name in model_obj['loc']:
+                    model_obj['loc'][table_name].extend(loc_entry)
+                else:
+                    model_obj['loc'][table_name] = loc_entry
+    print(set(col_types))
 
-    with open('../FallFromHeaven/Core/localization.sql', 'a') as file:
-        file.write(loc_string)
+
+def text_convert(text_loc):
+    localised = text_loc.replace('LOC_', '').replace('_', ' ').strip()
+    return localised
 
 
 def setup_tables():
