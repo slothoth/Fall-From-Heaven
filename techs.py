@@ -1,7 +1,7 @@
 import pandas as pd
 import xmltodict
 import re
-from utils import small_dict, localization, make_or_add
+from utils import small_dict,  make_or_add
 
 techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Cost', 'Repeatable': 0,
                 'EmbarkUnitType': 'NULL', 'EmbarkAll': 0, 'Description': 'Description', 'EraType': 'ERA_ANCIENT',
@@ -65,8 +65,6 @@ def techs_sql(model_obj, kept):
         tech_split = tech_type_to_add.split("'")
         model_obj['kinds'][f"SLTH_{tech_split[1]}"] = tech_split[3]
 
-    localization(six_style_techs)
-    localization(six_style_civics)
     model_obj['civics'] = civics
     return model_obj
 

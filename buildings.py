@@ -1,4 +1,4 @@
-from utils import small_dict, localization, make_or_add, update_or_add
+from utils import small_dict, make_or_add, update_or_add
 import xmltodict
 import json
 import logging
@@ -250,7 +250,6 @@ class Buildings:
         make_or_add(model_obj['sql_inserts'], building_replaces, 'BuildingReplaces')
         make_or_add(model_obj['sql_inserts'], self.traits, 'Traits')
 
-        localization(six_style_build_dict)
         model_obj['kinds'] = self.kinds
         model_obj['update_build'] = [i for i in update_buildings]
 
