@@ -2,7 +2,7 @@ from civilizations import Civilizations
 from units import units_sql
 from techs import techs_sql, prereq_techs
 from buildings import Buildings, districts_build
-from delete_n_patch import delete_rows, patch_string_generate
+from delete_n_patch import delete_rows
 from misc import build_resource_string, build_terrains_string, build_features_string, build_policies
 from promotions import Promotions
 from modifiers import Modifiers
@@ -14,7 +14,7 @@ import logging
 
 
 def main():
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(level=logging.INFO)
     setup_tables()
     civs = ['AMURITES', 'BALSERAPHS', 'BANNOR', 'CALABIM', 'CLAN_OF_EMBERS', 'DOVIELLO', 'ELOHIM', 'GRIGORI', 'HIPPUS',
             'ILLIANS', 'INFERNAL', 'KHAZAD', 'KURIOTATES', 'LANUN', 'LJOSALFAR', 'LUCHUIRP', 'MALAKIM', 'MERCURIANS',
@@ -24,7 +24,7 @@ def main():
         kept = json.load(json_file)
     model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [], 'sql_inserts': {}, 'sql_updates': {}, 'sql_config': {},
                  'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'select_civs': civs,
-                 'loc': {}, 'updates': {}, 'deletes': {}, 'metadata': {'unique_constraints': False}}
+                 'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}}
     model_obj['civilizations'].civilizations(model_obj)
     techs_sql(model_obj, kept)
     build_policies(model_obj)
@@ -34,18 +34,17 @@ def main():
     build_terrains_string(model_obj)
     build_features_string(model_obj)
     prereq_techs(model_obj)
-    patch_string_generate(model_obj)
+
     Buildings(civs).buildings_sql(model_obj)
     districts_build(model_obj)
-    delete_rows(model_obj, kept)
     make_or_add(model_obj['sql_inserts'], model_obj['traits'], 'Traits')
     model_obj['modifiers'].big_get(model_obj)
     make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value} for key, value
                                            in model_obj['kinds'].items()], 'Types')
-
     # deprecated hash version
     # make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value, 'Hash': hash(key)} for key, value
     #                                            in model_obj['kinds'].items()], 'Types')
+    delete_rows(model_obj, kept)
     localize(model_obj)
     check_primary_keys(model_obj)
     for table, rows in model_obj['sql_inserts'].items():

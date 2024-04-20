@@ -1,4 +1,4 @@
-from utils import small_dict, localization, make_or_add, update_or_add
+from utils import small_dict, make_or_add, update_or_add
 import xmltodict
 import json
 import logging
@@ -229,7 +229,6 @@ def units_sql(model_obj, kept):
     make_or_add(model_obj['sql_inserts'], replaces, 'UnitReplaces')
     make_or_add(model_obj['sql_inserts'], simple_upgrades, 'UnitUpgrades')
 
-    localization(final_units)
     return model_obj
 
 

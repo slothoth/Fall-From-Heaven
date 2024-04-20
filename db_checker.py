@@ -132,14 +132,7 @@ def check_primary_keys(model_obj):
                     to_pop.append((name, i[0]))
             else:
                 uniques.append(i)
-        placeholder = fk
-        for idx, i in enumerate(fk):
-            for j in i.values():
-                for l in [k[1] for k in to_pop]:
-                    if l == j:
-                        placeholder.pop(idx)
 
-        fk = placeholder
         for idx, i in enumerate(fk):
             for native_col, constraint_req in i.items():
                 if constraint_req is None or constraint_req == 'NULL':
@@ -157,12 +150,6 @@ def check_primary_keys(model_obj):
 
     # second pass to set bools
     for name, insert in model_obj['sql_inserts'].items():
-        if isinstance(insert, dict):
-            search = insert.values()
-        elif isinstance(insert, list):
-            search = insert
-        else:
-            raise ValueError('search was not a dict or list')
         for fk_table_name,  constraint_col in constraints.items():
             for col_name, column_reqs in constraint_col.items():
                 for fk_name, constraint in column_reqs.items():
@@ -204,21 +191,28 @@ def check_primary_keys(model_obj):
         else:
             new_pop_dict[i[0]].append(i[1])
 
+    popped_tables = {}
     for table_name, indexes_to_pop in new_pop_list.items():
         indexes_to_pop.sort(reverse=True)
+        popped_tables[table_name] = []
         for idx in indexes_to_pop:
-            logger.info(f"popped from table {table_name}: {model_obj['sql_inserts'][table_name].pop(idx)}")
+            popped_tables[table_name].append(model_obj['sql_inserts'][table_name].pop(idx))
 
     for table_name, keys_to_pop in new_pop_dict.items():
+        popped_tables[table_name] = []
         for key in keys_to_pop:
-            logger.info(f"popped from table {table_name}: {model_obj['sql_inserts'][table_name].pop(key)}")
+            popped_tables[table_name].append(model_obj['sql_inserts'][table_name].pop(key))
+
+    for table_name, table in popped_tables.items():
+        for i in table:
+            logger.info(f"popped from table {table_name}: {i}")
 
     logger.info('UNIQUE CONSTRAINT FAILED. Already existing record:')
     for i in set(vanilla_dupes):
         logger.info(i)
         logger.info('\n')
-    logger.info('\nUNIQUE CONSTRAINT FAILED. Duplicate mod records:')
 
+    logger.info('\nUNIQUE CONSTRAINT FAILED. Duplicate mod records:')
     for i in set(mod_dupes):
         logger.info(i)
 

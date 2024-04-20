@@ -14,6 +14,7 @@ class Sql:
         if isinstance(list_of_dicts, dict):
             list_of_dicts = [value for value in list_of_dicts.values()]
         if len(list_of_dicts) == 0:
+            self.logger.error(f'empty list of dicts for {table_name} found while building sql')
             return ''
         self.check_sql(list_of_dicts, table_name)
         schema_string = '('
@@ -46,6 +47,7 @@ class Sql:
         table_string = table_string[:-2]
         table_string += ";\n"
         return table_string
+
 
     def update_sql_table(self, list_of_dicts, table_name: str, columns_to_select: list):
         if isinstance(list_of_dicts, dict):
@@ -93,26 +95,6 @@ class Sql:
             self.tables[table_name] = list_of_dicts
         else:
             self.tables[table_name].append(list_of_dicts)
-
-
-def localization(names):
-    loc_string = ''
-    type_description = 'LOC_PEDIA_UNITS_PAGE'
-    if isinstance(names, dict):
-        names = [i for i in names.values()]
-    obj_type = [i for i in names[0] if 'Type' in i][0]
-    if 'UnitType' in names[0]:
-        type_description = 'LOC_PEDIA_UNITS_PAGE'
-    elif 'BuildingType' in names[0]:
-        type_description = 'LOC_PEDIA_BUILDINGS_PAGE'
-    for item in names:
-        name = item.get('Name', item[obj_type])
-        description = item.get('Description', item[obj_type])
-        en_name = ' '.join([word.capitalize() for word in item['Name'].split('_')][2:-1])
-        loc_string += f"('en_us', '{name}', '{en_name}'),\n"
-        loc_string += f"('en_us', '{description}',  'Description'),\n"
-        loc_string += f"('en_us', '{type_description}_{name[4:-4]}CHAPTER_HISTORY_PARA_1', 'DESCRIPTION'),\n"
-    return loc_string
 
 
 def split_dict(dictionary, condition, equalto=None):
