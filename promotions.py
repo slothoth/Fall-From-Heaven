@@ -1,6 +1,7 @@
 import xmltodict, copy
 from collections import defaultdict
 from utils import small_dict, split_dict, make_or_add
+import logging
 
 promo_mapper = {'Type': 'UnitPromotionType', 'Description': 'Description', 'UnitCombats': 'PromotionClass'}
 promo_mapper_extras = {'PromotionPrereq': 'PromotionPrereq', 'PromotionPrereqOr1': 'PromotionPrereqOr1',
@@ -18,6 +19,8 @@ hard_to_filter = ['STIGMATA']
 
 
 class Promotions:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
 
     def promotion_miner(self, model_obj):
         with open('data/XML/Units/CIV4PromotionInfos.xml', 'r') as file:
@@ -119,7 +122,7 @@ class Promotions:
                     duplicated_promos.append(dupe_promo)
                     duplicated_promo_extras[dupe_promo['UnitPromotionType']] = dupe_promo_extra
             else:
-                print(f'{promo["UnitPromotionType"]} has no combat type classification, setting to melee')
+                self.logger.info(f'{promo["UnitPromotionType"]} has no combat type classification, setting to melee')
                 promo['PromotionClass'] = 'PROMOTION_CLASS_MELEE'
                 promo.pop('UnitCombats')
 
