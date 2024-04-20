@@ -1,4 +1,5 @@
 from utils import make_or_add
+import logging
 
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
@@ -13,6 +14,7 @@ map_specialists = {'SPECIALIST_SCIENTIST': 'DISTRICT_CAMPUS', 'SPECIALIST_ENGINE
 
 class Modifiers:
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
         self.modifiers = {}
         self.dynamic_modifiers = {}
         self.modifier_arguments = []
@@ -602,7 +604,7 @@ class Modifiers:
             civ4_ability = [civ4_ability]
         attacks = set([i['iTerrainAttack'] for i in civ4_ability])
         if len(attacks) > 1:
-            print(' do some iterated versionahh')
+            logger.debug(' do some iterated versionahh')
         else:
             amount = attacks.pop()
         for idx, i in enumerate(civ4_ability):
@@ -850,7 +852,7 @@ class Modifiers:
             civ4_ability = [civ4_ability]
         attacks = set([i['iFeatureAttack'] for i in civ4_ability])
         if len(attacks) > 1:
-            print(' do some iterated versionahh')
+            self.logger.debug(' do some iterated versionahh')
         else:
             amount = attacks.pop()
         for idx, i in enumerate(civ4_ability):
@@ -940,26 +942,26 @@ class Modifiers:
 
 
     def trait_agnostic(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented, use Mvemba? + NULL replace religious units")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented, use Mvemba? + NULL replace religious units")
 
     def trait_horselord(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented, copy genghis khan and then add a movespeed like columbia?")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented, copy genghis khan and then add a movespeed like columbia?")
 
     def trait_sinister(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented, copy genghis khan but for scout units requirements")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented, copy genghis khan but for scout units requirements")
 
     def ability_sundered(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented, as needs argageddon module to function")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented, as needs argageddon module to function")
 
     def trait_fallow(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented, as no food growth/loss seems hard to do")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented, as no food growth/loss seems hard to do")
 
     def damage_type_Implementation(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented as needs Damage type module, probably handled in Magic")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Damage type module, probably handled in Magic")
 
     def bonus_requirementImplementation(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented")
-        print('If we have apply a modifier to the city, with secondary requirement that we have x resource')
+        self.logger.debug(f"{name}'s {civ4_target} not implemented")
+        self.logger.debug('If we have apply a modifier to the city, with secondary requirement that we have x resource')
 
     def apply_to_unit_if_in_cityImplement(self, civ4_target, name):
         modifier = {'ModifierId': 'MEDIC_INCREASE_HEAL_RATE',
@@ -969,13 +971,13 @@ class Modifiers:
                            'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'}
         requirement_set_requirements = {'RequirementSetId': 'MEDIC_HEALING_REQUIREMENTS',
                                         'RequirementId': 'ADJACENT_UNIT_REQUIREMENT'}
-        print(f"{name} with {civ4_target} seems possible, but awkward")
+        self.logger.debug(f"{name} with {civ4_target} seems possible, but awkward")
 
     def feature_happiness_modifier(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented")
 
     def specialistImplement(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented")
         # for idx, amount in enumerate(civ4_target['iCommerce']):
         # if int(amount) != 0:
         # yieldtype = commerce_map[idx]
@@ -988,28 +990,28 @@ class Modifiers:
         # map_citizen_slot to district. Make player that district have 94 CitizenSlots
 
     def no_fucking_clue(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented, who knows")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented, who knows")
 
     def magicImplement(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented as needs Magic module")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Magic module")
 
     def maintenanceImplement(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented as needs Maintenance Rework")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Maintenance Rework")
 
     def religionImplement(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented as needs Religion Rework")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Religion Rework")
 
     def alignmentImplement(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented as needs Alignment Rework")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Alignment Rework")
 
     def otherSystemImplement(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented as needs some other thing")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented as needs some other thing")
         # Stuck on SpecialistValids, iLargestCityHappiness as no concept of largest cities in civ,
         # bNoDiplomacyWithEnemies, bPrereqWar
 
     def prereqImplement(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented as it is a prerequisite, how can we apply this to a policy")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented as it is a prerequisite, how can we apply this to a policy")
 
     def cantImplement(self, civ4_target, name):
-        print(f"{name}'s {civ4_target} not implemented as it is a concept too far outside of civ vi")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented as it is a concept too far outside of civ vi")
         # half food requirements GlobalParameters (Name: 'CITY_FOOD_CONSUMPTION_PER_POPULATION', "Value": '2.0')

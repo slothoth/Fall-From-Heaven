@@ -1,6 +1,7 @@
 from utils import small_dict, localization, make_or_add, update_or_add
 import xmltodict
 import json
+import logging
 
 extras_building_map = {'Type': 'BuildingType', 'GreatPeopleUnitClass': 'GreatPersonClassType',
                        'iGreatPeopleRateChange': 'PointsPerTurn', 'CommerceChanges': 'YieldType',
@@ -72,6 +73,7 @@ others_to_remove += (prereq_civ4 + affects_prod + [i for i in buildings_4_to_6 i
 
 class Buildings:
     def __init__(self, civs):
+        self.logger = logging.getLogger(__name__)
         self.building_modifiers, self.modifier_table, self.civilization_modifiers = [], [], []
         self.modifier_arguments, self.dynamic_modifiers = [], {}
         self.requirements, self.requirement_arguments, self.requirement_set_reqs, self.requirement_set = [], [], [], []
@@ -98,9 +100,8 @@ class Buildings:
         for key, i in only_useful_build_infos.items():
             for key, val in i.items():
                 if key not in ['Type', 'BuildingClass']:
-                    # print(f"{i['Type']} has modifier {key} and value {val}")
                     uniques.add(key)
-        print(uniques)
+        self.logger.debug(uniques)
         for build_name, building in only_useful_build_infos.items():
             for key, val in building.items():
                 if key == 'FreeBonus':
@@ -250,7 +251,6 @@ class Buildings:
         make_or_add(model_obj['sql_inserts'], self.traits, 'Traits')
 
         localization(six_style_build_dict)
-        print(debug_string)
         model_obj['kinds'] = self.kinds
         model_obj['update_build'] = [i for i in update_buildings]
 
