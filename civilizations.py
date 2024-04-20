@@ -83,7 +83,7 @@ class Civilizations:
                 if 'BUILDING_PALACE' not in i['BuildingType']:
                     trait_type = f"SLTH_TRAIT_CIVILIZATION_{i['BuildingType']}"
                     model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
-                                          'Description': 'NULL'}
+                                          'Description':  f"LOC_{trait_type}_DESCRIPTION"}
                     model_obj['kinds'][trait_type] = 'KIND_TRAIT'
                     self.civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{civ}"})
                     civ_building_replace.append({'ReplacesBuildingType': f"SLTH_{i['BuildingClassType'].replace('INGCLASS', 'ING')}",
@@ -93,7 +93,7 @@ class Civilizations:
         for building, civ in civ_unique_buildings.items():
             trait_type = f"SLTH_TRAIT_CIVILIZATION_{building}"
             model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
-                                  'Description': 'NULL'}
+                                  'Description': f'LOC_{trait_type}_DESCRIPTION'}
             model_obj['kinds'][trait_type] = 'KIND_TRAIT'
             self.civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{civ['PrereqCiv']}"})
             civ_buildings['civ_traits'].append(f"SLTH_{building}")
@@ -130,7 +130,7 @@ class Civilizations:
                 trait_belongs_to = [i for i in civ_dict if i not in civ_list][0]
                 trait_type = f"SLTH_TRAIT_CIVILIZATION_UNIT_{unit[10:]}"
                 model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
-                                      'Description': 'NULL'}
+                                      'Description': f'LOC_{trait_type}_DESCRIPTION'}
                 model_obj['kinds'][trait_type] = 'KIND_TRAIT'
                 self.civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{trait_belongs_to}"})
                 civ_units['civ_traits'].append(f"SLTH_UNIT_{unit[10:]}")
@@ -145,9 +145,9 @@ class Civilizations:
     
         for civ_name, civ in self.six_style_civs.items():
             civ['CivilizationType'] = f"SLTH_{civ['CivilizationType']}"
-            civ['Name'] = f"LOC_{civ['Name'][8:-9]}"
+            civ['Name'] = f"LOC_{civ['Name'][8:-10]}NAME"
             civ['Description'] = f"LOC_{civ['Description'][8:]}RIPTION"
-            civ['Adjective'] = f"LOC_{civ['Adjective'][8:]}"
+            civ['Adjective'] = f"LOC_SLTH_{civ['Adjective'][8:]}"
             civ['StartingCivilizationLevelType'] = 'CIVILIZATION_LEVEL_FULL_CIV'
             civ['RandomCityNameDepth'] = 10
             civ['Ethnicity'] = 'ETHNICITY_EURO'       # harhar white as default. Change later with ethnicity mapper
@@ -160,7 +160,7 @@ class Civilizations:
             for leader in civ_leaders:
                 leader_name = f"SLTH_{leader['LeaderName']}"
                 self.leaders_of_civs.append({'LeaderType': leader_name, 'CivilizationType': civ,
-                                        'CapitalName': f"LOC_{value['Cities']['City'][0][8:]}"})
+                                        'CapitalName': f"LOC_SLTH_{value['Cities']['City'][0][8:]}"})
                 if leader_name not in [i['LeaderType'] for i in leaders]:
                     leaders.append({'LeaderType': leader_name, 'Name': f'LOC_{leader_name}_NAME',
                                     'InheritFrom': 'LEADER_DEFAULT'})
@@ -179,8 +179,6 @@ class Civilizations:
 
         model_obj['civ_units'] = civ_units
         model_obj['civ_buildings'] = civ_buildings
-
-        return model_obj
 
     def civilization_modifiers(self, model_obj, civ_dict):
         modifier_stuff = {key: {'CivTrait': i.get('CivTrait'), 'FreeTechs': i.get('FreeTechs'),
@@ -215,10 +213,10 @@ class Civilizations:
                     ability = {ability_name: ability}
                 modifiers = model_obj['modifiers'].generate_modifier(civ4_target=ability,
                                                                      name='SLTH_DEFAULT_RACE',
-                                                                     civ6_target=name[10:])
+                                                                     civ6_target=name)
                 if modifiers is not None:
                     ab_name = f'{name}_ABILITY_{list(ability.keys())[0].upper()}'
-                    self.unit_abilities.append({'UnitAbilityType': ab_name, 'Name': f'LOC_{ab_name}_NAME',
+                    self.unit_abilities.append({'UnitAbilityType': ab_name, 'Name': f'LOC_SLTH_{ab_name}_NAME',
                                                 'Description': f'LOC{ab_name}_DESCRIPTION', 'Inactive': 1,
                                                 'ShowFloatTextWhenEarned': 0, 'Permanent': 1})
 
@@ -230,18 +228,17 @@ class Civilizations:
             promo['trait_modifier'] = trait_mods
 
         for civ, i in modifier_stuff.items():
-            trait_type = f'SLTH_TRAIT_{civ}_COOL_NAME'
+            trait_type = f'SLTH_TRAIT_{civ}_COOL'
             self.civ_traits.append({'TraitType': trait_type,
                                     'CivilizationType': f'SLTH_{civ}'})
             model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
-                                               'Description': 'NULL'}
+                                               'Description': f'LOC_{trait_type}_DESCRIPTION'}
             model_obj['kinds'][trait_type] = 'KIND_TRAIT'
             if i['CivTrait'] != 'NONE':
                 mod_ = model_obj['modifiers'].generate_modifier({f"SLTH_{i['CivTrait']}": 'Cheese'},
                                                                 'SLTH_DEFAULT_RACE', civ)
                 if modifiers is not None:
                     self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
-                print(i['CivTrait'])
             if i['FreeTechs'] is not None:
                 if i['FreeTechs'] == 'TECH_SEAFARING':
                     print(i)
@@ -262,10 +259,10 @@ class Civilizations:
         for civ in self.leaders_of_civs:
             if civ['CivilizationType'][18:] in model_obj['select_civs']:
                 players.append({'Domain': 'Players:Expansion2_Players', 'CivilizationType': civ['CivilizationType'],
-                                'LeaderType': civ['LeaderType'], 'LeaderName': f"LOC_{ civ['LeaderType']}",
+                                'LeaderType': civ['LeaderType'], 'LeaderName': f"LOC_{civ['LeaderType']}_NAME",
                                 'HumanPlayable': 1, 'LeaderIcon': f'ICON_{civ["LeaderType"]}',
-                                'CivilizationName': f'LOC_{civ["CivilizationType"]}_NAME',
-                                'CivilizationIcon': f'ICON_{civ["CivilizationType"]}', 'LeaderAbilityName': 'NULL',
+                                'CivilizationName': f'LOC_CIV_{civ["CivilizationType"][18:]}_NAME',
+                                'CivilizationIcon': f'ICON_{civ["CivilizationType"]}', 'LeaderAbilityName': f'LOC_SLTH_TRAIT_{civ["CivilizationType"]}_COOL_NAME',
                                 'LeaderAbilityDescription': 'NULL', 'LeaderAbilityIcon': f'ICON_{civ["LeaderType"]}',
                                 'CivilizationAbilityName': 'NULL', 'CivilizationAbilityDescription': 'NULL',
                                 'CivilizationAbilityIcon': f'ICON_{civ["CivilizationType"]}', 'Portrait': 'NULL',

@@ -25,11 +25,14 @@ class Modifiers:
         self.requirement_set = []
 
         self.complete_set = {}
+        self.loc = {}
 
-        self.modifier_map = {'CapitalCommerceModifiers': self.capital_commerce_modifier,
+        self.modifier_map = {'CommerceModifiers': self.commerce_modifier,
+                             'CapitalCommerceModifiers': self.capital_commerce_modifier,
                              'CapitalYieldModifiers': self.capital_yield_modifier,  # dummy
+                             'YieldModifiers': self.yield_modifier_city,
+                             'CommerceModifiers_City': self.commerce_modifier_city,
                              'iWarWearinessModifier': self.war_weariness_modifier,
-                             'CommerceModifiers': self.commerce_modifier,
                              'ImprovementYieldChanges': self.improvement_yield_modifier,
                              'iGreatPeopleRateModifier': self.gpp_rate_modifier,
                              'iExtraHealth': self.housing_modifier,
@@ -50,7 +53,6 @@ class Modifiers:
                              'FreeBonus3': self.free_bonus_modifier,
                              'FreeBuilding': self.free_building_modifier,
                              'iGlobalSpaceProductionModifier': self.project_prod_mult_modifier,
-                             'YieldModifiers': self.yield_modifier,
                              'SeaPlotYieldChanges': self.plot_yield_modifier,
                              'GlobalSeaPlotYieldChanges': self.plot_yield_modifier_global,
                              'iTradeRouteModifier': self.trade_route_yield_modifier,
@@ -158,7 +160,8 @@ class Modifiers:
         return modifier_id
 
     def organize(self, modifier, modifier_arguments, dynamic_modifier=None, trait_modifiers=None, trait=None,
-                 requirements=None, requirements_arguments=None, requirements_set=None, requirements_set_reqs=None):
+                 requirements=None, requirements_arguments=None, requirements_set=None, requirements_set_reqs=None,
+                 loc=None):
         modifiers = modifier
         if isinstance(modifier, list):
             for mod in modifier:
@@ -183,6 +186,12 @@ class Modifiers:
             self.requirement_set.extend(requirements_set)
         if requirements_set_reqs:
             self.requirement_set_reqs.extend(requirements_set_reqs)
+        if loc:
+            if loc[0] in self.loc:
+                for i in loc[1]:
+                    self.loc[loc[0]].append(i)
+            else:
+                self.loc[loc[0]] = loc[1]
 
     def big_get(self, model_obj):
         modifier_string = ''
@@ -206,6 +215,14 @@ class Modifiers:
         return self.commerce_modifier(civ4_target, name, mapper=yield_map,
                                       modifier_type='MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER')
 
+    def yield_modifier_city(self, civ4_target, name):
+        return self.commerce_modifier(civ4_target, name, mapper=yield_map,
+                                      modifier_type='MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER')
+
+    def commerce_modifier_city(self, civ4_target, name):
+        return self.commerce_modifier(civ4_target, name,
+                                      modifier_type='MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER')
+
     def war_weariness_modifier(self, civ4_target, name):
         mod_name = f"MODIFIER_{name}_ADJUST_WAR_WEARINESS"
         if mod_name in self.modifiers:
@@ -220,45 +237,53 @@ class Modifiers:
         for name, value in [('Amount', civ4_target), ('Overall', 1)]:
             modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
                                   'Value': value})
-        self.organize(modifier, modifier_args)
+        loc = [name, [f'Accumulate {civ4_target}% less war weariness than usual.']]
+        self.organize(modifier, modifier_args, loc=loc)
         return [modifier['ModifierId']]
 
     def commerce_modifier(self, civ4_target, name, mapper=None,
                           modifier_type='MODIFIER_PLAYER_CITIES_ADJUST_CITY_YIELD_MODIFIER'):
         if mapper is None:
             mapper = commerce_map
+        if 'PLAYER_CITIES' in modifier_type:
+            owner = 'in all Cities'
+        elif 'CAPITAL' in modifier_type:
+            owner = 'in Capital City'
+        elif 'SINGLE_CITY' in modifier_type:
+            owner = 'in this City'
 
-        modifiers = []
-        modifier_args = []
+        modifiers, modifier_args, loc = [], [], [name, []]
         yield_changes = next(iter(civ4_target.values()))
         for idx, amount in enumerate(yield_changes):
             if int(amount) != 0:
                 modifier = {'ModifierId': f"MODIFIER_{name}_ADD_{mapper[idx][6:]}YIELD",
                             'ModifierType': modifier_type}
                 modifiers.append(modifier)
+                loc[1].append(f'{amount}% [ICON_{mapper[idx][6:].capitalize()}] {mapper[idx][6:].capitalize()} {owner}.')
                 for name, value in [('Amount', amount), ('YieldType', mapper[idx])]:
                     modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name,
                                           'Type': 'ARGTYPE_IDENTITY', 'Value': value})
 
-        self.organize(modifiers, modifier_args)
+        self.organize(modifiers, modifier_args, loc=loc)
         return [i['ModifierId'] for i in modifiers]
 
     def improvement_yield_modifier(self, civ4_target, name):
-        improvement = civ4_target['ImprovementYieldChange']['ImprovementType']
-        modifiers = []
-        modifier_args = []
+        improvement = civ4_target['ImprovementYieldChange']['ImprovementType'][12:]
+        modifiers, modifier_args, loc = [], [], [name, []]
+
         yield_changes = civ4_target['ImprovementYieldChange']['ImprovementYields']['iYield']
         for idx, amount in enumerate(yield_changes):
             if int(amount) != 0:
-                modifier = {'ModifierId': f"MODIFIER_{name}_{improvement[12:]}_{yield_map[idx][6:]}",
+                modifier = {'ModifierId': f"MODIFIER_{name}_{improvement}_{yield_map[idx][6:]}",
                             'ModifierType': 'MODIFIER_PLAYER_ADJUST_PLOT_YIELD',
-                            'SubjectRequirementSetId': f'PLOT_HAS_{improvement[12:]}_REQUIREMENTS'}
+                            'SubjectRequirementSetId': f'PLOT_HAS_{improvement}_REQUIREMENTS'}
                 modifiers.append(modifier)
+                loc[1].append(f'+{amount} [ICON_{yield_map[idx][6:].capitalize()}] {yield_map[idx][6:].capitalize()} for each {improvement}.')
                 for name, value in [('Amount', amount), ('YieldType', yield_map[idx])]:
                     modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name,
                                           'Type': 'ARGTYPE_IDENTITY', 'Value': value})
 
-        self.organize(modifiers, modifier_args)
+        self.organize(modifiers, modifier_args, loc=loc)
         return [i['ModifierId'] for i in modifiers]
 
     def gpp_rate_modifier(self, civ4_target, name):
@@ -267,12 +292,13 @@ class Modifiers:
 
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
         return [modifier['ModifierId']]
 
     def buildings_amenities_modifier(self, civ4_target, name, **kwargs):
         buildings = civ4_target['BuildingHappinessChange']
         modifiers, modifier_args, requirements, requirement_arguments, requirement_set = [], [], [], [], []
+        loc = [name, []]
         if not isinstance(buildings, list):
             buildings = [buildings]
         for building in buildings:
@@ -292,8 +318,10 @@ class Modifiers:
                                           'Type': 'ARGTYPE_IDENTITY', 'Value': building_name})
             requirement_set.append({'RequirementSetId': requirements_['RequirementId'],
                                     'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'})
+            loc_name = " ".join([i.capitalize() for i in building_name.replace('BUILDING', '').split('_')]).replace(' Of ', ' of ')
+            loc[1].append(f"{loc_name} gives +{amount} [ICON_Amenities] Amenity.")
         self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_set)
+                      requirements_set=requirement_set, loc=loc)
 
         """RequirementSetRequirements(RequirementSetId, RequirementId)
                 VALUES('BUILDING_IS_FACTORY', 'REQUIRES_CITY_HAS_FACTORY');"""
@@ -304,7 +332,7 @@ class Modifiers:
                     'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_MILITARY_UNITS_PRODUCTION'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f'+{civ4_target} Bonus Production to Military Units.']])
         return [modifier['ModifierId']]
 
     def free_xp_modifier(self, civ4_target, name):
@@ -312,7 +340,7 @@ class Modifiers:
                     'ModifierType': 'MODIFIER_CITY_TRAINED_UNITS_ADJUST_GRANT_EXPERIENCE'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': -1}]
-        self.organize(modifier, modifier_args)  # this just gives promo, cant seem to find method for part xp
+        self.organize(modifier, modifier_args, loc=[name, [f'City gives free promotion, as cannot work out how to grant experience']])  # this just gives promo, cant seem to find method for part xp
         return [modifier['ModifierId']]
 
     def free_xp_global_modifier(self, civ4_target, name):
@@ -325,7 +353,7 @@ class Modifiers:
                           'Value': -1},
                          {'ModifierId': modifiers[0]['ModifierId'], 'Name': 'ModifierId', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': modifiers[1]['ModifierId']}]
-        self.organize(modifiers, modifier_args)  # this just gives promo, cant seem to find method for part xp
+        self.organize(modifiers, modifier_args, loc=[name, [f'All units start with a free promotion, as cannot work out how to grant experience']])  # this just gives promo, cant seem to find method for part xp
         return [i['ModifierId'] for i in modifiers]
 
     def free_xp_modifier_promo_class_specific(self, civ4_target, name):
@@ -350,7 +378,8 @@ class Modifiers:
 
         self.organize(modifier, modifier_args, requirements=[requirements],
                       requirements_arguments=[requirements_arguments],
-                      requirements_set=[requirements_set], requirements_set_reqs=[requirement_set_requirements])
+                      requirements_set=[requirements_set], requirements_set_reqs=[requirement_set_requirements],
+                      loc=[name, [f'City gives free promotion to {target_name}, as cannot work out how to grant experience']])
         return [modifier['ModifierId']]
 
     def slave_taking_modifier(self, civ4_target, name):
@@ -365,7 +394,7 @@ class Modifiers:
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'ModifierId',
                           'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']}]
 
-        self.organize(modifiers, modifier_args)
+        self.organize(modifiers, modifier_args, loc=[name, [f'Units now have a chance of capturing a builder from defeating major civilization units.']])
         # do i need this?, also maybe need to alter probability of slave taking
         """MY_TABLE(UnitAbilityType, Name, Description, Inactive, ShowFloatTextWhenEarned, Permanent)
         VALUES('ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY', 'LOC_ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY_NAME',
@@ -380,7 +409,7 @@ class Modifiers:
                     'SubjectRequirementSetId': 'UNIT_IS_BUILDER'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': 2}]  # hardcoded value at the moment, unless we see other instances
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f"Builders start with +{2} charges."]])
         return [modifier['ModifierId']]
 
     def housing_modifier(self, civ4_target, name):
@@ -388,7 +417,7 @@ class Modifiers:
                     'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_POLICY_HOUSING'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]  # hardcoded value at the moment, unless we see other instances
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f"+{civ4_target} Housing in all cities."]])
         return [modifier['ModifierId']]
 
     def no_foreign_trade(self, civ4_target, name):
@@ -399,7 +428,7 @@ class Modifiers:
                           'Value': 'YIELD_PRODUCTION, YIELD_FOOD, YIELD_SCIENCE, YIELD_CULTURE, YIELD_GOLD, YIELD_FAITH'},
                          {'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': '-100, -100, -100, -100, -100, -100'}]
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f"Foreign Trade provides 0 yields."]])
         return [modifier['ModifierId']]
 
     def trade_route_count_modifier(self, civ4_target, name):
@@ -407,7 +436,7 @@ class Modifiers:
                     'ModifierType': 'MODIFIER_PLAYER_ADJUST_TRADE_ROUTE_CAPACITY'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]  # hardcoded value at the moment, unless we see other instances
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f"+{civ4_target} Trade Route Capacity."]])
         return [modifier['ModifierId']]
 
     def trade_route_count_sea_modifier(self, civ4_target, name):
@@ -425,7 +454,7 @@ class Modifiers:
                           'Value': civ4_target},
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'ModifierId', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': modifiers[0]['ModifierId']}]
-        self.organize(modifiers, modifier_args)
+        self.organize(modifiers, modifier_args, loc=[name, [f"+{civ4_target} Trade Route Capacity per coastal city."]])
         return [modifiers[1]['ModifierId']]
 
     def trade_route_yield_modifier(self, civ4_target, name):
@@ -439,7 +468,7 @@ class Modifiers:
                          {'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': f'{civ4_target}, {civ4_target}, {civ4_target}, {civ4_target}, {civ4_target},'
                                    f' {civ4_target}'}]
-        self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifier)
+        self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifier, loc=[name, [f"+{civ4_target} to all international Trade Route yields."]])
         return [modifier['ModifierId']]
 
     def global_amenities_modifier(self, civ4_target, name):
@@ -452,7 +481,7 @@ class Modifiers:
         modifiers.append(modifier)
         modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
                               'Value': civ4_target})
-        self.organize(modifiers, modifier_args)
+        self.organize(modifiers, modifier_args, loc=[name, [f"+{civ4_target} Amenities per city."]])
 
         return [i['ModifierId'] for i in modifiers]
 
@@ -461,7 +490,7 @@ class Modifiers:
                     'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_POLICY_HOUSING'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]  # hardcoded value at the moment, unless we see other instances
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f"+{civ4_target} Housing per city."]])
         return [modifier['ModifierId']]
 
     def free_bonus_modifier(self, civ4_target, name):
@@ -471,7 +500,13 @@ class Modifiers:
                           'Value': civ4_target['iNumFreeBonuses']},
                          {'ModifierId': modifier['ModifierId'], 'Name': 'ResourceType', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target['FreeBonus']}]
-        self.organize(modifier, modifier_args)
+        if 'MANA' in civ4_target['FreeBonus']:
+            spl = civ4_target['FreeBonus'].split('_')
+            spl[1], spl[2] = spl[2], spl[1]
+            free_bonus_text = " ".join([i.capitalize() for i in spl[1:]])
+        else:
+            free_bonus_text = " ".join([i.capitalize() for i in civ4_target['FreeBonus'].split('_')[1:]])
+        self.organize(modifier, modifier_args, loc=[name, [f"+{civ4_target['iNumFreeBonuses']} {free_bonus_text} from city."]])
         return [modifier['ModifierId']]
 
     def free_building_modifier(self, civ4_target, name):
@@ -487,7 +522,7 @@ class Modifiers:
                           'Value': modifiers[1]['ModifierId']},
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'BuildingType', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifiers, modifier_args)
+        self.organize(modifiers, modifier_args, loc=[name, [f"Grant free {civ4_target} in all cities."]])
         return [i['ModifierId'] for i in modifiers]
 
     def project_prod_mult_modifier(self, civ4_target, name):
@@ -495,17 +530,17 @@ class Modifiers:
                     'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_ALL_PROJECTS_PRODUCTION'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f"{civ4_target}% Production Bonus to Projects in all cities"]])
         return [modifier['ModifierId']]
-
-    def yield_modifier(self, civ4_target, name):
-        return self.commerce_modifier(civ4_target, name, mapper=yield_map,
-                                      modifier_type='MODIFIER_SINGLE_CITY_ADJUST_CITY_YIELD_MODIFIER')
 
     def plot_yield_modifier(self, civ4_target, name, modifier_type='MODIFIER_CITY_PLOT_YIELDS_ADJUST_PLOT_YIELD',
                             requirement='PLOT_HAS_COAST_REQUIREMENTS'):
         yield_changes = civ4_target['iYield']
-        modifiers, modifier_args = [], []
+        if 'CITY' in modifier_type:
+            owner = ' in this city.'
+        else:
+            owner = '.'
+        modifiers, modifier_args, loc = [], [], [name, []]
         for idx, amount in enumerate(yield_changes):
             if int(amount) != 0:
                 modifier = {'ModifierId': f"MODIFIER_{name}_PLOT_YIELD_CHANGE_{yield_map[idx][6:]}",
@@ -517,7 +552,8 @@ class Modifiers:
                       'Value': yield_map[idx]},
                      {'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                       'Value': amount}])
-        self.organize(modifiers, modifier_args)
+                loc[1].append(f"+{amount} {yield_map[idx][6:]} on plots of type unspecified{owner}")
+        self.organize(modifiers, modifier_args, loc=loc)
         return modifiers
 
     def plot_yield_modifier_global(self, civ4_target, name, ):
@@ -531,7 +567,7 @@ class Modifiers:
                           'Value': domain},
                          {'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target['DomainProductionModifier']['iProductionModifier']}]
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f"+{civ4_target['DomainProductionModifier']['iProductionModifier']} towards {domain} production in this city."]])
         return [modifier['ModifierId']]
 
     def free_tech_grant(self, civ4_target, name):
@@ -540,7 +576,7 @@ class Modifiers:
                     'RunOnce': 1, 'Permanent': 1}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifier, modifier_args)
+        self.organize(modifier, modifier_args, loc=[name, [f'Grant a random technology.']])
         return [modifier['ModifierId']]
 
     def tech_grant_specific(self, civ4_target, name):
@@ -551,7 +587,7 @@ class Modifiers:
                           'Value': civ4_target}]
         dynamic_modifier = {'ModifierType': mod_type_name, 'CollectionType': 'COLLECTION_OWNER',
                             'EffectType': 'EFFECT_GRANT_PLAYER_SPECIFIC_TECHNOLOGY'}
-        self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifier)
+        self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifier, loc=[name, [f"Grant ###{civ4_target}###."]])
         return [modifier['ModifierId']]
 
     def civ_race(self, civ4_target, name):

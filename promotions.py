@@ -1,6 +1,6 @@
 import xmltodict, copy
 from collections import defaultdict
-from utils import small_dict, split_dict, localization_changes, localization, make_or_add
+from utils import small_dict, split_dict, make_or_add
 
 promo_mapper = {'Type': 'UnitPromotionType', 'Description': 'Description', 'UnitCombats': 'PromotionClass'}
 promo_mapper_extras = {'PromotionPrereq': 'PromotionPrereq', 'PromotionPrereqOr1': 'PromotionPrereqOr1',
@@ -100,6 +100,8 @@ class Promotions:
 
         duplicated_promos, duplicated_promo_extras = [], {}
         for promo in promo_dict.values():
+            promo['Name'] = f"LOC_{promo['UnitPromotionType']}_NAME"
+            promo['Description'] = f"LOC_{promo['UnitPromotionType']}_DESCRIPTION"
             if promo.get('PromotionClass', False):
                 name = promo['UnitPromotionType']
                 combat_classes = promo['PromotionClass']['UnitCombat']
@@ -120,10 +122,6 @@ class Promotions:
                 print(f'{promo["UnitPromotionType"]} has no combat type classification, setting to melee')
                 promo['PromotionClass'] = 'PROMOTION_CLASS_MELEE'
                 promo.pop('UnitCombats')
-
-        for i in duplicated_promos:
-            i['Name'] = f"LOC_{i['UnitPromotionType']}_NAME"
-            i['Description'] = f"LOC_{i['UnitPromotionType']}_DESCRIPTION"
 
         per_class_promos = defaultdict(list)
         for d in duplicated_promos:
@@ -233,8 +231,6 @@ class Promotions:
             promo['Column'] = unique_positions_structured[promo['PromotionClass']][promo['oldname']].pop() + 1
             promo.pop('oldname')
 
-        localization_changes(duplicated_promos)
-        localization(promotion_classes)
         make_or_add(model_obj['sql_inserts'], duplicated_promos, 'UnitPromotions')
         make_or_add(model_obj['sql_inserts'], promo_prereqs + p1 + p2 + p3, 'UnitPromotionPrereqs')
         make_or_add(model_obj['sql_inserts'], promotion_classes, 'UnitPromotionClasses')
