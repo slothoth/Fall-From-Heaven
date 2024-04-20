@@ -113,7 +113,9 @@ class Buildings:
 
         for build_name, building in only_useful_build_infos.items():
             for key, val in building.items():
-                modifier_ids = model_obj['modifiers'].generate_modifier(val, key, build_name[9:])
+                if key == 'CommerceModifiers':
+                    key = 'CommerceModifiers_City'
+                modifier_ids = model_obj['modifiers'].generate_modifier(val, key, 'SLTH_' + build_name)
                 if modifier_ids is not None:
                     for modifier_id in modifier_ids:
                         self.building_modifiers.append({'PolicyType': f"MODIFIER_BUILDING_{build_name[9:]}".upper(),
@@ -218,8 +220,8 @@ class Buildings:
                 civ_null['BuildingType'] = f"{civ_null['BuildingType']}_{civ}_{building[14:]}"
                 civ_null['TraitType'] = f"{civ_null['TraitType']}_{civ}"
                 self.traits[civ_null['TraitType']] = {'TraitType': civ_null['TraitType'],
-                                                      'Name': f"LOC_{civ_null['TraitType']}_NAME",
-                                                      'Description': 'NULL'}
+                                                      'Name': f"LOC_SLTH_{civ_null['TraitType']}_NAME",
+                                                      'Description': 'LOC_NULL_DESCRIPTION'}
                 six_style_build_dict[civ_null['BuildingType']] = civ_null
                 building_replaces.append({'CivUniqueBuildingType': civ_null['BuildingType'],
                                           'ReplacesBuildingType': building})
@@ -260,7 +262,7 @@ class Buildings:
                 self.civilization_traits.append(
                     {'CivilizationType': f'SLTH_CIVILIZATION_{name[21:]}', 'TraitType': trait_type})
             self.traits[trait_type] = {'TraitType': trait_type, 'Name': f"LOC_{trait_type}_NAME",
-                                       'Description': 'NULL'}
+                                       'Description': f"LOC_{trait_type}_DESCRIPTION"}
             self.kinds[trait_type] = 'KIND_TRAIT'
             self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': modifier_id})
         else:
@@ -273,47 +275,6 @@ class Buildings:
 
     def palace_gen(self, palaces):
         for name, building in palaces['extras'].items():
-            if building.get('FreeBonus', None) is not None and building['FreeBonus'] != 'NONE':
-                self.add_to_modifiers(name=name,
-                                      modifier_id=f"MODIFIER_{name[14:]}_GRANT_{building['FreeBonus'][6:]}",
-                                      modifier_names=['ResourceType', 'Amount'],
-                                      modifier_values=[f"RESOURCE_{building['FreeBonus'][6:]}",
-                                                       f"{building['iNumFreeBonuses']}"],
-                                      modifier_type='MODIFIER_PLAYER_ADJUST_FREE_RESOURCE_IMPORT', is_palace=True)
-
-            if building.get('FreeBonus2', None) is not None and building['FreeBonus2'] != 'NONE':
-                self.add_to_modifiers(name=name,
-                                      modifier_id=f"MODIFIER_{name[14:]}_GRANT_{building['FreeBonus2'][6:]}",
-                                      modifier_names=['ResourceType', 'Amount'],
-                                      modifier_values=[f"RESOURCE_{building['FreeBonus2'][6:]}",
-                                                       f"{building['iNumFreeBonuses']}"],
-                                      modifier_type='MODIFIER_PLAYER_ADJUST_FREE_RESOURCE_IMPORT', is_palace=True)
-
-            if building.get('FreeBonus3', None) is not None and building['FreeBonus3'] != 'NONE':
-                self.add_to_modifiers(name=name,
-                                      modifier_id=f"MODIFIER_{name[14:]}_GRANT_{building['FreeBonus3'][6:]}",
-                                      modifier_names=['ResourceType', 'Amount'],
-                                      modifier_values=[f"RESOURCE_{building['FreeBonus3'][6:]}",
-                                                       f"{building['iNumFreeBonuses']}"],
-                                      modifier_type='MODIFIER_PLAYER_ADJUST_FREE_RESOURCE_IMPORT', is_palace=True)
-
-            if building.get('YieldModifiers', None) is not None and building['YieldModifiers'] != 'NONE':
-                for idx, amount in enumerate(building['YieldModifiers']['iYield']):
-                    if int(amount) != 0:
-                        self.add_to_modifiers(name=name,
-                                              modifier_id=f"MODIFIER_{name[14:]}_ADD{yield_map[idx][5:]}YIELD",
-                                              modifier_names=['Amount', 'YieldType'], is_palace=True,
-                                              modifier_values=[amount, yield_map[idx]],
-                                              modifier_type='MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER')
-
-            if building.get('CommerceModifier', None) is not None and building['CommerceModifier'] != 'NONE':
-                for idx, amount in enumerate(building['CommerceModifier']['iCommerce']):
-                    if int(amount) != 0:
-                        self.add_to_modifiers(name=name,
-                                              modifier_id=f"MODIFIER_{name[14:]}_ADD{commerce_map[idx][5:]}YIELD",
-                                              modifier_names=['Amount', 'YieldType'], is_palace=True,
-                                              modifier_values=[amount, commerce_map[idx]],
-                                              modifier_type='MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER')
             # DAMN GRIGORI
             if building.get('iGreatPeopleRateModifier', '0') != '0':
                 modifier_id = f"MODIFIER_{name[14:]}_INCREASE_GPP_MULT"
@@ -321,7 +282,7 @@ class Buildings:
                 trait_type = f'TRAIT_CIVILIZATION_{name[14:]}_GPP_MULT'
                 modifier_names = ['Amount']
                 modifier_values = [building['iGreatPeopleRateModifier']]
-                self.traits[trait_type] = {'TraitType': trait_type, 'Name': f"LOC_{trait_type}_NAME",
+                self.traits[trait_type] = {'TraitType': trait_type, 'Name': f"LOC_SLTH_{trait_type}_NAME",
                                            'Description': 'NULL'}
                 self.kinds[trait_type] = 'KIND_TRAIT'
                 self.dynamic_modifiers[modifier_type] = {'ModifierType': modifier_type,
@@ -347,7 +308,7 @@ class Buildings:
                                                          'EffectType': 'EFFECT_ADJUST_GREAT_PERSON_POINTS'}
                 self.civilization_traits.append({'CivilizationType': f"SLTH_CIVILIZATION_{name[21:]}",
                                                  'TraitType': trait_type})
-                self.traits[trait_type] = {'TraitType': trait_type, 'Name': 'NULL', 'Description': 'NULL'}
+                self.traits[trait_type] = {'TraitType': trait_type, 'Name': f'LOC{trait_type}_NAME', 'Description': f'LOC{trait_type}_DESCRIPTION'}
                 self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': modifier_id})
                 self.modifier_table.append({'ModifierId': modifier_id, 'ModifierType': modifier_type})
                 self.kinds[trait_type] = 'KIND_TRAIT'

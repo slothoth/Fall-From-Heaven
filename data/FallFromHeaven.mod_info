@@ -17,6 +17,9 @@
       </Properties>
       <File>Core/frontend_config.sql</File>
     </UpdateDatabase>
+    <UpdateText id="UpdateText">
+      <File>Core/localization.sql</File>
+    </UpdateText>
    </FrontEndActions>
   <InGameActions>
     <UpdateDatabase id="Gameplay">
