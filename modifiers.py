@@ -15,6 +15,8 @@ map_specialists = {'SPECIALIST_SCIENTIST': 'DISTRICT_CAMPUS', 'SPECIALIST_ENGINE
 class Modifiers:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.civic_map = {}
+
         self.modifiers = {}
         self.dynamic_modifiers = {}
         self.modifier_arguments = []
@@ -589,10 +591,14 @@ class Modifiers:
         return [modifier['ModifierId']]
 
     def tech_grant_specific(self, civ4_target, name):
+        tree_type = 'TechType'
+        if civ4_target[5:] in self.civic_map:
+            civ4_target = 'SLTH_' + self.civic_map[civ4_target[5:]]
+            tree_type = 'CivicType'
         mod_name = f"MODIFIER_{name}_GRANT_{civ4_target}"
         mod_type_name = 'MODIFIER_PLAYER_GRANT_SPECIFIC_TECHNOLOGY'
         modifier = {'ModifierId': mod_name, 'ModifierType': mod_type_name, 'RunOnce': 1, 'Permanent': 1}
-        modifier_args = [{'ModifierId': mod_name, 'Name': 'TechType', 'Type': 'ARGTYPE_IDENTITY',
+        modifier_args = [{'ModifierId': mod_name, 'Name': tree_type, 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
         dynamic_modifier = {'ModifierType': mod_type_name, 'CollectionType': 'COLLECTION_OWNER',
                             'EffectType': 'EFFECT_GRANT_PLAYER_SPECIFIC_TECHNOLOGY'}
