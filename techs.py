@@ -66,6 +66,7 @@ def techs_sql(model_obj, kept):
         model_obj['kinds'][f"SLTH_{tech_split[1]}"] = tech_split[3]
 
     model_obj['civics'] = civics
+    model_obj['modifiers'].civic_map = civics
     return model_obj
 
 

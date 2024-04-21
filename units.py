@@ -192,16 +192,6 @@ def units_sql(model_obj, kept):
     final_units = {key: val for key, val in final_units.items() if key not in compat_units}
     update_units = {key: val for key, val in final_units.items() if key in units_to_update}
     final_units = {key: val for key, val in final_units.items() if key not in units_to_update}
-    for civ, units in model_obj['civ_units']['dev_null'].items():
-        for unit in units:
-            civ_null = UNIT_NULL.copy()
-            civ_null['UnitType'] = f"{civ_null['UnitType']}_{civ}_{unit[10:]}"
-            civ_null['TraitType'] = f"{civ_null['TraitType']}_{civ}"
-            model_obj['traits'][civ_null['TraitType']] = {'TraitType': civ_null['TraitType'], 'Name': f"LOC_{civ_null['TraitType']}_NAME",
-                                              'Description': 'LOC_NULL'}
-            final_units[civ_null['UnitType']] = civ_null
-            replaces.append({'CivUniqueUnitType': civ_null['UnitType'], 'ReplacesUnitType': unit})
-            model_obj['kinds'][civ_null['TraitType']] = 'KIND_TRAIT'
 
     for name, unit in final_units.items():
         if name not in kept_units:

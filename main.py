@@ -38,7 +38,7 @@ def main():
     Buildings(civs).buildings_sql(model_obj)
     districts_build(model_obj)
     make_or_add(model_obj['sql_inserts'], model_obj['traits'], 'Traits')
-    model_obj['modifiers'].big_get(model_obj)
+    model_obj['modifiers'].sql_convert(model_obj)
     make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value} for key, value
                                            in model_obj['kinds'].items()], 'Types')
     # deprecated hash version
