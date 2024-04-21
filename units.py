@@ -211,9 +211,8 @@ def units_sql(model_obj, kept):
     model_obj['kinds']['SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM'] = 'KIND_TRAIT'
     mud_golem['BuildCharges'], mud_golem['Combat'], mud_golem['RangedCombat'] = 5, 3, 1
 
-    heros_, final_units, kinds = heros_builder(hero_units, model_obj['kinds'], final_units)
-    for table_name, values in heros_.items():
-        make_or_add(model_obj['sql_inserts'], values, table_name)
+    heros_builder(hero_units, model_obj, final_units)
+
     make_or_add(model_obj['sql_inserts'], final_units, 'Units')
     update_or_add(model_obj['sql_updates'], update_units, 'Units', ['UnitType'])
     make_or_add(model_obj['sql_inserts'], replaces, 'UnitReplaces')
@@ -222,33 +221,10 @@ def units_sql(model_obj, kept):
     return model_obj
 
 
-def heros_builder(hero_units, kinds, final_units):
+def heros_builder(hero_units, model_obj, final_units):
     # make wonders that represent the units
-    heros = {'Buildings': {}, 'BuildingModifiers': {}, 'Modifiers': {}, 'ModifierArguments': []}
+    # OR SLTH_ONLY_UNIT
     for hero_name, details in hero_units.items():
-        build_name = f"BUILDING_{hero_name}"
-        modifier = f'GRANT_{hero_name}'
-        building = {'BuildingType': f"BUILDING_{hero_name}", 'Name': details['Name'] + '_BUILDING',
-                    'PrereqTech': details['PrereqTech'], 'PrereqCivic': details['PrereqCivic'], 'Cost': details['Cost'],
-                    'TraitType': details['TraitType'], 'AdvisorType': details['AdvisorType'],
-                    'MaxPlayerInstances': -1, 'MaxWorldInstances': 1,  'IsWonder': 1,
-                    'Description': details['Description'] + '_BUILDING'}
-        heros['Buildings'][build_name] = building
-
-        heros['BuildingModifiers'][build_name] = {'BuildingType': build_name, 'ModifierId': modifier}
-
-        heros['Modifiers'][modifier] = {'ModifierId': modifier,
-                                          'ModifierType': 'MODIFIER_SINGLE_CITY_GRANT_UNIT_IN_CITY', 'RunOnce': 1,
-                                          'NewOnly': 0, 'Permanent': 1, 'Repeatable': 0}
-
-        heros['ModifierArguments'].append({'ModifierId': modifier, 'Name': 'UnitType', 'Type': 'ARGTYPE_IDENTITY',
-                                             'Value': hero_name})
-        heros['ModifierArguments'].append({'ModifierId': modifier, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                                             'Value': 1})
-        final_units[hero_name]['EnabledByReligion'] = 1
-        # TrackReligion, EnabledByReligion
-        kinds[build_name] = 'KIND_BUILDING'
-        kinds[modifier] = 'KIND_MODIFIER'
-    return heros, final_units, kinds
+        model_obj['modifiers'].generate_modifier({'SLTH_ONLY_UNIT': hero_name}, 'SLTH_DEFAULT_RACE', 'BAN')
 
 
