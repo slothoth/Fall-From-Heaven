@@ -24,6 +24,7 @@ class Civilizations:
         self.unit_abilities = []
         self.ability_modifiers = []
         self.type_tags = []
+        self.civ_traits = []
 
     def civilizations(self, model_obj):
         with open('data/XML/Civilizations/CIV4CivilizationInfos.xml', 'r') as file:
@@ -51,7 +52,7 @@ class Civilizations:
         civ_dict.pop('CIVILIZATION_RANDOM')
 
         string_counts = Counter()
-        self.civ_traits, civ_building_replace = [], []
+        civ_building_replace = []
         no_access_building, building_replaces, traits, barb_unit_traits, not_barb = {}, {}, {}, {}, {}
         civ_units = {'barbarian': [], 'not_barbarian': [], 'civ_traits': [], 'dev_null': {}}
         civ_buildings = {'civ_traits': [], 'dev_null': {}}
@@ -165,6 +166,8 @@ class Civilizations:
                                     'InheritFrom': 'LEADER_DEFAULT'})
                 model_obj['kinds'][leader_name] = 'KIND_LEADER'
 
+        model_obj['civ_units'] = civ_units
+        model_obj['civ_buildings'] = civ_buildings
         self.civilization_modifiers(model_obj, civ_dict)
 
         self.civ_traits.append({'TraitType': 'SLTH_TRAIT_CIVILIZATION_UNIT_MUD_GOLEM',
@@ -175,9 +178,6 @@ class Civilizations:
         make_or_add(model_obj['sql_inserts'], leaders, 'Leaders')
         make_or_add(model_obj['sql_inserts'], self.leaders_of_civs, 'CivilizationLeaders')
         make_or_add(model_obj['sql_inserts'], civ_building_replace, 'BuildingReplaces')
-
-        model_obj['civ_units'] = civ_units
-        model_obj['civ_buildings'] = civ_buildings
 
     def civilization_modifiers(self, model_obj, civ_dict):
         modifier_stuff = {key: {'CivTrait': i.get('CivTrait'), 'FreeTechs': i.get('FreeTechs'),
@@ -236,7 +236,7 @@ class Civilizations:
             if i['CivTrait'] != 'NONE':
                 mod_ = model_obj['modifiers'].generate_modifier({f"SLTH_{i['CivTrait']}": 'Cheese'},
                                                                 'SLTH_DEFAULT_RACE', civ)
-                if modifiers is not None:
+                if mod_ is not None:
                     self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
             if i['FreeTechs'] is not None:
                 if i['FreeTechs'] == 'TECH_SEAFARING':
@@ -250,6 +250,23 @@ class Civilizations:
                 promo = races[i['DefaultRace']]
                 for i in promo['trait_modifier']:
                     self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': i})
+
+        dummy = []
+        [dummy.extend(i) for i in model_obj['civ_units']['dev_null'].values()]
+        ban_unit_modifiers = []
+        for unit in list(set(dummy)):
+            ban_unit_modifiers.append(model_obj['modifiers'].generate_modifier(civ4_target=unit,
+                                                                               name='SLTH_BAN_UNIT',
+                                                                               civ6_target='placeholder'))
+
+        for civ, unit_list in model_obj['civ_units']['dev_null'].items():
+            if civ == 'CIVILIZATION_BARBARIAN':
+                continue
+            for unit in unit_list:
+                self.trait_modifiers.append({'TraitType': f'SLTH_TRAIT_{civ}_COOL',
+                                             'ModifierId': f"MODIFIER_BAN_{unit}"})
+
+        make_or_add(model_obj['sql_inserts'], self.trait_modifiers, 'TraitModifiers')
 
 
     def config_builder(self, model_obj):

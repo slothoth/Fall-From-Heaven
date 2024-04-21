@@ -1,5 +1,5 @@
 from civilizations import Civilizations
-from units import units_sql
+from units import Units
 from techs import techs_sql, prereq_techs
 from buildings import Buildings, districts_build
 from delete_n_patch import delete_rows
@@ -23,12 +23,12 @@ def main():
     with open("data/kept.json", 'r') as json_file:
         kept = json.load(json_file)
     model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [], 'sql_inserts': {}, 'sql_updates': {}, 'sql_config': {},
-                 'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'select_civs': civs,
-                 'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}}
-    model_obj['civilizations'].civilizations(model_obj)
+                 'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'units': Units(),
+                 'select_civs': civs, 'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}}
     techs_sql(model_obj, kept)
+    model_obj['civilizations'].civilizations(model_obj)
     build_policies(model_obj)
-    units_sql(model_obj, kept)
+    model_obj['units'].units_sql(model_obj, kept)
     Promotions().promotion_miner(model_obj)
     build_resource_string(model_obj)
     build_terrains_string(model_obj)
@@ -38,7 +38,7 @@ def main():
     Buildings(civs).buildings_sql(model_obj)
     districts_build(model_obj)
     make_or_add(model_obj['sql_inserts'], model_obj['traits'], 'Traits')
-    model_obj['modifiers'].big_get(model_obj)
+    model_obj['modifiers'].sql_convert(model_obj)
     make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value} for key, value
                                            in model_obj['kinds'].items()], 'Types')
     # deprecated hash version
@@ -54,10 +54,11 @@ def main():
         total += i
 
     # debug super palace
-    # total += """UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
-    # UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
-    # UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
-    # UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';"""
+    if True:
+        total += """UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
+        UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
+        UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
+        UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';"""
 
     total_with_null = total.replace("'NULL'", "NULL")
     with open('../FallFromHeaven/Core/main.sql', 'w') as file:
