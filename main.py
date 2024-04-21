@@ -1,5 +1,5 @@
 from civilizations import Civilizations
-from units import units_sql
+from units import Units
 from techs import techs_sql, prereq_techs
 from buildings import Buildings, districts_build
 from delete_n_patch import delete_rows
@@ -23,12 +23,12 @@ def main():
     with open("data/kept.json", 'r') as json_file:
         kept = json.load(json_file)
     model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [], 'sql_inserts': {}, 'sql_updates': {}, 'sql_config': {},
-                 'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'select_civs': civs,
-                 'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}}
+                 'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'units': Units(),
+                 'select_civs': civs, 'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}}
     techs_sql(model_obj, kept)
     model_obj['civilizations'].civilizations(model_obj)
     build_policies(model_obj)
-    units_sql(model_obj, kept)
+    model_obj['units'].units_sql(model_obj, kept)
     Promotions().promotion_miner(model_obj)
     build_resource_string(model_obj)
     build_terrains_string(model_obj)
