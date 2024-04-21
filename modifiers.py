@@ -28,6 +28,9 @@ class Modifiers:
         self.requirement_set_reqs = []
         self.requirement_set = []
 
+        self.tags = {}
+        self.type_tags = []
+
         self.complete_set = {}
         self.loc = {}
 
@@ -155,6 +158,7 @@ class Modifiers:
                             'SLTH_TRAIT_DEXTEROUS': self.ability_ranged_buff,
                             'SLTH_TRAIT_SINISTER': self.trait_sinister,
                             'SLTH_TRAIT_HORSELORD': self.trait_horselord,
+                            'SLTH_ONLY_UNIT': self.one_of_unit_setter,
                             'iWorkRateModify': self.cantImplement,
                             # difficult as build charges, would need to apply to only units with buld chargs already
                             'bImmuneToFear': self.cantImplement,  # no fear in civ6 as no tile stack
@@ -612,6 +616,25 @@ class Modifiers:
                           'Value': civ4_target}]
         self.organize(modifier, modifier_args)
         return modifier['ModifierId']
+
+    def one_of_unit_setter(self, civ4_target, name):
+        # give unit an ability.
+        # the ability on spawning attachs a modifier to all players, permananent, once.
+        # that modifier bans players from using it.
+        civ4_name = list(civ4_target.values())[0]
+        ability_name = f'ABILITY_{name}_{civ4_name.upper()}'
+        modifiers = [{'ModifierId': f"MODIFIER_{ability_name}", 'ModifierType': 'MODIFIER_ALL_PLAYERS_ATTACH_MODIFIER',
+                      'RunOnce': 1, 'Permanent': 1},
+                     {'ModifierId': f"MODIFIER_{ability_name}_ON_CIVS", 'ModifierType': 'MODIFIER_PLAYER_UNIT_BUILD_DISABLED'}]
+        modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'ModifierId', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': modifiers[1]['ModifierId']},
+                         {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'UnitType', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_name}]
+        tags = {'Tag': 'SLTH_CLASS_HERO', 'Vocabulary': 'ABILITY_CLASS'}
+        type_tags = [{'Type': ability_name, 'Tag': 'SLTH_CLASS_HERO'},
+                     {'Type': civ4_name, 'Tag': 'SLTH_CLASS_HERO'}]
+        self.organize(modifiers, modifier_args, tags=tags, type_tags = type_tags)
+        return modifiers[0]['ModifierId']
 
     def civ_race(self, civ4_target, name):
         civ4_name = list(civ4_target.keys())[0]
