@@ -15,6 +15,8 @@ map_specialists = {'SPECIALIST_SCIENTIST': 'DISTRICT_CAMPUS', 'SPECIALIST_ENGINE
 class Modifiers:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.civic_map = {}
+
         self.modifiers = {}
         self.dynamic_modifiers = {}
         self.modifier_arguments = []
@@ -25,6 +27,9 @@ class Modifiers:
         self.requirements_arguments = []
         self.requirement_set_reqs = []
         self.requirement_set = []
+
+        self.tags = {}
+        self.type_tags = []
 
         self.complete_set = {}
         self.loc = {}
@@ -129,7 +134,8 @@ class Modifiers:
                             }
 
         my_own_implemented = {'SLTH_GRANT_SPECIFIC_TECH': self.tech_grant_specific,
-                              'SLTH_DEFAULT_RACE': self.civ_race}
+                              'SLTH_DEFAULT_RACE': self.civ_race,
+                              'SLTH_BAN_UNIT': self.ban_unit}
 
         self.modifier_map.update(not_implemented)
         self.modifier_map.update(somewhat_botched)
@@ -152,6 +158,7 @@ class Modifiers:
                             'SLTH_TRAIT_DEXTEROUS': self.ability_ranged_buff,
                             'SLTH_TRAIT_SINISTER': self.trait_sinister,
                             'SLTH_TRAIT_HORSELORD': self.trait_horselord,
+                            'SLTH_ONLY_UNIT': self.one_of_unit_setter,
                             'iWorkRateModify': self.cantImplement,
                             # difficult as build charges, would need to apply to only units with buld chargs already
                             'bImmuneToFear': self.cantImplement,  # no fear in civ6 as no tile stack
@@ -163,7 +170,7 @@ class Modifiers:
 
     def organize(self, modifier, modifier_arguments, dynamic_modifier=None, trait_modifiers=None, trait=None,
                  requirements=None, requirements_arguments=None, requirements_set=None, requirements_set_reqs=None,
-                 loc=None):
+                 tags=None, type_tags=None, loc=None):
         modifiers = modifier
         if isinstance(modifier, list):
             for mod in modifier:
@@ -171,7 +178,8 @@ class Modifiers:
             modifier = modifier[0]
 
         self.complete_set[modifier['ModifierId']] = [modifiers, modifier_arguments, dynamic_modifier, trait_modifiers,
-                                                     trait, requirements, requirements_arguments, requirements_set]
+                                                     trait, requirements, requirements_arguments, requirements_set,
+                                                     requirements_set_reqs, tags, type_tags]
 
         self.modifiers[modifier['ModifierId']] = modifier
         self.modifier_arguments.extend(modifier_arguments)
@@ -188,6 +196,11 @@ class Modifiers:
             self.requirement_set.extend(requirements_set)
         if requirements_set_reqs:
             self.requirement_set_reqs.extend(requirements_set_reqs)
+        if tags:
+            self.tags[tags['Tag']] = tags
+        if type_tags:
+            self.type_tags.extend(type_tags)
+
         if loc:
             if loc[0] in self.loc:
                 for i in loc[1]:
@@ -195,19 +208,28 @@ class Modifiers:
             else:
                 self.loc[loc[0]] = loc[1]
 
-    def big_get(self, model_obj):
-        modifier_string = ''
+    def sql_convert(self, model_obj):
         for i in [(self.modifier_arguments, 'ModifierArguments'),
                   (self.modifiers, 'Modifiers'),
                   (self.dynamic_modifiers, 'DynamicModifiers'),
                   (self.requirements, 'Requirements'),
                   (self.requirement_set, 'RequirementSets'),
                   (self.requirement_set_reqs, 'RequirementSetRequirements'),
-                  (self.requirements_arguments, 'RequirementArguments')]:
+                  (self.requirements_arguments, 'RequirementArguments'),
+                  (self.tags, 'Tags'),
+                  (self.type_tags, 'TypeTags')]:
 
             make_or_add(model_obj['sql_inserts'], i[0], i[1])
             for modifier in self.dynamic_modifiers:
                 model_obj['kinds'][modifier] = 'KIND_MODIFIER'
+
+        for feature, details in self.complete_set.items():
+            print(feature)
+            for sql in details:
+                if sql is not None:
+                    for i in sql:
+                        print(i)
+            print('\n')
 
     def capital_commerce_modifier(self, civ4_target, name):
         return self.commerce_modifier(civ4_target, name,
@@ -334,7 +356,7 @@ class Modifiers:
                     'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_MILITARY_UNITS_PRODUCTION'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifier, modifier_args, loc=[name, [f'+{civ4_target} Bonus Production to Military Units.']])
+        self.organize(modifier, modifier_args, loc=[name, [f'+{civ4_target}% Bonus Production to Military Units.']])
         return [modifier['ModifierId']]
 
     def free_xp_modifier(self, civ4_target, name):
@@ -395,13 +417,7 @@ class Modifiers:
                           'Type': 'ARGTYPE_IDENTITY', 'Value': 'UNIT_SLAVE'},
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'ModifierId',
                           'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']}]
-
         self.organize(modifiers, modifier_args, loc=[name, [f'Units now have a chance of capturing a builder from defeating major civilization units.']])
-        # do i need this?, also maybe need to alter probability of slave taking
-        """MY_TABLE(UnitAbilityType, Name, Description, Inactive, ShowFloatTextWhenEarned, Permanent)
-        VALUES('ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY', 'LOC_ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY_NAME',
-               'LOC_ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY_DESCRIPTION', '1', '0', '1');"""
-
         return [modifiers[1]['ModifierId']]
 
     def builder_charge_modifier(self, civ4_target, name):
@@ -582,15 +598,47 @@ class Modifiers:
         return [modifier['ModifierId']]
 
     def tech_grant_specific(self, civ4_target, name):
+        tree_type = 'TechType'
+        if civ4_target[5:] in self.civic_map:
+            civ4_target = 'SLTH_' + self.civic_map[civ4_target[5:]]
+            tree_type = 'CivicType'
+            # NEVERMIND THIS DOESNT WORK BECAUSE WE NEED TO DO IT IN LUA AGHHH. CHECK SCENARIOS for examples
         mod_name = f"MODIFIER_{name}_GRANT_{civ4_target}"
         mod_type_name = 'MODIFIER_PLAYER_GRANT_SPECIFIC_TECHNOLOGY'
         modifier = {'ModifierId': mod_name, 'ModifierType': mod_type_name, 'RunOnce': 1, 'Permanent': 1}
-        modifier_args = [{'ModifierId': mod_name, 'Name': 'TechType', 'Type': 'ARGTYPE_IDENTITY',
+        modifier_args = [{'ModifierId': mod_name, 'Name': tree_type, 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
         dynamic_modifier = {'ModifierType': mod_type_name, 'CollectionType': 'COLLECTION_OWNER',
                             'EffectType': 'EFFECT_GRANT_PLAYER_SPECIFIC_TECHNOLOGY'}
         self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifier, loc=[name, [f"Grant ###{civ4_target}###."]])
-        return [modifier['ModifierId']]
+        return modifier['ModifierId']
+
+    def ban_unit(self, civ4_target, name):
+        mod_name = f"MODIFIER_BAN_{civ4_target}"
+        modifier = {'ModifierId': mod_name, 'ModifierType': 'MODIFIER_PLAYER_UNIT_BUILD_DISABLED'}
+        modifier_args = [{'ModifierId': mod_name, 'Name': 'UnitType', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target}]
+        self.organize(modifier, modifier_args)
+        return modifier['ModifierId']
+
+    def one_of_unit_setter(self, civ4_target, name):
+        # give unit an ability.
+        # the ability on spawning attachs a modifier to all players, permananent, once.
+        # that modifier bans players from using it.
+        civ4_name = list(civ4_target.values())[0]
+        ability_name = f'ABILITY_{name}_{civ4_name.upper()}'
+        modifiers = [{'ModifierId': f"MODIFIER_{ability_name}", 'ModifierType': 'MODIFIER_ALL_PLAYERS_ATTACH_MODIFIER',
+                      'RunOnce': 1, 'Permanent': 1},
+                     {'ModifierId': f'TRAIT_CANT_BUILD_HERO_{civ4_name.upper()}', 'ModifierType': 'MODIFIER_PLAYER_UNIT_BUILD_DISABLED'}]
+        modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'ModifierId', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': modifiers[1]['ModifierId']},
+                         {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'UnitType', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_name}]
+        tags = {'Tag': f'SLTH_CLASS_{civ4_name.upper()}', 'Vocabulary': 'ABILITY_CLASS'}
+        type_tags = [{'Type': ability_name, 'Tag': tags['Tag']},
+                     {'Type': civ4_name, 'Tag': tags['Tag']}]
+        self.organize(modifiers, modifier_args, tags=tags, type_tags=type_tags)
+        return {'modifier': modifiers[0]['ModifierId'], 'ability': ability_name}
 
     def civ_race(self, civ4_target, name):
         civ4_name = list(civ4_target.keys())[0]
@@ -604,7 +652,7 @@ class Modifiers:
             civ4_ability = [civ4_ability]
         attacks = set([i['iTerrainAttack'] for i in civ4_ability])
         if len(attacks) > 1:
-            logger.debug(' do some iterated versionahh')
+            print(' do some iterated versionahh')
         else:
             amount = attacks.pop()
         for idx, i in enumerate(civ4_ability):
