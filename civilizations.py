@@ -236,7 +236,7 @@ class Civilizations:
             if i['CivTrait'] != 'NONE':
                 mod_ = model_obj['modifiers'].generate_modifier({f"SLTH_{i['CivTrait']}": 'Cheese'},
                                                                 'SLTH_DEFAULT_RACE', civ)
-                if modifiers is not None:
+                if mod_ is not None:
                     self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
             if i['FreeTechs'] is not None:
                 if i['FreeTechs'] == 'TECH_SEAFARING':

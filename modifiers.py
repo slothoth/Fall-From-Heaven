@@ -347,7 +347,7 @@ class Modifiers:
                     'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_MILITARY_UNITS_PRODUCTION'}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifier, modifier_args, loc=[name, [f'+{civ4_target} Bonus Production to Military Units.']])
+        self.organize(modifier, modifier_args, loc=[name, [f'+{civ4_target}% Bonus Production to Military Units.']])
         return [modifier['ModifierId']]
 
     def free_xp_modifier(self, civ4_target, name):
@@ -648,7 +648,7 @@ class Modifiers:
             civ4_ability = [civ4_ability]
         attacks = set([i['iTerrainAttack'] for i in civ4_ability])
         if len(attacks) > 1:
-            logger.debug(' do some iterated versionahh')
+            print(' do some iterated versionahh')
         else:
             amount = attacks.pop()
         for idx, i in enumerate(civ4_ability):
