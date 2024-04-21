@@ -25,8 +25,8 @@ def main():
     model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [], 'sql_inserts': {}, 'sql_updates': {}, 'sql_config': {},
                  'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'select_civs': civs,
                  'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}}
-    model_obj['civilizations'].civilizations(model_obj)
     techs_sql(model_obj, kept)
+    model_obj['civilizations'].civilizations(model_obj)
     build_policies(model_obj)
     units_sql(model_obj, kept)
     Promotions().promotion_miner(model_obj)
