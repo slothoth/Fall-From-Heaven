@@ -209,18 +209,27 @@ class Modifiers:
                 self.loc[loc[0]] = loc[1]
 
     def sql_convert(self, model_obj):
-        modifier_string = ''
         for i in [(self.modifier_arguments, 'ModifierArguments'),
                   (self.modifiers, 'Modifiers'),
                   (self.dynamic_modifiers, 'DynamicModifiers'),
                   (self.requirements, 'Requirements'),
                   (self.requirement_set, 'RequirementSets'),
                   (self.requirement_set_reqs, 'RequirementSetRequirements'),
-                  (self.requirements_arguments, 'RequirementArguments')]:
+                  (self.requirements_arguments, 'RequirementArguments'),
+                  (self.tags, 'Tags'),
+                  (self.type_tags, 'TypeTags')]:
 
             make_or_add(model_obj['sql_inserts'], i[0], i[1])
             for modifier in self.dynamic_modifiers:
                 model_obj['kinds'][modifier] = 'KIND_MODIFIER'
+
+        for feature, details in self.complete_set.items():
+            print(feature)
+            for sql in details:
+                if sql is not None:
+                    for i in sql:
+                        print(i)
+            print('\n')
 
     def capital_commerce_modifier(self, civ4_target, name):
         return self.commerce_modifier(civ4_target, name,
@@ -408,13 +417,7 @@ class Modifiers:
                           'Type': 'ARGTYPE_IDENTITY', 'Value': 'UNIT_SLAVE'},
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'ModifierId',
                           'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']}]
-
         self.organize(modifiers, modifier_args, loc=[name, [f'Units now have a chance of capturing a builder from defeating major civilization units.']])
-        # do i need this?, also maybe need to alter probability of slave taking
-        """MY_TABLE(UnitAbilityType, Name, Description, Inactive, ShowFloatTextWhenEarned, Permanent)
-        VALUES('ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY', 'LOC_ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY_NAME',
-               'LOC_ABILITY_GENGHIS_KHAN_CAVALRY_CAPTURE_CAVALRY_DESCRIPTION', '1', '0', '1');"""
-
         return [modifiers[1]['ModifierId']]
 
     def builder_charge_modifier(self, civ4_target, name):
@@ -599,6 +602,7 @@ class Modifiers:
         if civ4_target[5:] in self.civic_map:
             civ4_target = 'SLTH_' + self.civic_map[civ4_target[5:]]
             tree_type = 'CivicType'
+            # NEVERMIND THIS DOESNT WORK BECAUSE WE NEED TO DO IT IN LUA AGHHH. CHECK SCENARIOS for examples
         mod_name = f"MODIFIER_{name}_GRANT_{civ4_target}"
         mod_type_name = 'MODIFIER_PLAYER_GRANT_SPECIFIC_TECHNOLOGY'
         modifier = {'ModifierId': mod_name, 'ModifierType': mod_type_name, 'RunOnce': 1, 'Permanent': 1}
@@ -625,16 +629,16 @@ class Modifiers:
         ability_name = f'ABILITY_{name}_{civ4_name.upper()}'
         modifiers = [{'ModifierId': f"MODIFIER_{ability_name}", 'ModifierType': 'MODIFIER_ALL_PLAYERS_ATTACH_MODIFIER',
                       'RunOnce': 1, 'Permanent': 1},
-                     {'ModifierId': f"MODIFIER_{ability_name}_ON_CIVS", 'ModifierType': 'MODIFIER_PLAYER_UNIT_BUILD_DISABLED'}]
+                     {'ModifierId': f'TRAIT_CANT_BUILD_HERO_{civ4_name.upper()}', 'ModifierType': 'MODIFIER_PLAYER_UNIT_BUILD_DISABLED'}]
         modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'ModifierId', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': modifiers[1]['ModifierId']},
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'UnitType', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_name}]
-        tags = {'Tag': 'SLTH_CLASS_HERO', 'Vocabulary': 'ABILITY_CLASS'}
-        type_tags = [{'Type': ability_name, 'Tag': 'SLTH_CLASS_HERO'},
-                     {'Type': civ4_name, 'Tag': 'SLTH_CLASS_HERO'}]
-        self.organize(modifiers, modifier_args, tags=tags, type_tags = type_tags)
-        return modifiers[0]['ModifierId']
+        tags = {'Tag': f'SLTH_CLASS_{civ4_name.upper()}', 'Vocabulary': 'ABILITY_CLASS'}
+        type_tags = [{'Type': ability_name, 'Tag': tags['Tag']},
+                     {'Type': civ4_name, 'Tag': tags['Tag']}]
+        self.organize(modifiers, modifier_args, tags=tags, type_tags=type_tags)
+        return {'modifier': modifiers[0]['ModifierId'], 'ability': ability_name}
 
     def civ_race(self, civ4_target, name):
         civ4_name = list(civ4_target.keys())[0]
