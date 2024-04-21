@@ -129,7 +129,8 @@ class Modifiers:
                             }
 
         my_own_implemented = {'SLTH_GRANT_SPECIFIC_TECH': self.tech_grant_specific,
-                              'SLTH_DEFAULT_RACE': self.civ_race}
+                              'SLTH_DEFAULT_RACE': self.civ_race,
+                              'SLTH_BAN_UNIT': self.ban_unit}
 
         self.modifier_map.update(not_implemented)
         self.modifier_map.update(somewhat_botched)
@@ -163,7 +164,7 @@ class Modifiers:
 
     def organize(self, modifier, modifier_arguments, dynamic_modifier=None, trait_modifiers=None, trait=None,
                  requirements=None, requirements_arguments=None, requirements_set=None, requirements_set_reqs=None,
-                 loc=None):
+                 tags=None, type_tags=None, loc=None):
         modifiers = modifier
         if isinstance(modifier, list):
             for mod in modifier:
@@ -171,7 +172,8 @@ class Modifiers:
             modifier = modifier[0]
 
         self.complete_set[modifier['ModifierId']] = [modifiers, modifier_arguments, dynamic_modifier, trait_modifiers,
-                                                     trait, requirements, requirements_arguments, requirements_set]
+                                                     trait, requirements, requirements_arguments, requirements_set,
+                                                     requirements_set_reqs, tags, type_tags]
 
         self.modifiers[modifier['ModifierId']] = modifier
         self.modifier_arguments.extend(modifier_arguments)
@@ -188,6 +190,11 @@ class Modifiers:
             self.requirement_set.extend(requirements_set)
         if requirements_set_reqs:
             self.requirement_set_reqs.extend(requirements_set_reqs)
+        if tags:
+            self.tags[tags['Tag']] = tags
+        if type_tags:
+            self.type_tags.extend(type_tags)
+
         if loc:
             if loc[0] in self.loc:
                 for i in loc[1]:
@@ -195,7 +202,7 @@ class Modifiers:
             else:
                 self.loc[loc[0]] = loc[1]
 
-    def big_get(self, model_obj):
+    def sql_convert(self, model_obj):
         modifier_string = ''
         for i in [(self.modifier_arguments, 'ModifierArguments'),
                   (self.modifiers, 'Modifiers'),
@@ -590,7 +597,15 @@ class Modifiers:
         dynamic_modifier = {'ModifierType': mod_type_name, 'CollectionType': 'COLLECTION_OWNER',
                             'EffectType': 'EFFECT_GRANT_PLAYER_SPECIFIC_TECHNOLOGY'}
         self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifier, loc=[name, [f"Grant ###{civ4_target}###."]])
-        return [modifier['ModifierId']]
+        return modifier['ModifierId']
+
+    def ban_unit(self, civ4_target, name):
+        mod_name = f"MODIFIER_BAN_{civ4_target}"
+        modifier = {'ModifierId': mod_name, 'ModifierType': 'MODIFIER_PLAYER_UNIT_BUILD_DISABLED'}
+        modifier_args = [{'ModifierId': mod_name, 'Name': 'UnitType', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target}]
+        self.organize(modifier, modifier_args)
+        return modifier['ModifierId']
 
     def civ_race(self, civ4_target, name):
         civ4_name = list(civ4_target.keys())[0]
