@@ -1,0 +1,55 @@
+# Building Modifiers
+- [ ] Bonus -> Resource needed to build this
+- [x] FreeBonus -> gives a resource specified (mimic Jebel barkal)
+- [x] FreeBonus2 -> free mana from palaces (mimic Jebel barkal)
+- [x] FreeBonus3 -> free mana from palaces (mimic Jebel barkal)
+- [ ] RemovePromotion -> Removes Rusted or Diseased
+- [ ] iMaintenanceModifier -> % reduction in maintenance, unsure if workable in 6
+- [x] DomainProductionModifiers -> increased shipbuilding speed if DOMAIN SEA for shipyard (Investigate Naval Policy) ( Modifier)
+- [x] iGlobalSpaceProductionModifier -> Celestial Compass, Rituals basically
+- [x] iTradeRouteModifier -> % increase in trade route yield, harbor, tavern, inn (Modifier Portugal adapted)
+- [x] iFreePromotionPick -> shrine of champions free promopick (Modifier VictorGov adapted)
+- [ ] BonusYieldModifiers -> % increase yield, if you have resource, i.e. dwarven smithy (Modifier)
+- [x] iDefense -> increases defense on city by percent   (Look at walls stuff)
+- [ ] ProductionTraits -> Produced faster if you have trait    Not used?
+- [ ] FreeSpecialistCounts -> gives free specialist of type and amount, only one type, Great Lib, Grand Menage (just port as extra tech, extra gpp)
+- [ ] BonusProductionModifiers -> If you have the resource, produce this building x % faster (Modifier)
+- [ ] StateReligion -> Asylum, OO etc. Needs state religion to build (RequiresReligion, EnabledByReligion)
+- [ ] iFoodKept -> Granary, Smokehouse, food left over
+- [ ] bGovernmentCenter -> Palace, Winter/Summer Palace
+- [x] iWarWearinessModifier -> explanatory
+- [ ] SpecialBuildingType -> Unfucking sure. Just each temple of religion
+- [ ] iEquipment -> pickable
+- [x] iGreatPeopleRateModifier -> Adventurers Guild, National Epic, Grigori Palace, Vault overflowing
+- [ ] iAirlift -> Obsidian Gate
+- [ ] UnitCombatFreeExperiences -> Gives a unit experience if it matchs on combat type, i.e. UNITCOMBAT_DISCIPLE, RECON
+- [x] FreePromotion -> Gives units a free specific promotion, if they can have that promotion
+- [ ] PrereqReligion -> Requires the religion to be preent in city to build
+- [ ] PrereqBuildingClasses -> No. of a specified building needed to allow construction of this, Great Library, Tower of Mastery
+- [ ] iModifyGlobalCounter -> Armageddon count increase
+- [ ] bSeeInvisible -> Dies DEI
+- [ ] iHealRateChange -> Aquae, Herbalist, Inn, Infirmary increased healing
+- [ ] bHideUnits -> Nox Noctis
+- [ ] iPlotRadius -> CityOfSlums
+- [ ] iLevelPrereq -> Form of Titan, Heroic Epic (require unit of that level to make)
+- [ ] StateReligionCommerces -> InfernalPalace, no fucking clue.
+# Unit Modifier
+- [ ] TerrainDoubleMove
+- [ ] FeatureDoubleMove
+- [ ] bHillsDoubleMove
+- [ ] TerrainAttack
+- [ ] TerrainDefense
+- [x] Terrain_Strength
+- [ ] FeatureAttack
+- [ ] FeatureDefense
+- [ ] DamageTypeResist
+- [ ] SLTH_TRAIT_SPRAWLING
+- [ ] SLTH_TRAIT_AGNOSTIC
+- [ ] SLTH_TRAIT_GUARDSMAN
+- [ ] SLTH_TRAIT_DEXTEROUS
+- [ ] SLTH_TRAIT_SINISTER
+- [ ] SLTH_TRAIT_HORSELORD
+- [x] SLTH_ONLY_UNIT
+- [ ] iWorkRateModify
+- [ ] bImmuneToFear
+- [ ] bNotAlive
