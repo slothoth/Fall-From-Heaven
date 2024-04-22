@@ -224,7 +224,7 @@ def make_or_add(to_sql, list_of_dicts, table_name):
     if table_name in to_sql:
         if isinstance(to_sql[table_name], list):
             if not isinstance(list_of_dicts, list):
-                list_of_dicts = [list_of_dicts]
+                list_of_dicts = list_of_dicts.values()
             to_sql[table_name].extend(list_of_dicts)
 
         elif isinstance(to_sql[table_name], dict) and isinstance(list_of_dicts, dict):

@@ -228,11 +228,5 @@ class Units:
         return model_obj
 
     def heros_builder(self, hero_units, model_obj):
-        # make wonders that represent the units
-        # OR SLTH_ONLY_UNIT
         for hero_name, details in hero_units.items():
-            modifier_name, ability_name = model_obj['modifiers'].generate_modifier({'SLTH_ONLY_UNIT': hero_name}, 'SLTH_DEFAULT_RACE', 'BAN').values()
-            self.abilities[ability_name] = {'UnitAbilityType': ability_name, 'Name': f'LOC_{ability_name}_NAME',
-                       'Description': f'LOC_{ability_name}_DESCRIPTION'}
-            self.ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': modifier_name})
-            model_obj['kinds'][ability_name] = 'KIND_ABILITY'
+            model_obj['modifiers'].generate_modifier({'SLTH_ONLY_UNIT': hero_name}, 'SLTH_DEFAULT_RACE', 'BAN')
