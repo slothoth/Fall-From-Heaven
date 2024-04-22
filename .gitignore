@@ -4,3 +4,4 @@
 /Debug*
 /data/tables/*
 /data/DebugGameplay.sqlite
+db_storer.py

@@ -178,6 +178,9 @@ class Civilizations:
         make_or_add(model_obj['sql_inserts'], leaders, 'Leaders')
         make_or_add(model_obj['sql_inserts'], self.leaders_of_civs, 'CivilizationLeaders')
         make_or_add(model_obj['sql_inserts'], civ_building_replace, 'BuildingReplaces')
+        make_or_add(model_obj['sql_inserts'], self.type_tags, 'TypeTags')
+        make_or_add(model_obj['sql_inserts'], self.ability_modifiers, 'UnitAbilityModifiers')
+        make_or_add(model_obj['sql_inserts'], self.unit_abilities, 'UnitAbilities')
 
     def civilization_modifiers(self, model_obj, civ_dict):
         modifier_stuff = {key: {'CivTrait': i.get('CivTrait'), 'FreeTechs': i.get('FreeTechs'),
@@ -210,11 +213,11 @@ class Civilizations:
             for ability_name, ability in promo.items():
                 if not isinstance(ability, dict):
                     ability = {ability_name: ability}
-                modifiers = model_obj['modifiers'].generate_modifier(civ4_target=ability,
+                ab_name = model_obj['modifiers'].generate_modifier(civ4_target=ability,
                                                                      name='SLTH_DEFAULT_RACE',
                                                                      civ6_target=name)
-                if modifiers is not None:
-                    ab_name = f'{name}_ABILITY_{list(ability.keys())[0].upper()}'
+                if ab_name is not None:
+                    """ab_name = f'{name}_ABILITY_{list(ability.keys())[0].upper()}'
                     self.unit_abilities.append({'UnitAbilityType': ab_name, 'Name': f'LOC_SLTH_{ab_name}_NAME',
                                                 'Description': f'LOC{ab_name}_DESCRIPTION', 'Inactive': 1,
                                                 'ShowFloatTextWhenEarned': 0, 'Permanent': 1})
@@ -222,8 +225,10 @@ class Civilizations:
                     self.ability_modifiers.append({'UnitAbilityType': ab_name,
                                                    'ModifierId': modifiers[0]})
 
-                    self.type_tags.append({'Type': ability_name, 'Tag': 'CLASS_ALL_UNITS'})
-                    trait_mods.append(modifiers[0])
+                    self.type_tags.append({'Type': ab_name, 'Tag': 'CLASS_ALL_UNITS'})
+
+                    model_obj['kinds'][ab_name] = 'KIND_ABILITY'"""
+                    trait_mods.append(ab_name)
             promo['trait_modifier'] = trait_mods
 
         for civ, i in modifier_stuff.items():
@@ -248,8 +253,8 @@ class Civilizations:
 
             if i['DefaultRace'] != 'NONE':
                 promo = races[i['DefaultRace']]
-                for i in promo['trait_modifier']:
-                    self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': i})
+                for mod_ in promo['trait_modifier']:
+                    self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
 
         dummy = []
         [dummy.extend(i) for i in model_obj['civ_units']['dev_null'].values()]
