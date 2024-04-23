@@ -35,7 +35,7 @@
 - [ ] StateReligionCommerces -> InfernalPalace, no fucking clue.
 # Unit Modifier
 - [x] TerrainDoubleMove
-- [ ] FeatureDoubleMove
+- [x] FeatureDoubleMove
 - [ ] bHillsDoubleMove
 - [ ] TerrainAttack
 - [ ] TerrainDefense
