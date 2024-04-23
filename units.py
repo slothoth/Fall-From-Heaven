@@ -219,20 +219,16 @@ class Units:
 
         self.heros_builder(hero_units, model_obj)
 
+        type_tags = [{'Type': i['UnitType'], 'Tag': i['PromotionClass'][10:]} for i in final_units.values() if
+                     i['PromotionClass'] != 'NULL']
+
         make_or_add(model_obj['sql_inserts'], final_units, 'Units')
         update_or_add(model_obj['sql_updates'], update_units, 'Units', ['UnitType'])
         make_or_add(model_obj['sql_inserts'], replaces, 'UnitReplaces')
         make_or_add(model_obj['sql_inserts'], simple_upgrades, 'UnitUpgrades')
-        make_or_add(model_obj['sql_inserts'], self.abilities, 'UnitAbilities')
-        make_or_add(model_obj['sql_inserts'], self.ability_modifiers, 'UnitAbilityModifiers')
+        make_or_add(model_obj['sql_inserts'], type_tags, 'TypeTags')
         return model_obj
 
     def heros_builder(self, hero_units, model_obj):
-        # make wonders that represent the units
-        # OR SLTH_ONLY_UNIT
         for hero_name, details in hero_units.items():
-            modifier_name, ability_name = model_obj['modifiers'].generate_modifier({'SLTH_ONLY_UNIT': hero_name}, 'SLTH_DEFAULT_RACE', 'BAN').values()
-            self.abilities[ability_name] = {'UnitAbilityType': ability_name, 'Name': f'LOC_{ability_name}_NAME',
-                       'Description': f'LOC_{ability_name}_DESCRIPTION'}
-            self.ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': modifier_name})
-            model_obj['kinds'][ability_name] = 'KIND_ABILITY'
+            model_obj['modifiers'].generate_modifier({'SLTH_ONLY_UNIT': hero_name}, 'SLTH_DEFAULT_RACE', 'BAN')

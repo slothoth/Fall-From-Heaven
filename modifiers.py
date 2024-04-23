@@ -28,6 +28,8 @@ class Modifiers:
         self.requirement_set_reqs = []
         self.requirement_set = []
 
+        self.abilities = {}
+        self.ability_modifiers = []
         self.tags = {}
         self.type_tags = []
 
@@ -143,20 +145,20 @@ class Modifiers:
 
         self.ability_map = {'TerrainDoubleMove': self.ability_terrain_movebuff,
                             'FeatureDoubleMove': self.ability_feature_movebuff,
-                            'TerrainAttack': self.ability_terrain_attack,
+                            'TerrainAttack': self.ability_terrain_or_feature_combat,
                             'TerrainDefense': self.ability_terrain_defense,
                             'Terrain_Strength': self.ability_terrain_all,
                             'FeatureAttack': self.ability_feature_attack,
                             'FeatureDefense': self.ability_feature_defense,
                             'DamageTypeResist': self.damage_type_Implementation,
                             'bHillsDoubleMove': self.ability_hills_movebuff,
-                            'SLTH_TRAIT_SPRAWLING': self.otherSystemImplement,      # yaxaclan mod
+                            'SLTH_TRAIT_SPRAWLING': self.otherSystemImplement,      # yaxchilan mod
                             'SLTH_TRAIT_AGNOSTIC': self.trait_agnostic,
                             'SLTH_TRAIT_SUNDERED': self.ability_sundered,
                             'SLTH_TRAIT_FALLOW': self.trait_fallow,
                             'SLTH_TRAIT_GUARDSMAN': self.cantImplement,
                             'SLTH_TRAIT_DEXTEROUS': self.ability_ranged_buff,
-                            'SLTH_TRAIT_SINISTER': self.trait_sinister,
+                            'SLTH_TRAIT_SINISTER': self.ability_scout_buff,
                             'SLTH_TRAIT_HORSELORD': self.trait_horselord,
                             'SLTH_ONLY_UNIT': self.one_of_unit_setter,
                             'iWorkRateModify': self.cantImplement,
@@ -170,7 +172,7 @@ class Modifiers:
 
     def organize(self, modifier, modifier_arguments, dynamic_modifier=None, trait_modifiers=None, trait=None,
                  requirements=None, requirements_arguments=None, requirements_set=None, requirements_set_reqs=None,
-                 tags=None, type_tags=None, loc=None):
+                 ability=None, ability_modifiers=None, tags=None, type_tags=None, loc=None):
         modifiers = modifier
         if isinstance(modifier, list):
             for mod in modifier:
@@ -196,10 +198,23 @@ class Modifiers:
             self.requirement_set.extend(requirements_set)
         if requirements_set_reqs:
             self.requirement_set_reqs.extend(requirements_set_reqs)
+        if ability:
+            self.abilities[ability['UnitAbilityType']] = ability
+        if ability_modifiers:
+            if isinstance(ability_modifiers, list):
+                for i in ability_modifiers:
+                    self.ability_modifiers.append(i)
+            else:
+                self.ability_modifiers.append(ability_modifiers)
+
         if tags:
-            self.tags[tags['Tag']] = tags
+            self.tags[tags['Tag']] = tags['Vocabulary']
         if type_tags:
-            self.type_tags.extend(type_tags)
+            if isinstance(type_tags, list):
+                for i in type_tags:
+                    self.type_tags.append(i)
+            else:
+                self.type_tags.append(type_tags)
 
         if loc:
             if loc[0] in self.loc:
@@ -216,20 +231,26 @@ class Modifiers:
                   (self.requirement_set, 'RequirementSets'),
                   (self.requirement_set_reqs, 'RequirementSetRequirements'),
                   (self.requirements_arguments, 'RequirementArguments'),
-                  (self.tags, 'Tags'),
+                  (self.abilities, 'UnitAbilities'),
+                  (self.ability_modifiers, 'UnitAbilityModifiers'),
                   (self.type_tags, 'TypeTags')]:
 
             make_or_add(model_obj['sql_inserts'], i[0], i[1])
-            for modifier in self.dynamic_modifiers:
-                model_obj['kinds'][modifier] = 'KIND_MODIFIER'
+        for modifier in self.dynamic_modifiers:
+            model_obj['kinds'][modifier] = 'KIND_MODIFIER'
+        for ability in self.abilities:
+            model_obj['kinds'][ability] = 'KIND_ABILITY'
+        for tag, vocab in self.tags.items():
+            model_obj['tags'][tag] = vocab
 
         for feature, details in self.complete_set.items():
             print(feature)
             for sql in details:
                 if sql is not None:
+                    print('--------------')
                     for i in sql:
                         print(i)
-            print('\n')
+            print('__________________________________________________________________________')
 
     def capital_commerce_modifier(self, civ4_target, name):
         return self.commerce_modifier(civ4_target, name,
@@ -626,7 +647,7 @@ class Modifiers:
         # the ability on spawning attachs a modifier to all players, permananent, once.
         # that modifier bans players from using it.
         civ4_name = list(civ4_target.values())[0]
-        ability_name = f'ABILITY_{name}_{civ4_name.upper()}'
+        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         modifiers = [{'ModifierId': f"MODIFIER_{ability_name}", 'ModifierType': 'MODIFIER_ALL_PLAYERS_ATTACH_MODIFIER',
                       'RunOnce': 1, 'Permanent': 1},
                      {'ModifierId': f'TRAIT_CANT_BUILD_HERO_{civ4_name.upper()}', 'ModifierType': 'MODIFIER_PLAYER_UNIT_BUILD_DISABLED'}]
@@ -634,11 +655,16 @@ class Modifiers:
                           'Value': modifiers[1]['ModifierId']},
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'UnitType', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_name}]
+        ability = {'UnitAbilityType': ability_name, 'Name': f'LOC_SLTH_{ability_name}_NAME',
+                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 0,
+                   'ShowFloatTextWhenEarned': 0, 'Permanent': 0}
+        ability_modifier = {'UnitAbilityType': ability_name, 'ModifierId': modifiers[0]['ModifierId']}
         tags = {'Tag': f'SLTH_CLASS_{civ4_name.upper()}', 'Vocabulary': 'ABILITY_CLASS'}
         type_tags = [{'Type': ability_name, 'Tag': tags['Tag']},
                      {'Type': civ4_name, 'Tag': tags['Tag']}]
-        self.organize(modifiers, modifier_args, tags=tags, type_tags=type_tags)
-        return {'modifier': modifiers[0]['ModifierId'], 'ability': ability_name}
+        self.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifier, tags=tags,
+                      type_tags=type_tags)
+        return
 
     def civ_race(self, civ4_target, name):
         civ4_name = list(civ4_target.keys())[0]
@@ -647,6 +673,7 @@ class Modifiers:
     def ability_terrain_all(self, civ4_target, name):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 0, [], [], [], [], []
+        ability_modifiers = []
         requirement_sets = []
         if not isinstance(civ4_ability, list):
             civ4_ability = [civ4_ability]
@@ -655,76 +682,61 @@ class Modifiers:
             print(' do some iterated versionahh')
         else:
             amount = attacks.pop()
+        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+
         for idx, i in enumerate(civ4_ability):
             terrain = i['TerrainType'].split('_')[1]
-            if amount == 0:
-                ability_name = f'{name}_ABILITY_{civ4_name.upper()}_{terrain}'
-                modifiers.append({'ModifierId': f"MODIFIER_{ability_name}",
-                                  'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
-                                  'SubjectRequirementSetId': f'{ability_name}_REQS'})
-                modifier_args.append(
-                    {'ModifierId': modifiers[idx]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                     'Value': int(amount / 2)})
-                requirements.append({'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
-                                     'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'})
+            modifiers.append({'ModifierId': f"MODIFIER_{ability_name}_{terrain}",
+                              'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
+                              'SubjectRequirementSetId': f'{ability_name}_REQS'})
+            modifier_args.append(
+                {'ModifierId': modifiers[idx]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                 'Value': amount})
+            requirements.append({'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
+                                 'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'})
 
-                requirement_arguments.append(
-                    {'RequirementId': requirements[idx]['RequirementId'], 'Name': 'TerrainType',
-                     'Type': 'ARGTYPE_IDENTITY',
-                     'Value': i['TerrainType']})
-                requirement_sets.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
-                                         'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'})
-                for req in requirements:
-                    req_set_reqs.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
-                                         'RequirementId': req['RequirementId']})
-            else:
-                ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
-                if len(modifiers) == 0:
-                    modifiers.append({'ModifierId': f"MODIFIER_{ability_name}",
-                                      'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
-                                      'SubjectRequirementSetId': f'{ability_name}_REQS'})
-                    modifier_args.append(
-                        {'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                         'Value': int(int(amount) / 2)})
-                requirements.append({'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
-                                     'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'})
-                requirement_arguments.append({'RequirementId': requirements[0]['RequirementId'], 'Name': 'TerrainType',
-                                              'Type': 'ARGTYPE_IDENTITY',
-                                              'Value': i['TerrainType']})
-                requirement_sets.append({'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                                         'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'})
+            requirement_arguments.append(
+                {'RequirementId': requirements[idx]['RequirementId'], 'Name': 'TerrainType',
+                 'Type': 'ARGTYPE_IDENTITY',
+                 'Value': i['TerrainType']})
+            requirement_sets.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
+                                     'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'})
+            for req in requirements:
+                req_set_reqs.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
+                                     'RequirementId': req['RequirementId']})
 
-        # set up attachment
-        modifiers.append({'ModifierId': f"TRAIT_GRANT_{ability_name}",
-                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'})
-        modifier_args.append({'ModifierId': modifiers[1]['ModifierId'], 'Name': 'AbilityType',
-                              'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']})
+        ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
+
         # BUG for plural abilities this will only attach first!
         self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
-        return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
+                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
+                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+        return modifiers[-1]['ModifierId']
 
-    def ability_terrain_movebuff(self, civ4_target, name):
+    def ability_terrain_movebuff(self, civ4_target, name):                      # MOVEBUFFS HAVE FAILED REQS
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+        ability_modifiers = []
         terrain = civ4_ability['TerrainType'].split('_')[1]
         # set up ability
         modifiers = [{'ModifierId': f"MODIFIER_{ability_name}",
                       'ModifierType': 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT',
                       'SubjectRequirementSetId': f'{ability_name}_REQS'}]
         modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                          'Value': 5}]
+                          'Value': 1}]
 
         requirements = [{'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
                          'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'},
                         {'RequirementId': f'PLOT_IS_{terrain}_HILLS_REQUIREMENT',
-                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}]
+                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}
+                        ]
 
         requirement_arguments = [
             {'RequirementId': requirements[0]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
              'Value': civ4_ability['TerrainType']},
             {'RequirementId': requirements[1]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': f"{civ4_ability['TerrainType']}_HILLS"}]
+             'Value': f"{civ4_ability['TerrainType']}_HILLS"}
+        ]
 
         requirement_sets = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
                              'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'}]
@@ -732,31 +744,32 @@ class Modifiers:
         req_set_reqs = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
                          'RequirementId': requirements[0]['RequirementId']},
                         {'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[1]['RequirementId']}]
+                        'RequirementId': requirements[1]['RequirementId']}]
 
-        # set up attachment
-        modifiers.append({'ModifierId': f"TRAIT_GRANT_{ability_name}",
-                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'})
-        modifier_args.append({'ModifierId': modifiers[1]['ModifierId'], 'Name': 'AbilityType',
-                              'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']})
+        # set modifiers on ability
+        ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
 
         self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
-        return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
+                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
+                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+        return modifiers[-1]['ModifierId']
 
-    def ability_feature_movebuff(self, civ4_target, name):
+    def ability_feature_movebuff(self, civ4_target, name):                      # MOVEBUFFS HAVE FAILED REQS
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 0, [], [], [], [], []
         requirement_sets = []
+        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         for idx, i in enumerate(civ4_ability):
             feature = i['FeatureType'].split('_')[1]
-            ability_name = f'{name}_ABILITY_{civ4_name.upper()}_{feature}'
-            modifiers.append({'ModifierId': f"MODIFIER_{ability_name}",
+            if 'ANCIENT' in i['FeatureType']:
+                feature = 'ANCIENT_FOREST'
+
+            modifiers.append({'ModifierId': f"MODIFIER_{ability_name}_{feature}",
                               'ModifierType': 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT',
-                              'SubjectRequirementSetId': f'{ability_name}_REQS'})
+                              'SubjectRequirementSetId': f'{ability_name}_{feature}_REQS'})
             modifier_args.append(
                 {'ModifierId': modifiers[idx]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                 'Value': int(amount / 2)})
+                 'Value': 1})
             requirements.append({'RequirementId': f'PLOT_IS_{feature}_REQUIREMENT',
                                  'RequirementType': 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES'})
             requirement_arguments.append(
@@ -768,15 +781,12 @@ class Modifiers:
                 req_set_reqs.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
                                      'RequirementId': req['RequirementId']})
 
-        # set up attachment
-        modifiers.append({'ModifierId': f"TRAIT_GRANT_{ability_name}",
-                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'})
-        modifier_args.append({'ModifierId': modifiers[1]['ModifierId'], 'Name': 'AbilityType',
-                              'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']})
+        ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
 
         self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
-        return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
+                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
+                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+        return modifiers[-1]['ModifierId']
 
     def ability_hills_movebuff(self, civ4_target, name):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
@@ -788,7 +798,7 @@ class Modifiers:
         modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': 5}]
         terrains = ['GRASSLAND_HILLS', 'PLAINS_HILLS', 'DESERT_HILLS', 'TUNDRA_HILLS', 'SNOW_HILLS']
-        requirements = [{'RequirementId': f'PLOT_IS_{i}_REQUIREMENT',
+        requirements = [{'RequirementId': f'PLOT_IS_{i}_TERRAIN_REQUIREMENT',
                          'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'} for i in terrains]
 
         requirement_arguments = [
@@ -803,96 +813,15 @@ class Modifiers:
                          'RequirementId': i['RequirementId']} for i in requirements]
 
         # set up attachment
-        modifiers.append({'ModifierId': f"TRAIT_GRANT_{ability_name}",
-                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'})
-        modifier_args.append({'ModifierId': modifiers[1]['ModifierId'], 'Name': 'AbilityType',
-                              'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']})
+        ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
 
         self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
-        return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
+                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
+                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+        return modifiers[-1]['ModifierId']
 
-    def ability_terrain_attack(self, civ4_target, name):
-        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
-        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
-        terrain = civ4_ability['TerrainType'].split('_')[1]
-        # set up ability
-        modifiers = [{'ModifierId': f"MODIFIER_{ability_name}",
-                      'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
-                      'SubjectRequirementSetId': f'{ability_name}_REQS'}]
-        modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                          'Value': 5}]
-
-        requirements = [{'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
-                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'},
-                        {'RequirementId': f'PLOT_IS_{terrain}_HILLS_REQUIREMENT',
-                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}]
-
-        requirement_arguments = [
-            {'RequirementId': requirements[0]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': civ4_ability['TerrainType']},
-            {'RequirementId': requirements[1]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': f"{civ4_ability['TerrainType']}_HILLS"}]
-
-        requirement_sets = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                             'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'}]
-
-        req_set_reqs = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[0]['RequirementId']},
-                        {'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[1]['RequirementId']}]
-
-        # set up attachment
-        modifiers.append({'ModifierId': f"TRAIT_GRANT_{ability_name}",
-                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'})
-        modifier_args.append({'ModifierId': modifiers[1]['ModifierId'], 'Name': 'AbilityType',
-                              'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']})
-
-        self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
-        return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
-
-    def ability_terrain_defense(self, civ4_target, name):
-        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
-        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
-        terrain = civ4_ability['TerrainType'].split('_')[1]
-        # set up ability
-        modifiers = [{'ModifierId': f"MODIFIER_{ability_name}",
-                      'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
-                      'SubjectRequirementSetId': f'{ability_name}_REQS'}]
-        modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                          'Value': 5}]
-
-        requirements = [{'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
-                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'},
-                        {'RequirementId': f'PLOT_IS_{terrain}_HILLS_REQUIREMENT',
-                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}]
-
-        requirement_arguments = [
-            {'RequirementId': requirements[0]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': civ4_ability['TerrainType']},
-            {'RequirementId': requirements[1]['RequirementId'], 'Name': 'TerrainType',
-             'Value': f"{civ4_ability['TerrainType']}_HILLS"}]
-
-        requirement_sets = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                             'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'}]
-
-        req_set_reqs = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[0]['RequirementId']},
-                        {'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[1]['RequirementId']}]
-
-        # set up attachment
-        modifiers.append({'ModifierId': f"TRAIT_GRANT_{ability_name}",
-                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'})
-        modifier_args.append({'ModifierId': modifiers[1]['ModifierId'], 'Name': 'AbilityType',
-                              'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']})
-
-        self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
-        return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
-
-    def ability_feature_attack(self, civ4_target, name):
+    def ability_terrain_or_feature_combat(self, civ4_target, name, combat='ATTACKER', plot_req_type='TerrainType'):
+        name = name[10:]
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 0, [], [], [], [], []
         requirement_sets = []
@@ -903,106 +832,113 @@ class Modifiers:
             self.logger.debug(' do some iterated versionahh')
         else:
             amount = attacks.pop()
+        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+        mod_ability = f"MODIFIER_{ability_name}"
+        master_req_set = f'{ability_name}_REQS'
+        modifiers.append({'ModifierId': mod_ability, 'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
+                          'SubjectRequirementSetId': master_req_set})
+        modifier_args.append({'ModifierId': mod_ability, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY', 'Value': amount})
         for idx, i in enumerate(civ4_ability):
-            feature = i['FeatureType'].split('_')[1]
-            if amount == 0:
-                ability_name = f'{name}_ABILITY_{civ4_name.upper()}_{feature}'
-                modifiers.append({'ModifierId': f"MODIFIER_{ability_name}",
-                                  'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
-                                  'SubjectRequirementSetId': f'{ability_name}_REQS'})
-                modifier_args.append(
-                    {'ModifierId': modifiers[idx]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                     'Value': int(amount / 2)})
-                requirements.append({'RequirementId': f'PLOT_IS_{feature}_REQUIREMENT',
-                                     'RequirementType': 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES'})
-                requirement_arguments.append(
-                    {'RequirementId': requirements[idx]['RequirementId'], 'Name': 'FeatureType',
-                     'Type': 'ARGTYPE_IDENTITY', 'Value': civ4_ability['FeatureType']})
-                requirement_sets.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
-                                         'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'})
-                for req in requirements:
-                    req_set_reqs.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
-                                         'RequirementId': req['RequirementId']})
-            else:
-                ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
-                if len(modifiers) == 0:
-                    modifiers.append({'ModifierId': f"MODIFIER_{ability_name}",
-                                      'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
-                                      'SubjectRequirementSetId': f'{ability_name}_REQS'})
-                    modifier_args.append(
-                        {'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                         'Value': int(int(amount) / 2)})
-                requirements.append({'RequirementId': f'PLOT_IS_{feature}_REQUIREMENT',
-                                     'RequirementType': 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES'})
-                requirement_arguments.append({'RequirementId': requirements[0]['RequirementId'], 'Name': 'FeatureType',
-                                              'Type': 'ARGTYPE_IDENTITY', 'Value': i['FeatureType']})
-                requirement_sets.append({'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                                         'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'})
+            plot_type = i[plot_req_type].split('_')[1]
+            requirements.append({'RequirementId': f'PLOT_IS_{plot_type}_REQUIREMENT',
+                                 'RequirementType': 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES'})
+            requirement_arguments.append(
+                {'RequirementId': requirements[idx]['RequirementId'], 'Name': 'FeatureType',
+                 'Type': 'ARGTYPE_IDENTITY', 'Value': i['FeatureType']})
 
-        # set up attachment
-        modifiers.append({'ModifierId': f"TRAIT_GRANT_{ability_name}",
-                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'})
-        modifier_args.append({'ModifierId': modifiers[1]['ModifierId'], 'Name': 'AbilityType',
-                              'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']})
-        # BUG for plural abilities this will only attach first!
+        terrain_satisfied = f"{master_req_set}_TERRAIN_SATISFIED"
+        requirement_sets.append({'RequirementSetId': terrain_satisfied,
+                                 'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'})
+        for req in requirements:
+            req_set_reqs.append({'RequirementSetId': terrain_satisfied,
+                                 'RequirementId': req['RequirementId']})
+
+        requirement_terrain_satisfied = f'{terrain_satisfied}_SET'
+        requirements.append({'RequirementId': requirement_terrain_satisfied,
+                             'RequirementType': 'REQUIREMENT_IS_MET'})
+        requirement_arguments.append({'RequirementId': requirement_terrain_satisfied, 'Name': 'RequirementSetId',
+                                      'Type': 'ARGTYPE_IDENTITY', 'Value': terrain_satisfied})
+
+        requirement_sets.append({'RequirementSetId': master_req_set, 'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'})
+        req_set_reqs.extend([{'RequirementSetId': master_req_set, 'RequirementId': f'PLAYER_IS_{combat}_REQUIREMENTS'},
+                             {'RequirementSetId': master_req_set, 'RequirementId': requirement_terrain_satisfied}])
+
+        ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
+
         self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
-        return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
+                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
+                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+        return modifiers[-1]['ModifierId']
+
+    def ability_terrain_defense(self, civ4_target, name):
+        return self.ability_terrain_or_feature_combat(civ4_target, name, combat='DEFENDER')
+
+    def ability_feature_attack(self, civ4_target, name):
+        return self.ability_terrain_or_feature_combat(civ4_target, name, plot_req_type='FeatureType')
 
     def ability_feature_defense(self, civ4_target, name):
+        return self.ability_terrain_or_feature_combat(civ4_target, name, combat='DEFENDER', plot_req_type='FeatureType')
+
+    def ability_buff_unit_type(self, ability_name, buff_type, amount):
+        mod_name = f"MODIFIER_{ability_name}"
+        modifiers = [{'ModifierId': mod_name,
+                      'ModifierType': buff_type}]
+        modifier_args = [{'ModifierId': mod_name, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': amount}]
+        return modifiers, modifier_args
+
+    def ability_trait(self, ability_name, trait_name):
+        ability = {'UnitAbilityType': ability_name, 'Name': f'LOC_SLTH_{ability_name}_NAME',
+                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 0,
+                   'ShowFloatTextWhenEarned': 0, 'Permanent': 1}
+        modifiers = [{'ModifierId': trait_name,
+                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY'}]
+        modifier_args = [{"ModifierId": trait_name, "Name": "AbilityType",
+                              "Type": "ARGTYPE_IDENTITY", "Value": ability_name}]
+        return ability, modifiers, modifier_args
+
+    def ability_scout_buff(self, civ4_target, name, promoclass='CLASS_RECON'):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
-        feature = civ4_ability['FeatureType'].split('_')[1]
-        # set up ability
-        modifiers = [{'ModifierId': f"MODIFIER_{ability_name}",
-                      'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
-                      'SubjectRequirementSetId': f'{ability_name}_REQS'}]
-        modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                          'Value': 5}]
-
-        requirements = [{'RequirementId': f'PLOT_IS_{feature}_REQUIREMENT',
-                         'RequirementType': 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES'}]
-
-        requirement_arguments = [{'RequirementId': requirements[0]['RequirementId'], 'Name': 'FeatureType',
-                                  'Value': civ4_ability['FeatureType']}]
-
-        requirement_sets = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                             'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'}]
-
-        req_set_reqs = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[0]['RequirementId']},
-                        {'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[1]['RequirementId']}]
-
-        # set up attachment
-        modifiers.append({'ModifierId': f"TRAIT_GRANT_{ability_name}",
-                          'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'})
-        modifier_args.append({'ModifierId': modifiers[1]['ModifierId'], 'Name': 'AbilityType',
-                              'Type': 'ARGTYPE_IDENTITY', 'Value': modifiers[0]['ModifierId']})
-
-        self.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs)
-        return [modifiers[0]['ModifierId'], modifiers[1]['ModifierId']]
+        trait_mod_name = f"TRAIT_{ability_name}"
+        modifiers, modifier_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH', 5)
+        ability, ab_modifiers, ab_mod_args = self.ability_trait(ability_name, trait_mod_name)
+        modifiers, modifier_args = modifiers + ab_modifiers, modifier_args + ab_mod_args
+        ability_modifiers = []
+        for i in modifiers[:-1]:
+            ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': i['ModifierId']})
+        type_tags = {'Type': ability_name, 'Tag': promoclass}
+        self.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifiers,
+                      type_tags=type_tags)
+        return trait_mod_name
 
     def ability_ranged_buff(self, civ4_target, name):
-        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
-        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
-
+        return self.ability_scout_buff(civ4_target, name, promoclass='CLASS_RANGED')
 
     def trait_agnostic(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented, use Mvemba? + NULL replace religious units")
 
     def trait_horselord(self, civ4_target, name):
-        self.logger.debug(f"{name}'s {civ4_target} not implemented, copy genghis khan and then add a movespeed like columbia?")
-
-    def trait_sinister(self, civ4_target, name):
-        self.logger.debug(f"{name}'s {civ4_target} not implemented, copy genghis khan but for scout units requirements")
+        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
+        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+        trait_mod_name = f"TRAIT_{ability_name}"
+        modifiers, modifier_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH', 5)
+        mod_move, mod_move_args = self.ability_buff_unit_type(f'{ability_name}_MOVE', 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT', 1)
+        ability, ab_modifiers, ab_mod_args = self.ability_trait(ability_name, trait_mod_name)
+        modifiers, modifier_args = modifiers + mod_move + ab_modifiers, modifier_args + mod_move_args + ab_mod_args
+        type_tags = {'Type': ability_name, 'Tag': 'CLASS_LIGHT_CAVALRY'}
+        ability_modifiers = []
+        for i in modifiers[:-1]:
+            ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': i['ModifierId']})
+        self.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifiers,
+                      type_tags=type_tags)
+        return modifiers[-1]['ModifierId']
 
     def ability_sundered(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented, as needs argageddon module to function")
 
     def trait_fallow(self, civ4_target, name):
-        self.logger.debug(f"{name}'s {civ4_target} not implemented, as no food growth/loss seems hard to do")
+        self.logger.debug(f"{name}'s {civ4_target} not implemented, as no food growth/loss seems hard to do. Maybe just SETS food to 0, not negative, not positive?")
 
     def damage_type_Implementation(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Damage type module, probably handled in Magic")
@@ -1063,3 +999,25 @@ class Modifiers:
     def cantImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as it is a concept too far outside of civ vi")
         # half food requirements GlobalParameters (Name: 'CITY_FOOD_CONSUMPTION_PER_POPULATION', "Value": '2.0')
+
+
+def ability_and_modifier_attach(ability_name, modifiers, modifier_args):
+    # set modifiers on ability
+    ability, ability_modifiers, type_tags = ability_set(ability_name, modifiers)
+    grant_modifier = {'ModifierId': f"TRAIT_GRANT_{ability_name}",
+                      'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY_GRANCOLOMBIA_MAYA'}
+    modifiers.append(grant_modifier)
+    modifier_args.append({'ModifierId': grant_modifier['ModifierId'], 'Name': 'AbilityType',
+                          'Type': 'ARGTYPE_IDENTITY', 'Value': ability_name})
+    return ability, ability_modifiers, type_tags
+
+
+def ability_set(ability_name, modifiers):
+    ability = {'UnitAbilityType': ability_name, 'Name': f'LOC_SLTH_{ability_name}_NAME',
+               'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 1,
+               'ShowFloatTextWhenEarned': 0, 'Permanent': 1}
+    ability_modifiers = []
+    for mod_ in modifiers:
+        ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': mod_['ModifierId']})
+    type_tags = {'Type': ability_name, 'Tag': 'CLASS_ALL_UNITS'}
+    return ability, ability_modifiers, type_tags
