@@ -726,23 +726,26 @@ class Modifiers:
                           'Value': 1}]
 
         requirements = [{'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
-                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'},
-                        {'RequirementId': f'PLOT_IS_{terrain}_HILLS_REQUIREMENT',
-                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}]
+                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}
+                        #{'RequirementId': f'PLOT_IS_{terrain}_HILLS_REQUIREMENT',
+                         #'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}
+                        ]
 
         requirement_arguments = [
             {'RequirementId': requirements[0]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': civ4_ability['TerrainType']},
-            {'RequirementId': requirements[1]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': f"{civ4_ability['TerrainType']}_HILLS"}]
+             'Value': civ4_ability['TerrainType']}
+            #{'RequirementId': requirements[1]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
+             #'Value': f"{civ4_ability['TerrainType']}_HILLS"}
+        ]
 
         requirement_sets = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
                              'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'}]
 
         req_set_reqs = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[0]['RequirementId']},
-                        {'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[1]['RequirementId']}]
+                         'RequirementId': requirements[0]['RequirementId']}
+                        #{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
+                        # 'RequirementId': requirements[1]['RequirementId']}
+                        ]
 
         # set modifiers on ability
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
@@ -1007,7 +1010,7 @@ class Modifiers:
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         trait_mod_name = f"TRAIT_{ability_name}"
         modifiers, modifier_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH', 5)
-        mod_move, mod_move_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT', 1)
+        mod_move, mod_move_args = self.ability_buff_unit_type(f'{ability_name}_MOVE', 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT', 1)
         ability, ab_modifiers, ab_mod_args = self.ability_trait(ability_name, trait_mod_name)
         modifiers, modifier_args = modifiers + mod_move + ab_modifiers, modifier_args + mod_move_args + ab_mod_args
         type_tags = {'Type': ability_name, 'Tag': 'CLASS_LIGHT_CAVALRY'}
