@@ -34,7 +34,7 @@
 - [ ] iLevelPrereq -> Form of Titan, Heroic Epic (require unit of that level to make)
 - [ ] StateReligionCommerces -> InfernalPalace, no fucking clue.
 # Unit Modifier
-- [ ] TerrainDoubleMove
+- [x] TerrainDoubleMove
 - [ ] FeatureDoubleMove
 - [ ] bHillsDoubleMove
 - [ ] TerrainAttack
@@ -44,12 +44,12 @@
 - [ ] FeatureDefense
 - [ ] DamageTypeResist
 - [ ] SLTH_TRAIT_SPRAWLING
-- [ ] SLTH_TRAIT_AGNOSTIC
-- [ ] SLTH_TRAIT_GUARDSMAN
-- [ ] SLTH_TRAIT_DEXTEROUS
-- [ ] SLTH_TRAIT_SINISTER
-- [ ] SLTH_TRAIT_HORSELORD
+- [-] SLTH_TRAIT_AGNOSTIC
+- [-] SLTH_TRAIT_GUARDSMAN
+- [x] SLTH_TRAIT_DEXTEROUS
+- [x] SLTH_TRAIT_SINISTER
+- [x] SLTH_TRAIT_HORSELORD
 - [x] SLTH_ONLY_UNIT
-- [ ] iWorkRateModify
-- [ ] bImmuneToFear
+- [-] iWorkRateModify
+- [-] bImmuneToFear
 - [ ] bNotAlive
