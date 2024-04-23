@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from collections import Counter
 import logging
+from itertools import chain
 
 
 class Sql:
@@ -19,7 +20,8 @@ class Sql:
         self.check_sql(list_of_dicts, table_name)
         schema_string = '('
         longest_index = max(range(len(list_of_dicts)), key=lambda i: len(list_of_dicts[i]))
-        master_dict = list_of_dicts[longest_index].copy()
+        possible_keys = list(set(chain.from_iterable(sub.keys() for sub in list_of_dicts)))
+        master_dict = {i: [j[i] for j in list_of_dicts if i in j][0] for i in possible_keys}
         for key, val in master_dict.items():
             try:
                 val = int(val)
