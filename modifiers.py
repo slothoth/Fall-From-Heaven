@@ -726,26 +726,25 @@ class Modifiers:
                           'Value': 1}]
 
         requirements = [{'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
+                         'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'},
+                        {'RequirementId': f'PLOT_IS_{terrain}_HILLS_REQUIREMENT',
                          'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}
-                        #{'RequirementId': f'PLOT_IS_{terrain}_HILLS_REQUIREMENT',
-                         #'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'}
                         ]
 
         requirement_arguments = [
             {'RequirementId': requirements[0]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': civ4_ability['TerrainType']}
-            #{'RequirementId': requirements[1]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             #'Value': f"{civ4_ability['TerrainType']}_HILLS"}
+             'Value': civ4_ability['TerrainType']},
+            {'RequirementId': requirements[1]['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
+             'Value': f"{civ4_ability['TerrainType']}_HILLS"}
         ]
 
         requirement_sets = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
                              'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'}]
 
         req_set_reqs = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                         'RequirementId': requirements[0]['RequirementId']}
-                        #{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
-                        # 'RequirementId': requirements[1]['RequirementId']}
-                        ]
+                         'RequirementId': requirements[0]['RequirementId']},
+                        {'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
+                        'RequirementId': requirements[1]['RequirementId']}]
 
         # set modifiers on ability
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
