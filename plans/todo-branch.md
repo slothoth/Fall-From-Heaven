@@ -36,11 +36,11 @@
 # Unit Modifier
 - [x] TerrainDoubleMove
 - [x] FeatureDoubleMove
-- [ ] bHillsDoubleMove
+- [x] bHillsDoubleMove
 - [ ] TerrainAttack
 - [ ] TerrainDefense
 - [x] Terrain_Strength
-- [ ] FeatureAttack
+- [x] FeatureAttack
 - [ ] FeatureDefense
 - [ ] DamageTypeResist
 - [ ] SLTH_TRAIT_SPRAWLING
