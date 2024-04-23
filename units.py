@@ -219,12 +219,14 @@ class Units:
 
         self.heros_builder(hero_units, model_obj)
 
+        type_tags = [{'Type': i['UnitType'], 'Tag': i['PromotionClass'][10:]} for i in final_units.values() if
+                     i['PromotionClass'] != 'NULL']
+
         make_or_add(model_obj['sql_inserts'], final_units, 'Units')
         update_or_add(model_obj['sql_updates'], update_units, 'Units', ['UnitType'])
         make_or_add(model_obj['sql_inserts'], replaces, 'UnitReplaces')
         make_or_add(model_obj['sql_inserts'], simple_upgrades, 'UnitUpgrades')
-        make_or_add(model_obj['sql_inserts'], self.abilities, 'UnitAbilities')
-        make_or_add(model_obj['sql_inserts'], self.ability_modifiers, 'UnitAbilityModifiers')
+        make_or_add(model_obj['sql_inserts'], type_tags, 'TypeTags')
         return model_obj
 
     def heros_builder(self, hero_units, model_obj):
