@@ -24,7 +24,7 @@ def main():
         kept = json.load(json_file)
     model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [], 'sql_inserts': {}, 'sql_updates': {}, 'sql_config': {},
                  'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'units': Units(),
-                 'select_civs': civs, 'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}}
+                 'select_civs': civs, 'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}, 'tags': {}}
     techs_sql(model_obj, kept)
     model_obj['civilizations'].civilizations(model_obj)
     build_policies(model_obj)
@@ -41,6 +41,8 @@ def main():
     model_obj['modifiers'].sql_convert(model_obj)
     make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value} for key, value
                                            in model_obj['kinds'].items()], 'Types')
+    make_or_add(model_obj['sql_inserts'], [{'Tag': key, 'Vocabulary': value} for key, value
+                                           in model_obj['tags'].items()], 'Tags')
     # deprecated hash version
     # make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value, 'Hash': hash(key)} for key, value
     #                                            in model_obj['kinds'].items()], 'Types')

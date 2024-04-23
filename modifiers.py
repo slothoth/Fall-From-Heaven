@@ -208,7 +208,7 @@ class Modifiers:
                 self.ability_modifiers.append(ability_modifiers)
 
         if tags:
-            self.tags[tags['Tag']] = tags
+            self.tags[tags['Tag']] = tags['Vocabulary']
         if type_tags:
             if isinstance(type_tags, list):
                 for i in type_tags:
@@ -233,14 +233,15 @@ class Modifiers:
                   (self.requirements_arguments, 'RequirementArguments'),
                   (self.abilities, 'UnitAbilities'),
                   (self.ability_modifiers, 'UnitAbilityModifiers'),
-                  (self.tags, 'Tags'),
                   (self.type_tags, 'TypeTags')]:
 
             make_or_add(model_obj['sql_inserts'], i[0], i[1])
-            for modifier in self.dynamic_modifiers:
-                model_obj['kinds'][modifier] = 'KIND_MODIFIER'
-            for ability in self.abilities:
-                model_obj['kinds'][ability] = 'KIND_ABILITY'
+        for modifier in self.dynamic_modifiers:
+            model_obj['kinds'][modifier] = 'KIND_MODIFIER'
+        for ability in self.abilities:
+            model_obj['kinds'][ability] = 'KIND_ABILITY'
+        for tag, vocab in self.tags.items():
+            model_obj['tags'][tag] = vocab
 
         for feature, details in self.complete_set.items():
             print(feature)
@@ -997,7 +998,6 @@ class Modifiers:
         self.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifiers,
                       type_tags=type_tags)
         return trait_mod_name
-
 
     def trait_agnostic(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented, use Mvemba? + NULL replace religious units")

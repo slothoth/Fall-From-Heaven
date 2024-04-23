@@ -226,6 +226,7 @@ class Promotions:
 
         for promotion in promotion_classes:
             model_obj['kinds'][promotion['PromotionClassType']] = 'KIND_PROMOTION_CLASS'
+            model_obj['tags'][promotion['PromotionClassType'][10:]] = 'ABILITY_CLASS'
 
         for promotion in duplicated_promos:
             model_obj['kinds'][promotion['UnitPromotionType']] = 'KIND_PROMOTION'
