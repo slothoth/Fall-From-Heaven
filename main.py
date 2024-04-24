@@ -8,6 +8,7 @@ from promotions import Promotions
 from modifiers import Modifiers
 from utils import Sql, setup_tables, make_or_add, localize
 from db_checker import check_primary_keys
+from prebuilt_transfer import main as prebuilt_transfer
 
 import json
 import logging
@@ -88,6 +89,8 @@ def main():
 
     with open('../FallFromHeaven/Core/frontend_config.sql', 'w') as file:
         file.write(config)
+
+    prebuilt_transfer()
 
 
 if __name__ == "__main__":
