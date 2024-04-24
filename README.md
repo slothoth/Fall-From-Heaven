@@ -30,7 +30,7 @@ testing workspace for finding the feasability of certain features needed to fait
 ## Item system:
 in civ iv, act as promotions that give buffs, and allow the dropping of item, to be picked up by someone else. can also be dropped on death, and captured. Also spawnable via event
 - [ ] ability that can be removed by lua on button press
-- [ ] 0 movement ingame unit that is destroyed/summoned.
+- [ ] 0 movement ingame unit that is destroyed/summoned, support class?
 - [ ] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted.
 
 ## Lairs:
