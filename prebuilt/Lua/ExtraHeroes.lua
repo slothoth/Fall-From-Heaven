@@ -16,7 +16,25 @@ function AoeDamageFunction(iCaster, iUnit, iX, iY)
 	local player = pUnit:GetOwner();
 	local playerReal = Players[player];
 	local playerUnits = playerReal:GetUnits();
-	-- playerUnits:Create(unit_summoned, iX, iY);
+	UnitManager.FinishMoves(pUnit);
+	local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if (pNearUnit ~= nil) then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer ~= iCaster) then
+					if Players[iCaster]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
+						if (GameInfo.Units[pNearUnit:GetType()].Combat ~= 0 and GameInfo.Units[pNearUnit:GetType()].Domain ~= "DOMAIN_AIR") then
+							pNearUnit:ChangeDamage(20);
+							if pNearUnit:GetDamage() >= 100 then
+								UnitManager.Kill(pNearUnit, false);
+							end
+						end
+					end
+				end
+			end
+		end
+	end
 end
 
 function ApplyDebuffAoeFunction(iCaster, iUnit, iX, iY)
