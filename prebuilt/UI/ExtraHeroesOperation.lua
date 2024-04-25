@@ -6,12 +6,13 @@ local m_WarriorIndex = GameInfo.Units['SLTH_UNIT_WARRIOR'].Index
 local validTypes = {
     [m_WarriorIndex] = true
     --GetExperience.HasPromotions('CHANNELING_I')
+    --
 }
 
 function OnUnitSelectionChanged(iPlayerID, iUnitID, iPlotX, iPlotY, iPlotZ, bSelected, bEditable)
     if bSelected then
         local pUnit = UnitManager.GetUnit(iPlayerID, iUnitID)
-        if not validTypes[pUnit:GetType()] then
+        if not pUnit.GetAbility().HasAbility('CHANNELING_ABILITY_PROMOTION_CHANNELING1') then
             Controls.SettleButtonGrid:SetHide(true)
             return
         end
@@ -33,10 +34,8 @@ function OnSummonButtonClicked()
     local iY = pUnit:GetY();
 	local iUnit = pUnit:GetID();
 	local iPlayer = pUnit:GetOwner();
-    local sUnitType = pUnit.GetUnitType()
 	ExposedMembers.ExtraHeroes.AndyLawFunction(iPlayer, iUnit, m_WarriorIndex, iX, iY);
-    print(sUnitType)
-    UI.AddWorldViewText(0, sUnitType, iX, iY);
+    local sUnitType = pUnit.GetUnitType()
 	UI.PlaySound("EH_AndyLawActive");
 	UI.DeselectUnit(pUnit);
 	return;

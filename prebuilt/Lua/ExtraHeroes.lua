@@ -11,7 +11,7 @@ function AndyLawFunction(iAndyPlayer, iUnit, unit_summoned, iX, iY)
 	playerUnits:Create(unit_summoned, iX, iY);
 end
 
-function AoeDamageFunction(iCaster, iUnit, iX, iY)
+function AoeDamageFunction(iCaster, iUnit, iDamage, iX, iY)
 	local pUnit = UnitManager.GetUnit(iCaster, iUnit);
 	local player = pUnit:GetOwner();
 	local playerReal = Players[player];
@@ -25,7 +25,7 @@ function AoeDamageFunction(iCaster, iUnit, iX, iY)
 				if (iOwnerPlayer ~= iCaster) then
 					if Players[iCaster]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
 						if (GameInfo.Units[pNearUnit:GetType()].Combat ~= 0 and GameInfo.Units[pNearUnit:GetType()].Domain ~= "DOMAIN_AIR") then
-							pNearUnit:ChangeDamage(20);
+							pNearUnit:ChangeDamage(iDamage);
 							if pNearUnit:GetDamage() >= 100 then
 								UnitManager.Kill(pNearUnit, false);
 							end
