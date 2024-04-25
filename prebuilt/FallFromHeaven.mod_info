@@ -6,10 +6,14 @@
     <Created>1588793116</Created>
     <Teaser>slothOth</Teaser>
     <Authors>Slothoth</Authors>
-    <SpecialThanks>the modern infantry guy who i built in this shell</SpecialThanks>
+    <SpecialThanks>SailorCat and Fuzzle for their help on discord with SQL. Flactine who's mods I relentlessly mined for LUA scripting.</SpecialThanks>
     <Homepage>cheese</Homepage>
     <CompatibleVersions>1.2,2.0</CompatibleVersions>
   </Properties>
+  <Dependencies>
+    <Mod id="4873eb62-8ccc-4574-b784-dda455e74e68" title="LOC_EXPANSION2_MOD_TITLE"/>
+    <Mod id="8424840C-92EF-4426-A9B4-B4E0CB818049" title="LOC_BABYLON_MOD_TITLE" />
+  </Dependencies>
   <FrontEndActions>
     <UpdateDatabase id="config">
       <Properties>
@@ -31,10 +35,24 @@
     <UpdateText id="Text">
       <File>Core/localization.sql</File>
     </UpdateText>
+    <AddGameplayScripts id="NewAction">
+      <Criteria>ExtraHeroes_Mode_Expansion2</Criteria>
+	  <File>Lua/ExtraHeroes.lua</File>
+    </AddGameplayScripts>
+    <AddUserInterfaces id="NewAction">
+      <Criteria>ExtraHeroes_Mode_Expansion2</Criteria>
+	  <Properties>
+        <Context>InGame</Context>
+      </Properties>
+	  <File>UI/ExtraHeroesOperation.xml</File>
+    </AddUserInterfaces>
   </InGameActions>
   <Files>
     <File>Core/localization.sql</File>
     <File>Core/main.sql</File>
     <File>Core/frontend_config.sql</File>
+    <File>Lua/ExtraHeroes.lua</File>
+    <File>UI/ExtraHeroesOperation.lua</File>
+    <File>UI/ExtraHeroesOperation.xml</File>
   </Files>
 </Mod>
