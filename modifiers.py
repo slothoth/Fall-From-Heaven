@@ -1,4 +1,5 @@
 from utils import make_or_add
+from promotion_modifiers import PromotionModifiers
 import logging
 
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
@@ -15,6 +16,7 @@ map_specialists = {'SPECIALIST_SCIENTIST': 'DISTRICT_CAMPUS', 'SPECIALIST_ENGINE
 class Modifiers:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.promotion_modifiers = PromotionModifiers(self)
         self.civic_map = {}
 
         self.modifiers = {}
@@ -35,6 +37,8 @@ class Modifiers:
 
         self.complete_set = {}
         self.loc = {}
+
+        self.count = 0
 
         self.modifier_map = {'CommerceModifiers': self.commerce_modifier,
                              'CapitalCommerceModifiers': self.capital_commerce_modifier,
@@ -122,7 +126,8 @@ class Modifiers:
                            'FeatureHappinessChanges': self.feature_happiness_modifier,
                            'BonusYieldModifiers': self.bonus_requirementImplementation,
                            'BonusHappinessChanges': self.bonus_requirementImplementation,
-                           'BonusHealthChanges': self.bonus_requirementImplementation
+                           'BonusHealthChanges': self.bonus_requirementImplementation,
+                           'BonusProductionBuilding': self.bonus_production_modifier_building
                            }
 
         somewhat_botched = {'iGlobalExperience': self.free_xp_modifier,
@@ -137,7 +142,8 @@ class Modifiers:
 
         my_own_implemented = {'SLTH_GRANT_SPECIFIC_TECH': self.tech_grant_specific,
                               'SLTH_DEFAULT_RACE': self.civ_race,
-                              'SLTH_BAN_UNIT': self.ban_unit}
+                              'SLTH_BAN_UNIT': self.ban_unit,
+                              'SLTH_PROMOTION': self.promotion_builder}
 
         self.modifier_map.update(not_implemented)
         self.modifier_map.update(somewhat_botched)
@@ -161,6 +167,7 @@ class Modifiers:
                             'SLTH_TRAIT_SINISTER': self.ability_scout_buff,
                             'SLTH_TRAIT_HORSELORD': self.trait_horselord,
                             'SLTH_ONLY_UNIT': self.one_of_unit_setter,
+                            'SLTH_CHANNELLING': self.ability_channeling,
                             'iWorkRateModify': self.cantImplement,
                             # difficult as build charges, would need to apply to only units with buld chargs already
                             'bImmuneToFear': self.cantImplement,  # no fear in civ6 as no tile stack
@@ -170,21 +177,29 @@ class Modifiers:
         modifier_id = self.modifier_map[name](civ4_target, civ6_target)
         return modifier_id
 
-    def organize(self, modifier, modifier_arguments, dynamic_modifier=None, trait_modifiers=None, trait=None,
+    def organize(self, modifier=None, modifier_arguments=None, dynamic_modifier=None, trait_modifiers=None, trait=None,
                  requirements=None, requirements_arguments=None, requirements_set=None, requirements_set_reqs=None,
                  ability=None, ability_modifiers=None, tags=None, type_tags=None, loc=None):
-        modifiers = modifier
         if isinstance(modifier, list):
             for mod in modifier:
                 self.modifiers[mod['ModifierId']] = mod
             modifier = modifier[0]
 
-        self.complete_set[modifier['ModifierId']] = [modifiers, modifier_arguments, dynamic_modifier, trait_modifiers,
+        if modifier:
+            self.modifiers[modifier['ModifierId']] = modifier
+
+        if modifier is None:
+            modifier = {'ModifierId': f'empty_mod_{self.count}'}
+            self.count += 1
+
+        including_nones = [modifier, modifier_arguments, dynamic_modifier, trait_modifiers,
                                                      trait, requirements, requirements_arguments, requirements_set,
                                                      requirements_set_reqs, tags, type_tags]
 
-        self.modifiers[modifier['ModifierId']] = modifier
-        self.modifier_arguments.extend(modifier_arguments)
+        self.complete_set[modifier['ModifierId']] = [i for i in including_nones if i is not None]
+
+        if modifier_arguments:
+            self.modifier_arguments.extend(modifier_arguments)
         if dynamic_modifier:
             self.dynamic_modifiers[dynamic_modifier['ModifierType']] = dynamic_modifier
         if trait_modifiers:
@@ -206,7 +221,6 @@ class Modifiers:
                     self.ability_modifiers.append(i)
             else:
                 self.ability_modifiers.append(ability_modifiers)
-
         if tags:
             self.tags[tags['Tag']] = tags['Vocabulary']
         if type_tags:
@@ -215,7 +229,6 @@ class Modifiers:
                     self.type_tags.append(i)
             else:
                 self.type_tags.append(type_tags)
-
         if loc:
             if loc[0] in self.loc:
                 for i in loc[1]:
@@ -666,9 +679,28 @@ class Modifiers:
                       type_tags=type_tags)
         return
 
+    def ability_channeling(self, civ4_target, name):
+        civ4_name = list(civ4_target.values())[0]
+        ability_name = f'{name}_ABILITY_CHANNELING'
+        modifiers = [{'ModifierId': f"MODIFIER_{ability_name}", 'ModifierType': 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT'}]
+        modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': 5}]
+        ability = {'UnitAbilityType': ability_name, 'Name': f'LOC_SLTH_{ability_name}_NAME',
+                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 0,
+                   'ShowFloatTextWhenEarned': 0, 'Permanent': 1}
+        ability_modifier = {'UnitAbilityType': ability_name, 'ModifierId': modifiers[0]['ModifierId']}
+        tags = {'Tag': f'SLTH_CLASS_{civ4_name.upper()}', 'Vocabulary': 'ABILITY_CLASS'}
+        type_tags = [{'Type': ability_name, 'Tag': 'CLASS_ADEPT'}]
+        self.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifier, tags=tags,
+                      type_tags=type_tags)
+        return
+
     def civ_race(self, civ4_target, name):
         civ4_name = list(civ4_target.keys())[0]
         return self.ability_map[civ4_name](civ4_target, name)
+
+    def promotion_builder(self, civ4_target, name):
+        return self.promotion_modifiers.choose_promo(civ4_target, name)
 
     def ability_terrain_all(self, civ4_target, name):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
@@ -934,6 +966,7 @@ class Modifiers:
                       type_tags=type_tags)
         return modifiers[-1]['ModifierId']
 
+
     def ability_sundered(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented, as needs argageddon module to function")
 
@@ -946,6 +979,9 @@ class Modifiers:
     def bonus_requirementImplementation(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented")
         self.logger.debug('If we have apply a modifier to the city, with secondary requirement that we have x resource')
+
+    def bonus_production_modifier_building(self, civ4_target, name):
+        print('MODIFIER_PLAYER_CITIES_ADJUST_BUILDING_PRODUCTION')
 
     def apply_to_unit_if_in_cityImplement(self, civ4_target, name):
         modifier = {'ModifierId': 'MEDIC_INCREASE_HEAL_RATE',

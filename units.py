@@ -113,7 +113,7 @@ class Units:
         for unit in model_obj['civ_units']['civ_traits']:
             six_style_dict[unit]['TraitType'] = f"SLTH_TRAIT_CIVILIZATION_{unit[5:]}"
 
-            # Make dictionaries of units to remove
+        # Make dictionaries of units to remove
         double_civ_units = {i[0]: [j for j in i if j in civs][0] for i in two_civs_units if any([j in civs for j in i])}
         not_religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}
         religious_units = {i[0]: i[1] for i in religious if i[1] in religions}
@@ -204,7 +204,6 @@ class Units:
                 model_obj['kinds'][name] = 'KIND_UNIT'
                 debug_string += f"'{name}',"
 
-        # upgrade tree, commented out for multiple upgrades, whicn is not supported in 6
         simple_upgrades = {unit: {'Unit': f'SLTH_{unit}', 'UpgradeUnit': f'SLTH_{upgrades[0]}'}
                            for unit, upgrades in upgrade_tree.items()}
 
@@ -219,6 +218,16 @@ class Units:
 
         self.heros_builder(hero_units, model_obj)
 
+        [{i['Type']: i['FreePromotions']['FreePromotion']} for i in infos if
+         i.get('Builds') is not None and len(i.get('Builds')['Build']) > 15]
+
+        free_promotions = [{'UnitType': f"SLTH_{i['Type']}", 'FreePromotion': i['FreePromotions']['FreePromotion']} for i in useful
+                           if i.get('FreePromotions') is not None]
+
+        self.free_promotions_builder(free_promotions, model_obj)
+
+        model_obj['modifiers'].generate_modifier({'PROMOTION_CHANNELING1': ''}, 'SLTH_PROMOTION', 'CHANNELING')
+
         type_tags = [{'Type': i['UnitType'], 'Tag': i['PromotionClass'][10:]} for i in final_units.values() if
                      i['PromotionClass'] != 'NULL']
 
@@ -232,3 +241,26 @@ class Units:
     def heros_builder(self, hero_units, model_obj):
         for hero_name, details in hero_units.items():
             model_obj['modifiers'].generate_modifier({'SLTH_ONLY_UNIT': hero_name}, 'SLTH_DEFAULT_RACE', 'BAN')
+
+    def mage_builder(self, mage_units, model_obj):
+        for unit_name, details in mage_units.items():
+            model_obj['modifiers'].generate_modifier({'SLTH_CHANNELING': unit_name}, 'SLTH_DEFAULT_RACE', 'CHANNELING')
+
+    def free_promotions_builder(self, free_promotions, model_obj):
+        for i in free_promotions:
+            name = i['UnitType']
+            promos = i['FreePromotion']
+            if isinstance(promos, dict):
+                promos = [promos]
+            i['FreePromotion'] = [i['PromotionType'] for i in promos]
+
+        my_l = []
+        for promo in free_promotions:
+            unit_name = promo['UnitType']
+            promotions = promo['FreePromotion']
+            for promo in promotions:
+                my_l.append(promo)
+                #model_obj['modifiers'].generate_modifier({promo: unit_name}, 'SLTH_DEFAULT_RACE', 'CHANNELING')
+
+        print(set(my_l))
+
