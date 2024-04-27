@@ -63,6 +63,7 @@ def delete_rows(model_obj, kept):
                 sql_type='deletes')
     dict_insert(model_obj, 'Governments', {'WHERE_COL': 'GovernmentType', 'WHERE_EQUALS': ['GOVERNMENT_CHIEFDOM']},
                 sql_type='deletes')
+
     # delete_string += 'DELETE FROM Building_YieldChanges;'
     update_delete_generate(model_obj)
 
