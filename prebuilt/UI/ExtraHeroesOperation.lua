@@ -2,7 +2,7 @@
 -- Original Author: Flactine --
 -- Altered by: Slothoth --
 --------------------------------------------------------------
-local m_WarriorIndex = GameInfo.Units['SLTH_UNIT_WARRIOR'].Index
+local m_WarriorIndex = GameInfo.Units['SLTH_UNIT_EYE'].Index
 local validTypes = {
     [m_WarriorIndex] = true
     --GetExperience.HasPromotions('CHANNELING_I')
