@@ -296,7 +296,9 @@ class PromotionModifiers:
                           'bTwincast': self.not_implemented_sphere,
                           'FeatureAttacks': self.ability_feature_attack,
                           'FeatureDefenses': self.ability_feature_defense,
-                          'FeatureDoubleMoves': self.ability_feature_movebuff
+                          'FeatureDoubleMoves': self.ability_feature_movebuff,
+                          'iCasterResistModify': self.not_implemented_sphere,
+                          'iCombatPercentGlobalCounter': self.concept_out_of_civ_implement
                           }
 
     def choose_promo(self, civ4_target, name):
