@@ -98,7 +98,14 @@ class Promotions:
 
         promo_extras = {key: small_dict(i, promo_mapper_extras) for key, i in promo_dict.items()}
         promo_six_dict = {key: small_dict(i, promo_mapper) for key, i in promo_dict.items()}
-        og_promo_six = {key: small_dict(i, promo_mapper) for key, i in og_promo.items()}
+
+        full_promo_abilities = {key_: {key: val for key, val in i.items()
+                                    if not any([key=='Button', key=='Sound', key=='UnitCombats',
+                                                key=='PromotionNextLevel', key=='TechPrereq', key=='RacePrereq',
+                                                key=='StateReligionPrereq', key=='bMutation', key=='iAIWeight',
+                                                key=='Help', key=='Description', key=='PromotionPrereqAnd',
+                                                key=='PromotionPrereq', key=='PromotionPrereqOr1', key=='Type'])}
+                                   for key_, i in og_promo.items()}
 
         cleaned_promo_abilities = [{key: val for key, val in i.items()
                                     if not any([key in j, key in k, key=='Button', key=='Sound', key=='UnitCombats',
@@ -230,7 +237,9 @@ class Promotions:
                 promo_prereqs.append({'UnitPromotion': name, 'PrereqUnitPromotion': f"{promo['PromotionPrereqOr3']}_{suffix}"})
 
         unit_promotion_modifiers = []
-        for promo, promo_details in cleaned_promo_abilities.items():
+        for promo, promo_details in full_promo_abilities.items():
+            if any([i in promo_details for i in ['iMinLevel', 'bRace', 'BonusPrereq', 'bEquipment']]):
+                continue
             if 'PromotionCombatType' in promo_details and 'iPromotionCombatMod' in promo_details:
                 promo_details['iPromotionCombatMod'] = {
                     promo_details.pop('PromotionCombatType'): promo_details['iPromotionCombatMod']}
@@ -267,4 +276,5 @@ class Promotions:
         make_or_add(model_obj['sql_inserts'], duplicated_promos, 'UnitPromotions')
         make_or_add(model_obj['sql_inserts'], promo_prereqs + p1 + p2 + p3, 'UnitPromotionPrereqs')
         make_or_add(model_obj['sql_inserts'], promotion_classes, 'UnitPromotionClasses')
+        make_or_add(model_obj['sql_inserts'], unit_promotion_modifiers, 'UnitPromotionModifiers')
         return model_obj
