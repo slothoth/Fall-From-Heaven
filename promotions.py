@@ -27,6 +27,7 @@ class Promotions:
             promo_dict = xmltodict.parse(file.read())['Civ4PromotionInfos']['PromotionInfos']['PromotionInfo']
 
         promo_dict = {i['Type']:i for i in promo_dict}
+        og_promo = promo_dict.copy()
         equipments, promo_dict = split_dict(promo_dict, 'bEquipment')
         races, promo_dict = split_dict(promo_dict, 'bRace')
         mana_promotions, promo_dict = split_dict(promo_dict, 'BonusPrereq')
@@ -96,13 +97,24 @@ class Promotions:
         ranked_nodes = sorted(depths.items(), key=lambda x: x[1], reverse=True)
 
         promo_extras = {key: small_dict(i, promo_mapper_extras) for key, i in promo_dict.items()}
-        promo_dict = {key: small_dict(i, promo_mapper) for key, i in promo_dict.items()}
+        promo_six_dict = {key: small_dict(i, promo_mapper) for key, i in promo_dict.items()}
+        og_promo_six = {key: small_dict(i, promo_mapper) for key, i in og_promo.items()}
+
+        cleaned_promo_abilities = [{key: val for key, val in i.items()
+                                    if not any([key in j, key in k, key=='Button', key=='Sound', key=='UnitCombats',
+                                                key=='PromotionNextLevel', key=='TechPrereq', key=='RacePrereq',
+                                                key=='StateReligionPrereq', key=='bMutation', key=='iAIWeight',
+                                                key=='Help'])}
+                                   for i, j, k in zip(promo_dict.values(), promo_six_dict.values(),
+                                                      promo_extras.values())]
+
+        cleaned_promo_abilities = {i.pop('Type'): {key: val for key, val in i.items()} for i in cleaned_promo_abilities}
 
         for i in ranked_nodes:
-            promo_dict[i[0]]['Level'] = i[1]
+            promo_six_dict[i[0]]['Level'] = i[1]
 
         duplicated_promos, duplicated_promo_extras = [], {}
-        for promo in promo_dict.values():
+        for promo in promo_six_dict.values():
             promo['Name'] = f"LOC_{promo['UnitPromotionType']}_NAME"
             promo['Description'] = f"LOC_{promo['UnitPromotionType']}_DESCRIPTION"
             if promo.get('PromotionClass', False):
@@ -216,6 +228,23 @@ class Promotions:
                 promo_prereqs.append({'UnitPromotion': name, 'PrereqUnitPromotion': f"{promo['PromotionPrereqOr2']}_{suffix}"})
             if promo.get('PromotionPrereqOr3') != 'PromotionPrereqOr3' and promo['PromotionPrereqOr3'] not in patch_exclude:
                 promo_prereqs.append({'UnitPromotion': name, 'PrereqUnitPromotion': f"{promo['PromotionPrereqOr3']}_{suffix}"})
+
+        unit_promotion_modifiers = []
+        for promo, promo_details in cleaned_promo_abilities.items():
+            if 'PromotionCombatType' in promo_details and 'iPromotionCombatMod' in promo_details:
+                promo_details['iPromotionCombatMod'] = {
+                    promo_details.pop('PromotionCombatType'): promo_details['iPromotionCombatMod']}
+            if 'iEnemyHealChange' in promo_details:
+                promo_details.pop('iNeutralHealChange'), promo_details.pop('iFriendlyHealChange')
+            if promo_details.get('iCombatPercentDefense', 0) == promo_details.get('iCombatPercent', -10):
+                promo_details.pop('iCombatPercentDefense')
+            for i, j in promo_details.items():
+                promo_mod = model_obj['modifiers'].promotion_modifiers.choose_promo(civ4_target={i: j}, name=promo)
+                if promo_mod is not None:
+                    for dupe_promo in duplicated_promos:
+                        if promo in dupe_promo['UnitPromotionType']:
+                            unit_promotion_modifiers.append({'UnitPromotionType': dupe_promo['UnitPromotionType'],
+                                                             'ModifierId': promo_mod})
 
 
         promotion_classes = [{'PromotionClassType': 'PROMOTION_CLASS_ANIMAL', 'Name': 'LOC_PROMOTION_CLASS_ANIMAL_NAME'},
