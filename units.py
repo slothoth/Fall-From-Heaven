@@ -46,21 +46,17 @@ class Units:
     def units_sql(self, model_obj, kept):
         logger = logging.getLogger(__name__)
         civs = model_obj['select_civs']
-        debug_string = ""
         with open('data/XML/Units/CIV4UnitInfos.xml', 'r') as file:
             infos = xmltodict.parse(file.read())['Civ4UnitInfos']['UnitInfos'][('UnitInfo')]
-        with open("data/unique_units.json", 'r') as json_file:
-            uu = json.load(json_file)
-        with open("data/heroes_civs.json", 'r') as json_file:
-            heroes = json.load(json_file)
-        with open("data/two_civ_units.json", 'r') as json_file:
-            two_civs_units = json.load(json_file)
-        with open("data/religious_units.json", 'r') as json_file:
-            religious = json.load(json_file)
+        with open("data/prebuilt_unit_infos.json", 'r') as json_file:
+            unit_prebuilt = json.load(json_file)
 
-        with open("data/upgrade_tree_units.json", 'r') as json_file:
-            upgrade_tree = json.load(json_file)
-
+        two_civs_units = unit_prebuilt['two_civs_units']
+        religious = unit_prebuilt['religious_units']
+        summons = unit_prebuilt['summon_units']
+        upgrade_tree = unit_prebuilt['upgrade_tree_units']
+        uu = unit_prebuilt['unique_units']
+        heroes = unit_prebuilt['heroes_civs']
         excludes_from_four, to_keep_but_modify = kept['exclude_from_IV'], kept['units_but_modify_name']
         units_to_update, units_changed_tech = kept['units_as_is'], kept['units_tech_change']
         units_but_for_unique_civs, compat_units = kept['units_unique_civ'], kept['compat_for_VI']
@@ -204,7 +200,6 @@ class Units:
         for name, unit in final_units.items():
             if name not in kept_units:
                 model_obj['kinds'][name] = 'KIND_UNIT'
-                debug_string += f"'{name}',"
 
         simple_upgrades = {unit: {'Unit': f'SLTH_{unit}', 'UpgradeUnit': f'SLTH_{upgrades[0]}'}
                            for unit, upgrades in upgrade_tree.items()}
