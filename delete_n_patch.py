@@ -11,9 +11,6 @@ def delete_rows(model_obj, kept):
         dict_insert(model_obj, table, {'WHERE_COL': 'UnitType', 'WHERE_EQUALS': 'UNIT_MILITARY_ENGINEER',
                                        'SET_COL': 'UnitType', 'SET_EQUALS': 'UNIT_BUILDER'})
 
-    dict_insert(model_obj, 'Improvement_ValidBuildUnits', {'WHERE_COL': 'UnitType',
-                                                           'WHERE_EQUALS': 'UNIT_MILITARY_ENGINEER'}, 'deletes')
-
 
     dict_insert(model_obj, 'Routes_XP2', {'WHERE_COL': 'PrereqTech', 'WHERE_EQUALS': 'TECH_STEAM_POWER'},
                 sql_type='deletes')
@@ -28,7 +25,8 @@ def delete_rows(model_obj, kept):
 
     delete_full = ['Technologies', 'TechnologyPrereqs', 'Technologies_XP2', 'Civics', 'Boosts', 'Policies',
                    'CivicPrereqs', 'Civics_XP2', 'Building_GreatPersonPoints', 'Unit_BuildingPrereqs',
-                   'UnitUpgrades', 'UnitPromotionPrereqs', 'UnitPromotionModifiers', 'UnitPromotions', 'Improvements']
+                   'UnitUpgrades', 'UnitPromotionPrereqs', 'UnitPromotionModifiers', 'UnitPromotions', 'Improvements',
+                   'Improvement_ValidBuildUnits', 'Improvement_ValidTerrains', 'Improvement_ValidResources']
     for i in delete_full:
         dict_insert(model_obj, i, {'WHERE_COL': 1, 'WHERE_EQUALS': 1},
                     sql_type='deletes')

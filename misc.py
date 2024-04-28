@@ -6,6 +6,9 @@ from modifiers import Modifiers
 
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
 
+full_terrain_set = ['TERRAIN_BURNING_SANDS', 'TERRAIN_BROKEN_LANDS', 'TERRAIN_FIELDS_OF_PERDITION',
+                    'TERRAIN_GRASS', 'TERRAIN_PLAINS', 'TERRAIN_DESERT', 'TERRAIN_TUNDRA', 'TERRAIN_SNOW']
+
 
 def build_resource_string(model_obj):
     resource_renames = {'HORSE': 'HORSES', 'GUNPOWDER': 'NITER', 'BANANA': 'BANANAS', 'CORN': 'MAIZE', 'COW': 'CATTLE',
@@ -333,6 +336,7 @@ def build_improvements(model_obj):
         spawned = {key: i for key, i in useful.items() if i.get('iAppearanceProbability') is not None}
         manas = {key: i for key, i in useful.items() if 'MANA' in i.get('Type')}
         weird = [i for i in useful if i not in list(only_buildables.keys()) + list(natural_wonders.keys()) + list(barb_encampments.keys()) + list(manas.keys()) + list(spawned.keys())]
+        trait_modifiers = []
     with open('data/XML/Units/CIV4BuildInfos.xml', 'r') as file:
         build_improve_dict = xmltodict.parse(file.read())['Civ4BuildInfos']['BuildInfos']['BuildInfo']
 
@@ -365,7 +369,7 @@ def build_improvements(model_obj):
         improvement['PlunderType'] = 'PLUNDER_GOLD'
         improvement['Icon'] = f'ICON_{i_type}'
         improvement['CanBuildOutsideTerritory'] = improvement.pop('bOutsideBorders', 0)
-        if improvement.pop('bWater', 0) == 1:
+        if improvement.pop('bWater', 0):
             improvement['Coast'] = 1
             improvement['Domain'] = 'DOMAIN_WATER'
         else:
@@ -383,8 +387,16 @@ def build_improvements(model_obj):
                 bonus_struct = [bonus_struct]
             for bonus in bonus_struct:
                 if not 'REMOVE' in bonus:
-                    improvement_valid_resources.append({'ImprovementType': i_type, 'MustRemoveFeature': 1,
+                    improvement_valid_resources.append({'ImprovementType': i_type, 'MustRemoveFeature': 0,
                                                         'ResourceType': f"RESOURCE_{bonus['BonusType'][6:]}"})
+                if 'MANA' not in improvement:
+                    for idx, amount in enumerate(bonus['YieldChanges']['iYieldChange']):
+                        if int(amount) != 0:
+                            mod_id = model_obj['modifiers'].generate_modifier(
+                                {'bonus': bonus, 'yield_type': yield_map[idx], 'amount': amount},
+                                'SLTH_Improvement_Bonus', improvement)
+                            if mod_id is not None:
+                                trait_modifiers.append({'TraitType': 'TRAIT_LEADER_MAJOR_CIV', 'ModifierId': mod_id})
 
         if improvement.get('TechYieldChanges') is not None:
             tech_yield = improvement.pop('TechYieldChanges')['TechYieldChange']
@@ -399,11 +411,12 @@ def build_improvements(model_obj):
                     prereqTech = f'SLTH_{tech}'
                     prereqCivic = 'NULL'
                 for idx, amount in enumerate(j['TechYields']['iYield']):
-                    y_type = yield_map[idx]
-                    bonus_yield_changes.append({'ImprovementType': i_type, 'PrereqTech': prereqTech,
-                                                'PrereqCivic': prereqCivic, 'YieldType': y_type,
-                                                'BonusYieldChange': amount, 'Id': str(id_count)})
-                    id_count += 1
+                    if int(amount) > 0:
+                        y_type = yield_map[idx]
+                        bonus_yield_changes.append({'ImprovementType': i_type, 'PrereqTech': prereqTech,
+                                                    'PrereqCivic': prereqCivic, 'YieldType': y_type,
+                                                    'BonusYieldChange': amount, 'Id': str(id_count)})
+                        id_count += 1
 
         if improvement.get('YieldChanges') is not None:
             for idx, amount in enumerate(improvement.pop('YieldChanges')['iYieldChange']):
@@ -411,8 +424,8 @@ def build_improvements(model_obj):
                     y_type = yield_map[idx]
                     yield_changes.append({'ImprovementType': i_type, 'YieldType': y_type, 'YieldChange': amount})
 
-        hills = True if improvement.pop('bHillsMakesValid', 1) else False
-        flatlands = True if improvement.pop('bRequiresFlatlands', 1) else False
+        only_hills = True if improvement.pop('bHillsMakesValid', 0) else False
+        only_flatlands = True if improvement.pop('bRequiresFlatlands', 0) else False
         if improvement.get('TerrainMakesValids'):
             terrain_valid = improvement.pop('TerrainMakesValids', {'TerrainMakesValid': []})['TerrainMakesValid']
             if not isinstance(terrain_valid, list):
@@ -422,10 +435,18 @@ def build_improvements(model_obj):
                 if any([i in terrain for i in ['MARSH', 'SHALLOWS']]):
                     improvement_valid_features.append({'ImprovementType': i_type, 'FeatureType': f"FEATURE_{terrain[8:]}"})
                 else:
-                    if hills and not any([i in terrain for i in ['COAST', 'OCEAN']]):
+                    if only_hills and not any([i in terrain for i in ['COAST', 'OCEAN']]):
                         valid_terrains.append({'ImprovementType': i_type, 'TerrainType': f'{terrain}_HILLS'})
-                    if flatlands:
-                        valid_terrains.append({'ImprovementType': i_type, 'TerrainType': f'{terrain}'})
+                    if only_flatlands:
+                        valid_terrains.append({'ImprovementType': i_type, 'TerrainType': terrain})
+        else:
+            for terrain in full_terrain_set:
+                if improvement['Coast']:
+                    continue
+                if only_flatlands:
+                    valid_terrains.append({'ImprovementType': i_type, 'TerrainType': terrain})
+                if only_hills:
+                    valid_terrains.append({'ImprovementType': i_type, 'TerrainType': f'{terrain}_HILLS'})
 
         if improvement.get('FeatureMakesValids', False):
             feature = improvement.pop('FeatureMakesValids')['FeatureMakesValid']['FeatureType']
@@ -440,9 +461,17 @@ def build_improvements(model_obj):
         improvement.pop('PrereqCivilization', None) #do civilizationtrait
         improvement.pop('BonusConvert', None) # LUA convert mana after building node.
         improvement.pop('iVisibilityChange', None) # scout watchtower mod
-        improvement.pop('RiverSideYieldChange', None) # TODO pick this one back up later?
+        improvement.pop('RiverSideYieldChange', None) # TODO pick this one back up later, using old lumbermills?
 
-
+    # elves can build on woods, ancient forest
+    for i, j in only_buildables.items():
+        if j['Coast'] == 1:
+            continue
+        if any([k in i for k in ['MINE', 'WORKSHOP', 'COTTAGE', 'WINDMILL', 'FARM']]):
+            improvement_valid_features.append({'FeatureType': 'FEATURE_FOREST', 'ImprovementType': i,
+                                               'PrereqTech': 'SLTH_TECH_FOREST_SECRETS'})
+            improvement_valid_features.append({'FeatureType': 'FEATURE_FOREST_ANCIENT', 'ImprovementType': i,
+                                               'PrereqTech': 'SLTH_TECH_FOREST_SECRETS'})
 
     for i in only_buildables:
         model_obj['kinds'][i] = 'KIND_IMPROVEMENT'
@@ -454,3 +483,4 @@ def build_improvements(model_obj):
     make_or_add(model_obj['sql_inserts'], valid_terrains, 'Improvement_ValidTerrains')
     make_or_add(model_obj['sql_inserts'], improvement_valid_features, 'Improvement_ValidFeatures')
     make_or_add(model_obj['sql_inserts'], improvement_valid_resources, 'Improvement_ValidResources')
+    make_or_add(model_obj['sql_inserts'], trait_modifiers, 'TraitModifiers')
