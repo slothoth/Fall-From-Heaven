@@ -70,7 +70,8 @@ class Modifiers:
                              'GlobalSeaPlotYieldChanges': self.plot_yield_modifier_global,
                              'iTradeRouteModifier': self.trade_route_yield_modifier,
                              'GPP_flat_capital': self.gpp_in_capital,
-                             'GPP_mult_capital': self.gpp_mult_in_capital
+                             'GPP_mult_capital': self.gpp_mult_in_capital,
+                             'SLTH_Improvement_Bonus': self.improvement_bonus_when_worked
                              }
 
         not_implemented = {'iHealRateChange': self.apply_to_unit_if_in_cityImplement,
@@ -698,7 +699,41 @@ class Modifiers:
         dynamic_modifiers = {'ModifierType': modifier_type, 'CollectionType': 'COLLECTION_PLAYER_CAPITAL_CITY',
                             'EffectType': 'EFFECT_ADJUST_CITY_GREAT_PERSON_POINTS_MODIFIER'}
 
+    def improvement_bonus_when_worked(self, civ4_target, improvement):
+        bonus, yield_type, amount = civ4_target['bonus'], civ4_target['yield_type'], civ4_target['amount']
+        mod_attach_id = f"MODIFIER_{bonus['BonusType'][6:]}_TAG_CITY_ATTACH"
+        mod_id = f"MODIFIER_{bonus['BonusType'][6:]}_TAG"
+        req_id = f"PLOT_HAS_{bonus['BonusType'][6:]}_TAG"
+        set_req = f"PLOT_HAS_{bonus['BonusType'][6:]}_TAG_IMPROVED"
+        req_improvement = f"REQUIRES_PLOT_HAS_{improvement['ImprovementType'][12:]}"
+        tag = f"CLASS_{bonus['BonusType'][6:]}_{yield_type}"
+        modifiers = [{"ModifierId": mod_attach_id,
+                     "ModifierType": "MODIFIER_ALL_CITIES_ATTACH_MODIFIER"}]
+        modifier_args = [{"ModifierId": mod_attach_id, "Name": "ModifierId",
+                          "Type": "ARGTYPE_IDENTITY",
+                          "Value": mod_id}]
+        modifiers.append({"ModifierId": mod_id,
+                          "ModifierType": "MODIFIER_CITY_PLOT_YIELDS_ADJUST_PLOT_YIELD",
+                          "SubjectRequirementSetId": set_req})
+        modifier_args.append({"ModifierId": mod_id, "Name": "YieldType",
+                              "Type": "ARGTYPE_IDENTITY", "Value": yield_type})
+        modifier_args.append({"ModifierId": mod_id,
+                              "Name": "Amount", "Type": "ARGTYPE_IDENTITY", "Value": amount})
+        requires = [{"RequirementId": req_id, "RequirementType": "REQUIREMENT_PLOT_RESOURCE_TAG_MATCHES"},
+                    {"RequirementId": req_improvement, "RequirementType": "REQUIREMENT_PLOT_IMPROVEMENT_TYPE_MATCHES"}]
+        require_args = [{"RequirementId": req_id, "Name": "Tag", "Type": "ARGTYPE_IDENTITY", "Value": tag},
+                        {"RequirementId": req_improvement, "Name": "ImprovementType", "Type": "ARGTYPE_IDENTITY",
+                         "Value": improvement['ImprovementType']}]
+        require_set = [{"RequirementSetId": set_req, "RequirementSetType": "REQUIREMENTSET_TEST_ALL"}]
 
+        req_set_reqs = [{"RequirementSetId": set_req, "RequirementId": req_improvement},
+                        {"RequirementSetId": set_req, "RequirementId": req_id}]
+        tags = {"Tag": tag, "Vocabulary": "RESOURCE_CLASS"}
+        type_tags = {'Type': f"RESOURCE_{bonus['BonusType'][6:]}", 'Tag': tag}
+        self.organize(modifiers, modifier_args, requirements=requires,
+                      requirements_arguments=require_args,
+                      requirements_set=require_set, requirements_set_reqs=req_set_reqs, tags=tags, type_tags=type_tags)
+        return mod_id
 
     def promotion_builder(self, civ4_target, name):
         return self.promotion_modifiers.choose_promo(civ4_target, name)
