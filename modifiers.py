@@ -69,6 +69,8 @@ class Modifiers:
                              'SeaPlotYieldChanges': self.plot_yield_modifier,
                              'GlobalSeaPlotYieldChanges': self.plot_yield_modifier_global,
                              'iTradeRouteModifier': self.trade_route_yield_modifier,
+                             'GPP_flat_capital': self.gpp_in_capital,
+                             'GPP_mult_capital': self.gpp_mult_in_capital
                              }
 
         not_implemented = {'iHealRateChange': self.apply_to_unit_if_in_cityImplement,
@@ -143,7 +145,8 @@ class Modifiers:
         my_own_implemented = {'SLTH_GRANT_SPECIFIC_TECH': self.tech_grant_specific,
                               'SLTH_DEFAULT_RACE': self.promotion_builder,
                               'SLTH_BAN_UNIT': self.ban_unit,
-                              'SLTH_PROMOTION': self.promotion_builder}
+                              'SLTH_PROMOTION': self.promotion_builder,
+                              'SLTH_MANA': self.mana_modifier}
 
         self.modifier_map.update(not_implemented)
         self.modifier_map.update(somewhat_botched)
@@ -321,13 +324,17 @@ class Modifiers:
         return [i['ModifierId'] for i in modifiers]
 
     def gpp_rate_modifier(self, civ4_target, name):
-        modifier = {'ModifierId': f"MODIFIER_{name}_INCREASE_GPP_MULT",
-                    'ModifierType': 'MODIFIER_PLAYER_CITIES_ADJUST_GREAT_PERSON_POINT_BONUS'}
-
-        modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
+        mod_id = f"MODIFIER_{name[14:]}_INCREASE_GPP_MULT"
+        modifier_type = 'MODIFIER_PLAYER_CAPITAL_CITY_GPP_MULT'
+        modifier = [{'ModifierId': mod_id,
+                     'ModifierType': modifier_type}]
+        modifier_args = [{'ModifierId': mod_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifier, modifier_args, loc=[name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
-        return [modifier['ModifierId']]
+        dynamic_modifiers = {'ModifierType': modifier_type, 'CollectionType': 'COLLECTION_PLAYER_CAPITAL_CITY',
+                             'EffectType': 'EFFECT_ADJUST_CITY_GREAT_PERSON_POINTS_MODIFIER'}
+        self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifiers,
+                      loc=[name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
+        return [mod_id]
 
     def buildings_amenities_modifier(self, civ4_target, name, **kwargs):
         buildings = civ4_target['BuildingHappinessChange']
@@ -522,19 +529,33 @@ class Modifiers:
         return [modifier['ModifierId']]
 
     def free_bonus_modifier(self, civ4_target, name):
+        if 'IRON' in civ4_target['FreeBonus']:
+            modifier_type = 'MODIFIER_FREE_RESOURCE_EXTRACTION_IN_CAPITAL'
+            effect_type = 'EFFECT_ADJUST_PLAYER_FREE_RESOURCE_IMPORT_EXTRACTION'
+        else:
+            modifier_type = 'MODIFIER_FREE_RESOURCE_IN_CAPITAL'
+            effect_type = 'EFFECT_ADJUST_PLAYER_FREE_RESOURCE_IMPORT'
         modifier = {'ModifierId': f"MODIFIER_{name}_GRANT_{civ4_target['FreeBonus'][6:]}",
-                    'ModifierType': 'MODIFIER_SINGLE_CITY_GRANT_RESOURCE_IN_CITY'}
+                    'ModifierType': modifier_type}
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target['iNumFreeBonuses']},
                          {'ModifierId': modifier['ModifierId'], 'Name': 'ResourceType', 'Type': 'ARGTYPE_IDENTITY',
-                          'Value': civ4_target['FreeBonus']}]
+                          'Value': f"RESOURCE_{civ4_target['FreeBonus'][6:]}"}]
         if 'MANA' in civ4_target['FreeBonus']:
             spl = civ4_target['FreeBonus'].split('_')
             spl[1], spl[2] = spl[2], spl[1]
             free_bonus_text = " ".join([i.capitalize() for i in spl[1:]])
         else:
             free_bonus_text = " ".join([i.capitalize() for i in civ4_target['FreeBonus'].split('_')[1:]])
-        self.organize(modifier, modifier_args, loc=[name, [f"+{civ4_target['iNumFreeBonuses']} {free_bonus_text} from city."]])
+        if modifier_type not in self.dynamic_modifiers:
+            dynamic_modifier = {'ModifierType': modifier_type,
+                                'CollectionType': 'COLLECTION_PLAYER_CAPITAL_CITY',
+                                'EffectType': effect_type}
+        else:
+            dynamic_modifier = None
+        self.organize(modifier, modifier_args,
+                      loc=[name, [f"+{civ4_target['iNumFreeBonuses']} {free_bonus_text} from city."]],
+                      dynamic_modifier=dynamic_modifier)
         return [modifier['ModifierId']]
 
     def free_building_modifier(self, civ4_target, name):
@@ -571,7 +592,8 @@ class Modifiers:
         modifiers, modifier_args, loc = [], [], [name, []]
         for idx, amount in enumerate(yield_changes):
             if int(amount) != 0:
-                modifier = {'ModifierId': f"MODIFIER_{name}_PLOT_YIELD_CHANGE_{yield_map[idx][6:]}",
+                mod_name = f"MODIFIER_{name}_PLOT_YIELD_CHANGE_{yield_map[idx][6:]}"
+                modifier = {'ModifierId': mod_name,
                             'ModifierType': modifier_type,
                             'SubjectRequirementSetId': requirement}
                 modifiers.append(modifier)
@@ -582,7 +604,7 @@ class Modifiers:
                       'Value': amount}])
                 loc[1].append(f"+{amount} {yield_map[idx][6:]} on plots of type unspecified{owner}")
         self.organize(modifiers, modifier_args, loc=loc)
-        return modifiers
+        return [i['ModifierId'] for i in modifiers]
 
     def plot_yield_modifier_global(self, civ4_target, name, ):
         return self.plot_yield_modifier(civ4_target, name, modifier_type='MODIFIER_PLAYER_ADJUST_PLOT_YIELD')
@@ -622,6 +644,61 @@ class Modifiers:
                             'EffectType': 'EFFECT_GRANT_PLAYER_SPECIFIC_TECHNOLOGY'}
         self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifier, loc=[name, [f"Grant ###{civ4_target}###."]])
         return modifier['ModifierId']
+
+    def mana_modifier(self, civ4_target, name):
+        target_name = name
+        mod_id = f"MODIFIER_{name}"
+        require_id = f'REQUIRES_PLAYER_HAS_{target_name}'
+        require_set = f'PLAYER_HAS_{target_name}'
+        modifier = [{'ModifierId': mod_id,
+                     'ModifierType': 'MODIFIER_PLAYER_CAPITAL_CITY_ADJUST_CITY_YIELD_MODIFIER',
+                     'SubjectRequirementSetId': require_set}]
+        modifier_args = [{'ModifierId': mod_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target},
+                         {'ModifierId': mod_id, 'Name': 'YieldType', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': 'YIELD_PRODUCTION'}]
+        requirements = [{'RequirementId': require_id,
+                         'RequirementType': 'REQUIREMENT_PLAYER_HAS_RESOURCE_OWNED', 'ProgressWeight': '1'}]
+
+        requirements_arguments = [{'RequirementId': require_id, 'Name': 'ResourceType',
+                                  'Type': 'ARGTYPE_IDENTITY', 'Value': f'{target_name}'}]
+        requirements_set = [{'RequirementSetId': require_set,
+                             'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'}]
+
+        requirement_set_requirements = [{'RequirementSetId': require_set,
+                                        'RequirementId':require_id}]
+
+        self.organize(modifier, modifier_args, requirements=requirements,
+                      requirements_arguments=requirements_arguments,
+                      requirements_set=requirements_set, requirements_set_reqs=requirement_set_requirements)
+        return mod_id
+
+    def gpp_in_capital(self, civ4_target, name):
+        great_person = gpp_map[name]
+        mod_id = f"MODIFIER_{name}_INCREASE_GPP_POINT_BONUS"
+        modifier_type = 'MODIFIER_PLAYER_CAPITAL_CITY_GPP_INCREASE'
+        modifier = [{'ModifierId': mod_id,
+                     'ModifierType': modifier_type}]
+        modifier_args = [{'ModifierId': mod_id, 'Name': 'GreatPersonClassType', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': great_person},
+                         {'ModifierId': mod_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target}]
+        dynamic_modifier = {'ModifierType': modifier_type, 'CollectionType': 'COLLECTION_PLAYER_CAPITAL_CITY',
+                            'EffectType': 'EFFECT_ADJUST_GREAT_PERSON_POINTS'}
+        self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifier)
+        return [mod_id]
+
+    def gpp_mult_in_capital(self, civ4_target, name):
+        mod_id = f"MODIFIER_{name[14:]}_INCREASE_GPP_MULT"
+        modifier_type = 'MODIFIER_PLAYER_CAPITAL_CITY_GPP_MULT'
+        modifier = [{'ModifierId': mod_id,
+                     'ModifierType': modifier_type}]
+        modifier_args = [{'ModifierId': mod_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
+                          'Value': civ4_target}]
+        dynamic_modifiers = {'ModifierType': modifier_type, 'CollectionType': 'COLLECTION_PLAYER_CAPITAL_CITY',
+                            'EffectType': 'EFFECT_ADJUST_CITY_GREAT_PERSON_POINTS_MODIFIER'}
+
+
 
     def promotion_builder(self, civ4_target, name):
         return self.promotion_modifiers.choose_promo(civ4_target, name)

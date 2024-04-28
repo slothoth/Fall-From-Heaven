@@ -57,7 +57,7 @@ def main():
         total += i
 
     # debug super palace
-    if True:
+    if False:
         total += """UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
         UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
         UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
