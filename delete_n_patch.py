@@ -28,7 +28,7 @@ def delete_rows(model_obj, kept):
 
     delete_full = ['Technologies', 'TechnologyPrereqs', 'Technologies_XP2', 'Civics', 'Boosts', 'Policies',
                    'CivicPrereqs', 'Civics_XP2', 'Building_GreatPersonPoints', 'Unit_BuildingPrereqs',
-                   'UnitUpgrades', 'UnitPromotionPrereqs', 'UnitPromotionModifiers', 'UnitPromotions']
+                   'UnitUpgrades', 'UnitPromotionPrereqs', 'UnitPromotionModifiers', 'UnitPromotions', 'Improvements']
     for i in delete_full:
         dict_insert(model_obj, i, {'WHERE_COL': 1, 'WHERE_EQUALS': 1},
                     sql_type='deletes')

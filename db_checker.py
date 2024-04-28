@@ -233,7 +233,10 @@ def check_primary_keys(model_obj):
 
     logger.info('\nUNIQUE CONSTRAINT FAILED. Duplicate mod records:')
     for i in set(mod_dupes):
-        logger.info(i)
+        if 'Require' in i or 'Modifier' in i:
+            logger.debug(i)
+        else:
+            logger.info(i)
 
     logger.info(f'Unique Constraints Removed: {len(vanilla_dupes)+ len(mod_dupes)}')
     for i in failed_constraints:
