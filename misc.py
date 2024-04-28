@@ -435,11 +435,14 @@ def build_improvements(model_obj):
         improvement.pop('bRequiresFeature', None), improvement.pop('iRange', None),
         improvement.pop('ImprovementUpgrade', None), improvement.pop('ImprovementPillage', None)
         improvement.pop('PrereqNatureYields', None), improvement.pop('iHealRateChange', None)
-        improvement.pop('iRangeDefenseModifier', None)
+        improvement.pop('iRangeDefenseModifier', None), improvement.pop('IrrigatedYieldChange', None)
+        improvement.pop('bRequiresIrrigation', None), improvement.pop('bCarriesIrrigation', None),
         improvement.pop('PrereqCivilization', None) #do civilizationtrait
         improvement.pop('BonusConvert', None) # LUA convert mana after building node.
         improvement.pop('iVisibilityChange', None) # scout watchtower mod
         improvement.pop('RiverSideYieldChange', None) # TODO pick this one back up later?
+
+
 
     for i in only_buildables:
         model_obj['kinds'][i] = 'KIND_IMPROVEMENT'
