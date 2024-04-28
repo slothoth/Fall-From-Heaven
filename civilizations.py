@@ -255,9 +255,10 @@ class Civilizations:
                 promo = races[i['DefaultRace']]
                 for mod_ in promo['trait_modifier']:
                     self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
-                if 'ELF' in promo:
+                if 'ELF' in i['DefaultRace']:
                     mod_ = model_obj['modifiers'].generate_modifier(f"SLTH_TECH_FOREST_SECRETS",
                                                                     'SLTH_GRANT_SPECIFIC_TECH', civ)
+                    self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
 
         dummy = []
         [dummy.extend(i) for i in model_obj['civ_units']['dev_null'].values()]
