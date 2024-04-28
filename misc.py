@@ -26,7 +26,7 @@ def build_resource_string(model_obj):
 
 
     resource_class_map = {'BONUSCLASS_RUSH': 'RESOURCECLASS_STRATEGIC', 'BONUSCLASS_GENERAL': 'RESOURCECLASS_BONUS',
-                          'BONUSCLASS_MANA': 'RESOURCECLASS_MANA', 'BONUSCLASS_WONDER': 'RESOURCECLASS_LUXURY',
+                          'BONUSCLASS_MANA': 'RESOURCECLASS_BONUS', 'BONUSCLASS_WONDER': 'RESOURCECLASS_LUXURY',
                           'BONUSCLASS_LIVESTOCK': 'RESOURCECLASS_BONUS', 'BONUSCLASS_GRAIN': 'RESOURCECLASS_BONUS',
                           'BONUSCLASS_RAWMANA': 'RESOURCECLASS_MANA'}
 
@@ -119,12 +119,27 @@ def build_resource_string(model_obj):
             model_obj['kinds'][resource['ResourceType']] = 'KIND_RESOURCE'
             # check its actually called that
 
+    trait_modifiers = []
+    for i in six_style_resource_dict:
+        if 'MANA_' in i['ResourceType']:
+            mod = model_obj['modifiers'].generate_modifier(10, 'SLTH_MANA', i['ResourceType'])
+            if mod is not None:
+                trait_modifiers.append({'TraitType': 'TRAIT_LEADER_MAJOR_CIV', 'ModifierId': mod})
+
+            mod = model_obj['modifiers'].promotion_builder({'SLTH_MANA_ABILITY': 'chs'}, i['ResourceType'])
+            if mod is not None:
+                trait_modifiers.append({'TraitType': 'TRAIT_LEADER_MAJOR_CIV', 'ModifierId': mod})
+
+    trait_modifiers.append({'TraitType': 'TRAIT_LEADER_MAJOR_CIV', 'ModifierId':
+        model_obj['modifiers'].generate_modifier(50, 'SLTH_MANA', 'RESOURCE_IRON')})
+
     make_or_add(model_obj['sql_inserts'], six_style_resource_dict, 'Resources')
     update_or_add(model_obj['sql_updates'], update_dict, 'Resources', ['ResourceType'])
     make_or_add(model_obj['sql_inserts'], resource_valid_feature, 'Resource_ValidFeatures')
     make_or_add(model_obj['sql_inserts'], resource_valid_terrain, 'Resource_ValidTerrains')
     make_or_add(model_obj['sql_inserts'], resource_yield_changes, 'Resource_YieldChanges')
     update_or_add(model_obj['sql_updates'], updates_yield, 'Resource_YieldChanges', ['ResourceType', 'YieldType'])
+    make_or_add(model_obj['sql_inserts'], trait_modifiers, 'TraitModifiers')
     return model_obj
 
 

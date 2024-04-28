@@ -218,9 +218,6 @@ class Units:
 
         self.heros_builder(hero_units, model_obj)
 
-        [{i['Type']: i['FreePromotions']['FreePromotion']} for i in infos if
-         i.get('Builds') is not None and len(i.get('Builds')['Build']) > 15]
-
         free_promotions = [{'UnitType': f"SLTH_{i['Type']}", 'FreePromotion': i['FreePromotions']['FreePromotion']} for i in useful
                            if i.get('FreePromotions') is not None]
 

@@ -298,7 +298,8 @@ class PromotionModifiers:
                           'FeatureDefenses': self.ability_feature_defense,
                           'FeatureDoubleMoves': self.ability_feature_movebuff,
                           'iCasterResistModify': self.not_implemented_sphere,
-                          'iCombatPercentGlobalCounter': self.concept_out_of_civ_implement
+                          'iCombatPercentGlobalCounter': self.concept_out_of_civ_implement,
+                          'SLTH_MANA_ABILITY': self.grant_ability_mana
                           }
 
     def choose_promo(self, civ4_target, name):
@@ -317,7 +318,7 @@ class PromotionModifiers:
                           'Value': 20}]
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         ability = {'UnitAbilityType': ability_name, 'Name': f'LOC_SLTH_{ability_name}_NAME',
-                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 0,
+                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 1,
                    'ShowFloatTextWhenEarned': 0, 'Permanent': 1}
         ability_modifier = {'UnitAbilityType': ability_name, 'ModifierId': modifier['ModifierId']}
         type_tags = {'Type': ability_name, 'Tag': 'CLASS_ADEPT'}
@@ -679,7 +680,7 @@ class PromotionModifiers:
 
     def ability_trait(self, ability_name, trait_name):
         ability = {'UnitAbilityType': ability_name, 'Name': f'LOC_SLTH_{ability_name}_NAME',
-                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 0,
+                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 1,
                    'ShowFloatTextWhenEarned': 0, 'Permanent': 1}
         modifiers = [{'ModifierId': trait_name,
                           'ModifierType': 'MODIFIER_PLAYER_UNITS_GRANT_ABILITY'}]
@@ -825,6 +826,36 @@ class PromotionModifiers:
                           "Name": "Amount", "Type": "ARGTYPE_IDENTITY", "Value": value}]
         self.modifier_obj.organize(modifiers, modifier_args)
         return promo_mod
+
+    def grant_ability_mana(self, civ4_target, name):
+        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
+        ability_name = f'{name}_ABILITY_GRANT_SPELL'
+        trait_mod_name = f"TRAIT_{ability_name}"
+        require_id = f'REQUIRES_PLAYER_HAS_{name}'
+        require_set = f'PLAYER_HAS_{name}'
+        modifiers, modifier_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT', 1)
+        ability, ab_modifiers, ab_mod_args = self.ability_trait(ability_name, trait_mod_name)
+        modifiers, modifier_args = modifiers + ab_modifiers, modifier_args + ab_mod_args
+        ability_modifiers = []
+        for i in modifiers[:-1]:
+            ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': i['ModifierId']})
+        type_tags = {'Type': ability_name, 'Tag': 'CLASS_ADEPT'}
+        modifiers[1]['SubjectRequirementSetId'] = require_set
+        requirements = [{'RequirementId': require_id,
+                         'RequirementType': 'REQUIREMENT_PLAYER_HAS_RESOURCE_OWNED', 'ProgressWeight': '1'}]
+        requirements_arguments = [{'RequirementId': require_id, 'Name': 'ResourceType',
+                                   'Type': 'ARGTYPE_IDENTITY', 'Value': f'{name}'}]
+        requirements_set = [{'RequirementSetId': require_set,
+                             'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'}]
+        requirement_set_requirements = [{'RequirementSetId': require_set,
+                                         'RequirementId': require_id}]
+
+        self.modifier_obj.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifiers,
+                                   type_tags=type_tags, requirements=requirements,
+                                   requirements_arguments=requirements_arguments, requirements_set=requirements_set,
+                                   requirements_set_reqs=requirement_set_requirements)
+        return trait_mod_name
+
 
     def not_implemented_effect(self, civ4_target, name):
         print('not implemented as is a temporary spell effect. Use Requirement Likeliness?')
