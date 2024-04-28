@@ -3,7 +3,7 @@ from units import Units
 from techs import techs_sql, prereq_techs
 from buildings import Buildings, districts_build
 from delete_n_patch import delete_rows
-from misc import build_resource_string, build_terrains_string, build_features_string, build_policies
+from misc import build_resource_string, build_terrains_string, build_features_string, build_policies, build_improvements
 from promotions import Promotions
 from modifiers import Modifiers
 from utils import Sql, setup_tables, make_or_add, localize
@@ -34,6 +34,7 @@ def main():
     build_resource_string(model_obj)
     build_terrains_string(model_obj)
     build_features_string(model_obj)
+    build_improvements(model_obj)
     prereq_techs(model_obj)
 
     Buildings(civs).buildings_sql(model_obj)
@@ -57,7 +58,7 @@ def main():
         total += i
 
     # debug super palace
-    if False:
+    if True:
         total += """UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
         UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
         UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';

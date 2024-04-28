@@ -71,6 +71,8 @@ class Units:
         six_style_dict = {f"SLTH_{i['Type']}": small_dict(i, unit_dict) for i in infos}
         useful = [{key: value for key, value in i.items() if value != 'NONE' and value != None and value != '0'} for i in
                   infos]
+        builders = [{'Type': i['Type'], 'Builds': [j['BuildType'] for j in i['Builds']['Build']]} for i in useful if len(i.get('Builds', [])) > 0]
+        model_obj['builders'] = builders
         # Conversions for civ vi
         for i in six_style_dict.values():
             i['TraitType'], i['AllowBarbarians'], i['UnitType'] = "NULL", 1, f"SLTH_{i['UnitType']}"
