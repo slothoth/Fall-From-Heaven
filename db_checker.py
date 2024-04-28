@@ -113,7 +113,26 @@ def check_primary_keys(model_obj):
             logger.critical(f'malformed insert data structure {name}')
 
         df = pd.read_csv(f'data/tables/{name}.csv')
-        df_prim = df[primary_keys[name]].values.tolist()
+        if name in model_obj['deletes']:
+            to_remove = model_obj['deletes'][name]
+            if list(to_remove[0].values()) == [1,1]:
+                df_prim = []
+            else:
+                ordered_remove = {i['WHERE_COL']: i['WHERE_EQUALS'] for i in to_remove}
+                masks = [~df[col].isin(vals) if isinstance(vals, list) else ~df[col].isin([vals]) for col, vals in ordered_remove.items()]
+                combined_mask = masks[0]
+                for mask in masks[1:]:
+                    combined_mask &= mask
+                df_prim = df[combined_mask]
+                df_prim = df_prim[primary_keys[name]].values.tolist()
+        elif name in model_obj['updates']:
+            updates = model_obj['updates'][name]
+            for up in updates:
+                df.loc[df[up['WHERE_COL']] == up['WHERE_EQUALS'], up['SET_COL']] = up['SET_EQUALS']
+            df_prim = df[primary_keys[name]].values.tolist()
+
+        else:
+            df_prim = df[primary_keys[name]].values.tolist()
 
         uniques = []
         for idx, i in enumerate(prim):
