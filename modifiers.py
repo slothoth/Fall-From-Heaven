@@ -701,12 +701,12 @@ class Modifiers:
 
     def improvement_bonus_when_worked(self, civ4_target, improvement):
         bonus, yield_type, amount = civ4_target['bonus'], civ4_target['yield_type'], civ4_target['amount']
-        mod_attach_id = f"MODIFIER_{bonus['BonusType'][6:]}_TAG_CITY_ATTACH"
-        mod_id = f"MODIFIER_{bonus['BonusType'][6:]}_TAG"
-        req_id = f"PLOT_HAS_{bonus['BonusType'][6:]}_TAG"
-        set_req = f"PLOT_HAS_{bonus['BonusType'][6:]}_TAG_IMPROVED"
+        mod_attach_id = f"MODIFIER_{bonus}_{yield_type}_TAG_CITY_ATTACH"
+        mod_id = f"MODIFIER_{bonus}_{yield_type}_TAG"
+        req_id = f"PLOT_HAS_{bonus}_{yield_type}_TAG"
+        set_req = f"PLOT_HAS_{bonus}_{yield_type}_TAG_IMPROVED"
         req_improvement = f"REQUIRES_PLOT_HAS_{improvement['ImprovementType'][12:]}"
-        tag = f"CLASS_{bonus['BonusType'][6:]}_{yield_type}"
+        tag = f"CLASS_{bonus}_{yield_type}"
         modifiers = [{"ModifierId": mod_attach_id,
                      "ModifierType": "MODIFIER_ALL_CITIES_ATTACH_MODIFIER"}]
         modifier_args = [{"ModifierId": mod_attach_id, "Name": "ModifierId",
@@ -729,11 +729,11 @@ class Modifiers:
         req_set_reqs = [{"RequirementSetId": set_req, "RequirementId": req_improvement},
                         {"RequirementSetId": set_req, "RequirementId": req_id}]
         tags = {"Tag": tag, "Vocabulary": "RESOURCE_CLASS"}
-        type_tags = {'Type': f"RESOURCE_{bonus['BonusType'][6:]}", 'Tag': tag}
+        type_tags = {'Type': f"RESOURCE_{bonus}", 'Tag': tag}
         self.organize(modifiers, modifier_args, requirements=requires,
                       requirements_arguments=require_args,
                       requirements_set=require_set, requirements_set_reqs=req_set_reqs, tags=tags, type_tags=type_tags)
-        return mod_id
+        return mod_attach_id
 
     def promotion_builder(self, civ4_target, name):
         return self.promotion_modifiers.choose_promo(civ4_target, name)

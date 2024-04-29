@@ -336,7 +336,7 @@ def build_improvements(model_obj):
         spawned = {key: i for key, i in useful.items() if i.get('iAppearanceProbability') is not None}
         manas = {key: i for key, i in useful.items() if 'MANA' in i.get('Type')}
         weird = [i for i in useful if i not in list(only_buildables.keys()) + list(natural_wonders.keys()) + list(barb_encampments.keys()) + list(manas.keys()) + list(spawned.keys())]
-        trait_modifiers = []
+        game_modifiers = []
     with open('data/XML/Units/CIV4BuildInfos.xml', 'r') as file:
         build_improve_dict = xmltodict.parse(file.read())['Civ4BuildInfos']['BuildInfos']['BuildInfo']
 
@@ -393,10 +393,10 @@ def build_improvements(model_obj):
                     for idx, amount in enumerate(bonus['YieldChanges']['iYieldChange']):
                         if int(amount) != 0:
                             mod_id = model_obj['modifiers'].generate_modifier(
-                                {'bonus': bonus, 'yield_type': yield_map[idx], 'amount': amount},
+                                {'bonus': bonus['BonusType'][6:], 'yield_type': yield_map[idx], 'amount': amount},
                                 'SLTH_Improvement_Bonus', improvement)
                             if mod_id is not None:
-                                trait_modifiers.append({'TraitType': 'TRAIT_LEADER_MAJOR_CIV', 'ModifierId': mod_id})
+                                game_modifiers.append({'ModifierId': mod_id})
 
         if improvement.get('TechYieldChanges') is not None:
             tech_yield = improvement.pop('TechYieldChanges')['TechYieldChange']
@@ -483,4 +483,4 @@ def build_improvements(model_obj):
     make_or_add(model_obj['sql_inserts'], valid_terrains, 'Improvement_ValidTerrains')
     make_or_add(model_obj['sql_inserts'], improvement_valid_features, 'Improvement_ValidFeatures')
     make_or_add(model_obj['sql_inserts'], improvement_valid_resources, 'Improvement_ValidResources')
-    make_or_add(model_obj['sql_inserts'], trait_modifiers, 'TraitModifiers')
+    make_or_add(model_obj['sql_inserts'], game_modifiers, 'GameModifiers')
