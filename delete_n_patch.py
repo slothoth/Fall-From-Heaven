@@ -5,11 +5,12 @@ def delete_rows(model_obj, kept):
     dict_insert(model_obj, 'Resource_Harvests', {'WHERE_COL': 'PrereqTech', 'WHERE_EQUALS': 'TECH_POTTERY',
                                                  'SET_COL': 'PrereqTech', 'SET_EQUALS': 'SLTH_TECH_AGRICULTURE'})
 
-    unit_military_engineer_issues = ['Improvement_ValidBuildUnits', 'Route_ValidBuildUnits',
+    unit_military_engineer_issues = ['Route_ValidBuildUnits',
                                      'Building_BuildChargeProductions', 'District_BuildChargeProductions']
     for table in unit_military_engineer_issues:
         dict_insert(model_obj, table, {'WHERE_COL': 'UnitType', 'WHERE_EQUALS': 'UNIT_MILITARY_ENGINEER',
                                        'SET_COL': 'UnitType', 'SET_EQUALS': 'UNIT_BUILDER'})
+
 
     dict_insert(model_obj, 'Routes_XP2', {'WHERE_COL': 'PrereqTech', 'WHERE_EQUALS': 'TECH_STEAM_POWER'},
                 sql_type='deletes')
@@ -24,7 +25,8 @@ def delete_rows(model_obj, kept):
 
     delete_full = ['Technologies', 'TechnologyPrereqs', 'Technologies_XP2', 'Civics', 'Boosts', 'Policies',
                    'CivicPrereqs', 'Civics_XP2', 'Building_GreatPersonPoints', 'Unit_BuildingPrereqs',
-                   'UnitUpgrades', 'UnitPromotionPrereqs', 'UnitPromotionModifiers', 'UnitPromotions']
+                   'UnitUpgrades', 'UnitPromotionPrereqs', 'UnitPromotionModifiers', 'UnitPromotions', 'Improvements',
+                   'Improvement_ValidBuildUnits', 'Improvement_ValidTerrains', 'Improvement_ValidResources']
     for i in delete_full:
         dict_insert(model_obj, i, {'WHERE_COL': 1, 'WHERE_EQUALS': 1},
                     sql_type='deletes')

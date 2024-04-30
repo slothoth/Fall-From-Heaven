@@ -58,6 +58,15 @@ def techs_sql(model_obj, kept):
     for tech in six_style_techs:
         tech['TechnologyType'] = f"SLTH_{tech['TechnologyType']}"
 
+    [i for i in six_style_techs if i['TechnologyType'] == 'SLTH_TECH_FISHING'][0]['EmbarkUnitType'] = 'UNIT_BUILDER'
+    [i for i in six_style_techs if i['TechnologyType'] == 'SLTH_TECH_SAILING'][0]['EmbarkAll'] = 1
+    [i for i in six_style_techs if i['TechnologyType'] == 'SLTH_TECH_SAILING'][0]['EmbarkUnitType'] = 'SLTH_UNIT_MUD_GOLEM'
+
+    six_style_techs.append(elf_patch(six_style_techs, model_obj))
+
+    'UNIT_BUILDER'
+    'EmbarkAll : 1'
+
     make_or_add(model_obj['sql_inserts'], six_style_techs, 'Technologies')
     make_or_add(model_obj['sql_inserts'], six_style_civics, 'Civics')
 
@@ -87,3 +96,20 @@ def prereq_techs(model_obj):
 
     make_or_add(model_obj['sql_inserts'], prereq_techs, 'TechnologyPrereqs')
     make_or_add(model_obj['sql_inserts'], prereqs_civics, 'CivicPrereqs')
+
+
+def elf_patch(six_style_techs, model_obj):
+    elf_patch_tech = [i for i in six_style_techs if i['TechnologyType'] =='SLTH_TECH_FUTURE_TECH'][0].copy()
+    era = 'ERA_DUMMY'
+    elf_patch_tech['TechnologyType'] = 'SLTH_TECH_FOREST_SECRETS'
+    elf_patch_tech['Name'] = 'LOC_SLTH_TECH_FOREST_SECRETS_NAME'
+    elf_patch_tech['Description'] = 'LOC_SLTH_TECH_FOREST_SECRETS_DESCRIPTION'
+    elf_patch_tech['Cost'] = 9000
+    elf_patch_tech['EraType'] = era
+    era_type = {'EraType': era, 'Name': 'LOC_ERA_DUMMY_NAME', 'ChronologyIndex': -1, 'EmbarkedUnitStrength': 10,
+                'GreatPersonBaseCost': 30}
+    model_obj['kinds'][era] = 'KIND_ERA'
+    model_obj['kinds']['SLTH_TECH_FOREST_SECRETS'] = 'KIND_TECH'
+    make_or_add(model_obj['sql_inserts'], [era_type], 'Eras')
+    return elf_patch_tech
+
