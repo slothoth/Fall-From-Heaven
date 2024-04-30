@@ -22,6 +22,7 @@ def main():
         shutil.copy(source_path, destination_path)
 
     mod_info = f'{destination_directory}/FallFromHeaven.mod_info'
+    os.remove(mod_info.replace('.mod_info', '.modinfo'))
     os.rename(mod_info, mod_info.replace('.mod_info', '.modinfo'))
 
 
