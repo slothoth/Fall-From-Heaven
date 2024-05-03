@@ -21,9 +21,10 @@ def main():
         destination_path = os.path.join(destination_directory, file_name)
         shutil.copy(source_path, destination_path)
 
-    mod_info = f'{destination_directory}/FallFromHeaven.mod_info'
-    os.remove(mod_info.replace('.mod_info', '.modinfo'))
-    os.rename(mod_info, mod_info.replace('.mod_info', '.modinfo'))
+    mod_ = f'{destination_directory}/FallFromHeaven.mod'
+    if os.path.exists(f'{mod_}info'):
+        os.remove(f'{mod_}info')
+    os.rename(f'{mod_}_info', f'{mod_}info')
 
 
 if __name__ == "__main__":

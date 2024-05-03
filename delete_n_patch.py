@@ -20,8 +20,6 @@ def delete_rows(model_obj, kept):
 
     dict_insert(model_obj, 'MajorStartingUnits', {'WHERE_COL': 'Unit', 'WHERE_EQUALS': 'UNIT_WARRIOR',
                                                   'SET_COL': 'Unit', 'SET_EQUALS': 'SLTH_UNIT_WARRIOR'})
-    dict_insert(model_obj, 'GovernmentSlots', {'WHERE_COL': 'GovernmentSlotType', 'WHERE_EQUALS': 'SLOT_WILDCARD',
-                                               'SET_COL': 'AllowsAnyPolicy', 'SET_EQUALS': 0})
 
     delete_full = ['Technologies', 'TechnologyPrereqs', 'Technologies_XP2', 'Civics', 'Boosts', 'Policies',
                    'CivicPrereqs', 'Civics_XP2', 'Building_GreatPersonPoints', 'Unit_BuildingPrereqs',
