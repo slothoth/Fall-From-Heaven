@@ -1,6 +1,7 @@
 from utils import make_or_add
 from promotion_modifiers import PromotionModifiers
 import logging
+import os
 
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
@@ -236,6 +237,11 @@ class Modifiers:
         for tag, vocab in self.tags.items():
             model_obj['tags'][tag] = vocab
 
+        if not os.path.exists('data/checklist.md'):
+            checklist = '\n  - [ ] '.join([i for i in self.complete_set])
+            checklist = '  - [ ] ' + checklist
+            with open('data/checklist.md', 'w') as file:
+                 file.write(checklist)
         for feature, details in self.complete_set.items():
             print(feature)
             for sql in details:
@@ -561,6 +567,7 @@ class Modifiers:
 
     def free_building_modifier(self, civ4_target, name):
         # gives free building in all cities
+        civ4_target = civ4_target.replace('BUILDINGCLASS', 'SLTH_BUILDING')
         modifiers = [{'ModifierId': f"MODIFIER_ALL_CITIES_FREE_{name}",
                       'ModifierType': 'MODIFIER_PLAYER_CITIES_ATTACH_MODIFIER'},
                      {'ModifierId': f"MODIFIER_FREE_{name}",
@@ -572,7 +579,7 @@ class Modifiers:
                           'Value': modifiers[1]['ModifierId']},
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'BuildingType', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifiers, modifier_args, loc=[name, [f"Grant free {civ4_target} in all cities."]])
+        self.organize(modifiers, modifier_args, loc=[name, [f"Grant free ###{civ4_target}### in all cities."]])
         return [i['ModifierId'] for i in modifiers]
 
     def project_prod_mult_modifier(self, civ4_target, name):
