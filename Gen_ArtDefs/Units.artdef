@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects::ArtDefSet>
+  <m_Version>
+    <major>4</major>
+    <minor>0</minor>
+    <build>238</build>
+    <revision>243</revision>
+  </m_Version>
+  <m_TemplateName text="Units"/>
+  <m_RootCollections>
+    <Element>
+      <m_CollectionName text="Units"/>
+    </Element>
+  </m_RootCollections>
+</AssetObjects::ArtDefSet>
