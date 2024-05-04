@@ -67,7 +67,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="StrategicView_Sprite"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Buildings.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="StrategicView_Sprite"/>
 				<Element text="StrategicView_DirectedAsset"/>
@@ -390,6 +392,12 @@
 		<Element>
 			<ArtDefPath text="UserInterface.artdef"/>
 			<ArtDefDependencyPaths/>
+		</Element>
+		<Element>
+			<ArtDefPath text="Buildings.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Buildings.artdef"/>
+			</ArtDefDependencyPaths>
 		</Element>
 	</ArtDefDependencies>
 	<LibraryDependencies>
