@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <AssetObjects..GameDependencyData>
 	<ID>
-		<name text="FallFromHeaven"/>
-		<id text="301d9851-b589-45ca-8c0a-931c8d16ede0"/>
+		<name text="AA FallFromHeavenPort"/>
+		<id text="8bc3b6cd-635d-46e3-acb0-5d6708fed678"/>
 	</ID>
-	<RequiredGameArtIDs>
-		<Element>
-			<name text="Civ6"/>
-			<id text="cb2f71b7-843e-4af3-9ca7-992acda9c195"/>
-		</Element>
-	</RequiredGameArtIDs>
+	<RequiredGameArtIDs/>
 	<SystemDependencies>
 		<Element>
 			<ConsumerName text="Units"/>
@@ -133,8 +128,7 @@
 		</Element>
 		<Element>
 			<ConsumerName text="UI"/>
-			<ArtDefDependencyPaths>
-			</ArtDefDependencyPaths>
+			<ArtDefDependencyPaths/>
 			<LibraryDependencies>
 				<Element text="UITexture"/>
 			</LibraryDependencies>
@@ -267,9 +261,7 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Audio"/>
-			<ArtDefDependencyPaths>
-				<Element text="Units.artdef"/>
-			</ArtDefDependencyPaths>
+			<ArtDefDependencyPaths/>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
@@ -387,10 +379,6 @@
 			<ArtDefPath text="Clutter.artdef"/>
 			<ArtDefDependencyPaths/>
 		</Element>
-		<Element>
-			<ArtDefPath text="UserInterface.artdef"/>
-			<ArtDefDependencyPaths/>
-		</Element>
 	</ArtDefDependencies>
 	<LibraryDependencies>
 		<Element>
@@ -499,8 +487,7 @@
 		</Element>
 		<Element>
 			<LibraryName text="UITexture"/>
-			<PackageDependencies>
-			</PackageDependencies>
+			<PackageDependencies/>
 		</Element>
 		<Element>
 			<LibraryName text="Unit"/>
