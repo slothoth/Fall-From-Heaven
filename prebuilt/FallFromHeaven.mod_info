@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Mod id="88437b31-15d2-48da-b71f-2f13b34e6b42" version="1">
+<Mod id="301d9851-b589-45ca-8c0a-931c8d16ede0" version="1">
   <Properties>
-    <Name>AAAA FallFromHeavenPort</Name>
+    <Name>AA FallFromHeavenPort</Name>
     <Description>Ports Kael's excellent Fall From Heaven mod to Civ VI</Description>
-    <Created>1588793116</Created>
+    <Created>1714825549</Created>
     <Teaser>slothOth</Teaser>
     <Authors>Slothoth</Authors>
     <SpecialThanks>SailorCat and Fuzzle for their help on discord with SQL. Flactine who's mods I relentlessly mined for LUA scripting.</SpecialThanks>
@@ -26,6 +26,9 @@
     </UpdateText>
    </FrontEndActions>
   <InGameActions>
+    <UpdateArt id="Abu_Art">
+      <File>FallFromHeaven.dep</File>
+    </UpdateArt>
     <UpdateDatabase id="Gameplay">
       <Properties>
         <LoadOrder>100</LoadOrder>
@@ -54,5 +57,8 @@
     <File>Lua/ExtraHeroes.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
+    <File>Artdefs/Units.artdef</File>
+    <File>ArtDefs/Buildings.artdef</File>
+    <File>FallFromHeaven.dep</File>
   </Files>
 </Mod>

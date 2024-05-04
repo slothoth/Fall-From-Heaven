@@ -9,6 +9,7 @@ from modifiers import Modifiers
 from utils import Sql, setup_tables, make_or_add, localize
 from db_checker import check_primary_keys
 from prebuilt_transfer import main as prebuilt_transfer
+from artdef_wrangler import artdef
 
 import json
 import logging
@@ -50,6 +51,7 @@ def main():
     #                                            in model_obj['kinds'].items()], 'Types')
     delete_rows(model_obj, kept)
     localize(model_obj)
+    artdef()
     check_primary_keys(model_obj)
     for table, rows in model_obj['sql_inserts'].items():
         model_obj['sql_strings'].append(model_obj['sql'].old_build_sql_table(rows, table))
@@ -58,7 +60,7 @@ def main():
         total += i
 
     # debug super palace
-    if True:
+    if False:
         total += """UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
         UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
         UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
