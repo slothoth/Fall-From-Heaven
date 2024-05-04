@@ -185,62 +185,43 @@ def feature_artdef():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
     folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
-    string = 'Units.artdef'
+    string = 'Features.artdef'
     artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
 
     with open(artdefs[0], 'r') as file:
         artdef_info = xmltodict.parse(file.read())
-    artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']
-    full_artdef = {i['m_CollectionName']['@text']: i.get('Element', []) for i in artdef_info_}
+    artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element']
+    full_artdef = {i['m_Name']['@text']: i for i in artdef_info_}
 
     for artdef in artdefs[1:]:
         with open(artdef, 'r') as file:
             artdef_info = xmltodict.parse(file.read())
-        artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']
-        artdef_dict = {i['m_CollectionName']['@text']: i['Element'] for i in artdef_info_ if
-                       i.get('Element', None) is not None}
-        for i, j in artdef_dict.items():
-            if isinstance(j, dict):
-                full_artdef[i].append(j)
-            elif isinstance(j, list):
-                full_artdef[i].extend(j)
-            else:
-                print('weird collection')
+        artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element']
+        if isinstance(artdef_info_, dict):
+            artdef_info_ = [artdef_info_]
+        artdef_dict = {i['m_Name']['@text']: i for i in artdef_info_}
+        full_artdef.update(artdef_dict)
 
-    uniques = []
-    not_uniques = []
-    drop_indices = []
-    for idx, i in enumerate(full_artdef['Units']):
-        if i['m_Name']['@text'] not in uniques:
-            uniques.append(i['m_Name']['@text'])
-        else:
-            not_uniques.append(i['m_Name']['@text'])
-            drop_indices.append(idx)
-
-    drop_indices.reverse()
-    for i in drop_indices:
-        del full_artdef['Units'][i]
-
-    artdef_total = {i['m_Name']['@text']: i for i in full_artdef['Units']}
+    artdef_total = full_artdef
 
     with open("plans/asset_map_plan.json", 'r') as json_file:
         artdef_map = json.load(json_file)
 
-    with open('Gen_ArtDefs/Units.artdef', 'r') as file:
+    """with open('Gen_ArtDefs/Features.artdef', 'r') as file:
         artdef_template = xmltodict.parse(file.read())
 
     artdef_template['AssetObjects::ArtDefSet']['m_RootCollections']['Element']['Element'] = []
     root = artdef_template['AssetObjects::ArtDefSet']['m_RootCollections']['Element']['Element']
-    """root.append(assign_artdef(artdef_total['UNIT_ARCHER'], 'SLTH_UNIT_BLOODPET'))
+    root.append(assign_artdef(artdef_total['UNIT_ARCHER'], 'SLTH_UNIT_BLOODPET'))
 
     with open('prebuilt/Artdefs/Units.artdef', 'w') as file:
          xmltodict.unparse(artdef_template, output=file, pretty=True)"""
 
-    artdef_units = artdef_map['Units']
+    artdef_features = artdef_map['Features']
 
     failed = {'multsearch': [], 'nosearch': []}
     search_found = []
-    for mod_ref, vanilla_ref in artdef_units.items():
+    for mod_ref, vanilla_ref in artdef_features.items():
         if any([vanilla_ref in i for i in ['CUSTOM', 'IRRELEVANT', 'LIKELY_SUKRITACT_WILDLIFE?']]):
             continue
         if 'ADAPTED' in vanilla_ref:
@@ -250,16 +231,18 @@ def feature_artdef():
             if len(search) > 1:
                 root.append(assign_artdef(artdef_total[search[0]], mod_ref))
                 logger.info(f'found more than one match for {vanilla_ref}')
-                failed['multsearch'].append(artdef_units[mod_ref])
+                failed['multsearch'].append(artdef_features[mod_ref])
             elif len(search) == 0:
                 logger.info(f'no match for {vanilla_ref}')
-                failed['nosearch'].append(artdef_units[mod_ref])
+                failed['nosearch'].append(artdef_features[mod_ref])
             else:
                 root.append(assign_artdef(artdef_total[search[0]], mod_ref))
-                search_found.append(artdef_units[mod_ref])
+                search_found.append(artdef_features[mod_ref])
         else:
             root.append(assign_artdef(artdef_total[vanilla_ref], mod_ref))
             logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-    with open('prebuilt/Artdefs/Units.artdef', 'w') as file:
+    with open('prebuilt/Artdefs/Features.artdef', 'w') as file:
         xmltodict.unparse(artdef_template, output=file, pretty=True)
+
+feature_artdef()
