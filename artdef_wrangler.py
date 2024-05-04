@@ -13,6 +13,7 @@ def assign_artdef(artdef, name):
 def artdef():
     unit_artdef()
     building_artdef()
+    resource_artdef()
 
 
 def unit_artdef():
@@ -214,7 +215,7 @@ def feature_artdef():
     root = artdef_template['AssetObjects::ArtDefSet']['m_RootCollections']['Element']['Element']
     root.append(assign_artdef(artdef_total['UNIT_ARCHER'], 'SLTH_UNIT_BLOODPET'))
 
-    with open('prebuilt/Artdefs/Units.artdef', 'w') as file:
+    with open('prebuilt/Artdefs/Features.artdef', 'w') as file:
          xmltodict.unparse(artdef_template, output=file, pretty=True)"""
 
     artdef_features = artdef_map['Features']
@@ -245,4 +246,65 @@ def feature_artdef():
     with open('prebuilt/Artdefs/Features.artdef', 'w') as file:
         xmltodict.unparse(artdef_template, output=file, pretty=True)
 
-feature_artdef()
+
+def resource_artdef():
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
+    string = 'Resources.artdef'
+    artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
+
+    with open(artdefs[0], 'r') as file:
+        artdef_info = xmltodict.parse(file.read())
+    artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element']
+    full_artdef = {i['m_Name']['@text']: i for i in artdef_info_}
+
+    for artdef in artdefs[1:]:
+        with open(artdef, 'r') as file:
+            artdef_info = xmltodict.parse(file.read())
+        if 'Element' not in artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']:
+            continue
+        artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element']
+        if isinstance(artdef_info_, dict):
+            artdef_info_ = [artdef_info_]
+        artdef_dict = {i['m_Name']['@text']: i for i in artdef_info_}
+        full_artdef.update(artdef_dict)
+
+    artdef_total = full_artdef
+
+    with open("plans/asset_map_plan.json", 'r') as json_file:
+        artdef_map = json.load(json_file)
+
+    with open('Gen_ArtDefs/Resources.artdef', 'r') as file:
+        artdef_template = xmltodict.parse(file.read())
+
+    artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element'] = []
+    root = artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element']
+
+    artdef_resources = artdef_map['Resources']
+
+    failed = {'multsearch': [], 'nosearch': []}
+    search_found = []
+    for mod_ref, vanilla_ref in artdef_resources.items():
+        if any([vanilla_ref in i for i in ['CUSTOM', 'IRRELEVANT', 'LIKELY_SUKRITACT_WILDLIFE?']]):
+            continue
+        if 'ADAPTED' in vanilla_ref:
+            vanilla_ref = vanilla_ref.replace('ADAPTED', 'UNIT')
+        if artdef_total.get(vanilla_ref) is None:
+            search = [i for i in artdef_total if vanilla_ref.replace('UNIT_', '') in i]
+            if len(search) > 1:
+                root.append(assign_artdef(artdef_total[search[0]], mod_ref))
+                logger.info(f'found more than one match for {vanilla_ref}')
+                failed['multsearch'].append(artdef_resources[mod_ref])
+            elif len(search) == 0:
+                logger.info(f'no match for {vanilla_ref}')
+                failed['nosearch'].append(artdef_resources[mod_ref])
+            else:
+                root.append(assign_artdef(artdef_total[search[0]], mod_ref))
+                search_found.append(artdef_resources[mod_ref])
+        else:
+            root.append(assign_artdef(artdef_total[vanilla_ref], mod_ref))
+            logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
+
+    with open('prebuilt/Artdefs/Resources.artdef', 'w') as file:
+        xmltodict.unparse(artdef_template, output=file, pretty=True)

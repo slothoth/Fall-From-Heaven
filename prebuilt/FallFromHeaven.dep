@@ -33,7 +33,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Landmarks"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Resources.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="CityBuildings"/>
 				<Element text="TileBase"/>
@@ -43,7 +45,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Farms"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Resources.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="TileBase"/>
 				<Element text="CityBuildings"/>
@@ -245,7 +249,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Resources"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Resources.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
@@ -257,7 +263,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="WorldView_Translate"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Resources.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
@@ -271,6 +279,7 @@
 			<ConsumerName text="Audio"/>
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
+				<Element text="Resources.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
@@ -397,6 +406,18 @@
 			<ArtDefPath text="Buildings.artdef"/>
 			<ArtDefDependencyPaths>
 				<Element text="Buildings.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Resources.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Clutter.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Farms.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Resources.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 	</ArtDefDependencies>
