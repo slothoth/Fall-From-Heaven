@@ -58,6 +58,7 @@
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>
+    <File>ArtDefs/Buildings.artdef</File>
     <File>FallFromHeaven.dep</File>
   </Files>
 </Mod>
