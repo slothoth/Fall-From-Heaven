@@ -1,6 +1,7 @@
 from utils import make_or_add
 from promotion_modifiers import PromotionModifiers
 import logging
+import os
 
 commerce_map = ['YIELD_GOLD', 'YIELD_SCIENCE', 'YIELD_CULTURE']
 yield_map = ['YIELD_FOOD', 'YIELD_PRODUCTION', 'YIELD_GOLD']
@@ -236,14 +237,21 @@ class Modifiers:
         for tag, vocab in self.tags.items():
             model_obj['tags'][tag] = vocab
 
-        for feature, details in self.complete_set.items():
-            print(feature)
-            for sql in details:
-                if sql is not None:
-                    print('--------------')
-                    for i in sql:
-                        print(i)
-            print('__________________________________________________________________________')
+        if os.path.exists('data/checklist.md'):
+            with open('data/checklist.md', 'r') as file:
+                checklist = file.read()
+            for i in self.complete_set:
+                if i in checklist:
+                    continue
+                else:
+                    checklist += f'\n  - [ ] {i}'
+            with open('data/checklist.md', 'w') as file:
+                 file.write(checklist)
+        else:
+            checklist = '\n  - [ ] '.join([i for i in self.complete_set])
+            checklist = '  - [ ] ' + checklist
+            with open('data/checklist.md', 'w') as file:
+                 file.write(checklist)
 
     def capital_commerce_modifier(self, civ4_target, name):
         return self.commerce_modifier(civ4_target, name,
@@ -325,7 +333,8 @@ class Modifiers:
         return [i['ModifierId'] for i in modifiers]
 
     def gpp_rate_modifier(self, civ4_target, name):
-        mod_id = f"MODIFIER_{name[14:]}_INCREASE_GPP_MULT"
+        my_name = name.replace('SLTH_', '').replace('POLICY_', '').replace('BUILDING_', '')
+        mod_id = f"MODIFIER_{my_name}_INCREASE_GPP_MULT"
         modifier_type = 'MODIFIER_PLAYER_CAPITAL_CITY_GPP_MULT'
         modifier = [{'ModifierId': mod_id,
                      'ModifierType': modifier_type}]
@@ -334,7 +343,7 @@ class Modifiers:
         dynamic_modifiers = {'ModifierType': modifier_type, 'CollectionType': 'COLLECTION_PLAYER_CAPITAL_CITY',
                              'EffectType': 'EFFECT_ADJUST_CITY_GREAT_PERSON_POINTS_MODIFIER'}
         self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifiers,
-                      loc=[name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
+                      loc=[my_name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
         return [mod_id]
 
     def buildings_amenities_modifier(self, civ4_target, name, **kwargs):
@@ -561,6 +570,7 @@ class Modifiers:
 
     def free_building_modifier(self, civ4_target, name):
         # gives free building in all cities
+        civ4_target = civ4_target.replace('BUILDINGCLASS', 'SLTH_BUILDING')
         modifiers = [{'ModifierId': f"MODIFIER_ALL_CITIES_FREE_{name}",
                       'ModifierType': 'MODIFIER_PLAYER_CITIES_ATTACH_MODIFIER'},
                      {'ModifierId': f"MODIFIER_FREE_{name}",
@@ -572,7 +582,7 @@ class Modifiers:
                           'Value': modifiers[1]['ModifierId']},
                          {'ModifierId': modifiers[1]['ModifierId'], 'Name': 'BuildingType', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_target}]
-        self.organize(modifiers, modifier_args, loc=[name, [f"Grant free {civ4_target} in all cities."]])
+        self.organize(modifiers, modifier_args, loc=[name, [f"Grant free ###{civ4_target}### in all cities."]])
         return [i['ModifierId'] for i in modifiers]
 
     def project_prod_mult_modifier(self, civ4_target, name):

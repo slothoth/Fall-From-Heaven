@@ -139,6 +139,20 @@ class Civilizations:
                     if not civ_units['dev_null'].get(civ, False):
                         civ_units['dev_null'][civ] = []
                     civ_units['dev_null'][civ].append(f"SLTH_UNIT_{unit[10:]}")
+
+        for j in unit_replaces.values():
+            for k in j:
+                trait_belongs_to = list(k.keys())[0]
+                if 'BARBARIAN' in trait_belongs_to:
+                    continue
+                unit = list(k.values())[0]
+                trait_type = f"SLTH_TRAIT_CIVILIZATION_{unit}"
+                model_obj['traits'][trait_type] = {'TraitType': trait_type, 'Name': f'LOC_{trait_type}_NAME',
+                                                   'Description': f'LOC_{trait_type}_DESCRIPTION'}
+                model_obj['kinds'][trait_type] = 'KIND_TRAIT'
+                self.civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{trait_belongs_to}"})
+                civ_units['civ_traits'].append(f"SLTH_{unit}")
+                self.civ_traits.append({'TraitType': trait_type, 'CivilizationType': f"SLTH_{trait_belongs_to}"})
     
         self.six_style_civs = {key: small_dict(i, civ_mapper) for key, i in civ_dict.items()}
         self.six_style_civs.pop('CIVILIZATION_BARBARIAN')

@@ -14,9 +14,6 @@ def build_resource_string(model_obj):
     resource_renames = {'HORSE': 'HORSES', 'GUNPOWDER': 'NITER', 'BANANA': 'BANANAS', 'CORN': 'MAIZE', 'COW': 'CATTLE',
                         'GEMS': 'DIAMONDS', 'CRAB': 'CRABS', 'DYE': 'DYES', 'FUR': 'FURS', 'WHALE': 'WHALES',
                         'PEARL': 'PEARLS'}
-    artdef_resources = {'PIG': 'TRUFFLES', 'MITHRIL': 'SILVER', 'FRUIT_OF_YGGDRASIL': 'CITRUS', 'REAGENTS': 'SPICES',
-                        'SHEUT_STONE': 'JADE', 'RAZORWEED': 'OLIVES', 'GULAGARM': 'TOBACCO', 'GOLD': 'GYPSUM',
-                        'CLAM': 'TURTLES', 'NIGHTMARE': 'AMBER', 'TOAD': 'HONEY'}
 
     pre_existing = ['RESOURCE_COPPER', 'RESOURCE_IRON', 'RESOURCE_MARBLE', 'RESOURCE_DEER', 'RESOURCE_FISH',
                     'RESOURCE_RICE', 'RESOURCE_SHEEP', 'RESOURCE_WHEAT', 'RESOURCE_INCENSE', 'RESOURCE_IVORY',
