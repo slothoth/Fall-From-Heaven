@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Mod id="8bc3b6cd-635d-46e3-acb0-5d6708fed678" version="1">
+<Mod id="301d9851-b589-45ca-8c0a-931c8d16ede0" version="1">
   <Properties>
     <Name>AA FallFromHeavenPort</Name>
     <Description>Ports Kael's excellent Fall From Heaven mod to Civ VI</Description>
@@ -26,6 +26,9 @@
     </UpdateText>
    </FrontEndActions>
   <InGameActions>
+    <UpdateArt id="Abu_Art">
+      <File>FallFromHeaven.dep</File>
+    </UpdateArt>
     <UpdateDatabase id="Gameplay">
       <Properties>
         <LoadOrder>100</LoadOrder>
@@ -54,7 +57,7 @@
     <File>Lua/ExtraHeroes.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
-    <File>ArtDefs/Units.artdef</File>
+    <File>Artdefs/Units.artdef</File>
     <File>FallFromHeaven.dep</File>
   </Files>
 </Mod>
