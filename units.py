@@ -6,7 +6,7 @@ import logging
 unit_dict = {'Class': 'UnitType', 'Type': 'Name', 'Description': 'Description', 'iMoves': 'BaseMoves',
              'iCost': 'Cost', 'Advisor': 'AdvisorType', 'iCombat': 'Combat', 'Combat': 'RangedCombat',
              'Domain': 'Domain', 'PromotionClass': 'Combat', 'Maintenance': 'bMilitarySupport',
-             'PrereqTech': 'PrereqTech', 'DefaultUnitAI': 'DefaultUnitAI'}
+             'PrereqTech': 'PrereqTech', 'DefaultUnitAI': 'DefaultUnitAI', 'SpecialCargo': 'SpecialCargo'}
 
 techs_4_to_6 = {'Type': 'TechnologyType', 'Name': 'TechnologyType', 'iCost': 'Cost', 'Repeatable': 0,
                 'EmbarkUnitType': 'NULL', 'EmbarkAll': 0, 'Description': 'Description', 'EraType': 'ERA_ANCIENT',
@@ -46,21 +46,17 @@ class Units:
     def units_sql(self, model_obj, kept):
         logger = logging.getLogger(__name__)
         civs = model_obj['select_civs']
-        debug_string = ""
         with open('data/XML/Units/CIV4UnitInfos.xml', 'r') as file:
             infos = xmltodict.parse(file.read())['Civ4UnitInfos']['UnitInfos'][('UnitInfo')]
-        with open("data/unique_units.json", 'r') as json_file:
-            uu = json.load(json_file)
-        with open("data/heroes_civs.json", 'r') as json_file:
-            heroes = json.load(json_file)
-        with open("data/two_civ_units.json", 'r') as json_file:
-            two_civs_units = json.load(json_file)
-        with open("data/religious_units.json", 'r') as json_file:
-            religious = json.load(json_file)
+        with open("data/prebuilt_unit_infos.json", 'r') as json_file:
+            unit_prebuilt = json.load(json_file)
 
-        with open("data/upgrade_tree_units.json", 'r') as json_file:
-            upgrade_tree = json.load(json_file)
-
+        two_civs_units = unit_prebuilt['two_civs_units']
+        religious = unit_prebuilt['religious_units']
+        summons = unit_prebuilt['summon_units']
+        upgrade_tree = unit_prebuilt['upgrade_tree_units']
+        uu = unit_prebuilt['unique_units']
+        heroes = unit_prebuilt['heroes_civs']
         excludes_from_four, to_keep_but_modify = kept['exclude_from_IV'], kept['units_but_modify_name']
         units_to_update, units_changed_tech = kept['units_as_is'], kept['units_tech_change']
         units_but_for_unique_civs, compat_units = kept['units_unique_civ'], kept['compat_for_VI']
@@ -92,6 +88,8 @@ class Units:
                 i['FormationClass'] = 'FORMATION_CLASS_CIVILIAN'
             else:
                 i['FormationClass'] = 'FORMATION_CLASS_LAND_COMBAT'
+            if i.pop('SpecialCargo', 'NONE') != 'NONE':
+                i['AirSlots'] = 1
 
             i['CanTrain'] = 0 if i['Cost'] == '-1' else 1
             if 'SLAVE' in i['UnitType']:
@@ -102,8 +100,6 @@ class Units:
         unbuildable_only = {key: val for key, val in six_style_dict.items() if val['Cost'] == '-1'}
         # Filter out civ units, processing strings
         equipment = {key: val for key, val in unbuildable_only.items() if 'EQUIP' in key}
-        summons = {key: val for key, val in unbuildable_only.items() if 'EQUIP' not in key}
-
         for unit in model_obj['civ_units']['barbarian']:
             if six_style_dict[unit]['TraitType'] != 'NULL':
                 logger.error(f"Unit {unit} already has a trait, so we cant set trait_barb_but_shows_up")
@@ -204,7 +200,6 @@ class Units:
         for name, unit in final_units.items():
             if name not in kept_units:
                 model_obj['kinds'][name] = 'KIND_UNIT'
-                debug_string += f"'{name}',"
 
         simple_upgrades = {unit: {'Unit': f'SLTH_{unit}', 'UpgradeUnit': f'SLTH_{upgrades[0]}'}
                            for unit, upgrades in upgrade_tree.items()}
@@ -219,6 +214,23 @@ class Units:
         mud_golem['BuildCharges'], mud_golem['Combat'], mud_golem['RangedCombat'] = 5, 3, 1
 
         self.heros_builder(hero_units, model_obj)
+
+        self.summons_restrictions(final_units, summons, model_obj)
+
+        hawk = {
+                "BaseSightRange": 4,
+                "BaseMoves": 8,
+                "Range": 5,
+                "Domain": "DOMAIN_AIR",
+                "FormationClass": "FORMATION_CLASS_AIR",
+                "PromotionClass": "PROMOTION_CLASS_MELEE",
+                "Stackable": 1,
+                "CanTargetAir": 1,
+                "PseudoYieldType": "PSEUDOYIELD_UNIT_AIR_COMBAT",
+                "IgnoreMoves": 1
+            }
+        final_units['SLTH_UNIT_HAWK'].update(hawk)
+        final_units['SLTH_UNIT_EYE'].update(hawk)
 
         free_promotions = [{'UnitType': f"SLTH_{i['Type']}", 'FreePromotion': i['FreePromotions']['FreePromotion']} for i in useful
                            if i.get('FreePromotions') is not None]
@@ -263,3 +275,13 @@ class Units:
 
         print(set(my_l))
 
+    def summons_restrictions(self, final_units, summons, model_obj):
+        type_properties = []
+        for i in final_units:
+            if i in summons:
+                type_properties.append({ "Type": i, "Name": "LIFESPAN", "Value": "1",
+                                         "PropertyType": "PROPERTYTYPE_IDENTITY"})
+        # patchy
+        type_properties.append({"Type": 'UNIT_BIPLANE', "Name": "LIFESPAN", "Value": "1",
+                                "PropertyType": "PROPERTYTYPE_IDENTITY"})
+        make_or_add(model_obj['sql_inserts'], type_properties, 'TypeProperties')
