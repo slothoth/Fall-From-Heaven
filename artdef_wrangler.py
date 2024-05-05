@@ -2,6 +2,7 @@ import xmltodict
 import json
 import glob
 import logging
+import platform
 
 
 def assign_artdef(artdef, name):
@@ -11,15 +12,19 @@ def assign_artdef(artdef, name):
 
 
 def artdef():
-    unit_artdef()
-    building_artdef()
-    resource_artdef()
+    os_name = platform.system()
+    if os_name == 'Darwin':
+        folder = "/Users/samuelmayo/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization VI/Civ6.app/Contents"
+    elif os_name == 'Windows':
+        folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
+    unit_artdef(folder)
+    building_artdef(folder)
+    resource_artdef(folder)
 
 
-def unit_artdef():
+def unit_artdef(folder):
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-    folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
     string = 'Units.artdef'
     artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
 
@@ -99,8 +104,7 @@ def unit_artdef():
         xmltodict.unparse(artdef_template, output=file, pretty=True)
 
 
-def building_artdef():
-    folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
+def building_artdef(folder):
     string = 'Buildings.artdef'
     artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
 
@@ -108,7 +112,9 @@ def building_artdef():
         artdef_info = xmltodict.parse(file.read())
     artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']
     full_artdef = {i['m_CollectionName']['@text']: i.get('Element', []) for i in artdef_info_}
-
+    for i in full_artdef:
+        if isinstance(full_artdef[i], dict):
+            full_artdef[i] = [full_artdef[i]]
     for artdef in artdefs[1:]:
         with open(artdef, 'r') as file:
             artdef_info = xmltodict.parse(file.read())
@@ -182,10 +188,9 @@ def building_artdef():
         xmltodict.unparse(artdef_template, output=file, pretty=True)
 
 
-def feature_artdef():
+def feature_artdef(folder):
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-    folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
     string = 'Features.artdef'
     artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
 
@@ -247,19 +252,26 @@ def feature_artdef():
         xmltodict.unparse(artdef_template, output=file, pretty=True)
 
 
-def resource_artdef():
+def resource_artdef(folder):
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-    folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
     string = 'Resources.artdef'
     artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
-
+    position = 1
     with open(artdefs[0], 'r') as file:
         artdef_info = xmltodict.parse(file.read())
+    if 'Element' not in artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']:
+        for i in artdefs[1:]:
+            position += 1
+            with open(i, 'r') as file:
+                artdef_info = xmltodict.parse(file.read())
+            if 'Element' in artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']:
+                break
+
     artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element']
     full_artdef = {i['m_Name']['@text']: i for i in artdef_info_}
 
-    for artdef in artdefs[1:]:
+    for artdef in artdefs[position:]:
         with open(artdef, 'r') as file:
             artdef_info = xmltodict.parse(file.read())
         if 'Element' not in artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']:
