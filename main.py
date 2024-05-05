@@ -6,7 +6,8 @@ from delete_n_patch import delete_rows
 from misc import build_resource_string, build_terrains_string, build_features_string, build_policies, build_improvements
 from promotions import Promotions
 from modifiers import Modifiers
-from utils import Sql, setup_tables, make_or_add, localize
+from utils import Sql, setup_tables, make_or_add
+from localiser import Localizer
 from db_checker import check_primary_keys
 from prebuilt_transfer import main as prebuilt_transfer
 from artdef_wrangler import artdef
@@ -50,7 +51,8 @@ def main():
     # make_or_add(model_obj['sql_inserts'], [{'Type': key, 'Kind': value, 'Hash': hash(key)} for key, value
     #                                            in model_obj['kinds'].items()], 'Types')
     delete_rows(model_obj, kept)
-    localize(model_obj)
+    localise = Localizer()
+    localise.localize(model_obj)
     artdef()
     check_primary_keys(model_obj)
     for table, rows in model_obj['sql_inserts'].items():
@@ -60,7 +62,7 @@ def main():
         total += i
 
     # debug super palace
-    if False:
+    if True:
         total += """UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
         UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
         UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
