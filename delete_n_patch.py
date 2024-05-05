@@ -63,6 +63,7 @@ def delete_rows(model_obj, kept):
                 sql_type='deletes')
     dict_insert(model_obj, 'Governments', {'WHERE_COL': 'GovernmentType', 'WHERE_EQUALS': ['GOVERNMENT_CHIEFDOM']},
                 sql_type='deletes')
+
     # delete_string += 'DELETE FROM Building_YieldChanges;'
     update_delete_generate(model_obj)
 
@@ -85,14 +86,19 @@ def update_delete_generate(model_obj):
                 where_eq = f"= {where_eq}"
             else:
                 where_eq = f"= '{where_eq}'"
-            if isinstance(where_eq, list):
-                set_eq = "NOT IN ('" + "', '".join(set_eq) + "')"
-            elif isinstance(where_eq, int):
+            if isinstance(set_eq, list):
+                update_list = ', '.join([f'{col} = {val}' for col, val in zip(updates['SET_COL'], set_eq)])
+                model_obj['sql_strings'].append(f"UPDATE {table_name} SET {update_list}"
+                                                f" WHERE {updates['WHERE_COL']} {where_eq};\n")
+            elif isinstance(set_eq, int):
                 set_eq = f"= {set_eq}"
+                model_obj['sql_strings'].append(f"UPDATE {table_name} SET {updates['SET_COL']} {set_eq}"
+                                                f" WHERE {updates['WHERE_COL']} {where_eq};\n")
             else:
                 set_eq = f"= '{set_eq}'"
-            model_obj['sql_strings'].append(f"UPDATE {table_name} SET {updates['SET_COL']} {set_eq}"
-                                            f" WHERE {updates['WHERE_COL']} {where_eq};\n")
+                model_obj['sql_strings'].append(f"UPDATE {table_name} SET {updates['SET_COL']} {set_eq}"
+                                                f" WHERE {updates['WHERE_COL']} {where_eq};\n")
+
 
     for table_name, table in model_obj['deletes'].items():
         for deletes in table:

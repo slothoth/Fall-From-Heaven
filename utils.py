@@ -184,6 +184,7 @@ def localize(model_obj):
                     model_obj['loc'][table_name].extend(loc_entry)
                 else:
                     model_obj['loc'][table_name] = loc_entry
+
     logger.info(set(col_types))
 
 
