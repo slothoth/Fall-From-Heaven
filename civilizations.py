@@ -174,7 +174,7 @@ class Civilizations:
             for leader in civ_leaders:
                 leader_name = f"SLTH_{leader['LeaderName']}"
                 self.leaders_of_civs.append({'LeaderType': leader_name, 'CivilizationType': civ,
-                                        'CapitalName': f"LOC_SLTH_{value['Cities']['City'][0][8:]}"})
+                                        'CapitalName': f"LOC_{value['Cities']['City'][0][8:]}_NAME"})
                 if leader_name not in [i['LeaderType'] for i in leaders]:
                     leaders.append({'LeaderType': leader_name, 'Name': f'LOC_{leader_name}_NAME',
                                     'InheritFrom': 'LEADER_DEFAULT'})

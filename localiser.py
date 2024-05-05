@@ -1,6 +1,7 @@
 import logging
 from collections import Counter
 import xmltodict
+from utils import make_or_add
 
 
 class Localizer:
@@ -28,7 +29,6 @@ class Localizer:
         if entry['English'] is not None and "'" in entry['English']:
             entry['English'] = entry['English'].replace("'", "''")      # deals with sql apostrophe issues
         return entry
-
 
     def localize(self, model_obj):
         logger = logging.getLogger(__name__)
@@ -88,7 +88,35 @@ class Localizer:
                             text = modifier_description.strip()
 
                         elif tag_value.replace('SLTH_', '') in self.text:
-                            text = self.text[tag_value.replace('SLTH_', '')]
+                            if 'DESCRIPTION' not in tag_value:
+                                text = self.text[tag_value.replace('SLTH_', '')]
+                            else:
+                                para_text = self.text[tag_value.replace('SLTH_', '')]
+                                para_text = para_text.replace('[TAB]', '')
+                                para_count = 1
+                                if 'PARA' in para_text:
+                                    civpedia_tag = tag_value.replace('DESCRIPTION', 'CHAPTER_HISTORY_PARA_1').replace(
+                                        'LOC_', f'LOC_PEDIA_{table_name.upper()}_PAGE_')
+                                    para_split = para_text.split('[PARAGRAPH:1]')
+                                    for p in para_split:
+                                        if 'PARAGRAPH:2' in p:
+                                            para_2 = p.split('[PARAGRAPH:2')
+                                            for p_two in para_2:
+                                                civpedia_tag = civpedia_tag.replace(f'PARA_{para_count-1}', f'PARA_{para_count}')
+                                                loc_entry.append(
+                                                    {'Language': 'en_us', 'Tag': civpedia_tag, 'Text': p_two})
+                                                para_count += 1
+                                        else:
+                                            civpedia_tag = civpedia_tag.replace(f'PARA_{para_count-1}', f'PARA_{para_count}')
+                                            loc_entry.append(
+                                                {'Language': 'en_us', 'Tag': civpedia_tag, 'Text': p})
+                                            para_count += 1
+
+                                else:
+                                    civpedia_tag = tag_value.replace('DESCRIPTION', 'CHAPTER_HISTORY_PARA_1').replace('LOC_', f'LOC_PEDIA_{table_name.upper()}_PAGE_')
+                                    loc_entry.append({'Language': 'en_us', 'Tag': civpedia_tag, 'Text': para_text})
+
+                            text = text + ' Description'
                             port_count += 1
                         else:
                             text = text + ' Description'
@@ -111,4 +139,24 @@ class Localizer:
                     else:
                         model_obj['loc'][table_name] = loc_entry
         logger.info(set(col_types))
+
+        city_names = {i: j for i, j in self.text.items() if 'LOC_CITY' in i}
+        unique_ids = 7000
+        model_obj['loc']['CityNames'] = []
+        cities = []
+        for tag, name in city_names.items():
+            civ = tag.split('_')[2]
+            if 'BARBARIAN' in civ:
+                continue
+            elif 'RANDOM' in civ:
+                continue
+            elif 'BAR' in civ:
+                continue
+            elif 'CLAN' in civ:
+                civ = 'CLAN_OF_EMBERS'
+            cities.append({'ID': unique_ids, 'CivilizationType': f'SLTH_CIVILIZATION_{civ}', 'CityName': tag})
+            model_obj['loc']['CityNames'].append({'Language': 'en_us', 'Tag': tag, 'Text': name})
+            unique_ids += 1
+            port_count += 1
+        make_or_add(model_obj['sql_inserts'], cities, 'CityNames')
         logger.info(f'Port count: {port_count}')
