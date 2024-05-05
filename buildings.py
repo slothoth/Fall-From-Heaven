@@ -269,47 +269,6 @@ class Buildings:
         model_obj['kinds'] = self.kinds
         model_obj['update_build'] = [i for i in update_buildings]
 
-    def add_to_modifiers(self, name, modifier_id, modifier_type, modifier_names, modifier_values, is_palace=False):
-        if is_palace:
-            trait_type = f'SLTH_TRAIT_CIVILIZATION_{name[14:]}'
-            if {'CivilizationType': f'SLTH_CIVILIZATION_{name[21:]}',
-                'TraitType': trait_type} not in self.civilization_traits:
-                self.civilization_traits.append(
-                    {'CivilizationType': f'SLTH_CIVILIZATION_{name[21:]}', 'TraitType': trait_type})
-            self.traits[trait_type] = {'TraitType': trait_type, 'Name': f"LOC_{trait_type}_NAME",
-                                       'Description': f"LOC_{trait_type}_DESCRIPTION"}
-            self.kinds[trait_type] = 'KIND_TRAIT'
-            self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': modifier_id})
-        else:
-            self.building_modifiers.append({'BuildingType': name, 'ModifierId': modifier_id})
-        self.modifier_table.append(
-            {'ModifierId': modifier_id, 'ModifierType': modifier_type})
-        for name, value in zip(modifier_names, modifier_values):
-            self.modifier_arguments.append({'ModifierId': modifier_id, 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
-                                            'Value': value})
-
-    def building_features(self, six_style_build_extras, exist_dict):
-        existing_buildings_gpp = exist_dict['existing_buildings_gpp']
-        existing_buildings_yields = exist_dict['existing_buildings_yields']
-        building_great_person_points, building_yield_changes = [], []
-
-        building_great_person_points = [i for i in building_great_person_points if
-                                        not i['BuildingType'] in existing_buildings_gpp]
-
-        building_yield_changes = [i for i in building_yield_changes if
-                                  not i['BuildingType'] in existing_buildings_yields]
-
-
-
-        building_features_string = ''
-        building_features_string += build_sql_table(building_great_person_points, 'Building_GreatPersonPoints')
-        building_features_string += build_sql_table(building_yield_changes, 'Building_YieldChanges')
-        building_features_string += build_sql_table(self.building_modifiers, 'BuildingModifiers')
-        building_features_string += build_sql_table(self.modifier_table, 'Modifiers')
-        building_features_string += build_sql_table(self.modifier_arguments, 'ModifierArguments')
-
-        return building_features_string
-
 
 def districts_build(model_obj):
     district_changes = [{'DistrictType': 'DISTRICT_HOLY_SITE', 'PrereqCivic': 'SLTH_CIVIC_MYSTICISM'},
