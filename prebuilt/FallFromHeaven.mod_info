@@ -25,6 +25,9 @@
       <File>Core/localization.sql</File>
     </UpdateText>
    </FrontEndActions>
+  <UpdateIcons id="Icons">
+          <File>Icons.xml</File>
+  </UpdateIcons>
   <InGameActions>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
@@ -49,6 +52,9 @@
       </Properties>
 	  <File>UI/ExtraHeroesOperation.xml</File>
     </AddUserInterfaces>
+    <UpdateIcons id="Icons">
+      <File>Icons.xml</File>
+  </UpdateIcons>
   </InGameActions>
   <Files>
     <File>Core/localization.sql</File>
@@ -60,5 +66,6 @@
     <File>Artdefs/Units.artdef</File>
     <File>ArtDefs/Buildings.artdef</File>
     <File>FallFromHeaven.dep</File>
+    <File>Icons.xml</File>
   </Files>
 </Mod>

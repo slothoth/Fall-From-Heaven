@@ -10,7 +10,7 @@ from utils import Sql, setup_tables, make_or_add
 from localiser import Localizer
 from db_checker import check_primary_keys, localize_check
 from prebuilt_transfer import main as prebuilt_transfer
-from artdef_wrangler import artdef
+from artdef_wrangler import Artdef
 
 import json
 import logging
@@ -53,7 +53,7 @@ def main():
     delete_rows(model_obj, kept)
     localise = Localizer()
     localise.localize(model_obj)
-    artdef()
+    artdef = Artdef().do_artdef()
     check_primary_keys(model_obj)
     for table, rows in model_obj['sql_inserts'].items():
         model_obj['sql_strings'].append(model_obj['sql'].old_build_sql_table(rows, table))
@@ -66,7 +66,8 @@ def main():
         total += """UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
         UPDATE Building_YieldChanges SET YieldChange = 500 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
         UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
-        UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';"""
+        UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';
+        INSERT INTO BuildingModifiers (BuildingType, ModifierId) VALUES('BUILDING_PALACE', 'CONTRATACION_GOVERNOR_POINTS')"""
 
     total_with_null = total.replace("'NULL'", "NULL")
     with open('../FallFromHeaven/Core/main.sql', 'w') as file:
@@ -85,7 +86,7 @@ def main():
 
     localization_file = model_obj['sql'].old_build_sql_table(model_obj['loc_full'], 'LocalizedText')
 
-    with open('../FallFromHeaven/Core/localization.sql', 'w') as file:
+    with open('../FallFromHeaven/Core/localization.sql', 'w', encoding="utf-8") as file:
         file.write(localization_file)
 
     model_obj['civilizations'].config_builder(model_obj)
@@ -94,7 +95,7 @@ def main():
     for table, rows in model_obj['sql_config'].items():
         config += model_obj['sql'].old_build_sql_table(rows, table)
 
-    with open('../FallFromHeaven/Core/frontend_config.sql', 'w') as file:
+    with open('../FallFromHeaven/Core/frontend_config.sql', 'w', encoding="utf-8") as file:
         file.write(config)
 
     prebuilt_transfer()
