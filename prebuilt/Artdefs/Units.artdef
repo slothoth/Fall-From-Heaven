@@ -2398,15 +2398,15 @@
 							<m_ElementName text="Archer"></m_ElementName>
 							<m_RootCollectionName text="UnitFormationTypes"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
-							<m_CollectionIsLocked>false</m_CollectionIsLocked>
-							<m_TemplateName text=""></m_TemplateName>
+							<m_CollectionIsLocked>true</m_CollectionIsLocked>
+							<m_TemplateName text="Units"></m_TemplateName>
 							<m_ParamName text="Formation"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
 							<m_ElementName text=""></m_ElementName>
 							<m_RootCollectionName text="UnitCombat"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
-							<m_CollectionIsLocked>false</m_CollectionIsLocked>
+							<m_CollectionIsLocked>true</m_CollectionIsLocked>
 							<m_TemplateName text=""></m_TemplateName>
 							<m_ParamName text="UnitCombat"></m_ParamName>
 						</Element>
@@ -2419,7 +2419,7 @@
 							<m_ParamName text="EscortFormation"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="UNIT_MODERNEMBARK"></m_ElementName>
+							<m_ElementName text="UNIT_CR_MODERNEMBARK_SINGLE"></m_ElementName>
 							<m_RootCollectionName text="Units"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -2480,7 +2480,7 @@
 										<m_ParamName text="Count"></m_ParamName>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Ranger"></m_ElementName>
+										<m_ElementName text="Ranger_Apoc"></m_ElementName>
 										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
 										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -2509,7 +2509,7 @@
 										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
 										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""></m_TemplateName>
+										<m_TemplateName text="Units"></m_TemplateName>
 										<m_ParamName text="Type"></m_ParamName>
 									</Element>
 								</m_Values>
@@ -2551,15 +2551,15 @@
 							<m_ElementName text="Archer"></m_ElementName>
 							<m_RootCollectionName text="UnitFormationTypes"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
-							<m_CollectionIsLocked>false</m_CollectionIsLocked>
-							<m_TemplateName text=""></m_TemplateName>
+							<m_CollectionIsLocked>true</m_CollectionIsLocked>
+							<m_TemplateName text="Units"></m_TemplateName>
 							<m_ParamName text="Formation"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
 							<m_ElementName text=""></m_ElementName>
 							<m_RootCollectionName text="UnitCombat"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
-							<m_CollectionIsLocked>false</m_CollectionIsLocked>
+							<m_CollectionIsLocked>true</m_CollectionIsLocked>
 							<m_TemplateName text=""></m_TemplateName>
 							<m_ParamName text="UnitCombat"></m_ParamName>
 						</Element>
@@ -2572,7 +2572,7 @@
 							<m_ParamName text="EscortFormation"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="UNIT_MODERNEMBARK"></m_ElementName>
+							<m_ElementName text="UNIT_CR_MODERNEMBARK_SINGLE"></m_ElementName>
 							<m_RootCollectionName text="Units"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -2633,7 +2633,7 @@
 										<m_ParamName text="Count"></m_ParamName>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Ranger"></m_ElementName>
+										<m_ElementName text="Ranger_Apoc"></m_ElementName>
 										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
 										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -2662,7 +2662,7 @@
 										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
 										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""></m_TemplateName>
+										<m_TemplateName text="Units"></m_TemplateName>
 										<m_ParamName text="Type"></m_ParamName>
 									</Element>
 								</m_Values>
@@ -11193,7 +11193,7 @@
 				<m_Fields>
 					<m_Values>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="Scout"></m_ElementName>
+							<m_ElementName text="ScoutCat"></m_ElementName>
 							<m_RootCollectionName text="UnitFormationTypes"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -11204,7 +11204,7 @@
 							<m_ElementName text=""></m_ElementName>
 							<m_RootCollectionName text="UnitCombat"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
-							<m_CollectionIsLocked>false</m_CollectionIsLocked>
+							<m_CollectionIsLocked>true</m_CollectionIsLocked>
 							<m_TemplateName text=""></m_TemplateName>
 							<m_ParamName text="UnitCombat"></m_ParamName>
 						</Element>
@@ -11217,7 +11217,7 @@
 							<m_ParamName text="EscortFormation"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="UNIT_ANCIENTEMBARK_SINGLE"></m_ElementName>
+							<m_ElementName text="UNIT_ANCIENTEMBARK"></m_ElementName>
 							<m_RootCollectionName text="Units"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -11295,7 +11295,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..FloatValue">
-										<m_fValue>1.000000</m_fValue>
+										<m_fValue>1.100000</m_fValue>
 										<m_ParamName text="Scale"></m_ParamName>
 									</Element>
 									<Element class="AssetObjects..IntValue">
@@ -11303,7 +11303,7 @@
 										<m_ParamName text="Count"></m_ParamName>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="ScoutDog"></m_ElementName>
+										<m_ElementName text="ScoutCat"></m_ElementName>
 										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
 										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -11316,6 +11316,56 @@
 							<m_Name text="Members2"></m_Name>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..FloatValue">
+										<m_fValue>1.300000</m_fValue>
+										<m_ParamName text="Scale"></m_ParamName>
+									</Element>
+									<Element class="AssetObjects..IntValue">
+										<m_nValue>1</m_nValue>
+										<m_ParamName text="Count"></m_ParamName>
+									</Element>
+									<Element class="AssetObjects..ArtDefReferenceValue">
+										<m_ElementName text="ScoutCat"></m_ElementName>
+										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
+										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
+										<m_CollectionIsLocked>true</m_CollectionIsLocked>
+										<m_TemplateName text="Units"></m_TemplateName>
+										<m_ParamName text="Type"></m_ParamName>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections></m_ChildCollections>
+							<m_Name text="ScoutCat_Units_Members"></m_Name>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..FloatValue">
+										<m_fValue>1.000000</m_fValue>
+										<m_ParamName text="Scale"></m_ParamName>
+									</Element>
+									<Element class="AssetObjects..IntValue">
+										<m_nValue>1</m_nValue>
+										<m_ParamName text="Count"></m_ParamName>
+									</Element>
+									<Element class="AssetObjects..ArtDefReferenceValue">
+										<m_ElementName text="ScoutCat"></m_ElementName>
+										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
+										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
+										<m_CollectionIsLocked>true</m_CollectionIsLocked>
+										<m_TemplateName text="Units"></m_TemplateName>
+										<m_ParamName text="Type"></m_ParamName>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections></m_ChildCollections>
+							<m_Name text="ScoutCat_Units_Members001"></m_Name>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="Audio"></m_CollectionName>
@@ -11324,26 +11374,13 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text=""></m_Value>
+										<m_Value text="ScoutCat"></m_Value>
 										<m_ParamName text="XrefName"></m_ParamName>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections></m_ChildCollections>
-							<m_Name text=""></m_Name>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Scout"></m_Value>
-										<m_ParamName text="XrefName"></m_ParamName>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections></m_ChildCollections>
-							<m_Name text="SCOUT"></m_Name>
+							<m_Name text="ScoutCat"></m_Name>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -11979,11 +12016,11 @@
 							<m_RootCollectionName text="UnitFormationTypes"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
-							<m_TemplateName text=""></m_TemplateName>
+							<m_TemplateName text="Units"></m_TemplateName>
 							<m_ParamName text="EscortFormation"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="UNIT_MODERNEMBARK"></m_ElementName>
+							<m_ElementName text="UNIT_CR_MODERNEMBARK"></m_ElementName>
 							<m_RootCollectionName text="Units"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -12044,11 +12081,11 @@
 										<m_ParamName text="Count"></m_ParamName>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Infantry"></m_ElementName>
+										<m_ElementName text="MechanizedInfantry_Apocalypse"></m_ElementName>
 										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
 										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
-										<m_CollectionIsLocked>false</m_CollectionIsLocked>
-										<m_TemplateName text=""></m_TemplateName>
+										<m_CollectionIsLocked>true</m_CollectionIsLocked>
+										<m_TemplateName text="Units"></m_TemplateName>
 										<m_ParamName text="Type"></m_ParamName>
 									</Element>
 								</m_Values>
@@ -12078,6 +12115,57 @@
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"></m_CollectionName>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..StringValue">
+										<m_Value text="STATUS_FX"></m_Value>
+										<m_ParamName text="Attachment Point Name"></m_ParamName>
+									</Element>
+									<Element class="AssetObjects..StringValue">
+										<m_Value text="ABILITY_MAD_SCIENTISTS_UNIT_SHIELD"></m_Value>
+										<m_ParamName text="Conditions"></m_ParamName>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections></m_ChildCollections>
+							<m_Name text="Shield"></m_Name>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..StringValue">
+										<m_Value text="ABILITY_BORDERLORD_EDGENESS_COMBAT_BONUS"></m_Value>
+										<m_ParamName text="Conditions"></m_ParamName>
+									</Element>
+									<Element class="AssetObjects..StringValue">
+										<m_Value text="STATUS_FX2"></m_Value>
+										<m_ParamName text="Attachment Point Name"></m_ParamName>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections></m_ChildCollections>
+							<m_Name text="Boost"></m_Name>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..StringValue">
+										<m_Value text="ABILITY_ALIENS_CLOAK"></m_Value>
+										<m_ParamName text="Conditions"></m_ParamName>
+									</Element>
+									<Element class="AssetObjects..StringValue">
+										<m_Value text="STATUS_FX3"></m_Value>
+										<m_ParamName text="Attachment Point Name"></m_ParamName>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections></m_ChildCollections>
+							<m_Name text="Invisibility"></m_Name>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
 					</Element>
 				</m_ChildCollections>
 				<m_Name text="SLTH_UNIT_BLOODPET"></m_Name>
@@ -12087,19 +12175,19 @@
 				<m_Fields>
 					<m_Values>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="Warrior"></m_ElementName>
+							<m_ElementName text="Zombie"></m_ElementName>
 							<m_RootCollectionName text="UnitFormationTypes"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
-							<m_CollectionIsLocked>false</m_CollectionIsLocked>
-							<m_TemplateName text=""></m_TemplateName>
+							<m_CollectionIsLocked>true</m_CollectionIsLocked>
+							<m_TemplateName text="Units"></m_TemplateName>
 							<m_ParamName text="Formation"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
 							<m_ElementName text="Warrior"></m_ElementName>
 							<m_RootCollectionName text="UnitCombat"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
-							<m_CollectionIsLocked>false</m_CollectionIsLocked>
-							<m_TemplateName text=""></m_TemplateName>
+							<m_CollectionIsLocked>true</m_CollectionIsLocked>
+							<m_TemplateName text="Units"></m_TemplateName>
 							<m_ParamName text="UnitCombat"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
@@ -12107,11 +12195,11 @@
 							<m_RootCollectionName text="UnitFormationTypes"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
-							<m_TemplateName text=""></m_TemplateName>
+							<m_TemplateName text="Units"></m_TemplateName>
 							<m_ParamName text="EscortFormation"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="UNIT_ANCIENTEMBARK"></m_ElementName>
+							<m_ElementName text="UNIT_WARRIOR"></m_ElementName>
 							<m_RootCollectionName text="Units"></m_RootCollectionName>
 							<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -12119,7 +12207,7 @@
 							<m_ParamName text="EmbarkedUnit"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..BoolValue">
-							<m_bValue>true</m_bValue>
+							<m_bValue>false</m_bValue>
 							<m_ParamName text="DoNotDisplayCharges"></m_ParamName>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
@@ -12172,7 +12260,7 @@
 										<m_ParamName text="Count"></m_ParamName>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Warrior"></m_ElementName>
+										<m_ElementName text="Zombies"></m_ElementName>
 										<m_RootCollectionName text="UnitMemberTypes"></m_RootCollectionName>
 										<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -12193,26 +12281,13 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text=""></m_Value>
+										<m_Value text="RD_Zombies"></m_Value>
 										<m_ParamName text="XrefName"></m_ParamName>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections></m_ChildCollections>
-							<m_Name text=""></m_Name>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Warrior"></m_Value>
-										<m_ParamName text="XrefName"></m_ParamName>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections></m_ChildCollections>
-							<m_Name text="WARRIOR"></m_Name>
+							<m_Name text="RD_Zombies"></m_Name>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>

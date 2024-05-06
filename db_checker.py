@@ -242,3 +242,16 @@ def check_primary_keys(model_obj):
     for i in failed_constraints:
         logger.critical(i)
     logger.warning(f'Foreign Key Constraints Failed: {len(failed_constraints)}, Succeeded: {succeeded_constraints}')
+
+
+def localize_check(model_obj):
+    conn = sqlite3.connect('data/DebugLocalization.sqlite')
+    cursor = conn.cursor()
+    cursor.execute("SELECT Tag, Language FROM LocalizedText WHERE Language = 'en_US';")
+    tables = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    pruned = [i for i in model_obj['loc_full'] if (i['Tag'], i['Language']) in tables]
+    keep = [i for i in model_obj['loc_full'] if (i['Tag'], i['Language']) not in tables]
+    model_obj['loc_full'] = keep
+    print(pruned)
