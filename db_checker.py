@@ -16,6 +16,16 @@ def get_primary_keys(logger):
     # Query the sqlite_master table to get information about database objects
     cursor.execute("SELECT name, sql FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
+    if not os.path.exists('data/tables'):
+        # ran once, to convert database to pandas for conversion
+        tables_pd = [table[0] for table in tables]
+        dfs = {}
+        os.makedirs('data/tables', exist_ok=True)
+        for table in tables:
+            query = f"SELECT * FROM {table}"
+            dfs[table] = pd.read_sql_query(query, conn)
+            dfs[table].to_csv(f"data/tables/{table}.csv", index=False)
+
     cursor.close()
     conn.close()
 
