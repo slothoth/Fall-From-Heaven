@@ -80,7 +80,7 @@ def unit_artdef(folder):
     failed = {'multsearch': [], 'nosearch': []}
     search_found = []
     for mod_ref, vanilla_ref in artdef_units.items():
-        if any([vanilla_ref in i for i in ['CUSTOM', 'IRRELEVANT', 'LIKELY_SUKRITACT_WILDLIFE?']]):
+        if any([i in vanilla_ref for i in ['CUSTOM', 'IRRELEVANT', 'LIKELY_SUKRITACT_WILDLIFE?', 'EQUIPMENT']]):
             continue
         if 'ADAPTED' in vanilla_ref:
             vanilla_ref = vanilla_ref.replace('ADAPTED', 'UNIT')
@@ -100,8 +100,9 @@ def unit_artdef(folder):
             root.append(assign_artdef(artdef_total[vanilla_ref], mod_ref))
             logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-    with open('prebuilt/Artdefs/Units.artdef', 'w') as file:
+    with open('../FallFromHeaven/Artdefs/Units.artdef', 'w') as file:
         xmltodict.unparse(artdef_template, output=file, pretty=True)
+
 
 
 def building_artdef(folder):
@@ -155,7 +156,7 @@ def building_artdef(folder):
     root = artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][0]['Element']
     root.append(assign_artdef(artdef_total['BUILDING_OLD_GOD_OBELISK'], 'SLTH_BUILDING_BREWERY'))
 
-    with open('prebuilt/Artdefs/Buildings.artdef', 'w') as file:
+    with open('../FallFromHeaven/Artdefs/Buildings.artdef', 'w') as file:
          xmltodict.unparse(artdef_template, output=file, pretty=True)
     return                                                              # once it works do full
 
@@ -184,7 +185,7 @@ def building_artdef(folder):
             root.append(assign_artdef(artdef_total[vanilla_ref], mod_ref))
             logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-    with open('prebuilt/Artdefs/Units.artdef', 'w') as file:
+    with open('../FallFromHeaven/Artdefs/Units.artdef', 'w') as file:
         xmltodict.unparse(artdef_template, output=file, pretty=True)
 
 
@@ -248,8 +249,9 @@ def feature_artdef(folder):
             root.append(assign_artdef(artdef_total[vanilla_ref], mod_ref))
             logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-    with open('prebuilt/Artdefs/Features.artdef', 'w') as file:
+    with open('../FallFromHeaven/Artdefs/Features.artdef', 'w') as file:
         xmltodict.unparse(artdef_template, output=file, pretty=True)
+
 
 
 def resource_artdef(folder):
@@ -318,5 +320,5 @@ def resource_artdef(folder):
             root.append(assign_artdef(artdef_total[vanilla_ref], mod_ref))
             logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-    with open('prebuilt/Artdefs/Resources.artdef', 'w') as file:
+    with open('../FallFromHeaven/Artdefs/Resources.artdef', 'w') as file:
         xmltodict.unparse(artdef_template, output=file, pretty=True)
