@@ -8,7 +8,7 @@ from promotions import Promotions
 from modifiers import Modifiers
 from utils import Sql, setup_tables, make_or_add
 from localiser import Localizer
-from db_checker import check_primary_keys
+from db_checker import check_primary_keys, localize_check
 from prebuilt_transfer import main as prebuilt_transfer
 from artdef_wrangler import artdef
 
@@ -80,6 +80,8 @@ def main():
     tuple_loc_list = [(i['Language'], i['Tag'], i['Text']) for i in model_obj['loc_full']]
     unique_tuple_loc_list = list(set(tuple_loc_list))
     model_obj['loc_full'] = [{'Language': i[0], 'Tag': i[1], 'Text': i[2]} for i in unique_tuple_loc_list]
+
+    localize_check(model_obj)
 
     localization_file = model_obj['sql'].old_build_sql_table(model_obj['loc_full'], 'LocalizedText')
 
