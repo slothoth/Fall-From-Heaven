@@ -173,7 +173,7 @@ def build_terrains_string(model_obj):
 
     hills = []
     for terrain in six_style_terrain_dict:
-        terrain['Name'] = "LOC_SLTH_" + "_".join(terrain['Name'].split('_')[2:])
+        terrain['Name'] = "LOC_SLTH_" + "_".join(terrain['Name'].split('_')[2:]) + '_NAME'
         if terrain['TerrainType'] == 'TERRAIN_BURNING_SANDS':
             terrain['InfluenceCost'] = 2
         if terrain['Water'] == '0':
@@ -235,7 +235,7 @@ def build_features_string(model_obj):
     feature_extras = [small_dict(i, features_extras_map) for i in features]
 
     for i in six_style_features:
-        i['Name'] = "LOC_SLTH_" + i['FeatureType']
+        i['Name'] = "LOC_SLTH_" + i['FeatureType'] + '_NAME'
 
     feature_yields, feature_valid_terrain = [], []
 
