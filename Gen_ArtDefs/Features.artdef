@@ -27,7 +27,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Suk_MonumentValley_N"/>
+										<m_ElementName text="TEST_N"/>
 										<m_RootCollectionName text="Features"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -48,7 +48,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Suk_MonumentValley_N"/>
+										<m_ElementName text="TEST_N"/>
 										<m_RootCollectionName text="Features"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -69,7 +69,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Suk_MonumentValley_N"/>
+										<m_ElementName text="TEST_N"/>
 										<m_RootCollectionName text="Features"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -90,7 +90,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Suk_MonumentValley_N"/>
+										<m_ElementName text="TEST_N"/>
 										<m_RootCollectionName text="Features"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -111,7 +111,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Suk_MonumentValley_N"/>
+										<m_ElementName text="TEST_N"/>
 										<m_RootCollectionName text="Features"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -132,7 +132,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Suk_MonumentValley_N"/>
+										<m_ElementName text="TEST_N"/>
 										<m_RootCollectionName text="Features"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -157,11 +157,11 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="NWON_Suk_MonumentValley_Blackbrush"/>
+										<m_Value text="TEST_Blackbrush"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="CLUTTER_NWON_SUK_MONUMENTVALLEY"/>
+										<m_ElementName text="CLUTTER_TEST"/>
 										<m_RootCollectionName text="ClutterSets"/>
 										<m_ArtDefPath text="Clutter.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -179,7 +179,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="NWON_Suk_MonumentValley_Blackbrush"/>
+							<m_Name text="TEST_Blackbrush"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -230,7 +230,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="FEATURE_SUK_MONUMENTVALLEY"/>
+				<m_Name text="FEATURE_TEST"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>
