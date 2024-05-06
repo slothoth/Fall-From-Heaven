@@ -1,4 +1,12 @@
-testing workspace for finding the feasability of certain features needed to faithfully recreate the glorious FallFromHeaven mod for civ iv.
+# Welcome
+Mod to faithfully recreate the glorious Civ IV FallFromHeaven mod by Kael in Civ VI. This project builds a Civ VI mod from an unhosted folder of the xml of FallFromHeaven.
+
+To "build from source", the user will need to install [FallFromHeaven](https://www.moddb.com/members/kaelffh/downloads/fall-from-heaven-ii1), install [Patch O](kael.civfanatics.net/files/FfH2041o.exe) on top of it, and
+then take the Assets/xml folder and place the contents in this project under data/XML.
+Yes the install is an .exe. I would like to distribute the folders myself, but am unsure of copyright.
+
+To download the mod, go to the Releases page, and select the highest number, for most recent. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder.
+One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
 
 # Features needed:
 ## Magic System:
@@ -11,10 +19,10 @@ testing workspace for finding the feasability of certain features needed to fait
 - [ ] debuff effects : dont really exist, there is the Fear -5 Strength effect, but thats an aura. maybe as promotion
 - [ ] buff effects : ditto as before
 - [x] Summons
-- [ ] Summoning Buildings : This was always a bit hacky in civ iv, a unit being present in a city does have modifiers, with Garrison affecting combat. Another issue is that the              nonstacking makes keeping a mage on the city less feasible. Could we do a single charge based system, and allow a city to unbuild a building, if it has the                             prerequisite building, and that would give the charge back to the unit? if we can have two active abilities, (himiko), then could have one ability that adds it,            with a single charge, and one context dependant ability that only works on cities with the building, that removes the building and adds a charge back.
+- [ ] Summoning Buildings : This was always a bit hacky in civ iv, a unit being present in a city does have modifiers, with Garrison affecting combat. Another issue is that the nonstacking makes keeping a mage on the city less feasible. Could we do a single charge based system, and allow a city to unbuild a building, if it has the prerequisite building, and that would give the charge back to the unit? if we can have two active abilities, (himiko), then could have one ability that adds it,            with a single charge, and one context dependant ability that only works on cities with the building, that removes the building and adds a charge back.
   
 ## Hero System:
-- [ ] one of a kind units : implemented by existing heroes, just need to remove Lifespans. Heroes are made using City Projects where a monument is present, these projects are probably what is one of a kind, and maybe tie that hero reference to that monument
+- [x] Done via Isolationism ban unit modifier attached to all civs globally by an ability the hero has
 - [ ] XP per turn: multiple types of xp gain exist, notice scouts get it for spotting natural wonders. Care that base Heroes do not get xp
 - [ ] Resurrection System
 - [ ] hero abandonment if leave religion
@@ -49,12 +57,12 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Amurite: Nothing, they are ez
   ##### Hippus:  unique abilty buffing heavy and light cavalry : adjusted Genghis Khan modifier
   ##### Khazad:
-  - [ ] lots of banned units
+  - [x] lots of banned units
   - [ ] cities have buffs/ nerfs depending on current gold / number of cities
-  - [ ] Dwarven units moving fast on hills
+  - [x] Dwarven units moving fast on hills
   ##### Ljolsfar:
   - [ ] elven workers can build in forest without chopping
-  - [ ] all archer units are stronger, Genghis style
+  - [x] all archer units are stronger, Genghis style
   #### Medium:
   ##### Elohim: 
   tolerant, can build conquered cities civ unique stuff.
@@ -66,11 +74,11 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Malakim:
   most units have Nomad, double movement on desert, could apply on civ level, but then would include stuff like StoneWardens who are dwarves. desert tiles get + 1 coin : maybe hard as mali doesnt have anything like this. Then again, there is auckland who modifies Coast with +1 prod
   - [ ] +1 gold per desert is easy, adapt Mario civpass modifier
-  - [ ] Nomad race, part of promotion -> ability modifier. Adapt Genghis cav modifier.
+  - [x] Nomad race, part of promotion -> ability modifier. Adapt Genghis cav modifier.
   ##### Balseraph:
   slave and slave cages, puppets summons that inherit magic promotions units, affecting neutral cities, arenas, chance of killing unit but otherwise free xp
   - [ ] Create building in city if matches unit type, not present already, and city has carnival
-  - [ ] Slavery mechanic taken from Aztec civ
+  - [x] Slavery mechanic taken from Aztec civ
 
   ##### Sheaim
   - [ ] aoe explosion damage from death of pyre zombie
@@ -84,8 +92,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Grigori:
   plural unit upgrade paths (archer, warrior, scout, cavalry) possible for Adventurer, blocked religous units, unique great person type
   - [ ] Plural upgrade paths for a unit
-  - [ ] Blocked units (as opposed to replaced)
-  - [ ] Great adventurer spawning system
+  - [x] Blocked units (as opposed to replaced)
+  - [ ] Great adventurer spawning system, just replace Great Writers with it?
    ##### Sidar:
   Level 6 + units can retire as shades, who can act as free Great Person Specialist, so a repeatable building that provides yields and gp points
   - [ ] no concept of added specialist in civ vi, maybe as non-unique buildings, or a building with yields, then multiplied by number of specialists
@@ -116,7 +124,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
   ##### Svartalfar
   - [ ] summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%
-  - [ ] Recon units (scout, skirmisher etc.) get a damage buff on attack, but not on defense
+  - [x] Recon units (scout, skirmisher etc.) get a damage buff on attack, but not on defense
   - [ ] Rework of "can kidnap great people in cities, as not a thing in civ vi"
       
   #### BullshitHard:
@@ -135,23 +143,25 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] cannot gain or lose pops with food, manes add population to a city
   ##### Kuriotates:
   Sprawling, have bigger cities, 3 distance, but only allowed 3 cities. Other cities founded are Settlements, which have 0 yields and only allow access to resources. This seems very hard.
-  - [ ] 4 tile workable cities, seems fucking impossible, dll bound as fuck
-  - [ ] 0 yield cities, seems doable, just have a script that any city past the first 3 gets a "settlement" building that multiplies all yields by 0
+  - [ ] 4 tile workable cities, seems fucking impossible, dll bound as fuck. Then again, Yaxchilan?
+  - [ ] 0 yield cities, seems doable, just have a modifier that any city past the first 3 gets a "settlement" building that multiplies all yields by 0. Unsure if requirement exists of count cities, check Sprawling historic moment?
   - [ ] Dynamic allowed city count, based on map size
 
 
   ## World Spell:
   a one time cast spell with often global effects, in civ iv is available to most units to cast, we can just have it be like a 0 prod project? or buyable
+  - [ ] When doing iterations on hide ability in Lua, can just do multiple checks. Is owner of unit x civ? Does owner of unit have x tech? Has owner cast spell before? Storing that internal state might suck though, maybe it can attach a modifier on the civ?
 
   ## Races:
-- different movements for dif races, double on desert, hills, forests for Nomads, dwarves, elves
-- buffs, debuffs to certain combat conditions
+  - [x] different movements for dif races, double on desert, hills, forests for Nomads, dwarves, elves
+  - [x] buffs, debuffs to certain combat conditions
 
 
 # Design choices and required changes:
 ## Tech System:
   - [x] Tech tree is now vastly different, being split into two, need to decide what techs go where and even pare techs apart.
   - [ ] come up with eurekas
+  - [ ] Use eurekas as proxies for techs where soft requirements (i.e. Trade uses something from Sailing or Horseback riding to Eureka? problem is has to be only opposing )
 
 
 ## Leader Trait System:
@@ -167,9 +177,10 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] existing governers arent very flavourful to the ffh universe, but this is an added extra
 ## Great People System:
   - [ ] Duplicate Great people so they all are basically the same, as for civ iv.
+  - [ ] Use name list from xml/Text to generate names
   - [ ] Grigori Great Adventurer issue, put under Great Writer, and then change its requirements
 ## City State System:
-  - didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
+  - [ ] didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 ## Wonder System:
   - [ ] Find why we cant find filter wonders in buildinginfos
   - [ ] Extra: port existing wonders to outside the city and adjust as needed.
@@ -179,6 +190,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 ### New Victory types:
 #### Altar of Luonnotar
-seems ez, just lua system of buildings, klep someones national wonders code, then a final project
+seems ez, A series of buildings, then a final project that requires last building. Only difficulty is making building not buildable, but still grantable by Great Person (like Hypatia)
 #### Tower of Mastery
-needs mana system in place, launching space missions requires preexisting other space missions, in a similar way to the Towers. Piggyback
+Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.

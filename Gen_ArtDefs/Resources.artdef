@@ -23,7 +23,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_CAPYBARAS"/>
+										<m_Value text="CLUTTER_TEST_1"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -45,7 +45,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Capybaras"/>
+							<m_Name text="Test_1"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -105,13 +105,13 @@
 										<m_ParamName text="Terrain"/>
 									</Element>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_CAPYBARAS_JUNGLE"/>
+										<m_Value text="CLUTTER_TEST_1_JUNGLE"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="CapybarasJungle"/>
+							<m_Name text="Test_1Jungle"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -134,453 +134,13 @@
 										<m_ParamName text="Terrain"/>
 									</Element>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_CAPYBARAS_FOREST"/>
+										<m_Value text="CLUTTER_TEST_1_FOREST"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="CapybarasForest"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="FEATURE_FOREST"/>
-										<m_RootCollectionName text="Feature"/>
-										<m_ArtDefPath text="Features.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Features"/>
-										<m_ParamName text="Feature"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="TERRAIN_TUNDRA"/>
-										<m_RootCollectionName text="Terrain"/>
-										<m_ArtDefPath text="Terrains.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Terrains"/>
-										<m_ParamName text="Terrain"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_CAPYBARAS_FOREST_TUNDRA"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="CapybarasForestTundra"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="FEATURE_FOREST"/>
-										<m_RootCollectionName text="Feature"/>
-										<m_ArtDefPath text="Features.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Features"/>
-										<m_ParamName text="Feature"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="TERRAIN_TUNDRA_HILLS"/>
-										<m_RootCollectionName text="Terrain"/>
-										<m_ArtDefPath text="Terrains.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Terrains"/>
-										<m_ParamName text="Terrain"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_CAPYBARAS_FOREST_TUNDRA"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="CapybarasForestTundraHills"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-					</Element>
-				</m_ChildCollections>
-				<m_Name text="RESOURCE_LEU_P0K_CAPYBARAS"/>
-				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-			</Element>
-			<Element>
-				<m_Fields>
-					<m_Values/>
-				</m_Fields>
-				<m_ChildCollections>
-					<Element>
-						<m_CollectionName text="Clutter"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text=""/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="CLUTTER_LEU_P0K_POTATOES"/>
-										<m_RootCollectionName text="ClutterSets"/>
-										<m_ArtDefPath text="Clutter.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Clutter"/>
-										<m_ParamName text="Xref"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text=""/>
-										<m_ParamName text="SelectionRule"/>
-									</Element>
-									<Element class="AssetObjects..IntValue">
-										<m_nValue>0</m_nValue>
-										<m_ParamName text="SelectionPriority"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Potatoes"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-					</Element>
-					<Element>
-						<m_CollectionName text="Landmark"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="Audio"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="ClutterVariants"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-				</m_ChildCollections>
-				<m_Name text="RESOURCE_LEU_P0K_POTATOES"/>
-				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-			</Element>
-			<Element>
-				<m_Fields>
-					<m_Values/>
-				</m_Fields>
-				<m_ChildCollections>
-					<Element>
-						<m_CollectionName text="Clutter"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_COCA"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text=""/>
-										<m_RootCollectionName text=""/>
-										<m_ArtDefPath text="Clutter.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""/>
-										<m_ParamName text="Xref"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text=""/>
-										<m_ParamName text="SelectionRule"/>
-									</Element>
-									<Element class="AssetObjects..IntValue">
-										<m_nValue>0</m_nValue>
-										<m_ParamName text="SelectionPriority"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Coca"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-					</Element>
-					<Element>
-						<m_CollectionName text="Landmark"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="Audio"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="ClutterVariants"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="FEATURE_JUNGLE"/>
-										<m_RootCollectionName text="Feature"/>
-										<m_ArtDefPath text="Features.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Features"/>
-										<m_ParamName text="Feature"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text=""/>
-										<m_RootCollectionName text="Terrain"/>
-										<m_ArtDefPath text="Terrains.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""/>
-										<m_ParamName text="Terrain"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_COCA_JUNGLE"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="CocaJungle"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-					</Element>
-				</m_ChildCollections>
-				<m_Name text="RESOURCE_LEU_P0K_COCA"/>
-				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-			</Element>
-			<Element>
-				<m_Fields>
-					<m_Values/>
-				</m_Fields>
-				<m_ChildCollections>
-					<Element>
-						<m_CollectionName text="Clutter"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_LLAMAS"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text=""/>
-										<m_RootCollectionName text=""/>
-										<m_ArtDefPath text="Clutter.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""/>
-										<m_ParamName text="Xref"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text=""/>
-										<m_ParamName text="SelectionRule"/>
-									</Element>
-									<Element class="AssetObjects..IntValue">
-										<m_nValue>0</m_nValue>
-										<m_ParamName text="SelectionPriority"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Llamas"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-					</Element>
-					<Element>
-						<m_CollectionName text="Landmark"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="Audio"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="RESOURCE_DEER_2D"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="RESOURCE_DEER_2D_STOP"/>
-										<m_ParamName text="XrefStop"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text=""/>
-										<m_ParamName text="Xref3DName"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text=""/>
-										<m_ParamName text="Xref3DStop"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Entry"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-					</Element>
-					<Element>
-						<m_CollectionName text="ClutterVariants"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-				</m_ChildCollections>
-				<m_Name text="RESOURCE_LEU_P0K_LLAMAS"/>
-				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-			</Element>
-			<Element>
-				<m_Fields>
-					<m_Values/>
-				</m_Fields>
-				<m_ChildCollections>
-					<Element>
-						<m_CollectionName text="Clutter"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_QUINOA"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text=""/>
-										<m_RootCollectionName text=""/>
-										<m_ArtDefPath text="Clutter.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""/>
-										<m_ParamName text="Xref"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text=""/>
-										<m_ParamName text="SelectionRule"/>
-									</Element>
-									<Element class="AssetObjects..IntValue">
-										<m_nValue>0</m_nValue>
-										<m_ParamName text="SelectionPriority"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Quinoa"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-					</Element>
-					<Element>
-						<m_CollectionName text="Landmark"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="Audio"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="ClutterVariants"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-				</m_ChildCollections>
-				<m_Name text="RESOURCE_LEU_P0K_QUINOA"/>
-				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-			</Element>
-			<Element>
-				<m_Fields>
-					<m_Values/>
-				</m_Fields>
-				<m_ChildCollections>
-					<Element>
-						<m_CollectionName text="Clutter"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_YERBAMATE"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text=""/>
-										<m_RootCollectionName text=""/>
-										<m_ArtDefPath text="Clutter.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""/>
-										<m_ParamName text="Xref"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text=""/>
-										<m_ParamName text="SelectionRule"/>
-									</Element>
-									<Element class="AssetObjects..IntValue">
-										<m_nValue>0</m_nValue>
-										<m_ParamName text="SelectionPriority"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Yerbamate"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-					</Element>
-					<Element>
-						<m_CollectionName text="Landmark"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="Audio"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-					</Element>
-					<Element>
-						<m_CollectionName text="ClutterVariants"/>
-						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="FEATURE_FOREST"/>
-										<m_RootCollectionName text="Feature"/>
-										<m_ArtDefPath text="Features.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Features"/>
-										<m_ParamName text="Feature"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text=""/>
-										<m_RootCollectionName text="Terrain"/>
-										<m_ArtDefPath text="Terrains.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""/>
-										<m_ParamName text="Terrain"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_YERBAMATE_FOREST"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="YerbamateForest"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="FEATURE_JUNGLE"/>
-										<m_RootCollectionName text="Feature"/>
-										<m_ArtDefPath text="Features.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Features"/>
-										<m_ParamName text="Feature"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text=""/>
-										<m_RootCollectionName text="Terrain"/>
-										<m_ArtDefPath text="Terrains.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text=""/>
-										<m_ParamName text="Terrain"/>
-									</Element>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_YERBAMATE_JUNGLE"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="YerbamateJungle"/>
+							<m_Name text="Test_1Forest"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -603,13 +163,13 @@
 										<m_ParamName text="Terrain"/>
 									</Element>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_YERBAMATE_FOREST_TUNDRA"/>
+										<m_Value text="CLUTTER_TEST_1_FOREST_TUNDRA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="YerbamateForestTundra"/>
+							<m_Name text="Test_1ForestTundra"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -632,18 +192,18 @@
 										<m_ParamName text="Terrain"/>
 									</Element>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_LEU_P0K_YERBAMATE_FOREST_TUNDRA"/>
+										<m_Value text="CLUTTER_TEST_1_FOREST_TUNDRA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="YerbamateForestTundraHills"/>
+							<m_Name text="Test_1ForestTundraHills"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="RESOURCE_LEU_P0K_YERBAMATE"/>
+				<m_Name text="RESOURCE_TEST_1"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>
