@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Mod id="301d9851-b589-45ca-8c0a-931c8d16ede0" version="1">
+<Mod id="301d9851-b589-45ca-8c1a-931c8d16ede0" version="1">
   <Properties>
-    <Name>AA FallFromHeavenPort</Name>
+    <Name>FallFromHeavenPort</Name>
     <Description>Ports Kael's excellent Fall From Heaven mod to Civ VI</Description>
     <Created>1714825549</Created>
-    <Teaser>slothOth</Teaser>
+    <Teaser>Ports Kael's excellent Fall From Heaven mod to Civ VI</Teaser>
     <Authors>Slothoth</Authors>
-    <SpecialThanks>SailorCat and Fuzzle for their help on discord with SQL. Flactine who's mods I relentlessly mined for LUA scripting.</SpecialThanks>
-    <Homepage>cheese</Homepage>
-    <CompatibleVersions>1.2,2.0</CompatibleVersions>
+    <SpecialThanks>SailorCat,Fuzzle and MC for their help on discord with SQL. Flactine </SpecialThanks>
+    <Homepage>https://github.com/slothoth/civvitests</Homepage>
+    <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>
   <Dependencies>
     <Mod id="4873eb62-8ccc-4574-b784-dda455e74e68" title="LOC_EXPANSION2_MOD_TITLE"/>
@@ -26,7 +26,7 @@
     </UpdateText>
    </FrontEndActions>
   <InGameActions>
-    <UpdateArt id="Abu_Art">
+    <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
     <UpdateDatabase id="Gameplay">
