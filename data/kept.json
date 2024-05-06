@@ -46,8 +46,9 @@
     "UNIT_SKIRMISHER": "UNIT_LONGBOWMAN"
   },
   "exclude_from_IV": [
-    "UNIT_WORKBOAT",
-    "UNIT_WORKER"
+    "SLTH_UNIT_WORKBOAT",
+    "SLTH_UNIT_SETTLER",
+    "SLTH_UNIT_WORKER"
   ],
   "civics": [
     "CIVIC_CODE_OF_LAWS",
