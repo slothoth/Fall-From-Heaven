@@ -3,6 +3,7 @@ import json
 import glob
 import logging
 import platform
+import os
 
 
 class Artdef:
@@ -11,7 +12,7 @@ class Artdef:
             self.asset_map = json.load(json_file)
         os_name = platform.system()
         if os_name == 'Darwin':
-            self.folder = "/Users/samuelmayo/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization VI/Civ6.app/Contents"
+            self.folder = os.environ['FOLDER']
         elif os_name == 'Windows':
             self.folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
         else:
@@ -399,3 +400,49 @@ class Artdef:
                 fow_def['@Name'] += '_FOW'
                 fow_def['@Atlas'] += '_FOW'
                 self.icons['GameInfo']['IconDefinitions']['Row'].append(fow_def)
+
+    def icon_buildings_wrangler(self, folder):
+        string = 'Icons_Buildings.xml'
+        icon_xml = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
+        with open(icon_xml[0], 'r') as file:
+            icon_info = xmltodict.parse(file.read())['GameInfo']['IconDefinitions']['Row']
+
+        full_icons = {i['@Name']: i for i in icon_info}
+
+        for i in icon_xml[1:]:
+            with open(i, 'r') as file:
+                icon_info = xmltodict.parse(file.read())
+            if icon_info.get('GameInfo', {}).get('IconDefinitions') is None:
+                continue
+            icon_info = icon_info['GameInfo']['IconDefinitions']['Row']
+            if isinstance(icon_info, dict):
+                icon_info = [icon_info]
+            full_icons.update({i['@Name']: i for i in icon_info})
+
+        icon_map = self.asset_map['Units']
+        for mod_ref, vanilla_ref in icon_map.items():
+            if any([vanilla_ref in i for i in ['CUSTOM', 'IRRELEVANT', 'LIKELY_SUKRITACT_WILDLIFE?']]):
+                continue
+            if 'ADAPTED' in vanilla_ref:
+                vanilla_ref = vanilla_ref.replace('ADAPTED', 'UNIT')
+            if mod_ref in self.asset_map['units_scenario']:
+                vanilla_ref = self.asset_map['units_scenario'][mod_ref]
+            vanilla_ref = 'ICON_' + vanilla_ref
+            if full_icons.get(vanilla_ref) is None:
+                search = [i for i in full_icons if vanilla_ref.replace('UNIT_', '') in i]
+                if len(search) > 1:
+                    self.logger.info(f'found more than one match for {vanilla_ref}')
+                if len(search) == 0:
+                    self.logger.info(f'no match for {vanilla_ref}')
+                    continue
+                vanilla_ref = search[0].replace('_FOW', '')
+
+            icon_def = full_icons[vanilla_ref].copy()
+            icon_def['@Name'] = f'ICON_{mod_ref}'
+            self.icons['GameInfo']['IconDefinitions']['Row'].append(icon_def)
+            if full_icons.get(vanilla_ref + '_FOW') is not None:
+                fow_def = icon_def.copy()
+                fow_def['@Name'] += '_FOW'
+                fow_def['@Atlas'] += '_FOW'
+                self.icons['GameInfo']['IconDefinitions']['Row'].append(fow_def)
+
