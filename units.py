@@ -116,9 +116,7 @@ class Units:
         not_religious_units = {i[0]: i[1] for i in religious if not (i[1] in religions)}
         religious_units = {i[0]: i[1] for i in religious if i[1] in religions}
         # Filter the units based on dictionaries
-        final_units = {key: val for key, val in six_style_dict.items() if key not in not_religious_units}
-
-        final_units = {key: val for key, val in final_units.items() if key not in excludes_from_four}
+        final_units = {key: val for key, val in six_style_dict.items() if key not in excludes_from_four}
         buildable_only = {key: val for key, val in final_units.items() if val['Cost'] != '-1'}
         # filter for our upgrades table too
         to_pop = []
@@ -217,8 +215,7 @@ class Units:
 
         self.summons_restrictions(final_units, summons, model_obj)
 
-        hawk = {
-                "BaseSightRange": 4,
+        hawk = {"BaseSightRange": 4,
                 "BaseMoves": 8,
                 "Range": 5,
                 "Domain": "DOMAIN_AIR",
@@ -227,8 +224,7 @@ class Units:
                 "Stackable": 1,
                 "CanTargetAir": 1,
                 "PseudoYieldType": "PSEUDOYIELD_UNIT_AIR_COMBAT",
-                "IgnoreMoves": 1
-            }
+                "IgnoreMoves": 1}
         final_units['SLTH_UNIT_HAWK'].update(hawk)
         final_units['SLTH_UNIT_EYE'].update(hawk)
 

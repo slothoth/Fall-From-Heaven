@@ -47,7 +47,7 @@ def build_resource_string(model_obj):
     for resource in six_style_resource_dict:
         resource['Happiness'] = 4 * int(resource['Happiness'])
         resource['ResourceType'] = f"RESOURCE_{resource['ResourceType'][6:]}"
-        resource['Name'] = "LOC_SLTH_" + resource['ResourceType']
+        resource['Name'] = "LOC_" + resource['ResourceType']
         resource['Frequency'] = 6
         resource['ResourceClassType'] = 'RESOURCECLASS_LUXURY' if resource['Happiness'] > 0 else resource_class_map[resource['ResourceClassType']]
         resource['PrereqCivic'] = 'NULL'
