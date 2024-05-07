@@ -11,19 +11,15 @@ class Artdef:
         with open("plans/asset_map_plan.json", 'r') as json_file:
             self.asset_map = json.load(json_file)
         os_name = platform.system()
-        if os_name == 'Darwin':
-            self.folder = os.environ['FOLDER']
-        elif os_name == 'Windows':
-            self.folder = "E:\Steam\steamapps\common\Sid Meier's Civilization VI"
-        else:
-            raise Exception(OSError)
+        self.folder = os.environ.get('FOLDER', None)
+        if self.folder is None:
+            raise EnvironmentError("You need to set an environment variable that is the filepath of your Civ VI installation.")
 
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
         with open('Gen_ArtDefs/Icons.xml', 'r') as file:
             self.icons = xmltodict.parse(file.read())
         self.icons['GameInfo']['IconDefinitions']['Row'] = []
-
 
     def assign_artdef(self, artdef, name):
         artdef_cpy = artdef.copy()
@@ -54,7 +50,9 @@ class Artdef:
             with open(artdef, 'r') as file:
                 artdef_info = xmltodict.parse(file.read())
             artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']
-            artdef_dict = {i['m_CollectionName']['@text']: i['Element'] for i in artdef_info_ if i.get('Element', None) is not None}
+            artdef_dict = {i['m_CollectionName']['@text']: i['Element'] for i in artdef_info_ if
+                           i.get('Element', None) is not None}
+
             for i, j in artdef_dict.items():
                 if isinstance(j, dict):
                     full_artdef[i].append(j)
@@ -77,7 +75,8 @@ class Artdef:
         for i in drop_indices:
             del full_artdef['Units'][i]
 
-        artdef_total = {i['m_Name']['@text']:i for i in full_artdef['Units']}
+        artdef_total = {i['m_Name']['@text']: i for i in full_artdef['Units']}
+
 
         # reset scout, warrior
         artdef_total['UNIT_SCOUT'] = [i for i in not_uniques if 'SCOUT' in i['m_Name']['@text']][0]
@@ -181,9 +180,9 @@ class Artdef:
         root.append(self.assign_artdef(artdef_total['BUILDING_OLD_GOD_OBELISK'], 'SLTH_BUILDING_BREWERY'))
 
         with open('../FallFromHeaven/Artdefs/Buildings.artdef', 'w') as file:
-             xmltodict.unparse(artdef_template, output=file, pretty=True)
-        return                                                              # once it works do full
-
+            xmltodict.unparse(artdef_template, output=file, pretty=True)
+        return  # once it works do full
+      
         artdef_build = artdef_map['Buildings']
 
         failed = {'multsearch': [], 'nosearch': []}
@@ -237,12 +236,11 @@ class Artdef:
 
         with open('Gen_ArtDefs/Features.artdef', 'r') as file:
             artdef_template = xmltodict.parse(file.read())
-    
+
         artdef_template['AssetObjects::ArtDefSet']['m_RootCollections']['Element']['Element'] = []
         root = artdef_template['AssetObjects::ArtDefSet']['m_RootCollections']['Element']['Element']
         """
         root.append(self.assign_artdef(artdef_total['UNIT_ARCHER'], 'SLTH_UNIT_BLOODPET'))
-    
         with open('prebuilt/Artdefs/Features.artdef', 'w') as file:
              xmltodict.unparse(artdef_template, output=file, pretty=True)"""
 
@@ -348,13 +346,17 @@ class Artdef:
             icon_atlas_map = json.load(json_file)
 
         big_dict = {}
-        [big_dict.update({j.replace('ICON_', ''): {'atlas': k, 'index': l} for j, l in i.items()}) for k, i in icon_atlas_map.items()]
+        [big_dict.update({j.replace('ICON_', ''): {'atlas': k, 'index': l} for j, l in i.items()}) for k, i in
+         icon_atlas_map.items()]
         icon_map = self.asset_map['Resources']
 
         for mod_ref, vanilla_ref in icon_map.items():
-            self.icons['GameInfo']['IconDefinitions']['Row'].append({'@Atlas': big_dict[vanilla_ref]['atlas'], '@Index': big_dict[vanilla_ref]['index'], '@Name': f'ICON_{mod_ref}'})
-            self.icons['GameInfo']['IconDefinitions']['Row'].append({'@Atlas': big_dict[vanilla_ref]['atlas']+'_FOW', '@Index': big_dict[vanilla_ref]['index'], '@Name': f'ICON_{mod_ref}_FOW'})
-
+            self.icons['GameInfo']['IconDefinitions']['Row'].append(
+                {'@Atlas': big_dict[vanilla_ref]['atlas'], '@Index': big_dict[vanilla_ref]['index'],
+                 '@Name': f'ICON_{mod_ref}'})
+            self.icons['GameInfo']['IconDefinitions']['Row'].append(
+                {'@Atlas': big_dict[vanilla_ref]['atlas'] + '_FOW', '@Index': big_dict[vanilla_ref]['index'],
+                 '@Name': f'ICON_{mod_ref}_FOW'})
 
     def icon_units_wrangler(self, folder):
         string = 'Icons_Units.xml'
@@ -395,7 +397,7 @@ class Artdef:
             icon_def = full_icons[vanilla_ref].copy()
             icon_def['@Name'] = f'ICON_{mod_ref}'
             self.icons['GameInfo']['IconDefinitions']['Row'].append(icon_def)
-            if full_icons.get(vanilla_ref+'_FOW') is not None:
+            if full_icons.get(vanilla_ref + '_FOW') is not None:
                 fow_def = icon_def.copy()
                 fow_def['@Name'] += '_FOW'
                 fow_def['@Atlas'] += '_FOW'
@@ -445,4 +447,3 @@ class Artdef:
                 fow_def['@Name'] += '_FOW'
                 fow_def['@Atlas'] += '_FOW'
                 self.icons['GameInfo']['IconDefinitions']['Row'].append(fow_def)
-
