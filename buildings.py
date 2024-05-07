@@ -127,7 +127,7 @@ class Buildings:
                 else:
                     if modifier_ids is not None:
                         for modifier_id in modifier_ids:
-                            self.building_modifiers.append({'BuildingType': f"MODIFIER_BUILDING_{build_name[9:]}".upper(),
+                            self.building_modifiers.append({'BuildingType': f"SLTH_BUILDING_{build_name[9:]}".upper(),
                                                             'ModifierId': modifier_id})
 
         six_style_build_dict = {f"SLTH_{i['Type']}": small_dict(i, buildings_4_to_6) for i in building_infos}
@@ -265,6 +265,7 @@ class Buildings:
         make_or_add(model_obj['sql_inserts'], building_replaces, 'BuildingReplaces')
         make_or_add(model_obj['sql_inserts'], self.traits, 'Traits')
         make_or_add(model_obj['sql_inserts'], self.trait_modifiers, 'TraitModifiers')
+        make_or_add(model_obj['sql_inserts'], self.building_modifiers, 'BuildingModifiers')
 
         model_obj['kinds'] = self.kinds
         model_obj['update_build'] = [i for i in update_buildings]
