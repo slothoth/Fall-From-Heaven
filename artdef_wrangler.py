@@ -52,6 +52,7 @@ class Artdef:
             artdef_info_ = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']
             artdef_dict = {i['m_CollectionName']['@text']: i['Element'] for i in artdef_info_ if
                            i.get('Element', None) is not None}
+
             for i, j in artdef_dict.items():
                 if isinstance(j, dict):
                     full_artdef[i].append(j)
@@ -75,6 +76,7 @@ class Artdef:
             del full_artdef['Units'][i]
 
         artdef_total = {i['m_Name']['@text']: i for i in full_artdef['Units']}
+
 
         # reset scout, warrior
         artdef_total['UNIT_SCOUT'] = [i for i in not_uniques if 'SCOUT' in i['m_Name']['@text']][0]
@@ -180,7 +182,7 @@ class Artdef:
         with open('../FallFromHeaven/Artdefs/Buildings.artdef', 'w') as file:
             xmltodict.unparse(artdef_template, output=file, pretty=True)
         return  # once it works do full
-
+      
         artdef_build = artdef_map['Buildings']
 
         failed = {'multsearch': [], 'nosearch': []}
@@ -239,7 +241,6 @@ class Artdef:
         root = artdef_template['AssetObjects::ArtDefSet']['m_RootCollections']['Element']['Element']
         """
         root.append(self.assign_artdef(artdef_total['UNIT_ARCHER'], 'SLTH_UNIT_BLOODPET'))
-
         with open('prebuilt/Artdefs/Features.artdef', 'w') as file:
              xmltodict.unparse(artdef_template, output=file, pretty=True)"""
 
