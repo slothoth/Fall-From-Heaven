@@ -49,24 +49,6 @@ class Sql:
         table_string += ";\n"
         return table_string
 
-
-    def update_sql_table(self, list_of_dicts, table_name: str, columns_to_select: list):
-        if isinstance(list_of_dicts, dict):
-            list_of_dicts = [value for value in list_of_dicts.values()]
-        table_string = ''
-
-        for item in list_of_dicts:
-            table_string += f"UPDATE {table_name} SET "
-            for key, value in item.items():
-                if key not in columns_to_select:
-                    table_string += f"{key} = '{value}', "
-            table_string = table_string[:-2]
-            table_string += f" WHERE {columns_to_select[0]} = '{item[columns_to_select[0]]}'"
-            for column in columns_to_select[1:]:
-                table_string += f" AND {column} = '{item[column]}'"
-            table_string += ";\n"
-        return table_string
-
     def build_sql_table(self, list_of_dicts, table_name):
         if isinstance(list_of_dicts, dict):
             list_of_dicts = [value for value in list_of_dicts.values()]
@@ -172,3 +154,23 @@ def update_or_add(to_sql, list_of_dicts, table_name, columns_to_select):
         if not isinstance(list_of_dicts, list):
             list_of_dicts = [list_of_dicts]
         to_sql[table_name] = (list_of_dicts, columns_to_select)
+
+
+def update_sql_table(list_of_dicts, table_name: str, columns_to_select: list):
+    if isinstance(list_of_dicts, dict):
+        list_of_dicts = [value for value in list_of_dicts.values()]
+    if list_of_dicts == [{}]:
+        return
+    table_string = ''
+
+    for item in list_of_dicts:
+        table_string += f"UPDATE {table_name} SET "
+        for key, value in item.items():
+            if key not in columns_to_select:
+                table_string += f"{key} = '{value}', "
+        table_string = table_string[:-2]
+        table_string += f" WHERE {columns_to_select[0]} = '{item[columns_to_select[0]]}'"
+        for column in columns_to_select[1:]:
+            table_string += f" AND {column} = '{item[column]}'"
+        table_string += ";\n"
+    return table_string
