@@ -171,6 +171,9 @@ class Buildings:
             if int(building['Cost']) < 1:
                 building['Cost'] = 1
 
+            if 'CARNIVAL' in building['BuildingType'] or 'PUBLIC_BATHS' in building['BuildingType']:
+                building['PrereqDistrict'] = 'DISTRICT_ENTERTAINMENT_COMPLEX'
+
             if 'bNoUnhappiness' in building:
                 if building['bNoUnhappiness'] != '0':
                     building['Entertainment'] = 70             # high enough to always be ecstatic, but not above 99
@@ -277,10 +280,9 @@ def districts_build(model_obj):
                         {'DistrictType': 'DISTRICT_ENCAMPMENT', 'PrereqTech': 'SLTH_TECH_BRONZE_WORKING'},
                         {'DistrictType': 'DISTRICT_HARBOR', 'PrereqTech': 'SLTH_TECH_FISHING'},
                         {'DistrictType': 'DISTRICT_COMMERCIAL_HUB', 'PrereqCivic': 'SLTH_CIVIC_FESTIVALS'},
-                        {'DistrictType': 'DISTRICT_ENTERTAINMENT_COMPLEX', 'PrereqCivic': 'SLTH_CIVIC_DRAMA'},
+                        {'DistrictType': 'DISTRICT_ENTERTAINMENT_COMPLEX', 'PrereqCivic': 'SLTH_CIVIC_FESTIVALS'},
                         {'DistrictType': 'DISTRICT_THEATER', 'PrereqCivic': 'SLTH_CIVIC_FESTIVALS'},
                         {'DistrictType': 'DISTRICT_INDUSTRIAL_ZONE', 'PrereqTech': 'SLTH_TECH_SMELTING'},
                         {'DistrictType': 'DISTRICT_AQUEDUCT', 'PrereqTech': 'SLTH_TECH_SANITATION'}]
 
-    to_keep = "', '".join([i['DistrictType'] for i in district_changes] + ['DISTRICT_CITY_CENTER', 'DISTRICT_WONDER'])
     update_or_add(model_obj['sql_updates'], district_changes, 'Districts', ['DistrictType'])
