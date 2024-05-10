@@ -6,7 +6,7 @@ from delete_n_patch import delete_rows
 from misc import build_resource_string, build_terrains_string, build_features_string, build_policies, build_improvements
 from promotions import Promotions
 from modifiers import Modifiers
-from utils import Sql, setup_tables, make_or_add
+from utils import Sql, setup_tables, make_or_add, update_sql_table
 from localiser import Localizer
 from db_checker import check_primary_keys, localize_check
 from prebuilt_transfer import main as prebuilt_transfer
@@ -57,6 +57,11 @@ def main():
     check_primary_keys(model_obj)
     for table, rows in model_obj['sql_inserts'].items():
         model_obj['sql_strings'].append(model_obj['sql'].old_build_sql_table(rows, table))
+    for table, val in model_obj['sql_updates'].items():
+        update = update_sql_table(val[0], table, val[1])
+        if update is not None:
+            model_obj['sql_strings'].append(update)
+
     total = ''
     for i in model_obj['sql_strings']:
         total += i
