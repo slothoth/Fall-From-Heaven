@@ -576,13 +576,13 @@ class PromotionModifiers:
                       'SubjectRequirementSetId': f'{ability_name}_REQS'}]
         modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': 5}]
-        terrains = ['GRASSLAND_HILLS', 'PLAINS_HILLS', 'DESERT_HILLS', 'TUNDRA_HILLS', 'SNOW_HILLS']
+        terrains = ['GRASS_HILLS', 'PLAINS_HILLS', 'DESERT_HILLS', 'TUNDRA_HILLS', 'SNOW_HILLS']
         requirements = [{'RequirementId': f'PLOT_IS_{i}_TERRAIN_REQUIREMENT',
                          'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'} for i in terrains]
 
         requirement_arguments = [
             {'RequirementId': i['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': terrains[idx]}
+             'Value': f'TERRAIN_{terrains[idx]}'}
             for idx, i in enumerate(requirements)]
 
         requirement_sets = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],

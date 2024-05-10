@@ -62,13 +62,12 @@ def techs_sql(model_obj, kept):
     [i for i in six_style_techs if i['TechnologyType'] == 'SLTH_TECH_SAILING'][0]['EmbarkAll'] = 1
     [i for i in six_style_techs if i['TechnologyType'] == 'SLTH_TECH_SAILING'][0]['EmbarkUnitType'] = 'SLTH_UNIT_MUD_GOLEM'
 
+    tech_modifiers = [{'TechnologyType': 'SLTH_TECH_ASTRONOMY', 'ModifierId': 'CARTOGRAPHY_GRANT_OCEAN_NAVIGATION'}]
     six_style_techs.append(elf_patch(six_style_techs, model_obj))
-
-    'UNIT_BUILDER'
-    'EmbarkAll : 1'
 
     make_or_add(model_obj['sql_inserts'], six_style_techs, 'Technologies')
     make_or_add(model_obj['sql_inserts'], six_style_civics, 'Civics')
+    make_or_add(model_obj['sql_inserts'], tech_modifiers, 'TechnologyModifiers')
 
     for tech_type_to_add in techsql[2:]:
         tech_split = tech_type_to_add.split("'")
