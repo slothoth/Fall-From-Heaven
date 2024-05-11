@@ -7,7 +7,7 @@ from misc import build_resource_string, build_terrains_string, build_features_st
 from promotions import Promotions
 from modifiers import Modifiers
 from utils import Sql, setup_tables, make_or_add, update_sql_table
-from localiser import Localizer
+from localiser import Localizer, custom_loc
 from db_checker import check_primary_keys, localize_check
 from prebuilt_transfer import main as prebuilt_transfer
 from artdef_wrangler import Artdef
@@ -28,6 +28,7 @@ def main():
     model_obj = {'kinds': {}, 'traits': {}, 'sql_strings': [], 'sql_inserts': {}, 'sql_updates': {}, 'sql_config': {},
                  'civilizations': Civilizations(), 'modifiers': Modifiers(), 'sql': Sql(), 'units': Units(),
                  'select_civs': civs, 'loc': {}, 'updates': {}, 'deletes': {}, 'sql_deletes': {}, 'tags': {}}
+    model_obj['custom_loc'] = custom_loc()
     techs_sql(model_obj, kept)
     model_obj['civilizations'].civilizations(model_obj)
     build_policies(model_obj)
