@@ -2,6 +2,7 @@ import logging
 from collections import Counter
 import xmltodict
 from utils import make_or_add
+import json
 
 
 class Localizer:
@@ -37,7 +38,8 @@ class Localizer:
         tables_to_translate = ['Buildings', 'Districts', 'Improvements', 'Projects', 'Civics', 'Policies', 'Civilizations',
                                'Leaders', 'Traits', 'Resources', 'Terrains', 'Features', 'UnitPromotions', 'UnitPromotionClasses',
                                'Units', 'Abilities', 'Technologies', ]
-        weird_tables = ['CityNames', 'CivilopediaConcepts', 'CivilizationFrontEnd']
+        weird_tables = ['CivilopediaConcepts', 'CivilizationFrontEnd']
+        model_obj['missed_loc'] = {}
         col_types = []
         for table_name, table in model_obj['sql_inserts'].items():
             if table_name not in tables_to_translate:
@@ -72,10 +74,7 @@ class Localizer:
                             modifier_description = ''
                             for i in model_obj['modifiers'].loc[key]:
                                 if 'SLTH' in i:
-                                    string_replace = i.split('###')
-                                    string_replace[1] = string_replace[1].replace('SLTH', '')
-                                    string_replace[1] = "".join([j.capitalize() for j in string_replace[1].split('_')])
-                                    i = " ".join([i.strip() for i in string_replace])
+                                    i = self.strip_loc(i)
                                 modifier_description += i + ' '
                             text = modifier_description.strip()
                         elif isinstance(key, str) and 'COOL' in key:
@@ -94,8 +93,21 @@ class Localizer:
                         elif len([i for i in self.text if tag_value.split('_')[-2] in i and 'STRATEGY' in i]) > 1:
                             if 'MILITARY_STRATEGY' not in tag_value:
                                 text = self.text[[i for i in self.text if tag_value.split('_')[-2] in i and 'STRATEGY' in i][0]]
+                        elif tag_value in model_obj['modifiers'].loc:
+                            modifier_description = ''
+                            for i in model_obj['modifiers'].loc[tag_value]:
+                                if 'SLTH' in i:
+                                    i = self.strip_loc(i)
+                                modifier_description += i + ' '
+                            text = modifier_description.strip()
+                        elif tag_value in model_obj['custom_loc']:
+                            text = model_obj['custom_loc'][tag_value]
                         else:
                             text = text + ' Description'
+                            if table_name not in model_obj['missed_loc']:
+                                model_obj['missed_loc'][table_name] = {}
+                            model_obj['missed_loc'][table_name][key] = row
+
                     else:
                         logger.error(f'unrecognized loc_tag {col}')
                     if 'Mana ' in text and table_name == 'Resources':
@@ -104,7 +116,7 @@ class Localizer:
                         text = 'ZZ_Banned for Civ'
                     if table_name == 'Units':
                         text = text.replace('Equipment', '').replace('Unit', '')
-                    if table_name == 'UnitPromotions':
+                    if table_name == 'UnitPromotions' and 'Description' not in col:
                         text = text.replace('1', ' I').replace('2', ' II').replace('3', ' III')
                         text = text.replace('4', ' IV').replace('5', ' V')
                     text = text.replace('+-', '-')
@@ -121,13 +133,14 @@ class Localizer:
         self.concept_pedia(model_obj)
 
         logger.info(f'Port count: {self.port_count}')
+        length_arr = []
+        [[length_arr.append(j) for j in i.values()] for i in model_obj["missed_loc"].values()]
+        logger.info(f'Empty: {len(length_arr)}')
 
     def concept_pedia(self, model_obj):
         page_name = self.text.pop('LOC_PEDIA_CATEGORY_CONCEPT_NAME')
         concepts = {i: self.text[i] for i in self.text if 'CONCEPT' in i}
-
         loc = []
-
         # CivilopediaPageGroups
         civ_page_groups = [{"SectionId": "CONCEPTS", "PageGroupId": "FALLFROMHEAVEN",
                             "Name": "LOC_PEDIA_CONCEPTS_PAGEGROUP_FALLFROMHEAVEN_NAME"}]
@@ -184,7 +197,7 @@ class Localizer:
     def paragraph_pedia(self, model_obj):
         pedia = [i for i in self.text if 'PEDIA' in i]
         model_obj['loc']['Pedia'] = []
-        allowed = ['LOC_PROMOTION', 'PEDIA_CIT', 'LOC_IMPROVEMENT', 'LOC_UNIT', 'LOC_CIV', 'BUILDING', 'LOC_POLICY',
+        allowed = ['PEDIA_CIT', 'LOC_IMPROVEMENT', 'LOC_UNIT', 'LOC_CIV', 'BUILDING', 'LOC_POLICY',
                    'LOC_LEADER', 'LOC_RESOURCE', 'TECHS']
         extra = ['PEDIAS_PAGE', 'LOC_SPELL', 'LOC_RELIGION', 'LOC_PEDIA_CATEGORY']
         for i in pedia:
@@ -237,3 +250,15 @@ class Localizer:
 
         make_or_add(model_obj['sql_inserts'], cities, 'CityNames')
 
+
+    def strip_loc(self,i):
+        string_replace = i.split('###')
+        string_replace[1] = string_replace[1].replace('SLTH', '')
+        string_replace[1] = "".join([j.capitalize() for j in string_replace[1].split('_')])
+        i = " ".join([i.strip() for i in string_replace])
+        return i
+
+def custom_loc():
+    with open("data/prebuilt_loc.json", 'r') as json_file:
+        loc_prebuilt = json.load(json_file)
+    return loc_prebuilt

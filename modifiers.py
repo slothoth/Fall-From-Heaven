@@ -280,8 +280,8 @@ class Modifiers:
         modifier = {'ModifierId': mod_name,
                     'ModifierType': 'MODIFIER_PLAYER_ADJUST_WAR_WEARINESS'}
         modifier_args = []
-        for name, value in [('Amount', civ4_target), ('Overall', 1)]:
-            modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
+        for name_, value in [('Amount', civ4_target), ('Overall', 1)]:
+            modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name_, 'Type': 'ARGTYPE_IDENTITY',
                                   'Value': value})
         loc = [name, [f'Accumulate {civ4_target}% less war weariness than usual.']]
         self.organize(modifier, modifier_args, loc=loc)
@@ -343,7 +343,7 @@ class Modifiers:
         dynamic_modifiers = {'ModifierType': modifier_type, 'CollectionType': 'COLLECTION_PLAYER_CAPITAL_CITY',
                              'EffectType': 'EFFECT_ADJUST_CITY_GREAT_PERSON_POINTS_MODIFIER'}
         self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifiers,
-                      loc=[my_name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
+                      loc=[name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
         return [mod_id]
 
     def buildings_amenities_modifier(self, civ4_target, name, **kwargs):
