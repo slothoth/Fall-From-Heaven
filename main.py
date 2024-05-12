@@ -17,7 +17,7 @@ import logging
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.WARNING)
     setup_tables()
     civs = ['AMURITES', 'BALSERAPHS', 'BANNOR', 'CALABIM', 'CLAN_OF_EMBERS', 'DOVIELLO', 'ELOHIM', 'GRIGORI', 'HIPPUS',
             'ILLIANS', 'INFERNAL', 'KHAZAD', 'KURIOTATES', 'LANUN', 'LJOSALFAR', 'LUCHUIRP', 'MALAKIM', 'MERCURIANS',
@@ -90,7 +90,7 @@ def main():
 
     localize_check(model_obj)
 
-    localization_file = model_obj['sql'].old_build_sql_table(model_obj['loc_full'], 'LocalizedText')
+    localization_file = model_obj['sql'].old_build_sql_table(model_obj['loc_full'], 'LocalizedText', replace=True)
 
     with open('../FallFromHeaven/Core/localization.sql', 'w', encoding="utf-8") as file:
         file.write(localization_file)

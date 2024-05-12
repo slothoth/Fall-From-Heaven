@@ -270,6 +270,12 @@ def localize_check(model_obj):
     tables = list(loc_table.iloc[:, :2].itertuples(index=False, name=None))
     pruned = [i for i in model_obj['loc_full'] if (i['Tag'], i['Language']) in tables]
     keep = [i for i in model_obj['loc_full'] if (i['Tag'], i['Language']) not in tables]
+    compare_tuple = [(i['Language'], i['Tag']) for i in keep]
+    unique_tuple = set(compare_tuple)
+    if len(compare_tuple) != len(unique_tuple):
+        print('WARNING: There are duplicates in Localization.')
+        not_unique_tuple = [i for i in compare_tuple if i not in unique_tuple]
+        print(not_unique_tuple)
     model_obj['loc_full'] = keep
     print(f'{len(pruned)} localize records removed.')
     print([i['Text'] for i in pruned])

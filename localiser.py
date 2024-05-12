@@ -103,11 +103,11 @@ class Localizer:
                         elif tag_value in model_obj['custom_loc']:
                             text = model_obj['custom_loc'][tag_value]
                         else:
-                            text = text + ' Description'
                             if table_name not in model_obj['missed_loc']:
                                 model_obj['missed_loc'][table_name] = {}
                             model_obj['missed_loc'][table_name][key] = row
-
+                            #text = text + ' Description'
+                            continue
                     else:
                         logger.error(f'unrecognized loc_tag {col}')
                     if 'Mana ' in text and table_name == 'Resources':
@@ -249,7 +249,6 @@ class Localizer:
             self.port_count += 1
 
         make_or_add(model_obj['sql_inserts'], cities, 'CityNames')
-
 
     def strip_loc(self,i):
         string_replace = i.split('###')

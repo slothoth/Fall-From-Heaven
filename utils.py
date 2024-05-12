@@ -10,7 +10,7 @@ class Sql:
         self.tables = {}
         self.logger = logging.getLogger(__name__)
 
-    def old_build_sql_table(self, list_of_dicts, table_name):
+    def old_build_sql_table(self, list_of_dicts, table_name, replace=False):
         if isinstance(list_of_dicts, dict):
             list_of_dicts = [value for value in list_of_dicts.values()]
         if len(list_of_dicts) == 0:
@@ -37,8 +37,10 @@ class Sql:
                 schema_key = '"Column"'
             schema_string += f'{schema_key}, '
         schema_string = schema_string[:-2] + ') VALUES\n'
-        table_string = f"INSERT INTO {table_name}" + schema_string
-
+        if replace:
+            table_string = f"INSERT OR REPLACE INTO {table_name}" + schema_string
+        else:
+            table_string = f"INSERT INTO {table_name}" + schema_string
         for item in list_of_dicts:
             table_string += "("
             for schema_key in master_dict:
