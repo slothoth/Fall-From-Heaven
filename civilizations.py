@@ -25,6 +25,7 @@ class Civilizations:
         self.ability_modifiers = []
         self.type_tags = []
         self.civ_traits = []
+        self.races = {}
 
     def civilizations(self, model_obj):
         with open('data/XML/Civilizations/CIV4CivilizationInfos.xml', 'r') as file:
@@ -210,40 +211,6 @@ class Civilizations:
             races[j].pop('Description', None), races[j].pop('Sound', None), races[j].pop('TechPrereq', None),
             races[j].pop('Button', None), races[j].pop('bRace', None), races[j].pop('UnitArtStyleType', None),
             races[j].pop('iMinLevel', None), races[j].pop('bGraphicalOnly', None), races[j].pop('UnitCombats', None)        # Winterborn has this, why??
-        for name, promo in races.items():
-            name = promo.pop('Type', None)
-            if 'TerrainAttacks' in promo and 'TerrainDefenses' in promo:  # get rid o['TerrainDefenses']f defense if attack same
-                t_att, t_d = promo['TerrainAttacks']['TerrainAttack'], promo['TerrainDefenses']['TerrainDefense']
-                if isinstance(t_att, dict) and t_att['TerrainType'] == t_d['TerrainType']:
-                    if t_att['iTerrainAttack'] == t_d['iTerrainDefense']:
-                        promo.pop('TerrainDefenses')
-                        promo['TerrainAttacks']['Terrain_Strength'] = promo['TerrainAttacks'].pop('TerrainAttack')
-                elif [i['TerrainType'] for i in t_att] and [i['TerrainType'] for i in t_d]:
-                    if [i['iTerrainAttack'] for i in t_att] and [i['iTerrainDefense'] for i in t_d]:
-                        promo.pop('TerrainDefenses')
-                        promo['TerrainAttacks']['Terrain_Strength'] = promo['TerrainAttacks'].pop('TerrainAttack')
-
-            trait_mods = []
-            for ability_name, ability in promo.items():
-                if not isinstance(ability, dict):
-                    ability = {ability_name: ability}
-                ab_name = model_obj['modifiers'].generate_modifier(civ4_target=ability,
-                                                                     name='SLTH_DEFAULT_RACE',
-                                                                     civ6_target=name)
-                if ab_name is not None:
-                    """ab_name = f'{name}_ABILITY_{list(ability.keys())[0].upper()}'
-                    self.unit_abilities.append({'UnitAbilityType': ab_name, 'Name': f'LOC_SLTH_{ab_name}_NAME',
-                                                'Description': f'LOC{ab_name}_DESCRIPTION', 'Inactive': 1,
-                                                'ShowFloatTextWhenEarned': 0, 'Permanent': 1})
-
-                    self.ability_modifiers.append({'UnitAbilityType': ab_name,
-                                                   'ModifierId': modifiers[0]})
-
-                    self.type_tags.append({'Type': ab_name, 'Tag': 'CLASS_ALL_UNITS'})
-
-                    model_obj['kinds'][ab_name] = 'KIND_ABILITY'"""
-                    trait_mods.append(ab_name)
-            promo['trait_modifier'] = trait_mods
 
         for civ, i in modifier_stuff.items():
             trait_type = f'SLTH_TRAIT_{civ}_COOL'
@@ -266,13 +233,7 @@ class Civilizations:
                     self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
 
             if i['DefaultRace'] != 'NONE':
-                promo = races[i['DefaultRace']]
-                for mod_ in promo['trait_modifier']:
-                    self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
-                if 'ELF' in i['DefaultRace']:
-                    mod_ = model_obj['modifiers'].generate_modifier(f"SLTH_TECH_FOREST_SECRETS",
-                                                                    'SLTH_GRANT_SPECIFIC_TECH', civ)
-                    self.trait_modifiers.append({'TraitType': trait_type, 'ModifierId': mod_})
+                self.races[trait_type] = i['DefaultRace']
 
         dummy = []
         [dummy.extend(i) for i in model_obj['civ_units']['dev_null'].values()]

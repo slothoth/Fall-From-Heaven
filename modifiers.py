@@ -41,6 +41,7 @@ class Modifiers:
         self.mod_string = []
 
         self.count = 0
+        self.not_implemented_count = 0
 
         self.modifier_map = {'CommerceModifiers': self.commerce_modifier,
                              'CapitalCommerceModifiers': self.capital_commerce_modifier,
@@ -212,11 +213,22 @@ class Modifiers:
             else:
                 self.type_tags.append(type_tags)
         if loc:
-            if loc[0] in self.loc:
-                for i in loc[1]:
-                    self.loc[loc[0]].append(i)
+            if isinstance(loc[0], str):
+                if loc[0] in self.loc:
+                    for i in loc[1]:
+                        self.loc[loc[0]].append(i)
+                else:
+                    self.loc[loc[0]] = []
+                    for i in loc[1]:
+                        self.loc[loc[0]].append(i)
+
             else:
-                self.loc[loc[0]] = loc[1]
+                for loc_ in loc:
+                    if loc_[0] in self.loc:
+                        for i in loc_[1]:
+                            self.loc[loc_[0]].append(i)
+                    else:
+                        self.loc[loc_[0]] = loc_[1]
         if mod_string:
             if isinstance(mod_string, list):
                 for i in mod_string:
@@ -766,13 +778,16 @@ class Modifiers:
 
     def damage_type_Implementation(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Damage type module, probably handled in Magic")
+        self.not_implemented_count += 1
 
     def bonus_requirementImplementation(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented")
         self.logger.debug('If we have apply a modifier to the city, with secondary requirement that we have x resource')
+        self.not_implemented_count += 1
 
     def bonus_production_modifier_building(self, civ4_target, name):
         print('MODIFIER_PLAYER_CITIES_ADJUST_BUILDING_PRODUCTION')
+        self.not_implemented_count += 1
 
     def apply_to_unit_if_in_cityImplement(self, civ4_target, name):
         modifier = {'ModifierId': 'MEDIC_INCREASE_HEAL_RATE',
@@ -783,12 +798,15 @@ class Modifiers:
         requirement_set_requirements = {'RequirementSetId': 'MEDIC_HEALING_REQUIREMENTS',
                                         'RequirementId': 'ADJACENT_UNIT_REQUIREMENT'}
         self.logger.debug(f"{name} with {civ4_target} seems possible, but awkward")
+        self.not_implemented_count += 1
 
     def feature_happiness_modifier(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented")
+        self.not_implemented_count += 1
 
     def specialistImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented")
+        self.not_implemented_count += 1
         # for idx, amount in enumerate(civ4_target['iCommerce']):
         # if int(amount) != 0:
         # yieldtype = commerce_map[idx]
@@ -802,27 +820,34 @@ class Modifiers:
 
     def no_fucking_clue(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented, who knows")
+        self.not_implemented_count += 1
 
     def magicImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Magic module")
 
     def maintenanceImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Maintenance Rework")
+        self.not_implemented_count += 1
 
     def religionImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Religion Rework")
+        self.not_implemented_count += 1
 
     def alignmentImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Alignment Rework")
+        self.not_implemented_count += 1
 
     def otherSystemImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs some other thing")
+        self.not_implemented_count += 1
         # Stuck on SpecialistValids, iLargestCityHappiness as no concept of largest cities in civ,
         # bNoDiplomacyWithEnemies, bPrereqWar
 
     def prereqImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as it is a prerequisite, how can we apply this to a policy")
+        self.not_implemented_count += 1
 
     def cantImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as it is a concept too far outside of civ vi")
+        self.not_implemented_count += 1
         # half food requirements GlobalParameters (Name: 'CITY_FOOD_CONSUMPTION_PER_POPULATION', "Value": '2.0')

@@ -90,6 +90,9 @@ def main():
 
     localize_check(model_obj)
 
+    print(f'Modifiers not implemented: {model_obj["modifiers"].not_implemented_count},\n'
+          f'Promotion Modifiers not implement: {model_obj["modifiers"].promotion_modifiers.not_implemented_count}')
+
     localization_file = model_obj['sql'].old_build_sql_table(model_obj['loc_full'], 'LocalizedText', replace=True)
 
     with open('../FallFromHeaven/Core/localization.sql', 'w', encoding="utf-8") as file:
