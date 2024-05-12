@@ -38,6 +38,7 @@ class Modifiers:
 
         self.complete_set = {}
         self.loc = {}
+        self.mod_string = []
 
         self.count = 0
 
@@ -160,7 +161,7 @@ class Modifiers:
 
     def organize(self, modifier=None, modifier_arguments=None, dynamic_modifier=None, trait_modifiers=None, trait=None,
                  requirements=None, requirements_arguments=None, requirements_set=None, requirements_set_reqs=None,
-                 ability=None, ability_modifiers=None, tags=None, type_tags=None, loc=None):
+                 ability=None, ability_modifiers=None, tags=None, type_tags=None, loc=None, mod_string=None):
         if isinstance(modifier, list):
             for mod in modifier:
                 self.modifiers[mod['ModifierId']] = mod
@@ -216,6 +217,12 @@ class Modifiers:
                     self.loc[loc[0]].append(i)
             else:
                 self.loc[loc[0]] = loc[1]
+        if mod_string:
+            if isinstance(mod_string, list):
+                for i in mod_string:
+                    self.mod_string.append(i)
+            else:
+                self.mod_string.append(mod_string)
 
     def sql_convert(self, model_obj):
         for i in [(self.modifier_arguments, 'ModifierArguments'),
@@ -227,7 +234,8 @@ class Modifiers:
                   (self.requirements_arguments, 'RequirementArguments'),
                   (self.abilities, 'UnitAbilities'),
                   (self.ability_modifiers, 'UnitAbilityModifiers'),
-                  (self.type_tags, 'TypeTags')]:
+                  (self.type_tags, 'TypeTags'),
+                  (self.mod_string, 'ModifierStrings'),]:
 
             make_or_add(model_obj['sql_inserts'], i[0], i[1])
         for modifier in self.dynamic_modifiers:
