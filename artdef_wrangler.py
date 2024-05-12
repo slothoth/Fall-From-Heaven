@@ -119,7 +119,7 @@ class Artdef:
             else:
                 root.append(self.assign_artdef(artdef_total[vanilla_ref], mod_ref))
                 used.append(vanilla_ref)
-                self.logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
+                self.logger.info(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
         with open('../FallFromHeaven/Artdefs/Units.artdef', 'w') as file:
             xmltodict.unparse(artdef_template, output=file, pretty=True)
