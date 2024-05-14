@@ -319,7 +319,37 @@ class PromotionModifiers:
                           'iFriendlyHealChange': self.easyimplement,
                           'iCombatLimit': self.hardimplement,
                           'BonusAffinities': self.buff_by_resource,
-                          'iModifyGlobalCounterOnCombat': self.armageddon
+                          'iModifyGlobalCounterOnCombat': self.armageddon,
+                          'bDispellable': self.not_implemented_effect,
+                          'bRemovedByCombat': self.not_implemented_effect,
+                          'bImmuneToDefensiveStrike': self.concept_out_of_civ_implement,
+                          'iExpireChance': self.not_implemented_effect,
+                          'bBoarding': self.easyimplement,
+                          'iBetrayalChance': self.hardimplement,
+                          'iSpellCasterXP': self.hardimplement,
+                          'iFreeXPPerTurn': self.hardimplement,
+                          'bOnlyDefensive': self.not_implemented_effect,
+                          'PromotionRandomApply': self.not_implemented_effect,
+                          'PyPerTurn': self.not_implemented_effect,
+                          'bValidate': self.no_clue,
+                          'bPrereqAlive': self.hardimplement,
+                          'bAIControl': self.hardimplement,
+                          'bFlying': self.easyimplement,             # HELICOPTER?
+                          'iFreeXPFromCombat': self.easyimplement,
+                          'iMoveDiscountChange': self.easyimplement,
+                          'bHeld': self.not_implemented_effect,
+                          'bInvisible': self.hardimplement,             # Spy?
+                          'bRemovedByCasting': self.hardimplement,
+                          'bHiddenNationality': self.hardimplement,
+                          'iCombatPercentInBorders': self.easyimplement,
+                          'bImmortal': self.hardimplement,
+                          'PromotionImmune1': self.not_implemented_effect,
+                          'PromotionImmune2': self.not_implemented_effect,
+                          'bRemovedWhenHealed': self.not_implemented_effect,
+                          'iModifyGlobalCounter': self.armageddon,
+                          'bIgnoreBuildingDefense': self.easyimplement,
+                          'bWaterWalking': self.easyimplement,
+                          'iExperiencePercent': self.easyimplement
                           }
 
     def choose_promo(self, civ4_target, name):
@@ -476,7 +506,7 @@ class PromotionModifiers:
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 0, [], [], [], [], []
         ability_modifiers = []
-        requirement_sets = []
+        requirement_sets, loc_string = [], []
         if not isinstance(civ4_ability, list):
             civ4_ability = [civ4_ability]
         attacks = set([i['iTerrainAttack'] for i in civ4_ability])
@@ -506,9 +536,10 @@ class PromotionModifiers:
             for req in requirements:
                 req_set_reqs.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
                                      'RequirementId': req['RequirementId']})
+            loc_string += f'+{amount}[ICON_Strength] Combat Strength while on {terrain.capitalize()}.'
 
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-        loc = [f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_Strength] Combat Strength while on {terrain.capitalize()}.']]
+        loc = [ability['Description'], [loc_string]]
         mod_string = {'ModifierId': modifiers[0]['ModifierId'], 'Context': 'Preview', 'Text': loc[0]}
         # BUG for plural abilities this will only attach first!
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
@@ -552,7 +583,7 @@ class PromotionModifiers:
 
         # set modifiers on ability
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-        loc = [f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_Movement] Movement while on {terrain.capitalize()}.']]
+        loc = [ability['Description'], [f'+{amount}[ICON_Movement] Movement while on {terrain.capitalize()}.']]
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
                       requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
                       ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc)
@@ -561,7 +592,7 @@ class PromotionModifiers:
     def ability_feature_movebuff(self, civ4_target, name):                      # MOVEBUFFS HAVE FAILED REQS
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 1, [], [], [], [], []
-        requirement_sets = []
+        requirement_sets, loc_string = [], ""
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         if 'FeatureDoubleMove' in civ4_ability:
             civ4_ability = civ4_ability['FeatureDoubleMove']
@@ -586,9 +617,10 @@ class PromotionModifiers:
             for req in requirements:
                 req_set_reqs.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
                                      'RequirementId': req['RequirementId']})
+            loc_string += f'+{amount}[ICON_Movement] Movement while on {feature.capitalize()}.'
 
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-        loc = [f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_Movement] Movement while on {feature.capitalize()}.']]
+        loc = [ability['Description'], [loc_string]]
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
                       requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
                       ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc)
@@ -621,7 +653,7 @@ class PromotionModifiers:
 
         # set up attachment
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-        loc = [f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_Movement] Movement while on Hills.']]
+        loc = [ability['Description'], [f'+{amount}[ICON_Movement] Movement while on Hills.']]
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
                       requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
                       ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc)
@@ -666,7 +698,7 @@ class PromotionModifiers:
         for i in modifiers[:-1]:
             ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': i['ModifierId']})
         type_tags = {'Type': ability_name, 'Tag': promoclass}
-        loc = [f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_STRENGTH] Combat Strength.']]
+        loc = [ability['Description'], [f'+{amount}[ICON_STRENGTH] Combat Strength.']]
 
         self.modifier_obj.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifiers,
                                    type_tags=type_tags, loc=loc)
@@ -692,7 +724,7 @@ class PromotionModifiers:
         ability_modifiers = []
         for i in modifiers[:-1]:
             ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': i['ModifierId']})
-        loc = [f'LOC_{name}_DESCRIPTION', [f'+{move_amount}[ICON_Movement] Movement, +{combat_amount}[ICON_Strength] Combat Strength.']]
+        loc = [f'LOC_SLTH_{name}_DESCRIPTION', [f'+{move_amount}[ICON_Movement] Movement, +{combat_amount}[ICON_Strength] Combat Strength.']]
         self.modifier_obj.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifiers,
                       type_tags=type_tags, loc=loc)
         return modifiers[-1]['ModifierId']
@@ -863,7 +895,7 @@ class PromotionModifiers:
             amount = i[i_selector]
             req_id = f'PLOT_IS_{plot_req_upper}_REQUIREMENT'
             terrain_pretty_text = terrain_type.replace("TERRAIN_", "")
-            prettier = " ".join(terrain_pretty_text.split('_')).capitalize()
+            prettier = " ".join(terrain_pretty_text.split('_')).capitalize().replace('Feature ', '').replace('forest ancient', 'Ancient Forest').replace('forest', 'Woods').replace('Jungle', 'Rainforest')
             terrain_strings.append(prettier)
             specific_mod = f'{mod_ability}_{terrain_pretty_text}'
             specific_req_set = f'{master_req_set}_{terrain_pretty_text}'
@@ -894,12 +926,12 @@ class PromotionModifiers:
                     loc_string += f'+{amount}[ICON_Strength] Combat Strength while on {terr_strings[0]}.[NEWLINE]'
                 else:
                     loc_string += f'+{amount}[ICON_Strength] Combat Strength while on {", ".join(terr_strings[:-1])} and {terr_strings[-1]}.[NEWLINE]'
-            loc.append([f'LOC_{name}_DESCRIPTION', [loc_string]])
+            loc.append([f'LOC_{ability_name}_DESCRIPTION', [loc_string]])
         else:
             if len(terrain_strings) == 1:
-                loc.append([f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_Strength] Combat Strength while on {terrain_strings[0]}.']])
+                loc.append([f'LOC_{ability_name}_DESCRIPTION', [f'+{amount}[ICON_Strength] Combat Strength while on {terrain_strings[0]}.']])
             else:
-                loc.append([f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_Strength] Combat Strength while on {", ".join(terrain_strings[:-1])} and {terrain_strings[-1]}.']])
+                loc.append([f'LOC_{ability_name}_DESCRIPTION', [f'+{amount}[ICON_Strength] Combat Strength while on {", ".join(terrain_strings[:-1])} and {terrain_strings[-1]}.']])
         if do_ability:
             ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
             self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
@@ -949,7 +981,8 @@ class PromotionModifiers:
                 req_set_reqs.append({'RequirementSetId': req_set_id, 'RequirementId': req['RequirementId']})
 
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-        loc = [f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_Movement] Movement while on {landscape.capitalize()}.']]
+        loc = [ability['Description'], [f'+{amount}[ICON_Movement] Movement while on {landscape.capitalize()}.']]
+        loc.append([ability['Description'], [' '.join(word.capitalize() for word in name.replace('PROMOTION', '').split('_'))]])
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements,
                                    requirements_arguments=requirement_arguments,
                                    requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs,

@@ -37,7 +37,7 @@ class Localizer:
         logger = logging.getLogger(__name__)
         tables_to_translate = ['Buildings', 'Districts', 'Improvements', 'Projects', 'Civics', 'Policies', 'Civilizations',
                                'Leaders', 'Traits', 'Resources', 'Terrains', 'Features', 'UnitPromotions', 'UnitPromotionClasses',
-                               'Units', 'Abilities', 'Technologies', ]
+                               'Units', 'UnitAbilities', 'Technologies', ]
         weird_tables = ['CivilopediaConcepts', 'CivilizationFrontEnd']
         model_obj['missed_loc'] = {}
         col_types = []
@@ -106,7 +106,6 @@ class Localizer:
                             if table_name not in model_obj['missed_loc']:
                                 model_obj['missed_loc'][table_name] = {}
                             model_obj['missed_loc'][table_name][key] = row
-                            #text = text + ' Description'
                             continue
                     else:
                         logger.error(f'unrecognized loc_tag {col}')

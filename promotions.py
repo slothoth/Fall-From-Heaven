@@ -240,11 +240,10 @@ class Promotions:
         race_promos, trait_modifiers, race_traits = [], [], model_obj['civilizations'].races
         for promo, promo_details in full_promo_abilities.items():
             if any([i in promo_details for i in ['iMinLevel', 'BonusPrereq']]):
-                continue
-            is_race = False
+                promo_details.pop('iMinLevel', None)
+                promo_details.pop('BonusPrereq', None)
             if 'bRace' in promo_details:
                 promo_details.pop('bRace')
-                is_race = True
             if 'bEquipment' in promo_details:
                 promo_details.pop('bEquipment')
             if 'PromotionCombatType' in promo_details and 'iPromotionCombatMod' in promo_details:
@@ -260,16 +259,15 @@ class Promotions:
                     if 'TRAIT_GRANT' in promo_mod:
                         applies_to = [civ_trait for civ_trait, i in race_traits.items() if i.replace('PROMOTION_', '') in promo_mod]
                         for trait_type in applies_to:
+                            if 'DARK' in promo_mod and 'LJO' in trait_type:
+                                continue
                             trait_modifiers.append({'TraitType': trait_type, 'ModifierId': promo_mod})
                     else:
                         for dupe_promo in duplicated_promos:
                             if promo in dupe_promo['UnitPromotionType']:
                                 unit_promotion_modifiers.append({'UnitPromotionType': dupe_promo['UnitPromotionType'],
                                                              'ModifierId': promo_mod})
-                    if is_race:
-                        race_promos.append(promo_mod)
 
-        print(race_promos)
         promotion_classes = [{'PromotionClassType': 'PROMOTION_CLASS_ANIMAL', 'Name': 'LOC_PROMOTION_CLASS_ANIMAL_NAME'},
                              {'PromotionClassType': 'PROMOTION_CLASS_BEAST', 'Name': 'LOC_PROMOTION_CLASS_BEAST_NAME'},
                              {'PromotionClassType': 'PROMOTION_CLASS_ADEPT', 'Name': 'LOC_PROMOTION_CLASS_ADEPT_NAME'},
