@@ -77,7 +77,6 @@ class Artdef:
 
         artdef_total = {i['m_Name']['@text']: i for i in full_artdef['Units']}
 
-
         # reset scout, warrior
         artdef_total['UNIT_SCOUT'] = [i for i in not_uniques if 'SCOUT' in i['m_Name']['@text']][0]
 
@@ -126,7 +125,7 @@ class Artdef:
 
         total_units = set([i for i in artdef_total])
         unused = list(total_units - set(used))
-        self.logger.warning(f"{unused}")
+        self.logger.info(f"{unused}")
 
     def building_artdef(self, folder):
         string = 'Buildings.artdef'
@@ -336,7 +335,7 @@ class Artdef:
                     search_found.append(artdef_resources[mod_ref])
             else:
                 root.append(self.assign_artdef(artdef_total[vanilla_ref], mod_ref))
-                logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
+                logger.debug(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
         with open('../FallFromHeaven/Artdefs/Resources.artdef', 'w') as file:
             xmltodict.unparse(artdef_template, output=file, pretty=True)

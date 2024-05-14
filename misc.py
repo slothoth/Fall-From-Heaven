@@ -321,6 +321,7 @@ def build_policies(model_obj):
     make_or_add(model_obj['sql_inserts'], gov_adjust, 'Government_SlotCounts')
     return model_obj
 
+
 def build_improvements(model_obj):
     with open('data/XML/Terrain/CIV4ImprovementInfos.xml', 'r') as file:
         improve_dict = xmltodict.parse(file.read())['Civ4ImprovementInfos']['ImprovementInfos']['ImprovementInfo']
