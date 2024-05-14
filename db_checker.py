@@ -255,13 +255,27 @@ def check_primary_keys(model_obj):
 
 
 def localize_check(model_obj):
-    conn = sqlite3.connect('data/DebugLocalization.sqlite')
-    cursor = conn.cursor()
-    cursor.execute("SELECT Tag, Language FROM LocalizedText WHERE Language = 'en_US';")
-    tables = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    if os.path.exists('data/loc.csv'):
+        loc_table = pd.read_csv('data/loc.csv')
+    else:
+        conn = sqlite3.connect('data/DebugLocalization.sqlite')
+        cursor = conn.cursor()
+        cursor.execute("SELECT Tag, Language, Text FROM LocalizedText WHERE Language = 'en_US';")
+        loc_table = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        loc_table = pd.DataFrame().from_records(loc_table, columns=['Tag', 'Language', 'Text'])
+        loc_table.to_csv('data/loc.csv')
+
+    tables = list(loc_table.iloc[:, :2].itertuples(index=False, name=None))
     pruned = [i for i in model_obj['loc_full'] if (i['Tag'], i['Language']) in tables]
     keep = [i for i in model_obj['loc_full'] if (i['Tag'], i['Language']) not in tables]
+    compare_tuple = [(i['Language'], i['Tag']) for i in keep]
+    unique_tuple = set(compare_tuple)
+    if len(compare_tuple) != len(unique_tuple):
+        print('WARNING: There are duplicates in Localization.')
+        not_unique_tuple = [i for i in compare_tuple if i not in unique_tuple]
+        print(not_unique_tuple)
     model_obj['loc_full'] = keep
-    print(pruned)
+    print(f'{len(pruned)} localize records removed.')
+    print([i['Text'] for i in pruned])

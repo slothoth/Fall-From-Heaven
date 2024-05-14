@@ -237,9 +237,15 @@ class Promotions:
                 promo_prereqs.append({'UnitPromotion': name, 'PrereqUnitPromotion': f"{promo['PromotionPrereqOr3']}_{suffix}"})
 
         unit_promotion_modifiers = []
+        race_promos, trait_modifiers, race_traits = [], [], model_obj['civilizations'].races
         for promo, promo_details in full_promo_abilities.items():
-            if any([i in promo_details for i in ['iMinLevel', 'bRace', 'BonusPrereq', 'bEquipment']]):
-                continue
+            if any([i in promo_details for i in ['iMinLevel', 'BonusPrereq']]):
+                promo_details.pop('iMinLevel', None)
+                promo_details.pop('BonusPrereq', None)
+            if 'bRace' in promo_details:
+                promo_details.pop('bRace')
+            if 'bEquipment' in promo_details:
+                promo_details.pop('bEquipment')
             if 'PromotionCombatType' in promo_details and 'iPromotionCombatMod' in promo_details:
                 promo_details['iPromotionCombatMod'] = {
                     promo_details.pop('PromotionCombatType'): promo_details['iPromotionCombatMod']}
@@ -250,11 +256,17 @@ class Promotions:
             for i, j in promo_details.items():
                 promo_mod = model_obj['modifiers'].promotion_modifiers.choose_promo(civ4_target={i: j}, name=promo)
                 if promo_mod is not None:
-                    for dupe_promo in duplicated_promos:
-                        if promo in dupe_promo['UnitPromotionType']:
-                            unit_promotion_modifiers.append({'UnitPromotionType': dupe_promo['UnitPromotionType'],
+                    if 'TRAIT_GRANT' in promo_mod:
+                        applies_to = [civ_trait for civ_trait, i in race_traits.items() if i.replace('PROMOTION_', '') in promo_mod]
+                        for trait_type in applies_to:
+                            if 'DARK' in promo_mod and 'LJO' in trait_type:
+                                continue
+                            trait_modifiers.append({'TraitType': trait_type, 'ModifierId': promo_mod})
+                    else:
+                        for dupe_promo in duplicated_promos:
+                            if promo in dupe_promo['UnitPromotionType']:
+                                unit_promotion_modifiers.append({'UnitPromotionType': dupe_promo['UnitPromotionType'],
                                                              'ModifierId': promo_mod})
-
 
         promotion_classes = [{'PromotionClassType': 'PROMOTION_CLASS_ANIMAL', 'Name': 'LOC_PROMOTION_CLASS_ANIMAL_NAME'},
                              {'PromotionClassType': 'PROMOTION_CLASS_BEAST', 'Name': 'LOC_PROMOTION_CLASS_BEAST_NAME'},
@@ -277,4 +289,5 @@ class Promotions:
         make_or_add(model_obj['sql_inserts'], promo_prereqs + p1 + p2 + p3, 'UnitPromotionPrereqs')
         make_or_add(model_obj['sql_inserts'], promotion_classes, 'UnitPromotionClasses')
         make_or_add(model_obj['sql_inserts'], unit_promotion_modifiers, 'UnitPromotionModifiers')
+        make_or_add(model_obj['sql_inserts'], trait_modifiers, 'TraitModifiers')
         return model_obj

@@ -38,8 +38,10 @@ class Modifiers:
 
         self.complete_set = {}
         self.loc = {}
+        self.mod_string = []
 
         self.count = 0
+        self.not_implemented_count = 0
 
         self.modifier_map = {'CommerceModifiers': self.commerce_modifier,
                              'CapitalCommerceModifiers': self.capital_commerce_modifier,
@@ -160,7 +162,7 @@ class Modifiers:
 
     def organize(self, modifier=None, modifier_arguments=None, dynamic_modifier=None, trait_modifiers=None, trait=None,
                  requirements=None, requirements_arguments=None, requirements_set=None, requirements_set_reqs=None,
-                 ability=None, ability_modifiers=None, tags=None, type_tags=None, loc=None):
+                 ability=None, ability_modifiers=None, tags=None, type_tags=None, loc=None, mod_string=None):
         if isinstance(modifier, list):
             for mod in modifier:
                 self.modifiers[mod['ModifierId']] = mod
@@ -211,11 +213,28 @@ class Modifiers:
             else:
                 self.type_tags.append(type_tags)
         if loc:
-            if loc[0] in self.loc:
-                for i in loc[1]:
-                    self.loc[loc[0]].append(i)
+            if isinstance(loc[0], str):
+                if loc[0] in self.loc:
+                    for i in loc[1]:
+                        self.loc[loc[0]].append(i)
+                else:
+                    self.loc[loc[0]] = []
+                    for i in loc[1]:
+                        self.loc[loc[0]].append(i)
+
             else:
-                self.loc[loc[0]] = loc[1]
+                for loc_ in loc:
+                    if loc_[0] in self.loc:
+                        for i in loc_[1]:
+                            self.loc[loc_[0]].append(i)
+                    else:
+                        self.loc[loc_[0]] = loc_[1]
+        if mod_string:
+            if isinstance(mod_string, list):
+                for i in mod_string:
+                    self.mod_string.append(i)
+            else:
+                self.mod_string.append(mod_string)
 
     def sql_convert(self, model_obj):
         for i in [(self.modifier_arguments, 'ModifierArguments'),
@@ -227,7 +246,8 @@ class Modifiers:
                   (self.requirements_arguments, 'RequirementArguments'),
                   (self.abilities, 'UnitAbilities'),
                   (self.ability_modifiers, 'UnitAbilityModifiers'),
-                  (self.type_tags, 'TypeTags')]:
+                  (self.type_tags, 'TypeTags'),
+                  (self.mod_string, 'ModifierStrings'),]:
 
             make_or_add(model_obj['sql_inserts'], i[0], i[1])
         for modifier in self.dynamic_modifiers:
@@ -280,8 +300,8 @@ class Modifiers:
         modifier = {'ModifierId': mod_name,
                     'ModifierType': 'MODIFIER_PLAYER_ADJUST_WAR_WEARINESS'}
         modifier_args = []
-        for name, value in [('Amount', civ4_target), ('Overall', 1)]:
-            modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name, 'Type': 'ARGTYPE_IDENTITY',
+        for name_, value in [('Amount', civ4_target), ('Overall', 1)]:
+            modifier_args.append({'ModifierId': modifier['ModifierId'], 'Name': name_, 'Type': 'ARGTYPE_IDENTITY',
                                   'Value': value})
         loc = [name, [f'Accumulate {civ4_target}% less war weariness than usual.']]
         self.organize(modifier, modifier_args, loc=loc)
@@ -343,7 +363,7 @@ class Modifiers:
         dynamic_modifiers = {'ModifierType': modifier_type, 'CollectionType': 'COLLECTION_PLAYER_CAPITAL_CITY',
                              'EffectType': 'EFFECT_ADJUST_CITY_GREAT_PERSON_POINTS_MODIFIER'}
         self.organize(modifier, modifier_args, dynamic_modifier=dynamic_modifiers,
-                      loc=[my_name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
+                      loc=[name, [f'{civ4_target}% Great Person Great People points generated per turn.']])
         return [mod_id]
 
     def buildings_amenities_modifier(self, civ4_target, name, **kwargs):
@@ -758,13 +778,16 @@ class Modifiers:
 
     def damage_type_Implementation(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Damage type module, probably handled in Magic")
+        self.not_implemented_count += 1
 
     def bonus_requirementImplementation(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented")
         self.logger.debug('If we have apply a modifier to the city, with secondary requirement that we have x resource')
+        self.not_implemented_count += 1
 
     def bonus_production_modifier_building(self, civ4_target, name):
         print('MODIFIER_PLAYER_CITIES_ADJUST_BUILDING_PRODUCTION')
+        self.not_implemented_count += 1
 
     def apply_to_unit_if_in_cityImplement(self, civ4_target, name):
         modifier = {'ModifierId': 'MEDIC_INCREASE_HEAL_RATE',
@@ -775,12 +798,15 @@ class Modifiers:
         requirement_set_requirements = {'RequirementSetId': 'MEDIC_HEALING_REQUIREMENTS',
                                         'RequirementId': 'ADJACENT_UNIT_REQUIREMENT'}
         self.logger.debug(f"{name} with {civ4_target} seems possible, but awkward")
+        self.not_implemented_count += 1
 
     def feature_happiness_modifier(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented")
+        self.not_implemented_count += 1
 
     def specialistImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented")
+        self.not_implemented_count += 1
         # for idx, amount in enumerate(civ4_target['iCommerce']):
         # if int(amount) != 0:
         # yieldtype = commerce_map[idx]
@@ -794,27 +820,34 @@ class Modifiers:
 
     def no_fucking_clue(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented, who knows")
+        self.not_implemented_count += 1
 
     def magicImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Magic module")
 
     def maintenanceImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Maintenance Rework")
+        self.not_implemented_count += 1
 
     def religionImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Religion Rework")
+        self.not_implemented_count += 1
 
     def alignmentImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Alignment Rework")
+        self.not_implemented_count += 1
 
     def otherSystemImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs some other thing")
+        self.not_implemented_count += 1
         # Stuck on SpecialistValids, iLargestCityHappiness as no concept of largest cities in civ,
         # bNoDiplomacyWithEnemies, bPrereqWar
 
     def prereqImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as it is a prerequisite, how can we apply this to a policy")
+        self.not_implemented_count += 1
 
     def cantImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as it is a concept too far outside of civ vi")
+        self.not_implemented_count += 1
         # half food requirements GlobalParameters (Name: 'CITY_FOOD_CONSUMPTION_PER_POPULATION', "Value": '2.0')

@@ -1,8 +1,13 @@
 import pandas as pd
+from itertools import groupby
+from operator import itemgetter
+import re
+
 
 class PromotionModifiers:
     def __init__(self, modifier_obj):
         self.modifier_obj = modifier_obj
+        self.not_implemented_count = 0
         self.promo_map = {'PROMOTION_COMMANDO': self.existsalready,
                           'PROMOTION_LOYALTY': self.not_implemented_effect,
                           'PROMOTION_FLYING': self.existsalready,
@@ -232,10 +237,10 @@ class PromotionModifiers:
                           'PROMOTION_PROPHECY_MARK': self.armageddon,
                           'TerrainDoubleMove': self.ability_terrain_movebuff,
                           'FeatureDoubleMove': self.ability_feature_movebuff,
-                          'TerrainAttack': self.ability_terrain_or_feature_combat,
+                          'TerrainAttack': self.new_terrain_attack,
                           'TerrainDefense': self.ability_terrain_defense,
                           'Terrain_Strength': self.ability_terrain_all,
-                          'FeatureAttack': self.ability_feature_attack,
+                          'FeatureAttack': self.new_terrain_attack,
                           'FeatureDefense': self.ability_feature_defense,
                           'DamageTypeResist': self.not_implemented_damage_types,
                           'bHillsDoubleMove': self.ability_hills_movebuff,
@@ -294,18 +299,62 @@ class PromotionModifiers:
                           'iVisibilityChange': self.spyglass,
                           'CaptureUnitCombat': self.capture_ability_with_class,
                           'bTwincast': self.not_implemented_sphere,
-                          'FeatureAttacks': self.ability_feature_attack,
-                          'FeatureDefenses': self.ability_feature_defense,
-                          'FeatureDoubleMoves': self.ability_feature_movebuff,
+                          'FeatureAttacks': self.new_terrain_attack,
+                          'FeatureDefenses': self.new_terrain_attack,
+                          'FeatureDoubleMoves': self.new_terrain_movebuff,
                           'iCasterResistModify': self.not_implemented_sphere,
                           'iCombatPercentGlobalCounter': self.concept_out_of_civ_implement,
-                          'SLTH_MANA_ABILITY': self.grant_ability_mana
+                          'SLTH_MANA_ABILITY': self.grant_ability_mana,
+                          'PromotionCombatApply': self.apply_debuff_on_combat,
+                          'DamageTypeCombats': self.not_implemented_damage_types,
+                          'bImmuneToCapture': self.hardimplement,
+                          'bImmuneToMagic': self.not_implemented_damage_types,
+                          'bGraphicalOnly': self.not_needed,
+                          'UnitArtStyleType': self.not_needed,
+                          'TerrainAttacks': self.new_terrain_attack,
+                          'TerrainDefenses': self.new_terrain_attack,
+                          'TerrainDoubleMoves': self.new_terrain_movebuff,
+                          'iGroupSize': self.no_clue,
+                          'iNeutralHealChange': self.easyimplement,
+                          'iFriendlyHealChange': self.easyimplement,
+                          'iCombatLimit': self.hardimplement,
+                          'BonusAffinities': self.buff_by_resource,
+                          'iModifyGlobalCounterOnCombat': self.armageddon,
+                          'bDispellable': self.not_implemented_effect,
+                          'bRemovedByCombat': self.not_implemented_effect,
+                          'bImmuneToDefensiveStrike': self.concept_out_of_civ_implement,
+                          'iExpireChance': self.not_implemented_effect,
+                          'bBoarding': self.easyimplement,
+                          'iBetrayalChance': self.hardimplement,
+                          'iSpellCasterXP': self.hardimplement,
+                          'iFreeXPPerTurn': self.hardimplement,
+                          'bOnlyDefensive': self.not_implemented_effect,
+                          'PromotionRandomApply': self.not_implemented_effect,
+                          'PyPerTurn': self.not_implemented_effect,
+                          'bValidate': self.no_clue,
+                          'bPrereqAlive': self.hardimplement,
+                          'bAIControl': self.hardimplement,
+                          'bFlying': self.easyimplement,             # HELICOPTER?
+                          'iFreeXPFromCombat': self.easyimplement,
+                          'iMoveDiscountChange': self.easyimplement,
+                          'bHeld': self.not_implemented_effect,
+                          'bInvisible': self.hardimplement,             # Spy?
+                          'bRemovedByCasting': self.hardimplement,
+                          'bHiddenNationality': self.hardimplement,
+                          'iCombatPercentInBorders': self.easyimplement,
+                          'bImmortal': self.hardimplement,
+                          'PromotionImmune1': self.not_implemented_effect,
+                          'PromotionImmune2': self.not_implemented_effect,
+                          'bRemovedWhenHealed': self.not_implemented_effect,
+                          'iModifyGlobalCounter': self.armageddon,
+                          'bIgnoreBuildingDefense': self.easyimplement,
+                          'bWaterWalking': self.easyimplement,
+                          'iExperiencePercent': self.easyimplement
                           }
 
     def choose_promo(self, civ4_target, name):
         civ4_name = list(civ4_target.keys())[0]
         return self.promo_map[civ4_name](civ4_target, name)
-
 
     def channeling(self, civ4_target, name):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
@@ -325,8 +374,7 @@ class PromotionModifiers:
         self.modifier_obj.organize(modifier=modifier, modifier_arguments=modifier_args, ability=ability,
                                    ability_modifiers=ability_modifier, type_tags=type_tags)
 
-    def combat(self, civ4_target, name, promoclass=None, require=None, requireset=None):
-        civ4_name = list(civ4_target.keys())[0]
+    def combat(self, civ4_target, name, promoclass=None, require=None, requireset=None, loc_info=''):
         civ4_ability = list(civ4_target.values())[0]
         if isinstance(civ4_ability, dict):
             deplatted = list(civ4_target.values())[0].get('UnitCombatMod', {})
@@ -334,9 +382,12 @@ class PromotionModifiers:
             if promoclass is not None:
                 promoclass = promoclass.replace('UNITCOMBAT', 'PROMOTION_CLASS')
                 civ4_ability = int(int(civ4_ability) / 4)
+                loc_info = f'against {promoclass.replace("PROMOTION_CLASS_", "").capitalize()} units'
         mod_name = f"MODIFIER_{name}"
         modifiers = [{'ModifierId': mod_name, 'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH'}]
         modifier_args = [{'ModifierId': mod_name, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY', 'Value': civ4_ability}]
+        loc = [f'LOC_{name}_DESCRIPTION', [f'+{civ4_ability} [ICON_Strength] Combat Strength {loc_info}']]
+        mod_string = {'ModifierId': mod_name, 'Context': 'Preview', 'Text': loc[0]}
         if promoclass is not None:
             req_id = f'OPPONENT_{promoclass}_REQUIREMENT'
             master_req_set = f'{req_id}_SET'
@@ -349,22 +400,22 @@ class PromotionModifiers:
             req_set_reqs = [{'RequirementSetId': master_req_set, 'RequirementId': req_id}]
             self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements,
                                        requirements_set=requirement_sets,
-                                       requirements_arguments=requirement_arguments, requirements_set_reqs=req_set_reqs)
+                                       requirements_arguments=requirement_arguments, requirements_set_reqs=req_set_reqs,
+                                       loc=loc, mod_string=mod_string)
+
         elif require is not None:
             modifiers[0]['SubjectRequirementSetId'] = require
-
-            self.modifier_obj.organize(modifiers, modifier_args)
+            self.modifier_obj.organize(modifiers, modifier_args, loc=loc, mod_string=mod_string)
         elif requireset is not None:
             req_id = f'REQUIREMENT_{name}'
             master_req_set = f'{req_id}_SET'
             requirement_sets = [{'RequirementSetId': master_req_set, 'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'}]
             req_set_reqs = [{'RequirementSetId': master_req_set, 'RequirementId': requireset}]
             modifiers[0]['SubjectRequirementSetId'] = master_req_set
-
-            self.modifier_obj.organize(modifiers, modifier_args, requirements_set= requirement_sets,
-                                       requirements_set_reqs=req_set_reqs)
+            self.modifier_obj.organize(modifiers, modifier_args, requirements_set=requirement_sets,
+                                       requirements_set_reqs=req_set_reqs, loc=loc, mod_string=mod_string)
         else:
-            self.modifier_obj.organize(modifiers, modifier_args)
+            self.modifier_obj.organize(modifiers, modifier_args, loc=loc, mod_string=mod_string)
         return mod_name
 
     def cover_ability(self, civ4_target, name):
@@ -404,9 +455,12 @@ class PromotionModifiers:
                                   'Type': 'ARGTYPE_IDENTITY', 'Value': f'PROMOTION_CLASS_{civ4_ability}'}]
         requirement_sets = [{'RequirementSetId': master_req_set, 'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'}]
         req_set_reqs = [{'RequirementSetId': master_req_set, 'RequirementId': req_id}]
+        loc = [f'LOC_{name}_DESCRIPTION', [f'Captures defeated {civ4_ability.replace("PROMOTION_CLASS_","").capitalize()} units']]
+        mod_string = {'ModifierId': mod_name, 'Context': 'Preview', 'Text': loc[0]}
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements,
-                                   requirements_set=requirement_sets,
-                                   requirements_arguments=requirement_arguments, requirements_set_reqs=req_set_reqs)
+                                   requirements_set=requirement_sets, loc=loc,
+                                   requirements_arguments=requirement_arguments, requirements_set_reqs=req_set_reqs,
+                                   mod_string=mod_string)
         return mod_name
 
     def subdue_beast(self, civ4_target, name):
@@ -423,7 +477,8 @@ class PromotionModifiers:
                     }
         modifier_args = [{'ModifierId': modifier['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
                           'Value': civ4_ability}]
-        self.modifier_obj.organize(modifier=modifier, modifier_arguments=modifier_args)
+        loc = [f'LOC_{name}_DESCRIPTION', [f'+{civ4_ability}[ICON_Movement] Movement.']]
+        self.modifier_obj.organize(modifier=modifier, modifier_arguments=modifier_args, loc=loc)
         return mod_name
 
     def helmsman(self, civ4_target, name):
@@ -433,25 +488,25 @@ class PromotionModifiers:
         return self.pursuit(civ4_target, name)
 
     def shells(self, civ4_target, name):
-        return self.combat(civ4_target, name, require='SHELLS_REQUIREMENTS')
+        return self.combat(civ4_target, name, require='SHELLS_REQUIREMENTS', loc_info='against District Defenses.')
 
     def on_attack_bonus(self, civ4_target, name):
-        return self.combat(civ4_target, name, require='UNIT_STRONG_WHEN_ATTACKING_REQUIREMENTS')
+        return self.combat(civ4_target, name, require='UNIT_STRONG_WHEN_ATTACKING_REQUIREMENTS', loc_info='while attacking')
 
     def on_defense_bonus(self, civ4_target, name):
-        return self.combat(civ4_target, name, requireset='PLAYER_IS_DEFENDER_REQUIREMENTS')
+        return self.combat(civ4_target, name, requireset='PLAYER_IS_DEFENDER_REQUIREMENTS', loc_info='while defending')
 
     def garrison(self, civ4_target, name):
-        return self.combat(civ4_target, name, require='GARRISON_REQUIREMENTS')
+        return self.combat(civ4_target, name, require='GARRISON_REQUIREMENTS', loc_info='while in a District')
 
     def marauding(self, civ4_target, name):
-        return self.combat(civ4_target, name, require='URBAN_RAIDER_REQUIREMENTS')
+        return self.combat(civ4_target, name, require='URBAN_RAIDER_REQUIREMENTS', loc_info= 'while fighting in a District')
 
     def ability_terrain_all(self, civ4_target, name):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 0, [], [], [], [], []
         ability_modifiers = []
-        requirement_sets = []
+        requirement_sets, loc_string = [], []
         if not isinstance(civ4_ability, list):
             civ4_ability = [civ4_ability]
         attacks = set([i['iTerrainAttack'] for i in civ4_ability])
@@ -481,18 +536,21 @@ class PromotionModifiers:
             for req in requirements:
                 req_set_reqs.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
                                      'RequirementId': req['RequirementId']})
+            loc_string += f'+{amount}[ICON_Strength] Combat Strength while on {terrain.capitalize()}.'
 
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-
+        loc = [ability['Description'], [loc_string]]
+        mod_string = {'ModifierId': modifiers[0]['ModifierId'], 'Context': 'Preview', 'Text': loc[0]}
         # BUG for plural abilities this will only attach first!
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
                       requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
-                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+                      ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc, mod_string=mod_string)
         return modifiers[-1]['ModifierId']
 
     def ability_terrain_movebuff(self, civ4_target, name):                      # MOVEBUFFS HAVE FAILED REQS
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+        amount = 1
         ability_modifiers = []
         terrain = civ4_ability['TerrainType'].split('_')[1]
         # set up ability
@@ -500,7 +558,7 @@ class PromotionModifiers:
                       'ModifierType': 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT',
                       'SubjectRequirementSetId': f'{ability_name}_REQS'}]
         modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                          'Value': 1}]
+                          'Value': amount}]
 
         requirements = [{'RequirementId': f'PLOT_IS_{terrain}_REQUIREMENT',
                          'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'},
@@ -525,16 +583,16 @@ class PromotionModifiers:
 
         # set modifiers on ability
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-
+        loc = [ability['Description'], [f'+{amount}[ICON_Movement] Movement while on {terrain.capitalize()}.']]
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
                       requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
-                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+                      ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc)
         return modifiers[-1]['ModifierId']
 
     def ability_feature_movebuff(self, civ4_target, name):                      # MOVEBUFFS HAVE FAILED REQS
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
-        amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 0, [], [], [], [], []
-        requirement_sets = []
+        amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 1, [], [], [], [], []
+        requirement_sets, loc_string = [], ""
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         if 'FeatureDoubleMove' in civ4_ability:
             civ4_ability = civ4_ability['FeatureDoubleMove']
@@ -548,7 +606,7 @@ class PromotionModifiers:
                               'SubjectRequirementSetId': f'{ability_name}_{feature}_REQS'})
             modifier_args.append(
                 {'ModifierId': modifiers[idx]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                 'Value': 1})
+                 'Value': amount})
             requirements.append({'RequirementId': f'PLOT_IS_{feature}_REQUIREMENT',
                                  'RequirementType': 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES'})
             requirement_arguments.append(
@@ -559,30 +617,32 @@ class PromotionModifiers:
             for req in requirements:
                 req_set_reqs.append({'RequirementSetId': modifiers[idx]['SubjectRequirementSetId'],
                                      'RequirementId': req['RequirementId']})
+            loc_string += f'+{amount}[ICON_Movement] Movement while on {feature.capitalize()}.'
 
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-
+        loc = [ability['Description'], [loc_string]]
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
                       requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
-                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+                      ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc)
         return modifiers[-1]['ModifierId']
 
     def ability_hills_movebuff(self, civ4_target, name):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+        amount = 5
         # set up ability
         modifiers = [{'ModifierId': f"MODIFIER_{ability_name}",
                       'ModifierType': 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT',
                       'SubjectRequirementSetId': f'{ability_name}_REQS'}]
         modifier_args = [{'ModifierId': modifiers[0]['ModifierId'], 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY',
-                          'Value': 5}]
-        terrains = ['GRASSLAND_HILLS', 'PLAINS_HILLS', 'DESERT_HILLS', 'TUNDRA_HILLS', 'SNOW_HILLS']
+                          'Value': amount}]
+        terrains = ['GRASS_HILLS', 'PLAINS_HILLS', 'DESERT_HILLS', 'TUNDRA_HILLS', 'SNOW_HILLS']
         requirements = [{'RequirementId': f'PLOT_IS_{i}_TERRAIN_REQUIREMENT',
                          'RequirementType': 'REQUIREMENT_PLOT_TERRAIN_TYPE_MATCHES'} for i in terrains]
 
         requirement_arguments = [
             {'RequirementId': i['RequirementId'], 'Name': 'TerrainType', 'Type': 'ARGTYPE_IDENTITY',
-             'Value': terrains[idx]}
+             'Value': f'TERRAIN_{terrains[idx]}'}
             for idx, i in enumerate(requirements)]
 
         requirement_sets = [{'RequirementSetId': modifiers[0]['SubjectRequirementSetId'],
@@ -593,72 +653,10 @@ class PromotionModifiers:
 
         # set up attachment
         ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-
+        loc = [ability['Description'], [f'+{amount}[ICON_Movement] Movement while on Hills.']]
         self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
                       requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
-                      ability_modifiers=ability_modifiers, type_tags=type_tags)
-        return modifiers[-1]['ModifierId']
-
-    def ability_terrain_or_feature_combat(self, civ4_target, name, combat='ATTACKER', plot_req_type='TerrainType'):
-        name = name[10:]
-        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
-        amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 0, [], [], [], [], []
-        requirement_sets = []
-        if isinstance(civ4_ability, str) or isinstance(civ4_ability, int):
-            amount = civ4_ability
-        else:
-            if not isinstance(civ4_ability, list):
-                if 'FeatureAttack' in civ4_ability:
-                    civ4_ability = civ4_ability['FeatureAttack']
-                    attacks = set([i['iFeatureAttack'] for i in civ4_ability])
-                elif 'FeatureDefense' in civ4_ability:
-                    civ4_ability = civ4_ability['FeatureDefense']
-                    attacks = set([i['iFeatureDefense'] for i in civ4_ability])
-                else:
-                    civ4_ability = [civ4_ability]
-                    attacks = set([i['iFeatureAttack'] for i in civ4_ability])
-            else:
-                attacks = set([i['iFeatureAttack'] for i in civ4_ability])
-            if len(attacks) > 1:
-                self.logger.debug(' do some iterated versionahh')
-            else:
-                amount = attacks.pop()
-        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
-        mod_ability = f"MODIFIER_{ability_name}"
-        master_req_set = f'{ability_name}_REQS'
-        modifiers.append({'ModifierId': mod_ability, 'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
-                          'SubjectRequirementSetId': master_req_set})
-        modifier_args.append({'ModifierId': mod_ability, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY', 'Value': amount})
-        for idx, i in enumerate(civ4_ability):
-            plot_type = i[plot_req_type].split('_')[1]
-            requirements.append({'RequirementId': f'PLOT_IS_{plot_type}_REQUIREMENT',
-                                 'RequirementType': 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES'})
-            requirement_arguments.append(
-                {'RequirementId': requirements[idx]['RequirementId'], 'Name': 'FeatureType',
-                 'Type': 'ARGTYPE_IDENTITY', 'Value': i['FeatureType']})
-
-        terrain_satisfied = f"{master_req_set}_TERRAIN_SATISFIED"
-        requirement_sets.append({'RequirementSetId': terrain_satisfied,
-                                 'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'})
-        for req in requirements:
-            req_set_reqs.append({'RequirementSetId': terrain_satisfied,
-                                 'RequirementId': req['RequirementId']})
-
-        requirement_terrain_satisfied = f'{terrain_satisfied}_SET'
-        requirements.append({'RequirementId': requirement_terrain_satisfied,
-                             'RequirementType': 'REQUIREMENT_IS_MET'})
-        requirement_arguments.append({'RequirementId': requirement_terrain_satisfied, 'Name': 'RequirementSetId',
-                                      'Type': 'ARGTYPE_IDENTITY', 'Value': terrain_satisfied})
-
-        requirement_sets.append({'RequirementSetId': master_req_set, 'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'})
-        req_set_reqs.extend([{'RequirementSetId': master_req_set, 'RequirementId': f'PLAYER_IS_{combat}_REQUIREMENTS'},
-                             {'RequirementSetId': master_req_set, 'RequirementId': requirement_terrain_satisfied}])
-
-        ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
-
-        self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
-                      requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
-                      ability_modifiers=ability_modifiers, type_tags=type_tags)
+                      ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc)
         return modifiers[-1]['ModifierId']
 
     def ability_terrain_defense(self, civ4_target, name):
@@ -692,15 +690,18 @@ class PromotionModifiers:
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         trait_mod_name = f"TRAIT_{ability_name}"
-        modifiers, modifier_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH', 5)
+        amount = 5
+        modifiers, modifier_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH', amount)
         ability, ab_modifiers, ab_mod_args = self.ability_trait(ability_name, trait_mod_name)
         modifiers, modifier_args = modifiers + ab_modifiers, modifier_args + ab_mod_args
         ability_modifiers = []
         for i in modifiers[:-1]:
             ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': i['ModifierId']})
         type_tags = {'Type': ability_name, 'Tag': promoclass}
+        loc = [ability['Description'], [f'+{amount}[ICON_STRENGTH] Combat Strength.']]
+
         self.modifier_obj.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifiers,
-                      type_tags=type_tags)
+                                   type_tags=type_tags, loc=loc)
         return trait_mod_name
 
     def ability_ranged_buff(self, civ4_target, name):
@@ -708,21 +709,24 @@ class PromotionModifiers:
 
     def trait_agnostic(self, civ4_target, name):
         print(f"{name}'s {civ4_target} not implemented, use Mvemba? + NULL replace religious units")
+        self.not_implemented_count +=1
 
     def trait_horselord(self, civ4_target, name):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         trait_mod_name = f"TRAIT_{ability_name}"
-        modifiers, modifier_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH', 5)
-        mod_move, mod_move_args = self.ability_buff_unit_type(f'{ability_name}_MOVE', 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT', 1)
+        combat_amount, move_amount = 5, 1
+        modifiers, modifier_args = self.ability_buff_unit_type(ability_name, 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH', combat_amount)
+        mod_move, mod_move_args = self.ability_buff_unit_type(f'{ability_name}_MOVE', 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT', move_amount)
         ability, ab_modifiers, ab_mod_args = self.ability_trait(ability_name, trait_mod_name)
         modifiers, modifier_args = modifiers + mod_move + ab_modifiers, modifier_args + mod_move_args + ab_mod_args
         type_tags = {'Type': ability_name, 'Tag': 'CLASS_LIGHT_CAVALRY'}
         ability_modifiers = []
         for i in modifiers[:-1]:
             ability_modifiers.append({'UnitAbilityType': ability_name, 'ModifierId': i['ModifierId']})
+        loc = [f'LOC_SLTH_{name}_DESCRIPTION', [f'+{move_amount}[ICON_Movement] Movement, +{combat_amount}[ICON_Strength] Combat Strength.']]
         self.modifier_obj.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifiers,
-                      type_tags=type_tags)
+                      type_tags=type_tags, loc=loc)
         return modifiers[-1]['ModifierId']
 
     def one_of_unit_setter(self, civ4_target, name):
@@ -745,6 +749,7 @@ class PromotionModifiers:
         tags = {'Tag': f'SLTH_CLASS_{civ4_name.upper()}', 'Vocabulary': 'ABILITY_CLASS'}
         type_tags = [{'Type': ability_name, 'Tag': tags['Tag']},
                      {'Type': civ4_name, 'Tag': tags['Tag']}]
+
         self.modifier_obj.organize(modifiers, modifier_args, ability=ability, ability_modifiers=ability_modifier, tags=tags,
                       type_tags=type_tags)
         return
@@ -780,13 +785,16 @@ class PromotionModifiers:
         requirement_sets = [{'RequirementSetId': master_req_set, 'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'}]
         req_set_reqs = [{'RequirementSetId': master_req_set, 'RequirementId': 'PLAYER_IS_DEFENDER_REQUIREMENTS'},
                         {'RequirementSetId': master_req_set, 'RequirementId': 'PLOT_IS_HILLS_REQUIREMENT'}]
+        loc = [f'LOC_{name}_DESCRIPTION', [f'+{civ4_ability}[ICON_Strength] Combat Strength while on Hills.']]
+        mod_string = {'ModifierId': promo_mod, 'Context': 'Preview', 'Text': loc[0]}
         self.modifier_obj.organize(modifiers, modifier_args, requirements_set=requirement_sets,
-                                   requirements_set_reqs=req_set_reqs)
+                                   requirements_set_reqs=req_set_reqs, loc=loc, mod_string=mod_string)
         return promo_mod
 
     def remake_modifier(self, modifier, original, change):
         modifier_table = pd.read_csv('data/tables/modifiers.csv')
         modifier_table_args = pd.read_csv('data/tables/modifierArguments.csv')
+        modifier_strings = pd.read_csv('data/tables/modifierStrings.csv')
         mod_existing = modifier_table[modifier_table['ModifierId'] == original]
         mod_arg_existing = modifier_table_args[modifier_table_args['ModifierId'] == original]
         modifier_object = {'Modifiers': [], 'ModifierArguments': []}
@@ -802,12 +810,14 @@ class PromotionModifiers:
             for col, val in ch.items():
                 for j in modifier_object[table]:
                     j[col] = val
+        #loc = [f'LOC_{name}_DESCRIPTION', [f'+{amount}[ICON_Movement] Movement while on {feature.capitalize()}.']]
         self.modifier_obj.organize(modifier_object['Modifiers'], modifier_object['ModifierArguments'])
 
     def heal_every_move(self, civ4_target, name):
         promo_mod = f'MODIFIER_{name}'
         modifiers = [{"ModifierId": promo_mod, "ModifierType": "MODIFIER_PLAYER_UNIT_GRANT_HEAL_AFTER_ACTION"}]
-        self.modifier_obj.organize(modifiers)
+        loc = [f'LOC_{name}_DESCRIPTION', ['Always heal at end of turn.']]
+        self.modifier_obj.organize(modifiers, loc=loc)
         return promo_mod
 
     def spyglass(self, civ4_target, name):
@@ -824,8 +834,13 @@ class PromotionModifiers:
                           "Type": "ARGTYPE_IDENTITY", "Value": "ALL"},
                          {"ModifierId": promo_mod,
                           "Name": "Amount", "Type": "ARGTYPE_IDENTITY", "Value": value}]
-        self.modifier_obj.organize(modifiers, modifier_args)
+        loc = [f'LOC_{name}_DESCRIPTION', [f'+{value} Healing in any territory.']]
+        self.modifier_obj.organize(modifiers, modifier_args, loc=loc)
         return promo_mod
+
+    def apply_debuff_on_combat(self, civ4_target, name):
+        print('Need debuff work done first.')
+        self.not_implemented_count += 1
 
     def grant_ability_mana(self, civ4_target, name):
         civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
@@ -857,54 +872,191 @@ class PromotionModifiers:
         return trait_mod_name
 
 
+    def new_terrain_attack(self, civ4_target, name, do_ability=True):
+        name = name[10:]
+        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
+        selector = civ4_name[:-1]
+        i_selector = 'i' + selector
+        split = re.findall('[A-Z][^A-Z]*', civ4_name)
+        plot_req = split[0]
+        combat = split[1][:-1].upper().replace('ATTACK', 'ATTACKER').replace('DEFENSE', 'DEFENDER')
+        plot_req_type, plot_req_upper = plot_req + 'Type', plot_req.upper() + '_TYPE'
+        modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = [], [], [], [], []
+        requirement_sets = []
+        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+        mod_ability = f"MODIFIER_{ability_name}"
+        master_req_set = f'{ability_name}_REQS'
+        loc, mod_string, terrain_strings = [], [], []
+        civ4_values = list(civ4_ability.values())[0]
+        if not isinstance(civ4_values, list):
+            civ4_values = [civ4_values]
+        for idx, i in enumerate(civ4_values):
+            terrain_type = i[plot_req_type]
+            amount = i[i_selector]
+            req_id = f'PLOT_IS_{plot_req_upper}_REQUIREMENT'
+            terrain_pretty_text = terrain_type.replace("TERRAIN_", "")
+            prettier = " ".join(terrain_pretty_text.split('_')).capitalize().replace('Feature ', '').replace('forest ancient', 'Ancient Forest').replace('forest', 'Woods').replace('Jungle', 'Rainforest')
+            terrain_strings.append(prettier)
+            specific_mod = f'{mod_ability}_{terrain_pretty_text}'
+            specific_req_set = f'{master_req_set}_{terrain_pretty_text}'
+            modifiers.append({'ModifierId': specific_mod, 'ModifierType': 'MODIFIER_UNIT_ADJUST_COMBAT_STRENGTH',
+                              'SubjectRequirementSetId': specific_req_set})
+            modifier_args.append(
+                {'ModifierId': specific_mod, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY', 'Value': amount})
+            requirements.append({'RequirementId': req_id,
+                                 'RequirementType': f'REQUIREMENT_PLOT_{plot_req_upper}_MATCHES'})
+            requirement_arguments.append(
+                {'RequirementId': req_id, 'Name': plot_req_type,
+                 'Type': 'ARGTYPE_IDENTITY', 'Value': terrain_type})
+            requirement_sets.append(
+                {'RequirementSetId': specific_req_set, 'RequirementSetType': 'REQUIREMENTSET_TEST_ALL'})
+            req_set_reqs.extend(
+                [{'RequirementSetId': specific_req_set, 'RequirementId': f'PLAYER_IS_{combat}_REQUIREMENTS'},
+                 {'RequirementSetId': specific_req_set, 'RequirementId': req_id}])
+            loc_to_add = [f'LOC_{ability_name}_{terrain_pretty_text}_PREVIEW', f'+{amount}[ICON_Strength] Combat Strength while on {prettier}.']
+            loc.append(loc_to_add)
+            mod_string.append({'ModifierId': specific_mod, 'Context': 'Preview', 'Text': loc_to_add[0]})
+
+        sort_by_strength = {k: list(v) for k, v in groupby(civ4_values, key=itemgetter(i_selector))}
+        if len(sort_by_strength) > 1:
+            loc_string = ''
+            for amount, amount_list in sort_by_strength.items():
+                terr_strings = [i['TerrainType'].replace('TERRAIN_', '').capitalize() for i in amount_list]
+                if len(terr_strings) == 1:
+                    loc_string += f'+{amount}[ICON_Strength] Combat Strength while on {terr_strings[0]}.[NEWLINE]'
+                else:
+                    loc_string += f'+{amount}[ICON_Strength] Combat Strength while on {", ".join(terr_strings[:-1])} and {terr_strings[-1]}.[NEWLINE]'
+            loc.append([f'LOC_{ability_name}_DESCRIPTION', [loc_string]])
+        else:
+            if len(terrain_strings) == 1:
+                loc.append([f'LOC_{ability_name}_DESCRIPTION', [f'+{amount}[ICON_Strength] Combat Strength while on {terrain_strings[0]}.']])
+            else:
+                loc.append([f'LOC_{ability_name}_DESCRIPTION', [f'+{amount}[ICON_Strength] Combat Strength while on {", ".join(terrain_strings[:-1])} and {terrain_strings[-1]}.']])
+        if do_ability:
+            ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
+            self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements, requirements_arguments=requirement_arguments,
+                          requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, ability=ability,
+                          ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc, mod_string=mod_string)
+            return modifiers[-1]['ModifierId']
+        self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements,
+                                   requirements_arguments=requirement_arguments,
+                                   requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs, loc=loc,
+                                   mod_string=mod_string)
+        return modifiers
+
+
+
+    def new_terrain_attack_no_trait(self, civ4_target, name):
+        return self.new_terrain_attack(civ4_target, name, False)
+
+    def new_terrain_movebuff(self, civ4_target, name):
+        civ4_name, civ4_ability = list(civ4_target.keys())[0], list(civ4_target.values())[0]
+        selector = re.findall('[A-Z][^A-Z]*', civ4_name)[0]
+        landscape_upper = selector.upper() + '_TYPE'
+        landscape_camel = selector + 'Type'
+        selector = selector + 'DoubleMove'
+        amount, modifiers, modifier_args, requirements, requirement_arguments, req_set_reqs = 1, [], [], [], [], []
+        requirement_sets = []
+        ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
+        civ4_ability = civ4_ability[selector]
+        if not isinstance(civ4_ability, list):
+            civ4_ability = [civ4_ability]
+        for idx, i in enumerate(civ4_ability):
+            landscape = i[landscape_camel].split('_')[1]
+            if 'ANCIENT' in i[landscape_camel]:
+                landscape = 'ANCIENT_FOREST'
+            mod_id = f"MODIFIER_{ability_name}_{landscape}"
+            req_id = f'PLOT_IS_{landscape}_REQUIREMENT'
+            req_set_id = f'{ability_name}_{landscape}_REQS'
+            modifiers.append({'ModifierId': mod_id, 'ModifierType': 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT',
+                              'SubjectRequirementSetId': req_set_id})
+            modifier_args.append({'ModifierId': mod_id, 'Name': 'Amount', 'Type': 'ARGTYPE_IDENTITY', 'Value': amount})
+            requirements.append({'RequirementId': req_id,
+                                 'RequirementType': f'REQUIREMENT_PLOT_{landscape_upper}_MATCHES'})
+            requirement_arguments.append({'RequirementId': req_id, 'Name': landscape_camel, 'Type': 'ARGTYPE_IDENTITY',
+                                          'Value': i[landscape_camel]})
+            requirement_sets.append({'RequirementSetId': req_set_id,
+                                     'RequirementSetType': 'REQUIREMENTSET_TEST_ANY'})
+            for req in requirements:
+                req_set_reqs.append({'RequirementSetId': req_set_id, 'RequirementId': req['RequirementId']})
+
+        ability, ability_modifiers, type_tags = ability_and_modifier_attach(ability_name, modifiers, modifier_args)
+        loc = [ability['Description'], [f'+{amount}[ICON_Movement] Movement while on {landscape.capitalize()}.']]
+        loc.append([ability['Description'], [' '.join(word.capitalize() for word in name.replace('PROMOTION', '').split('_'))]])
+        self.modifier_obj.organize(modifiers, modifier_args, requirements=requirements,
+                                   requirements_arguments=requirement_arguments,
+                                   requirements_set=requirement_sets, requirements_set_reqs=req_set_reqs,
+                                   ability=ability,
+                                   ability_modifiers=ability_modifiers, type_tags=type_tags, loc=loc)
+        return modifiers[-1]['ModifierId']
+
+
     def not_implemented_effect(self, civ4_target, name):
         print('not implemented as is a temporary spell effect. Use Requirement Likeliness?')
+        self.not_implemented_count += 1
 
 
     def not_implemented_sphere(self, civ4_target, name):
         print('not implemented as is a magic sphere')
+        self.not_implemented_count += 1
 
     def not_implemented_equipment(self, civ4_target, name):
         print('not implemented as is a a part of equipment module')
+        self.not_implemented_count += 1
 
     def not_implemented_damage_types(self, civ4_target, name):
         print(f"{name}'s {civ4_target} not implemented as needs Magic module")
+        self.not_implemented_count += 1
 
     def race(self, civ4_target, name):
         print(f"{name}'s {civ4_target} already made in civilizatins kinda, we should port to here")
 
     def easyimplement(self, civ4_target, name):
         print(f"{name}'s {civ4_target} should be easy to make")
+        self.not_implemented_count += 1
 
     def hardimplement(self, civ4_target, name):
         print(f"{name}'s {civ4_target} should be hard to make")
+        self.not_implemented_count += 1
 
     def ability_sundered(self, civ4_target, name):
         print(f"{name}'s {civ4_target} not implemented, as needs argageddon module to function")
+        self.not_implemented_count += 1
 
     def trait_fallow(self, civ4_target, name):
         print(f"{name}'s {civ4_target} not implemented, as no food growth/loss seems hard to do. Maybe just SETS food to 0, not negative, not positive?")
+        self.not_implemented_count += 1
 
     def concept_out_of_civ_implement(self, civ4_target, name):
         print(f"{name}'s {civ4_target} doesnt make sense in civ vi")
+        self.not_implemented_count += 1
 
     def existsalready(self, civ4_target, name):
         print(f"{name}'s {civ4_target} already has a feature in base game")
+        self.not_implemented_count += 1
 
     def ship_refitting(self, civ4_target, name):
         print(f"{name}'s {civ4_target}, Not implemented, ship refitting stuff module")
+        self.not_implemented_count += 1
 
     def armageddon(self, civ4_target, name):
         print(f"{name}'s {civ4_target}, Not implemented, armageddon module")
+        self.not_implemented_count += 1
 
     def effect_conditional_end(self, civ4_target, name):
         print(f"{name}'s {civ4_target}, Not implemented, effect module but needs detached")
+        self.not_implemented_count += 1
 
     def buff_by_resource(self, civ4_target, name):
         print(f"{name}'s {civ4_target}, Not implemented, resource buff module")
+        self.not_implemented_count += 1
 
     def no_clue(self, civ4_target, name):
         print(f"{name}'s {civ4_target}, uhhh no idea")
+        self.not_implemented_count += 1
+
+    def not_needed(self, civ4_target, name):
+        return
 
 
 
