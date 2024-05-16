@@ -10,10 +10,14 @@ class Artdef:
     def __init__(self):
         with open("plans/asset_map_plan.json", 'r') as json_file:
             self.asset_map = json.load(json_file)
-        os_name = platform.system()
-        self.folder = os.environ.get('FOLDER', None)
-        if self.folder is None:
-            raise EnvironmentError("You need to set an environment variable that is the filepath of your Civ VI installation.")
+        with open("data/config.json", 'r') as json_file:
+            config = json.load(json_file)
+        self.folder = config.get('civ_install', None)
+        if self.folder == "YOUR_DIRECTORY_HERE":
+            self.folder = os.environ.get('CIV_INSTALL', None)
+            if self.folder is None:
+                raise FileNotFoundError(
+                    "Set your civ VI install filepath in config.json.")
 
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)

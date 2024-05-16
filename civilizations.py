@@ -16,8 +16,8 @@ civ_extras_mapper = {'Type': 'CivilizationType', 'Cities': 'Cities', 'Leaders': 
 
 ethnicity_mapper = {}       # TODO design doc decision
 
-# For lanun Pearls INSERT INTO MY_TABLE(ModifierId, Name, Type, "Value") VALUES ('GOVERNOR_PROMOTION_HERMETIC_ORDER_1_UNLOCK_LEY_LINE', 'ResourceType', 'ARGTYPE_IDENTITY', 'RESOURCE_LEY_LINE');
 
+# For lanun Pearls INSERT INTO MY_TABLE(ModifierId, Name, Type, "Value") VALUES ('GOVERNOR_PROMOTION_HERMETIC_ORDER_1_UNLOCK_LEY_LINE', 'ResourceType', 'ARGTYPE_IDENTITY', 'RESOURCE_LEY_LINE');
 class Civilizations:
     def __init__(self):
         self.trait_modifiers = []
