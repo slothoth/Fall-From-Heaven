@@ -2,6 +2,7 @@ import glob
 import json
 from xml_handler import dict_to_xml, xml_to_string, pretty_print_xml, save_pretty_xml_to_file, read_xml
 from utils import make_or_add
+import os
 
 
 def make_colors(model_obj):
@@ -9,8 +10,10 @@ def make_colors(model_obj):
         config = json.load(json_file)
     folder = config.get('civ_install', None)
     if folder == "YOUR_DIRECTORY_HERE":
-        raise FileNotFoundError(
-            "Set your civ VI install filepath in config.json.")
+        folder = os.environ.get('CIV_INSTALL', None)
+        if folder is None:
+            raise FileNotFoundError(
+                "Set your civ VI install filepath in config.json.")
     map_set = get_colors(folder, None)
     make_or_add(model_obj['sql_inserts'], map_set, 'PlayerColors')
 
@@ -85,12 +88,12 @@ def get_colors(folder, config):
                     new_color_set[mod_ref]['Type'] = mod_ref
                     search_found.append(assets[mod_ref])
                     used.append(vanilla_ref)
-                    print(f'Found partial match for specified {vanilla_ref}. {mod_ref} now uses {search[0]}')
+                    print(f'Found partial match for specified {vanilla_ref}. {mod_ref} now uses {search[0]} colours')
         else:
             new_color_set[mod_ref] = full_artdef[vanilla_ref].copy()
             new_color_set[mod_ref]['Type'] = mod_ref
             used.append(vanilla_ref)
-            print(f"Success! {mod_ref} now uses {full_artdef[vanilla_ref]['Type']}")
+            print(f"Success! {mod_ref} now uses {full_artdef[vanilla_ref]['Type']} colours")
 
     new_colors = []
     for d in new_color_set.values():
