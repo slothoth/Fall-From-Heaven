@@ -11,6 +11,7 @@ from localiser import Localizer, custom_loc
 from db_checker import check_primary_keys, localize_check
 from prebuilt_transfer import main as prebuilt_transfer
 from artdef_wrangler import Artdef
+from leader_art import make_colors
 
 import json
 import logging
@@ -38,8 +39,8 @@ def main():
     build_terrains_string(model_obj)
     build_features_string(model_obj)
     build_improvements(model_obj)
+    make_colors(model_obj)
     prereq_techs(model_obj)
-
     Buildings(civs).buildings_sql(model_obj)
     districts_build(model_obj)
     make_or_add(model_obj['sql_inserts'], model_obj['traits'], 'Traits')
