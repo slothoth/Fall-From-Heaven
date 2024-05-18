@@ -238,7 +238,9 @@ class Promotions:
 
         unit_promotion_modifiers = []
         race_promos, trait_modifiers, race_traits = [], [], model_obj['civilizations'].races
+        ability_map = {}
         for promo, promo_details in full_promo_abilities.items():
+            ability_map[promo] = []
             if any([i in promo_details for i in ['iMinLevel', 'BonusPrereq']]):
                 promo_details.pop('iMinLevel', None)
                 promo_details.pop('BonusPrereq', None)
@@ -263,6 +265,7 @@ class Promotions:
                                 continue
                             trait_modifiers.append({'TraitType': trait_type, 'ModifierId': promo_mod})
                     else:
+                        ability_map[promo].append(promo_mod)
                         for dupe_promo in duplicated_promos:
                             if promo in dupe_promo['UnitPromotionType']:
                                 unit_promotion_modifiers.append({'UnitPromotionType': dupe_promo['UnitPromotionType'],
@@ -284,6 +287,8 @@ class Promotions:
         for promo in duplicated_promos:
             promo['Column'] = unique_positions_structured[promo['PromotionClass']][promo['oldname']].pop() + 1
             promo.pop('oldname')
+
+        model_obj['ability_map'] = ability_map
 
         make_or_add(model_obj['sql_inserts'], duplicated_promos, 'UnitPromotions')
         make_or_add(model_obj['sql_inserts'], promo_prereqs + p1 + p2 + p3, 'UnitPromotionPrereqs')

@@ -5,7 +5,83 @@
 <Context>
 	<Grid ID="SettleButtonGrid" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
 		<Button ID="SettleButton" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
-			<Image ID="SettleButtonIcon"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_AREA_DAMAGE_HEAL"/>
+			<Image ID="SettleButtonIcon"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridAir" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="Air Spell" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonAir" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconAir"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_AREA_DAMAGE_HEAL"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridBody" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="Body	Summon" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonBody" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconBody"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_TRANSFORM_UNIT"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridChaos" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonChaos" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconChaos"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+
+	<Grid ID="SettleButtonGridDeath" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonDeath" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconDeath"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridEarth" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonEarth" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconEarth"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridEnchantment" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonEnchantment" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconEnchantment"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridEntropy" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonEntropy" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconEntropy"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridFire" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonFire" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconFire"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridLife" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonLife" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconLife"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridMetamagic" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonMetamagic" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconMetamagic"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridMind" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonMind" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconMind"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridNature" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonNature" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconNature"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridShadow" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonShadow" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconShadow"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridSpirit" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonSpirit" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconSpirit"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
+	<Grid ID="SettleButtonGridWater" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_FLACS_ANDY_LAW_SPECIAL_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonWater" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonIconWater"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
 		</Button>
 	</Grid>
 </Context>
