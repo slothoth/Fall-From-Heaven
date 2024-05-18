@@ -46,10 +46,13 @@ def save_pretty_xml_to_file(xml_string, filename):
         f.write(xml_string)
 
 
-def read_xml(filepath):
+def read_xml(filepath, as_xml=False):
     tree = ET.parse(filepath)
     t = tree.getroot()
-    return etree_to_dict(t)
+    if as_xml:
+        return tree
+    else:
+        return etree_to_dict(t)
 
 
 def etree_to_dict(t):
