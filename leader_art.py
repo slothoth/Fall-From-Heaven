@@ -23,7 +23,8 @@ def get_colors(folder, config):
             f'No files were found that match Units.artdef. Make sure your config.json points to your civ VI directory.')
 
     artdef_info = read_xml(artdefs[0])
-    full_artdef = {i['Type']: i for i in artdef_info['GameInfo']['PlayerColors']['Row']}
+    root_1, root_2, root_3 = navigate_xml(artdef_info)
+    full_artdef = {i['Type']: i for i in artdef_info[root_1][root_2][root_3]}
 
     for artdef in artdefs[1:]:
         artdef_info = read_xml(artdef)
@@ -100,6 +101,28 @@ def get_colors(folder, config):
     [(i.pop('Alt3PrimaryColor'), i.pop('Alt3SecondaryColor'), i.pop('Alt2PrimaryColor'), i.pop('Alt2SecondaryColor'),
       i.pop('Alt1PrimaryColor'), i.pop('Alt1SecondaryColor')) for i in new_color_set.values()]
     return new_color_set
+
+
+def navigate_xml(artdef_info):
+    if 'GameInfo' in artdef_info:
+        root_1 = 'GameInfo'
+    elif 'Database' in artdef_info:
+        root_1 = 'Database'
+    else:
+        raise ValueError
+    if 'PlayerColors' in artdef_info[root_1]:
+        root_2 = 'PlayerColors'
+    elif 'Colors' in artdef_info[root_1]:
+        root_2 = 'Colors'
+    else:
+        raise ValueError
+    if 'Row' in artdef_info[root_1][root_2]:
+        root_3 = 'Row'
+    elif 'Replace' in artdef_info[root_1][root_2]:
+        root_3 = 'Replace'
+    else:
+        raise ValueError
+    return root_1, root_2, root_3
 
 """
 INSERT INTO LoadingInfo
