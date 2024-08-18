@@ -82,9 +82,9 @@ class Artdef:
         artdef_total = {i['m_Name']['@text']: i for i in full_artdef['Units']}
 
         # reset scout, warrior
-        artdef_total['UNIT_SCOUT'] = [i for i in not_uniques if 'SCOUT' in i['m_Name']['@text']][0]
+        artdef_total['UNIT_SCOUT_CAT'] = [i for i in not_uniques if 'SCOUT' in i['m_Name']['@text']][0]
 
-        artdef_total['UNIT_WARRIOR'] = [i for i in not_uniques if 'WARRIOR' in i['m_Name']['@text']][0]
+        artdef_total['UNIT_ZOMBIE'] = [i for i in not_uniques if 'WARRIOR' in i['m_Name']['@text']][0]
 
         with open("plans/asset_map_plan.json", 'r') as json_file:
             artdef_map = json.load(json_file)

@@ -79,12 +79,8 @@ class Modifiers:
 
         not_implemented = {'iHealRateChange': self.apply_to_unit_if_in_cityImplement,
                            'iResistMagic': self.apply_to_unit_if_in_cityImplement,
-                           'Upkeep': self.maintenanceImplement,
-                           'iMaintenanceModifier': self.maintenanceImplement,
-                           'iNumCitiesMaintenanceModifier': self.maintenanceImplement,
-                           'iDistanceMaintenanceModifier': self.maintenanceImplement,
-                           'iFreeUnitsPopulationPercent': self.maintenanceImplement,
-                           'bGovernmentCenter': self.maintenanceImplement,
+                           'Upkeep': self.policyMaintenanceImplement,
+                           'iFreeUnitsPopulationPercent': self.unitMaintenanceImplement,
                            'bNoNonStateReligionSpread': self.religionImplement,
                            'bStateReligion': self.religionImplement,
                            'iStateReligionHappiness': self.religionImplement,
@@ -152,9 +148,16 @@ class Modifiers:
                               'SLTH_PROMOTION': self.promotion_builder,
                               'SLTH_MANA': self.mana_modifier}
 
+        lua_implemented = {'bGovernmentCenter': self.maintenanceImplement,
+                           'iMaintenanceModifier': self.maintenanceImplement,
+                           'iNumCitiesMaintenanceModifier': self.maintenanceImplement,
+                           'iDistanceMaintenanceModifier': self.maintenanceImplement
+                           }
+
         self.modifier_map.update(not_implemented)
         self.modifier_map.update(somewhat_botched)
         self.modifier_map.update(my_own_implemented)
+        self.modifier_map.update(lua_implemented)
 
     def generate_modifier(self, civ4_target, name, civ6_target):
         modifier_id = self.modifier_map[name](civ4_target, civ6_target)
@@ -826,6 +829,14 @@ class Modifiers:
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Magic module")
 
     def maintenanceImplement(self, civ4_target, name):
+        self.logger.debug(f"{name}'s {civ4_target} implemented in lua")
+        self.not_implemented_count += 1
+
+    def policyMaintenanceImplement(self, civ4_target, name):
+        self.logger.debug(f"{name}'s {civ4_target} implemented in lua")
+        self.not_implemented_count += 1
+
+    def unitMaintenanceImplement(self, civ4_target, name):
         self.logger.debug(f"{name}'s {civ4_target} not implemented as needs Maintenance Rework")
         self.not_implemented_count += 1
 

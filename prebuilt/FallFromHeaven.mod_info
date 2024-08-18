@@ -14,6 +14,11 @@
     <Mod id="4873eb62-8ccc-4574-b784-dda455e74e68" title="LOC_EXPANSION2_MOD_TITLE"/>
     <Mod id="8424840C-92EF-4426-A9B4-B4E0CB818049" title="LOC_BABYLON_MOD_TITLE" />
   </Dependencies>
+  <ActionCriteria>
+    <Criteria id="Expansion2">
+      <GameCoreInUse>Expansion2</GameCoreInUse>
+    </Criteria>
+  </ActionCriteria>
   <FrontEndActions>
     <UpdateDatabase id="config">
       <Properties>
@@ -29,7 +34,7 @@
     </UpdateArt>
    </FrontEndActions>
   <UpdateIcons id="Icons">
-          <File>Icons.xml</File>
+    <File>Icons.xml</File>
   </UpdateIcons>
   <InGameActions>
     <UpdateArt id="Art">
@@ -46,6 +51,7 @@
       <File>Core/localization.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
+      <File>Lua/Maintenance.lua</File>
 	  <File>Lua/ExtraHeroes.lua</File>
       <File>Lua/Gameplay.lua</File>
     </AddGameplayScripts>
@@ -55,6 +61,21 @@
       </Properties>
 	  <File>UI/ExtraHeroesOperation.xml</File>
     </AddUserInterfaces>
+    <ImportFiles id="LUA_Replacers">
+      <Properties>
+        <LoadOrder>150000</LoadOrder>
+      </Properties>
+      <File>UI/ToolTipHelper_PlayerYields.lua</File>
+      <File>UI/TopPanel.lua</File>
+      <File>UI/ReportScreen.lua</File>
+      <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
+    </ImportFiles>
+    <ImportFiles id="LUA_Replacers_XP2" criteria="Expansion2">
+      <Properties>
+        <LoadOrder>150005</LoadOrder>
+      </Properties>
+      <File>UI/XP2/TopPanel.lua</File>
+    </ImportFiles>
     <UpdateIcons id="Icons">
       <File>Icons.xml</File>
     </UpdateIcons>
@@ -63,20 +84,26 @@
     <File>Core/localization.sql</File>
     <File>Core/main.sql</File>
     <File>Core/frontend_config.sql</File>
+    <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Gameplay.lua</File>
+    <File>Lua/Maintenance.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>
     <File>ArtDefs/Buildings.artdef</File>
+    <File>Artdefs/FallbackLeaders.artdef</File>
+    <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons.xml</File>
     <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
-    <File>XLP/LeaderFallbacks.xlp</File>
-    <File>Artdefs/FallbackLeaders.artdef</File>
-    <File>Core/Assets_ingame.sql</File>
+    <File>UI/ToolTipHelper_PlayerYields.lua</File>
+    <File>UI/TopPanel.lua</File>
+    <File>UI/XP2/TopPanel.lua</File>
+    <File>UI/ReportScreen.lua</File>
+    <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
   </Files>
 </Mod>

@@ -103,4 +103,4 @@ def generate_mod_art(save_file_location):
     save_pretty_xml_to_file(pretty_xml_string, save_file_location)
 
 
-generate_mod_art('FallFromHeaven.Mod.art.xml')
+# generate_mod_art('FallFromHeaven.Mod.art.xml')

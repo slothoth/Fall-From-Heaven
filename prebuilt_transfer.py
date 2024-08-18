@@ -12,10 +12,9 @@ def main():
     for directory_name in all_directories:
         source_path = os.path.join(source_directory, directory_name)
         destination_path = os.path.join(destination_directory, directory_name)
-        if os.path.exists(destination_path):
-            shutil.rmtree(destination_path)
-        shutil.copytree(source_path, destination_path)
-
+        existing_to_replace = [i for i in os.listdir(source_path) if i in os.listdir(destination_path) and not os.path.isdir(f'{source_path}/{i}')]
+        for i in existing_to_replace:
+            shutil.copy(f'{source_path}/{i}', f'../FallFromHeaven/{directory_name}/{i}')
     for file_name in all_files:
         source_path = os.path.join(source_directory, file_name)
         destination_path = os.path.join(destination_directory, file_name)
