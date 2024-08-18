@@ -254,20 +254,17 @@ class Units:
             model_obj['modifiers'].generate_modifier({'SLTH_CHANNELING': unit_name}, 'SLTH_DEFAULT_RACE', 'CHANNELING')
 
     def free_promotions_builder(self, free_promotions, model_obj):
-        for i in free_promotions:
-            name = i['UnitType']
-            promos = i['FreePromotion']
-            if isinstance(promos, dict):
-                promos = [promos]
-            i['FreePromotion'] = [i['PromotionType'] for i in promos]
-
         my_l = []
         for promo in free_promotions:
+            promos = promo['FreePromotion']
+            if isinstance(promos, dict):
+                promos = [promos]
+            promo['FreePromotion'] = [i['PromotionType'] for i in promos]
             unit_name = promo['UnitType']
             promotions = promo['FreePromotion']
             for promo in promotions:
                 my_l.append(promo)
-                #model_obj['modifiers'].generate_modifier({promo: unit_name}, 'SLTH_DEFAULT_RACE', 'CHANNELING')
+                model_obj['modifiers'].generate_modifier({promo: unit_name}, 'SLTH_DEFAULT_RACE', 'CHANNELING')
 
         print(set(my_l))
 

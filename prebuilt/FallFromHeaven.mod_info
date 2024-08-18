@@ -42,8 +42,8 @@
       <File>Core/localization.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
-      <Criteria>ExtraHeroes_Mode_Expansion2</Criteria>
 	  <File>Lua/ExtraHeroes.lua</File>
+      <File>LUA/Gameplay.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
       <Criteria>ExtraHeroes_Mode_Expansion2</Criteria>
@@ -67,5 +67,6 @@
     <File>ArtDefs/Buildings.artdef</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons.xml</File>
+    <File>LUA/Gameplay.lua</File>
   </Files>
 </Mod>
