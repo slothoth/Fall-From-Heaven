@@ -240,6 +240,8 @@ class PromotionModifiers:
                           'PROMOTION_LONGSHOREMEN': self.ship_refitting, 'PROMOTION_SKELETON_CREW': self.ship_refitting,
                           'PROMOTION_EXPANDED_HULL': self.ship_refitting, 'PROMOTION_BUCCANEERS': self.ship_refitting,
                           'PROMOTION_PROPHECY_MARK': self.armageddon,
+                          'PROMOTION_MARCH': self.easyimplement,
+                          'PROMOTION_DEXTEROUS': self.easyimplement,
                           'TerrainDoubleMove': self.ability_terrain_movebuff,
                           'FeatureDoubleMove': self.ability_feature_movebuff,
                           'TerrainAttack': self.new_terrain_attack,
@@ -374,7 +376,7 @@ class PromotionModifiers:
                           'Value': 20}]
         ability_name = f'{name}_ABILITY_{civ4_name.upper()}'
         ability = {'UnitAbilityType': ability_name, 'Name': f'LOC_SLTH_{ability_name}_NAME',
-                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 1,
+                   'Description': f'LOC_{ability_name}_DESCRIPTION', 'Inactive': 0,
                    'ShowFloatTextWhenEarned': 0, 'Permanent': 1}
         ability_modifier = {'UnitAbilityType': ability_name, 'ModifierId': modifier['ModifierId']}
         type_tags = {'Type': ability_name, 'Tag': 'CLASS_ADEPT'}

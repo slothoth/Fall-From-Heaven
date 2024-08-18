@@ -11,6 +11,7 @@ from localiser import Localizer, custom_loc
 from db_checker import check_primary_keys, localize_check
 from prebuilt_transfer import main as prebuilt_transfer
 from artdef_wrangler import Artdef
+from leader_art import make_colors
 
 import json
 import logging
@@ -32,14 +33,14 @@ def main():
     techs_sql(model_obj, kept)
     model_obj['civilizations'].civilizations(model_obj)
     build_policies(model_obj)
-    model_obj['units'].units_sql(model_obj, kept)
     Promotions().promotion_miner(model_obj)
+    model_obj['units'].units_sql(model_obj, kept)
     build_resource_string(model_obj)
     build_terrains_string(model_obj)
     build_features_string(model_obj)
     build_improvements(model_obj)
+    make_colors(model_obj)
     prereq_techs(model_obj)
-
     Buildings(civs).buildings_sql(model_obj)
     districts_build(model_obj)
     make_or_add(model_obj['sql_inserts'], model_obj['traits'], 'Traits')
@@ -97,12 +98,6 @@ def main():
 
     with open('../FallFromHeaven/Core/localization.sql', 'w', encoding="utf-8") as file:
         file.write(localization_file)
-
-    model_obj['civilizations'].config_builder(model_obj)
-
-    config = 'DELETE FROM Players;\n'
-    for table, rows in model_obj['sql_config'].items():
-        config += model_obj['sql'].old_build_sql_table(rows, table)
 
     with open('../FallFromHeaven/Core/frontend_config.sql', 'w', encoding="utf-8") as file:
         file.write(config)
