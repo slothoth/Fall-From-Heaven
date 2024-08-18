@@ -20,7 +20,7 @@ function FreePromotionFromResource(playerID, unitID)
     local pPlayer = Players[playerID];              -- Players[0]:GetResources():GetResourceAmount(12);
     local resources = pPlayer:GetResources()
     if not resources then return end                -- DealManager.GetPlayerDeals(0,1)[1]:FindItemByID(2):()
-    local iResource = resources:GetResourceAmount(12);      -- absolutely doesnt work on imported resources
+    local iResource = resources:GetResourceAmount(19);      -- absolutely doesnt work on imported resources
     local imported_coffee = pPlayer:GetProperty('LOC_RESOURCE_MANA_FIRE')
     if not imported_coffee then imported_coffee = 0; end
     iResource = iResource + imported_coffee

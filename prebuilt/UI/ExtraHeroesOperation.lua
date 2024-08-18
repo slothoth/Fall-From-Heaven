@@ -12,7 +12,7 @@ local validTypes = {
 function OnUnitSelectionChanged(iPlayerID, iUnitID, iPlotX, iPlotY, iPlotZ, bSelected, bEditable)
     if bSelected then
         local pUnit = UnitManager.GetUnit(iPlayerID, iUnitID)
-        local pAbility = pUnit.GetAbility()
+        local pAbility = pUnit:GetAbility()
         print(pAbility)
         if not pUnit.Index then
             Controls.SettleButtonGrid:SetHide(true)
