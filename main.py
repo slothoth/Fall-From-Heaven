@@ -99,12 +99,6 @@ def main():
     with open('../FallFromHeaven/Core/localization.sql', 'w', encoding="utf-8") as file:
         file.write(localization_file)
 
-    model_obj['civilizations'].config_builder(model_obj)
-
-    config = 'DELETE FROM Players;\n'
-    for table, rows in model_obj['sql_config'].items():
-        config += model_obj['sql'].old_build_sql_table(rows, table)
-
     with open('../FallFromHeaven/Core/frontend_config.sql', 'w', encoding="utf-8") as file:
         file.write(config)
 

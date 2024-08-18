@@ -251,22 +251,3 @@ class Civilizations:
                                              'ModifierId': f"MODIFIER_BAN_{unit}"})
 
         make_or_add(model_obj['sql_inserts'], self.trait_modifiers, 'TraitModifiers')
-
-
-    def config_builder(self, model_obj):
-        config_string = 'DELETE FROM Players;\n'
-        players = []
-        for civ in self.leaders_of_civs:
-            if civ['CivilizationType'][18:] in model_obj['select_civs']:
-                players.append({'Domain': 'Players:Expansion2_Players', 'CivilizationType': civ['CivilizationType'],
-                                'LeaderType': civ['LeaderType'], 'LeaderName': f"LOC_{civ['LeaderType']}_NAME",
-                                'HumanPlayable': 1, 'LeaderIcon': f'ICON_{civ["LeaderType"]}',
-                                'CivilizationName': f'LOC_CIV_{civ["CivilizationType"][18:]}_NAME',
-                                'CivilizationIcon': f'ICON_{civ["CivilizationType"]}', 'LeaderAbilityName': f'LOC_SLTH_TRAIT_{civ["CivilizationType"]}_COOL_NAME',
-                                'LeaderAbilityDescription': 'NULL', 'LeaderAbilityIcon': f'ICON_{civ["LeaderType"]}',
-                                'CivilizationAbilityName': 'NULL', 'CivilizationAbilityDescription': 'NULL',
-                                'CivilizationAbilityIcon': f'ICON_{civ["CivilizationType"]}', 'Portrait': 'NULL',
-                                'PortraitBackground': 'NULL', 'PlayerColor': 'NULL'
-                                })
-
-        make_or_add(model_obj['sql_config'], players, 'Players')

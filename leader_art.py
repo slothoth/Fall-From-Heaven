@@ -10,7 +10,7 @@ def make_colors(model_obj):
         config = json.load(json_file)
     folder = config.get('civ_install', None)
     if folder == "YOUR_DIRECTORY_HERE":
-        folder = os.environ.get('CIV_INSTALL', None)
+        folder = os.environ.get('FOLDER', None)
         if folder is None:
             raise FileNotFoundError(
                 "Set your civ VI install filepath in config.json.")
