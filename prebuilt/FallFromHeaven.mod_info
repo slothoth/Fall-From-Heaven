@@ -24,6 +24,9 @@
     <UpdateText id="UpdateText">
       <File>Core/localization.sql</File>
     </UpdateText>
+    <UpdateArt id="Art">
+      <File>FallFromHeaven.dep</File>
+    </UpdateArt>
    </FrontEndActions>
   <UpdateIcons id="Icons">
           <File>Icons.xml</File>
@@ -37,16 +40,16 @@
         <LoadOrder>100</LoadOrder>
       </Properties>
       <File>Core/main.sql</File>
+      <File>Core/Assets_ingame.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
       <File>Core/localization.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
 	  <File>Lua/ExtraHeroes.lua</File>
-      <File>LUA/Gameplay.lua</File>
+      <File>Lua/Gameplay.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
-      <Criteria>ExtraHeroes_Mode_Expansion2</Criteria>
 	  <Properties>
         <Context>InGame</Context>
       </Properties>
@@ -54,19 +57,26 @@
     </AddUserInterfaces>
     <UpdateIcons id="Icons">
       <File>Icons.xml</File>
-  </UpdateIcons>
+    </UpdateIcons>
   </InGameActions>
   <Files>
     <File>Core/localization.sql</File>
     <File>Core/main.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
+    <File>Lua/Gameplay.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>
     <File>ArtDefs/Buildings.artdef</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons.xml</File>
-    <File>LUA/Gameplay.lua</File>
+    <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
+    <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
+    <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
+    <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
+    <File>XLP/LeaderFallbacks.xlp</File>
+    <File>Artdefs/FallbackLeaders.artdef</File>
+    <File>Core/Assets_ingame.sql</File>
   </Files>
 </Mod>
