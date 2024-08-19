@@ -305,7 +305,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="LeaderFallback"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="FallbackLeaders.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="LeaderFallback"/>
 			</LibraryDependencies>
@@ -420,6 +422,10 @@
 				<Element text="Resources.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
+		<Element>
+			<ArtDefPath text="FallbackLeaders.artdef"/>
+			<ArtDefDependencyPaths/>
+		</Element>
 	</ArtDefDependencies>
 	<LibraryDependencies>
 		<Element>
@@ -456,7 +462,9 @@
 		</Element>
 		<Element>
 			<LibraryName text="LeaderFallback"/>
-			<PackageDependencies/>
+			<PackageDependencies>
+				<Element text="LeaderFallbacks.blp"/>
+			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="LeaderLighting"/>
@@ -529,6 +537,7 @@
 		<Element>
 			<LibraryName text="UITexture"/>
 			<PackageDependencies>
+				<Element text="UI/Icons.blp"/>
 			</PackageDependencies>
 		</Element>
 		<Element>

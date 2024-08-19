@@ -77,6 +77,7 @@ def main():
         INSERT INTO BuildingModifiers (BuildingType, ModifierId) VALUES('BUILDING_PALACE', 'CONTRATACION_GOVERNOR_POINTS')"""
 
     total_with_null = total.replace("'NULL'", "NULL")
+    prebuilt_transfer()
     with open('../FallFromHeaven/Core/main.sql', 'w') as file:
         file.write(total_with_null)
 
@@ -98,11 +99,6 @@ def main():
 
     with open('../FallFromHeaven/Core/localization.sql', 'w', encoding="utf-8") as file:
         file.write(localization_file)
-
-    with open('../FallFromHeaven/Core/frontend_config.sql', 'w', encoding="utf-8") as file:
-        file.write(config)
-
-    prebuilt_transfer()
 
 
 if __name__ == "__main__":

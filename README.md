@@ -11,45 +11,47 @@ One the mod is out of Alpha (probably when art assets for three civilizations ar
 # Features needed:
 ## Magic System:
   ### Mana System
-  - [ ] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource
+  - [ ] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource, Lua: HasResource, GetBonusResourcePerTurn, GetResourceAmount, Monopolies support stuff?
   - [ ] resource transformation, ie can build Death Well improvement on raw mana node and it becomes Death mana
-  - [ ] free promotions depending on mana amount controlled
+  - [x] free promotions depending on mana amount controlled. Lua: UnitCreated Event.
 ### Spell System
 - [x] damage spells in aoe around caster
-- [ ] debuff effects : dont really exist, there is the Fear -5 Strength effect, but thats an aura. maybe as promotion
-- [ ] buff effects : ditto as before
+- [ ] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though.
+- [ ] buff effects : ditto as before. Attacking debuffs (withered, Diseased can use Event :: OnUnitRetreated ?)
 - [x] Summons
-- [ ] Summoning Buildings : This was always a bit hacky in civ iv, a unit being present in a city does have modifiers, with Garrison affecting combat. Another issue is that the nonstacking makes keeping a mage on the city less feasible. Could we do a single charge based system, and allow a city to unbuild a building, if it has the prerequisite building, and that would give the charge back to the unit? if we can have two active abilities, (himiko), then could have one ability that adds it,            with a single charge, and one context dependant ability that only works on cities with the building, that removes the building and adds a charge back.
+- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Dunno if there is a modifier to grant a modifier to a city, like there is for units.
   
 ## Hero System:
 - [x] Done via Isolationism ban unit modifier attached to all civs globally by an ability the hero has
-- [ ] XP per turn: multiple types of xp gain exist, notice scouts get it for spotting natural wonders. Care that base Heroes do not get xp
-- [ ] Resurrection System
-- [ ] hero abandonment if leave religion
+- [x] XP per turn: Event on PlayerTurnStarted, iterate over all units, if they match on xp gain, give xp. Maybe check if they have x ability. If this sucks performance, could store the list of units in pPlayer:GetProperty() but then would need Events covering unit creation and killed.
+- [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
+- [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
 
 ## Alignment System:
-- [ ] limit units depending on alignment
-- [ ] diplomacy penalties, advantages
+- [ ] Certain actions like switching religion set as Good, Evil, Neutral   Probably pPlayer:SetProperty()
+- [ ] limit units depending on alignment   Lua: pPlayer:GetUnits:SetBuildDisabled()? no args documented so maybe just stops all units being built.
+- [ ] diplomacy penalties, advantages      Annoyingly diplo penalties seem to be done as modifiers, but no requirements would work.
 
 ## Armageddon Counter:
-- [ ] Conversion of global warming system
-- [ ] actions that happen once counter reaches certain value : we just piggyback off of global warming system, right?
+- [ ] Conversion of global warming system  We probably just steal the UI design of it.  
+- [ ] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
+- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
 
 ## Item system:
 in civ iv, act as promotions that give buffs, and allow the dropping of item, to be picked up by someone else. can also be dropped on death, and captured. Also spawnable via event
-- [ ] ability that can be removed by lua on button press
-- [ ] 0 movement ingame unit that is destroyed/summoned, support class?
-- [ ] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted.
+- [ ] ability that can be removed by lua on button press : Reasonably easy to implement for player as button, not for AI. Attempts with custom FormationClasses have failed as entering formation fails for combining novel formationClasses. Would limit a unit to one unit, one item.
+- [ ] 0 movement ingame unit that is destroyed/summoned, support class? A button to apply an effect on the combat unit in the same tile seems feasible. As does removing it. We don't need to store unit state, beyond its UnitType. Lua Event: UnitRemovedFromMap to respawn all items when a unit with them dies?
+- [ ] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted. Seems reasonable in SQL. weapons cant stack.
 
 ## Lairs:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
-- [ ] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)
-- [ ] Implement random chance effect (look into goody hut mechanics)
-- [ ] Implement "deck" of different events that can happen when a lair is explored
+- [ ] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into how spectator mod implemeneted Civilization Spectator.
+- [ ] Have to implement spawning on mapgeneration, check that Cat relics mod, to see how they did it.
+- [ ] Implement "deck" of different events that can happen when a lair is explored: probably do this with plot:SetProperty() then remove them on lair removal
 
 ## Event System:
 dialogue boxes with a choice that appear randomly, if the conditions satisfy the event. ex. library burning if u have library : tricky, as ui elements involved, choice will lead to lua script execution. Low priority.
-- [ ] Implement UI dialogue box with clicking.
+- [ ] Someone made a framework for Stellaris meteors on discord. Just copy that I guess..
 
 ## Per Civ Features:
   ### Difficulty:
@@ -58,67 +60,66 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Hippus:  unique abilty buffing heavy and light cavalry : adjusted Genghis Khan modifier
   ##### Khazad:
   - [x] lots of banned units
-  - [ ] cities have buffs/ nerfs depending on current gold / number of cities
+  - [ ] cities have buffs/ nerfs depending on current gold / number of cities -> Lua: Could do lua side that sets plot property of city, and 5 modifiers for each stage, applied to each city, with requirement REQUIREMENT_PLOT_PROPERTY_MATCHES. Although unsure if modifier with City context would have plot as a subject for requirements...
   - [x] Dwarven units moving fast on hills
   ##### Ljolsfar:
-  - [ ] elven workers can build in forest without chopping
+  - [ ] elven workers can build in forest without chopping    Can do this with dummy tech and RHAI-style tech hiding.
   - [x] all archer units are stronger, Genghis style
   #### Medium:
-  ##### Elohim: 
-  tolerant, can build conquered cities civ unique stuff.
-  - [ ] needs to implement some concept of inherent city identity, check civ conquer mode?
+  ##### Elohim:
+  tolerant, can build conquered cities civ unique stuff.     
+  - [ ] needs to implement some concept of inherent city identity, check civ conquer mode? But then apply only to that city. hmmm
   ##### Lanun:
   - [ ] coast tiles get +1 food    : ez, just a variant of auckland
-  - [ ] unique resource others cant access or see, pearls. Basically a strategic resource reveal, piggyback off leylines
-  - [ ] pirate cove, water improvement that have to be 3 tiles from another, and get upgraded as they get worked, like cottage
+  - [ ] unique resource others cant access or see, pearls. Basically a strategic resource reveal, piggyback off leylines/etherium
+  - [ ] pirate cove, water improvement that have to be 3 tiles from another, and get upgraded as they get worked, like cottage. Possible by Plot:SetProperty('worked', isWorked) on event ImprovementChanged(isWorked), then on PlayerTurnStarted use pPlayer:GetImprovements() to get a full list then filter to the Pirate Ports. Get their Plot, then Plot:SetProperty('turns_worked', ++). Then ImprovementBuilder:SetImprovementType()?
   ##### Malakim:
-  most units have Nomad, double movement on desert, could apply on civ level, but then would include stuff like StoneWardens who are dwarves. desert tiles get + 1 coin : maybe hard as mali doesnt have anything like this. Then again, there is auckland who modifies Coast with +1 prod
-  - [ ] +1 gold per desert is easy, adapt Mario civpass modifier
+  most units have Nomad, double movement on desert, could apply on civ level, but then would include stuff like StoneWardens who are dwarves.
+  - [ ] +1 gold per desert is easy
   - [x] Nomad race, part of promotion -> ability modifier. Adapt Genghis cav modifier.
   ##### Balseraph:
   slave and slave cages, puppets summons that inherit magic promotions units, affecting neutral cities, arenas, chance of killing unit but otherwise free xp
-  - [ ] Create building in city if matches unit type, not present already, and city has carnival
+  - [ ] Create building in city if matches unit type, not present already, and city has carnival  Lua button on per unit basis, or ability basis for Human, Orc, Elf etc.
   - [x] Slavery mechanic taken from Aztec civ
 
   ##### Sheaim
-  - [ ] aoe explosion damage from death of pyre zombie
-  - [ ] planar gates randomly summon units
+  - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
+    - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
   #### Hard:
   ##### Luichuirp:
   Golems being promotion lacking, slow healers, but mendable by mages with enchant 1, Barnaxus, passing buffs onto other golems globally may be awkward
-  - [ ] modifier to reduce healing on golem units
-  - [ ] lua event for mages with enchant 1 to repair
-  - [ ] Golem Modifier like Cause Dissent of Cultist, where its value is adjusted. For the Barnaxus stuff.
+  - [ ] modifier to reduce healing on golem units     copy vampire mechanic without pillage part.
+  - [ ] lua event for mages with enchant 1 to repair   Just an extra spell with one more condition
+  - [ ] Golem Modifier like Cause Dissent of Cultist, where its value is adjusted. For the Barnaxus stuff.  Idk that whole thing seemed cursed.
   ##### Grigori:
   plural unit upgrade paths (archer, warrior, scout, cavalry) possible for Adventurer, blocked religous units, unique great person type
-  - [ ] Plural upgrade paths for a unit
+  - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. 
   - [x] Blocked units (as opposed to replaced)
   - [ ] Great adventurer spawning system, just replace Great Writers with it?
    ##### Sidar:
   Level 6 + units can retire as shades, who can act as free Great Person Specialist, so a repeatable building that provides yields and gp points
-  - [ ] no concept of added specialist in civ vi, maybe as non-unique buildings, or a building with yields, then multiplied by number of specialists
+  - [ ] no concept of added specialist in civ vi, maybe as non-unique buildings, or a building with yields, then multiplied by number of specialists     Just make the specialist a modifier that grants +X yield to city centre. Implement via lua button. Unit:GetExperience():GetLevel() for check.
 
   ##### Clan of embers
   - [ ] -10% science, lie Babylon 50% reduction
-  - [ ] warrens building makes all units in city be doubled, like Scythia for light cavalry
-  - [ ] Peace with barbarians trait, shared with doviello
+  - [ ] warrens building makes all units in city be doubled, like Scythia for light cavalry, but repeat for all promoClasses
+  - [ ] Peace with barbarians trait, shared with doviello   WildW was thinking of something like this, look at comments on discord
 
   ##### Doviello
-  - [ ] Free starting hero Lucian
-  - [ ] can upgrade outside borders
+  - [ ] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
+    - [ ] can upgrade outside borders       probably needs bespoke upgrade system
   - [ ] Peace with barbarians trait, shared with embers
-  - [ ] some units can do duels with another unit for xp
+    - [ ] some units can do duels with another unit for xp          lua button, need to take target adjacent tile logic used in QinBuilders on Machu Picchu
 
   ##### Calabim
   Vampirism, a unit on a city can cast feed, reducing the pop of the city by one, and gaining xp. also causes unhappiness, building that gets prod from unhappiness.
-  - [ ] An ability that allows giving an ability to another unit, if it has enough promotions
-  - [ ] promotion counter
-  - [ ] active to reduce population in a city
-  - [ ] building that does Required Amenities * int = prod
+  - [ ] An ability that allows giving an ability to another unit, if it has enough promotions     Button implemented in Lua. Unit:GetExperience():GetLevel()
+  - [ ] active to reduce population in a city                       Button implemented in Lua. Unit:GetExperience():ChangeExperience(). Possible to remove pop, check Firetuner. Transient amenity loss will be harder.
+  - [ ] building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted
 
   ##### Ilians
   - [ ] The Deepening project to add tundra and snow
-  - [ ] The Draw project to force war to you from everyone, half city population, half unit health
+  - [ ] The Draw project to force war to you from everyone, half city population, half unit health    Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
   - [ ] extra yields on snow terrain, like Auckland, Canada
   - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 
@@ -135,7 +136,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Switch player midgame
   - [ ] UI prompt from events to do switch
   - [ ] Ability modifier of "Good" unit applied to other civs units
-  - [ ] lua event when "Good" unit dies to spawn angels for this civ
+  - [ ] lua event when "Good" unit dies to spawn angels for this civ Lua : Event : UnitRemovedFromMap
   ##### Infernals
   - [ ] Evil units globally reborn as manes, like Mercurians
   - [ ] Summoned through first to tech, takes over a barbarian city
@@ -143,8 +144,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] cannot gain or lose pops with food, manes add population to a city
   ##### Kuriotates:
   Sprawling, have bigger cities, 3 distance, but only allowed 3 cities. Other cities founded are Settlements, which have 0 yields and only allow access to resources. This seems very hard.
-  - [ ] 4 tile workable cities, seems fucking impossible, dll bound as fuck. Then again, Yaxchilan?
-  - [ ] 0 yield cities, seems doable, just have a modifier that any city past the first 3 gets a "settlement" building that multiplies all yields by 0. Unsure if requirement exists of count cities, check Sprawling historic moment?
+  - [ ] 4 tile workable cities, seems fucking impossible, dll bound as fuck. Then again, Yaxchilan? It bugs out and gives like 180 yields for each sometimes
+  - [ ] 0 yield cities, seems doable, just have a modifier that any city past the first 3 gets a "settlement" modifier that multiplies all yields by 0. Unsure if requirement exists of count cities. 
   - [ ] Dynamic allowed city count, based on map size
 
 
@@ -171,12 +172,13 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [x] District system means we need to change a lot of buildings, categorise them by District, 
   - [ ] Reexamine if that buildings path makes sense.
 ## Religion System:
-  - [ ] due to custom religions being a thing, how do we incorporate the veil, Order, kilmorph?  : this will need a lot of research, see how other grand conversions deal with this. Could implement it as Secret Societies.
+  - [ ] due to custom religions being a thing, how do we incorporate the veil, Order, kilmorph?  : Plan is, custom policy screen grants access to religion policy once in one of your cities. Predefine religions on map startup by assigning them as being founded by dummy civs? Can give people Mvemba traits if we wanna use Founder beliefs. + Amenities may be an issue. Game.GetReligion():FoundReligion(); Game.GetReligion():AddBelief();  Pantheons may bite us in the ass. Also Holy City will have to be manually implemented through City:SetProperty()
 ## Governer System:
   - [ ] Make sure governers arent broken
   - [ ] existing governers arent very flavourful to the ffh universe, but this is an added extra
 ## Great People System:
   - [ ] Duplicate Great people so they all are basically the same, as for civ iv.
+  - [ ] Buttons for making Academy, doing Trade Mission, Culture Bomb (bad in context), 
   - [ ] Use name list from xml/Text to generate names
   - [ ] Grigori Great Adventurer issue, put under Great Writer, and then change its requirements
 ## City State System:
