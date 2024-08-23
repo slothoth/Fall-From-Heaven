@@ -44,7 +44,16 @@
       <Properties>
         <LoadOrder>100</LoadOrder>
       </Properties>
-      <File>Core/main.sql</File>
+      <File>Core/Buildings.sql</File>
+      <File>Core/Civilizations.sql</File>
+      <File>Core/Governments.sql</File>
+      <File>Core/Promotion_and_Abilities.sql</File>
+      <File>Core/Resources.sql</File>
+      <File>Core/Technologies.sql</File>
+      <File>Core/Units.sql</File>
+      <File>Core/CivPolishing.sql</File>
+      <File>Core/lua_support.sql</File>
+      <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
@@ -82,7 +91,16 @@
   </InGameActions>
   <Files>
     <File>Core/localization.sql</File>
-    <File>Core/main.sql</File>
+    <File>Core/Buildings.sql</File>
+    <File>Core/Civilizations.sql</File>
+    <File>Core/Governments.sql</File>
+    <File>Core/Promotion_and_Abilities.sql</File>
+    <File>Core/Resources.sql</File>
+    <File>Core/Technologies.sql</File>
+    <File>Core/Units.sql</File>
+    <File>Core/CivPolishing.sql</File>
+    <File>Core/lua_support.sql</File>
+    <File>Core/Modifier_Support.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
