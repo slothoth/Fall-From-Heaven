@@ -54,7 +54,8 @@
       <File>Core/Technologies.sql</File>
       <File>Core/Units.sql</File>
       <File>Core/CivPolishing.sql</File>
-      <File>Core/lua_support.sql</File>
+      <File>Core/Lua_support/Mana_support.sql</File>
+      <File>Core/Lua_support/vaults.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
     </UpdateDatabase>
@@ -65,6 +66,7 @@
       <File>Lua/Maintenance.lua</File>
 	  <File>Lua/ExtraHeroes.lua</File>
       <File>Lua/Gameplay.lua</File>
+      <File>Lua/vaults.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>
@@ -104,12 +106,14 @@
     <File>Core/Units.sql</File>
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
-    <File>Core/lua_support.sql</File>
+    <File>Core/Lua_support/Mana_support.sql</File>
+    <File>Core/Lua_support/vaults.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Gameplay.lua</File>
     <File>Lua/Maintenance.lua</File>
+    <File>Lua/vaults.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>
