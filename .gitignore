@@ -1,10 +1,10 @@
 /.idea/*
-/data/XML/*
-/data/XML/Units/CIV4UnitInfos.xml
+/python_gen/data/XML/*
+/python_gen/data/XML/Units/CIV4UnitInfos.xml
 /Debug*
-/data/tables/*
+/python_gen/data/tables/*
 /data/*.sqlite
 db_storer.py
 /civ_library/*
-data/foreign_keys.json
-/data/loc.csv
+python_gen/data/foreign_keys.json
+/python_gen/data/loc.csv

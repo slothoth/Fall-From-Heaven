@@ -6,7 +6,7 @@
 import os
 import logging
 
-from xml_handler import read_xml, pretty_print_xml, dict_to_xml, xml_to_string, save_pretty_xml_to_file
+from python_gen.xml_handler import read_xml, pretty_print_xml, dict_to_xml, xml_to_string, save_pretty_xml_to_file
 
 
 def generate_mod_art(save_file_location):

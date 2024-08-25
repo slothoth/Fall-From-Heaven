@@ -39,7 +39,7 @@ class Artdef:
         self.write_xml()
 
     def write_xml(self):
-        with open('../FallFromHeaven/Icons.xml', 'w') as file:
+        with open('../../FallFromHeaven/Icons.xml', 'w') as file:
             xmltodict.unparse(self.icons, output=file, pretty=True)
 
     def unit_artdef(self, folder):
@@ -124,7 +124,7 @@ class Artdef:
                 used.append(vanilla_ref)
                 self.logger.info(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-        with open('../FallFromHeaven/Artdefs/Units.artdef', 'w') as file:
+        with open('../../FallFromHeaven/Artdefs/Units.artdef', 'w') as file:
             xmltodict.unparse(artdef_template, output=file, pretty=True)
 
         total_units = set([i for i in artdef_total])
@@ -182,7 +182,7 @@ class Artdef:
         root = artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][0]['Element']
         root.append(self.assign_artdef(artdef_total['BUILDING_OLD_GOD_OBELISK'], 'SLTH_BUILDING_BREWERY'))
 
-        with open('../FallFromHeaven/Artdefs/Buildings.artdef', 'w') as file:
+        with open('../../FallFromHeaven/Artdefs/Buildings.artdef', 'w') as file:
             xmltodict.unparse(artdef_template, output=file, pretty=True)
         return  # once it works do full
       
@@ -211,7 +211,7 @@ class Artdef:
                 root.append(assign_artdef(artdef_total[vanilla_ref], mod_ref))
                 logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-        with open('../FallFromHeaven/Artdefs/Units.artdef', 'w') as file:
+        with open('../../FallFromHeaven/Artdefs/Units.artdef', 'w') as file:
             xmltodict.unparse(artdef_template, output=file, pretty=True)
 
     def feature_artdef(self, folder):
@@ -272,7 +272,7 @@ class Artdef:
                 root.append(self.assign_artdef(artdef_total[vanilla_ref], mod_ref))
                 self.logger.warning(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-        with open('../FallFromHeaven/Artdefs/Features.artdef', 'w') as file:
+        with open('../../FallFromHeaven/Artdefs/Features.artdef', 'w') as file:
             xmltodict.unparse(artdef_template, output=file, pretty=True)
 
     def resource_artdef(self, folder):
@@ -341,7 +341,7 @@ class Artdef:
                 root.append(self.assign_artdef(artdef_total[vanilla_ref], mod_ref))
                 logger.debug(f"{mod_ref} now uses {artdef_total[vanilla_ref]['m_Name']['@text']}")
 
-        with open('../FallFromHeaven/Artdefs/Resources.artdef', 'w') as file:
+        with open('../../FallFromHeaven/Artdefs/Resources.artdef', 'w') as file:
             xmltodict.unparse(artdef_template, output=file, pretty=True)
 
     def icon_resource_wrangler(self):
