@@ -6,13 +6,13 @@ import os
 # ('MODIFIER_SHRINE_CITY_HERO_EXTRA_LIFESPAN', 'Key', 'ARGTYPE_IDENTITY', 'CityHeroExtraLifespan');
 # This to me implies that CityHeroExtraLifeSpan is a key to an internal dictionary of city properties: MODIFIER_SINGLE_CITY_ADJUST_PROPERTY
 # could we find hidden keys that are exposed but undocumented? Apparently you can find it in a lua property
-substring = 'LOC_PEDIA_CONCEPTS_PAGE_HEROES'
+substring = 'RUHRVALLEY_ADDPRODUCTIONYIELD'
 records = {}
-for i in os.listdir('data/tables/'):
+for i in os.listdir('python_gen/data/tables/'):
     if i == 'Kinds.csv':
         continue
     if i.endswith('.csv'):
-        df = pd.read_csv(f'data/tables/{i}')
+        df = pd.read_csv(f'python_gen/data/tables/{i}')
         records['i'] = []
         for column in df.columns:
             if df[column].apply(lambda x: isinstance(x, str)).any():

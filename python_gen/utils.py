@@ -98,7 +98,7 @@ def text_convert(text_loc):
 
 
 def setup_tables():
-    os.makedirs('../FallFromHeaven/Core/', exist_ok=True)
+    os.makedirs('../../FallFromHeaven/Core/', exist_ok=True)
     # build pandas tables
     if not os.path.exists('data/tables'):
         # ran once, to convert database to pandas for conversion

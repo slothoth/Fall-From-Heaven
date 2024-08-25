@@ -2,7 +2,7 @@ import sqlite3
 
 import pandas as pd
 
-with open('../FallFromHeaven/Core/main.sql') as file:
+with open('../../FallFromHeaven/Core/main.sql') as file:
     lines = file.readlines()
 
 insert_indices = [idx for idx, i in enumerate(lines) if 'INSERT' in i]
