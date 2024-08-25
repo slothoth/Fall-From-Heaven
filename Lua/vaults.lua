@@ -10,10 +10,9 @@ ranges = {{min = 0, max = 49, category = 1},        -- Empty (<50): -2 amenities
 function RecalculateVaults(playerID)
     local pPlayer = Players[playerID]
     if not pPlayer:IsMajor() then return; end;
-    -- local pPlayerConfig = PlayerConfigurations[playerID]
-    -- local sCivName = pPlayerConfig:GetCivilizationTypeName()
-    -- print(sCivName)
-    --if sCivName == 'SLTH_CIVILIZATION_KHAZAD' then return end;
+    local pPlayerConfig = PlayerConfigurations[playerID]
+    local sCivName = pPlayerConfig:GetCivilizationTypeName()
+    if sCivName ~= 'SLTH_CIVILIZATION_KHAZAD' then return end;
     local pPlayerCities = pPlayer:GetCities()
     if not pPlayerCities then return; end;
     local iCityCount = pPlayerCities:GetCount()
