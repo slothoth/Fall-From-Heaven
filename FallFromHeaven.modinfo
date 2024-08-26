@@ -40,13 +40,40 @@
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
-    <UpdateDatabase id="Gameplay">
+    <UpdateDatabase id="Gameplay_first">
       <Properties>
         <LoadOrder>100</LoadOrder>
       </Properties>
+      <File>Core/Civilizations/shared_grant_modifiers.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="Gameplay">
+      <Properties>
+        <LoadOrder>105</LoadOrder>
+      </Properties>
       <File>Core/Delete_Update.sql</File>
       <File>Core/Buildings.sql</File>
-      <File>Core/Civilizations.sql</File>
+      <File>Core/Civilizations/Amurites.sql</File>
+      <File>Core/Civilizations/Balseraphs.sql</File>
+      <File>Core/Civilizations/Bannor.sql</File>
+      <File>Core/Civilizations/Calabim.sql</File>
+      <File>Core/Civilizations/Clan.sql</File>
+      <File>Core/Civilizations/Doviello.sql</File>
+      <File>Core/Civilizations/Elohim.sql</File>
+      <File>Core/Civilizations/Grigori.sql</File>
+      <File>Core/Civilizations/Hippus.sql</File>
+      <File>Core/Civilizations/Illians.sql</File>
+      <File>Core/Civilizations/Infernal.sql</File>
+      <File>Core/Civilizations/Kuriotates.sql</File>
+      <File>Core/Civilizations/Lanun.sql</File>
+      <File>Core/Civilizations/Luchuirp.sql</File>
+      <File>Core/Civilizations/Malakim.sql</File>
+      <File>Core/Civilizations/Mercurians.sql</File>
+      <File>Core/Civilizations/Sheaim.sql</File>
+      <File>Core/Civilizations/Sidar.sql</File>
+      <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
+      <File>Core/Civilizations/Elves/Svartalfar.sql</File>
+      <File>Core/Civilizations/Khazad/Khazad.sql</File>
+      <File>Core/Religions.sql</File>
       <File>Core/Governments.sql</File>
       <File>Core/Abilities.sql</File>
       <File>Core/Promotion.sql</File>
@@ -55,7 +82,6 @@
       <File>Core/Units.sql</File>
       <File>Core/CivPolishing.sql</File>
       <File>Core/Lua_support/Mana_support.sql</File>
-      <File>Core/Lua_support/vaults.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
     </UpdateDatabase>
@@ -66,7 +92,7 @@
       <File>Lua/Maintenance.lua</File>
 	  <File>Lua/ExtraHeroes.lua</File>
       <File>Lua/Gameplay.lua</File>
-      <File>Lua/vaults.lua</File>
+      <File>Core/Civilizations/Khazad/Khazad.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>
@@ -97,7 +123,7 @@
     <File>Core/localization.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
-    <File>Core/Civilizations.sql</File>
+    <File>Core/Religions.sql</File>
     <File>Core/Governments.sql</File>
     <File>Core/Abilities.sql</File>
     <File>Core/Promotion.sql</File>
@@ -107,7 +133,30 @@
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
     <File>Core/Lua_support/Mana_support.sql</File>
-    <File>Core/Lua_support/vaults.sql</File>
+    <File>Core/Civilizations/Amurites.sql</File>
+    <File>Core/Civilizations/Balseraphs.sql</File>
+    <File>Core/Civilizations/Bannor.sql</File>
+    <File>Core/Civilizations/Calabim.sql</File>
+    <File>Core/Civilizations/Clan.sql</File>
+    <File>Core/Civilizations/Doviello.sql</File>
+    <File>Core/Civilizations/Elohim.sql</File>
+    <File>Core/Civilizations/Grigori.sql</File>
+    <File>Core/Civilizations/Hippus.sql</File>
+    <File>Core/Civilizations/Illians.sql</File>
+    <File>Core/Civilizations/Infernal.sql</File>
+    <File>Core/Civilizations/Kuriotates.sql</File>
+    <File>Core/Civilizations/Lanun.sql</File>
+    <File>Core/Civilizations/Luchuirp.sql</File>
+    <File>Core/Civilizations/Malakim.sql</File>
+    <File>Core/Civilizations/Mercurians.sql</File>
+    <File>Core/Civilizations/Sheaim.sql</File>
+    <File>Core/Civilizations/Sidar.sql</File>
+    <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
+    <File>Core/Civilizations/Elves/Svartalfar.sql</File>
+    <File>Core/Civilizations/Khazad/Khazad.sql</File>
+    <File>Core/Civilizations/shared_grant_modifiers.sql</File>
+    <File>Core/Civilizations/Khazad/Khazad.sql</File>
+    <File>Core/Civilizations/Khazad/Khazad.lua</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
