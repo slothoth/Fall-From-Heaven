@@ -70,6 +70,7 @@
       <File>Core/Civilizations/Mercurians.sql</File>
       <File>Core/Civilizations/Sheaim.sql</File>
       <File>Core/Civilizations/Sidar.sql</File>
+      <File>Core/Civilizations/Elves/ElfSupport.sql</File>
       <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
       <File>Core/Civilizations/Elves/Svartalfar.sql</File>
       <File>Core/Civilizations/Khazad/Khazad.sql</File>
@@ -151,6 +152,7 @@
     <File>Core/Civilizations/Mercurians.sql</File>
     <File>Core/Civilizations/Sheaim.sql</File>
     <File>Core/Civilizations/Sidar.sql</File>
+    <File>Core/Civilizations/Elves/ElfSupport.sql</File>
     <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
     <File>Core/Civilizations/Elves/Svartalfar.sql</File>
     <File>Core/Civilizations/Khazad/Khazad.sql</File>
