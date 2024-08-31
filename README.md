@@ -63,7 +63,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [x] cities have buffs/ nerfs depending on current gold / number of cities -> Lua: Could do lua side that sets plot property of city, and 5 modifiers for each stage, applied to each city, with requirement REQUIREMENT_PLOT_PROPERTY_MATCHES. Although unsure if modifier with City context would have plot as a subject for requirements...
   - [x] Dwarven units moving fast on hills
   ##### Ljolsfar:
-  - [ ] elven workers can build in forest without chopping    Can do this with dummy tech and RHAI-style tech hiding.
+  - [x] elven workers can build in forest without chopping    Can do this with dummy tech and RHAI-style tech hiding.
+  - [ ] racial units are not applied on civ level, instead as production level 
   - [x] all archer units are stronger, Genghis style
   #### Medium:
   ##### Elohim:

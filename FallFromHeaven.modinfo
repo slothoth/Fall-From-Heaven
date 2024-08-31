@@ -40,7 +40,7 @@
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
-    <UpdateDatabase id="Gameplay_first">
+    <UpdateDatabase id="Deletes_first">
       <Properties>
         <LoadOrder>95</LoadOrder>
       </Properties>
