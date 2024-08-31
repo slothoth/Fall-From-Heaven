@@ -42,6 +42,12 @@
     </UpdateArt>
     <UpdateDatabase id="Gameplay_first">
       <Properties>
+        <LoadOrder>95</LoadOrder>
+      </Properties>
+      <File>Core/Delete_Update.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="Gameplay_first">
+      <Properties>
         <LoadOrder>100</LoadOrder>
       </Properties>
       <File>Core/Civilizations/shared_grant_modifiers.sql</File>
@@ -50,7 +56,6 @@
       <Properties>
         <LoadOrder>105</LoadOrder>
       </Properties>
-      <File>Core/Delete_Update.sql</File>
       <File>Core/Buildings.sql</File>
       <File>Core/Civilizations/Amurites.sql</File>
       <File>Core/Civilizations/Balseraphs.sql</File>
@@ -79,6 +84,7 @@
       <File>Core/Abilities.sql</File>
       <File>Core/Promotion.sql</File>
       <File>Core/Resources.sql</File>
+      <File>Core/Improvements.sql</File>
       <File>Core/Technologies.sql</File>
       <File>Core/Units.sql</File>
       <File>Core/CivPolishing.sql</File>
@@ -109,6 +115,7 @@
       <File>UI/TopPanel.lua</File>
       <File>UI/ReportScreen.lua</File>
       <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
+      <File>UI/TechTree_support.lua</File>
     </ImportFiles>
     <ImportFiles id="LUA_Replacers_XP2" criteria="Expansion2">
       <Properties>
@@ -116,6 +123,21 @@
       </Properties>
       <File>UI/XP2/TopPanel.lua</File>
     </ImportFiles>
+    <ReplaceUIScript id="ResearchChooserHideFFH">
+      <Properties>
+          <LoadOrder>1100</LoadOrder>
+          <LuaContext>ResearchChooser</LuaContext>
+          <LuaReplace>UI/ResearchChooser_overrides.lua</LuaReplace>
+      </Properties>
+    </ReplaceUIScript>
+
+    <ReplaceUIScript id="ReplaceUI_TechTree_BaseFFH">
+        <Properties>
+            <LoadOrder>10950</LoadOrder>
+            <LuaContext>TechTree</LuaContext>
+            <LuaReplace>UI/TechTree_overrides.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
     <UpdateIcons id="Icons">
       <File>Icons.xml</File>
     </UpdateIcons>
@@ -129,6 +151,7 @@
     <File>Core/Abilities.sql</File>
     <File>Core/Promotion.sql</File>
     <File>Core/Resources.sql</File>
+    <File>Core/Improvements.sql</File>
     <File>Core/Technologies.sql</File>
     <File>Core/Units.sql</File>
     <File>Core/Modifier_Support.sql</File>
@@ -182,5 +205,8 @@
     <File>UI/XP2/TopPanel.lua</File>
     <File>UI/ReportScreen.lua</File>
     <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
+    <File>UI/TechTree_support.lua</File>
+    <File>UI/TechTree_overrides.lua</File>
+    <File>UI/ResearchChooser_overrides.lua</File>
   </Files>
 </Mod>
