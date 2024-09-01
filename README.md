@@ -89,7 +89,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   #### Hard:
   ##### Luichuirp:
   Golems being promotion lacking, slow healers, but mendable by mages with enchant 1, Barnaxus, passing buffs onto other golems globally may be awkward
-  - [ ] modifier to reduce healing on golem units     copy vampire mechanic without pillage part.
+  - [x] modifier to reduce healing on golem units     copy vampire mechanic without pillage part.
   - [ ] lua event for mages with enchant 1 to repair   Just an extra spell with one more condition
   - [ ] Golem Modifier like Cause Dissent of Cultist, where its value is adjusted. For the Barnaxus stuff.  Idk that whole thing seemed cursed.
   ##### Grigori:
