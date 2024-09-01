@@ -277,12 +277,12 @@ class Buildings:
 def districts_build(model_obj):
     district_changes = [{'DistrictType': 'DISTRICT_HOLY_SITE', 'PrereqCivic': 'SLTH_CIVIC_MYSTICISM'},
                         {'DistrictType': 'DISTRICT_CAMPUS', 'PrereqCivic': 'SLTH_CIVIC_MYSTICISM'},
-                        {'DistrictType': 'DISTRICT_ENCAMPMENT', 'PrereqTech': 'SLTH_TECH_BRONZE_WORKING'},
-                        {'DistrictType': 'DISTRICT_HARBOR', 'PrereqTech': 'SLTH_TECH_FISHING'},
+                        {'DistrictType': 'DISTRICT_ENCAMPMENT', 'PrereqTech': 'TECH_BRONZE_WORKING'},
+                        {'DistrictType': 'DISTRICT_HARBOR', 'PrereqTech': 'TECH_FISHING'},
                         {'DistrictType': 'DISTRICT_COMMERCIAL_HUB', 'PrereqCivic': 'SLTH_CIVIC_FESTIVALS'},
                         {'DistrictType': 'DISTRICT_ENTERTAINMENT_COMPLEX', 'PrereqCivic': 'SLTH_CIVIC_FESTIVALS'},
                         {'DistrictType': 'DISTRICT_THEATER', 'PrereqCivic': 'SLTH_CIVIC_FESTIVALS'},
-                        {'DistrictType': 'DISTRICT_INDUSTRIAL_ZONE', 'PrereqTech': 'SLTH_TECH_SMELTING'},
-                        {'DistrictType': 'DISTRICT_AQUEDUCT', 'PrereqTech': 'SLTH_TECH_SANITATION'}]
+                        {'DistrictType': 'DISTRICT_INDUSTRIAL_ZONE', 'PrereqTech': 'TECH_SMELTING'},
+                        {'DistrictType': 'DISTRICT_AQUEDUCT', 'PrereqTech': 'TECH_SANITATION'}]
 
     update_or_add(model_obj['sql_updates'], district_changes, 'Districts', ['DistrictType'])

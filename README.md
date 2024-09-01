@@ -64,20 +64,20 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [x] Dwarven units moving fast on hills
   ##### Ljolsfar:
   - [x] elven workers can build in forest without chopping    Can do this with dummy tech and RHAI-style tech hiding.
-  - [ ] racial units are not applied on civ level, instead as production level 
+  - [x] racial units are not applied on civ level, instead as production level 
   - [x] all archer units are stronger, Genghis style
   #### Medium:
   ##### Elohim:
   tolerant, can build conquered cities civ unique stuff.     
   - [ ] needs to implement some concept of inherent city identity, check civ conquer mode? But then apply only to that city. hmmm
   ##### Lanun:
-  - [ ] coast tiles get +1 food    : ez, just a variant of auckland
+  - [x] coast tiles get +1 food 
   - [ ] unique resource others cant access or see, pearls. Basically a strategic resource reveal, piggyback off leylines/etherium
   - [ ] pirate cove, water improvement that have to be 3 tiles from another, and get upgraded as they get worked, like cottage. Possible by Plot:SetProperty('worked', isWorked) on event ImprovementChanged(isWorked), then on PlayerTurnStarted use pPlayer:GetImprovements() to get a full list then filter to the Pirate Ports. Get their Plot, then Plot:SetProperty('turns_worked', ++). Then ImprovementBuilder:SetImprovementType()?
   ##### Malakim:
   most units have Nomad, double movement on desert, could apply on civ level, but then would include stuff like StoneWardens who are dwarves.
-  - [ ] +1 gold per desert is easy
-  - [x] Nomad race, part of promotion -> ability modifier. Adapt Genghis cav modifier.
+  - [x] +1 gold on desert tiles
+  - [x] Nomad race
   ##### Balseraph:
   slave and slave cages, puppets summons that inherit magic promotions units, affecting neutral cities, arenas, chance of killing unit but otherwise free xp
   - [ ] Create building in city if matches unit type, not present already, and city has carnival  Lua button on per unit basis, or ability basis for Human, Orc, Elf etc.
@@ -85,7 +85,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
   ##### Sheaim
   - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
-    - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
+  - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
   #### Hard:
   ##### Luichuirp:
   Golems being promotion lacking, slow healers, but mendable by mages with enchant 1, Barnaxus, passing buffs onto other golems globally may be awkward
@@ -102,8 +102,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] no concept of added specialist in civ vi, maybe as non-unique buildings, or a building with yields, then multiplied by number of specialists     Just make the specialist a modifier that grants +X yield to city centre. Implement via lua button. Unit:GetExperience():GetLevel() for check.
 
   ##### Clan of embers
-  - [ ] -10% science, lie Babylon 50% reduction
-  - [ ] warrens building makes all units in city be doubled, like Scythia for light cavalry, but repeat for all promoClasses
+  - [x] -10% science, lie Babylon 50% reduction
+  - [x] warrens building makes all units in city be doubled, like Scythia for light cavalry, but repeat for all promoClasses
   - [ ] Peace with barbarians trait, shared with doviello   WildW was thinking of something like this, look at comments on discord
 
   ##### Doviello
@@ -121,7 +121,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Ilians
   - [ ] The Deepening project to add tundra and snow
   - [ ] The Draw project to force war to you from everyone, half city population, half unit health    Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
-  - [ ] extra yields on snow terrain, like Auckland, Canada
+  - [x] extra yields on snow terrain, like Auckland, Canada
   - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 
   ##### Svartalfar

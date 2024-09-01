@@ -58,7 +58,7 @@ def techs_sql(model_obj, kept):
     for tech in six_style_techs:
         tech['TechnologyType'] = f"SLTH_{tech['TechnologyType']}"
 
-    [i for i in six_style_techs if i['TechnologyType'] == 'SLTH_TECH_FISHING'][0]['EmbarkUnitType'] = 'UNIT_BUILDER'
+    [i for i in six_style_techs if i['TechnologyType'] == 'TECH_FISHING'][0]['EmbarkUnitType'] = 'UNIT_BUILDER'
     [i for i in six_style_techs if i['TechnologyType'] == 'SLTH_TECH_SAILING'][0]['EmbarkAll'] = 1
     [i for i in six_style_techs if i['TechnologyType'] == 'SLTH_TECH_SAILING'][0]['EmbarkUnitType'] = 'SLTH_UNIT_MUD_GOLEM'
 
