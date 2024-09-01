@@ -51,6 +51,7 @@
         <LoadOrder>100</LoadOrder>
       </Properties>
       <File>Core/Civilizations/shared_grant_modifiers.sql</File>
+      <File>Core/Racials.sql</File>
     </UpdateDatabase>
     <UpdateDatabase id="Gameplay">
       <Properties>
@@ -61,16 +62,12 @@
       <File>Core/Civilizations/Balseraphs.sql</File>
       <File>Core/Civilizations/Bannor.sql</File>
       <File>Core/Civilizations/Calabim.sql</File>
-      <File>Core/Civilizations/Clan.sql</File>
-      <File>Core/Civilizations/Doviello.sql</File>
       <File>Core/Civilizations/Elohim.sql</File>
       <File>Core/Civilizations/Grigori.sql</File>
       <File>Core/Civilizations/Hippus.sql</File>
-      <File>Core/Civilizations/Illians.sql</File>
       <File>Core/Civilizations/Infernal.sql</File>
       <File>Core/Civilizations/Kuriotates.sql</File>
       <File>Core/Civilizations/Lanun.sql</File>
-      <File>Core/Civilizations/Luchuirp.sql</File>
       <File>Core/Civilizations/Malakim.sql</File>
       <File>Core/Civilizations/Mercurians.sql</File>
       <File>Core/Civilizations/Sheaim.sql</File>
@@ -78,10 +75,18 @@
       <File>Core/Civilizations/Elves/ElfSupport.sql</File>
       <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
       <File>Core/Civilizations/Elves/Svartalfar.sql</File>
-      <File>Core/Civilizations/Khazad/Khazad.sql</File>
+      <File>Core/Civilizations/Dwarves/DwarfCivs.sql</File>
+      <File>Core/Civilizations/Dwarves/Khazad.sql</File>
+      <File>Core/Civilizations/Dwarves/Luchuirp.sql</File>
+      <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
+      <File>Core/Civilizations/Winterborn/Illians.sql</File>
+      <File>Core/Civilizations/Winterborn/Doviello.sql</File>
+      <File>Core/Civilizations/BeastRaces/Clan.sql</File>
+      <!--File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File-->
       <File>Core/Religions.sql</File>
       <File>Core/Governments.sql</File>
       <File>Core/Abilities.sql</File>
+      <File>Core/HeroBanning.sql</File>
       <File>Core/Promotion.sql</File>
       <File>Core/Resources.sql</File>
       <File>Core/Improvements.sql</File>
@@ -92,6 +97,12 @@
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
     </UpdateDatabase>
+     <UpdateDatabase id="Gameplay_addon">
+      <Properties>
+        <LoadOrder>110</LoadOrder>
+      </Properties>
+      <File>Core/ResourceBuffs.sql</File>
+    </UpdateDatabase>
     <UpdateText id="Text">
       <File>Core/localization.sql</File>
     </UpdateText>
@@ -99,7 +110,7 @@
       <File>Lua/Maintenance.lua</File>
 	  <File>Lua/ExtraHeroes.lua</File>
       <File>Lua/Gameplay.lua</File>
-      <File>Core/Civilizations/Khazad/Khazad.lua</File>
+      <File>Core/Civilizations/Dwarves/Khazad.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>
@@ -149,11 +160,14 @@
     <File>Core/Religions.sql</File>
     <File>Core/Governments.sql</File>
     <File>Core/Abilities.sql</File>
+    <File>Core/HeroBanning.sql</File>
     <File>Core/Promotion.sql</File>
     <File>Core/Resources.sql</File>
+    <File>Core/ResourceBuffs.sql</File>
     <File>Core/Improvements.sql</File>
     <File>Core/Technologies.sql</File>
     <File>Core/Units.sql</File>
+    <File>Core/Racials.sql</File>
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
     <File>Core/Lua_support/Mana_support.sql</File>
@@ -161,16 +175,12 @@
     <File>Core/Civilizations/Balseraphs.sql</File>
     <File>Core/Civilizations/Bannor.sql</File>
     <File>Core/Civilizations/Calabim.sql</File>
-    <File>Core/Civilizations/Clan.sql</File>
-    <File>Core/Civilizations/Doviello.sql</File>
     <File>Core/Civilizations/Elohim.sql</File>
     <File>Core/Civilizations/Grigori.sql</File>
     <File>Core/Civilizations/Hippus.sql</File>
-    <File>Core/Civilizations/Illians.sql</File>
     <File>Core/Civilizations/Infernal.sql</File>
     <File>Core/Civilizations/Kuriotates.sql</File>
     <File>Core/Civilizations/Lanun.sql</File>
-    <File>Core/Civilizations/Luchuirp.sql</File>
     <File>Core/Civilizations/Malakim.sql</File>
     <File>Core/Civilizations/Mercurians.sql</File>
     <File>Core/Civilizations/Sheaim.sql</File>
@@ -178,10 +188,16 @@
     <File>Core/Civilizations/Elves/ElfSupport.sql</File>
     <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
     <File>Core/Civilizations/Elves/Svartalfar.sql</File>
-    <File>Core/Civilizations/Khazad/Khazad.sql</File>
     <File>Core/Civilizations/shared_grant_modifiers.sql</File>
-    <File>Core/Civilizations/Khazad/Khazad.sql</File>
-    <File>Core/Civilizations/Khazad/Khazad.lua</File>
+    <File>Core/Civilizations/Dwarves/Khazad.sql</File>
+    <File>Core/Civilizations/Dwarves/Khazad.lua</File>
+    <File>Core/Civilizations/Dwarves/Luchuirp.sql</File>
+    <File>Core/Civilizations/Dwarves/DwarfCivs.sql</File>
+    <File>Core/Civilizations/Winterborn/Doviello.sql</File>
+    <File>Core/Civilizations/Winterborn/Illians.sql</File>
+    <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
+    <File>Core/Civilizations/BeastRaces/Clan.sql</File>
+    <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>

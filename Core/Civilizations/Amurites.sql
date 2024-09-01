@@ -79,9 +79,13 @@ INSERT INTO Improvement_ValidBuildUnits(UnitType, ImprovementType, ConsumesCharg
 
 INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_UNIT_WIZARD', 'CLASS_ADEPT'),
+('SLTH_UNIT_WIZARD', 'CAN_BE_RACIALIZED'),
 ('SLTH_UNIT_FIREBOW', 'CLASS_RANGED'),
+('SLTH_UNIT_FIREBOW', 'CAN_BE_RACIALIZED'),
 ('SLTH_UNIT_CHANTER', 'CLASS_RECON'),
-('SLTH_UNIT_GOVANNON', 'CLASS_ADEPT');
+('SLTH_UNIT_CHANTER', 'CAN_BE_RACIALIZED'),
+('SLTH_UNIT_GOVANNON', 'CLASS_ADEPT'),
+('SLTH_UNIT_GOVANNON', 'RACE_HUMAN');
 
 -- work needed to for custom functions of CoA
 INSERT INTO Buildings(BuildingType, Name, PrereqTech, PrereqCivic, Cost, PrereqDistrict, Description, OuterDefenseHitPoints, Housing, Entertainment, TraitType, CitizenSlots, AdvisorType) VALUES

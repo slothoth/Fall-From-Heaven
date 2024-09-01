@@ -36,7 +36,7 @@
 # Unit Modifier
 - [x] TerrainDoubleMove
 - [x] FeatureDoubleMove
-- [x] bHillsDoubleMove
+- [x] HILLS_DOUBLE_MOVE
 - [ ] TerrainAttack
 - [ ] TerrainDefense
 - [x] Terrain_Strength

@@ -8,3 +8,9 @@ db_storer.py
 /civ_library/*
 python_gen/data/foreign_keys.json
 /python_gen/data/loc.csv
+/python_gen/data/frontend_tables
+/Platforms/
+/python_gen/data/Debug*
+
+/python_gen/build_utils/FallFromHeaven.Mod.art.xml
+/python_gen/build_utils/correct.xml
