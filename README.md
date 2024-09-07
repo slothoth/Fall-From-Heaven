@@ -174,6 +174,9 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Reexamine if that buildings path makes sense.
 ## Religion System:
   - [ ] due to custom religions being a thing, how do we incorporate the veil, Order, kilmorph?  : Plan is, custom policy screen grants access to religion policy once in one of your cities. Predefine religions on map startup by assigning them as being founded by dummy civs? Can give people Mvemba traits if we wanna use Founder beliefs. + Amenities may be an issue. Game.GetReligion():FoundReligion(); Game.GetReligion():AddBelief();  Pantheons may bite us in the ass. Also Holy City will have to be manually implemented through City:SetProperty()
+  - [x] Extra Policies on Policy Screen
+  - [L] Investigate Religion as Removing/Allowing Policies (WC is dll bound, can only grant policy not take away in Lua. PolicyXP1 allows dark age policies, no more granular than 1 or 0)
+  - [ ] Investigate Religion as Religion lol. Do check on each civ to see what religions it qualifies for based on religion spread to it, do a playerProperty for each relgion as Yes can or no Cant. Do a custom screen to select which religion, stealing copiously from PolicyScreen. For AI, just make them do first religion, and stay on if has unique units from it, and move off if lost majority. Also possibly custom preferences, like no Veil for Bannor say.
 ## Governer System:
   - [ ] Make sure governers arent broken
   - [ ] existing governers arent very flavourful to the ffh universe, but this is an added extra
@@ -187,6 +190,11 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Wonder System:
   - [ ] Find why we cant find filter wonders in buildinginfos
   - [ ] Extra: port existing wonders to outside the city and adjust as needed.
+# Specialist System:
+- [ ] Permanent specialists could implement as a few modifiers on a city, with variable values based on requirements?
+- [ ] assignable ones feels like a pain. Can we check number of assigned specialists in a district and award yields in Lua?
+- [ ] For permanent, check requirements. Policies (LuaProperty), Building (Req) seem to be the only modifiers
+- [ ] UI to see these Specialists
 ## Over/Undercouncil:
   - world congress but without inclusive participation : bonus feature really
 ## Agendas for leaders:
