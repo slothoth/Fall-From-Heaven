@@ -331,3 +331,11 @@ INSERT INTO Types(Type, Kind) VALUES
 ('SLTH_POLICY_MERCANTILISM', 'KIND_POLICY'),
 ('SLTH_POLICY_FOREIGN_TRADE', 'KIND_POLICY'),
 ('SLTH_POLICY_GUARDIAN_OF_NATURE', 'KIND_POLICY');
+
+UPDATE Policies SET PrereqCivic = 'CIVIC_CODE_OF_LAWS' WHERE PolicyType in ('SLTH_POLICY_DESPOTISM',
+                                                                            'SLTH_POLICY_RELIGION',
+                                                                            'SLTH_POLICY_PACIFISM',
+                                                                           'SLTH_POLICY_NATIONHOOD',
+                                                                           'SLTH_POLICY_TRIBALISM',
+                                                                           'SLTH_POLICY_DECENTRALIZATION');
+-- just for fast debugging

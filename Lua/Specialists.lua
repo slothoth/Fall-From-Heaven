@@ -46,4 +46,12 @@ function OnPolicyChanged(iPlayerID, ePolicyIndex, bEnacted)
 	end
 end
 
+--function LostWonderSpecialist(newPlayerID , oldPlayerID , newCityID , cityX ,cityY)
+	-- if city has Great Library
+	-- if city has Guild of Hammers
+	-- if city has Luonnotar (well you wrecked lol) (maybe we store it for reconquering?)
+	-- if city has Hall of Kings
+--end
+--GameEvents.CityConquered.Add(LostWonderSpecialist);
+
 GameEvents.PolicyChanged.Add(OnPolicyChanged);
