@@ -92,6 +92,8 @@
       <File>Core/Improvements.sql</File>
       <File>Core/Technologies.sql</File>
       <File>Core/Units.sql</File>
+      <File>Core/Specialists/Specialists.sql</File>
+      <File>Core/Specialists/GreatPersons.sql</File>
       <File>Core/CivPolishing.sql</File>
       <File>Core/Lua_support/Mana_support.sql</File>
       <File>Core/Modifier_Support.sql</File>
@@ -110,6 +112,7 @@
       <File>Lua/Maintenance.lua</File>
 	  <File>Lua/ExtraHeroes.lua</File>
       <File>Lua/Gameplay.lua</File>
+      <File>Lua/Specialists.lua</File>
       <File>Core/Civilizations/Dwarves/Khazad.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
@@ -168,6 +171,8 @@
     <File>Core/Technologies.sql</File>
     <File>Core/Units.sql</File>
     <File>Core/Racials.sql</File>
+    <File>Core/Specialists/Specialists.sql</File>
+    <File>Core/Specialists/GreatPersons.sql</File>
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
     <File>Core/Lua_support/Mana_support.sql</File>
@@ -203,7 +208,7 @@
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Gameplay.lua</File>
     <File>Lua/Maintenance.lua</File>
-    <File>Lua/vaults.lua</File>
+    <File>Lua/Specialists.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>
