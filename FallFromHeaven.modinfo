@@ -125,17 +125,7 @@
       <Properties>
         <LoadOrder>150000</LoadOrder>
       </Properties>
-      <File>UI/ToolTipHelper_PlayerYields.lua</File>
-      <File>UI/TopPanel.lua</File>
-      <File>UI/ReportScreen.lua</File>
-      <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
       <File>UI/TechTree_support.lua</File>
-    </ImportFiles>
-    <ImportFiles id="LUA_Replacers_XP2" criteria="Expansion2">
-      <Properties>
-        <LoadOrder>150005</LoadOrder>
-      </Properties>
-      <File>UI/XP2/TopPanel.lua</File>
     </ImportFiles>
     <ReplaceUIScript id="ResearchChooserHideFFH">
       <Properties>
@@ -150,6 +140,41 @@
             <LoadOrder>10950</LoadOrder>
             <LuaContext>TechTree</LuaContext>
             <LuaReplace>UI/TechTree_overrides.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_TopPanel_BaseFFH">
+        <Properties>
+            <LoadOrder>1100</LoadOrder>
+            <LuaContext>TopPanel</LuaContext>
+            <LuaReplace>UI/FFH_TopPanel.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_TopPanel_XP2FFH" criteria="Expansion2">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>TopPanel</LuaContext>
+            <LuaReplace>UI/FFH_TopPanel_XP2.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_ModalScreen_PlayerYieldsHelper_FFH">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>ModalScreen_PlayerYieldsHelper</LuaContext>
+            <LuaReplace>UI/ModalScreen_PlayerYieldsHelper.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_ReportScreen_FFH">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>ReportScreen</LuaContext>
+            <LuaReplace>UI/ReportScreen.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_ToolTipHelper_PlayerYields_FFH">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>ToolTipHelper_PlayerYields</LuaContext>
+            <LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
     <UpdateIcons id="Icons">
@@ -222,8 +247,8 @@
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
     <File>UI/ToolTipHelper_PlayerYields.lua</File>
-    <File>UI/TopPanel.lua</File>
-    <File>UI/XP2/TopPanel.lua</File>
+    <File>UI/FFH_TopPanel.lua</File>
+    <File>UI/FFH_TopPanel_XP2.lua</File>
     <File>UI/ReportScreen.lua</File>
     <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
     <File>UI/TechTree_support.lua</File>

@@ -1,3 +1,4 @@
+include("ToolTipHelper_PlayerYields")
 -- ===========================================================================
 -- Shared code to get the tool tip for the local player's gold.
 --
@@ -68,61 +69,6 @@ function GetGoldTooltip()
 		szReturnValue = szReturnValue .. Locale.Lookup("LOC_TOP_PANEL_GOLD_EXPENSE", -playerTreasury:GetTotalMaintenance() - dist_maintenance - num_maintenance);
 		if(#expense_tt_details > 0) then
 			szReturnValue = szReturnValue .. "[NEWLINE]" .. expense_tt_details;
-		end
-	end
-	return szReturnValue;
-end
-
--- ===========================================================================
-function GetScienceTooltip()
-	local szReturnValue = "";
-
-	local localPlayerID = Game.GetLocalPlayer();
-	if (localPlayerID ~= -1) then
-		local playerTechnology		:table	= Players[localPlayerID]:GetTechs();
-		local currentScienceYield	:number = playerTechnology:GetScienceYield();
-
-		szReturnValue = Locale.Lookup("LOC_TOP_PANEL_SCIENCE_YIELD");
-		local science_tt_details = playerTechnology:GetScienceYieldToolTip();
-		if(#science_tt_details > 0) then
-			szReturnValue = szReturnValue .. "[NEWLINE][NEWLINE]" .. science_tt_details;
-		end
-	end
-	return szReturnValue;
-end
-
--- ===========================================================================
-function GetCultureTooltip()
-	local szReturnValue = "";
-
-	local localPlayerID = Game.GetLocalPlayer();
-	if (localPlayerID ~= -1) then
-		local playerCulture			:table	= Players[localPlayerID]:GetCulture();
-		local currentCultureYield	:number = playerCulture:GetCultureYield();
-
-		szReturnValue = Locale.Lookup("LOC_TOP_PANEL_CULTURE_YIELD");
-		local culture_tt_details = playerCulture:GetCultureYieldToolTip();
-		if(#culture_tt_details > 0) then
-			szReturnValue = szReturnValue .. "[NEWLINE][NEWLINE]" .. culture_tt_details;
-		end
-	end
-	return szReturnValue;
-end
-
--- ===========================================================================
-function GetFaithTooltip()
-	local szReturnValue = "";
-
-	local localPlayerID = Game.GetLocalPlayer();
-	if (localPlayerID ~= -1) then
-		local playerReligion		:table	= Players[localPlayerID]:GetReligion();
-		local faithYield			:number = playerReligion:GetFaithYield();
-		local faithBalance			:number = playerReligion:GetFaithBalance();
-
-		szReturnValue = Locale.Lookup("LOC_TOP_PANEL_FAITH_YIELD");
-		local faith_tt_details = playerReligion:GetFaithYieldToolTip();
-		if(#faith_tt_details > 0) then
-			szReturnValue = szReturnValue .. "[NEWLINE][NEWLINE]" .. faith_tt_details;
 		end
 	end
 	return szReturnValue;

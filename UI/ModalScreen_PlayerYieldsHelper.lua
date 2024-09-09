@@ -1,4 +1,4 @@
-include( "ToolTipHelper_PlayerYields" );
+include( "ModalScreen_PlayerYieldsHelper" );
 
 -- ===========================================================================
 --	GLOBALS
@@ -116,13 +116,4 @@ function RefreshYields()
 		Controls.ModalScreenClose:Reparent();
 	end
 	return true;
-end
-
--- ===========================================================================
-function FormatValuePerTurn( value:number )
-	if(value == 0) then
-		return Locale.ToNumber(value);
-	else
-		return Locale.Lookup("{1: number +#,###.#;-#,###.#}", value);
-	end
 end
