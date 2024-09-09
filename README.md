@@ -181,10 +181,19 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Make sure governers arent broken
   - [ ] existing governers arent very flavourful to the ffh universe, but this is an added extra
 ## Great People System:
-  - [ ] Duplicate Great people so they all are basically the same, as for civ iv.
-  - [ ] Buttons for making Academy, doing Trade Mission, Culture Bomb (bad in context), 
-  - [ ] Use name list from xml/Text to generate names
+  - [x] Duplicate Great people so they all are basically the same, as for civ iv.
+  - [x] Buttons for making Academy, Religious Wonders, SuperSpecialist
+  - [ ] Trade Mission, Gold for distance, gold for city size
+  - [ ] Culture Bomb, big grant of culture, and border expansion
+  - [ ] Bulbing techs.
+  - [ ] Golden ages. playerProperty to see number of golden ages triggered, to know how many great people to consume. playerProperty to get all current Great people owned, and also references to delete them on use.
+  - [ ] Great General Command post, Junil
+  - [ ] Great General aura all eras
+  - [x] Lunnotar Buildings in Lua/with modifiers
+  - [ ] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
+  - [x] Use name list from xml/Text to generate names
   - [ ] Grigori Great Adventurer issue, put under Great Writer, and then change its requirements
+  - [ ] Dark elf kidnapping superSpecialist ( apply a modifier  with the reverse values of a superspecialist) and spawn a great person
 ## City State System:
   - [ ] didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 ## Wonder System:

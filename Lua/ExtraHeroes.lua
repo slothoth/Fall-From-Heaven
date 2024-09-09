@@ -122,19 +122,62 @@ function GrantBuildingFunction(iAndyPlayer, iUnit, iX, iY, sModifierGrant)
 end
 
 function GrantSuperSpecialist(iAndyPlayer, iUnit, iX, iY)
-	print('in gameplay')
 	local pUnit = UnitManager.GetUnit(iAndyPlayer, iUnit);
 	local iUnitType = pUnit:GetType();
 	local pCity = Cities.GetCityInPlot(iX, iY)
-	print('now attaching modifiers')
 	for idx, sModifier in ipairs(tSuperSpecialistModifiers[iUnitType]) do
 		pCity:AttachModifierByID(sModifier)
 	end
 	for idx, sModifier in ipairs(tSuperSpecialistGenericModifiers) do
 		pCity:AttachModifierByID(sModifier)
 	end
-	print('now killing unit')
 	UnitManager.Kill(pUnit);
+end
+
+function GrantGoldenAge(iPlayer, t_iUnits)
+	local pPlayer = Players[iPlayer]
+	local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
+	for iUnitType, iUnitID in t_iUnits do
+		local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+		UnitManager.Kill(pUnit);
+	end
+	local pPlot
+	for idx, pCity in pPlayer:GetCities():Members() do
+		pPlot = pCity:GetPlot();
+        pPlot:SetProperty('InGoldenAge', 1);
+	end
+	pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + 10)
+	pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
+end
+
+function FlushGoldenAge(pPlayer)
+	local pPlot
+	for idx, pCity in pPlayer:GetCities():Members() do
+		pPlot = pCity:GetPlot();
+        pPlot:SetProperty('InGoldenAge', 0);
+	end
+end
+
+function TimerSystem(playerID)
+	local iTurnsLeft
+	local iNewTurnsLeft
+	local pPlayer = Players[playerID]
+	for sMechanicName, entry in pairs(tTimers) do
+		iTurnsLeft = pPlayer:GetProperty(entry.sProperty)
+		if iTurnsLeft then
+			iNewTurnsLeft = iTurnsLeft - 1
+			if iNewTurnsLeft < 1 then
+				iNewTurnsLeft = nil
+				entry.callback(pPlayer)
+			end
+			pPlayer:SetProperty(entry.sProperty, iNewTurnsLeft)
+		end
+		if iNewTurnsLeft < 1 then
+			entry.callback(pPlayer)
+		else
+			tTimers[sMechanicName] = iNewTurnsLeft
+		end
+	end
 end
 
 function Initialize()
@@ -144,6 +187,9 @@ function Initialize()
 	ExposedMembers.ExtraHeroes.AndyLawFunction = AndyLawFunction;
 	ExposedMembers.ExtraHeroes.GrantBuildingFunction = GrantBuildingFunction;
 	ExposedMembers.ExtraHeroes.GrantSuperSpecialist = GrantSuperSpecialist;
+	ExposedMembers.ExtraHeroes.GrantGoldenAge = GrantGoldenAge
+	tTimers = {GoldenAges = { sProperty = 'GoldenAgeDuration', callback = FlushGoldenAge}}
 end
 
 Initialize();
+GameEvents.PlayerTurnDeactivated.Add(TimerSystem);
