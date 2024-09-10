@@ -20,20 +20,14 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     local pCity = Cities.GetCityInPlot(iPlotX, iPlotY)
     local tSpecificUnitControls = tUnitControls[iUnitIndex]
     if tSpecificUnitControls then
-        for gridButton, tButton in pairs(tSpecificUnitControls) do
-            print(gridButton)
-        end
-    end
-    if pCity and tSpecificUnitControls then
         for gridButton, tButton in pairs(tControlsAdded) do
-            print(gridButton)
             print(tSpecificUnitControls[gridButton])
             if tSpecificUnitControls[gridButton] then
-                if tSpecificUnitControls[gridButton] == 'SHOW_ON_CITY' then
+                if tSpecificUnitControls[gridButton] == 'SHOW_ON_CITY' and pCity then
                     gridButton:SetHide(false)
                 elseif tSpecificUnitControls[gridButton] == 'GOLDEN_AGE_LOGIC' then
                     goldenAgeHide(gridButton, iPlayerID, pPlayer, iUnitID, iUnitIndex)
-                elseif pCity:GetBuildings():HasBuilding(tSpecificUnitControls[gridButton]) then
+                elseif pCity and pCity:GetBuildings():HasBuilding(tSpecificUnitControls[gridButton]) then
                     gridButton:SetHide(true)
                 else
                     gridButton:SetHide(false)
@@ -77,28 +71,41 @@ end
 function goldenAgeHide(gridButton, iPlayerID, pPlayer, iUnitID, iUnitIndex)
     print('attempting golden age hide')
     local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
-    local bRecalculateSacrificeList
-    if #tGreatPeopleUnitIDs > iUniqueGreatPeopleRequirement then            -- saves recalculating when golden possible
+    local bRecalculateSacrificeList = false
+    print(table.count(tGreatPeopleUnitIDs))
+    print(iUniqueGreatPeopleRequirement)
+    if table.count(tGreatPeopleUnitIDs) >= iUniqueGreatPeopleRequirement then            -- saves recalculating when golden possible
+        print('check if all still alive and value in index')
         if tGreatPeopleUnitIDs[iUnitIndex] ~= iUnitID then
-            bRecalculateSacrificeList = True
+            bRecalculateSacrificeList = true
         end
         for iUnitType, iPreDefUnitID in pairs(tGreatPeopleUnitIDs) do             -- still need to check the unit exists
             if not UnitManager.GetUnit(iPlayerID, iPreDefUnitID) then
-                bRecalculateSacrificeList = True
+                bRecalculateSacrificeList = true
                 break
             end
         end
+    else
+        bRecalculateSacrificeList = true
+        print('build list')
+        print(bRecalculateSacrificeList)
     end
+    print(bRecalculateSacrificeList)
     if bRecalculateSacrificeList then
+        print('building list')
         tGreatPeopleUnitTypes[iUnitIndex] = iUnitID
         for _, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
             local unitType = pPlayerUnit:GetType()
-            if tGreatPeopleUnitTypes[unitType] and not tGreatPeopleUnitIDs[unitType] then
+            if tGreatPeopleUnitTypes[unitType] and table.count(tGreatPeopleUnitIDs) < iUniqueGreatPeopleRequirement and not tGreatPeopleUnitIDs[unitType] then
                 tGreatPeopleUnitIDs[unitType] = pPlayerUnit:GetID()
+                print('added great person')
             end
         end
     end
-    if #tGreatPeopleUnitIDs > iUniqueGreatPeopleRequirement then
+    print('-------------------------------------------')
+    print(table.count(tGreatPeopleUnitIDs))
+    print(iUniqueGreatPeopleRequirement)
+    if table.count(tGreatPeopleUnitIDs) >= iUniqueGreatPeopleRequirement then
         gridButton:SetHide(false)
     else
         gridButton:SetHide(true)
@@ -186,6 +193,13 @@ function UnitGatherInfo()
 	local iUnit = pUnit:GetID();
 	local iPlayer = pUnit:GetOwner();
     return pUnit, iX, iY, iUnit, iPlayer
+end
+
+function SlthLog(sMessage)
+    SLTH_DEBUG_ON = True
+    if SLTH_DEBUG_ON then
+        print(sMessage)
+    end
 end
 
 function Setup()

@@ -137,14 +137,14 @@ end
 function GrantGoldenAge(iPlayer, t_iUnits)
 	local pPlayer = Players[iPlayer]
 	local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
-	for iUnitType, iUnitID in t_iUnits do
+	for iUnitType, iUnitID in pairs(t_iUnits) do
 		local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
 		UnitManager.Kill(pUnit);
 	end
-	local pPlot
 	for idx, pCity in pPlayer:GetCities():Members() do
-		pPlot = pCity:GetPlot();
-        pPlot:SetProperty('InGoldenAge', 1);
+		local pPlot = pCity:GetPlot();
+		print(pPlot)						-- plot exists
+        pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instea of nil?
 	end
 	pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + 10)
 	pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
