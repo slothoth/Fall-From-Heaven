@@ -3,7 +3,7 @@ def delete_rows(model_obj, kept):
                                                      'SET_COL': 'CivicType', 'SET_EQUALS': 'CIVIC_FEUDALISM'})
 
     dict_insert(model_obj, 'Resource_Harvests', {'WHERE_COL': 'PrereqTech', 'WHERE_EQUALS': 'TECH_POTTERY',
-                                                 'SET_COL': 'PrereqTech', 'SET_EQUALS': 'SLTH_TECH_AGRICULTURE'})
+                                                 'SET_COL': 'PrereqTech', 'SET_EQUALS': 'TECH_AGRICULTURE'})
 
     unit_military_engineer_issues = ['Route_ValidBuildUnits',
                                      'Building_BuildChargeProductions', 'District_BuildChargeProductions']

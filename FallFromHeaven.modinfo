@@ -40,24 +40,70 @@
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
-    <UpdateDatabase id="Gameplay">
+    <UpdateDatabase id="Deletes_first">
+      <Properties>
+        <LoadOrder>95</LoadOrder>
+      </Properties>
+      <File>Core/Delete_Update.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="Gameplay_first">
       <Properties>
         <LoadOrder>100</LoadOrder>
       </Properties>
-      <File>Core/Delete_Update.sql</File>
+      <File>Core/Civilizations/shared_grant_modifiers.sql</File>
+      <File>Core/Racials.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="Gameplay">
+      <Properties>
+        <LoadOrder>105</LoadOrder>
+      </Properties>
       <File>Core/Buildings.sql</File>
-      <File>Core/Civilizations.sql</File>
+      <File>Core/Civilizations/Amurites.sql</File>
+      <File>Core/Civilizations/Balseraphs.sql</File>
+      <File>Core/Civilizations/Bannor.sql</File>
+      <File>Core/Civilizations/Calabim.sql</File>
+      <File>Core/Civilizations/Elohim.sql</File>
+      <File>Core/Civilizations/Grigori.sql</File>
+      <File>Core/Civilizations/Hippus.sql</File>
+      <File>Core/Civilizations/Infernal.sql</File>
+      <File>Core/Civilizations/Kuriotates.sql</File>
+      <File>Core/Civilizations/Lanun.sql</File>
+      <File>Core/Civilizations/Malakim.sql</File>
+      <File>Core/Civilizations/Mercurians.sql</File>
+      <File>Core/Civilizations/Sheaim.sql</File>
+      <File>Core/Civilizations/Sidar.sql</File>
+      <File>Core/Civilizations/Elves/ElfSupport.sql</File>
+      <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
+      <File>Core/Civilizations/Elves/Svartalfar.sql</File>
+      <File>Core/Civilizations/Dwarves/DwarfCivs.sql</File>
+      <File>Core/Civilizations/Dwarves/Khazad.sql</File>
+      <File>Core/Civilizations/Dwarves/Luchuirp.sql</File>
+      <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
+      <File>Core/Civilizations/Winterborn/Illians.sql</File>
+      <File>Core/Civilizations/Winterborn/Doviello.sql</File>
+      <File>Core/Civilizations/BeastRaces/Clan.sql</File>
+      <!--File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File-->
+      <File>Core/Religions.sql</File>
       <File>Core/Governments.sql</File>
       <File>Core/Abilities.sql</File>
+      <File>Core/HeroBanning.sql</File>
       <File>Core/Promotion.sql</File>
       <File>Core/Resources.sql</File>
+      <File>Core/Improvements.sql</File>
       <File>Core/Technologies.sql</File>
       <File>Core/Units.sql</File>
+      <File>Core/Specialists/Specialists.sql</File>
+      <File>Core/Specialists/GreatPersons.sql</File>
       <File>Core/CivPolishing.sql</File>
       <File>Core/Lua_support/Mana_support.sql</File>
-      <File>Core/Lua_support/vaults.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
+    </UpdateDatabase>
+     <UpdateDatabase id="Gameplay_addon">
+      <Properties>
+        <LoadOrder>110</LoadOrder>
+      </Properties>
+      <File>Core/ResourceBuffs.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
       <File>Core/localization.sql</File>
@@ -66,7 +112,8 @@
       <File>Lua/Maintenance.lua</File>
 	  <File>Lua/ExtraHeroes.lua</File>
       <File>Lua/Gameplay.lua</File>
-      <File>Lua/vaults.lua</File>
+      <File>Lua/Specialists.lua</File>
+      <File>Core/Civilizations/Dwarves/Khazad.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>
@@ -78,17 +125,58 @@
       <Properties>
         <LoadOrder>150000</LoadOrder>
       </Properties>
-      <File>UI/ToolTipHelper_PlayerYields.lua</File>
-      <File>UI/TopPanel.lua</File>
-      <File>UI/ReportScreen.lua</File>
-      <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
+      <File>UI/TechTree_support.lua</File>
     </ImportFiles>
-    <ImportFiles id="LUA_Replacers_XP2" criteria="Expansion2">
+    <ReplaceUIScript id="ResearchChooserHideFFH">
       <Properties>
-        <LoadOrder>150005</LoadOrder>
+          <LoadOrder>1100</LoadOrder>
+          <LuaContext>ResearchChooser</LuaContext>
+          <LuaReplace>UI/ResearchChooser_overrides.lua</LuaReplace>
       </Properties>
-      <File>UI/XP2/TopPanel.lua</File>
-    </ImportFiles>
+    </ReplaceUIScript>
+
+    <ReplaceUIScript id="ReplaceUI_TechTree_BaseFFH">
+        <Properties>
+            <LoadOrder>10950</LoadOrder>
+            <LuaContext>TechTree</LuaContext>
+            <LuaReplace>UI/TechTree_overrides.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_TopPanel_BaseFFH">
+        <Properties>
+            <LoadOrder>1100</LoadOrder>
+            <LuaContext>TopPanel</LuaContext>
+            <LuaReplace>UI/FFH_TopPanel.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_TopPanel_XP2FFH" criteria="Expansion2">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>TopPanel</LuaContext>
+            <LuaReplace>UI/FFH_TopPanel_XP2.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_ModalScreen_PlayerYieldsHelper_FFH">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>ModalScreen_PlayerYieldsHelper</LuaContext>
+            <LuaReplace>UI/ModalScreen_PlayerYieldsHelper.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_ReportScreen_FFH">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>ReportScreen</LuaContext>
+            <LuaReplace>UI/ReportScreen.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_ToolTipHelper_PlayerYields_FFH">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>ToolTipHelper_PlayerYields</LuaContext>
+            <LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
     <UpdateIcons id="Icons">
       <File>Icons.xml</File>
     </UpdateIcons>
@@ -97,23 +185,55 @@
     <File>Core/localization.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
-    <File>Core/Civilizations.sql</File>
+    <File>Core/Religions.sql</File>
     <File>Core/Governments.sql</File>
     <File>Core/Abilities.sql</File>
+    <File>Core/HeroBanning.sql</File>
     <File>Core/Promotion.sql</File>
     <File>Core/Resources.sql</File>
+    <File>Core/ResourceBuffs.sql</File>
+    <File>Core/Improvements.sql</File>
     <File>Core/Technologies.sql</File>
     <File>Core/Units.sql</File>
+    <File>Core/Racials.sql</File>
+    <File>Core/Specialists/Specialists.sql</File>
+    <File>Core/Specialists/GreatPersons.sql</File>
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
     <File>Core/Lua_support/Mana_support.sql</File>
-    <File>Core/Lua_support/vaults.sql</File>
+    <File>Core/Civilizations/Amurites.sql</File>
+    <File>Core/Civilizations/Balseraphs.sql</File>
+    <File>Core/Civilizations/Bannor.sql</File>
+    <File>Core/Civilizations/Calabim.sql</File>
+    <File>Core/Civilizations/Elohim.sql</File>
+    <File>Core/Civilizations/Grigori.sql</File>
+    <File>Core/Civilizations/Hippus.sql</File>
+    <File>Core/Civilizations/Infernal.sql</File>
+    <File>Core/Civilizations/Kuriotates.sql</File>
+    <File>Core/Civilizations/Lanun.sql</File>
+    <File>Core/Civilizations/Malakim.sql</File>
+    <File>Core/Civilizations/Mercurians.sql</File>
+    <File>Core/Civilizations/Sheaim.sql</File>
+    <File>Core/Civilizations/Sidar.sql</File>
+    <File>Core/Civilizations/Elves/ElfSupport.sql</File>
+    <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
+    <File>Core/Civilizations/Elves/Svartalfar.sql</File>
+    <File>Core/Civilizations/shared_grant_modifiers.sql</File>
+    <File>Core/Civilizations/Dwarves/Khazad.sql</File>
+    <File>Core/Civilizations/Dwarves/Khazad.lua</File>
+    <File>Core/Civilizations/Dwarves/Luchuirp.sql</File>
+    <File>Core/Civilizations/Dwarves/DwarfCivs.sql</File>
+    <File>Core/Civilizations/Winterborn/Doviello.sql</File>
+    <File>Core/Civilizations/Winterborn/Illians.sql</File>
+    <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
+    <File>Core/Civilizations/BeastRaces/Clan.sql</File>
+    <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Gameplay.lua</File>
     <File>Lua/Maintenance.lua</File>
-    <File>Lua/vaults.lua</File>
+    <File>Lua/Specialists.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>
@@ -127,9 +247,12 @@
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
     <File>UI/ToolTipHelper_PlayerYields.lua</File>
-    <File>UI/TopPanel.lua</File>
-    <File>UI/XP2/TopPanel.lua</File>
+    <File>UI/FFH_TopPanel.lua</File>
+    <File>UI/FFH_TopPanel_XP2.lua</File>
     <File>UI/ReportScreen.lua</File>
     <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
+    <File>UI/TechTree_support.lua</File>
+    <File>UI/TechTree_overrides.lua</File>
+    <File>UI/ResearchChooser_overrides.lua</File>
   </Files>
 </Mod>

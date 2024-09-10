@@ -60,23 +60,24 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Hippus:  unique abilty buffing heavy and light cavalry : adjusted Genghis Khan modifier
   ##### Khazad:
   - [x] lots of banned units
-  - [ ] cities have buffs/ nerfs depending on current gold / number of cities -> Lua: Could do lua side that sets plot property of city, and 5 modifiers for each stage, applied to each city, with requirement REQUIREMENT_PLOT_PROPERTY_MATCHES. Although unsure if modifier with City context would have plot as a subject for requirements...
+  - [x] cities have buffs/ nerfs depending on current gold / number of cities -> Lua: Could do lua side that sets plot property of city, and 5 modifiers for each stage, applied to each city, with requirement REQUIREMENT_PLOT_PROPERTY_MATCHES. Although unsure if modifier with City context would have plot as a subject for requirements...
   - [x] Dwarven units moving fast on hills
   ##### Ljolsfar:
-  - [ ] elven workers can build in forest without chopping    Can do this with dummy tech and RHAI-style tech hiding.
+  - [x] elven workers can build in forest without chopping    Can do this with dummy tech and RHAI-style tech hiding.
+  - [x] racial units are not applied on civ level, instead as production level 
   - [x] all archer units are stronger, Genghis style
   #### Medium:
   ##### Elohim:
   tolerant, can build conquered cities civ unique stuff.     
   - [ ] needs to implement some concept of inherent city identity, check civ conquer mode? But then apply only to that city. hmmm
   ##### Lanun:
-  - [ ] coast tiles get +1 food    : ez, just a variant of auckland
+  - [x] coast tiles get +1 food 
   - [ ] unique resource others cant access or see, pearls. Basically a strategic resource reveal, piggyback off leylines/etherium
   - [ ] pirate cove, water improvement that have to be 3 tiles from another, and get upgraded as they get worked, like cottage. Possible by Plot:SetProperty('worked', isWorked) on event ImprovementChanged(isWorked), then on PlayerTurnStarted use pPlayer:GetImprovements() to get a full list then filter to the Pirate Ports. Get their Plot, then Plot:SetProperty('turns_worked', ++). Then ImprovementBuilder:SetImprovementType()?
   ##### Malakim:
   most units have Nomad, double movement on desert, could apply on civ level, but then would include stuff like StoneWardens who are dwarves.
-  - [ ] +1 gold per desert is easy
-  - [x] Nomad race, part of promotion -> ability modifier. Adapt Genghis cav modifier.
+  - [x] +1 gold on desert tiles
+  - [x] Nomad race
   ##### Balseraph:
   slave and slave cages, puppets summons that inherit magic promotions units, affecting neutral cities, arenas, chance of killing unit but otherwise free xp
   - [ ] Create building in city if matches unit type, not present already, and city has carnival  Lua button on per unit basis, or ability basis for Human, Orc, Elf etc.
@@ -84,11 +85,11 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
   ##### Sheaim
   - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
-    - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
+  - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
   #### Hard:
   ##### Luichuirp:
   Golems being promotion lacking, slow healers, but mendable by mages with enchant 1, Barnaxus, passing buffs onto other golems globally may be awkward
-  - [ ] modifier to reduce healing on golem units     copy vampire mechanic without pillage part.
+  - [x] modifier to reduce healing on golem units     copy vampire mechanic without pillage part.
   - [ ] lua event for mages with enchant 1 to repair   Just an extra spell with one more condition
   - [ ] Golem Modifier like Cause Dissent of Cultist, where its value is adjusted. For the Barnaxus stuff.  Idk that whole thing seemed cursed.
   ##### Grigori:
@@ -101,15 +102,15 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] no concept of added specialist in civ vi, maybe as non-unique buildings, or a building with yields, then multiplied by number of specialists     Just make the specialist a modifier that grants +X yield to city centre. Implement via lua button. Unit:GetExperience():GetLevel() for check.
 
   ##### Clan of embers
-  - [ ] -10% science, lie Babylon 50% reduction
-  - [ ] warrens building makes all units in city be doubled, like Scythia for light cavalry, but repeat for all promoClasses
+  - [x] -10% science, lie Babylon 50% reduction
+  - [x] warrens building makes all units in city be doubled, like Scythia for light cavalry, but repeat for all promoClasses
   - [ ] Peace with barbarians trait, shared with doviello   WildW was thinking of something like this, look at comments on discord
 
   ##### Doviello
   - [ ] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
-    - [ ] can upgrade outside borders       probably needs bespoke upgrade system
+  - [ ] can upgrade outside borders       probably needs bespoke upgrade system
   - [ ] Peace with barbarians trait, shared with embers
-    - [ ] some units can do duels with another unit for xp          lua button, need to take target adjacent tile logic used in QinBuilders on Machu Picchu
+  - [ ] some units can do duels with another unit for xp          lua button, need to take target adjacent tile logic used in QinBuilders on Machu Picchu
 
   ##### Calabim
   Vampirism, a unit on a city can cast feed, reducing the pop of the city by one, and gaining xp. also causes unhappiness, building that gets prod from unhappiness.
@@ -120,7 +121,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Ilians
   - [ ] The Deepening project to add tundra and snow
   - [ ] The Draw project to force war to you from everyone, half city population, half unit health    Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
-  - [ ] extra yields on snow terrain, like Auckland, Canada
+  - [x] extra yields on snow terrain, like Auckland, Canada
   - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 
   ##### Svartalfar
@@ -173,19 +174,36 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Reexamine if that buildings path makes sense.
 ## Religion System:
   - [ ] due to custom religions being a thing, how do we incorporate the veil, Order, kilmorph?  : Plan is, custom policy screen grants access to religion policy once in one of your cities. Predefine religions on map startup by assigning them as being founded by dummy civs? Can give people Mvemba traits if we wanna use Founder beliefs. + Amenities may be an issue. Game.GetReligion():FoundReligion(); Game.GetReligion():AddBelief();  Pantheons may bite us in the ass. Also Holy City will have to be manually implemented through City:SetProperty()
+  - [x] Extra Policies on Policy Screen
+  - [L] Investigate Religion as Removing/Allowing Policies (WC is dll bound, can only grant policy not take away in Lua. PolicyXP1 allows dark age policies, no more granular than 1 or 0)
+  - [ ] Investigate Religion as Religion lol. Do check on each civ to see what religions it qualifies for based on religion spread to it, do a playerProperty for each relgion as Yes can or no Cant. Do a custom screen to select which religion, stealing copiously from PolicyScreen. For AI, just make them do first religion, and stay on if has unique units from it, and move off if lost majority. Also possibly custom preferences, like no Veil for Bannor say.
 ## Governer System:
   - [ ] Make sure governers arent broken
   - [ ] existing governers arent very flavourful to the ffh universe, but this is an added extra
 ## Great People System:
-  - [ ] Duplicate Great people so they all are basically the same, as for civ iv.
-  - [ ] Buttons for making Academy, doing Trade Mission, Culture Bomb (bad in context), 
-  - [ ] Use name list from xml/Text to generate names
+  - [x] Duplicate Great people so they all are basically the same, as for civ iv.
+  - [x] Buttons for making Academy, Religious Wonders, SuperSpecialist
+  - [ ] Trade Mission, Gold for distance, gold for city size
+  - [ ] Culture Bomb, big grant of culture, and border expansion
+  - [ ] Bulbing techs.
+  - [ ] Golden ages. playerProperty to see number of golden ages triggered, to know how many great people to consume. playerProperty to get all current Great people owned, and also references to delete them on use.
+  - [ ] Great General Command post, Junil
+  - [ ] Great General aura all eras
+  - [x] Lunnotar Buildings in Lua/with modifiers
+  - [ ] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
+  - [x] Use name list from xml/Text to generate names
   - [ ] Grigori Great Adventurer issue, put under Great Writer, and then change its requirements
+  - [ ] Dark elf kidnapping superSpecialist ( apply a modifier  with the reverse values of a superspecialist) and spawn a great person
 ## City State System:
   - [ ] didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 ## Wonder System:
   - [ ] Find why we cant find filter wonders in buildinginfos
   - [ ] Extra: port existing wonders to outside the city and adjust as needed.
+# Specialist System:
+- [ ] Permanent specialists could implement as a few modifiers on a city, with variable values based on requirements?
+- [ ] assignable ones feels like a pain. Can we check number of assigned specialists in a district and award yields in Lua?
+- [ ] For permanent, check requirements. Policies (LuaProperty), Building (Req) seem to be the only modifiers
+- [ ] UI to see these Specialists
 ## Over/Undercouncil:
   - world congress but without inclusive participation : bonus feature really
 ## Agendas for leaders:

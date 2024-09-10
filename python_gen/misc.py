@@ -467,9 +467,9 @@ def build_improvements(model_obj):
             continue
         if any([k in i for k in ['MINE', 'WORKSHOP', 'COTTAGE', 'WINDMILL', 'FARM']]):
             improvement_valid_features.append({'FeatureType': 'FEATURE_FOREST', 'ImprovementType': i,
-                                               'PrereqTech': 'SLTH_TECH_FOREST_SECRETS'})
+                                               'PrereqTech': 'TECH_FOREST_SECRETS'})
             improvement_valid_features.append({'FeatureType': 'FEATURE_FOREST_ANCIENT', 'ImprovementType': i,
-                                               'PrereqTech': 'SLTH_TECH_FOREST_SECRETS'})
+                                               'PrereqTech': 'TECH_FOREST_SECRETS'})
 
     for i in only_buildables:
         model_obj['kinds'][i] = 'KIND_IMPROVEMENT'

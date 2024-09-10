@@ -555,5 +555,13 @@
     "SLTH_UNIT_HIGH_PRIEST_OF_LEAVES":  "UNIT_APOSTLE",
     "SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL":  "UNIT_MISSIONARY",
     "SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN":  "UNIT_APOSTLE"
-}
+},
+  "Leaders": {"Alexis": "Eleanor of Aquitaine (France), Black Dress, Gaunt",
+    "Amelanchier": "BOW, Hood, Quiver, Green Leather", "ARENDEL": "LONG HAIR, GINGER, SKINNY, DARKISH COMPLEXION, SHARP FEATURES, silk",
+    "Beeri": "Short, Warhammer, beard, armor, backshield, Brown hair short", "Cardith": "short, child, brown hair, staff, cloak, Finery",
+    "Cassiel": "Dyed White skin, Shirtless, Lilac eyeshadow, Staff, outstretched, Leather, Bald", "Charadon":"Old man, Beard, Two Handed Axe, Sword at waist, Furs, Wolfhat",
+    "Dain": "Staff, Gaunt, Brown Hair, Long Hair, Red finery", "Decius": "Armor, Red cloak, Saber, Long Hair, Brown Hair",
+    "Einion": "Old man, White Hair, White robe, White Long Beard, Staff"
+  },
+  "LeaderPrompt": {"Vampire, Pixar, Disney,  V-neck Dress, Black Dress, Windswept, Long Hair,  Gaunt, Smoky Eye, Hungry, Medieval, White Eyes"}
 }

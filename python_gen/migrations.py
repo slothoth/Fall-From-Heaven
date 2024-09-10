@@ -2,7 +2,7 @@ import sqlite3
 
 import pandas as pd
 
-with open('../../FallFromHeaven/Core/main.sql') as file:
+with open('../Core/Improvements.sql') as file:
     lines = file.readlines()
 
 insert_indices = [idx for idx, i in enumerate(lines) if 'INSERT' in i]
@@ -12,7 +12,7 @@ semicolon_indices = [idx for idx, i in enumerate(lines) if ';' in i]
 table_inserts = {}
 for idx, i in enumerate(insert_indices):
     name = lines[i].split('INTO ')[1].split('(')[0]
-    chis = [j for j in semicolon_indices if i < j < insert_indices[idx + 1]]
+    chis = [j for j in semicolon_indices if len(insert_indices) - 1 > idx and i < j < insert_indices[idx + 1]]
     if len(chis) > 1:
         for k in chis:
             if 'UPDATE' not in lines[k]:
@@ -21,7 +21,8 @@ for idx, i in enumerate(insert_indices):
         table_inserts[name] = (i, chis[0])
     else:
         print('NO LINES?')
-        table_inserts[name] = (i, i)
+
+        table_inserts[name] = (i, len(lines)-1)
 
 # parse into tables
 table_values = {}

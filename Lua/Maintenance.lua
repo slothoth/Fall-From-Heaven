@@ -20,7 +20,7 @@ function MasterTax(playerId)
     local num_cities = 0;
     local glob_dist_tax = 0.0;
     local glob_num_tax = 0.0;
-    print('Player is: '.. playerId);
+    SlthLog('Player is: '.. playerId);
     for idx, city in pPlayer:GetCities():Members() do
         num_cities = num_cities + 1;
     end
@@ -31,17 +31,17 @@ function MasterTax(playerId)
         local num_tax_final = (num_cities * mult_city) / 100    / 2;
         glob_dist_tax = glob_dist_tax + dist_tax_final;
         glob_num_tax = glob_num_tax + num_tax_final;
-        print('City Distance Tax cost:'.. dist_tax_final);
-        print('City Num Tax cost:'.. num_tax_final);
+        SlthLog('City Distance Tax cost:'.. dist_tax_final);
+        SlthLog('City Num Tax cost:'.. num_tax_final);
     end
     local num_tax_final = glob_num_tax * global_city_reduction / 100;
-    print('Global Num Cities Tax cost:'.. num_tax_final);
+    SlthLog('Global Num Cities Tax cost:'.. num_tax_final);
     pPlayer:SetProperty('city_num_maintenance', num_tax_final);
     local taxes = glob_dist_tax * global_dist_reduction / 100;
     pPlayer:SetProperty('city_distance_maintenance', taxes);
-    print('Global Distance Cities Tax cost:'.. taxes);
+    SlthLog('Global Distance Cities Tax cost:'.. taxes);
     taxes = taxes + num_tax_final;
-    print('Total tax cost:'.. -taxes);
+    SlthLog('Total tax cost:'.. -taxes);
     pPlayer:GrantYield(2, -taxes);          -- 2 is hopefully gold attempt to index a number value?
 end
 
@@ -53,10 +53,10 @@ function InitCityTax(playerID, cityID, x, y)
         local cap_x = pCapital:GetX();
         local cap_y = pCapital:GetY();
         local distance = Map.GetPlotDistance(x, y, cap_x, cap_y) - 3;
-        print('Distance from capital -3 on init: ' .. distance);
+        SlthLog('Distance from capital -3 on init: ' .. distance);
         pCity:SetProperty('distance', distance);
     else
-        -- print('No Capital found! Was this first city?');
+        -- SlthLog('No Capital found! Was this first city?');
         pCity:SetProperty('distance', 0);
     end
     pCity:SetProperty('city_mult', 100);
@@ -65,13 +65,13 @@ end
 
 function BuildingTaxReductionMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     local buildingName = GameInfo.Buildings[buildingID];
-    print(buildingName.BuildingType);
+    SlthLog(buildingName.BuildingType);
     local building_row = MaintenanceReductionBuildings[buildingName.BuildingType];
     if building_row then
         local pCity = CityManager.GetCity(playerID, cityID);
 	    local tax_val = pCity:GetProperty('city_mult');
 	    tax_val = tax_val + building_row;
-	    print('New tax mult on this city: ' .. tax_val);
+	    SlthLog('New tax mult on this city: ' .. tax_val);
 	    pCity:SetProperty('city_mult', tax_val);
     end
     local buildingGovern = GovernCentres[buildingName.BuildingType]
@@ -83,7 +83,7 @@ function BuildingTaxReductionMade(playerID, cityID, buildingID, plotID, isOrigin
         local t_GovernorSeats = GetGovernanceDistances(pPlayer);
         for _, city in pPlayer:GetCities():Members() do
             CalculateGovernanceDistance(city, t_GovernorSeats);
-            print('city iterate-------------');
+            SlthLog('city iterate-------------');
         end
     end
 end
@@ -151,14 +151,14 @@ function CalculateGovernanceDistance(city, tGovernSeats_)
     local best_distance = 999;
     local closest_seat = '';
     for building_name, location in pairs(tGovernSeats_) do
-        if location.empty then city:SetProperty('distance', best_distance); print('tGovernSeats_ was empty'); return; end     -- on first city settle
+        if location.empty then city:SetProperty('distance', best_distance); SlthLog('tGovernSeats_ was empty'); return; end     -- on first city settle
         local distance = Map.GetPlotDistance(city_x, city_y, location.x, location.y);
         if distance < best_distance then
             best_distance = distance;
             closest_seat = building_name;
         end
     end
-    print('distance is '.. best_distance .. ' from ' .. closest_seat);
+    SlthLog('distance is '.. best_distance .. ' from ' .. closest_seat);
     city:SetProperty('distance', best_distance);
 end
 
@@ -175,6 +175,13 @@ function GetGovernanceDistances(pPlayer)
         end
     end
     return tGovernSeats
+end
+
+function SlthLog(sMessage)
+    SLTH_DEBUG_ON = False
+    if SLTH_DEBUG_ON then
+        print(sMessage)
+    end
 end
 
 

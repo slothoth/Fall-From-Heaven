@@ -16,6 +16,13 @@ RESOURCE_MANA_WATER='MANA',  RESOURCE_MANA_SUN='MANA',  RESOURCE_MANA_SHADOW='MA
     end
 end
 
+function SlthLog(sMessage)
+    SLTH_DEBUG_ON = False
+    if SLTH_DEBUG_ON then
+        print(sMessage)
+    end
+end
+
 function FreePromotionFromResource(playerID, unitID)
     local pPlayer = Players[playerID];              -- Players[0]:GetResources():GetResourceAmount(12);
     local resources = pPlayer:GetResources()
@@ -44,12 +51,12 @@ function GrantXP(playerId)
             else
                 -- if float, use property to set state.
                 local iXP_portion, fXP_portion = math.modf(fXP_gain);
-                print('Decimal portion of xp gain is:')
-                print(fXP_portion);
+                SlthLog('Decimal portion of xp gain is:')
+                SlthLog(fXP_portion);
                 local existing_xp_portion = unit:GetProperty('xp_portion');
                 if not existing_xp_portion then
                     unit:SetProperty('xp_portion', fXP_portion);
-                    print('No prior xp_portion');
+                    SlthLog('No prior xp_portion');
                 else
                     local new_xp_portion = existing_xp_portion + fXP_portion;
                     if new_xp_portion > 1 then
@@ -57,9 +64,9 @@ function GrantXP(playerId)
                         new_xp_portion = new_xp_portion - 1;
                     end
                     unit:SetProperty('xp_portion', new_xp_portion);
-                    print('Old xp_portion: ' .. existing_xp_portion .. ' New xp_portion: ' .. new_xp_portion);
+                    SlthLog('Old xp_portion: ' .. existing_xp_portion .. ' New xp_portion: ' .. new_xp_portion);
                 end
-                print('Adding ' .. iXP_portion .. ' to unit.')
+                SlthLog('Adding ' .. iXP_portion .. ' to unit.')
                 unit:GetExperience():ChangeExperience(iXP_portion);
             end
         end
@@ -92,8 +99,8 @@ function checkDeals(playerId)
                                 if resource_row then
                                     if not dealItem:GetFromPlayerID() == playerId then
                                         local resourceChange = dealItem:GetAmount()
-                                        print('hit');
-                                        print(resource_name)
+                                        SlthLog('hit');
+                                        SlthLog(resource_name)
                                         local existing = 0;
                                         if tResourceExportImport[resource_row.ResourceType] then
                                             existing = tResourceExportImport[resource_row.ResourceType]
@@ -101,7 +108,7 @@ function checkDeals(playerId)
                                         tResourceExportImport[resource_name] = existing + resourceChange
                                     end
                                 end
-                                print(resource_name);
+                                SlthLog(resource_name);
                             end
                         end
                     end
@@ -110,11 +117,11 @@ function checkDeals(playerId)
             pPlayer:SetProperty('deals_' .. otherPlayerId, deals)
         end
     end
-    print('finally:')
-    print(#tResourceExportImport);
+    SlthLog('finally:')
+    SlthLog(#tResourceExportImport);
     for rsc_name, rsc_amount in pairs(tResourceExportImport) do
-        print(rsc_name);
-        print(rsc_amount);
+        SlthLog(rsc_name);
+        SlthLog(rsc_amount);
         pPlayer:SetProperty(rsc_name, rsc_amount);
     end
 end
