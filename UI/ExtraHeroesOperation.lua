@@ -236,12 +236,16 @@ function Setup()
                       [GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index] = { [Controls.SettleButtonGridGrantStigmataUnborn] = GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index, [Controls.SettleButtonGridGrantDiesDei] = GameInfo.Buildings['SLTH_BUILDING_DIES_DIEI'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
 
                       [GameInfo.Units['UNIT_GREAT_ARTIST'].Index] = { [Controls.SettleButtonGridGrantSongAutumn] = GameInfo.Buildings['SLTH_BUILDING_SONG_OF_AUTUMN'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-                      [GameInfo.Units['UNIT_GREAT_MERCHANT'].Index] = { [Controls.SettleButtonGridGrantNoxNoctis] = GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' }
+                      [GameInfo.Units['UNIT_GREAT_MERCHANT'].Index] = { [Controls.SettleButtonGridGrantNoxNoctis] = GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
+                      [GameInfo.Units['UNIT_GREAT_GENERAL'].Index] = { [Controls.SettleButtonGridGrantCodeJunil] = GameInfo.Buildings['SLTH_BUILDING_CODE_OF_JUNIL'].Index, [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
     }
     -- Golden Age checks
+    tGoldenAgeUnitIDs = {GameInfo.Units['UNIT_GREAT_PROPHET'].Index, GameInfo.Units['UNIT_GREAT_ENGINEER'].Index,
+                         GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index, GameInfo.Units['UNIT_GREAT_ARTIST'].Index,
+                         GameInfo.Units['UNIT_GREAT_MERCHANT'].Index, GameInfo.Units['UNIT_GREAT_GENERAL'].Index}
     tGreatPeopleUnitIDs = {}
     tGreatPeopleUnitTypes = {}
-    for key, _ in pairs(tUnitControls) do
+    for _ , key in ipairs(tGoldenAgeUnitIDs) do
         tGreatPeopleUnitTypes[key] = -1
     end
 

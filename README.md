@@ -91,7 +91,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   Golems being promotion lacking, slow healers, but mendable by mages with enchant 1, Barnaxus, passing buffs onto other golems globally may be awkward
   - [x] modifier to reduce healing on golem units     copy vampire mechanic without pillage part.
   - [ ] lua event for mages with enchant 1 to repair   Just an extra spell with one more condition
-  - [ ] Golem Modifier like Cause Dissent of Cultist, where its value is adjusted. For the Barnaxus stuff.  Idk that whole thing seemed cursed.
+  - [ ] Barnaxus Golem Modifier attachment, do it by Great general aoe but like range 100
+  - [ ] stop golems upgrading by making them uniques, not replacers, and banning unit they would replace
   ##### Grigori:
   plural unit upgrade paths (archer, warrior, scout, cavalry) possible for Adventurer, blocked religous units, unique great person type
   - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. 
@@ -119,7 +120,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted
 
   ##### Ilians
-  - [ ] The Deepening project to add tundra and snow
+  - [ ] The Deepening project to add tundra and snow (terrain changes dont show up except on reload)
   - [ ] The Draw project to force war to you from everyone, half city population, half unit health    Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
   - [x] extra yields on snow terrain, like Auckland, Canada
   - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
@@ -127,7 +128,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Svartalfar
   - [ ] summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%
   - [x] Recon units (scout, skirmisher etc.) get a damage buff on attack, but not on defense
-  - [ ] Rework of "can kidnap great people in cities, as not a thing in civ vi"
       
   #### BullshitHard:
   ##### Mercurians:
@@ -147,15 +147,18 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   Sprawling, have bigger cities, 3 distance, but only allowed 3 cities. Other cities founded are Settlements, which have 0 yields and only allow access to resources. This seems very hard.
   - [ ] 4 tile workable cities, seems fucking impossible, dll bound as fuck. Then again, Yaxchilan? It bugs out and gives like 180 yields for each sometimes
   - [ ] 0 yield cities, seems doable, just have a modifier that any city past the first 3 gets a "settlement" modifier that multiplies all yields by 0. Unsure if requirement exists of count cities. 
-  - [ ] Dynamic allowed city count, based on map size
+  - [ ] Dynamic allowed city count, based on map size. Map size part is hard and probably needs Lua. 
 
 
   ## World Spell:
   a one time cast spell with often global effects, in civ iv is available to most units to cast, we can just have it be like a 0 prod project? or buyable
   - [ ] When doing iterations on hide ability in Lua, can just do multiple checks. Is owner of unit x civ? Does owner of unit have x tech? Has owner cast spell before? Storing that internal state might suck though, maybe it can attach a modifier on the civ?
+  - [ ] Do I even need to do it on a unit? arent all world spells just on units for convenience, I could make a UI button for it, in governor panel?
+  - [ ] can do check on pPlayer:GetProperty() to see if its been used, or regained with Regain Birthright.
 
   ## Races:
   - [x] different movements for dif races, double on desert, hills, forests for Nomads, dwarves, elves
+  - [ ] due to engine differences, cant regain movement like in IV without restoring all movement, which isnt right.
   - [x] buffs, debuffs to certain combat conditions
 
 
@@ -168,7 +171,16 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 ## Leader Trait System:
   - civ iv had boilerplate leader traits, civ vi has bespoke traits per leader that are far more specific.
-  - [ ] Implement modifiers for each of the civ iv leader traits (organized etc.) Apply to relevant leaders
+  - [x] Implement modifiers for each of the civ iv leader traits (organized etc.) Apply to relevant leaders
+  - [ ] Implement Barbarian trait
+  - [ ] Implement Perpentach insanity and ui indicator
+  - [ ] Implement Cassiel adaptive and ui selector
+  - [ ] Implement Commando roads stuff
+  - [ ] Implement proper free promotions (Combat I) as just ability misses getting early better promos behind combat I
+  - [ ] Implement xp gain from potencyÏ
+  - [ ] Implement summoner inherit system on summon
+  - [ ] implement Charisma +relationship gain
+  - [ ] implement diplo effects for each trait?
 ## City System:
   - [x] District system means we need to change a lot of buildings, categorise them by District, 
   - [ ] Reexamine if that buildings path makes sense.
@@ -187,23 +199,21 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Culture Bomb, big grant of culture, and border expansion
   - [ ] Bulbing techs.
   - [ ] Golden ages. playerProperty to see number of golden ages triggered, to know how many great people to consume. playerProperty to get all current Great people owned, and also references to delete them on use.
-  - [ ] Great General Command post, Junil
-  - [ ] Great General aura all eras
+  - [x] Great General Command post, Junil
+  - [x] Great General aura all eras
   - [x] Lunnotar Buildings in Lua/with modifiers
   - [ ] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
   - [x] Use name list from xml/Text to generate names
-  - [ ] Grigori Great Adventurer issue, put under Great Writer, and then change its requirements
+  - [x] Grigori Great Adventurer issue, put under Great Writer, and then change its requirements
   - [ ] Dark elf kidnapping superSpecialist ( apply a modifier  with the reverse values of a superspecialist) and spawn a great person
+  - [ ] Display SuperSpecialists in the City UI somehow (DESIGN DECISION)
 ## City State System:
   - [ ] didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 ## Wonder System:
   - [ ] Find why we cant find filter wonders in buildinginfos
   - [ ] Extra: port existing wonders to outside the city and adjust as needed.
 # Specialist System:
-- [ ] Permanent specialists could implement as a few modifiers on a city, with variable values based on requirements?
-- [ ] assignable ones feels like a pain. Can we check number of assigned specialists in a district and award yields in Lua?
-- [ ] For permanent, check requirements. Policies (LuaProperty), Building (Req) seem to be the only modifiers
-- [ ] UI to see these Specialists
+- [x] Permanent specialists could implement as a few modifiers on a city, with variable values based on requirements?
 ## Over/Undercouncil:
   - world congress but without inclusive participation : bonus feature really
 ## Agendas for leaders:
