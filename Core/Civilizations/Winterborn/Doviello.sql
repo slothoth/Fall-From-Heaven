@@ -45,7 +45,7 @@ INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 
 INSERT INTO BuildingReplaces(CivUniqueBuildingType, ReplacesBuildingType) VALUES
 ('SLTH_BUILDING_NULL_CIVILIZATION_DOVIELLO_ALCHEMY_LAB', 'SLTH_BUILDING_ALCHEMY_LAB'),
-('SLTH_BUILDING_NULL_CIVILIZATION_DOVIELLO_LIBRARY', 'SLTH_BUILDING_LIBRARY'),
+('SLTH_BUILDING_NULL_CIVILIZATION_DOVIELLO_LIBRARY', 'BUILDING_LIBRARY'),
 ('SLTH_BUILDING_NULL_CIVILIZATION_DOVIELLO_MAGE_GUILD', 'SLTH_BUILDING_MAGE_GUILD');
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
