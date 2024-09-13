@@ -2,7 +2,7 @@ import sqlite3
 
 import pandas as pd
 
-with open('../Core/Improvements.sql') as file:
+with open('../Core/frontend_config.sql') as file:
     lines = file.readlines()
 
 insert_indices = [idx for idx, i in enumerate(lines) if 'INSERT' in i]
@@ -34,7 +34,7 @@ for key, val in table_inserts.items():
     for i in lines_to_parse:
         line = lines[i]
         chs = line.replace('(', '').replace(')', '').replace(',\n', '').split(',')
-        multi_col = [(idx, k) for idx, k in enumerate(chs) if 'NULL' not in k and k[0] !="'" and (k[1] !="'" or k[-1]!="'")]# get value in sql statement
+        multi_col = [(idx, k) for idx, k in enumerate(chs) if 'NULL' not in k and k[0] != "'" and (k[1] != "'" or k[-1]!="'")] # get value in sql statement
         if len(multi_col) > 1:
             idx_to_remove = [l[0] for l in multi_col]
             multi_col_values = [l[1] for l in multi_col]

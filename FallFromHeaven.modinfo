@@ -28,6 +28,7 @@
     </UpdateDatabase>
     <UpdateText id="UpdateText">
       <File>Core/localization.sql</File>
+      <File>Localisation/frontend.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
