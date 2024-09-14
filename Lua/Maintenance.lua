@@ -89,7 +89,7 @@ function BuildingTaxReductionMade(playerID, cityID, buildingID, plotID, isOrigin
 end
 
 function BuildingTaxPillageStateChange(playerID, cityID, buildingID, isPillaged)
-    local buildingName = GameInfo.Buildings[buildingID];
+    local buildingName = GameInfo.Buildings[buildingID];                                -- i suspec buildingID is wrong
     local building_row = GameInfo.MaintenanceReductionBuildings[buildingName.BuildingType];     -- MaintenanceReductionBuildings[buildingName.BuildingType]
     if building_row then
         local pCity = CityManager.GetCity(playerID, cityID);

@@ -130,6 +130,98 @@ function checkDeals(playerId)
     end
 end
 
+------------ Cottage / Pirate Cove improvement upgrading over turns  ---------
+
+function ImprovementsWorkOrPillageChange(x, y, improvementIndex, improvementPlayerID, resourceIndex, isPillaged, isWorked)
+    local iImprovementToDowngradeIndex = tImprovementsRegression[improvementIndex]
+    if iImprovementToDowngradeIndex and isPillaged then
+        ImprovementBuilder.SetImprovementType(pPlot, iImprovementToDowngradeIndex, improvementPlayerID)
+        return
+    end
+    if tImprovementsProgression[improvementIndex] then
+         local pPlot = Map.GetPlot(x, y)
+         local iImprovementWorkedState =  pPlot:GetProperty('currently_worked') or 0
+         print(iImprovementWorkedState)
+         print(isWorked)
+         if isWorked and iImprovementWorkedState == 0 then
+             pPlot:SetProperty('currently_worked', 1)
+         elseif iImprovementWorkedState > 0 and not isWorked then
+             pPlot:SetProperty('currently_worked', 0)
+         end
+     end
+end
+
+function InitCottage(x, y, improvementIndex, playerID)
+    local iImprovementUpgradeIndex = tImprovementsProgression[improvementIndex]
+    if iImprovementUpgradeIndex then
+        if iImprovementUpgradeIndex == GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index then    -- enclave exception
+            local pPlayer = Players[playerID]
+            local civ = PlayerConfigurations[pPlayer]:GetCivilizationTypeName()
+            if civ ~= 'SLTH_CIVILIZATION_KURIOTATES' then
+                return end
+        end
+        local pPlot = Map.GetPlot(x, y)
+        pPlot:SetProperty('worked_turns', 0)
+        local iIsWorked = pPlot:GetWorkerCount()
+        print(iIsWorked)
+        if iIsWorked > 0 then
+            pPlot:SetProperty('currently_worked', 1)
+        else
+            pPlot:SetProperty('currently_worked', 0)
+        end
+        local pPlayer = Players[playerID]
+        local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment') or  {}
+        table.insert(tImprovingImprovements, {x, y})
+        pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
+    end
+end
+
+function IncrementCottages(playerId)
+    local pPlayer = Players[playerId]
+    local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')     -- could we instead use pPlayer:GetImprovements:GetImprovementPlots()?
+    if not tImprovingImprovements then return end
+    for idx, plot_tuple in ipairs(tImprovingImprovements) do
+        local iX, iY = plot_tuple
+        local pPlot = Map.GetPlot(iX, iY)
+        local bIsWorked = pPlot:GetProperty('currently_worked')
+        local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
+        if bIsWorked and not bIsImprovementPillaged then
+            local iWorkedTurns = pPlot:GetProperty('worked_turns')
+            if iWorkedTurns > 20 then
+                local iImprovementIndex = pPlot:GetImprovementType()
+                print(iImprovementIndex)
+                local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
+                ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
+            else
+                pPlot:SetProperty('worked_turns', iWorkedTurns+1)
+            end
+        end
+    end
+end
+
+function onStart()
+    tImprovementsProgression = {
+        [GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index]    = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_PIRATE_PORT'].Index}
+    tImprovementsRegression = {
+        [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_PIRATE_PORT'].Index]    = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index}
+end
+
+onStart()
+
 GameEvents.PlayerTurnStarted.Add(GrantXP);
 GameEvents.PlayerTurnStarted.Add(checkDeals);
 GameEvents.UnitCreated.Add(FreePromotionFromResource);
+
+-- Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
+-- Events.ImprovementAddedToMap.Add(InitCottage)
+-- GameEvents.PlayerTurnStarted.Add(IncrementCottages);
