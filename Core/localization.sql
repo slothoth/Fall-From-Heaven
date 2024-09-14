@@ -2603,7 +2603,7 @@ INSERT OR REPLACE INTO LocalizedText(Text, Tag, Language) VALUES
 ('Arena', 'LOC_SLTH_BUILDING_ARENA_NAME', 'en_US'),
 ('-1 [ICON_Food] Food for each FARM. +2 [ICON_Gold] Gold for each FARM.', 'LOC_SLTH_POLICY_ARISTOCRACY_DESCRIPTION', 'en_US'),
 ('Grant TechExploration . Grant TechSkip .', 'LOC_CIV_LJOSALFAR_DESCRIPTION', 'en_US'),
-('Ckwork Golem', 'LOC_SLTH_UNIT_CLOCKWORK_GOLEM_NAME', 'en_US'),
+('Clockwork Golem', 'LOC_SLTH_UNIT_CLOCKWORK_GOLEM_NAME', 'en_US'),
 ('Priest Of The Empyrean', 'LOC_SLTH_UNIT_PRIEST_OF_THE_EMPYREAN_NAME', 'en_US'),
 ('Warrage', 'LOC_CITY_MERCURIANS_9_NAME', 'en_US'),
 ('Mind Stapling', 'LOC_CIVIC_MIND_STAPLING_NAME', 'en_US'),

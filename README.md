@@ -72,7 +72,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] needs to implement some concept of inherent city identity, check civ conquer mode? But then apply only to that city. hmmm
   ##### Lanun:
   - [x] coast tiles get +1 food 
-  - [ ] unique resource others cant access or see, pearls. Basically a strategic resource reveal, piggyback off leylines/etherium
+  - [x] unique resource others cant access or see, pearls. Basically a strategic resource reveal, piggyback off leylines/etherium
   - [ ] pirate cove, water improvement that have to be 3 tiles from another, and get upgraded as they get worked, like cottage. Possible by Plot:SetProperty('worked', isWorked) on event ImprovementChanged(isWorked), then on PlayerTurnStarted use pPlayer:GetImprovements() to get a full list then filter to the Pirate Ports. Get their Plot, then Plot:SetProperty('turns_worked', ++). Then ImprovementBuilder:SetImprovementType()?
   ##### Malakim:
   most units have Nomad, double movement on desert, could apply on civ level, but then would include stuff like StoneWardens who are dwarves.
@@ -82,6 +82,9 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   slave and slave cages, puppets summons that inherit magic promotions units, affecting neutral cities, arenas, chance of killing unit but otherwise free xp
   - [ ] Create building in city if matches unit type, not present already, and city has carnival  Lua button on per unit basis, or ability basis for Human, Orc, Elf etc.
   - [x] Slavery mechanic taken from Aztec civ
+  - [ ] Puppets, inheriting from summoner
+  - [ ] Hall of Mirrors clone spawning
+  - [ ] Arenas Gladiator
 
   ##### Sheaim
   - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
@@ -91,8 +94,9 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   Golems being promotion lacking, slow healers, but mendable by mages with enchant 1, Barnaxus, passing buffs onto other golems globally may be awkward
   - [x] modifier to reduce healing on golem units     copy vampire mechanic without pillage part.
   - [ ] lua event for mages with enchant 1 to repair   Just an extra spell with one more condition
-  - [ ] Barnaxus Golem Modifier attachment, do it by Great general aoe but like range 100
-  - [ ] stop golems upgrading by making them uniques, not replacers, and banning unit they would replace
+  - [x] Barnaxus Golem Modifier attachment, do it by Great general aoe but like range 99
+  - [ ] implemented but untested as needs windows
+  - [x] stop golems upgrading by making them uniques, not replacers, and banning unit they would replace
   ##### Grigori:
   plural unit upgrade paths (archer, warrior, scout, cavalry) possible for Adventurer, blocked religous units, unique great person type
   - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. 
@@ -126,7 +130,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 
   ##### Svartalfar
-  - [ ] summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%
+  - [ ] summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%. seems impossible
   - [x] Recon units (scout, skirmisher etc.) get a damage buff on attack, but not on defense
       
   #### BullshitHard:
@@ -176,8 +180,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Implement Perpentach insanity and ui indicator
   - [ ] Implement Cassiel adaptive and ui selector
   - [ ] Implement Commando roads stuff
-  - [ ] Implement proper free promotions (Combat I) as just ability misses getting early better promos behind combat I
-  - [ ] Implement xp gain from potencyÏ
+  - [x] Implement proper free promotions (Combat I) as just ability misses getting early better promos behind combat I
+  - [x] Implement xp gain from potency
   - [ ] Implement summoner inherit system on summon
   - [ ] implement Charisma +relationship gain
   - [ ] implement diplo effects for each trait?
