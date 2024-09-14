@@ -59,7 +59,6 @@ INSERT INTO BuildingReplaces(CivUniqueBuildingType, ReplacesBuildingType) VALUES
 ('SLTH_BUILDING_ARENA', 'SLTH_BUILDING_TRAINING_YARD');
 ;
 INSERT INTO BuildingConditions(BuildingType, UnlocksFromEffect) VALUES
-('SLTH_BUILDING_FREAK_SHOW', '1'),
 ('SLTH_BUILDING_DWARF_CAGE', '1'),
 ('SLTH_BUILDING_ELF_CAGE', '1'),
 ('SLTH_BUILDING_HUMAN_CAGE', '1'),
@@ -83,6 +82,10 @@ INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES
 
 INSERT INTO UnitUpgrades(Unit, UpgradeUnit) VALUES
 ('SLTH_UNIT_FREAK', 'SLTH_UNIT_ARCHER');
+
+INSERT INTO Unit_BuildingPrereqs(Unit, PrereqBuilding) VALUES
+('SLTH_UNIT_HARLEQUIN', 'SLTH_BUILDING_CARNIVAL'),
+('SLTH_UNIT_FREAK', 'SLTH_BUILDING_FREAK_SHOW');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_UNIT_MIMIC', 'CLASS_MELEE'),
