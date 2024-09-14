@@ -1,7 +1,7 @@
 local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN = 1, SLTH_UNIT_ARCHMAGE = 2, SLTH_UNIT_EATER_OF_DREAMS = 2,
                       SLTH_UNIT_CORLINDALE = 2, SLTH_UNIT_DISCIPLE_OF_ACHERON = 1, SLTH_UNIT_GAELAN = 1.5, SLTH_UNIT_GIBBON = 2,
                       SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
-                      SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2, }
+                      SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2}
 
 TrackedResources = {}
 for resourceType, resourceClass in pairs({RESOURCE_MANA_DEATH='MANA', RESOURCE_MANA_FIRE='MANA',
@@ -43,8 +43,12 @@ function GrantXP(playerId)
         local iUnitIndex = unit:GetType();
         local sUnitType = GameInfo.Units[iUnitIndex].UnitType
         if not sUnitType then return; end                       -- remove once table correct
-        local fXP_gain = FreeXPUnits[sUnitType]
-        if fXP_gain then
+        local fXP_gain = FreeXPUnits[sUnitType] or 0
+        local pUnitAbilities = unit:GetAbility()
+        if pUnitAbilities and pUnitAbilities:HasAbility('SLTH_ABILITY_POTENCY') then
+            fXP_gain = fXP_gain + 1
+        end
+        if fXP_gain > 0 then
             if fXP_gain == math.floor(fXP_gain) then
                 -- if integer, simple add xp
                 unit:GetExperience():ChangeExperience(fXP_gain);

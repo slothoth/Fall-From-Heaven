@@ -115,6 +115,7 @@
       <File>Lua/Gameplay.lua</File>
       <File>Lua/Specialists.lua</File>
       <File>Core/Civilizations/Dwarves/Khazad.lua</File>
+      <File>Lua/Promotions.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>
@@ -235,6 +236,7 @@
     <File>Lua/Gameplay.lua</File>
     <File>Lua/Maintenance.lua</File>
     <File>Lua/Specialists.lua</File>
+    <File>Lua/Promotions.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>
