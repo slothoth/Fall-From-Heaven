@@ -117,6 +117,70 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
     end
 end
 
+function GrantReligion(playerID, unitID)
+    -- deal with Encampment district issues
+    -- if somehow not in a city, its a summon, implement that later (or dont even)?
+    local pPlayer = Players[playerID]
+    local pUnit =  pPlayer:GetUnits():FindID(unitID)
+    local iX, iY = pUnit:GetLocation()
+    local pPlot = Map.GetPlot(iX, iY)
+    local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
+    if pCity then
+        local tiReligions = City:GetReligion():GetReligionsInCity()
+        if tiReligions then
+            local pUnitAbilities = pUnit:GetAbility()
+            local CHANCE_OF_GRANT_RELIGION = 15
+            for idx, val in ipairs(tiReligions) do                  --TODO needs testing to see what this table contains
+                local iAttempt = math.random(0, 99)
+                if iAttempt > CHANCE_OF_GRANT_RELIGION then
+                    local iAlignment = tReligionAlignment[val]
+                    if iAlignment then
+                        if iAlignment == 0 then
+                            pUnitAbilities:AddAbilityCount('ALIGNMENT_EVIL')   -- does this function even work.
+                        elseif iAlignment == 1 then
+                            pUnitAbilities:AddAbilityCount('ALIGNMENT_GOOD')
+                        end
+                        break
+                    end
+                end
+            end
+        end
+    end
+end
+
+tReligions = {['GameInfo.Religions["RELIGION_THE_ORDER"].Index']= {
+    ['1']=GameInfo.Beliefs["BELIEF_THE_ORDER_PANTH"].Hash},
+['GameInfo.Religions["RELIGION_EMPYREAN"].Index']= {
+    ['1']=GameInfo.Beliefs["BELIEF_EMPYREAN_PANTH"].Hash},
+['GameInfo.Religions["RELIGION_KILMORPH"].Index']= {
+    ['1']=GameInfo.Beliefs["BELIEF_KILMORPH_PANTH"].Hash},
+['GameInfo.Religions["RELIGION_LEAVES"].Index']= {
+    ['1']=GameInfo.Beliefs["BELIEF_LEAVES_PANTH"].Hash},
+['GameInfo.Religions["RELIGION_OVERLORDS"].Index']= {
+    ['1']=GameInfo.Beliefs["BELIEF_OVERLORDS_PANTH"].Hash},
+['GameInfo.Religions["RELIGION_ESUS"].Index']= {
+    ['1']=GameInfo.Beliefs["BELIEF_ESUS_PANTH"].Hash},
+['GameInfo.Religions["RELIGION_VEIL"].Index']= {
+    ['1']=GameInfo.Beliefs["BELIEF_VEIL_PANTH"].Hash}}
+function InitiateReligions()
+    local aPlayers = PlayerManager.GetAliveMinors();            -- will minors work? if so need 7 in game
+    local pGameReligion = Game.GetReligion();
+    local count = 0
+    for religion, tReligion in pairs(tReligions) do
+        local pMinorPlayer = aPlayers[count]
+        local pReligion = pMinorPlayer:GetReligion();
+        local iMinorPlayer = pMinorPlayer:GetID();
+
+        pGameReligion:FoundPantheonHash(iMinorPlayer,  tReligion[1]);
+        pGameReligion:FoundReligion(iPlayer,  GameInfo.Religions["RELIGION_TAOISM"].Index);
+        -- pGameReligion:AddBeliefHash(iPlayer,  GameInfo.Beliefs["BELIEF_FEED_THE_WORLD"].Hash);
+        pReligion:SetHolyCity(pPlayer:GetCities():GetCapitalCity());
+        pReligion:ChangeNumBeliefsEarned(1);
+        count = count + 1
+    end
+end
+Events.UnitAddedToMap.Add(GrantReligion)                         -- test UnitAbilityGained
+LuaEvents.NewGameInitialized.Add(InitiateReligions);
 function onStart()
     for iPlayerID, pPlayer in Players do
         local alignment = pPlayer:GetProperty('alignment')
