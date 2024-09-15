@@ -104,8 +104,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Great adventurer spawning system, just replace Great Writers with it?
    ##### Sidar:
   Level 6 + units can retire as shades, who can act as free Great Person Specialist, so a repeatable building that provides yields and gp points
-  - [ ] no concept of added specialist in civ vi, maybe as non-unique buildings, or a building with yields, then multiplied by number of specialists     Just make the specialist a modifier that grants +X yield to city centre. Implement via lua button. Unit:GetExperience():GetLevel() for check.
-
+  - [ ] Button for all units if level 6 and Sidar to convert to Shade. Then just use Great Person Specialist system already set up
   ##### Clan of embers
   - [x] -10% science, lie Babylon 50% reduction
   - [x] warrens building makes all units in city be doubled, like Scythia for light cavalry, but repeat for all promoClasses

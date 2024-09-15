@@ -43,7 +43,7 @@ INSERT INTO UnitAbilityModifiers(UnitAbilityType, ModifierId) VALUES
 ('CIVILIZATION_HIPPUS_ABILITY_SLTH_TRAIT_HORSELORD', 'MODIFIER_CIVILIZATION_HIPPUS_ABILITY_SLTH_TRAIT_HORSELORD_MOVE');
 
 INSERT INTO BuildingReplaces(CivUniqueBuildingType, ReplacesBuildingType) VALUES
-('SLTH_BUILDING_NULL_CIVILIZATION_HIPPUS_ALCHEMY_LAB', 'SLTH_BUILDING_ALCHEMY_LAB');
+('SLTH_BUILDING_NULL_CIVILIZATION_HIPPUS_ALCHEMY_LAB', 'BUILDING_RESEARCH_LAB');
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
 ('SLTH_UNIT_MERCENARY_MOUNTED', 'LOC_SLTH_UNIT_MERCENARY_MOUNTED_NAME', '2', '3', '5', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '-1', '0', 'LOC_SLTH_UNIT_MERCENARY_MOUNTED_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_MERCENARY_MOUNTED', '1', 'PROMOTION_CLASS_LIGHT_CAVALRY', NULL, NULL, '0', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0'),
