@@ -6,7 +6,7 @@ function onSpawnApplyPromotions(playerID, unitID)
     if pPlayer == nil then return end
     local pUnit = pPlayer:GetUnits():FindID(unitID)
     if pUnit == nil then return end
-    local sCivName = pPlayerConfig:GetLeaderTypeName()
+    local sCivName = PlayerConfigurations[playerID]:GetLeaderTypeName()
     local sPromoClass
     local iPromoToGive
     local pUnitExp

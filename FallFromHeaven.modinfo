@@ -108,6 +108,7 @@
     </UpdateDatabase>
     <UpdateText id="Text">
       <File>Core/localization.sql</File>
+      <File>Localisation/Neat.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
       <File>Lua/Maintenance.lua</File>
@@ -116,6 +117,7 @@
       <File>Lua/Specialists.lua</File>
       <File>Core/Civilizations/Dwarves/Khazad.lua</File>
       <File>Lua/Promotions.lua</File>
+      <File>Lua/Alignment.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>
@@ -185,6 +187,7 @@
   </InGameActions>
   <Files>
     <File>Core/localization.sql</File>
+    <File>Localisation/Neat.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
     <File>Core/Religions.sql</File>
@@ -237,6 +240,7 @@
     <File>Lua/Maintenance.lua</File>
     <File>Lua/Specialists.lua</File>
     <File>Lua/Promotions.lua</File>
+    <File>Lua/Alignment.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>

@@ -188,10 +188,10 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [x] District system means we need to change a lot of buildings, categorise them by District, 
   - [ ] Reexamine if that buildings path makes sense.
 ## Religion System:
-  - [ ] due to custom religions being a thing, how do we incorporate the veil, Order, kilmorph?  : Plan is, custom policy screen grants access to religion policy once in one of your cities. Predefine religions on map startup by assigning them as being founded by dummy civs? Can give people Mvemba traits if we wanna use Founder beliefs. + Amenities may be an issue. Game.GetReligion():FoundReligion(); Game.GetReligion():AddBelief();  Pantheons may bite us in the ass. Also Holy City will have to be manually implemented through City:SetProperty()
+  - [x] due to custom religions being a thing, how do we incorporate the veil, Order, kilmorph?  : Plan is, custom policy screen grants access to religion policy once in one of your cities. Predefine religions on map startup by assigning them as being founded by dummy civs? Can give people Mvemba traits if we wanna use Founder beliefs. + Amenities may be an issue. Game.GetReligion():FoundReligion(); Game.GetReligion():AddBelief();  Pantheons may bite us in the ass. Also Holy City will have to be manually implemented through City:SetProperty()
   - [x] Extra Policies on Policy Screen
   - [L] Investigate Religion as Removing/Allowing Policies (WC is dll bound, can only grant policy not take away in Lua. PolicyXP1 allows dark age policies, no more granular than 1 or 0)
-  - [ ] Investigate Religion as Religion lol. Do check on each civ to see what religions it qualifies for based on religion spread to it, do a playerProperty for each relgion as Yes can or no Cant. Do a custom screen to select which religion, stealing copiously from PolicyScreen. For AI, just make them do first religion, and stay on if has unique units from it, and move off if lost majority. Also possibly custom preferences, like no Veil for Bannor say.
+  - [x] Investigate Religion as Religion lol. Do check on each civ to see what religions it qualifies for based on religion spread to it, do a playerProperty for each relgion as Yes can or no Cant. Do a custom screen to select which religion, stealing copiously from PolicyScreen. For AI, just make them do first religion, and stay on if has unique units from it, and move off if lost majority. Also possibly custom preferences, like no Veil for Bannor say.
 ## Governer System:
   - [ ] Make sure governers arent broken
   - [ ] existing governers arent very flavourful to the ffh universe, but this is an added extra
@@ -213,13 +213,16 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## City State System:
   - [ ] didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 ## Wonder System:
-  - [ ] Find why we cant find filter wonders in buildinginfos
-  - [ ] Extra: port existing wonders to outside the city and adjust as needed.
+  - [x] Find why we cant find filter wonders in buildinginfos
+  - [x] Extra: port existing wonders to outside the city and adjust as needed.
+  - [ ] Investigat Landmark / District changes to allow alt buildings. Like why do Wonders like ORzgarzh work in city centre? but buildings wont. also palgum exclamation cultures stuff.
 # Specialist System:
 - [x] Permanent specialists could implement as a few modifiers on a city, with variable values based on requirements?
 ## Over/Undercouncil:
   - world congress but without inclusive participation : bonus feature really
 ## Agendas for leaders:
+
+## Decisions on Start Biases:
 
 ### New Victory types:
 #### Altar of Luonnotar

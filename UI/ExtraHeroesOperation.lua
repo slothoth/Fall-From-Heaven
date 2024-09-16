@@ -5,10 +5,8 @@
 g_selectedPlayerId = -1;
 g_selectedUnitId = -1;
 
-chan_one = GameInfo.UnitAbilities["CHANNELING_ABILITY_PROMOTION_CHANNELING1"].Index
-
-
 function myRefresh(iPlayerID, iUnitID, iOldID)
+    local iBuilding
     local pUnit = UnitManager.GetUnit(iPlayerID, iUnitID)
     local pPlayer = Players[iPlayerID]
     if pUnit:GetMovesRemaining() == 0 then
@@ -21,16 +19,28 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     local tSpecificUnitControls = tUnitControls[iUnitIndex]
     if tSpecificUnitControls then
         for gridButton, tButton in pairs(tControlsAdded) do
-            print(tSpecificUnitControls[gridButton])
-            if tSpecificUnitControls[gridButton] then
-                if tSpecificUnitControls[gridButton] == 'SHOW_ON_CITY' and pCity then
-                    gridButton:SetHide(false)
-                elseif tSpecificUnitControls[gridButton] == 'GOLDEN_AGE_LOGIC' then
+            iBuilding = tSpecificUnitControls[gridButton]
+            print(iBuilding)
+            if iBuilding then
+                if iBuilding == 'GOLDEN_AGE_LOGIC' then
                     goldenAgeHide(gridButton, iPlayerID, pPlayer, iUnitID, iUnitIndex)
-                elseif pCity and pCity:GetBuildings():HasBuilding(tSpecificUnitControls[gridButton]) then
-                    gridButton:SetHide(true)
-                else
-                    gridButton:SetHide(false)
+                elseif pCity then
+                    if iBuilding == 'SHOW_ON_CITY' then
+                        gridButton:SetHide(false)
+                    elseif pCity:GetBuildings():HasBuilding(iBuilding) then
+                        gridButton:SetHide(true)
+                    else
+                        local iReligion = tReligiousWonders[iBuilding]
+                        if iReligion then
+                            local iX, iY = pCity:GetX(), pCity:GetY()
+                            local pPlot = Map.GetPlot(iX, iY)
+                            if pPlot:GetProperty(tostring(iReligion)..'_HOLY_CITY') or 0 > 0 then
+                                gridButton:SetHide(false)
+                            end
+                        else
+                            gridButton:SetHide(true)
+                        end
+                    end
                 end
             else
                 gridButton:SetHide(true)
@@ -250,7 +260,14 @@ function Setup()
     end
 
     tCurrentButtons = {}
-    --]]
+    tReligiousWonders = {
+        [GameInfo.Buildings['SLTH_BUILDING_CODE_OF_JUNIL'].Index]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
+        [GameInfo.Buildings['BUILDING_ANGKOR_WAT'].Index]=GameInfo.Religions["RELIGION_JUDAISM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_TABLETS_OF_BAMBUR'].Index]=GameInfo.Religions["RELIGION_CONFUCIANISM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_SONG_OF_AUTUMN'].Index]=GameInfo.Religions["RELIGION_CATHOLICISM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_THE_NECRONOMICON'].Index]=GameInfo.Religions["RELIGION_HINDUISM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index]=GameInfo.Religions["RELIGION_ISLAM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index]=GameInfo.Religions["RELIGION_BUDDHISM"].Index}
 	if ExposedMembers.ExtraHeroes == nil then
 		ExposedMembers.ExtraHeroes = {}
 	end

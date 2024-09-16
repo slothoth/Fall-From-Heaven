@@ -14,15 +14,47 @@ tLeaderAlignmentMap = {
     ['SLTH_LEADER_GARRIM']=2, ['SLTH_LEADER_BEERI']=2
 }
 
-tReligionFromGood = {['SLTH_ESUS']=1, ['SLTH_OVERLORDS']=1}
-tReligionFromEvil = {['SLTH_EMPYREAN']=1, ['SLTH_KILMORPH']=1}
-tReligionForceAlignment = {['SLTH_THE_ORDER']=2, ['SLTH_VEIL']=0}
+tReligionFromGood = {['RELIGION_ISLAM']=1, ['RELIGION_HINDUISM']=1}
+tReligionFromEvil = {['RELIGION_JUDAISM']=1, ['RELIGION_CONFUCIANISM']=1}
+tReligionForceAlignment = {['RELIGION_PROTESTANTISM']=2, ['RELIGION_BUDDHISM']=0}
 
 tReligionAlignment = {
-    ['SLTH_ESUS']=0, ['SLTH_OVERLORDS']=0, ['SLTH_VEIL']=0,
-    ['SLTH_LEAVES']=1,
-    ['SLTH_EMPYREAN']=2, ['SLTH_KILMORPH']=2, ['SLTH_THE_ORDER']=2
+    ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
+    ['RELIGION_CATHOLICISM']=1,
+    ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
+
+tReligousCivicTrigger = {
+[GameInfo.Civics['CIVIC_ORDERS_FROM_HEAVEN'].Index]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
+[GameInfo.Civics['CIVIC_HONOR'].Index]=GameInfo.Religions["RELIGION_JUDAISM"].Index,
+[GameInfo.Civics['CIVIC_WAY_OF_THE_EARTHMOTHER'].Index]=GameInfo.Religions["RELIGION_CONFUCIANISM"].Index,
+[GameInfo.Civics['CIVIC_WAY_OF_THE_FORESTS'].Index]=GameInfo.Religions["RELIGION_CATHOLICISM"].Index,
+[GameInfo.Civics['CIVIC_MESSAGE_FROM_THE_DEEP'].Index]=GameInfo.Religions["RELIGION_HINDUISM"].Index,
+[GameInfo.Civics['CIVIC_DECEPTION'].Index]=GameInfo.Religions["RELIGION_ISLAM"].Index,
+[GameInfo.Civics['CIVIC_CORRUPTION_OF_SPIRIT'].Index]=GameInfo.Religions["RELIGION_BUDDHISM"].Index}
+
+tReligions = {
+    [GameInfo.Religions["RELIGION_PROTESTANTISM"].Index] = {
+        [1] = GameInfo.Beliefs["BELIEF_RELIGIOUS_IDOLS"].Hash,
+        [2] = GameInfo.Beliefs["BELIEF_LAY_MINISTRY"].Hash },
+    [GameInfo.Religions["RELIGION_JUDAISM"].Index] = {
+        [1] = GameInfo.Beliefs["BELIEF_GOD_OF_THE_OPEN_SKY"].Hash,
+        [2] = GameInfo.Beliefs["BELIEF_PAPAL_PRIMACY"].Hash },
+    [GameInfo.Religions["RELIGION_CONFUCIANISM"].Index] = {
+        [1] = GameInfo.Beliefs["BELIEF_STONE_CIRCLES"].Hash,
+        [2] = GameInfo.Beliefs["BELIEF_PILGRIMAGE"].Hash },
+    [GameInfo.Religions["RELIGION_CATHOLICISM"].Index] = {
+        [1] = GameInfo.Beliefs["BELIEF_DESERT_FOLKLORE"].Hash,
+        [2] = GameInfo.Beliefs["BELIEF_STEWARDSHIP"].Hash },
+    [GameInfo.Religions["RELIGION_HINDUISM"].Index] = {
+        [1] = GameInfo.Beliefs["BELIEF_DANCE_OF_THE_AURORA"].Hash,
+        [2] = GameInfo.Beliefs["BELIEF_TITHE"].Hash },
+    [GameInfo.Religions["RELIGION_ISLAM"].Index] = {
+        [1] = GameInfo.Beliefs["BELIEF_GOD_OF_THE_SEA"].Hash,
+        [2] = GameInfo.Beliefs["BELIEF_WORLD_CHURCH"].Hash },
+    [GameInfo.Religions["RELIGION_BUDDHISM"].Index] = {
+        [1] = GameInfo.Beliefs["BELIEF_INITIATION_RITES"].Hash,
+        [2] = GameInfo.Beliefs["BELIEF_CROSS_CULTURAL_DIALOGUE"].Hash } }
 
 tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
@@ -73,8 +105,8 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local pPlayer = Players[killedPlayerID]
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
     local pUnitAbilities = pUnit:GetAbility()
-    local isEvil = pUnitAbilities:HasAbility('ALIGNMENT_EVIL') -- or pUnit:GetExperience():HasPromotion() -- once we have magic do entropy and death promos.
-    if isEvil then
+    -- or pUnit:GetExperience():HasPromotion() -- once we have magic do entropy and death promos.
+    if pUnitAbilities:HasAbility('ALIGNMENT_EVIL') then
         iUnitToGrant = GameInfo.Units['SLTH_UNIT_MANES'].Index
         iPlotSpawnedLocation = Game:GetProperty('InfernalPlot')
         iGrantPlayer = Game:GetProperty('Infernal', playerID)
@@ -82,18 +114,22 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
         iUnitToGrant = GameInfo.Units['SLTH_UNIT_ANGEL'].Index
         iPlotSpawnedLocation = Game:GetProperty('MercurianGatePlot')
         iGrantPlayer = Game:GetProperty('Mercurian')
+        print('prepping to grant angel')
     else
+        print('unit doesnt have an alignment')
         return
     end
-    if not iPlotSpawnedLocation then return end
+    if not iPlotSpawnedLocation then print('no spawn location, not spawning'); return; end
     local pKillingPlayer = Players[playerID]
     local pUnitKiller = pKillingPlayer:GetUnits():FindID(unitID);
-    local sUnitName = pUnit:GetUnitType()
+    local sUnitName = pUnit:GetType()
     if tAnimalBeastSiege[GameInfo.Units[sUnitName].PromotionClass] or pUnitKiller:GetAbility():HasAbility('NETHER_BLADE') then
+        print('unit is beast or siege or animal or killed by nether blade')
         return
     end
     local bIsNotAlive = pUnitAbilities:HasAbility('ABILITY_ANGEL') or pUnitAbilities:HasAbility('ABILITY_DEMON') or pUnitAbilities:HasAbility('ABILITY_UNDEAD')
     if bIsNotAlive then
+        print('Unit isnt alive, dont grant')
         return
     end
     -- passed checks for eligibility, now do pseudo random, deaths since success.
@@ -105,13 +141,14 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
 end
 
 function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstruction)
-    if buildingID == GameInfo.Buildings['BUILDING_PALACE'] then
+    if buildingID == GameInfo.Buildings['BUILDING_PALACE'].Index then
         local pPlayer = Players[playerID]
-        if PlayerConfigurations[pPlayer]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
+        if PlayerConfigurations[playerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
             Game:SetProperty('Infernal', playerID)
         end
-    elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'] then
+    elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
+        print('Mercurian Gate founded')
         Game:SetProperty('MercurianGatePlot', plotID)
         Game:SetProperty('Mercurian', playerID)
     end
@@ -148,44 +185,68 @@ function GrantReligion(playerID, unitID)
     end
 end
 
-tReligions = {['GameInfo.Religions["RELIGION_THE_ORDER"].Index']= {
-    ['1']=GameInfo.Beliefs["BELIEF_THE_ORDER_PANTH"].Hash},
-['GameInfo.Religions["RELIGION_EMPYREAN"].Index']= {
-    ['1']=GameInfo.Beliefs["BELIEF_EMPYREAN_PANTH"].Hash},
-['GameInfo.Religions["RELIGION_KILMORPH"].Index']= {
-    ['1']=GameInfo.Beliefs["BELIEF_KILMORPH_PANTH"].Hash},
-['GameInfo.Religions["RELIGION_LEAVES"].Index']= {
-    ['1']=GameInfo.Beliefs["BELIEF_LEAVES_PANTH"].Hash},
-['GameInfo.Religions["RELIGION_OVERLORDS"].Index']= {
-    ['1']=GameInfo.Beliefs["BELIEF_OVERLORDS_PANTH"].Hash},
-['GameInfo.Religions["RELIGION_ESUS"].Index']= {
-    ['1']=GameInfo.Beliefs["BELIEF_ESUS_PANTH"].Hash},
-['GameInfo.Religions["RELIGION_VEIL"].Index']= {
-    ['1']=GameInfo.Beliefs["BELIEF_VEIL_PANTH"].Hash}}
+function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
+    local iReligion = tReligousCivicTrigger[civicIndex]
+    if iReligion then
+        local bHolyCityEstablished = Game:GetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS') or 0
+        local pPlayer = Players[playerID]
+        local pPlayerCities = pPlayer:GetCities()
+        local tCityReligionFollowers
+        local pLeastReligionsCity
+        local iCityPop
+        local iLeastFollowersCityCount = 2
+        for idx, pCity in pPlayerCities:Members() do
+            iCityPop = pCity:GetPopulation()
+            print(iCityPop)
+            local iFollowers = 0
+            for i in GameInfo.Religions() do
+                iFollowers = iFollowers + pCity:GetReligion():GetNumFollowers(i.Index)
+                print(iFollowers)
+            end
+            if iFollowers == 0 then
+                tCityReligionFollowers = 0
+            else
+                tCityReligionFollowers = iFollowers / iCityPop
+            end
+            if tCityReligionFollowers == 0 then
+                pLeastReligionsCity = pCity
+                break
+            end
+            if tCityReligionFollowers < iLeastFollowersCityCount then
+                iLeastFollowersCityCount = tCityReligionFollowers
+                pLeastReligionsCity = pCity
+            end
+        end
+        pLeastReligionsCity:GetReligion():AddReligiousPressure(playerID, iReligion, 1000)
+        if bHolyCityEstablished < 1 then
+            Game:SetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS', 1)
+            local pPlot = pLeastReligionsCity:GetPlot()
+            pPlot:SetProperty(tostring(iReligion)..'_HOLY_CITY', 1)
+        end
+    end
+end
+
 function InitiateReligions()
     local aPlayers = PlayerManager.GetAliveMinors();            -- will minors work? if so need 7 in game
     local pGameReligion = Game.GetReligion();
-    local count = 0
-    for religion, tReligion in pairs(tReligions) do
-        local pMinorPlayer = aPlayers[count]
+    local iMinorPlayer = 1
+    for sReligion, tReligion in pairs(tReligions) do
+        local pMinorPlayer = aPlayers[iMinorPlayer]
         local pReligion = pMinorPlayer:GetReligion();
-        local iMinorPlayer = pMinorPlayer:GetID();
 
         pGameReligion:FoundPantheonHash(iMinorPlayer,  tReligion[1]);
-        pGameReligion:FoundReligion(iPlayer,  GameInfo.Religions["RELIGION_TAOISM"].Index);
-        -- pGameReligion:AddBeliefHash(iPlayer,  GameInfo.Beliefs["BELIEF_FEED_THE_WORLD"].Hash);
-        pReligion:SetHolyCity(pPlayer:GetCities():GetCapitalCity());
+        pGameReligion:FoundReligion(iMinorPlayer,  sReligion);
+        pGameReligion:AddBeliefHash(iMinorPlayer,  tReligion[2]);
+        pReligion:SetHolyCity(pMinorPlayer:GetCities():GetCapitalCity());
         pReligion:ChangeNumBeliefsEarned(1);
-        count = count + 1
+        iMinorPlayer = iMinorPlayer + 1
     end
 end
-Events.UnitAddedToMap.Add(GrantReligion)                         -- test UnitAbilityGained
-LuaEvents.NewGameInitialized.Add(InitiateReligions);
 function onStart()
-    for iPlayerID, pPlayer in Players do
+    for iPlayerID, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
         local alignment = pPlayer:GetProperty('alignment')
         if not alignment then
-            local sLeaderName = PlayerConfigurations[pPlayer]:GetLeaderTypeName()
+            local sLeaderName = PlayerConfigurations[iPlayerID]:GetLeaderTypeName()
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
@@ -197,7 +258,11 @@ function onStart()
 end
 
 
-onStart()
+
 
 Events.UnitKilledInCombat.Add(alignmentDeath)
 GameEvents.BuildingConstructed.Add(RespawnerSpawned)
+Events.UnitAddedToMap.Add(GrantReligion)                         -- test UnitAbilityGained
+LuaEvents.NewGameInitialized.Add(onStart);
+LuaEvents.NewGameInitialized.Add(InitiateReligions);
+Events.CivicCompleted.Add(GrantReligionFromCivicCompleted)

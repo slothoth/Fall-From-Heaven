@@ -178,7 +178,7 @@ function GetGovernanceDistances(pPlayer)
 end
 
 function SlthLog(sMessage)
-    SLTH_DEBUG_ON = False
+    SLTH_DEBUG_ON = nil
     if SLTH_DEBUG_ON then
         print(sMessage)
     end
