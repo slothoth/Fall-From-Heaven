@@ -17,7 +17,7 @@ RESOURCE_MANA_WATER='MANA',  RESOURCE_MANA_SUN='MANA',  RESOURCE_MANA_SHADOW='MA
 end
 
 function SlthLog(sMessage)
-    SLTH_DEBUG_ON = False
+    SLTH_DEBUG_ON = nil
     if SLTH_DEBUG_ON then
         print(sMessage)
     end
@@ -134,15 +134,25 @@ end
 
 function ImprovementsWorkOrPillageChange(x, y, improvementIndex, improvementPlayerID, resourceIndex, isPillaged, isWorked)
     local iImprovementToDowngradeIndex = tImprovementsRegression[improvementIndex]
-    if iImprovementToDowngradeIndex and isPillaged then
+    local pPlot
+    if iImprovementToDowngradeIndex and isPillaged > 0 then
+        print(ImprovementBuilder)
+        print(ImprovementBuilder.SetImprovementType)
+        pPlot = Map.GetPlot(x, y)
         ImprovementBuilder.SetImprovementType(pPlot, iImprovementToDowngradeIndex, improvementPlayerID)
         return
     end
     if tImprovementsProgression[improvementIndex] then
-         local pPlot = Map.GetPlot(x, y)
+         pPlot = Map.GetPlot(x, y)
+         if tImprovementsCivProgression[improvementIndex] then
+             if PlayerConfigurations[improvementPlayerID]:GetCivilizationTypeName() ~= 'SLTH_CIVILIZATION_KURIOTATES' then
+                 pPlot:SetProperty('currently_worked', 0)
+                 return
+             end
+         end
          local iImprovementWorkedState =  pPlot:GetProperty('currently_worked') or 0
-         print(iImprovementWorkedState)
-         print(isWorked)
+         print( 'tile worked status was now: ' .. tostring(iImprovementWorkedState or "nil") )
+         print( 'tile worked status is now: ' .. tostring(isWorked or "nil") )
          if isWorked and iImprovementWorkedState == 0 then
              pPlot:SetProperty('currently_worked', 1)
          elseif iImprovementWorkedState > 0 and not isWorked then
@@ -154,24 +164,27 @@ end
 function InitCottage(x, y, improvementIndex, playerID)
     local iImprovementUpgradeIndex = tImprovementsProgression[improvementIndex]
     if iImprovementUpgradeIndex then
+        local pPlayer = Players[playerID]
+        local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment') or  {}
         if iImprovementUpgradeIndex == GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index then    -- enclave exception
-            local pPlayer = Players[playerID]
-            local civ = PlayerConfigurations[pPlayer]:GetCivilizationTypeName()
+            local civ = PlayerConfigurations[playerID]:GetCivilizationTypeName()
             if civ ~= 'SLTH_CIVILIZATION_KURIOTATES' then
-                return end
+                print('removing from list of incrementers')
+                tImprovingImprovements[tostring(x) .. '_' .. tostring(y)] = nil
+                pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
+                return
+            end
         end
         local pPlot = Map.GetPlot(x, y)
         pPlot:SetProperty('worked_turns', 0)
         local iIsWorked = pPlot:GetWorkerCount()
-        print(iIsWorked)
+        print('Is tile worked: '.. tostring(iIsWorked or "nil"))
         if iIsWorked > 0 then
             pPlot:SetProperty('currently_worked', 1)
         else
             pPlot:SetProperty('currently_worked', 0)
         end
-        local pPlayer = Players[playerID]
-        local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment') or  {}
-        table.insert(tImprovingImprovements, {x, y})
+        tImprovingImprovements[tostring(x) .. '_' .. tostring(y)] = {['x']=x, ['y']=y}
         pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
     end
 end
@@ -180,20 +193,22 @@ function IncrementCottages(playerId)
     local pPlayer = Players[playerId]
     local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')     -- could we instead use pPlayer:GetImprovements:GetImprovementPlots()?
     if not tImprovingImprovements then return end
-    for idx, plot_tuple in ipairs(tImprovingImprovements) do
-        local iX, iY = plot_tuple
+    for idx, plot_tuple in pairs(tImprovingImprovements) do
+        print(idx)
+        local iX, iY = plot_tuple['x'], plot_tuple['y']
         local pPlot = Map.GetPlot(iX, iY)
         local bIsWorked = pPlot:GetProperty('currently_worked')
         local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
-        if bIsWorked and not bIsImprovementPillaged then
+        if bIsWorked > 0 and not bIsImprovementPillaged then
             local iWorkedTurns = pPlot:GetProperty('worked_turns')
-            if iWorkedTurns > 20 then
+            if iWorkedTurns > 2 then
                 local iImprovementIndex = pPlot:GetImprovementType()
-                print(iImprovementIndex)
+                print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
                 local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
                 ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
             else
                 pPlot:SetProperty('worked_turns', iWorkedTurns+1)
+                print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
             end
         end
     end
@@ -213,7 +228,9 @@ function onStart()
         [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
         [GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
         [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index]    = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index}
+        [GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index]       = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index}
+    tImprovementsCivProgression = {
+        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index}
 end
 
 onStart()
@@ -222,6 +239,6 @@ GameEvents.PlayerTurnStarted.Add(GrantXP);
 GameEvents.PlayerTurnStarted.Add(checkDeals);
 GameEvents.UnitCreated.Add(FreePromotionFromResource);
 
--- Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
--- Events.ImprovementAddedToMap.Add(InitCottage)
--- GameEvents.PlayerTurnStarted.Add(IncrementCottages);
+Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
+Events.ImprovementAddedToMap.Add(InitCottage)
+GameEvents.PlayerTurnStarted.Add(IncrementCottages);
