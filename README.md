@@ -15,7 +15,7 @@ One the mod is out of Alpha (probably when art assets for three civilizations ar
 - [ ] Certain actions like switching religion set as Good, Evil, Neutral   Probably pPlayer:SetProperty()
 - [ ] limit units depending on alignment   Lua: pPlayer:GetUnits:SetBuildDisabled()? no args documented so maybe just stops all units being built.
 - [ ] diplomacy penalties, advantages      Annoyingly diplo penalties seem to be done as modifiers, but no requirements would work.
-- [ ] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though.
+- [ ] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though. ('SANGUINE_PACT_VAMPIRE_COMBAT_STRENGTH_ON_DEAD_UNIT', 'MODIFIER_ALL_COMBAT_RESULTS_APPLY_MODIFIER_TO_UNITS_ON_TILE'); MODIFIER_COMBAT_RESULTS_ATTACH_UNIT_MODIFIER
 - [ ] buff effects : ditto as before. Attacking debuffs (withered, Diseased can use Event :: OnUnitRetreated ?)
 
 ### Armageddon Counter:
@@ -91,7 +91,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] first to tech Great People or other things
 - [ ] Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
 - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system.
-- [ ] Investigate Religion as Removing/Allowing Policies (WC is dll bound, can only grant policy not take away in Lua. PolicyXP1 allows dark age policies, no more granular than 1 or 0)
+- [ ] Investigate Religion as Removing/Allowing Policies (WC is dll bound, can only grant policy not take away in Lua. PolicyXP1 allows dark age policies, no more granular than 1 or 0) MODIFIER_MAJOR_PLAYERS_ADJUST_BANNED_POLICY
 - [ ] world congress but without inclusive participation : bonus feature really
 - [ ] didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 - [ ] Altar of Luonnotar ez, A series of buildings, then a final project that requires last building. Only difficulty is making building not buildable, but still grantable by Great Person (like Hypatia)

@@ -23,6 +23,7 @@ tReligionAlignment = {
     ['RELIGION_CATHOLICISM']=1,
     ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
+-- pPlayerUnits:SetBuildDisabled(m_ePlagueDoctorUnit, true);
 
 tReligousCivicTrigger = {
 [GameInfo.Civics['CIVIC_ORDERS_FROM_HEAVEN'].Index]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
