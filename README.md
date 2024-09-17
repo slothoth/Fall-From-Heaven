@@ -1,11 +1,7 @@
 # Welcome
-Mod to faithfully recreate the glorious Civ IV FallFromHeaven mod by Kael in Civ VI. This project builds a Civ VI mod from an unhosted folder of the xml of FallFromHeaven.
+Mod to faithfully recreate the glorious Civ IV FallFromHeaven mod by Kael in Civ VI. 
 
-To "build from source", the user will need to install [FallFromHeaven](https://www.moddb.com/members/kaelffh/downloads/fall-from-heaven-ii1), install [Patch O](kael.civfanatics.net/files/FfH2041o.exe) on top of it, and
-then take the Assets/xml folder and place the contents in this project under data/XML.
-Yes the install is an .exe. I would like to distribute the folders myself, but am unsure of copyright.
-
-To download the mod, go to the Releases page, and select the highest number, for most recent. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder.
+To download the mod, git clone or go to the Releases page, and select the highest number, for most recent. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder.
 One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
 
 # Features needed:
@@ -95,13 +91,11 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [x] modifier to reduce healing on golem units     copy vampire mechanic without pillage part.
   - [ ] lua event for mages with enchant 1 to repair   Just an extra spell with one more condition
   - [x] Barnaxus Golem Modifier attachment, do it by Great general aoe but like range 99
-  - [ ] implemented but untested as needs windows
   - [x] stop golems upgrading by making them uniques, not replacers, and banning unit they would replace
   ##### Grigori:
   plural unit upgrade paths (archer, warrior, scout, cavalry) possible for Adventurer, blocked religous units, unique great person type
-  - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. 
   - [x] Blocked units (as opposed to replaced)
-  - [ ] Great adventurer spawning system, just replace Great Writers with it?
+  - [x] Great adventurer spawning system, just replace Great Writers with it? Implemented, now need a modifier to ban everyone else getting them. Like Maori
    ##### Sidar:
   Level 6 + units can retire as shades, who can act as free Great Person Specialist, so a repeatable building that provides yields and gp points
   - [ ] Button for all units if level 6 and Sidar to convert to Shade. Then just use Great Person Specialist system already set up
@@ -135,17 +129,17 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   #### BullshitHard:
   ##### Mercurians:
   Not directly playable, needs Wonder completed to summon, and then takes over that city. Needs to also be switchable to that player via ui prompt Units spawn on mercurian gate when Good units die, that whole headache as with Infernal
-  - [ ] New Civ spawned midgame
-  - [ ] Forced city transfer to the civ
-  - [ ] Switch player midgame
-  - [ ] UI prompt from events to do switch
-  - [ ] Ability modifier of "Good" unit applied to other civs units
-  - [ ] lua event when "Good" unit dies to spawn angels for this civ Lua : Event : UnitRemovedFromMap
+  - [ ] New Civ spawned midgame      think we use barb clans method
+  - [ ] Forced city transfer to the civ      doable in Lua
+  - [ ] Switch player midgame              very hard
+    - [ ] UI prompt from events to do switch        doable
+  - [x] Ability modifier of "Good" unit applied to other civs units
+  - [x] lua event when "Good" unit dies to spawn angels for this civ Lua : Event : UnitRemovedFromMap
   ##### Infernals
-  - [ ] Evil units globally reborn as manes, like Mercurians
-  - [ ] Summoned through first to tech, takes over a barbarian city
+  - [x] Evil units globally reborn as manes, like Mercurians
+  - [ ] Summoned through first to tech, takes over a barbarian city           easy to do first to tech. Barb city is harder tho. Need to implement Free City spawning
   - [ ] UI prompt option to play as them, basically Mercurians but we need more work to make the city
-  - [ ] cannot gain or lose pops with food, manes add population to a city
+  - [x] cannot gain or lose pops with food, manes add population to a city.
   ##### Kuriotates:
   Sprawling, have bigger cities, 3 distance, but only allowed 3 cities. Other cities founded are Settlements, which have 0 yields and only allow access to resources. This seems very hard.
   - [ ] 4 tile workable cities, seems fucking impossible, dll bound as fuck. Then again, Yaxchilan? It bugs out and gives like 180 yields for each sometimes
@@ -184,6 +178,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Implement summoner inherit system on summon
   - [ ] implement Charisma +relationship gain
   - [ ] implement diplo effects for each trait?
+  - [ ] Write Descriptions
 ## City System:
   - [x] District system means we need to change a lot of buildings, categorise them by District, 
   - [ ] Reexamine if that buildings path makes sense.
@@ -201,7 +196,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Trade Mission, Gold for distance, gold for city size
   - [ ] Culture Bomb, big grant of culture, and border expansion
   - [ ] Bulbing techs.
-  - [ ] Golden ages. playerProperty to see number of golden ages triggered, to know how many great people to consume. playerProperty to get all current Great people owned, and also references to delete them on use.
+  - [x] Golden ages. playerProperty to see number of golden ages triggered, to know how many great people to consume. playerProperty to get all current Great people owned, and also references to delete them on use.
+  - [ ] Golden Age modifiers, the whole extra Hammer/ extra gold per tile thing. 
   - [x] Great General Command post, Junil
   - [x] Great General aura all eras
   - [x] Lunnotar Buildings in Lua/with modifiers
@@ -218,12 +214,18 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   - [ ] Investigat Landmark / District changes to allow alt buildings. Like why do Wonders like ORzgarzh work in city centre? but buildings wont. also palgum exclamation cultures stuff.
 # Specialist System:
 - [x] Permanent specialists could implement as a few modifiers on a city, with variable values based on requirements?
+## Combat Rebalancing:
+- [ ] Find a way to go from % damage increases and low values to high integer values in a comprehensive way. Maybe if we had the calculation for both combat systems?
+- [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. 
+
 ## Over/Undercouncil:
   - world congress but without inclusive participation : bonus feature really
 ## Agendas for leaders:
 
 ## Decisions on Start Biases:
-
+# Misc
+- [ ] first to tech Great People or other things
+- [ ] Hero Hijacking, see if the relic system is in Lua and if we can override.
 ### New Victory types:
 #### Altar of Luonnotar
 seems ez, A series of buildings, then a final project that requires last building. Only difficulty is making building not buildable, but still grantable by Great Person (like Hypatia)
