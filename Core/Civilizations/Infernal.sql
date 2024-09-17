@@ -60,7 +60,7 @@ INSERT INTO BuildingReplaces(CivUniqueBuildingType, ReplacesBuildingType) VALUES
 ('SLTH_BUILDING_NULL_CIVILIZATION_INFERNAL_SMOKEHOUSE', 'SLTH_BUILDING_SMOKEHOUSE');
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
-('SLTH_UNIT_HYBOREM', 'LOC_SLTH_UNIT_HYBOREM_NAME', '2', '2', '7', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '100', '0', 'LOC_SLTH_UNIT_HYBOREM_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_HYBOREM', '0', 'PROMOTION_CLASS_MELEE', NULL, NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0');
+('SLTH_UNIT_HYBOREM', 'LOC_SLTH_UNIT_HYBOREM_NAME', '2', '2', '34', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '100', '0', 'LOC_SLTH_UNIT_HYBOREM_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_HYBOREM', '0', 'PROMOTION_CLASS_MELEE', NULL, NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0');
 
 INSERT INTO Unit_BuildingPrereqs(Unit, PrereqBuilding) VALUES
 ('SLTH_UNIT_DEATH_KNIGHT', 'BUILDING_STABLE');
