@@ -134,4 +134,9 @@
 			<Image ID="SettleButtonGrantGoldenAgeIcon"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
 		</Button>
 	</Grid>
+	<Grid ID="SettleButtonGridGrantCommandPost" Anchor="R,B" Size="auto,41" AutoSizePadding="6,0" Texture="SelectionPanel_ActionGroupSlot" SliceCorner="5,19" ToolTip="LOC_BUTTON_GrantCommandPost_NAME" SliceSize="1,1" SliceTextureSize="12,41" ConsumeMouse="1" Alpha="0.75">
+		<Button ID="SettleButtonGrantCommandPost" Anchor="C,B" Size="44,53" Texture="UnitPanel_ActionButton">
+			<Image ID="SettleButtonGrantCommandPostIcon"		Anchor="C,C" Offset="0,-2" Size="38,38"  Icon="ICON_UNITCOMMAND_RESTORE_UNIT_MOVES"/>
+		</Button>
+	</Grid>
 </Context>

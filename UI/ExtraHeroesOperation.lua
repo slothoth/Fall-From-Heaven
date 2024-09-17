@@ -5,10 +5,8 @@
 g_selectedPlayerId = -1;
 g_selectedUnitId = -1;
 
-chan_one = GameInfo.UnitAbilities["CHANNELING_ABILITY_PROMOTION_CHANNELING1"].Index
-
-
 function myRefresh(iPlayerID, iUnitID, iOldID)
+    local iBuilding
     local pUnit = UnitManager.GetUnit(iPlayerID, iUnitID)
     local pPlayer = Players[iPlayerID]
     if pUnit:GetMovesRemaining() == 0 then
@@ -21,16 +19,28 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     local tSpecificUnitControls = tUnitControls[iUnitIndex]
     if tSpecificUnitControls then
         for gridButton, tButton in pairs(tControlsAdded) do
-            print(tSpecificUnitControls[gridButton])
-            if tSpecificUnitControls[gridButton] then
-                if tSpecificUnitControls[gridButton] == 'SHOW_ON_CITY' and pCity then
-                    gridButton:SetHide(false)
-                elseif tSpecificUnitControls[gridButton] == 'GOLDEN_AGE_LOGIC' then
+            iBuilding = tSpecificUnitControls[gridButton]
+            print(iBuilding)
+            if iBuilding then
+                if iBuilding == 'GOLDEN_AGE_LOGIC' then
                     goldenAgeHide(gridButton, iPlayerID, pPlayer, iUnitID, iUnitIndex)
-                elseif pCity and pCity:GetBuildings():HasBuilding(tSpecificUnitControls[gridButton]) then
-                    gridButton:SetHide(true)
-                else
-                    gridButton:SetHide(false)
+                elseif pCity then
+                    if iBuilding == 'SHOW_ON_CITY' then
+                        gridButton:SetHide(false)
+                    elseif pCity:GetBuildings():HasBuilding(iBuilding) then
+                        gridButton:SetHide(true)
+                    else
+                        local iReligion = tReligiousWonders[iBuilding]
+                        if iReligion then
+                            local iX, iY = pCity:GetX(), pCity:GetY()
+                            local pPlot = Map.GetPlot(iX, iY)
+                            if pPlot:GetProperty(tostring(iReligion)..'_HOLY_CITY') or 0 > 0 then
+                                gridButton:SetHide(false)
+                            end
+                        else
+                            gridButton:SetHide(true)
+                        end
+                    end
                 end
             else
                 gridButton:SetHide(true)
@@ -228,25 +238,36 @@ function Setup()
     end
 
     -- can expand this for Dancing Bear etc. but not elf cage etc as that is ability bound.
-    tUnitControls = { [GameInfo.Units['UNIT_GREAT_PROPHET'].Index] = { [Controls.SettleButtonGridGrantNoxNoctis] = GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index, [Controls.SettleButtonGridGrantDiesDei] = GameInfo.Buildings['SLTH_BUILDING_DIES_DIEI'].Index,
+    tUnitControls = { [GameInfo.Units['UNIT_GREAT_PROPHET'].Index] = { [Controls.SettleButtonGridGrantNoxNoctis] = GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index, [Controls.SettleButtonGridGrantDiesDei] = GameInfo.Buildings['BUILDING_ANGKOR_WAT'].Index,
                                                                        [Controls.SettleButtonGridGrantStigmataUnborn] = GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'], [Controls.SettleButtonGridGrantCodeJunil] = GameInfo.Buildings['SLTH_BUILDING_CODE_OF_JUNIL'].Index,
                                                                        [Controls.SettleButtonGridGrantNecronomicon] = GameInfo.Buildings['SLTH_BUILDING_THE_NECRONOMICON'].Index, [Controls.SettleButtonGridGrantTabletsBambur] = GameInfo.Buildings['SLTH_BUILDING_TABLETS_OF_BAMBUR'].Index,
                                                                        [Controls.SettleButtonGridGrantSongAutumn] = GameInfo.Buildings['SLTH_BUILDING_SONG_OF_AUTUMN'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
                       [GameInfo.Units['UNIT_GREAT_ENGINEER'].Index] = { [Controls.SettleButtonGridGrantTabletsBambur] = GameInfo.Buildings['SLTH_BUILDING_TABLETS_OF_BAMBUR'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-                      [GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index] = { [Controls.SettleButtonGridGrantStigmataUnborn] = GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index, [Controls.SettleButtonGridGrantDiesDei] = GameInfo.Buildings['SLTH_BUILDING_DIES_DIEI'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
+                      [GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index] = { [Controls.SettleButtonGridGrantStigmataUnborn] = GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index, [Controls.SettleButtonGridGrantDiesDei] = GameInfo.Buildings['BUILDING_ANGKOR_WAT'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
 
                       [GameInfo.Units['UNIT_GREAT_ARTIST'].Index] = { [Controls.SettleButtonGridGrantSongAutumn] = GameInfo.Buildings['SLTH_BUILDING_SONG_OF_AUTUMN'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-                      [GameInfo.Units['UNIT_GREAT_MERCHANT'].Index] = { [Controls.SettleButtonGridGrantNoxNoctis] = GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' }
+                      [GameInfo.Units['UNIT_GREAT_MERCHANT'].Index] = { [Controls.SettleButtonGridGrantNoxNoctis] = GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
+                      [GameInfo.Units['UNIT_GREAT_GENERAL'].Index] = { [Controls.SettleButtonGridGrantCodeJunil] = GameInfo.Buildings['SLTH_BUILDING_CODE_OF_JUNIL'].Index, [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
     }
     -- Golden Age checks
+    tGoldenAgeUnitIDs = {GameInfo.Units['UNIT_GREAT_PROPHET'].Index, GameInfo.Units['UNIT_GREAT_ENGINEER'].Index,
+                         GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index, GameInfo.Units['UNIT_GREAT_ARTIST'].Index,
+                         GameInfo.Units['UNIT_GREAT_MERCHANT'].Index, GameInfo.Units['UNIT_GREAT_GENERAL'].Index}
     tGreatPeopleUnitIDs = {}
     tGreatPeopleUnitTypes = {}
-    for key, _ in pairs(tUnitControls) do
+    for _ , key in ipairs(tGoldenAgeUnitIDs) do
         tGreatPeopleUnitTypes[key] = -1
     end
 
     tCurrentButtons = {}
-    --]]
+    tReligiousWonders = {
+        [GameInfo.Buildings['SLTH_BUILDING_CODE_OF_JUNIL'].Index]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
+        [GameInfo.Buildings['BUILDING_ANGKOR_WAT'].Index]=GameInfo.Religions["RELIGION_JUDAISM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_TABLETS_OF_BAMBUR'].Index]=GameInfo.Religions["RELIGION_CONFUCIANISM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_SONG_OF_AUTUMN'].Index]=GameInfo.Religions["RELIGION_CATHOLICISM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_THE_NECRONOMICON'].Index]=GameInfo.Religions["RELIGION_HINDUISM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index]=GameInfo.Religions["RELIGION_ISLAM"].Index,
+        [GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index]=GameInfo.Religions["RELIGION_BUDDHISM"].Index}
 	if ExposedMembers.ExtraHeroes == nil then
 		ExposedMembers.ExtraHeroes = {}
 	end
