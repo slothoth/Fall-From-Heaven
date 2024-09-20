@@ -23,6 +23,8 @@ tReligionAlignment = {
     ['RELIGION_CATHOLICISM']=1,
     ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
+tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
+
 -- pPlayerUnits:SetBuildDisabled(m_ePlagueDoctorUnit, true);
 
 tReligousCivicTrigger = {
@@ -59,6 +61,9 @@ tReligions = {
 
 tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
+iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
+
+
 function onReligionSwitch(sReligion)                -- TODO not attached to anything currently
     -- get pPlayer somehow
     local iCurrentAlignment = pPlayer:GetProperty('alignment')
@@ -72,6 +77,9 @@ function onReligionSwitch(sReligion)                -- TODO not attached to anyt
     end
     if iNewAlignment then
         pPlayer:SetProperty('alignment', iNewAlignment)
+        local pPlot = pPlayer:GetCities():GetCapitalCity():GetPlot()
+        pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
+        pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
     end
 end
 
@@ -146,12 +154,28 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         local pPlayer = Players[playerID]
         if PlayerConfigurations[playerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
-            Game:SetProperty('Infernal', playerID)
         end
+        local iAlignment = pPlayer:GetProperty('alignment') or 0
+        local pPlot = Map.GetPlotByIndex(plotID)
+        pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
         print('Mercurian Gate founded')
         Game:SetProperty('MercurianGatePlot', plotID)
-        Game:SetProperty('Mercurian', playerID)
+        local iBasiumPlayerID = Game:GetProperty('Mercurian')
+        if iBasiumPlayerID then
+            local pCity = CityManager.GetCity(playerID, cityID)
+            -- maybe use stamford raffles? GREATPERSON_CITY_STATE_ABSORB_EXPANSIONS
+            -- spawn stamford raffles somehow. need to grant his great person ability. then activate him. that last part might need UI.
+            -- pCity:ChangeLoyalty(-110)            -- this also fails as city just goes to 0 loyalty.
+            if pCity then
+                local individual = GameInfo.GreatPersonIndividuals["GREAT_PERSON_INDIVIDUAL_STAMFORD_RAFFLES"].Hash;
+		        local class = GameInfo.GreatPersonClasses["GREAT_PERSON_CLASS_MERCHANT"].Hash;
+                local era = GameInfo.Eras["ERA_CLASSICAL"].Hash;
+                Game.GetGreatPeople():GrantPerson(individual, class, era,	0,	playerID, false)
+                -- pCity:AttachModifierByID('GREATPERSON_CITY_STATE_ABSORB_EXPANSIONS') -- fails likely due to wrong context, also how can it know the owner
+                --CityManager.TransferCity(pCity, 1, -1821839791)     -- enum CityTransferTypes.BY_COMBAT
+            end
+        end
     end
 end
 
@@ -225,6 +249,10 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             pPlot:SetProperty(tostring(iReligion)..'_HOLY_CITY', 1)
         end
     end
+    if civicIndex == iINFERNAL_PACT_INDEX then
+        local iInfernalPlayerId = Game:GetProperty('Infernal')
+        -- transfer city here. Grant all techs of previous civ?
+    end
 end
 
 function InitiateReligions()
@@ -246,8 +274,8 @@ end
 function onStart()
     for iPlayerID, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
         local alignment = pPlayer:GetProperty('alignment')
+        local sLeaderName = PlayerConfigurations[iPlayerID]:GetLeaderTypeName()
         if not alignment then
-            local sLeaderName = PlayerConfigurations[iPlayerID]:GetLeaderTypeName()
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
@@ -255,11 +283,14 @@ function onStart()
                 pPlayer:SetProperty('alignment', -1)                -- to catch errors, remove at production
             end
         end
+        if sLeaderName == 'SLTH_LEADER_HYBOREM' then
+            Game:SetProperty('Infernal', iPlayerID)
+        end
+        if sLeaderName == 'SLTH_LEADER_BASIUM' then
+            Game:SetProperty('Mercurian', iPlayerID)
+        end
     end
 end
-
-
-
 
 Events.UnitKilledInCombat.Add(alignmentDeath)
 GameEvents.BuildingConstructed.Add(RespawnerSpawned)

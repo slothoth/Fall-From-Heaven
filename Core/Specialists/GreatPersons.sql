@@ -15,6 +15,8 @@
 
 -- Bulbing techs (has to be Lua as list for each)
 
+UPDATE GreatPersonIndividuals SET ActionRequiresNonHostileTerritory = 1, ActionRequiresSuzerainTerritory=0, EraType='ERA_CLASSICAL' WHERE GreatPersonIndividualType='GREAT_PERSON_INDIVIDUAL_STAMFORD_RAFFLES';
+
 -- UPDATE GreatPersonClasses SET GenerateDuplicateIndividuals = 1 WHERE MaxPlayerInstances IS NULL;
 -- UPDATE GreatPersonClasses SET MaxPlayerInstances = NULL AND DistrictType = 'DISTRICT_ENCAMPMENT' WHERE GreatPersonClassType = 'GREAT_PERSON_CLASS_PROPHET';
 UPDATE Units SET FoundReligion = 0 WHERE UnitType = 'UNIT_GREAT_PROPHET';
