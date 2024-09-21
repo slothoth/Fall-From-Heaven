@@ -114,6 +114,7 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local iGrantPlayer
     local pPlayer = Players[killedPlayerID]
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
+    if not pUnit then return; end
     local pUnitAbilities = pUnit:GetAbility()
     -- or pUnit:GetExperience():HasPromotion() -- once we have magic do entropy and death promos.
     if pUnitAbilities:HasAbility('ALIGNMENT_EVIL') then
@@ -160,21 +161,15 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         local pPlot = Map.GetPlotByIndex(plotID)
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
+        local iBasiumPlayerID = Game:GetProperty('Mercurian')
+        if playerID == iBasiumPlayerID then return end              -- city transfer rebuilds the wonder so stops recursive calls
         print('Mercurian Gate founded')
         Game:SetProperty('MercurianGatePlot', plotID)
-        local iBasiumPlayerID = Game:GetProperty('Mercurian')
         if iBasiumPlayerID then
             local pCity = CityManager.GetCity(playerID, cityID)
-            -- maybe use stamford raffles? GREATPERSON_CITY_STATE_ABSORB_EXPANSIONS
-            -- spawn stamford raffles somehow. need to grant his great person ability. then activate him. that last part might need UI.
-            -- pCity:ChangeLoyalty(-110)            -- this also fails as city just goes to 0 loyalty.
             if pCity then
-                local individual = GameInfo.GreatPersonIndividuals["GREAT_PERSON_INDIVIDUAL_STAMFORD_RAFFLES"].Hash;
-		        local class = GameInfo.GreatPersonClasses["GREAT_PERSON_CLASS_MERCHANT"].Hash;
-                local era = GameInfo.Eras["ERA_CLASSICAL"].Hash;
-                Game.GetGreatPeople():GrantPerson(individual, class, era,	0,	playerID, false)
-                -- pCity:AttachModifierByID('GREATPERSON_CITY_STATE_ABSORB_EXPANSIONS') -- fails likely due to wrong context, also how can it know the owner
-                --CityManager.TransferCity(pCity, 1, -1821839791)     -- enum CityTransferTypes.BY_COMBAT
+                CityManager.TransferCity(pCity, iBasiumPlayerID, -1821839791)     -- enum CityTransferTypes.BY_GIFT
+                CityManager.SetAsOriginalCapital(pCity)         -- how would it know whose original capital?
             end
         end
     end

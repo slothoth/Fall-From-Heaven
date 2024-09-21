@@ -69,11 +69,13 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Puppets, inheriting from summoner
 
 ## Civ Spawn System:
-- [ ] New Civ spawned midgame      think we use barb clans method
-- [ ] Forced city transfer to the civ      doable in Lua
+- [x] New Civ spawned midgame      Do Kupe LeadersXP2 ocean spawn, then do citytransfer/found city.
+- [x] Forced city transfer to the civ      doable in Lua
 - [ ] Switch player midgame              very hard
 - [ ] Summoned through first to tech, takes over a barbarian city           easy to do first to tech. Barb city is harder tho. Need to implement Free City spawning
-
+- [ ] need to do inheriting techs/civics and extra units(Basium/Hyborem, stack of angels/manes)
+- [ ] Diplomatic modifiers for bringing into world. Not permanent alliance with basium tho
+- [ ] Ban Mercurian gate from palace. Mutually exclusives?. Also needs to grant palace after building, and maybe set capital
 ## Event System:
 dialogue boxes with a choice that appear randomly, if the conditions satisfy the event. ex. library burning if u have library : tricky, as ui elements involved, choice will lead to lua script execution. Low priority.
 - [ ] Someone made a framework for Stellaris meteors on discord. Just copy that I guess..
