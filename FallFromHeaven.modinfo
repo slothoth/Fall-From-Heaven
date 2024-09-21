@@ -33,13 +33,6 @@
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
-    <ReplaceUIScript id="ResearchChooserHideFFH">
-      <Properties>
-          <LoadOrder>1100</LoadOrder>
-          <LuaContext>AdvancedSetup</LuaContext>
-          <LuaReplace>UI/advanced_setup.lua</LuaReplace>
-      </Properties>
-    </ReplaceUIScript>
    </FrontEndActions>
   <UpdateIcons id="Icons">
     <File>Icons.xml</File>
@@ -274,7 +267,5 @@
     <File>UI/TechTree_support.lua</File>
     <File>UI/TechTree_overrides.lua</File>
     <File>UI/ResearchChooser_overrides.lua</File>
-    <File>UI/advanced_setup.lua</File>
-    <File>UI/advanced_setup.xml</File>
   </Files>
 </Mod>
