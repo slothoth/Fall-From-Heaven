@@ -27,7 +27,9 @@
       <File>Core/frontend_config.sql</File>
     </UpdateDatabase>
     <UpdateText id="UpdateText">
-      <File>Core/localization.sql</File>
+      <File>Core/long_localization.sql</File>
+      <File>Core/medium_localization.sql</File>
+      <File>Core/short_loc.sql</File>
       <File>Localisation/frontend.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
@@ -95,6 +97,8 @@
       <File>Core/Units.sql</File>
       <File>Core/Specialists/Specialists.sql</File>
       <File>Core/Specialists/GreatPersons.sql</File>
+      <File>Core/National_Units.sql</File>
+      <File>Core/CombatBuffs.sql</File>
       <File>Core/CivPolishing.sql</File>
       <File>Core/Lua_support/Mana_support.sql</File>
       <File>Core/Modifier_Support.sql</File>
@@ -107,7 +111,9 @@
       <File>Core/ResourceBuffs.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
-      <File>Core/localization.sql</File>
+      <File>Core/long_localization.sql</File>
+      <File>Core/medium_localization.sql</File>
+      <File>Core/short_loc.sql</File>
       <File>Localisation/Neat.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
@@ -118,6 +124,7 @@
       <File>Core/Civilizations/Dwarves/Khazad.lua</File>
       <File>Lua/Promotions.lua</File>
       <File>Lua/Alignment.lua</File>
+      <!--File>Lua/Combat.lua</File-->
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>
@@ -186,7 +193,9 @@
     </UpdateIcons>
   </InGameActions>
   <Files>
-    <File>Core/localization.sql</File>
+    <File>Core/long_localization.sql</File>
+    <File>Core/medium_localization.sql</File>
+    <File>Core/short_loc.sql</File>
     <File>Localisation/Neat.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
@@ -205,6 +214,7 @@
     <File>Core/Specialists/GreatPersons.sql</File>
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
+    <File>Core/National_Units.sql</File>
     <File>Core/Lua_support/Mana_support.sql</File>
     <File>Core/Civilizations/Amurites.sql</File>
     <File>Core/Civilizations/Balseraphs.sql</File>
@@ -233,6 +243,7 @@
     <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
     <File>Core/Civilizations/BeastRaces/Clan.sql</File>
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
+    <File>Core/CombatBuffs.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
@@ -241,6 +252,7 @@
     <File>Lua/Specialists.lua</File>
     <File>Lua/Promotions.lua</File>
     <File>Lua/Alignment.lua</File>
+    <File>Lua/Combat.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <File>Artdefs/Units.artdef</File>

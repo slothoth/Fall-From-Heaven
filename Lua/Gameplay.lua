@@ -29,7 +29,7 @@ function FreePromotionFromResource(playerID, unitID)
     if not resources then return end                -- DealManager.GetPlayerDeals(0,1)[1]:FindItemByID(2):()
     local iResource = resources:GetResourceAmount(19);      -- absolutely doesnt work on imported resources
     local imported_coffee = pPlayer:GetProperty('LOC_RESOURCE_MANA_FIRE')
-    if not imported_coffee then imported_coffee = 0; end
+    if not imported_coffee then imported_coffee = 0; end        -- EconomicManager:GetNumControlledResources(iPlayerId, iResourceId)
     iResource = iResource + imported_coffee
     if iResource > 1 then
         local pUnit = pPlayer:GetUnits():FindID(unitID);
@@ -214,6 +214,23 @@ function IncrementCottages(playerId)
     end
 end
 
+function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
+    print(resourceUTypeID)
+    local iResourceIndex = tMonitoredStrategic[resourceTypeID]
+    if iResourceIndex then
+        local pPlayer = Players[ownerPlayerID];
+        local resources = pPlayer:GetResources()
+        local iResourceCount = resources:GetResourceAmount(iResourceIndex);
+        local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+        local pCapitalPlot = pCapitalCity:GetPlot()
+        local sPropKey = 'has_resource_' + tostring(iResourceIndex)
+        local iPastResource = pCapitalPlot:GetProperty(sPropKey)
+        if iResourceCount ~= iPastResource then
+            pCapitalPlot:SetProperty(sPropKey, iResourceCount)
+        end
+    end
+end
+
 function onStart()
     tImprovementsProgression = {
         [GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
@@ -236,9 +253,11 @@ end
 onStart()
 
 GameEvents.PlayerTurnStarted.Add(GrantXP);
-GameEvents.PlayerTurnStarted.Add(checkDeals);
+-- GameEvents.PlayerTurnStarted.Add(checkDeals);
 GameEvents.UnitCreated.Add(FreePromotionFromResource);
 
 Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
 Events.ImprovementAddedToMap.Add(InitCottage)
 GameEvents.PlayerTurnStarted.Add(IncrementCottages);
+
+Events.PlayerResourceChanged.Add(UpdateResource)

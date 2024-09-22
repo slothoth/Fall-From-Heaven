@@ -4,7 +4,8 @@ tLeaderAlignmentMap = {
     ['SLTH_LEADER_SHEELBA']=0, ['SLTH_LEADER_CHARADON']=0, ['SLTH_LEADER_MAHALA']=0,
     ['SLTH_LEADER_AURIC']=0, ['SLTH_LEADER_FAERYL']=0,
 
-    ['SLTH_LEADER_VALLEDIA']=1, ['SLTH_LEADER_DAIN']=1, ['SLTH_LEADER_DECIUS']=1, ['SLTH_LEADER_CASSIEL']=1,
+    ['SLTH_LEADER_VALLEDIA']=1, ['SLTH_LEADER_DAIN']=1, ['SLTH_LEADER_DECIUS_BANNOR']=1,
+    ['SLTH_LEADER_DECIUS_MALAKIM']=1, ['SLTH_LEADER_DECIUS_CALABIM']=1, ['SLTH_LEADER_CASSIEL']=1,
     ['SLTH_LEADER_TASUNKE']=1, ['SLTH_LEADER_RHOANNA']=1, ['SLTH_LEADER_FALAMAR']=1, ['SLTH_LEADER_HANNAH']=1,
     ['SLTH_LEADER_AMELANCHIER']=1, ['SLTH_LEADER_ARENDEL']=1, ['SLTH_LEADER_THESSA']=1, ['SLTH_LEADER_ARTURUS']=1,
     ['SLTH_LEADER_KANDROS']=1, ['SLTH_LEADER_SANDALPHON']=1,
@@ -23,6 +24,9 @@ tReligionAlignment = {
     ['RELIGION_CATHOLICISM']=1,
     ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
+tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
+
+-- pPlayerUnits:SetBuildDisabled(m_ePlagueDoctorUnit, true);
 
 tReligousCivicTrigger = {
 [GameInfo.Civics['CIVIC_ORDERS_FROM_HEAVEN'].Index]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
@@ -58,6 +62,9 @@ tReligions = {
 
 tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
+iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
+
+
 function onReligionSwitch(sReligion)                -- TODO not attached to anything currently
     -- get pPlayer somehow
     local iCurrentAlignment = pPlayer:GetProperty('alignment')
@@ -71,6 +78,9 @@ function onReligionSwitch(sReligion)                -- TODO not attached to anyt
     end
     if iNewAlignment then
         pPlayer:SetProperty('alignment', iNewAlignment)
+        local pPlot = pPlayer:GetCities():GetCapitalCity():GetPlot()
+        pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
+        pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
     end
 end
 
@@ -104,6 +114,7 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local iGrantPlayer
     local pPlayer = Players[killedPlayerID]
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
+    if not pUnit then return; end
     local pUnitAbilities = pUnit:GetAbility()
     -- or pUnit:GetExperience():HasPromotion() -- once we have magic do entropy and death promos.
     if pUnitAbilities:HasAbility('ALIGNMENT_EVIL') then
@@ -145,12 +156,23 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         local pPlayer = Players[playerID]
         if PlayerConfigurations[playerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
-            Game:SetProperty('Infernal', playerID)
         end
+        local iAlignment = pPlayer:GetProperty('alignment') or 0
+        local pPlot = Map.GetPlotByIndex(plotID)
+        pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
+        local iBasiumPlayerID = Game:GetProperty('Mercurian')
+        if playerID == iBasiumPlayerID then return end              -- city transfer rebuilds the wonder so stops recursive calls
         print('Mercurian Gate founded')
         Game:SetProperty('MercurianGatePlot', plotID)
-        Game:SetProperty('Mercurian', playerID)
+        if iBasiumPlayerID then
+            local pCity = CityManager.GetCity(playerID, cityID)
+            if pCity then
+                CityManager.TransferCity(pCity, iBasiumPlayerID, -1821839791)     -- enum CityTransferTypes.BY_GIFT
+                GrantTechParity(iBasiumPlayerID, playerID)
+                GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
+            end
+        end
     end
 end
 
@@ -224,6 +246,45 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             pPlot:SetProperty(tostring(iReligion)..'_HOLY_CITY', 1)
         end
     end
+    if civicIndex == iINFERNAL_PACT_INDEX then
+        local iInfernalPlayerId = Game:GetProperty('Infernal')
+        -- transfer city here. Grant all techs of previous civ? Make good city location?
+        GrantTechParity(iInfernalPlayerId, playerID)
+        GrantCultureParity(iInfernalPlayerId, playerID)
+    end
+end
+
+function GrantTechParity(iPlayerGrantedTechs, iPlayerTechGranter)
+    local pPlayerGrantedTechs = Players[iPlayerGrantedTechs]
+    local pPlayerTechGranter = Players[iPlayerTechGranter]
+    if not pPlayerGrantedTechs then return end
+    if not pPlayerTechGranter then return end
+    local pTechsGrantedTechs = pPlayerGrantedTechs:GetTechs()
+    local pTechsTechGranter = pPlayerTechGranter:GetTechs()
+    for techRow in GameInfo.Technologies() do
+        local iTechIndex = techRow.Index
+        if pTechsTechGranter:HasTech(iTechIndex) then
+            print(techRow.Index)
+            pTechsGrantedTechs:SetTech(iTechIndex, true)
+        end
+    end
+end
+
+function GrantCultureParity(iPlayerGrantedCivics, iPlayerCivicGranter)
+    local pPlayerGrantedCivics = Players[iPlayerGrantedCivics]
+    local pPlayerCivicGranter = Players[iPlayerCivicGranter]
+    if not pPlayerGrantedCivics then return end
+    if not pPlayerCivicGranter then return end
+    local pCivicsGrantedCivics = pPlayerGrantedCivics:GetCulture()
+    local pCivicsCivicGranter = pPlayerCivicGranter:GetCulture()
+    for civicRow in GameInfo.Civics() do
+        local iCivicIndex = civicRow.Index
+        print(civicRow.Index)
+        if pCivicsCivicGranter:HasCivic(iCivicIndex) then
+            print(civicRow.Index)
+            pCivicsGrantedCivics:SetCivic(iCivicIndex, true)
+        end
+    end
 end
 
 function InitiateReligions()
@@ -245,8 +306,8 @@ end
 function onStart()
     for iPlayerID, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
         local alignment = pPlayer:GetProperty('alignment')
+        local sLeaderName = PlayerConfigurations[iPlayerID]:GetLeaderTypeName()
         if not alignment then
-            local sLeaderName = PlayerConfigurations[iPlayerID]:GetLeaderTypeName()
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
@@ -254,11 +315,14 @@ function onStart()
                 pPlayer:SetProperty('alignment', -1)                -- to catch errors, remove at production
             end
         end
+        if sLeaderName == 'SLTH_LEADER_HYBOREM' then
+            Game:SetProperty('Infernal', iPlayerID)
+        end
+        if sLeaderName == 'SLTH_LEADER_BASIUM' then
+            Game:SetProperty('Mercurian', iPlayerID)
+        end
     end
 end
-
-
-
 
 Events.UnitKilledInCombat.Add(alignmentDeath)
 GameEvents.BuildingConstructed.Add(RespawnerSpawned)
