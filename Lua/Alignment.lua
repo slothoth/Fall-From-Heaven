@@ -169,7 +169,8 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
             local pCity = CityManager.GetCity(playerID, cityID)
             if pCity then
                 CityManager.TransferCity(pCity, iBasiumPlayerID, -1821839791)     -- enum CityTransferTypes.BY_GIFT
-                CityManager.SetAsOriginalCapital(pCity)         -- how would it know whose original capital?
+                GrantTechParity(iBasiumPlayerID, playerID)
+                GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
             end
         end
     end
@@ -247,7 +248,42 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
     end
     if civicIndex == iINFERNAL_PACT_INDEX then
         local iInfernalPlayerId = Game:GetProperty('Infernal')
-        -- transfer city here. Grant all techs of previous civ?
+        -- transfer city here. Grant all techs of previous civ? Make good city location?
+        GrantTechParity(iInfernalPlayerId, playerID)
+        GrantCultureParity(iInfernalPlayerId, playerID)
+    end
+end
+
+function GrantTechParity(iPlayerGrantedTechs, iPlayerTechGranter)
+    local pPlayerGrantedTechs = Players[iPlayerGrantedTechs]
+    local pPlayerTechGranter = Players[iPlayerTechGranter]
+    if not pPlayerGrantedTechs then return end
+    if not pPlayerTechGranter then return end
+    local pTechsGrantedTechs = pPlayerGrantedTechs:GetTechs()
+    local pTechsTechGranter = pPlayerTechGranter:GetTechs()
+    for techRow in GameInfo.Technologies() do
+        local iTechIndex = techRow.Index
+        if pTechsTechGranter:HasTech(iTechIndex) then
+            print(techRow.Index)
+            pTechsGrantedTechs:SetTech(iTechIndex, true)
+        end
+    end
+end
+
+function GrantCultureParity(iPlayerGrantedCivics, iPlayerCivicGranter)
+    local pPlayerGrantedCivics = Players[iPlayerGrantedCivics]
+    local pPlayerCivicGranter = Players[iPlayerCivicGranter]
+    if not pPlayerGrantedCivics then return end
+    if not pPlayerCivicGranter then return end
+    local pCivicsGrantedCivics = pPlayerGrantedCivics:GetCulture()
+    local pCivicsCivicGranter = pPlayerCivicGranter:GetCulture()
+    for civicRow in GameInfo.Civics() do
+        local iCivicIndex = civicRow.Index
+        print(civicRow.Index)
+        if pCivicsCivicGranter:HasCivic(iCivicIndex) then
+            print(civicRow.Index)
+            pCivicsGrantedCivics:SetCivic(iCivicIndex, true)
+        end
     end
 end
 
