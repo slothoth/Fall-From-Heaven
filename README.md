@@ -7,7 +7,6 @@ One the mod is out of Alpha (probably when art assets for three civilizations ar
 ## Promotion System:
 - [ ] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource, Lua: HasResource, GetBonusResourcePerTurn, GetResourceAmount, Monopolies support stuff?
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
-- [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
 - [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Dunno if there is a modifier to grant a modifier to a city, like there is for units.
 
 ## Alignment System:
@@ -59,7 +58,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Bulbing techs.
 - [ ] Dark elf kidnapping superSpecialist ( apply a modifier  with the reverse values of a superspecialist) and spawn a great person
 - [ ] For single ability units, Manes for example, Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
-- 
+
 
 ## Upgrade System:
 - [ ] can upgrade outside borders       probably needs bespoke upgrade system
@@ -73,9 +72,9 @@ like barbarian encampments but with different classes that spawn different units
 - [x] Forced city transfer to the civ      doable in Lua
 - [ ] Switch player midgame              very hard
 - [ ] Summoned through first to tech, takes over a barbarian city           easy to do first to tech. Barb city is harder tho. Need to implement Free City spawning
-- [ ] need to do inheriting techs/civics and extra units(Basium/Hyborem, stack of angels/manes)
+- [x] need to do inheriting techs/civics and extra units(Basium/Hyborem, stack of angels/manes)
 - [ ] Diplomatic modifiers for bringing into world. Not permanent alliance with basium tho
-- [ ] Ban Mercurian gate from palace. Mutually exclusives?. Also needs to grant palace after building, and maybe set capital
+- [x] Ban Mercurian gate from palace. Mutually exclusives?. Also needs to grant palace after building, and maybe set capital
 ## Event System:
 dialogue boxes with a choice that appear randomly, if the conditions satisfy the event. ex. library burning if u have library : tricky, as ui elements involved, choice will lead to lua script execution. Low priority.
 - [ ] Someone made a framework for Stellaris meteors on discord. Just copy that I guess..
@@ -114,6 +113,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 ## Religion:
 - [ ] Investigate Religion as Removing/Allowing Policies (WC is dll bound, can only grant policy not take away in Lua. PolicyXP1 allows dark age policies, no more granular than 1 or 0) MODIFIER_MAJOR_PLAYERS_ADJUST_BANNED_POLICY
+- [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
 
 ## Great People:
 - [ ] Golden Age modifiers, the whole extra Hammer/ extra gold per tile thing.
