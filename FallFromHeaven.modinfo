@@ -27,7 +27,9 @@
       <File>Core/frontend_config.sql</File>
     </UpdateDatabase>
     <UpdateText id="UpdateText">
-      <File>Core/localization.sql</File>
+      <File>Core/long_localization.sql</File>
+      <File>Core/medium_localization.sql</File>
+      <File>Core/short_loc.sql</File>
       <File>Localisation/frontend.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
@@ -109,7 +111,9 @@
       <File>Core/ResourceBuffs.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
-      <File>Core/localization.sql</File>
+      <File>Core/long_localization.sql</File>
+      <File>Core/medium_localization.sql</File>
+      <File>Core/short_loc.sql</File>
       <File>Localisation/Neat.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
@@ -189,7 +193,9 @@
     </UpdateIcons>
   </InGameActions>
   <Files>
-    <File>Core/localization.sql</File>
+    <File>Core/long_localization.sql</File>
+    <File>Core/medium_localization.sql</File>
+    <File>Core/short_loc.sql</File>
     <File>Localisation/Neat.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
