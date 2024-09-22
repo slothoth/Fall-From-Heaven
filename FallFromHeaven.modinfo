@@ -189,6 +189,13 @@
             <LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
+    <ImportFiles id="ImportUIFiles">
+      <Properties>
+        <LoadOrder>901</LoadOrder>
+      </Properties>
+      <File>UI/UnitPromotionPopup.lua</File>
+      <File>UI/UnitPromotionPopup.xml</File>
+    </ImportFiles>
     <UpdateIcons id="Icons">
       <File>Icons.xml</File>
     </UpdateIcons>
@@ -275,5 +282,7 @@
     <File>UI/TechTree_support.lua</File>
     <File>UI/TechTree_overrides.lua</File>
     <File>UI/ResearchChooser_overrides.lua</File>
+    <File>UI/UnitPromotionPopup.lua</File>
+    <File>UI/UnitPromotionPopup.xml</File>
   </Files>
 </Mod>
