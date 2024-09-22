@@ -85,7 +85,8 @@
       <File>Core/Civilizations/Winterborn/Illians.sql</File>
       <File>Core/Civilizations/Winterborn/Doviello.sql</File>
       <File>Core/Civilizations/BeastRaces/Clan.sql</File>
-      <!--File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File-->
+      <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
+      <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
       <File>Core/Religions.sql</File>
       <File>Core/Governments.sql</File>
       <File>Core/Abilities.sql</File>
@@ -243,6 +244,7 @@
     <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
     <File>Core/Civilizations/BeastRaces/Clan.sql</File>
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
+    <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
     <File>Core/CombatBuffs.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>

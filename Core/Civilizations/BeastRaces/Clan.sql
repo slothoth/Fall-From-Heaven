@@ -68,6 +68,10 @@ INSERT INTO ModifierArguments(ModifierId, Name, Type, Value) VALUES
 ('WARREN_EXTRA_UNIT', 'Tag', 'ARGTYPE_IDENTITY', 'CAN_WARREN_DOUBLE'),
 ('WARREN_EXTRA_UNIT', 'Amount', 'ARGTYPE_IDENTITY', '1');
 
+INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
+('SLTH_UNIT_RANTINE', 'LOC_SLTH_UNIT_RANTINE_NAME', '2', '1', '19', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '180', '0', 'LOC_SLTH_UNIT_RANTINE_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_RANTINE', '1', 'PROMOTION_CLASS_MELEE', 'TECH_BRONZE_WORKING', NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0');
+
+
 -- Does not double Hero, National, Siege Weapons, or Naval units
 INSERT INTO Buildings(BuildingType, Name, PrereqTech, PrereqCivic, Cost, PrereqDistrict, Description, OuterDefenseHitPoints, Housing, Entertainment, TraitType, CitizenSlots, AdvisorType) VALUES
 ('SLTH_BUILDING_WARRENS', 'LOC_SLTH_BUILDING_WARRENS_NAME', 'TECH_MASONRY', NULL, '180', 'DISTRICT_CITY_CENTER', 'LOC_SLTH_BUILDING_WARRENS_DESCRIPTION', '0', '0', '0', 'SLTH_TRAIT_CIVILIZATION_BUILDING_WARRENS', NULL, 'ADVISOR_CONQUEST');
