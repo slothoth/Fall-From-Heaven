@@ -6,18 +6,18 @@ include("InstanceManager");
 -- ===========================================================================
 --	CONSTANTS
 -- ===========================================================================
-local SIZE_NODE_X				:number = 150;				-- Item node dimensions
+local SIZE_NODE_X				:number = 132;				-- Item node dimensions
 local SIZE_NODE_Y				:number = 146;
 local SIZE_NODE_X_HALF			:number = SIZE_NODE_X/2;	-- Item node dimensions
 local SIZE_NODE_Y_HALF			:number = SIZE_NODE_Y/2;
 local SIZE_PATH					:number = 40;
 local SIZE_PATH_HALF			:number = 20;
-local SIZE_ROW_Y				:number = 106;
-local SIZE_COLUMN_X				:number = 212;
+local SIZE_ROW_Y				:number = 100;
+local SIZE_COLUMN_X				:number = 200;
 local LINE_BEFORE_CURVE			:number = 20;		-- MIN-MAX 40-(SIZE_NODE_Y/3)
 
-local MAX_WIDTH					:number = 1024;
-local MAX_HEIGHT				:number = 768;
+local MAX_WIDTH					:number = 1850;
+local MAX_HEIGHT				:number = 1100;
 
 local WIDTH_PADDING				:number = 50;
 local HEIGHT_PADDING			:number = 120;
@@ -217,11 +217,11 @@ function OnPromoteUnitPopup()
 					local inst:table = m_kLineIM:GetInstance();
 					local line:table = inst.LineImage;
 					if(currentColumn > previousColumn or currentColumn < previousColumn) then
-						local startX:number= (math.min(previousColumn,currentColumn))*SIZE_NODE_X;
+						local startX:number= (math.min(previousColumn,currentColumn))*SIZE_NODE_X + 120;
 						local endX :number = (math.max(previousColumn,currentColumn)-1)*SIZE_NODE_X;
-						local yVal:number = (currentRow-1)*SIZE_NODE_Y + SIZE_NODE_Y_HALF;
+						local yVal:number = (currentRow-1)*SIZE_NODE_Y + SIZE_NODE_Y_HALF -40;
 						
-						line:SetOffsetVal(startX, yVal);				
+						line:SetOffsetVal(startX, yVal);
 						line:SetSizeVal( endX - startX, SIZE_PATH);
 						if hasPromotion then
 							line:SetTexture("Controls_TreePathEW");
