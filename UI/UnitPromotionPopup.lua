@@ -6,7 +6,7 @@ include("InstanceManager");
 -- ===========================================================================
 --	CONSTANTS
 -- ===========================================================================
-local SIZE_NODE_X				:number = 132;				-- Item node dimensions
+local SIZE_NODE_X				:number = 130;				-- Item node dimensions
 local SIZE_NODE_Y				:number = 146;
 local SIZE_NODE_X_HALF			:number = SIZE_NODE_X/2;	-- Item node dimensions
 local SIZE_NODE_Y_HALF			:number = SIZE_NODE_Y/2;
@@ -129,8 +129,12 @@ function OnPromoteUnitPopup()
 		for row in GameInfo.UnitPromotionPrereqs() do
 			hasPromotion = false;
 			numUnlocks = 0
-			
+			local sCrossPromoTag = GameInfo.UnitPromotions[row.UnitPromotion].Specialization
+			print(sCrossPromoTag)
 			if row.PrereqUnitPromotion == i.UnitPromotionType then
+				-- if sCrossPromoTag > 0 then
+				--	row.PrereqUnitPromotion = sCrossPromoTag
+				-- end
 				local previousRow	:number = i.Level;
 				local previousColumn:number = i.Column;
 				local currentRow:number = m_uiNodes[row.UnitPromotion].Level;
