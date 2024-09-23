@@ -23,7 +23,7 @@ class Promotions:
         self.logger = logging.getLogger(__name__)
 
     def promotion_miner(self, model_obj):
-        with open('data/XML/Units/CIV4PromotionInfos.xml', 'r') as file:
+        with open('../data/XML/Units/CIV4PromotionInfos.xml', 'r') as file:
             promo_dict = xmltodict.parse(file.read())['Civ4PromotionInfos']['PromotionInfos']['PromotionInfo']
 
         promo_dict = {i['Type']:i for i in promo_dict}
@@ -237,7 +237,7 @@ class Promotions:
                 promo_prereqs.append({'UnitPromotion': name, 'PrereqUnitPromotion': f"{promo['PromotionPrereqOr3']}_{suffix}"})
 
         unit_promotion_modifiers = []
-        race_promos, trait_modifiers, race_traits = [], [], model_obj['civilizations'].races
+        race_promos, trait_modifiers, race_traits = [], [], []              # last was model_obj['civilizations'].races
         ability_map = {}
         for promo, promo_details in full_promo_abilities.items():
             ability_map[promo] = []
@@ -255,6 +255,7 @@ class Promotions:
                 promo_details.pop('iNeutralHealChange'), promo_details.pop('iFriendlyHealChange')
             if promo_details.get('iCombatPercentDefense', 0) == promo_details.get('iCombatPercent', -10):
                 promo_details.pop('iCombatPercentDefense')
+            break
             for i, j in promo_details.items():
                 promo_mod = model_obj['modifiers'].promotion_modifiers.choose_promo(civ4_target={i: j}, name=promo)
                 if promo_mod is not None:
@@ -277,16 +278,35 @@ class Promotions:
                              {'PromotionClassType': 'PROMOTION_CLASS_DISCIPLE',
                               'Name': 'LOC_PROMOTION_CLASS_DISCIPLE_NAME'}]
 
-        for promotion in promotion_classes:
-            model_obj['kinds'][promotion['PromotionClassType']] = 'KIND_PROMOTION_CLASS'
-            model_obj['tags'][promotion['PromotionClassType'][10:]] = 'ABILITY_CLASS'
+        #for promotion in promotion_classes:
+        #    model_obj['kinds'][promotion['PromotionClassType']] = 'KIND_PROMOTION_CLASS'
+        #    model_obj['tags'][promotion['PromotionClassType'][10:]] = 'ABILITY_CLASS'
 
-        for promotion in duplicated_promos:
-            model_obj['kinds'][promotion['UnitPromotionType']] = 'KIND_PROMOTION'
+        #for promotion in duplicated_promos:
+        #    model_obj['kinds'][promotion['UnitPromotionType']] = 'KIND_PROMOTION'
 
         for promo in duplicated_promos:
             promo['Column'] = unique_positions_structured[promo['PromotionClass']][promo['oldname']].pop() + 1
             promo.pop('oldname')
+
+        with open('editpromo.sql', 'r') as file:
+            lines = file.readlines()
+
+        fails = []
+        too_many = []
+        for promo in duplicated_promos:
+            searcher = promo['UnitPromotionType']
+            result = [(idx, i) for idx, i in enumerate(lines) if searcher in i]
+            if len(result) == 0:
+                fails.append(promo)
+            elif len(result) > 1:
+                too_many.append(promo)
+            else:
+                idx, item = result[0]
+                columnEntry = promo['Column']
+                edited_item = item.replace(')', f", '{columnEntry}')")
+                lines[idx] = edited_item
+
 
         model_obj['ability_map'] = ability_map
 
@@ -296,3 +316,6 @@ class Promotions:
         make_or_add(model_obj['sql_inserts'], unit_promotion_modifiers, 'UnitPromotionModifiers')
         make_or_add(model_obj['sql_inserts'], trait_modifiers, 'TraitModifiers')
         return model_obj
+
+my = Promotions()
+my.promotion_miner({})
