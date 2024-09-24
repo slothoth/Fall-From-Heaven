@@ -22,6 +22,17 @@ local MAX_HEIGHT				:number = 1100;
 local WIDTH_PADDING				:number = 50;
 local HEIGHT_PADDING			:number = 120;
 
+local tSmallNodes = { ['DEATH_ONE'] = 1, ['FIRE_ONE'] = 1, ['AIR_ONE'] = 1, ['BODY_ONE'] = 1, ['CHAOS_ONE'] = 1, ['EARTH_ONE'] = 1,
+                ['ENCHANTMENT_ONE'] = 1, ['ENTROPY_ONE'] = 1, ['ICE_ONE'] = 1, ['LAW_ONE'] = 1, ['LIFE_ONE'] = 1, ['METAMAGIC_ONE'] = 1,
+                ['MIND_ONE'] = 1, ['NATURE_ONE'] = 1, ['SPIRIT_ONE'] = 1, ['WATER_ONE'] = 1, ['SUN_ONE'] = 1, ['SHADOW_ONE'] = 1,
+                ['DEATH_TWO'] = 1, ['FIRE_TWO'] = 1, ['AIR_TWO'] = 1, ['BODY_TWO'] = 1, ['CHAOS_TWO'] = 1, ['EARTH_TWO'] = 1,
+                ['ENCHANTMENT_TWO'] = 1, ['ENTROPY_TWO'] = 1, ['ICE_TWO'] = 1, ['LAW_TWO'] = 1, ['LIFE_TWO'] = 1, ['METAMAGIC_TWO'] = 1,
+                ['MIND_TWO'] = 1, ['NATURE_TWO'] = 1, ['SPIRIT_TWO'] = 1, ['WATER_TWO'] = 1, ['SUN_TWO'] = 1, ['SHADOW_TWO'] = 1,
+                ['DEATH_THREE'] = 1, ['FIRE_THREE'] = 1, ['AIR_THREE'] = 1, ['BODY_THREE'] = 1, ['CHAOS_THREE'] = 1,
+                ['EARTH_THREE'] = 1, ['ENCHANTMENT_THREE'] = 1, ['ENTROPY_THREE'] = 1, ['ICE_THREE'] = 1, ['LAW_THREE'] = 1,
+                ['LIFE_THREE'] = 1, ['METAMAGIC_THREE'] = 1, ['MIND_THREE'] = 1, ['NATURE_THREE'] = 1, ['SPIRIT_THREE'] = 1,
+                ['WATER_THREE'] = 1, ['SUN_THREE'] = 1, ['SHADOW_THREE'] = 1 }
+
 -- ===========================================================================
 --	MEMBERS
 -- ===========================================================================
@@ -116,7 +127,6 @@ function OnPromoteUnitPopup()
 	m_kLineIM:ResetInstances();
 	m_uiNodes = {};
 	local hasPromotion:boolean;
-
 	for row in GameInfo.UnitPromotions() do
 
 		if row.PromotionClass == promotionClass then
@@ -124,6 +134,7 @@ function OnPromoteUnitPopup()
 		end
 	end
 
+	local bSmallTriggered
 	local numUnlocks = 0;
 	for _, i in pairs(m_uiNodes) do
 		for row in GameInfo.UnitPromotionPrereqs() do
@@ -272,15 +283,28 @@ function OnPromoteUnitPopup()
 			else
 				promotionInstance = m_PromotionListInstanceMgr:GetInstance();
 			end
-
-			promotionInstance.PromotionSelection:SetOffsetVal((row.Column-1)*SIZE_NODE_X, (row.Level-1)*SIZE_NODE_Y);
+			local bIsSmallNode = tSmallNodes[row.UnitPromotionType]
+			if bIsSmallNode then
+				promotionInstance.PromotionSelection:SetSizeVal(62,100)
+				promotionInstance.PromotionSelection:SetOffsetVal((row.Column+10)*35, (row.Level-1)*SIZE_NODE_Y);
+				promotionInstance.PromotionName.SetOffsetVal(0,0)			-- not working
+				-- promotionInstance.PromotionSelection.PromotionSlot.PromotionListIcon:SetHide()
+			else
+				promotionInstance.PromotionSelection:SetOffsetVal((row.Column-1)*SIZE_NODE_X, (row.Level-1)*SIZE_NODE_Y);
+			end
 			if (promotionDefinition ~= nil) then
 				promotionInstance.PromotionName:SetText(Locale.ToUpper(promotionDefinition.Name));
 				promotionInstance.PromotionDescription:SetText(Locale.Lookup(promotionDefinition.Description));
 				local iconName = "ICON_" .. promotionDefinition.UnitPromotionType;
-				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName,32);
+				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName,32);			-- change to amber? and then hijack for different ones
 				if (textureOffsetX ~= nil) then
-					promotionInstance.PromotionIcon:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+					if not bIsSmallNode then
+						promotionInstance.PromotionIcon:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+					end
+				end
+				if bIsSmallNode then
+					promotionInstance.PromotionListIcon:SetHide(1)			-- plan is. Replace name with ICON_RESOURCE when made.
+					promotionInstance.PromotionIcon:SetHide(1)				-- Description of spells can be handled with a tooltip
 				end
 			end
 
