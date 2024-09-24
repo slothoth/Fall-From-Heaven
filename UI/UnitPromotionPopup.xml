@@ -11,7 +11,7 @@
   <Image Texture="Controls_Gradient" Size="parent,150"  Color="0,0,0,255" Anchor="L,T" FlipY="1"/>
   <Image Texture="Controls_Gradient" Size="parent,150"  Color="0,0,0,255" Anchor="L,B"/>
 
-  <Grid ID="PopupFrameGrid" Anchor="C,C" Size="2000,2000" Offset="0,0" Style="EnhancedToolTip">
+  <Grid ID="PopupFrameGrid" Anchor="C,C" Size="5000,5000" Offset="0,0" Style="EnhancedToolTip">
     <!-- Corner Icons -->
     <Button	ID="CloseButton"		Texture="Controls_CloseLarge" Size="44,44" Anchor="R,T"	Offset="10,0"	/>
 

@@ -5,9 +5,12 @@ To download the mod, git clone or go to the Releases page, and select the highes
 One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
 
 ## Promotion System:
-- [ ] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource, Lua: HasResource, GetBonusResourcePerTurn, GetResourceAmount, Monopolies support stuff?
-- [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
-- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Dunno if there is a modifier to grant a modifier to a city, like there is for units.
+- [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo?
+- [ ] Do removal of promotions on losing requirements for mana/nightmare.
+- [ ] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
+- [ ] Lines linking promos where dummy promo is used in promop popup screen
+- [ ] Mess with sphere promos to get them to look better. Get placeholder Amber icon in for test? Also line formatting, aligning title. Maybe just replace the promotion icon with unique one?
+- [ ] How are we gonna handle other non-adepts getting channeling I or II. Disciple is common enough we should plan for it, others, no clue.
 
 ## Alignment System:
 - [ ] Certain actions like switching religion set as Good, Evil, Neutral  Need to find the right trigger, policy change as thats how religion?
@@ -15,12 +18,13 @@ One the mod is out of Alpha (probably when art assets for three civilizations ar
 - [ ] diplomacy penalties, advantages      Annoyingly diplo penalties seem to be done as modifiers, but no requirements would work.
 
 ## Improvement System:
-- [ ] resource transformation, ie can build Death Well improvement on raw mana node and it becomes Death mana
+- [x] resource transformation, ie can build Death Well improvement on raw mana node and it becomes Death mana
 
 ## Combat System:
 - [ ] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though. ('SANGUINE_PACT_VAMPIRE_COMBAT_STRENGTH_ON_DEAD_UNIT', 'MODIFIER_ALL_COMBAT_RESULTS_APPLY_MODIFIER_TO_UNITS_ON_TILE'); MODIFIER_COMBAT_RESULTS_ATTACH_UNIT_MODIFIER
 - [ ] buff effects : ditto as before. Attacking debuffs (withered, Diseased can use Event :: OnUnitRetreated ?)
-- [ ] some summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%. seems impossible
+- [ ] debug buggy spawning system from it
+- [ ] some summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%. VERY HARD
 - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
 - [ ] Element damage system. Need to test the range of resistance. Each damage is really 5.
 ## Armageddon Counter:
@@ -36,7 +40,7 @@ in civ iv, act as promotions that give buffs, and allow the dropping of item, to
 
 ## Lairs and barbarians:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
-- [ ] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans.
+- [ ] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
 - [ ] Have to implement spawning on mapgeneration, check that Cat relics mod, to see how they did it.
 - [ ] Implement "deck" of different events that can happen when a lair is explored: probably do this with plot:SetProperty() then hook into barbarian clans removal and trigger event, if it shouldnt clear the lair, replace the lair lol
 - [ ] Peace with barbarians trait, shared with embers        WildW was thinking of something like this, look at comments on discord
@@ -62,10 +66,13 @@ like barbarian encampments but with different classes that spawn different units
 
 ## Upgrade System:
 - [ ] can upgrade outside borders       probably needs bespoke upgrade system
-- [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system.
+- [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. That would solve a lot of issues. WildW unit transfer system?
 
-## Summoning System:
+## Magic System:
 - [ ] Puppets, inheriting from summoner
+- [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
+- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit
+
 
 ## Civ Spawn System:
 - [x] New Civ spawned midgame      Do Kupe LeadersXP2 ocean spawn, then do citytransfer/found city.
