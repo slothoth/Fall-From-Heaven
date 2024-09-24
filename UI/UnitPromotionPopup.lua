@@ -141,11 +141,10 @@ function OnPromoteUnitPopup()
 			hasPromotion = false;
 			numUnlocks = 0
 			local sCrossPromoTag = GameInfo.UnitPromotions[row.UnitPromotion].Specialization
-			print(sCrossPromoTag)
+			if sCrossPromoTag then
+				row.PrereqUnitPromotion = sCrossPromoTag
+			end
 			if row.PrereqUnitPromotion == i.UnitPromotionType then
-				-- if sCrossPromoTag > 0 then
-				--	row.PrereqUnitPromotion = sCrossPromoTag
-				-- end
 				local previousRow	:number = i.Level;
 				local previousColumn:number = i.Column;
 				local currentRow:number = m_uiNodes[row.UnitPromotion].Level;
@@ -291,11 +290,13 @@ function OnPromoteUnitPopup()
 				-- promotionInstance.PromotionSelection.PromotionSlot.PromotionListIcon:SetHide()
 			else
 				promotionInstance.PromotionSelection:SetOffsetVal((row.Column-1)*SIZE_NODE_X, (row.Level-1)*SIZE_NODE_Y);
+				promotionInstance.PromotionSelection:SetSizeVal(248,100)
 			end
 			if (promotionDefinition ~= nil) then
 				promotionInstance.PromotionName:SetText(Locale.ToUpper(promotionDefinition.Name));
 				promotionInstance.PromotionDescription:SetText(Locale.Lookup(promotionDefinition.Description));
 				local iconName = "ICON_" .. promotionDefinition.UnitPromotionType;
+				print(iconName)
 				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName,32);			-- change to amber? and then hijack for different ones
 				if (textureOffsetX ~= nil) then
 					if not bIsSmallNode then
