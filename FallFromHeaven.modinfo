@@ -101,7 +101,6 @@
       <File>Core/National_Units.sql</File>
       <File>Core/CombatBuffs.sql</File>
       <File>Core/CivPolishing.sql</File>
-      <File>Core/Lua_support/Mana_support.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
     </UpdateDatabase>
@@ -112,9 +111,10 @@
       <File>Core/ResourceBuffs.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
-      <File>Core/long_localization.sql</File>
-      <File>Core/medium_localization.sql</File>
-      <File>Core/short_loc.sql</File>
+      <File>Localisation/long_localization.sql</File>
+      <File>Localisation/medium_localization.sql</File>
+      <File>Localisation/short_loc.sql</File>
+      <File>Localisation/promo_loc.sql</File>
       <File>Localisation/Neat.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
@@ -201,9 +201,10 @@
     </UpdateIcons>
   </InGameActions>
   <Files>
-    <File>Core/long_localization.sql</File>
-    <File>Core/medium_localization.sql</File>
-    <File>Core/short_loc.sql</File>
+    <File>Localisation/long_localization.sql</File>
+    <File>Localisation/medium_localization.sql</File>
+    <File>Localisation/short_loc.sql</File>
+    <File>Localisation/promo_loc.sql</File>
     <File>Localisation/Neat.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
@@ -223,7 +224,6 @@
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
     <File>Core/National_Units.sql</File>
-    <File>Core/Lua_support/Mana_support.sql</File>
     <File>Core/Civilizations/Amurites.sql</File>
     <File>Core/Civilizations/Balseraphs.sql</File>
     <File>Core/Civilizations/Bannor.sql</File>
