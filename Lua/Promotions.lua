@@ -2,7 +2,7 @@
 function onSpawnApplyPromotions(playerID, unitID)
     if playerID == nil then return end
     if unitID == nil then return end
-    pPlayer = Players[playerID]
+    local pPlayer = Players[playerID]
     if pPlayer == nil then return end
     local pUnit = pPlayer:GetUnits():FindID(unitID)
     if pUnit == nil then return end

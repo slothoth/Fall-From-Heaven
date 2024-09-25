@@ -3,13 +3,20 @@ Mod to faithfully recreate the glorious Civ IV FallFromHeaven mod by Kael in Civ
 
 To download the mod, git clone or go to the Releases page, and select the highest number, for most recent. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder.
 One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
-
+## TOP priority:
+Magic system
+Barbarians
+Fix religion
+Armageddon
+World Spells
+Items
 ## Promotion System:
-- [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo?
-- [ ] Do removal of promotions on losing requirements for mana/nightmare.
-- [ ] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
-- [ ] Lines linking promos where dummy promo is used in promop popup screen
-- [ ] Mess with sphere promos to get them to look better. Get placeholder Amber icon in for test? Also line formatting, aligning title. Maybe just replace the promotion icon with unique one?
+- [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo? i cannot
+- [x] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
+- [ ] clean up UI by doing includes instead of whole file
+- [ ] Low prio: unitFlagManager counts hidden promos, hide em
+- [x] Lines linking promos where dummy promo is used in promop popup screen
+- [x] Mess with sphere promos to get them to look better. Get placeholder Amber icon in for test? Also line formatting, aligning title. Maybe just replace the promotion icon with unique one?
 - [ ] How are we gonna handle other non-adepts getting channeling I or II. Disciple is common enough we should plan for it, others, no clue.
 
 ## Alignment System:
@@ -26,9 +33,13 @@ One the mod is out of Alpha (probably when art assets for three civilizations ar
 - [ ] debug buggy spawning system from it
 - [ ] some summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%. VERY HARD
 - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
-- [ ] Element damage system. Need to test the range of resistance. Each damage is really 5.
+- [ ] Element damage system. Need to test the range of resistance. Each damage is really 5. Some immunities exist. 20% MR plus 50% MR specific.
+- [ ] is it additive or not?
+- [ ] can then just do as modifier with requirements in a binaryish way, if only 5 possible ways. i.e. if unit doesnt have 20% tag, do 1 damage. if unit doesnt have 50% tag, do 3 damage. if unit doesnt have immune tag, do 2 damage for full 6.
 ## Armageddon Counter:
-- [ ] Conversion of global warming system  We probably just steal the UI design of it.  
+- [ ] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
+- [ ] Lowering Armageddon count (Razing Veil Cities, Sanctifying city ruins, Hallowing of Elohim project, Prophecy Mark units dying, Wonders destroyed? )
+- [ ] Hijack Global Warming panel. We probably just steal the UI design of it.  
 - [ ] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
 - [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
 
@@ -69,6 +80,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. That would solve a lot of issues. WildW unit transfer system?
 
 ## Magic System:
+- [ ] UI to press buttons (try make something like for buulding improvements but above)
 - [ ] Puppets, inheriting from summoner
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
 - [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit

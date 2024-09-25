@@ -286,17 +286,18 @@ function OnPromoteUnitPopup()
 			if bIsSmallNode then
 				promotionInstance.PromotionSelection:SetSizeVal(62,100)
 				promotionInstance.PromotionSelection:SetOffsetVal((row.Column+10)*35, (row.Level-1)*SIZE_NODE_Y);
-				promotionInstance.PromotionName.SetOffsetVal(0,0)			-- not working
-				-- promotionInstance.PromotionSelection.PromotionSlot.PromotionListIcon:SetHide()
+				promotionInstance.PromotionName:SetOffsetX(15)
+				print(promotionInstance.PromotionDescription.WrapWidth)
+				promotionInstance.PromotionDescription.WrapWidth=55
 			else
 				promotionInstance.PromotionSelection:SetOffsetVal((row.Column-1)*SIZE_NODE_X, (row.Level-1)*SIZE_NODE_Y);
 				promotionInstance.PromotionSelection:SetSizeVal(248,100)
+				promotionInstance.PromotionName:SetOffsetX(44)
 			end
 			if (promotionDefinition ~= nil) then
 				promotionInstance.PromotionName:SetText(Locale.ToUpper(promotionDefinition.Name));
 				promotionInstance.PromotionDescription:SetText(Locale.Lookup(promotionDefinition.Description));
 				local iconName = "ICON_" .. promotionDefinition.UnitPromotionType;
-				print(iconName)
 				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName,32);			-- change to amber? and then hijack for different ones
 				if (textureOffsetX ~= nil) then
 					if not bIsSmallNode then
@@ -304,8 +305,8 @@ function OnPromoteUnitPopup()
 					end
 				end
 				if bIsSmallNode then
+					--promotionInstance.PromotionListIcon:SetColor(0,0,0,0)
 					promotionInstance.PromotionListIcon:SetHide(1)			-- plan is. Replace name with ICON_RESOURCE when made.
-					promotionInstance.PromotionIcon:SetHide(1)				-- Description of spells can be handled with a tooltip
 				end
 			end
 

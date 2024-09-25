@@ -189,6 +189,13 @@
             <LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
+        <ReplaceUIScript id="ReplaceUI_UnitPanel">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>UnitPanel</LuaContext>
+            <LuaReplace>UI/UnitPanel_skip_promos.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
     <ImportFiles id="ImportUIFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
@@ -284,5 +291,6 @@
     <File>UI/ResearchChooser_overrides.lua</File>
     <File>UI/UnitPromotionPopup.lua</File>
     <File>UI/UnitPromotionPopup.xml</File>
+    <File>UI/UnitPanel_skip_promos.lua</File>
   </Files>
 </Mod>
