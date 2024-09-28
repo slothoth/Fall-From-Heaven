@@ -146,8 +146,267 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Tower of Mastery Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.
 ## Art Todo
 - [ ] Investigat Landmark / District changes to allow alt buildings. Like why do Wonders like ORzgarzh work in city centre? but buildings wont. also palgum exclamation cultures stuff.
-- [ ] Make new Buildings
-- [ ] Make new Units
+### Buildings
+#### Redo District Placement
+- [ ] Blasting Workshop(Workshop)
+- [ ] Breeding Pit (Ordu)
+- [ ] Adventurers Guild (GuildHall)
+- [ ] Chancel of Guardians (GrandMasters Chapel)
+- [ ] Command Post (Pagoda)
+- [ ] Courthouse (Quens BiblioTheque)
+- [ ] Grove (Grove)
+- [ ] Herbalist (MEETING_HOUSE)
+- [ ] Hunting Lodge (Marae)
+- [ ] Infirmary (Chancery)
+- [ ] Inn (Consulate)
+- [ ] Mages Guild (Madrasa)
+- [ ] Shipyard (Shipyard)
+- [ ] Shrine of the Champion (Kotoku-In)
+- [ ] Tavern (Meeting House)
+- [ ] Grigori Tavern (Foreign Ministry lol)
+- [ ] Arena (Arena)
+#### District Clutter
+- [ ] Aqueduct from Aqueduct District Clutter 
+- [ ] Tents from Entertainment Complex Clutter
+- [ ] Bath from Roman Bath District Clutter
+#### Redo Landmarks Wonder
+- [ ] Bazaar of Mammon (Grand Bazaar)
+#### Redo Landmarks Improvements
+- [ ] Cave of Ancestors (Giant Head)
+- [ ] Warrens (Cahokia Mound)
+- [ ] Elder Council (Mekewap)
+- [ ] Temple of the Hand (Monastery)
+#### Redo Landmarks Natural Wonders
+- [ ] Mercurian Gate (Delicate Arch)
+- [ ] 
+#### From elsewhere
+- [ ] Archery Range (JNR_TARGET_RANGE)
+- [ ] Thousand Slums (Kowloon Walled City?)
+- [ ] Governors Manor (JNR_MANSION)
+- [ ] Dungeon (JNR_PRISON)
+- [ ] Dwarven Smithy (JNR_MANUFACTORY?)
+- [ ] Harbor (JNR_HARBOR_CITY_CENTRE)
+- [ ] Lanun Harbor (JNR_HARBOR_VARIANT_CITY_CENTRE)
+- [ ] Siege Workshop (JNR_CASEMATES)
+- [ ] Smugglers Port (JNR_HAVEN)
+- [ ] Tower of Necromancy (LEANING_TOWER_OF_PISA)
+- [ ] Tower of Elements (Porcelain Tower)
+#### Could find someone elses
+- [ ] Alchemy Lab
+- [ ] Tailor
+- [ ] Gambling House
+- [ ] Desert Shrine
+- [ ] Smokehouse
+- [ ] Sculptors studio
+#### Check if exist
+- [ ] Citadel of Light
+#### Custom
+- [ ] Aquae Sucellus
+- [ ] Asylum
+- [ ] Celestial Compass
+- [ ] Freak Show
+- [ ] Planar Gate
+- [ ] Pallens Engine
+- [ ] Adularia Chamber
+- [ ] Hall of Mirrors
+- [ ] Jeweler
+- [ ] Reliquary
+- [ ] Code of Junil
+- [ ] Dancing Bear, Gorilla/Lion/Tiger/Wolf Cage, Spider pen
+- [ ] Human/Dwarf/Elf/Orc Cage
+- [ ] Grand Menagerie
+- [ ] Guild of Hammers (or some cool wonder)
+- [ ] Heroic Epic (Monument variant but bigger, cooler?)
+- [ ] National Epic (Monument variant but bigger, cooler?)
+- [ ] Nox Noctis (no idea what it looks like)
+- [ ] Song of Autumn (no idea)
+- [ ] Stigmata on the Unborn
+- [ ] Tablets of Bambur
+- [ ] The Necronomicon
+- [ ] Obsidian Gate
+- [ ] The Nexus
+- [ ] Pillar of Chains
+- [ ] Ride of the Nine Kings (no idea)
+- [ ] Soul Forge
+- [ ] Tower of Eyes
+#### Exclamation
+- [ ] Palgum
+#### Equipment Buildings
+- [ ] Crown of Akharien (Little square, its on a plinth in centre)
+- [ ] Infernal Grimoire
+- [ ] Mokka's Cauldron
+- [ ] Sylivens Lyre
+- [ ] Dragons Horde
+### Improvements
+- [ ] Hamlet
+- [ ] Cottage
+- [ ] Village
+- [ ] Town
+- [ ] Enclave
+- [ ] Pirate Cove
+- [ ] Pirate Harbor
+- [ ] Mana Well
+- [ ] Castle
+- [ ] Citadel
+- [ ] Workshop
+- [ ] Winery
+### Resources
+- [ ] Nightmare
+- [ ] Toad
+- [ ] Mana Tints ( and change to Gypsum)
+
+### Units
+#### Rebin
+- [ ] Losha
+- [ ] Vampire
+- [ ] Vampire Lord
+- [ ] Diseased Corpses
+#### Retint
+- [ ] Bloodpet
+- [ ] Shadowrider
+#### Rejig
+- [ ] Firebow
+- [ ] Longbowman
+- [ ] Nightwatch
+- [ ] Freak
+- [ ] Supplies (cultist wagon + builder)
+- [ ] Eidolon
+- [ ] Govannon
+- [ ] Guybrush
+- [ ] Hemah
+- [ ] Loki
+- [ ] Mary Morbus
+- [ ] Rathus
+- [ ] Donal
+- [ ] Assassin
+- [ ] Ghost
+- [ ] Boarding Party
+- [ ] Marksman
+- [ ] Paramander
+- [ ] Divided Soul
+- [ ] Flagbearer
+- [ ] Harlequin
+- [ ] Mimic
+- [ ] Revelers
+- [ ] Son of the Inferno
+- [ ] Gibbon
+- [ ] Chalid
+- [ ] Courtesan
+- [ ] Shadow
+- [ ] Slave
+#### Rejig with Custom Culture
+- [ ] Rantine
+- [ ] Lizardman Ranger
+- [ ] Repentant Angel
+- [ ] Sphener
+- [ ] Angel
+- [ ] Angel of Death
+- [ ] Herald
+- [ ] Ophanim
+- [ ] Seraph
+- [ ] Valkyrie
+- [ ] Einherjar (alpha channel variant)
+- [ ] Imp
+- [ ] Balor
+- [ ] Chaos Marauder
+- [ ] Mardero
+- [ ] Meshabber
+- [ ] Alazkhan
+- [ ] Arthendain
+- [ ] Gilden
+- [ ] Maros
+- [ ] Orthus
+- [ ] Goblin Archer
+- [ ] Goblin Archer
+- [ ] Lizardman
+- [ ] Lizardman Assassin
+- [ ] Lizardman Druid
+- [ ] Ogre
+- [ ] Ogre Warchief
+- [ ] Dwarven Shadow
+- [ ] Yvain
+- [ ] Saverous
+#### Custom Parts 
+- [ ] Boar Rider
+- [ ] Bison Rider
+- [ ] Fyrdwell
+- [ ] Nyxkin
+- [ ] Hornguard
+- [ ] WolfRider
+- [ ] Camel Archer
+- [ ] TumTum
+- [ ] Stephanos
+- [ ] Buboes
+- [ ] Yersinia
+- [ ] Ars Moriendi
+- [ ] Hyborem
+- [ ] Fawn
+- [ ] Satyr
+- [ ] Soldier of Kilmorph
+- [ ] Dwarven Druid
+#### Custom Model
+- [ ] Hawk
+- [ ] Floating eye
+- [ ] Werewolf (w/ Ravenous/Greater variants)
+- [ ] Golems
+- [ ] Centaur (Variants: Charger, Lancer, Archer)
+- [ ] Guardian Vines
+- [ ] Treant
+- [ ] Generic Equipment Chest (keep all same for now)
+- [ ] Puppet
+- [ ] Succubus
+- [ ] Wilboman
+- [ ] Auric Ascended
+- [ ] Avatar of Wrath
+- [ ] Dragon (Abashi, Acheron, Drifa, Eurabatres)
+- [ ] Hellhound (Beast of Agares variant scaled)
+- [ ] Basium
+- [ ] Herne
+- [ ] Meteor
+- [ ] Minotaur
+- [ ] Sailors Dirge
+- [ ] Giant Tortoise (Variant War Tortoise)
+- [ ] Scorpion
+- [ ] Earth Elemental
+- [ ] Barnaxus
+#### Custom Model and Animations
+- [ ] Spider attackers (Giant Spider,  Baby Spider)
+- [ ] Arm attack (Golems, Stygian Guard, Wait just copy Zombies)
+- [ ] Claw attack (Werewolves, Treant, Pit Beast)
+- [ ] Mouth Attackers (Griffon, Manticore)
+- [ ] Big Club attackers (Hill Giant, Ogres)
+#### Cultures
+- [ ] Elf
+- [ ] Dwarf
+- [ ] Infernal
+- [ ] Orc
+- [ ] Goblin
+- [ ] Lizardman
+- [ ] Frostling
+- [ ] Ogre
+- [ ] Angel
+- [ ] Skeleton (Skeleton, Wraith, Ars, Bone Golem, Lich)
+- [ ] Liquid (Tar demon, Water Elemental)
+#### VFX
+- [ ] Air Elemental
+- [ ] Fire Elemental
+- [ ] Fireball
+- [ ] Mistform
+- [ ] Severed Soul
+- [ ] Lightning Elemental
+#### Partial VFX
+- [ ] Azer
+- [ ] Ira
+- [ ] SandLion
+- [ ] Shade
+- [ ] Spectre
+- [ ] Pyre Zombie
+#### Unsure
+- [ ] Myconid
+#### Reuse
+- [ ] Druid as Eagle Warrior
+- [ ] Paramander as spearman
+- [ ] Shadowrider as Keshig?
 ## Design Todo
 - [ ] Display SuperSpecialists in the City UI somehow 
 - [ ] Reexamine if buildings path and districts makes sense.
@@ -157,7 +416,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - 
 ## Polish Todo
 - [ ] Trait Descriptions
-
+- [ ] Limit Tech Tree to Renaissance Era techs, and make tree look better 
 
 # Done
 ##### Mercurians:
