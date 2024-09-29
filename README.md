@@ -257,13 +257,13 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 ### Units
 #### Rebin
-- [ ] Losha
-- [ ] Vampire
-- [ ] Vampire Lord
-- [ ] Diseased Corpses
+- [x] Losha
+- [x] Vampire
+- [x] Vampire Lord
+- [x] Diseased Corpses
+- [x] Drown
 #### Retint
-- [ ] Bloodpet
-- [ ] Shadowrider
+- [x] Shadowrider
 #### Rejig
 - [ ] Firebow
 - [ ] Longbowman
@@ -371,7 +371,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Barnaxus
 #### Custom Model and Animations
 - [ ] Spider attackers (Giant Spider,  Baby Spider)
-- [ ] Arm attack (Golems, Stygian Guard, Wait just copy Zombies)
+- [x] Arm attack (Golems, Stygian Guard, Wait just copy Zombies)
 - [ ] Claw attack (Werewolves, Treant, Pit Beast)
 - [ ] Mouth Attackers (Griffon, Manticore)
 - [ ] Big Club attackers (Hill Giant, Ogres)
@@ -395,7 +395,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Severed Soul
 - [ ] Lightning Elemental
 #### Partial VFX
-- [ ] Azer
+- [ ] Azer   Possible, look at Arthur sword, but its not an FX. unsure what it is as in blp. find another instance?
 - [ ] Ira
 - [ ] SandLion
 - [ ] Shade
@@ -418,6 +418,9 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Trait Descriptions
 - [ ] Limit Tech Tree to Renaissance Era techs, and make tree look better 
 
+## Bugs
+- [ ] Why are civ colours always green blue?
+- [ ] Why does UnitPanel buttons always show on reload of game?
 # Done
 ##### Mercurians:
   Not directly playable, needs Wonder completed to summon, and then takes over that city. Needs to also be switchable to that player via ui prompt Units spawn on mercurian gate when Good units die, that whole headache as with Infernal

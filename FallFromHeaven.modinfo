@@ -27,10 +27,12 @@
       <File>Core/frontend_config.sql</File>
     </UpdateDatabase>
     <UpdateText id="UpdateText">
-      <File>Core/long_localization.sql</File>
-      <File>Core/medium_localization.sql</File>
-      <File>Core/short_loc.sql</File>
       <File>Localisation/frontend.sql</File>
+      <File>Localisation/long_localization.sql</File>
+      <File>Localisation/medium_localization.sql</File>
+      <File>Localisation/short_loc.sql</File>
+      <File>Localisation/promo_loc.sql</File>
+      <File>Localisation/Neat.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
