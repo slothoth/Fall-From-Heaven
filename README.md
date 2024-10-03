@@ -388,12 +388,13 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Skeleton (Skeleton, Wraith, Ars, Bone Golem, Lich)
 - [ ] Liquid (Tar demon, Water Elemental)
 #### VFX
-- [ ] Air Elemental
+- [ ] Air Elemental  (We now know Ambient VFX is possible. Just need to hide unit (we have done this before accidentally by calling non-existant assets, but will the VFX stay?))
 - [ ] Fire Elemental
 - [ ] Fireball
 - [ ] Mistform
 - [ ] Severed Soul
 - [ ] Lightning Elemental
+- [ ] Pyre Zombie
 #### Partial VFX
 - [ ] Azer   Possible, look at Arthur sword, but its not an FX. unsure what it is as in blp. find another instance?
 - [ ] Ira
@@ -518,7 +519,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Clan of embers
   - [x] -10% science, lie Babylon 50% reduction
   - [x] warrens building makes all units in city be doubled, like Scythia for light cavalry, but repeat for all promoClasses
-
+  - [ ] Give recon line units Amphibious and Marsh strength as Lizardmen. Also druid. And lacks Entangle.
   ##### Doviello
 
   ##### Calabim

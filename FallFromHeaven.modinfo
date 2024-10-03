@@ -37,6 +37,9 @@
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
+    <UpdateColors id="FFH_UpdateColorsFrontend">
+      <File>Core/Civilization_Colors.sql</File>
+    </UpdateColors>
    </FrontEndActions>
   <UpdateIcons id="Icons">
     <File>Icons.xml</File>
@@ -45,6 +48,9 @@
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
+    <UpdateColors id="FFH_UpdateColorsBackend">
+      <File>Core/Civilization_Colors.sql</File>
+    </UpdateColors>
     <UpdateDatabase id="Deletes_first">
       <Properties>
         <LoadOrder>95</LoadOrder>
@@ -215,6 +221,7 @@
     <File>Localisation/short_loc.sql</File>
     <File>Localisation/promo_loc.sql</File>
     <File>Localisation/Neat.sql</File>
+    <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
     <File>Core/Religions.sql</File>
