@@ -111,6 +111,7 @@
       <File>Core/CivPolishing.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
+      <File>Core/BarbarianClans.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -211,6 +212,12 @@
       <File>UI/UnitPromotionPopup.lua</File>
       <File>UI/UnitPromotionPopup.xml</File>
     </ImportFiles>
+    <!--ImportFiles id="ImportMapGenOverrideFiles">
+      <Properties>
+        <LoadOrder>901</LoadOrder>
+      </Properties>
+      <File>MapUtilities.lua</File>
+    </ImportFiles-->
     <UpdateIcons id="Icons">
       <File>Icons.xml</File>
     </UpdateIcons>
@@ -269,6 +276,7 @@
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
     <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
     <File>Core/CombatBuffs.sql</File>
+    <File>Core/BarbarianClans.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
@@ -280,6 +288,7 @@
     <File>Lua/Combat.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
+    <!--File>MapUtilities.lua</File-->
     <File>Artdefs/Units.artdef</File>
     <File>ArtDefs/Buildings.artdef</File>
     <File>Artdefs/FallbackLeaders.artdef</File>

@@ -51,11 +51,18 @@ in civ iv, act as promotions that give buffs, and allow the dropping of item, to
 
 ## Lairs and barbarians:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
-- [ ] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
-- [ ] Have to implement spawning on mapgeneration, check that Cat relics mod, to see how they did it.
+- [x] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
+- [x] Have to implement spawning on mapgeneration, MapUtilities override was possible, but instead just gave GoodyHut columns to barb camp
 - [ ] Implement "deck" of different events that can happen when a lair is explored: probably do this with plot:SetProperty() then hook into barbarian clans removal and trigger event, if it shouldnt clear the lair, replace the lair lol
+- [x] Deck selection skeleton
+- [ ] All deck options
 - [ ] Peace with barbarians trait, shared with embers        WildW was thinking of something like this, look at comments on discord
 - [ ] Free City spawning?
+- [ ] Goblin Clan Fort: Orc warriors, Goblin scouts, Archers, Goblin Chariot
+- [x] Ruins: Lizardmen
+- [x] Barrows: Skeleton
+- [ ] Generic: Frostlings, Animals, Beasts, Event barbarians, spawning ad-hoc
+- [ ] Acheron Free City
 
 ## Terrain Alteration:
 - [ ] The Deepening project to add tundra and snow (terrain changes dont show up except on reload)
@@ -371,8 +378,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Barnaxus
 #### Custom Model and Animations
 - [ ] Spider attackers (Giant Spider,  Baby Spider)
-- [x] Arm attack (Golems, Stygian Guard, Wait just copy Zombies)
-- [ ] Claw attack (Werewolves, Treant, Pit Beast)
+- [x] Arm attack (Golems, Stygian Guard, treant Wait just copy Zombies)
+- [ ] Claw attack (Werewolves, Pit Beast)
 - [ ] Mouth Attackers (Griffon, Manticore)
 - [ ] Big Club attackers (Hill Giant, Ogres)
 #### Cultures
