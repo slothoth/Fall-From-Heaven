@@ -225,6 +225,39 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
     end
 end
 
+function EventCollapse(x, y)
+    local pPlot = Map.GetPlot(x, y)
+    local tUnits = Map.GetUnitsAt(pPlot)
+    for idx, pUnit in tUnits do
+        pUnit:ChangeDamage(20)
+        if pUnit:GetDamage() < 1 then           -- is it at 0 or at 100?
+            UnitManager.Kill(pUnit)
+        end
+    end
+end
+
+tTribeDeck = {TRIBE_CLAN_SCORPION = 1, TRIBE_CLAN_SKELETON = {[1]=EventCollapse},
+              TRIBE_CLAN_LIZARDMEN = {[1]=EventCollapse}}
+function RemovedBarbCamp(x, y, owningPlayerID)
+    print('Owning playerID is ' .. tostring(owningPlayerID))
+    -- hopefully this is unneeded
+    local pPlot = Map.GetPlot(x, y)
+    local owner = pPlot:GetOwner()
+    print('Plot owner is ' .. tostring(owner))
+    if not owningPlayerID then
+        -- draw from deck of events
+        local pBarbarianManager  = Game.GetBarbarianManager();
+	    local tribeIndex = pBarbarianManager:GetTribeIndexAtLocation(x, y);
+        local tribeType = pBarbarianManager:GetTribeType(tribeIndex)
+        local tTribeEvents = tTribeDeck['tribeType']            --TRIBE_CLAN_SKELETON
+        local lengthTribeEvents = table.count(tTribeEvents)
+        local dice_roll = math.random(1, lengthTribeEvents)
+        local fEvent = tTribeEvents[dice_roll]
+        fEvent(x, y)
+        -- do event. Sometimes we reinstantiate barb camp
+    end
+end
+
 -- Great general on Mil Strategy
 -- Great Bard on Drama
 -- there are others im pretty sure
@@ -281,7 +314,7 @@ function onStart()
 
     -- Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
-
+    Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)
 end
 
 onStart()

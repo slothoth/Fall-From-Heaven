@@ -63,6 +63,7 @@ tReligions = {
 tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
 iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
+local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 
 
 function onReligionSwitch(sReligion)                -- TODO not attached to anything currently
@@ -156,6 +157,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         local pPlayer = Players[playerID]
         if PlayerConfigurations[playerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
+            AdjustArmageddonCount(5)            -- Compact broken
         end
         local iAlignment = pPlayer:GetProperty('alignment') or 0
         local pPlot = Map.GetPlotByIndex(plotID)
@@ -173,6 +175,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
                 GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
             end
         end
+        AdjustArmageddonCount(5)            -- Compact broken
     end
 end
 
@@ -244,6 +247,9 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             Game:SetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS', 1)
             local pPlot = pLeastReligionsCity:GetPlot()
             pPlot:SetProperty(tostring(iReligion)..'_HOLY_CITY', 1)
+            if iReligion == iReligionVeil then
+                AdjustArmageddonCount(5)
+            end
         end
     end
     if civicIndex == iINFERNAL_PACT_INDEX then
@@ -287,6 +293,15 @@ function GrantCultureParity(iPlayerGrantedCivics, iPlayerCivicGranter)
     end
 end
 
+function AdjustArmageddonCount(iAmount)
+    local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
+    if iArmageddonCount then
+        Game.SetProperty('ARMAGEDDON', iArmageddonCount + iAmount)
+    else
+        print('Armageddon count not initilizaed!')
+    end
+end
+
 function InitiateReligions()
     local aPlayers = PlayerManager.GetAliveMinors();            -- will minors work? if so need 7 in game
     local pGameReligion = Game.GetReligion();
@@ -321,6 +336,9 @@ function onStart()
         if sLeaderName == 'SLTH_LEADER_BASIUM' then
             Game:SetProperty('Mercurian', iPlayerID)
         end
+    end
+    if not Game.GetProperty('ARMAGEDDON') then          -- initalize armageddon
+        Game.SetProperty('ARMAGEDDON',  0)
     end
 end
 
