@@ -6,7 +6,7 @@
     <Created>1714825549</Created>
     <Teaser>Ports Kael's excellent Fall From Heaven mod to Civ VI</Teaser>
     <Authors>Slothoth</Authors>
-    <SpecialThanks>SailorCat,Fuzzle and MC for their help on discord with SQL. Flactine </SpecialThanks>
+    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi and Sukritact for their great reference mods for Lua.</SpecialThanks>
     <Homepage>https://github.com/slothoth/civvitests</Homepage>
     <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>

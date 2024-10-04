@@ -1,6 +1,6 @@
 -------------------------
 -- Civ 6 Map Utilities --
--------------------------
+-------------------------  Currently unused
 include "MapUtilities"
 
 function CanPlaceGoodyAt(improvement, plot)

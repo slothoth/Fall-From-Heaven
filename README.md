@@ -37,11 +37,14 @@ Items
 - [ ] is it additive or not?
 - [ ] can then just do as modifier with requirements in a binaryish way, if only 5 possible ways. i.e. if unit doesnt have 20% tag, do 1 damage. if unit doesnt have 50% tag, do 3 damage. if unit doesnt have immune tag, do 2 damage for full 6.
 ## Armageddon Counter:
-- [ ] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
-- [ ] Lowering Armageddon count (Razing Veil Cities, Sanctifying city ruins, Hallowing of Elohim project, Prophecy Mark units dying, Wonders destroyed? )
+- [x] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
+- [x] Lowering Armageddon count (Razing Veil Cities, Sanctifying city ruins, Hallowing of Elohim project, Prophecy Mark units dying, Wonders destroyed? )
 - [ ] Hijack Global Warming panel. We probably just steal the UI design of it.  
-- [ ] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
-- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
+- [x] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
+- [ ] test basic functionality
+- [ ] amend to proper version with plotProp counter
+- [x] actions that happen once counter reaches certain value. Did this without any specific Event, instead its checked whenever armageddon counter is changed.
+- [ ] Events to implement still: Warning popup, Blight, 100Armageddon
 
 ## Item system:
 in civ iv, act as promotions that give buffs, and allow the dropping of item, to be picked up by someone else. can also be dropped on death, and captured. Also spawnable via event
@@ -106,15 +109,20 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Someone made a framework for Stellaris meteors on discord. Just copy that I guess..
 - [ ] UI prompt from events to do city switch        doable
 
+## Misc:
+- [ ] Double prod with Copper Form of Titan example.
+- [ ] Need 3 libraries for Great Library, same with Theatre
+
 ## LowHangingCiv:
 - [ ] The Draw project to force war to you from everyone, half city population, half unit health    Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
 - [ ] Manor + Pillar of Chains building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted. Needs rebalacing as sucks under civ vi
 - [ ] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
 - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
-
+- [ ] Infernal no amenity cost? as they get no unhappiness.
 ## Hard but minor:
 - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 - [ ] Hall of Mirrors clone spawning
+- [ ] Do we swap Amenities and Housing as Amenities and Housing?
 
 ## CivHard
   Sprawling, have bigger cities, 3 distance, but only allowed 3 cities. Other cities founded are Settlements, which have 0 yields and only allow access to resources. This seems very hard.
