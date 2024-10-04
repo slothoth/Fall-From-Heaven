@@ -42,7 +42,7 @@ Items
 - [ ] Hijack Global Warming panel. We probably just steal the UI design of it.  
 - [x] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
 - [ ] test basic functionality
-- [ ] amend to proper version with plotProp counter
+- [x] amend to proper version with plotProp counter
 - [x] actions that happen once counter reaches certain value. Did this without any specific Event, instead its checked whenever armageddon counter is changed.
 - [ ] Events to implement still: Warning popup, Blight, 100Armageddon
 

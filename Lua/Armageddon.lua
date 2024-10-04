@@ -1,10 +1,16 @@
--- [ ] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
--- [ ] Lowering Armageddon count (Razing Veil Cities, Sanctifying city ruins, Hallowing of Elohim project, Prophecy Mark units dying, Wonders destroyed? )
 -- [ ] Hijack Global Warming panel. We probably just steal the UI design of it.
--- [ ] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
 -- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
 tArmageddonEvents = {[10]=fWarning,[30]=Blight, [40]=ArmaSummonSteph, [50]=ArmaSummonBuboes, [60]=ArmaSummonYersinia,
                      [70]=ArmaSummonArs,  [90]=ArmaSpawnWrath, [100]=ArmaKillHalf}
+-- helper
+function reverse_table(t)
+    local reversed = {}
+    for k, v in pairs(t) do
+        reversed[v] = k
+    end
+    return reversed
+end
+
 
 function AdjustArmageddonCount(iAmount)
     local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
@@ -35,6 +41,7 @@ local iCityCenter = GameInfo.Districts["DISTRICT_CITY_CENTER"].Index
 local iCityRuins = GameInfo.Improvements['IMPROVEMENT_CITY_RUINS'].Index
 local iReligionVeil = tostring(GameInfo.Religions["RELIGION_BUDDHISM"].Index)..'_HOLY_CITY'
 
+-- nicked from Sui Generis steppe function
 function OnCityRaze(playerID, districtID, icityID, idistrictX, idistrictY, iDistrictType)
 	if iDistrictType == iCityCenter then
 		print ("City Center Removed")
@@ -230,18 +237,15 @@ function SpawnUnitInWilderness(iUnitToSpawn, eligiblePlots)
 end
 
 --[[WIKI: The plot counter is what determines if a tile is hell or not. It has a range from 0 to 100, and anything over 10 is hell. Infernal lands are set to 100 every turn. Tiles that are eligible (good civs' lands are never eligible, nor or neutral or non-AV evil lands when the AC is low enough) have their plot counter increased by 1 each turn if they are adjacent to a tile with a plot counter greater than 10; otherwise, the counter decreases by 1 each turn.
---
 --Whether an individual tile is in hell or not depends on that tile's plot counter - which is different than the AC. If the plot counter is over 10, then it is hell. Most tiles change to a different "Hellish" terrain at this point, and change back when the counter dips below 10 (it used to be 20, but the code clearly says 10 now). There are some terrains, like tundras and water, that currently have no different version for hell.
---
 --Each tile is updated once per turn. All tiles owned by the Infernals have their plot counters set to 100. The Mercurian lands had their counters slowly dimished (in previous version it was set to zero).
---
 --Any tile belonging to an Ashen Veil civ regardless of the AC, to any Evil civ at an AC of 25 or greater, or any Neutral civ at an AC of 75 or greater that borders a tile with an plot counter of at least 10 will have its plot counter increased by one each turn. Good Civs are never effected. Unowned tiles likewise have their plot counter increased by 1 each turn if they border a tile with a counter of 10+, if the AC is at least 25 (I could have sworn that non-AV evil lands turned to hell before unowned lands, but thats not what the code seems to say.) Tiles with positive plot counters that haven't been increased will have theirs decreased.
---
 --Note that while changing the plot counter immediately changes the terrain (e.g., the sanctify spell sets the plot counter of the surrounding tiles to 0, and immediately reclaims the hell terrain, temporarily), the resources aren't updated but once per turn.
 ]]
 -- not implemented as different, [80]=HellFireCanSpawn, need to do as barb tribe?
 -- big performance concerns on this as getting every land tile, checking terrain, then checking adjacent tiles. every turn
--- need some initial starting plots, as otherwise it cant spread. Also needs some plots on each landmass, down to a min size
+-- need some initial starting plots, as otherwise it cant spread. Also needs some plots on each landmass, down to a min size. Apparently this last point wasnt in og
+-- Infernal cities alywas convert their terrain to hell equivalent. Thats the seed. Also HellFire improvement but we'll cross that bridge when we come to it
 tHellTerrains = {[GameInfo.Terrains['TERRAIN_BURNING_SANDS'].Index]=1,          -- cba with mountains
                  [GameInfo.Terrains["TERRAIN_BURNING_SANDS_HILLS"].Index]=1,
                  [GameInfo.Terrains['TERRAIN_BROKEN_LANDS'].Index]=1,
@@ -265,18 +269,23 @@ tResourceTransform = {  [GameInfo.Resources['RESOURCE_PIG'].Index]=GameInfo.Reso
                         [GameInfo.Resources['RESOURCE_SUGAR'].Index]=GameInfo.Resources['RESOURCE_GULAGARM'].Index,
                         [GameInfo.Resources['RESOURCE_SILK'].Index]=GameInfo.Resources['RESOURCE_RAZORWEED'].Index,
                         [GameInfo.Resources['RESOURCE_COTTON'].Index]=GameInfo.Resources['RESOURCE_RAZORWEED'].Index}
--- todo use proper strategy as detailed on wiki above
+
+tResourceReverse = {  [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo.Resources['RESOURCE_SHEEP'].Index,
+                        [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index]=GameInfo.Resources['RESOURCE_HORSE'].Index,
+                        [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index]=GameInfo.Resources['RESOURCE_MARBLE'].Index,
+                        [GameInfo.Resources['RESOURCE_GULAGARM'].Index]=GameInfo.Resources['RESOURCE_SUGAR'].Index,
+                        [GameInfo.Resources['RESOURCE_RAZORWEED'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index}
+
+tHellReverse = reverse_table(tHellTransforms)
 function HellSpread()
     local pPlot
     local sTerrainType
     local tAdjacentPlots
     local bIsOwned
     local iAdjPlotID
-    local iDiceRoll
-    local iCurrentTerrain
-    local iNewTerrain
-    local iCurrentResource
-    local iNewResource
+    local bIncludeTile
+    local HellConversion
+    local NewHellConversion
     local tCurrentHellTiles = {}
     local tPotentialHellTiles = {}
     local tCoveredTiles = {}
@@ -301,20 +310,34 @@ function HellSpread()
                     if bIsOwned then
                         local owner = pAdjPlot:GetOwner()       -- no idea on typing, is it player, or city?
                         local pPlayer = Players[owner]
-                        -- todo do some logic to get state religion and then allow if is veil
-                        local iAlignment = pPlayer:GetProperty('alignment')
-                        if iAlignment then
-                            if iAlignment == 0 and iArmageddonCount > 49 then
-                                tPotentialHellTiles[iAdjPlotID] = pAdjPlot             -- evil player spread
+                        local sCivName = PlayerConfigurations[owner]:GetCivilizationTypeName()
+                        if sCivName == 'SLTH_CIVILIZATION_INFERNAL' then
+                            HellConversion =  pAdjPlot:GetProperty('HellConversion') or 0
+                            pAdjPlot:SetProperty('HellConversion', 100)
+                            if HellConversion < 10 then
+                                ConvertTerrain(pAdjPlot, tHellTransforms, tResourceTransform)
                             end
-                            if iAlignment == 1 and iArmageddonCount > 74 then
-                                tPotentialHellTiles[iAdjPlotID] = pAdjPlot             -- neutral player spread
+                        else
+                            -- todo do some logic to get state religion and then allow if is veil
+                            local iAlignment = pPlayer:GetProperty('alignment')
+                            if iAlignment then
+                                if iAlignment == 0 and iArmageddonCount > 49 then
+                                    bIncludeTile = 1                                 -- evil player spread
+                                end
+                                if iAlignment == 1 and iArmageddonCount > 74 then
+                                    bIncludeTile = 1             -- neutral player spread
+                                end
+                            else
+                                print('ERROR NO alignment on owner of owned tile')          -- wait what about city states
                             end
                         end
                     else
                         if iArmageddonCount > 24 then
-                            tPotentialHellTiles[iAdjPlotID] = pAdjPlot
+                            bIncludeTile = 1
                         end
+                    end
+                    if bIncludeTile then
+                        tPotentialHellTiles[iAdjPlotID] = pAdjPlot
                     end
                     tCoveredTiles[iAdjPlotID] = pAdjPlot
                 end
@@ -322,17 +345,44 @@ function HellSpread()
         end
     end
     for iPotentialHellPlotID, pAdjPlot in pairs(tPotentialHellTiles) do
-        iDiceRoll = math.random(20)
-        if iDiceRoll > 5 then               --todo make higher gate for balance after debugging
-            iCurrentTerrain = pAdjPlot:GetTerrainType()                 -- does this return indexof terrain?
-            iNewTerrain = tHellTransforms[iCurrentTerrain]
-            if iNewTerrain then
-                TerrainBuilder.SetTerrainType(pAdjPlot, iNewTerrain);           -- unsure if needed index of terrain
-                iCurrentResource = pAdjPlot:GetResourceType()
-                iNewResource =  tResourceTransform[iCurrentResource]
-                if iNewResource then
-                    TerrainBuilder.SetResourceType(pAdjPlot, iNewResource, 1)       -- what does amount do
-                end
+        HellConversion = pAdjPlot:GetProperty('HellConversion') or 0
+        NewHellConversion = HellConversion + 1
+        if NewHellConversion < 101 then
+            pAdjPlot:SetProperty('HellConversion', NewHellConversion)
+        end
+        if NewHellConversion == 10 then                                 -- think we can assume only increments of 1
+            ConvertTerrain(pAdjPlot, tHellTransforms, tResourceTransform)
+        end
+    end
+    for idx, iPlotID in tLandTiles do
+        if not tPotentialHellTiles[iPlotID] then                        -- filter non hell adjacent tiles
+            pPlot = Map.GetPlotByIndex(iPlotID)
+            HellConversion = pPlot:GetProperty('HellConversion') or 0
+            NewHellConversion = HellConversion -1
+            if HellConversion > -1 then
+                pPlot:SetProperty('HellConversion', HellConversion - 1)
+            end
+            if NewHellConversion == 9 then                                  -- reverse hell terrain
+                ConvertTerrain(pPlot, tHellReverse, tResourceReverse)
+            end
+        end
+    end
+end
+
+function ConvertTerrain(pPlot, tTerrainConverter, tResourceConverter)
+    local iCurrentResource
+    local iCurrentTerrain
+    local iNewResource
+    local iNewTerrain
+    iCurrentTerrain = pPlot:GetTerrainType()                 -- does this return indexof terrain?
+    iNewTerrain = tTerrainConverter[iCurrentTerrain]
+    if iNewTerrain then
+        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain);           -- unsure if needed index of terrain
+        iCurrentResource = pPlot:GetResourceType()
+        if iCurrentResource then
+            iNewResource =  tResourceConverter[iCurrentResource]
+            if iNewResource then
+                TerrainBuilder.SetResourceType(pPlot, iNewResource, 1)       -- what does amount do
             end
         end
     end
