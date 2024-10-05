@@ -109,12 +109,26 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Someone made a framework for Stellaris meteors on discord. Just copy that I guess..
 - [ ] UI prompt from events to do city switch        doable
 
+## Projects:
+- [ ] Armageddon count projects
+- [ ] Bane Divine (remove promos of Disciple units, 70 arma)
+- [ ] Birthright regained (world spell back)
+- [ ] Blood of the Phoenix (let all current units be able to respawn in cap once)
+- [ ] Genesis (upgrade terrain in civ)
+- [ ] Glory everlasting (kill all demon units once, 70 Arma)
+- [ ] Pact of Nilhorn (3 giants spawn, only plausible one non-lua)
+- [ ] Rites of Oghma (new mana resources spawn)
+- [ ] Samhain (spawn barb frostlings and Mokaa, allow White Hand once civic)
+- [ ] The White Hand (spawn 3 priest of Winters for player, can do The Deepening)
+- [ ] The Deepening (convert some desert to plains, plains/grassland to tundra, tundra to snow. cba with blizards tho, can do the Draw?)
+- [ ] The Draw (+10 to Arma, halve all your cities pops, damage all units, declare war with all other civs, suspend any diplomacy. Can start Ascension) Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
+- [ ] Ascension (Summons Auric Unleashed for player)
+- )
 ## Misc:
-- [ ] Double prod with Copper Form of Titan example.
+- [ ] Double prod with Copper Form of Titan example. Also for some projects (Blood of Phoenix)
 - [ ] Need 3 libraries for Great Library, same with Theatre
 
 ## LowHangingCiv:
-- [ ] The Draw project to force war to you from everyone, half city population, half unit health    Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
 - [ ] Manor + Pillar of Chains building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted. Needs rebalacing as sucks under civ vi
 - [ ] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
 - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.

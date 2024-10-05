@@ -6,7 +6,7 @@
     <Created>1714825549</Created>
     <Teaser>Ports Kael's excellent Fall From Heaven mod to Civ VI</Teaser>
     <Authors>Slothoth</Authors>
-    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi and Sukritact for their great reference mods for Lua.</SpecialThanks>
+    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi, SeelingCat and Sukritact for their great reference mods for Lua.</SpecialThanks>
     <Homepage>https://github.com/slothoth/civvitests</Homepage>
     <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>
@@ -112,6 +112,7 @@
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
       <File>Core/BarbarianClans.sql</File>
+      <File>Core/Equipment.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -134,6 +135,7 @@
       <File>Core/Civilizations/Dwarves/Khazad.lua</File>
       <File>Lua/Promotions.lua</File>
       <File>Lua/Alignment.lua</File>
+      <File>Lua/Equipment.lua</File>
       <!--File>Lua/Combat.lua</File-->
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
@@ -277,6 +279,7 @@
     <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
     <File>Core/CombatBuffs.sql</File>
     <File>Core/BarbarianClans.sql</File>
+    <File>Core/Equipment.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
@@ -285,6 +288,7 @@
     <File>Lua/Specialists.lua</File>
     <File>Lua/Promotions.lua</File>
     <File>Lua/Alignment.lua</File>
+    <File>Lua/Equipment.lua</File>
     <File>Lua/Combat.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
