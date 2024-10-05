@@ -18,7 +18,11 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     local pPlayer = Players[iPlayerID]
     if pUnit:GetMovesRemaining() == 0 then
         FlushButtons()
+        Controls.SettleButtonTakeEquipment:SetHide(true)
         return
+    end
+    if pUnit:GetMaxMoves() < 1 then
+        Controls.SettleButtonTakeEquipment:SetHide(true)
     end
     local iPlotX, iPlotY = pUnit:GetX(), pUnit:GetY()
     local iUnitIndex = pUnit:GetType()
