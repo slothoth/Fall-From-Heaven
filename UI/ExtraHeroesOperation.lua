@@ -7,6 +7,10 @@ g_selectedUnitId = -1;
 
 local m_markedPlots = {}  -- plotIndex
 local m_markedPlotsMap = {}  -- key: plotIndex, value: BuildingIndex
+local m_wbInterfaceMode = false
+
+local HEX_COLORING_MOVEMENT = UILens.CreateLensLayerHash("Hex_Coloring_Movement");--LensLayers.HEX_COLORING_MOVEMENT;
+
 
 function myRefresh(iPlayerID, iUnitID, iOldID)
     local iBuilding
@@ -199,7 +203,7 @@ function OnGrantGoldenAgeClicked()
 	return;
 end
 -- instead what if we do plot targetting logic, and just adjust valid plots. dont need 30+ buttons then
-function OnGrantEquipment()
+function OnGrantEquipmentClicked()
     local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
     -- search chosen plot for equipment, choose first found
     -- get unitID of equipment
@@ -211,7 +215,7 @@ function OnGrantEquipment()
 		UI.SetInterfaceMode(InterfaceModeTypes.SELECTION)
 		UI.SetInterfaceMode(InterfaceModeTypes.WB_SELECT_PLOT)
 		m_wbInterfaceMode = true
-		Controls.KnmSpeedButton:SetSelected(true)
+		Controls.SettleButtonTakeEquipment:SetSelected(true)
 
 		m_markedPlots, m_markedPlotsMap = GetNearbyEquipment(iPlayer, iX, iY)
 		if #m_markedPlots > 0 then
@@ -243,7 +247,7 @@ function OnSelectPlot(plotId, plotEdge, boolDown, rButton)
                 local iUnit = pUnit:GetID()
                 local iPlayer = pUnit:GetOwner()
                 ExposedMembers.ExtraHeroes.ConsumeEquipment(iPlayer, iUnit, consumeUnitID);
-				--Controls.KnmSpeedButtonGrid:SetHide(true)
+				--Controls.SettleButtonTakeEquipmentGrid:SetHide(true)
 				--ContextPtr:RequestRefresh();
 			end
 		end
@@ -274,6 +278,16 @@ function GetNearbyEquipment(iPlayerID, iPlotX, iPlotY)
         end
     end
     return markedPlots, markedPlotsMap
+end
+
+function QuitWBInterfaceMode(ifChangeInterfaceMode)
+	if ifChangeInterfaceMode then
+		UI.SetInterfaceMode( InterfaceModeTypes.SELECTION )
+	end
+	UILens.ClearLayerHexes( HEX_COLORING_MOVEMENT );
+	UILens.ToggleLayerOff( HEX_COLORING_MOVEMENT );
+	m_wbInterfaceMode = false
+	Controls.SettleButtonTakeEquipment:SetSelected(false)
 end
 
 -- helper functions
@@ -312,6 +326,8 @@ function Setup()
         for gridButton, tButton in pairs(tControlsAdded) do
             gridButton:ChangeParent(ctrl)
         end
+        Controls.SettleButtonGridTakeEquipment:ChangeParent(ctrl)
+        Controls.SettleButtonTakeEquipment:RegisterCallback(Mouse.eLClick, OnGrantEquipmentClicked)
     end
     for gridButton, tButton in pairs(tControlsAdded) do
         for button, callbackFunc in pairs(tButton) do
