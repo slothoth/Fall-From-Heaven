@@ -262,7 +262,7 @@ function GetNearbyEquipment(iPlayerID, iPlotX, iPlotY)
     for idx, pAdjPlot in ipairs(tAdjacentPlots) do          -- is this idx an index or plotID?
         tUnits = Units.GetUnitsInPlot(pAdjPlot)
         if tUnits then
-            for _, pAdjUnit in tUnits do
+            for _, pAdjUnit in ipairs(tUnits) do
                 local iOwnerID = pAdjUnit:GetOwner()
                 if iOwnerID == iPlayerID then
                     local iUnitType = pAdjUnit:GetType()
