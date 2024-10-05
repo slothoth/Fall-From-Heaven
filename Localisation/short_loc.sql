@@ -1672,7 +1672,7 @@ INSERT OR REPLACE INTO LocalizedText(Text, Tag, Language) VALUES
 ('Paramander', 'LOC_SLTH_UNIT_PARAMANDER_NAME', 'en_US'),
 ('Hic Jacet', 'LOC_CITY_INFERNAL_20_NAME', 'en_US'),
 ('Unit Pyre Zombie', 'LOC_SLTH_TRAIT_CIVILIZATION_UNIT_PYRE_ZOMBIE_NAME', 'en_US'),
-('Starts with a source of Body, Fire and Nature Mana. Accumulate -40% less war weariness than usual. Starts at peace with the Barbarians.', 'LOC_SLTH_TRAIT_CIVILIZATION_CLAN_OF_EMBERS_COOL_DESCRIPTION', 'en_US'),
+('Starts with a source of Body, Fire and Nature Mana. Accumulate -40% less war weariness than usual. Starts at peace with the Barbarians. Recon line units are Lizardmen, starting with the Amphibious ability.', 'LOC_SLTH_TRAIT_CIVILIZATION_CLAN_OF_EMBERS_COOL_DESCRIPTION', 'en_US'),
 ('Heaven''s Bane', 'LOC_CITY_CLAN_OF_EMBERS_23_NAME', 'en_US'),
 ('Urslo', 'LOC_CITY_DOVIELLO_1_NAME', 'en_US'),
 ('A Beast unit that can effectively Siege cities, but does not benefit from defensive bonuses.', 'LOC_SLTH_UNIT_HILL_GIANT_DESCRIPTION', 'en_US'),

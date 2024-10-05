@@ -48,9 +48,9 @@ Items
 
 ## Item system:
 in civ iv, act as promotions that give buffs, and allow the dropping of item, to be picked up by someone else. can also be dropped on death, and captured. Also spawnable via event
-- [ ] ability that can be removed by lua on button press : Reasonably easy to implement for player as button, not for AI. Attempts with custom FormationClasses have failed as entering formation fails for combining novel formationClasses. Would limit a unit to one unit, one item.
-- [ ] 0 movement ingame unit that is destroyed/summoned, support class? A button to apply an effect on the combat unit in the same tile seems feasible. As does removing it. We don't need to store unit state, beyond its UnitType. Lua Event: UnitRemovedFromMap to respawn all items when a unit with them dies?
-- [ ] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted. Seems reasonable in SQL. weapons cant stack.
+- [x] ability that can be removed by lua on button press : Reasonably easy to implement for player as button, not for AI. Attempts with custom FormationClasses have failed as entering formation fails for combining novel formationClasses. Would limit a unit to one unit, one item.
+- [x] 0 movement ingame unit that is destroyed/summoned, support class? A button to apply an effect on the combat unit in the same tile seems feasible. As does removing it. We don't need to store unit state, beyond its UnitType. Lua Event: UnitRemovedFromMap to respawn all items when a unit with them dies?
+- [x] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted. Seems reasonable in SQL. weapons cant stack.
 
 ## Lairs and barbarians:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
@@ -64,7 +64,9 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Goblin Clan Fort: Orc warriors, Goblin scouts, Archers, Goblin Chariot
 - [x] Ruins: Lizardmen
 - [x] Barrows: Skeleton
-- [ ] Generic: Frostlings, Animals, Beasts, Event barbarians, spawning ad-hoc
+- [x] Lion Den
+- [ ] Bear Den: Bears not spawning despite CanTrain
+- [ ] Generic: Frostlings, Beasts, Event barbarians, spawning ad-hoc
 - [ ] Acheron Free City
 
 ## Terrain Alteration:
