@@ -18,7 +18,11 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     local pPlayer = Players[iPlayerID]
     if pUnit:GetMovesRemaining() == 0 then
         FlushButtons()
+        Controls.SettleButtonTakeEquipment:SetHide(true)
         return
+    end
+    if pUnit:GetMaxMoves() < 1 then
+        Controls.SettleButtonTakeEquipment:SetHide(true)
     end
     local iPlotX, iPlotY = pUnit:GetX(), pUnit:GetY()
     local iUnitIndex = pUnit:GetType()
@@ -247,8 +251,6 @@ function OnSelectPlot(plotId, plotEdge, boolDown, rButton)
                 local iUnit = pUnit:GetID()
                 local iPlayer = pUnit:GetOwner()
                 ExposedMembers.ExtraHeroes.ConsumeEquipment(iPlayer, iUnit, consumeUnitID);
-				--Controls.SettleButtonTakeEquipmentGrid:SetHide(true)
-				--ContextPtr:RequestRefresh();
 			end
 		end
 	end
@@ -266,12 +268,20 @@ function GetNearbyEquipment(iPlayerID, iPlotX, iPlotY)
                 local iOwnerID = pAdjUnit:GetOwner()
                 if iOwnerID == iPlayerID then
                     local iUnitType = pAdjUnit:GetType()
-                    local iAbilityToGrant = tEquipmentUnits[iUnitType]      -- is an equipment
-                    if iAbilityToGrant then
+                    if tEquipmentUnits[iUnitType] then              -- is equipment
                         local iUnitID = pAdjUnit:GetID()
                         markedPlotsMap[pAdjPlot:GetIndex()] = iUnitID
                         table.insert(markedPlots, pAdjPlot:GetIndex())
                         break
+                    end
+                    local pAdjUnitAbilities = pAdjUnit:GetAbility():GetAbilities()
+                    for _, iAbilityIndex in ipairs(pAdjUnitAbilities) do
+                        if tEquipmentAbilities[iAbilityIndex] then                  -- has equipment
+                            local iUnitID = pAdjUnit:GetID()
+                            markedPlotsMap[pAdjPlot:GetIndex()] = iUnitID
+                            table.insert(markedPlots, pAdjPlot:GetIndex())
+                            break
+                        end
                     end
                 end
             end
@@ -394,6 +404,32 @@ function Setup()
 	[GameInfo.Units['SLTH_EQUIPMENT_WAR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index }
 
     tEquipmentAbilities = {
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_TREASURE_ABILITY'].Index] = 1,
+	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index] = 1}
+
+    tEquipmentNameAbilities = {
 	['ATHAME'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
 	['BLACK_MIRROR'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
 	['CROWN_OF_AKHARIEN'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
