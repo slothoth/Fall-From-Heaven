@@ -204,15 +204,22 @@ end
 function ConsumeEquipment(iPlayer, iUnitID, consumeUnitID)
 	local hasEquipment
 	local iEquipmentAbilityToGrant
+	local bSuccess = 0
 	local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+	local pUnitAbilityManager = pUnit:GetAbility()
 	local pConsumeUnit = UnitManager.GetUnit(iPlayer, consumeUnitID);			-- assumes consume unit is owned by same
 	local iConsumeUnitType = pConsumeUnit:GetType()
 	local equipAbility = tEquipmentUnits[iConsumeUnitType]
 	if equipAbility then
-		pUnit:GetAbility():AddAbilityCount(equipAbility)
-		print('Added ability to unit')
-		UnitManager.Kill(pConsumeUnit);
-		print('killed equipment')
+		if not pUnitAbilityManager:HasAbility(equipAbility) then
+			pUnit:GetAbility():AddAbilityCount(equipAbility)
+			print('Added ability to unit')
+			UnitManager.Kill(pConsumeUnit);
+			print('killed equipment')
+			bSuccess = 1
+		else
+			print('not granted as unit already has ability')
+		end
 	else
 		local pConsumeUnitAbilityManager = pConsumeUnit:GetAbility()
 		-- iterate over equipment abilities and check if unit has them
@@ -225,14 +232,20 @@ function ConsumeEquipment(iPlayer, iUnitID, consumeUnitID)
 			end
 		end
 		if iEquipmentAbilityToGrant then
-			pUnit:GetAbility():AddAbilityCount(iEquipmentAbilityToGrant)
-			print('Added ability to unit')
-			pConsumeUnitAbilityManager:RemoveAbilityCount(iEquipmentAbilityToGrant);
-			print('removed ability from consumer')
+			if not pUnitAbilityManager:HasAbility(iEquipmentAbilityToGrant) then
+				pUnitAbilityManager:AddAbilityCount(iEquipmentAbilityToGrant)
+				print('Added ability to unit')
+				pConsumeUnitAbilityManager:RemoveAbilityCount(iEquipmentAbilityToGrant);
+				print('removed ability from consumer')
+				bSuccess = 1
+			else
+				print('dont get ability as already have it')
+			end
 		else
 			print('ERROR: somehow sent command to consume equipment that wasnt configured or had ')
 		end
 	end
+	return bSuccess
 end
 
 function FlushGoldenAge(pPlayer)

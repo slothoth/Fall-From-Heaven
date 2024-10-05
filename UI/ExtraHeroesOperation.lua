@@ -18,11 +18,13 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     local pPlayer = Players[iPlayerID]
     if pUnit:GetMovesRemaining() == 0 then
         FlushButtons()
-        Controls.SettleButtonTakeEquipment:SetHide(true)
+        Controls.SettleButtonGridTakeEquipment:SetHide(true)
         return
     end
-    if pUnit:GetMaxMoves() < 1 then
-        Controls.SettleButtonTakeEquipment:SetHide(true)
+    if pUnit:GetFormationClass() == 0 then
+        Controls.SettleButtonGridTakeEquipment:SetHide(false)
+    else
+        Controls.SettleButtonGridTakeEquipment:SetHide(true)
     end
     local iPlotX, iPlotY = pUnit:GetX(), pUnit:GetY()
     local iUnitIndex = pUnit:GetType()
@@ -250,7 +252,12 @@ function OnSelectPlot(plotId, plotEdge, boolDown, rButton)
 				local pUnit = UI.GetHeadSelectedUnit()
                 local iUnit = pUnit:GetID()
                 local iPlayer = pUnit:GetOwner()
-                ExposedMembers.ExtraHeroes.ConsumeEquipment(iPlayer, iUnit, consumeUnitID);
+                local bSuccess = ExposedMembers.ExtraHeroes.ConsumeEquipment(iPlayer, iUnit, consumeUnitID);
+                if bSuccess < 1 then
+                    local pPlot = Map.GetPlotByIndex()
+                    UI.AddWorldViewText(0, 'Already has equipment', pPlot:GetX(), pPlot:GetY());
+                end
+                QuitWBInterfaceMode(true)
 			end
 		end
 	end
