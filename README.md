@@ -37,11 +37,14 @@ Items
 - [ ] is it additive or not?
 - [ ] can then just do as modifier with requirements in a binaryish way, if only 5 possible ways. i.e. if unit doesnt have 20% tag, do 1 damage. if unit doesnt have 50% tag, do 3 damage. if unit doesnt have immune tag, do 2 damage for full 6.
 ## Armageddon Counter:
-- [ ] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
-- [ ] Lowering Armageddon count (Razing Veil Cities, Sanctifying city ruins, Hallowing of Elohim project, Prophecy Mark units dying, Wonders destroyed? )
+- [x] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
+- [x] Lowering Armageddon count (Razing Veil Cities, Sanctifying city ruins, Hallowing of Elohim project, Prophecy Mark units dying, Wonders destroyed? )
 - [ ] Hijack Global Warming panel. We probably just steal the UI design of it.  
-- [ ] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
-- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
+- [x] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
+- [ ] test basic functionality
+- [x] amend to proper version with plotProp counter
+- [x] actions that happen once counter reaches certain value. Did this without any specific Event, instead its checked whenever armageddon counter is changed.
+- [ ] Events to implement still: Warning popup, Blight, 100Armageddon
 
 ## Item system:
 in civ iv, act as promotions that give buffs, and allow the dropping of item, to be picked up by someone else. can also be dropped on death, and captured. Also spawnable via event
@@ -51,11 +54,18 @@ in civ iv, act as promotions that give buffs, and allow the dropping of item, to
 
 ## Lairs and barbarians:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
-- [ ] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
-- [ ] Have to implement spawning on mapgeneration, check that Cat relics mod, to see how they did it.
+- [x] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
+- [x] Have to implement spawning on mapgeneration, MapUtilities override was possible, but instead just gave GoodyHut columns to barb camp
 - [ ] Implement "deck" of different events that can happen when a lair is explored: probably do this with plot:SetProperty() then hook into barbarian clans removal and trigger event, if it shouldnt clear the lair, replace the lair lol
+- [x] Deck selection skeleton
+- [ ] All deck options
 - [ ] Peace with barbarians trait, shared with embers        WildW was thinking of something like this, look at comments on discord
 - [ ] Free City spawning?
+- [ ] Goblin Clan Fort: Orc warriors, Goblin scouts, Archers, Goblin Chariot
+- [x] Ruins: Lizardmen
+- [x] Barrows: Skeleton
+- [ ] Generic: Frostlings, Animals, Beasts, Event barbarians, spawning ad-hoc
+- [ ] Acheron Free City
 
 ## Terrain Alteration:
 - [ ] The Deepening project to add tundra and snow (terrain changes dont show up except on reload)
@@ -99,15 +109,34 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Someone made a framework for Stellaris meteors on discord. Just copy that I guess..
 - [ ] UI prompt from events to do city switch        doable
 
+## Projects:
+- [ ] Armageddon count projects
+- [ ] Bane Divine (remove promos of Disciple units, 70 arma)
+- [ ] Birthright regained (world spell back)
+- [ ] Blood of the Phoenix (let all current units be able to respawn in cap once)
+- [ ] Genesis (upgrade terrain in civ)
+- [ ] Glory everlasting (kill all demon units once, 70 Arma)
+- [ ] Pact of Nilhorn (3 giants spawn, only plausible one non-lua)
+- [ ] Rites of Oghma (new mana resources spawn)
+- [ ] Samhain (spawn barb frostlings and Mokaa, allow White Hand once civic)
+- [ ] The White Hand (spawn 3 priest of Winters for player, can do The Deepening)
+- [ ] The Deepening (convert some desert to plains, plains/grassland to tundra, tundra to snow. cba with blizards tho, can do the Draw?)
+- [ ] The Draw (+10 to Arma, halve all your cities pops, damage all units, declare war with all other civs, suspend any diplomacy. Can start Ascension) Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
+- [ ] Ascension (Summons Auric Unleashed for player)
+- )
+## Misc:
+- [ ] Double prod with Copper Form of Titan example. Also for some projects (Blood of Phoenix)
+- [ ] Need 3 libraries for Great Library, same with Theatre
+
 ## LowHangingCiv:
-- [ ] The Draw project to force war to you from everyone, half city population, half unit health    Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
 - [ ] Manor + Pillar of Chains building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted. Needs rebalacing as sucks under civ vi
 - [ ] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
 - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
-
+- [ ] Infernal no amenity cost? as they get no unhappiness.
 ## Hard but minor:
 - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 - [ ] Hall of Mirrors clone spawning
+- [ ] Do we swap Amenities and Housing as Amenities and Housing?
 
 ## CivHard
   Sprawling, have bigger cities, 3 distance, but only allowed 3 cities. Other cities founded are Settlements, which have 0 yields and only allow access to resources. This seems very hard.
@@ -371,8 +400,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Barnaxus
 #### Custom Model and Animations
 - [ ] Spider attackers (Giant Spider,  Baby Spider)
-- [x] Arm attack (Golems, Stygian Guard, Wait just copy Zombies)
-- [ ] Claw attack (Werewolves, Treant, Pit Beast)
+- [x] Arm attack (Golems, Stygian Guard, treant Wait just copy Zombies)
+- [ ] Claw attack (Werewolves, Pit Beast)
 - [ ] Mouth Attackers (Griffon, Manticore)
 - [ ] Big Club attackers (Hill Giant, Ogres)
 #### Cultures

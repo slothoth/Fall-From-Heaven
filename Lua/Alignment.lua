@@ -1,4 +1,4 @@
-tLeaderAlignmentMap = {
+local tLeaderAlignmentMap = {
     ['SLTH_LEADER_ALEXIS']=0, ['SLTH_LEADER_FLAUROS']=0, ['SLTH_LEADER_KEELYN']=0, ['SLTH_LEADER_PERPENTACH']=0,
     ['SLTH_LEADER_HYBOREM']=0, ['SLTH_LEADER_TEBRYN']=0, ['SLTH_LEADER_OS-GABELLA']=0, ['SLTH_LEADER_JONAS']=0,
     ['SLTH_LEADER_SHEELBA']=0, ['SLTH_LEADER_CHARADON']=0, ['SLTH_LEADER_MAHALA']=0,
@@ -15,20 +15,20 @@ tLeaderAlignmentMap = {
     ['SLTH_LEADER_GARRIM']=2, ['SLTH_LEADER_BEERI']=2
 }
 
-tReligionFromGood = {['RELIGION_ISLAM']=1, ['RELIGION_HINDUISM']=1}
-tReligionFromEvil = {['RELIGION_JUDAISM']=1, ['RELIGION_CONFUCIANISM']=1}
-tReligionForceAlignment = {['RELIGION_PROTESTANTISM']=2, ['RELIGION_BUDDHISM']=0}
+local tReligionFromGood = {['RELIGION_ISLAM']=1, ['RELIGION_HINDUISM']=1}
+local tReligionFromEvil = {['RELIGION_JUDAISM']=1, ['RELIGION_CONFUCIANISM']=1}
+local tReligionForceAlignment = {['RELIGION_PROTESTANTISM']=2, ['RELIGION_BUDDHISM']=0}
 
-tReligionAlignment = {
+local tReligionAlignment = {
     ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
     ['RELIGION_CATHOLICISM']=1,
     ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
-tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
+local tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
 
 -- pPlayerUnits:SetBuildDisabled(m_ePlagueDoctorUnit, true);
 
-tReligousCivicTrigger = {
+local tReligousCivicTrigger = {
 [GameInfo.Civics['CIVIC_ORDERS_FROM_HEAVEN'].Index]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
 [GameInfo.Civics['CIVIC_HONOR'].Index]=GameInfo.Religions["RELIGION_JUDAISM"].Index,
 [GameInfo.Civics['CIVIC_WAY_OF_THE_EARTHMOTHER'].Index]=GameInfo.Religions["RELIGION_CONFUCIANISM"].Index,
@@ -37,7 +37,7 @@ tReligousCivicTrigger = {
 [GameInfo.Civics['CIVIC_DECEPTION'].Index]=GameInfo.Religions["RELIGION_ISLAM"].Index,
 [GameInfo.Civics['CIVIC_CORRUPTION_OF_SPIRIT'].Index]=GameInfo.Religions["RELIGION_BUDDHISM"].Index}
 
-tReligions = {
+local tReligions = {
     [GameInfo.Religions["RELIGION_PROTESTANTISM"].Index] = {
         [1] = GameInfo.Beliefs["BELIEF_RELIGIOUS_IDOLS"].Hash,
         [2] = GameInfo.Beliefs["BELIEF_LAY_MINISTRY"].Hash },
@@ -60,9 +60,10 @@ tReligions = {
         [1] = GameInfo.Beliefs["BELIEF_INITIATION_RITES"].Hash,
         [2] = GameInfo.Beliefs["BELIEF_CROSS_CULTURAL_DIALOGUE"].Hash } }
 
-tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
+local tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
-iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
+local iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
+local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 
 
 function onReligionSwitch(sReligion)                -- TODO not attached to anything currently
@@ -73,7 +74,7 @@ function onReligionSwitch(sReligion)                -- TODO not attached to anyt
         if iCurrentAlignment == 2 then
             iNewAlignment = tReligionFromGood[sReligion]
         elseif iCurrentAlignment==0 then
-            iNewAlignment = tReligionFromGood[sReligion]
+            iNewAlignment = tReligionFromEvil[sReligion]
         end
     end
     if iNewAlignment then
@@ -156,6 +157,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         local pPlayer = Players[playerID]
         if PlayerConfigurations[playerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
+            AdjustArmageddonCount(5)            -- Compact broken
         end
         local iAlignment = pPlayer:GetProperty('alignment') or 0
         local pPlot = Map.GetPlotByIndex(plotID)
@@ -173,6 +175,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
                 GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
             end
         end
+        AdjustArmageddonCount(5)            -- Compact broken
     end
 end
 
@@ -244,6 +247,9 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             Game:SetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS', 1)
             local pPlot = pLeastReligionsCity:GetPlot()
             pPlot:SetProperty(tostring(iReligion)..'_HOLY_CITY', 1)
+            if iReligion == iReligionVeil then
+                AdjustArmageddonCount(5)
+            end
         end
     end
     if civicIndex == iINFERNAL_PACT_INDEX then
@@ -287,6 +293,15 @@ function GrantCultureParity(iPlayerGrantedCivics, iPlayerCivicGranter)
     end
 end
 
+function AdjustArmageddonCount(iAmount)
+    local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
+    if iArmageddonCount then
+        Game.SetProperty('ARMAGEDDON', iArmageddonCount + iAmount)
+    else
+        print('Armageddon count not initilizaed!')
+    end
+end
+
 function InitiateReligions()
     local aPlayers = PlayerManager.GetAliveMinors();            -- will minors work? if so need 7 in game
     local pGameReligion = Game.GetReligion();
@@ -321,6 +336,9 @@ function onStart()
         if sLeaderName == 'SLTH_LEADER_BASIUM' then
             Game:SetProperty('Mercurian', iPlayerID)
         end
+    end
+    if not Game.GetProperty('ARMAGEDDON') then          -- initalize armageddon
+        Game.SetProperty('ARMAGEDDON',  0)
     end
 end
 
