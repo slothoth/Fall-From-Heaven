@@ -113,6 +113,7 @@
       <File>Core/Assets_ingame.sql</File>
       <File>Core/BarbarianClans.sql</File>
       <File>Core/Equipment.sql</File>
+      <File>Core/Globals.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -214,19 +215,14 @@
             <LuaReplace>UI/Null.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript-->
-    <!--ReplaceUIScript id="ReplaceUI_BarbClanBanner_BaseFFH">
-        <Properties>
-            <LoadOrder>10950</LoadOrder>
-            <LuaContext>CityBannerManager_BarbarianClansMode</LuaContext>
-            <LuaReplace>UI/Null.lua</LuaReplace>
-        </Properties>
-    </ReplaceUIScript-->
     <ImportFiles id="ImportUIFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
       </Properties>
       <File>UI/UnitPromotionPopup.lua</File>
       <File>UI/UnitPromotionPopup.xml</File>
+      <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
+      <File>UI/TreatWithTribePopup.lua</File>
     </ImportFiles>
     <!--ImportFiles id="ImportMapGenOverrideFiles">
       <Properties>
@@ -294,6 +290,7 @@
     <File>Core/CombatBuffs.sql</File>
     <File>Core/BarbarianClans.sql</File>
     <File>Core/Equipment.sql</File>
+    <File>Core/Globals.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
@@ -329,5 +326,7 @@
     <File>UI/UnitPromotionPopup.xml</File>
     <File>UI/UnitPanel_skip_promos.lua</File>
     <File>UI/Null.lua</File>
+    <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
+    <File>UI/TreatWithTribePopup.lua</File>
   </Files>
 </Mod>

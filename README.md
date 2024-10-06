@@ -60,14 +60,17 @@ like barbarian encampments but with different classes that spawn different units
 - [x] Deck selection skeleton
 - [ ] All deck options
 - [ ] Peace with barbarians trait, shared with embers        WildW was thinking of something like this, look at comments on discord
-- [ ] Free City spawning?
-- [ ] Goblin Clan Fort: Orc warriors, Goblin scouts, Archers, Goblin Chariot
+- [x] Free City spawning
+- [x] Goblin Clan Fort: Orc warriors, Goblin scouts, Archers, Goblin Chariot
 - [x] Ruins: Lizardmen
 - [x] Barrows: Skeleton
 - [x] Lion Den
 - [ ] Bear Den: Bears not spawning despite CanTrain
 - [ ] Generic: Frostlings, Beasts, Event barbarians, spawning ad-hoc
 - [ ] Acheron Free City
+- [x] Embers diplomacy with Clans only
+- [x] No diplomacy with some clans
+- [ ] Animal Clans cant become cities
 
 ## Terrain Alteration:
 - [ ] The Deepening project to add tundra and snow (terrain changes dont show up except on reload)
@@ -92,7 +95,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. That would solve a lot of issues. WildW unit transfer system?
 
 ## Magic System:
-- [ ] UI to press buttons (try make something like for buulding improvements but above)
+- [ ] UI to press buttons (try make something like for buulding improvements but above) maybe hijack unitCommands system for populating?
 - [ ] Puppets, inheriting from summoner
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
 - [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit
@@ -102,7 +105,7 @@ like barbarian encampments but with different classes that spawn different units
 - [x] New Civ spawned midgame      Do Kupe LeadersXP2 ocean spawn, then do citytransfer/found city.
 - [x] Forced city transfer to the civ      doable in Lua
 - [ ] Switch player midgame              very hard
-- [ ] Summoned through first to tech, takes over a barbarian city           easy to do first to tech. Barb city is harder tho. Need to implement Free City spawning
+- [x] Summoned through first to tech, takes over a barbarian city           easy to do first to tech. Barb city is harder tho. Need to implement Free City spawning
 - [x] need to do inheriting techs/civics and extra units(Basium/Hyborem, stack of angels/manes)
 - [ ] Diplomatic modifiers for bringing into world. Not permanent alliance with basium tho
 - [x] Ban Mercurian gate from palace. Mutually exclusives?. Also needs to grant palace after building, and maybe set capital
@@ -140,12 +143,11 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Do we swap Amenities and Housing as Amenities and Housing?
 
 ## CivHard
-  Sprawling, have bigger cities, 3 distance, but only allowed 3 cities. Other cities founded are Settlements, which have 0 yields and only allow access to resources. This seems very hard.
 - [ ] 4 tile workable cities. CypRyan and Phantagonist versions, Phantagonist less buggy. But how to make single civ?
 - [ ] 0 yield cities, seems doable, just have a modifier that any city past the first 3 gets a "settlement" modifier that multiplies all yields by 0. Unsure if requirement exists of count cities. 
 - [ ] Dynamic allowed city count, based on map size. Map size part is hard and probably needs Lua. 
 - [ ] needs to implement some concept of inherent city identity for being able to produce those units, check civ conquer mode? But then apply only to that city. hmmm
-
+- [ ] Doviello scavenging prod for nearby city on killing unit.
 ## World Spell:
   a one time cast spell with often global effects, in civ iv is available to most units to cast, we can just have it be like a 0 prod project? or buyable
 - [ ] Do I even need to do it on a unit? arent all world spells just on units for convenience, I could make a UI button for it, in governor panel?
