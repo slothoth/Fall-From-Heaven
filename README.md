@@ -95,7 +95,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. That would solve a lot of issues. WildW unit transfer system?
 
 ## Magic System:
-- [ ] UI to press buttons (try make something like for buulding improvements but above) maybe hijack unitCommands system for populating?
+- [ ] UI to press buttons (try make something like for building improvements but above) maybe hijack unitCommands system for populating?
 - [ ] Puppets, inheriting from summoner
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
 - [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit
@@ -163,7 +163,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] implement diplo effects for each trait?
 
 ## Religion:
-- [ ] Investigate Religion as Removing/Allowing Policies (WC is dll bound, can only grant policy not take away in Lua. PolicyXP1 allows dark age policies, no more granular than 1 or 0) MODIFIER_MAJOR_PLAYERS_ADJUST_BANNED_POLICY
+- [x] Investigate Religion as Removing/Allowing Policies Unearthed working Effect, now just need to find a way to have it turn on or off with requirements as its on Player not City. But Bannor specific worked
 - [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
 
 ## Great People:
