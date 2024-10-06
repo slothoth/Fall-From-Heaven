@@ -5,11 +5,11 @@ To download the mod, git clone or go to the Releases page, and select the highes
 One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
 ## TOP priority:
 Magic system
-Barbarians
+Barbarians[x]
 Fix religion
-Armageddon
+Armageddon[x]
 World Spells
-Items
+Items[x]
 ## Promotion System:
 - [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo? i cannot
 - [x] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
@@ -125,7 +125,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] The Deepening (convert some desert to plains, plains/grassland to tundra, tundra to snow. cba with blizards tho, can do the Draw?)
 - [ ] The Draw (+10 to Arma, halve all your cities pops, damage all units, declare war with all other civs, suspend any diplomacy. Can start Ascension) Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
 - [ ] Ascension (Summons Auric Unleashed for player)
-- )
 ## Misc:
 - [ ] Double prod with Copper Form of Titan example. Also for some projects (Blood of Phoenix)
 - [ ] Need 3 libraries for Great Library, same with Theatre

@@ -207,20 +207,20 @@
             <LuaReplace>UI/UnitPanel_skip_promos.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
-    <ReplaceUIScript id="ReplaceUI_BarbClanPopup_BaseFFH">
+    <!--ReplaceUIScript id="ReplaceUI_BarbClanPopup_BaseFFH">
         <Properties>
             <LoadOrder>10950</LoadOrder>
             <LuaContext>TreatWithTribePopup</LuaContext>
             <LuaReplace>UI/Null.lua</LuaReplace>
         </Properties>
-    </ReplaceUIScript>
-    <ReplaceUIScript id="ReplaceUI_BarbClanBanner_BaseFFH">
+    </ReplaceUIScript-->
+    <!--ReplaceUIScript id="ReplaceUI_BarbClanBanner_BaseFFH">
         <Properties>
             <LoadOrder>10950</LoadOrder>
             <LuaContext>CityBannerManager_BarbarianClansMode</LuaContext>
             <LuaReplace>UI/Null.lua</LuaReplace>
         </Properties>
-    </ReplaceUIScript>
+    </ReplaceUIScript-->
     <ImportFiles id="ImportUIFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
