@@ -166,19 +166,26 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
 
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')
-            local iGameTurn = Game.GetCurrentGameTurn()         -- ten turns to settle a city state
+            local iGameTurn = Game.GetCurrentGameTurn()         -- five turns to settle a city state
             print('game turn is')
             print(iGameTurn)
-            if iGameTurn > 10 then
-                -- transfer to freecities, and give loyalty?
-                print('transferring city to free cities')
-                local pCity = CityManager.GetCity(playerID, cityID)
-                local iX, iY = pPlot:GetX(), pPlot:GetY()
-                local pFreeCitiesPlayer = Players[62]
-                Cities.DestroyCity(pCity)
-                pFreeCitiesPlayer:GetCities():Create(iX, iY)
-                -- could also use that transfer unit logic from dll extension for polish later
-                -- CityManager.TransferCity(pCity, 62, -1173539618)    -- free cities transfer keeps cs alive
+            if iGameTurn > 3 then
+                local pAllMajors = PlayerManager.GetAliveMajorIDs();            -- just hating on all civs
+                local pDiplo = pPlayer:GetDiplomacy()
+                for k, iterPlayerID in ipairs(pAllMajors) do
+                    if (pPlayer:GetID() ~= iterPlayerID) then
+                        pDiplo:SetHasMet(iterPlayerID);
+                        pDiplo:DeclareWarOn(iterPlayerID, WarTypes.FORMAL_WAR, true);
+                        pDiplo:NeverMakePeaceWith(iterPlayerID);
+                        local pOtherPlayer = Players[iterPlayerID];
+                        if(pOtherPlayer ~= nil) then
+                            local pOtherDiplo = pOtherPlayer:GetDiplomacy();
+                            if(pOtherDiplo ~= nil) then
+                                pOtherDiplo:NeverMakePeaceWith(playerID);
+                            end
+                        end
+                    end
+                end
             end
         end
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
@@ -273,9 +280,90 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
     end
     if civicIndex == iINFERNAL_PACT_INDEX then
         local iInfernalPlayerId = Game:GetProperty('Infernal')
-        -- transfer city here. Grant all techs of previous civ? Make good city location?
-        GrantTechParity(iInfernalPlayerId, playerID)
-        GrantCultureParity(iInfernalPlayerId, playerID)
+        -- find strongest city state. what if no cs
+        local tpMinorCivs = PlayerManager.GetAliveMinors()
+        local pCity
+        local iCurrentCityPop
+        local iBestCityPop = 0
+        local pBestCity
+        for idx, pPlayer in ipairs(tpMinorCivs) do
+            pCity = pPlayer:GetCities():GetCapitalCity()
+            if pCity then
+                iCurrentCityPop = pCity:GetPopulation()
+                if iCurrentCityPop > iBestCityPop then
+                    pBestCity = pCity
+                    iBestCityPop = pCity:GetPopulation()
+                end
+            end
+        end
+        if pBestCity then
+            CityManager.TransferCity(pCity, iInfernalPlayerId, -1821839791)     -- enum CityTransferTypes.BY_GIFT
+            GrantTechParity(iInfernalPlayerId, playerID)
+            GrantCultureParity(iInfernalPlayerId, playerID)
+        else
+            print('no city state found. PANIC! place a city at a tribe clan a decent spot far away.')
+            -- iter over plots,
+            local iW, iH = Map.GetGridSize();
+            local tCampTiles = {}
+            local iIMPROVEMENT_BARB_CAMP = GameInfo.Improvements['IMPROVEMENT_BARBARIAN_CAMP'].Index
+            for x = 0, iW - 1 do
+                for y = 0, iH - 1 do
+                    local i = y * iW + x;
+                    local pPlot = Map.GetPlotByIndex(i);
+                    local iPlotImprovement = pPlot:GetImprovementType()
+                    if iPlotImprovement then
+                        if iPlotImprovement == iIMPROVEMENT_BARB_CAMP then
+                            tCampTiles[i] = pPlot
+                        end
+                    end
+                end
+            end
+            print(table.count(tCampTiles))
+            -- filter for the best camp
+            --IsValidFoundLocation
+            local aPlayers = PlayerManager.GetAlive();
+            local more_than_four_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4)
+            local iInfernalPlot
+            local iLeastWaterTiles = 20
+            local iCurrentWaterTiles
+            print(table.count(more_than_four_plots))
+            if table.count(more_than_four_plots) > 0 then
+                print('some 5+ plots exist')
+                for idx, pPlot in pairs(more_than_four_plots) do
+                    -- count coast within 3 tiles. choose smallest
+                    iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
+                    print(iCurrentWaterTiles)
+                    if iCurrentWaterTiles < iLeastWaterTiles then
+                        print('found better')
+                        iInfernalPlot = pPlot
+                        iLeastWaterTiles = iCurrentWaterTiles
+                    end
+                end
+            end
+            if not iInfernalPlot then
+                local four_range_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4, true)
+                if table.count(four_range_plots) > 0 then
+                    print('some 4 plots exist')
+                    for idx, pPlot in pairs(four_range_plots) do
+                        iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
+                        print(iCurrentWaterTiles)
+                        if iCurrentWaterTiles < iLeastWaterTiles then
+                            iInfernalPlot = pPlot
+                            iLeastWaterTiles = iCurrentWaterTiles
+                        end
+                    end
+                end
+            end
+            if iInfernalPlot then
+                local pInfernal = Players[iInfernalPlayerId]
+                local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
+                pInfernal:GetCities():Create(iCityMakeX, iCityMakeY)
+                GrantTechParity(iInfernalPlayerId, playerID)
+                GrantCultureParity(iInfernalPlayerId, playerID)
+            else
+                print('not yet implemented random city outside of camps')
+            end
+        end
     end
 end
 
@@ -336,6 +424,47 @@ function InitiateReligions()
         pReligion:ChangeNumBeliefsEarned(1);
         iMinorPlayer = iMinorPlayer + 1
     end
+end
+
+function FindPlotsAtRange(tCampTiles, aPlayers, iUniqueRange, bIsEquals)
+    local tPlotsAtRange = {}
+    for iPlotID, pPlot in pairs(tCampTiles) do
+        local iCampX = pPlot:GetX();
+        local iCampY = pPlot:GetY();
+        for loop, pPlayer in pairs(aPlayers) do
+            local iPlayer = pPlayer:GetID();
+            local pPlayerCities = pPlayer:GetCities();
+            for i, pLoopCity in pPlayerCities:Members() do
+                local iDistance = Map.GetPlotDistance(iCampX, iCampY, pLoopCity:GetX(), pLoopCity:GetY());
+                print(iDistance)
+                if bIsEquals then
+                    if (iDistance == iUniqueRange) then
+                        tPlotsAtRange[iPlotID] = pPlot
+                    end
+                else
+                    if (iDistance > iUniqueRange) then
+                        tPlotsAtRange[iPlotID] = pPlot
+                    end
+                end
+            end
+        end --]]
+    end
+    return tPlotsAtRange
+end
+
+function countPlotWithinThreeCoast(pPlot)
+    local iWaterCount = 0
+	local plotX = pPlot:GetX();
+	local plotY = pPlot:GetY();
+	for dx = -3, 3 - 1, 1 do
+		for dy = -3, 3 - 1, 1 do
+			local otherPlot = Map.GetPlotXYWithRangeCheck(plotX, plotY, dx, dy, 3);
+			if(otherPlot and otherPlot:IsWater()) then
+				iWaterCount = iWaterCount + 1
+			end
+		end
+	end
+    return iWaterCount
 end
 function onStart()
     for iPlayerID, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
