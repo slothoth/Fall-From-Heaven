@@ -155,13 +155,32 @@ end
 function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     if buildingID == GameInfo.Buildings['BUILDING_PALACE'].Index then
         local pPlayer = Players[playerID]
-        if PlayerConfigurations[playerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
+        local pConfig = PlayerConfigurations[playerID]
+        if pConfig:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
             AdjustArmageddonCount(5)            -- Compact broken
         end
-        local iAlignment = pPlayer:GetProperty('alignment') or 0
+        local iAlignment = pPlayer:GetProperty('alignment') or 0                                -- set player alignment
         local pPlot = Map.GetPlotByIndex(plotID)
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
+
+        if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
+            print('city is city state level')
+            local iGameTurn = Game.GetCurrentGameTurn()         -- ten turns to settle a city state
+            print('game turn is')
+            print(iGameTurn)
+            if iGameTurn > 10 then
+                -- transfer to freecities, and give loyalty?
+                print('transferring city to free cities')
+                local pCity = CityManager.GetCity(playerID, cityID)
+                local iX, iY = pPlot:GetX(), pPlot:GetY()
+                local pFreeCitiesPlayer = Players[62]
+                Cities.DestroyCity(pCity)
+                pFreeCitiesPlayer:GetCities():Create(iX, iY)
+                -- could also use that transfer unit logic from dll extension for polish later
+                -- CityManager.TransferCity(pCity, 62, -1173539618)    -- free cities transfer keeps cs alive
+            end
+        end
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
         local iBasiumPlayerID = Game:GetProperty('Mercurian')
         if playerID == iBasiumPlayerID then return end              -- city transfer rebuilds the wonder so stops recursive calls

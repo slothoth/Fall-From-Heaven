@@ -258,23 +258,6 @@ function RemovedBarbCamp(x, y, owningPlayerID)
     end
 end
 
-function onLateCityStateFound(playerID, cityID, x, y)
-    local pConfig = PlayerConfigurations[playerID]
-    print('cit found deteccted')
-    if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
-        print('city is city state level')
-        local iGameTurn = Game.GetCurrentGameTurn()         -- ten turns to settle a city state
-        print('game turn is')
-        print(iGameTurn)
-        if iGameTurn > 10 then
-            -- transfer to freecities, and give loyalty?
-            print('transferring city to free cities')
-            local pCity = CityManager.GetCity(playerID, cityID)
-            CityManager.TransferCityToFreeCities(pCity)
-        end
-    end
-end
-
 -- Great general on Mil Strategy
 -- Great Bard on Drama
 -- there are others im pretty sure
@@ -332,7 +315,6 @@ function onStart()
     -- Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
-    Events.CityInitialized.Add(onLateCityStateFound)
 end
 
 onStart()
