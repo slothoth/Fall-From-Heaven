@@ -314,7 +314,7 @@ function onStart()
 
     -- Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
-    Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)
+    Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
 end
 
 onStart()

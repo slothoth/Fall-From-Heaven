@@ -2,6 +2,8 @@ DELETE FROM BarbarianTribes;
 DELETE FROM BarbarianTribe_MapConditions;
 DELETE FROM BarbarianTribe_MapConditionSets;
 
+DELETE FROM UnitCommands WHERE CommandType='UNITCOMMAND_TREAT_WITH_CLAN_RAID';
+
 -- spawn into game. keeping same as goody huts for now
 UPDATE Improvements SET Goody = 1, TilesPerGoody = 64, GoodyRange = 3 WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';
 
