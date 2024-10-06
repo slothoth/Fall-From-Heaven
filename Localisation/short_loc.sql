@@ -370,7 +370,6 @@ INSERT OR REPLACE INTO LocalizedText(Text, Tag, Language) VALUES
 ('Sylivens Perfect Lyre', 'LOC_SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_NAME', 'en_US'),
 ('Ljosalfarian', 'LOC_SLTH_CIV_LJOSALFAR_ADJECTIVE', 'en_US'),
 ('Patior', 'LOC_CITY_INFERNAL_8_NAME', 'en_US'),
-('Unit Swordsman', 'LOC_SLTH_TRAIT_CIVILIZATION_UNIT_SWORDSMAN_NAME', 'en_US'),
 ('Manaus', 'LOC_CITY_LUCHUIRP_17_NAME', 'en_US'),
 ('+5 [ICON_Strength] Combat Strength while defending', 'LOC_PROMOTION_HEROIC_DEFENSE_DESCRIPTION', 'en_US'),
 ('Crepusculum', 'LOC_CITY_SVARTALFAR_15_NAME', 'en_US'),
