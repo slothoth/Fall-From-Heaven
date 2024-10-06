@@ -3,12 +3,21 @@ Mod to faithfully recreate the glorious Civ IV FallFromHeaven mod by Kael in Civ
 
 To download the mod, git clone or go to the Releases page, and select the highest number, for most recent. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder.
 One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
-
+## TOP priority:
+Magic system
+Barbarians[x]
+Fix religion
+Armageddon[x]
+World Spells
+Items[x]
 ## Promotion System:
-- [ ] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource, Lua: HasResource, GetBonusResourcePerTurn, GetResourceAmount, Monopolies support stuff?
-- [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
-- [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
-- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Dunno if there is a modifier to grant a modifier to a city, like there is for units.
+- [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo? i cannot
+- [x] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
+- [ ] clean up UI by doing includes instead of whole file
+- [ ] Low prio: unitFlagManager counts hidden promos, hide em
+- [x] Lines linking promos where dummy promo is used in promop popup screen
+- [x] Mess with sphere promos to get them to look better. Get placeholder Amber icon in for test? Also line formatting, aligning title. Maybe just replace the promotion icon with unique one?
+- [ ] How are we gonna handle other non-adepts getting channeling I or II. Disciple is common enough we should plan for it, others, no clue.
 
 ## Alignment System:
 - [ ] Certain actions like switching religion set as Good, Evil, Neutral  Need to find the right trigger, policy change as thats how religion?
@@ -16,32 +25,52 @@ One the mod is out of Alpha (probably when art assets for three civilizations ar
 - [ ] diplomacy penalties, advantages      Annoyingly diplo penalties seem to be done as modifiers, but no requirements would work.
 
 ## Improvement System:
-- [ ] resource transformation, ie can build Death Well improvement on raw mana node and it becomes Death mana
+- [x] resource transformation, ie can build Death Well improvement on raw mana node and it becomes Death mana
 
 ## Combat System:
 - [ ] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though. ('SANGUINE_PACT_VAMPIRE_COMBAT_STRENGTH_ON_DEAD_UNIT', 'MODIFIER_ALL_COMBAT_RESULTS_APPLY_MODIFIER_TO_UNITS_ON_TILE'); MODIFIER_COMBAT_RESULTS_ATTACH_UNIT_MODIFIER
 - [ ] buff effects : ditto as before. Attacking debuffs (withered, Diseased can use Event :: OnUnitRetreated ?)
-- [ ] some summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%. seems impossible
+- [ ] debug buggy spawning system from it
+- [ ] some summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%. VERY HARD
 - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
-- [ ] Element damage system. Need to test the range of resistance. Each damage is really 5.
+- [ ] Element damage system. Need to test the range of resistance. Each damage is really 5. Some immunities exist. 20% MR plus 50% MR specific.
+- [ ] is it additive or not?
+- [ ] can then just do as modifier with requirements in a binaryish way, if only 5 possible ways. i.e. if unit doesnt have 20% tag, do 1 damage. if unit doesnt have 50% tag, do 3 damage. if unit doesnt have immune tag, do 2 damage for full 6.
 ## Armageddon Counter:
-- [ ] Conversion of global warming system  We probably just steal the UI design of it.  
-- [ ] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
-- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
+- [x] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
+- [x] Lowering Armageddon count (Razing Veil Cities, Sanctifying city ruins, Hallowing of Elohim project, Prophecy Mark units dying, Wonders destroyed? )
+- [ ] Hijack Global Warming panel. We probably just steal the UI design of it.  
+- [x] Converting terrain to Hell terrain equivalent. Look into TerrainBuilder.SetTerrainType(), can also set Features and Resources. If not, can set plot Properties and visually change it, like JNR does? idk if that ever worked.
+- [ ] test basic functionality
+- [x] amend to proper version with plotProp counter
+- [x] actions that happen once counter reaches certain value. Did this without any specific Event, instead its checked whenever armageddon counter is changed.
+- [ ] Events to implement still: Warning popup, Blight, 100Armageddon
 
 ## Item system:
 in civ iv, act as promotions that give buffs, and allow the dropping of item, to be picked up by someone else. can also be dropped on death, and captured. Also spawnable via event
-- [ ] ability that can be removed by lua on button press : Reasonably easy to implement for player as button, not for AI. Attempts with custom FormationClasses have failed as entering formation fails for combining novel formationClasses. Would limit a unit to one unit, one item.
-- [ ] 0 movement ingame unit that is destroyed/summoned, support class? A button to apply an effect on the combat unit in the same tile seems feasible. As does removing it. We don't need to store unit state, beyond its UnitType. Lua Event: UnitRemovedFromMap to respawn all items when a unit with them dies?
-- [ ] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted. Seems reasonable in SQL. weapons cant stack.
+- [x] ability that can be removed by lua on button press : Reasonably easy to implement for player as button, not for AI. Attempts with custom FormationClasses have failed as entering formation fails for combining novel formationClasses. Would limit a unit to one unit, one item.
+- [x] 0 movement ingame unit that is destroyed/summoned, support class? A button to apply an effect on the combat unit in the same tile seems feasible. As does removing it. We don't need to store unit state, beyond its UnitType. Lua Event: UnitRemovedFromMap to respawn all items when a unit with them dies?
+- [x] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted. Seems reasonable in SQL. weapons cant stack.
 
 ## Lairs and barbarians:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
-- [ ] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans.
-- [ ] Have to implement spawning on mapgeneration, check that Cat relics mod, to see how they did it.
+- [x] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
+- [x] Have to implement spawning on mapgeneration, MapUtilities override was possible, but instead just gave GoodyHut columns to barb camp
 - [ ] Implement "deck" of different events that can happen when a lair is explored: probably do this with plot:SetProperty() then hook into barbarian clans removal and trigger event, if it shouldnt clear the lair, replace the lair lol
+- [x] Deck selection skeleton
+- [ ] All deck options
 - [ ] Peace with barbarians trait, shared with embers        WildW was thinking of something like this, look at comments on discord
-- [ ] Free City spawning?
+- [x] Free City spawning
+- [x] Goblin Clan Fort: Orc warriors, Goblin scouts, Archers, Goblin Chariot
+- [x] Ruins: Lizardmen
+- [x] Barrows: Skeleton
+- [x] Lion Den
+- [ ] Bear Den: Bears not spawning despite CanTrain
+- [ ] Generic: Frostlings, Beasts, Event barbarians, spawning ad-hoc
+- [ ] Acheron Free City
+- [x] Embers diplomacy with Clans only
+- [x] No diplomacy with some clans
+- [ ] Animal Clans cant become cities
 
 ## Terrain Alteration:
 - [ ] The Deepening project to add tundra and snow (terrain changes dont show up except on reload)
@@ -59,45 +88,66 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Bulbing techs.
 - [ ] Dark elf kidnapping superSpecialist ( apply a modifier  with the reverse values of a superspecialist) and spawn a great person
 - [ ] For single ability units, Manes for example, Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
-- 
+
 
 ## Upgrade System:
 - [ ] can upgrade outside borders       probably needs bespoke upgrade system
-- [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system.
+- [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. That would solve a lot of issues. WildW unit transfer system?
 
-## Summoning System:
+## Magic System:
+- [ ] UI to press buttons (try make something like for building improvements but above) maybe hijack unitCommands system for populating?
 - [ ] Puppets, inheriting from summoner
+- [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
+- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit
+
 
 ## Civ Spawn System:
 - [x] New Civ spawned midgame      Do Kupe LeadersXP2 ocean spawn, then do citytransfer/found city.
 - [x] Forced city transfer to the civ      doable in Lua
 - [ ] Switch player midgame              very hard
-- [ ] Summoned through first to tech, takes over a barbarian city           easy to do first to tech. Barb city is harder tho. Need to implement Free City spawning
-- [ ] need to do inheriting techs/civics and extra units(Basium/Hyborem, stack of angels/manes)
+- [x] Summoned through first to tech, takes over a barbarian city           easy to do first to tech. Barb city is harder tho. Need to implement Free City spawning
+- [x] need to do inheriting techs/civics and extra units(Basium/Hyborem, stack of angels/manes)
 - [ ] Diplomatic modifiers for bringing into world. Not permanent alliance with basium tho
-- [ ] Ban Mercurian gate from palace. Mutually exclusives?. Also needs to grant palace after building, and maybe set capital
+- [x] Ban Mercurian gate from palace. Mutually exclusives?. Also needs to grant palace after building, and maybe set capital
 ## Event System:
 dialogue boxes with a choice that appear randomly, if the conditions satisfy the event. ex. library burning if u have library : tricky, as ui elements involved, choice will lead to lua script execution. Low priority.
 - [ ] Someone made a framework for Stellaris meteors on discord. Just copy that I guess..
 - [ ] UI prompt from events to do city switch        doable
 
+## Projects:
+- [ ] Armageddon count projects
+- [ ] Bane Divine (remove promos of Disciple units, 70 arma)
+- [ ] Birthright regained (world spell back)
+- [ ] Blood of the Phoenix (let all current units be able to respawn in cap once)
+- [ ] Genesis (upgrade terrain in civ)
+- [ ] Glory everlasting (kill all demon units once, 70 Arma)
+- [ ] Pact of Nilhorn (3 giants spawn, only plausible one non-lua)
+- [ ] Rites of Oghma (new mana resources spawn)
+- [ ] Samhain (spawn barb frostlings and Mokaa, allow White Hand once civic)
+- [ ] The White Hand (spawn 3 priest of Winters for player, can do The Deepening)
+- [ ] The Deepening (convert some desert to plains, plains/grassland to tundra, tundra to snow. cba with blizards tho, can do the Draw?)
+- [ ] The Draw (+10 to Arma, halve all your cities pops, damage all units, declare war with all other civs, suspend any diplomacy. Can start Ascension) Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
+- [ ] Ascension (Summons Auric Unleashed for player)
+## Misc:
+- [ ] Double prod with Copper Form of Titan example. Also for some projects (Blood of Phoenix)
+- [ ] Need 3 libraries for Great Library, same with Theatre
+
 ## LowHangingCiv:
-- [ ] The Draw project to force war to you from everyone, half city population, half unit health    Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
 - [ ] Manor + Pillar of Chains building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted. Needs rebalacing as sucks under civ vi
 - [ ] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
 - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
-
+- [ ] Infernal no amenity cost? as they get no unhappiness.
 ## Hard but minor:
 - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 - [ ] Hall of Mirrors clone spawning
+- [ ] Do we swap Amenities and Housing as Amenities and Housing?
 
 ## CivHard
-  Sprawling, have bigger cities, 3 distance, but only allowed 3 cities. Other cities founded are Settlements, which have 0 yields and only allow access to resources. This seems very hard.
 - [ ] 4 tile workable cities. CypRyan and Phantagonist versions, Phantagonist less buggy. But how to make single civ?
 - [ ] 0 yield cities, seems doable, just have a modifier that any city past the first 3 gets a "settlement" modifier that multiplies all yields by 0. Unsure if requirement exists of count cities. 
 - [ ] Dynamic allowed city count, based on map size. Map size part is hard and probably needs Lua. 
 - [ ] needs to implement some concept of inherent city identity for being able to produce those units, check civ conquer mode? But then apply only to that city. hmmm
-
+- [ ] Doviello scavenging prod for nearby city on killing unit.
 ## World Spell:
   a one time cast spell with often global effects, in civ iv is available to most units to cast, we can just have it be like a 0 prod project? or buyable
 - [ ] Do I even need to do it on a unit? arent all world spells just on units for convenience, I could make a UI button for it, in governor panel?
@@ -113,7 +163,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] implement diplo effects for each trait?
 
 ## Religion:
-- [ ] Investigate Religion as Removing/Allowing Policies (WC is dll bound, can only grant policy not take away in Lua. PolicyXP1 allows dark age policies, no more granular than 1 or 0) MODIFIER_MAJOR_PLAYERS_ADJUST_BANNED_POLICY
+- [x] Investigate Religion as Removing/Allowing Policies Unearthed working Effect, now just need to find a way to have it turn on or off with requirements as its on Player not City. But Bannor specific worked
+- [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
 
 ## Great People:
 - [ ] Golden Age modifiers, the whole extra Hammer/ extra gold per tile thing.
@@ -127,8 +178,268 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Tower of Mastery Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.
 ## Art Todo
 - [ ] Investigat Landmark / District changes to allow alt buildings. Like why do Wonders like ORzgarzh work in city centre? but buildings wont. also palgum exclamation cultures stuff.
-- [ ] Make new Buildings
-- [ ] Make new Units
+### Buildings
+#### Redo District Placement
+- [ ] Blasting Workshop(Workshop)
+- [ ] Breeding Pit (Ordu)
+- [ ] Adventurers Guild (GuildHall)
+- [ ] Chancel of Guardians (GrandMasters Chapel)
+- [ ] Command Post (Pagoda)
+- [ ] Courthouse (Quens BiblioTheque)
+- [ ] Grove (Grove)
+- [ ] Herbalist (MEETING_HOUSE)
+- [ ] Hunting Lodge (Marae)
+- [ ] Infirmary (Chancery)
+- [ ] Inn (Consulate)
+- [ ] Mages Guild (Madrasa)
+- [ ] Shipyard (Shipyard)
+- [ ] Shrine of the Champion (Kotoku-In)
+- [ ] Tavern (Meeting House)
+- [ ] Grigori Tavern (Foreign Ministry lol)
+- [ ] Arena (Arena)
+#### District Clutter
+- [ ] Aqueduct from Aqueduct District Clutter 
+- [ ] Tents from Entertainment Complex Clutter
+- [ ] Bath from Roman Bath District Clutter
+#### Redo Landmarks Wonder
+- [ ] Bazaar of Mammon (Grand Bazaar)
+#### Redo Landmarks Improvements
+- [ ] Cave of Ancestors (Giant Head)
+- [ ] Warrens (Cahokia Mound)
+- [ ] Elder Council (Mekewap)
+- [ ] Temple of the Hand (Monastery)
+#### Redo Landmarks Natural Wonders
+- [ ] Mercurian Gate (Delicate Arch)
+- [ ] 
+#### From elsewhere
+- [ ] Archery Range (JNR_TARGET_RANGE)
+- [ ] Thousand Slums (Kowloon Walled City?)
+- [ ] Governors Manor (JNR_MANSION)
+- [ ] Dungeon (JNR_PRISON)
+- [ ] Dwarven Smithy (JNR_MANUFACTORY?)
+- [ ] Harbor (JNR_HARBOR_CITY_CENTRE)
+- [ ] Lanun Harbor (JNR_HARBOR_VARIANT_CITY_CENTRE)
+- [ ] Siege Workshop (JNR_CASEMATES)
+- [ ] Smugglers Port (JNR_HAVEN)
+- [ ] Tower of Necromancy (LEANING_TOWER_OF_PISA)
+- [ ] Tower of Elements (Porcelain Tower)
+#### Could find someone elses
+- [ ] Alchemy Lab
+- [ ] Tailor
+- [ ] Gambling House
+- [ ] Desert Shrine
+- [ ] Smokehouse
+- [ ] Sculptors studio
+#### Check if exist
+- [ ] Citadel of Light
+#### Custom
+- [ ] Aquae Sucellus
+- [ ] Asylum
+- [ ] Celestial Compass
+- [ ] Freak Show
+- [ ] Planar Gate
+- [ ] Pallens Engine
+- [ ] Adularia Chamber
+- [ ] Hall of Mirrors
+- [ ] Jeweler
+- [ ] Reliquary
+- [ ] Code of Junil
+- [ ] Dancing Bear, Gorilla/Lion/Tiger/Wolf Cage, Spider pen
+- [ ] Human/Dwarf/Elf/Orc Cage
+- [ ] Grand Menagerie
+- [ ] Guild of Hammers (or some cool wonder)
+- [ ] Heroic Epic (Monument variant but bigger, cooler?)
+- [ ] National Epic (Monument variant but bigger, cooler?)
+- [ ] Nox Noctis (no idea what it looks like)
+- [ ] Song of Autumn (no idea)
+- [ ] Stigmata on the Unborn
+- [ ] Tablets of Bambur
+- [ ] The Necronomicon
+- [ ] Obsidian Gate
+- [ ] The Nexus
+- [ ] Pillar of Chains
+- [ ] Ride of the Nine Kings (no idea)
+- [ ] Soul Forge
+- [ ] Tower of Eyes
+#### Exclamation
+- [ ] Palgum
+#### Equipment Buildings
+- [ ] Crown of Akharien (Little square, its on a plinth in centre)
+- [ ] Infernal Grimoire
+- [ ] Mokka's Cauldron
+- [ ] Sylivens Lyre
+- [ ] Dragons Horde
+### Improvements
+- [ ] Hamlet
+- [ ] Cottage
+- [ ] Village
+- [ ] Town
+- [ ] Enclave
+- [ ] Pirate Cove
+- [ ] Pirate Harbor
+- [ ] Mana Well
+- [ ] Castle
+- [ ] Citadel
+- [ ] Workshop
+- [ ] Winery
+### Resources
+- [ ] Nightmare
+- [ ] Toad
+- [ ] Mana Tints ( and change to Gypsum)
+
+### Units
+#### Rebin
+- [x] Losha
+- [x] Vampire
+- [x] Vampire Lord
+- [x] Diseased Corpses
+- [x] Drown
+#### Retint
+- [x] Shadowrider
+#### Rejig
+- [ ] Firebow
+- [ ] Longbowman
+- [ ] Nightwatch
+- [ ] Freak
+- [ ] Supplies (cultist wagon + builder)
+- [ ] Eidolon
+- [ ] Govannon
+- [ ] Guybrush
+- [ ] Hemah
+- [ ] Loki
+- [ ] Mary Morbus
+- [ ] Rathus
+- [ ] Donal
+- [ ] Assassin
+- [ ] Ghost
+- [ ] Boarding Party
+- [ ] Marksman
+- [ ] Paramander
+- [ ] Divided Soul
+- [ ] Flagbearer
+- [ ] Harlequin
+- [ ] Mimic
+- [ ] Revelers
+- [ ] Son of the Inferno
+- [ ] Gibbon
+- [ ] Chalid
+- [ ] Courtesan
+- [ ] Shadow
+- [ ] Slave
+#### Rejig with Custom Culture
+- [ ] Rantine
+- [ ] Lizardman Ranger
+- [ ] Repentant Angel
+- [ ] Sphener
+- [ ] Angel
+- [ ] Angel of Death
+- [ ] Herald
+- [ ] Ophanim
+- [ ] Seraph
+- [ ] Valkyrie
+- [ ] Einherjar (alpha channel variant)
+- [ ] Imp
+- [ ] Balor
+- [ ] Chaos Marauder
+- [ ] Mardero
+- [ ] Meshabber
+- [ ] Alazkhan
+- [ ] Arthendain
+- [ ] Gilden
+- [ ] Maros
+- [ ] Orthus
+- [ ] Goblin Archer
+- [ ] Goblin Archer
+- [ ] Lizardman
+- [ ] Lizardman Assassin
+- [ ] Lizardman Druid
+- [ ] Ogre
+- [ ] Ogre Warchief
+- [ ] Dwarven Shadow
+- [ ] Yvain
+- [ ] Saverous
+#### Custom Parts 
+- [ ] Boar Rider
+- [ ] Bison Rider
+- [ ] Fyrdwell
+- [ ] Nyxkin
+- [ ] Hornguard
+- [ ] WolfRider
+- [ ] Camel Archer
+- [ ] TumTum
+- [ ] Stephanos
+- [ ] Buboes
+- [ ] Yersinia
+- [ ] Ars Moriendi
+- [ ] Hyborem
+- [ ] Fawn
+- [ ] Satyr
+- [ ] Soldier of Kilmorph
+- [ ] Dwarven Druid
+#### Custom Model
+- [ ] Hawk
+- [ ] Floating eye
+- [ ] Werewolf (w/ Ravenous/Greater variants)
+- [ ] Golems
+- [ ] Centaur (Variants: Charger, Lancer, Archer)
+- [ ] Guardian Vines
+- [ ] Treant
+- [ ] Generic Equipment Chest (keep all same for now)
+- [ ] Puppet
+- [ ] Succubus
+- [ ] Wilboman
+- [ ] Auric Ascended
+- [ ] Avatar of Wrath
+- [ ] Dragon (Abashi, Acheron, Drifa, Eurabatres)
+- [ ] Hellhound (Beast of Agares variant scaled)
+- [ ] Basium
+- [ ] Herne
+- [ ] Meteor
+- [ ] Minotaur
+- [ ] Sailors Dirge
+- [ ] Giant Tortoise (Variant War Tortoise)
+- [ ] Scorpion
+- [ ] Earth Elemental
+- [ ] Barnaxus
+#### Custom Model and Animations
+- [ ] Spider attackers (Giant Spider,  Baby Spider)
+- [x] Arm attack (Golems, Stygian Guard, treant Wait just copy Zombies)
+- [ ] Claw attack (Werewolves, Pit Beast)
+- [ ] Mouth Attackers (Griffon, Manticore)
+- [ ] Big Club attackers (Hill Giant, Ogres)
+#### Cultures
+- [ ] Elf
+- [ ] Dwarf
+- [ ] Infernal
+- [ ] Orc
+- [ ] Goblin
+- [ ] Lizardman
+- [ ] Frostling
+- [ ] Ogre
+- [ ] Angel
+- [ ] Skeleton (Skeleton, Wraith, Ars, Bone Golem, Lich)
+- [ ] Liquid (Tar demon, Water Elemental)
+#### VFX
+- [ ] Air Elemental  (We now know Ambient VFX is possible. Just need to hide unit (we have done this before accidentally by calling non-existant assets, but will the VFX stay?))
+- [ ] Fire Elemental
+- [ ] Fireball
+- [ ] Mistform
+- [ ] Severed Soul
+- [ ] Lightning Elemental
+- [ ] Pyre Zombie
+#### Partial VFX
+- [ ] Azer   Possible, look at Arthur sword, but its not an FX. unsure what it is as in blp. find another instance?
+- [ ] Ira
+- [ ] SandLion
+- [ ] Shade
+- [ ] Spectre
+- [ ] Pyre Zombie
+#### Unsure
+- [ ] Myconid
+#### Reuse
+- [ ] Druid as Eagle Warrior
+- [ ] Paramander as spearman
+- [ ] Shadowrider as Keshig?
 ## Design Todo
 - [ ] Display SuperSpecialists in the City UI somehow 
 - [ ] Reexamine if buildings path and districts makes sense.
@@ -138,8 +449,11 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - 
 ## Polish Todo
 - [ ] Trait Descriptions
+- [ ] Limit Tech Tree to Renaissance Era techs, and make tree look better 
 
-
+## Bugs
+- [ ] Why are civ colours always green blue?
+- [ ] Why does UnitPanel buttons always show on reload of game?
 # Done
 ##### Mercurians:
   Not directly playable, needs Wonder completed to summon, and then takes over that city. Needs to also be switchable to that player via ui prompt Units spawn on mercurian gate when Good units die, that whole headache as with Infernal
@@ -237,7 +551,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
   ##### Clan of embers
   - [x] -10% science, lie Babylon 50% reduction
   - [x] warrens building makes all units in city be doubled, like Scythia for light cavalry, but repeat for all promoClasses
-
+  - [ ] Give recon line units Amphibious and Marsh strength as Lizardmen. Also druid. And lacks Entangle.
   ##### Doviello
 
   ##### Calabim

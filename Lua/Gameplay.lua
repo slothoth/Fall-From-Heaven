@@ -23,20 +23,6 @@ function SlthLog(sMessage)
     end
 end
 
-function FreePromotionFromResource(playerID, unitID)
-    local pPlayer = Players[playerID];              -- Players[0]:GetResources():GetResourceAmount(12);
-    local resources = pPlayer:GetResources()
-    if not resources then return end                -- DealManager.GetPlayerDeals(0,1)[1]:FindItemByID(2):()
-    local iResource = resources:GetResourceAmount(19);      -- absolutely doesnt work on imported resources
-    local imported_coffee = pPlayer:GetProperty('LOC_RESOURCE_MANA_FIRE')
-    if not imported_coffee then imported_coffee = 0; end        -- EconomicManager:GetNumControlledResources(iPlayerId, iResourceId)
-    iResource = iResource + imported_coffee
-    if iResource > 1 then
-        local pUnit = pPlayer:GetUnits():FindID(unitID);
-        pUnit:GetExperience():SetPromotion(1)           -- choose relevant promotion index, currently scout
-    end
-end
-
 function GrantXP(playerId)
     local pPlayer = Players[playerId];
     for i, unit in pPlayer:GetUnits():Members() do
@@ -187,6 +173,14 @@ function InitCottage(x, y, improvementIndex, playerID)
         tImprovingImprovements[tostring(x) .. '_' .. tostring(y)] = {['x']=x, ['y']=y}
         pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
     end
+    local pPlot = Map.GetPlot(x,y);
+    local resourceIndex = pPlot:GetResourceType()
+	if not resourceIndex == GameInfo.Resources['RESOURCE_MANA'].Index then return; end
+    local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
+    print(iResourceToChangeTo)
+    if not iResourceToChangeTo then return; end
+    print('changing resource to ' .. tostring(iResourceToChangeTo))
+    ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);
 end
 
 function IncrementCottages(playerId)
@@ -231,6 +225,46 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
     end
 end
 
+function EventCollapse(x, y)
+    local pPlot = Map.GetPlot(x, y)
+    local tUnits = Map.GetUnitsAt(pPlot)
+    for idx, pUnit in tUnits do
+        pUnit:ChangeDamage(20)
+        if pUnit:GetDamage() < 1 then           -- is it at 0 or at 100?
+            UnitManager.Kill(pUnit)
+        end
+    end
+end
+
+tTribeDeck = {TRIBE_CLAN_SCORPION = 1, TRIBE_CLAN_SKELETON = {[1]=EventCollapse},
+              TRIBE_CLAN_LIZARDMEN = {[1]=EventCollapse}}
+function RemovedBarbCamp(x, y, owningPlayerID)
+    print('Owning playerID is ' .. tostring(owningPlayerID))
+    -- hopefully this is unneeded
+    local pPlot = Map.GetPlot(x, y)
+    local owner = pPlot:GetOwner()
+    print('Plot owner is ' .. tostring(owner))
+    if not owningPlayerID then
+        -- draw from deck of events
+        local pBarbarianManager  = Game.GetBarbarianManager();
+	    local tribeIndex = pBarbarianManager:GetTribeIndexAtLocation(x, y);
+        local tribeType = pBarbarianManager:GetTribeType(tribeIndex)
+        local tTribeEvents = tTribeDeck['tribeType']            --TRIBE_CLAN_SKELETON
+        local lengthTribeEvents = table.count(tTribeEvents)
+        local dice_roll = math.random(1, lengthTribeEvents)
+        local fEvent = tTribeEvents[dice_roll]
+        fEvent(x, y)
+        -- do event. Sometimes we reinstantiate barb camp
+    end
+end
+
+-- Great general on Mil Strategy
+-- Great Bard on Drama
+-- there are others im pretty sure
+-- function OnTechnologyGrantFirst()  end
+
+-- function OnCivicGrantFirst() end
+
 function onStart()
     tImprovementsProgression = {
         [GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
@@ -248,16 +282,40 @@ function onStart()
         [GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index]       = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index}
     tImprovementsCivProgression = {
         [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index}
+
+
+    tManaNodeMapper = {
+        [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Index]         = GameInfo.Resources['RESOURCE_MANA_AIR'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Index]        = GameInfo.Resources['RESOURCE_MANA_BODY'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Index]       = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Index]       = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Index]       = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Index] = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Index]     = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Index]        = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Index]         = GameInfo.Resources['RESOURCE_MANA_LAW'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Index]        = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Index]   = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Index]        = GameInfo.Resources['RESOURCE_MANA_MIND'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Index]      = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Index]      = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Index]      = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Index]         = GameInfo.Resources['RESOURCE_MANA_SUN'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Index]       = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
+    }
+    GameEvents.PlayerTurnStarted.Add(GrantXP);
+    -- GameEvents.PlayerTurnStarted.Add(checkDeals);
+
+    Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
+    Events.ImprovementAddedToMap.Add(InitCottage)
+    GameEvents.PlayerTurnStarted.Add(IncrementCottages);
+
+    Events.PlayerResourceChanged.Add(UpdateResource)
+
+    -- Events.CivicCompleted.Add(OnCivicGrantFirst)
+    -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
+    Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
 end
 
 onStart()
 
-GameEvents.PlayerTurnStarted.Add(GrantXP);
--- GameEvents.PlayerTurnStarted.Add(checkDeals);
-GameEvents.UnitCreated.Add(FreePromotionFromResource);
-
-Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
-Events.ImprovementAddedToMap.Add(InitCottage)
-GameEvents.PlayerTurnStarted.Add(IncrementCottages);
-
-Events.PlayerResourceChanged.Add(UpdateResource)

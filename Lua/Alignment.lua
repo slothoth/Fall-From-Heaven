@@ -1,4 +1,4 @@
-tLeaderAlignmentMap = {
+local tLeaderAlignmentMap = {
     ['SLTH_LEADER_ALEXIS']=0, ['SLTH_LEADER_FLAUROS']=0, ['SLTH_LEADER_KEELYN']=0, ['SLTH_LEADER_PERPENTACH']=0,
     ['SLTH_LEADER_HYBOREM']=0, ['SLTH_LEADER_TEBRYN']=0, ['SLTH_LEADER_OS-GABELLA']=0, ['SLTH_LEADER_JONAS']=0,
     ['SLTH_LEADER_SHEELBA']=0, ['SLTH_LEADER_CHARADON']=0, ['SLTH_LEADER_MAHALA']=0,
@@ -15,20 +15,20 @@ tLeaderAlignmentMap = {
     ['SLTH_LEADER_GARRIM']=2, ['SLTH_LEADER_BEERI']=2
 }
 
-tReligionFromGood = {['RELIGION_ISLAM']=1, ['RELIGION_HINDUISM']=1}
-tReligionFromEvil = {['RELIGION_JUDAISM']=1, ['RELIGION_CONFUCIANISM']=1}
-tReligionForceAlignment = {['RELIGION_PROTESTANTISM']=2, ['RELIGION_BUDDHISM']=0}
+local tReligionFromGood = {['RELIGION_ISLAM']=1, ['RELIGION_HINDUISM']=1}
+local tReligionFromEvil = {['RELIGION_JUDAISM']=1, ['RELIGION_CONFUCIANISM']=1}
+local tReligionForceAlignment = {['RELIGION_PROTESTANTISM']=2, ['RELIGION_BUDDHISM']=0}
 
-tReligionAlignment = {
+local tReligionAlignment = {
     ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
     ['RELIGION_CATHOLICISM']=1,
     ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
-tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
+local tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
 
 -- pPlayerUnits:SetBuildDisabled(m_ePlagueDoctorUnit, true);
 
-tReligousCivicTrigger = {
+local tReligousCivicTrigger = {
 [GameInfo.Civics['CIVIC_ORDERS_FROM_HEAVEN'].Index]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
 [GameInfo.Civics['CIVIC_HONOR'].Index]=GameInfo.Religions["RELIGION_JUDAISM"].Index,
 [GameInfo.Civics['CIVIC_WAY_OF_THE_EARTHMOTHER'].Index]=GameInfo.Religions["RELIGION_CONFUCIANISM"].Index,
@@ -37,7 +37,7 @@ tReligousCivicTrigger = {
 [GameInfo.Civics['CIVIC_DECEPTION'].Index]=GameInfo.Religions["RELIGION_ISLAM"].Index,
 [GameInfo.Civics['CIVIC_CORRUPTION_OF_SPIRIT'].Index]=GameInfo.Religions["RELIGION_BUDDHISM"].Index}
 
-tReligions = {
+local tReligions = {
     [GameInfo.Religions["RELIGION_PROTESTANTISM"].Index] = {
         [1] = GameInfo.Beliefs["BELIEF_RELIGIOUS_IDOLS"].Hash,
         [2] = GameInfo.Beliefs["BELIEF_LAY_MINISTRY"].Hash },
@@ -60,9 +60,10 @@ tReligions = {
         [1] = GameInfo.Beliefs["BELIEF_INITIATION_RITES"].Hash,
         [2] = GameInfo.Beliefs["BELIEF_CROSS_CULTURAL_DIALOGUE"].Hash } }
 
-tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
+local tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
-iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
+local iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
+local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 
 
 function onReligionSwitch(sReligion)                -- TODO not attached to anything currently
@@ -73,7 +74,7 @@ function onReligionSwitch(sReligion)                -- TODO not attached to anyt
         if iCurrentAlignment == 2 then
             iNewAlignment = tReligionFromGood[sReligion]
         elseif iCurrentAlignment==0 then
-            iNewAlignment = tReligionFromGood[sReligion]
+            iNewAlignment = tReligionFromEvil[sReligion]
         end
     end
     if iNewAlignment then
@@ -154,12 +155,39 @@ end
 function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     if buildingID == GameInfo.Buildings['BUILDING_PALACE'].Index then
         local pPlayer = Players[playerID]
-        if PlayerConfigurations[playerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
+        local pConfig = PlayerConfigurations[playerID]
+        if pConfig:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
+            AdjustArmageddonCount(5)            -- Compact broken
         end
-        local iAlignment = pPlayer:GetProperty('alignment') or 0
+        local iAlignment = pPlayer:GetProperty('alignment') or 0                                -- set player alignment
         local pPlot = Map.GetPlotByIndex(plotID)
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
+
+        if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
+            print('city is city state level')
+            local iGameTurn = Game.GetCurrentGameTurn()         -- five turns to settle a city state
+            print('game turn is')
+            print(iGameTurn)
+            if iGameTurn > 3 then
+                local pAllMajors = PlayerManager.GetAliveMajorIDs();            -- just hating on all civs
+                local pDiplo = pPlayer:GetDiplomacy()
+                for k, iterPlayerID in ipairs(pAllMajors) do
+                    if (pPlayer:GetID() ~= iterPlayerID) then
+                        pDiplo:SetHasMet(iterPlayerID);
+                        pDiplo:DeclareWarOn(iterPlayerID, WarTypes.FORMAL_WAR, true);
+                        pDiplo:NeverMakePeaceWith(iterPlayerID);
+                        local pOtherPlayer = Players[iterPlayerID];
+                        if(pOtherPlayer ~= nil) then
+                            local pOtherDiplo = pOtherPlayer:GetDiplomacy();
+                            if(pOtherDiplo ~= nil) then
+                                pOtherDiplo:NeverMakePeaceWith(playerID);
+                            end
+                        end
+                    end
+                end
+            end
+        end
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
         local iBasiumPlayerID = Game:GetProperty('Mercurian')
         if playerID == iBasiumPlayerID then return end              -- city transfer rebuilds the wonder so stops recursive calls
@@ -173,6 +201,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
                 GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
             end
         end
+        AdjustArmageddonCount(5)            -- Compact broken
     end
 end
 
@@ -244,13 +273,97 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             Game:SetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS', 1)
             local pPlot = pLeastReligionsCity:GetPlot()
             pPlot:SetProperty(tostring(iReligion)..'_HOLY_CITY', 1)
+            if iReligion == iReligionVeil then
+                AdjustArmageddonCount(5)
+            end
         end
     end
     if civicIndex == iINFERNAL_PACT_INDEX then
         local iInfernalPlayerId = Game:GetProperty('Infernal')
-        -- transfer city here. Grant all techs of previous civ? Make good city location?
-        GrantTechParity(iInfernalPlayerId, playerID)
-        GrantCultureParity(iInfernalPlayerId, playerID)
+        -- find strongest city state. what if no cs
+        local tpMinorCivs = PlayerManager.GetAliveMinors()
+        local pCity
+        local iCurrentCityPop
+        local iBestCityPop = 0
+        local pBestCity
+        for idx, pPlayer in ipairs(tpMinorCivs) do
+            pCity = pPlayer:GetCities():GetCapitalCity()
+            if pCity then
+                iCurrentCityPop = pCity:GetPopulation()
+                if iCurrentCityPop > iBestCityPop then
+                    pBestCity = pCity
+                    iBestCityPop = pCity:GetPopulation()
+                end
+            end
+        end
+        if pBestCity then
+            CityManager.TransferCity(pCity, iInfernalPlayerId, -1821839791)     -- enum CityTransferTypes.BY_GIFT
+            GrantTechParity(iInfernalPlayerId, playerID)
+            GrantCultureParity(iInfernalPlayerId, playerID)
+        else
+            print('no city state found. PANIC! place a city at a tribe clan a decent spot far away.')
+            -- iter over plots,
+            local iW, iH = Map.GetGridSize();
+            local tCampTiles = {}
+            local iIMPROVEMENT_BARB_CAMP = GameInfo.Improvements['IMPROVEMENT_BARBARIAN_CAMP'].Index
+            for x = 0, iW - 1 do
+                for y = 0, iH - 1 do
+                    local i = y * iW + x;
+                    local pPlot = Map.GetPlotByIndex(i);
+                    local iPlotImprovement = pPlot:GetImprovementType()
+                    if iPlotImprovement then
+                        if iPlotImprovement == iIMPROVEMENT_BARB_CAMP then
+                            tCampTiles[i] = pPlot
+                        end
+                    end
+                end
+            end
+            print(table.count(tCampTiles))
+            -- filter for the best camp
+            --IsValidFoundLocation
+            local aPlayers = PlayerManager.GetAlive();
+            local more_than_four_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4)
+            local iInfernalPlot
+            local iLeastWaterTiles = 20
+            local iCurrentWaterTiles
+            print(table.count(more_than_four_plots))
+            if table.count(more_than_four_plots) > 0 then
+                print('some 5+ plots exist')
+                for idx, pPlot in pairs(more_than_four_plots) do
+                    -- count coast within 3 tiles. choose smallest
+                    iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
+                    print(iCurrentWaterTiles)
+                    if iCurrentWaterTiles < iLeastWaterTiles then
+                        print('found better')
+                        iInfernalPlot = pPlot
+                        iLeastWaterTiles = iCurrentWaterTiles
+                    end
+                end
+            end
+            if not iInfernalPlot then
+                local four_range_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4, true)
+                if table.count(four_range_plots) > 0 then
+                    print('some 4 plots exist')
+                    for idx, pPlot in pairs(four_range_plots) do
+                        iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
+                        print(iCurrentWaterTiles)
+                        if iCurrentWaterTiles < iLeastWaterTiles then
+                            iInfernalPlot = pPlot
+                            iLeastWaterTiles = iCurrentWaterTiles
+                        end
+                    end
+                end
+            end
+            if iInfernalPlot then
+                local pInfernal = Players[iInfernalPlayerId]
+                local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
+                pInfernal:GetCities():Create(iCityMakeX, iCityMakeY)
+                GrantTechParity(iInfernalPlayerId, playerID)
+                GrantCultureParity(iInfernalPlayerId, playerID)
+            else
+                print('not yet implemented random city outside of camps')
+            end
+        end
     end
 end
 
@@ -287,6 +400,15 @@ function GrantCultureParity(iPlayerGrantedCivics, iPlayerCivicGranter)
     end
 end
 
+function AdjustArmageddonCount(iAmount)
+    local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
+    if iArmageddonCount then
+        Game.SetProperty('ARMAGEDDON', iArmageddonCount + iAmount)
+    else
+        print('Armageddon count not initilizaed!')
+    end
+end
+
 function InitiateReligions()
     local aPlayers = PlayerManager.GetAliveMinors();            -- will minors work? if so need 7 in game
     local pGameReligion = Game.GetReligion();
@@ -302,6 +424,47 @@ function InitiateReligions()
         pReligion:ChangeNumBeliefsEarned(1);
         iMinorPlayer = iMinorPlayer + 1
     end
+end
+
+function FindPlotsAtRange(tCampTiles, aPlayers, iUniqueRange, bIsEquals)
+    local tPlotsAtRange = {}
+    for iPlotID, pPlot in pairs(tCampTiles) do
+        local iCampX = pPlot:GetX();
+        local iCampY = pPlot:GetY();
+        for loop, pPlayer in pairs(aPlayers) do
+            local iPlayer = pPlayer:GetID();
+            local pPlayerCities = pPlayer:GetCities();
+            for i, pLoopCity in pPlayerCities:Members() do
+                local iDistance = Map.GetPlotDistance(iCampX, iCampY, pLoopCity:GetX(), pLoopCity:GetY());
+                print(iDistance)
+                if bIsEquals then
+                    if (iDistance == iUniqueRange) then
+                        tPlotsAtRange[iPlotID] = pPlot
+                    end
+                else
+                    if (iDistance > iUniqueRange) then
+                        tPlotsAtRange[iPlotID] = pPlot
+                    end
+                end
+            end
+        end --]]
+    end
+    return tPlotsAtRange
+end
+
+function countPlotWithinThreeCoast(pPlot)
+    local iWaterCount = 0
+	local plotX = pPlot:GetX();
+	local plotY = pPlot:GetY();
+	for dx = -3, 3 - 1, 1 do
+		for dy = -3, 3 - 1, 1 do
+			local otherPlot = Map.GetPlotXYWithRangeCheck(plotX, plotY, dx, dy, 3);
+			if(otherPlot and otherPlot:IsWater()) then
+				iWaterCount = iWaterCount + 1
+			end
+		end
+	end
+    return iWaterCount
 end
 function onStart()
     for iPlayerID, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
@@ -321,6 +484,9 @@ function onStart()
         if sLeaderName == 'SLTH_LEADER_BASIUM' then
             Game:SetProperty('Mercurian', iPlayerID)
         end
+    end
+    if not Game.GetProperty('ARMAGEDDON') then          -- initalize armageddon
+        Game.SetProperty('ARMAGEDDON',  0)
     end
 end
 

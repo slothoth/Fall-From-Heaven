@@ -6,7 +6,7 @@
     <Created>1714825549</Created>
     <Teaser>Ports Kael's excellent Fall From Heaven mod to Civ VI</Teaser>
     <Authors>Slothoth</Authors>
-    <SpecialThanks>SailorCat,Fuzzle and MC for their help on discord with SQL. Flactine </SpecialThanks>
+    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi, SeelingCat and Sukritact for their great reference mods for Lua.</SpecialThanks>
     <Homepage>https://github.com/slothoth/civvitests</Homepage>
     <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>
@@ -27,14 +27,19 @@
       <File>Core/frontend_config.sql</File>
     </UpdateDatabase>
     <UpdateText id="UpdateText">
-      <File>Core/long_localization.sql</File>
-      <File>Core/medium_localization.sql</File>
-      <File>Core/short_loc.sql</File>
       <File>Localisation/frontend.sql</File>
+      <File>Localisation/long_localization.sql</File>
+      <File>Localisation/medium_localization.sql</File>
+      <File>Localisation/short_loc.sql</File>
+      <File>Localisation/promo_loc.sql</File>
+      <File>Localisation/Neat.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
+    <UpdateColors id="FFH_UpdateColorsFrontend">
+      <File>Core/Civilization_Colors.sql</File>
+    </UpdateColors>
    </FrontEndActions>
   <UpdateIcons id="Icons">
     <File>Icons.xml</File>
@@ -43,6 +48,9 @@
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
+    <UpdateColors id="FFH_UpdateColorsBackend">
+      <File>Core/Civilization_Colors.sql</File>
+    </UpdateColors>
     <UpdateDatabase id="Deletes_first">
       <Properties>
         <LoadOrder>95</LoadOrder>
@@ -85,7 +93,8 @@
       <File>Core/Civilizations/Winterborn/Illians.sql</File>
       <File>Core/Civilizations/Winterborn/Doviello.sql</File>
       <File>Core/Civilizations/BeastRaces/Clan.sql</File>
-      <!--File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File-->
+      <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
+      <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
       <File>Core/Religions.sql</File>
       <File>Core/Governments.sql</File>
       <File>Core/Abilities.sql</File>
@@ -100,9 +109,11 @@
       <File>Core/National_Units.sql</File>
       <File>Core/CombatBuffs.sql</File>
       <File>Core/CivPolishing.sql</File>
-      <File>Core/Lua_support/Mana_support.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
+      <File>Core/BarbarianClans.sql</File>
+      <File>Core/Equipment.sql</File>
+      <File>Core/Globals.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -111,9 +122,10 @@
       <File>Core/ResourceBuffs.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
-      <File>Core/long_localization.sql</File>
-      <File>Core/medium_localization.sql</File>
-      <File>Core/short_loc.sql</File>
+      <File>Localisation/long_localization.sql</File>
+      <File>Localisation/medium_localization.sql</File>
+      <File>Localisation/short_loc.sql</File>
+      <File>Localisation/promo_loc.sql</File>
       <File>Localisation/Neat.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
@@ -124,6 +136,7 @@
       <File>Core/Civilizations/Dwarves/Khazad.lua</File>
       <File>Lua/Promotions.lua</File>
       <File>Lua/Alignment.lua</File>
+      <File>Lua/Equipment.lua</File>
       <!--File>Lua/Combat.lua</File-->
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
@@ -188,15 +201,46 @@
             <LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
+        <ReplaceUIScript id="ReplaceUI_UnitPanel">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>UnitPanel</LuaContext>
+            <LuaReplace>UI/UnitPanel_skip_promos.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <!--ReplaceUIScript id="ReplaceUI_BarbClanPopup_BaseFFH">
+        <Properties>
+            <LoadOrder>10950</LoadOrder>
+            <LuaContext>TreatWithTribePopup</LuaContext>
+            <LuaReplace>UI/Null.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript-->
+    <ImportFiles id="ImportUIFiles">
+      <Properties>
+        <LoadOrder>901</LoadOrder>
+      </Properties>
+      <File>UI/UnitPromotionPopup.lua</File>
+      <File>UI/UnitPromotionPopup.xml</File>
+      <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
+      <File>UI/TreatWithTribePopup.lua</File>
+    </ImportFiles>
+    <!--ImportFiles id="ImportMapGenOverrideFiles">
+      <Properties>
+        <LoadOrder>901</LoadOrder>
+      </Properties>
+      <File>MapUtilities.lua</File>
+    </ImportFiles-->
     <UpdateIcons id="Icons">
       <File>Icons.xml</File>
     </UpdateIcons>
   </InGameActions>
   <Files>
-    <File>Core/long_localization.sql</File>
-    <File>Core/medium_localization.sql</File>
-    <File>Core/short_loc.sql</File>
+    <File>Localisation/long_localization.sql</File>
+    <File>Localisation/medium_localization.sql</File>
+    <File>Localisation/short_loc.sql</File>
+    <File>Localisation/promo_loc.sql</File>
     <File>Localisation/Neat.sql</File>
+    <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
     <File>Core/Religions.sql</File>
@@ -215,7 +259,6 @@
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
     <File>Core/National_Units.sql</File>
-    <File>Core/Lua_support/Mana_support.sql</File>
     <File>Core/Civilizations/Amurites.sql</File>
     <File>Core/Civilizations/Balseraphs.sql</File>
     <File>Core/Civilizations/Bannor.sql</File>
@@ -243,7 +286,11 @@
     <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
     <File>Core/Civilizations/BeastRaces/Clan.sql</File>
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
+    <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
     <File>Core/CombatBuffs.sql</File>
+    <File>Core/BarbarianClans.sql</File>
+    <File>Core/Equipment.sql</File>
+    <File>Core/Globals.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
@@ -252,9 +299,11 @@
     <File>Lua/Specialists.lua</File>
     <File>Lua/Promotions.lua</File>
     <File>Lua/Alignment.lua</File>
+    <File>Lua/Equipment.lua</File>
     <File>Lua/Combat.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
+    <!--File>MapUtilities.lua</File-->
     <File>Artdefs/Units.artdef</File>
     <File>ArtDefs/Buildings.artdef</File>
     <File>Artdefs/FallbackLeaders.artdef</File>
@@ -273,5 +322,11 @@
     <File>UI/TechTree_support.lua</File>
     <File>UI/TechTree_overrides.lua</File>
     <File>UI/ResearchChooser_overrides.lua</File>
+    <File>UI/UnitPromotionPopup.lua</File>
+    <File>UI/UnitPromotionPopup.xml</File>
+    <File>UI/UnitPanel_skip_promos.lua</File>
+    <File>UI/Null.lua</File>
+    <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
+    <File>UI/TreatWithTribePopup.lua</File>
   </Files>
 </Mod>
