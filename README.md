@@ -243,7 +243,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] 
 #### From elsewhere
 - [ ] Archery Range (JNR_TARGET_RANGE)
-- [ ] Thousand Slums (Kowloon Walled City?)
 - [ ] Governors Manor (JNR_MANSION)
 - [ ] Dungeon (JNR_PRISON)
 - [ ] Dwarven Smithy (JNR_MANUFACTORY?)
@@ -253,6 +252,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Smugglers Port (JNR_HAVEN)
 - [ ] Tower of Necromancy (LEANING_TOWER_OF_PISA)
 - [ ] Tower of Elements (Porcelain Tower)
+- [ ] Thousand Slums (Kowloon Walled City?)
+
 #### Could find someone elses
 - [ ] Alchemy Lab
 - [ ] Tailor

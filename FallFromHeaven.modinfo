@@ -18,6 +18,12 @@
     <Criteria id="Expansion2">
       <GameCoreInUse>Expansion2</GameCoreInUse>
     </Criteria>
+    <Criteria id="PorcelainTowerNotOn">
+      <ModInUse inverse="1">89a948de-5e48-4608-81a4-c52bd68bc4eb</ModInUse>
+    </Criteria>
+    <Criteria id="LeaningTowerNotOn">
+	  <ModInUse inverse="1">d1c3ef16-00ed-4d72-a468-1e584fdb85ad</ModInUse>
+	</Criteria>
   </ActionCriteria>
   <FrontEndActions>
     <UpdateDatabase id="config">
@@ -55,6 +61,19 @@
         <LoadOrder>95</LoadOrder>
       </Properties>
       <File>Core/Delete_Update.sql</File>
+      <File>Core/AbsorbDeletes.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="mod_compatPorcelain" criteria="PorcelainTowerNotOn">
+      <Properties>
+        <LoadOrder>98</LoadOrder>
+      </Properties>
+      <File>Core/Absorb_deletes/Porcelain.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="mod_compatLeaning" criteria="LeaningTowerNotOn">
+      <Properties>
+        <LoadOrder>98</LoadOrder>
+      </Properties>
+      <File>Core/Absorb_deletes/Leaning.sql</File>
     </UpdateDatabase>
     <UpdateDatabase id="Gameplay_first">
       <Properties>
@@ -311,6 +330,9 @@
     <File>Core/BarbarianClans.sql</File>
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
+    <File>Core/AbsorbDeletes.sql</File>
+    <File>Core/Absorb_deletes/Leaning.sql</File>
+    <File>Core/Absorb_deletes/Porcelain.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>

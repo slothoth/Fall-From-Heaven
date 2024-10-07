@@ -46,7 +46,7 @@ INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 INSERT INTO BuildingReplaces(CivUniqueBuildingType, ReplacesBuildingType) VALUES
 ('SLTH_BUILDING_NULL_CIVILIZATION_DOVIELLO_ALCHEMY_LAB', 'BUILDING_RESEARCH_LAB'),
 ('SLTH_BUILDING_NULL_CIVILIZATION_DOVIELLO_LIBRARY', 'BUILDING_LIBRARY'),
-('SLTH_BUILDING_NULL_CIVILIZATION_DOVIELLO_MAGE_GUILD', 'BUILDING_MADRASA');
+('SLTH_BUILDING_NULL_CIVILIZATION_DOVIELLO_MAGE_GUILD', 'BUILDING_MAGE_GUILD');
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
 ('SLTH_UNIT_LUCIAN', 'LOC_SLTH_UNIT_LUCIAN_NAME', '2', '1', '19', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '60', '0', 'LOC_SLTH_UNIT_LUCIAN_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_LUCIAN', '1', 'PROMOTION_CLASS_MELEE', NULL, NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0'),
