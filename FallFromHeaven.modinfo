@@ -27,12 +27,11 @@
       <File>Core/frontend_config.sql</File>
     </UpdateDatabase>
     <UpdateText id="UpdateText">
-      <File>Localisation/frontend.sql</File>
-      <File>Localisation/long_localization.sql</File>
-      <File>Localisation/medium_localization.sql</File>
-      <File>Localisation/short_loc.sql</File>
-      <File>Localisation/promo_loc.sql</File>
-      <File>Localisation/Neat.sql</File>
+      <File>Localisation/loc_playeritems.sql</File>
+      <File>Localisation/loc_buildings.sql</File>
+      <File>Localisation/loc_civ_leader.sql</File>
+      <File>Localisation/loc_traits.sql</File>
+      <File>Localisation/loc_units.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
@@ -122,11 +121,21 @@
       <File>Core/ResourceBuffs.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
-      <File>Localisation/long_localization.sql</File>
-      <File>Localisation/medium_localization.sql</File>
-      <File>Localisation/short_loc.sql</File>
-      <File>Localisation/promo_loc.sql</File>
-      <File>Localisation/Neat.sql</File>
+      <File>Localisation/loc_abilities.sql</File>
+      <File>Localisation/loc_buildings.sql</File>
+      <File>Localisation/loc_cities_great_people_names.sql</File>
+      <File>Localisation/loc_civ_leader.sql</File>
+      <File>Localisation/loc_equipment.sql</File>
+      <File>Localisation/loc_pedia.sql</File>
+      <File>Localisation/loc_policies.sql</File>
+      <File>Localisation/loc_promotions.sql</File>
+      <File>Localisation/loc_techs_civics.sql</File>
+      <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
+      <File>Localisation/loc_traits.sql</File>
+      <File>Localisation/loc_nulls.sql</File>
+      <File>Localisation/loc_units.sql</File>
+      <File>Localisation/loc_beliefs.sql</File>
+      <File>Localisation/loc_barbs.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
       <File>Lua/Maintenance.lua</File>
@@ -235,11 +244,22 @@
     </UpdateIcons>
   </InGameActions>
   <Files>
-    <File>Localisation/long_localization.sql</File>
-    <File>Localisation/medium_localization.sql</File>
-    <File>Localisation/short_loc.sql</File>
-    <File>Localisation/promo_loc.sql</File>
-    <File>Localisation/Neat.sql</File>
+    <File>Localisation/loc_abilities.sql</File>
+    <File>Localisation/loc_barbs.sql</File>
+    <File>Localisation/loc_beliefs.sql</File>
+    <File>Localisation/loc_buildings.sql</File>
+    <File>Localisation/loc_cities_great_people_names.sql</File>
+    <File>Localisation/loc_civ_leader.sql</File>
+    <File>Localisation/loc_equipment.sql</File>
+    <File>Localisation/loc_nulls.sql</File>
+    <File>Localisation/loc_pedia.sql</File>
+    <File>Localisation/loc_policies.sql</File>
+    <File>Localisation/loc_promotions.sql</File>
+    <File>Localisation/loc_techs_civics.sql</File>
+    <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
+    <File>Localisation/loc_traits.sql</File>
+    <File>Localisation/loc_units.sql</File>
+    <File>Localisation/loc_playeritems.sql</File>
     <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
