@@ -191,7 +191,7 @@ INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES
 
 INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_ABILITY_CHARISMATIC_MORE_XP', 'CLASS_ALL_UNITS'),
-('SLTH_ABILITY_DEFENDER_GRANT_HOMELAND', 'CLASS_ALL_UNITS'),    -- its technically more restrictive but oh well
+('SLTH_ABILITY_HOMELAND', 'CLASS_ALL_UNITS'),    -- its technically more restrictive but oh well
 ('SLTH_ABILITY_SUMMONER', 'CLASS_ALL_UNITS'),
 ('SLTH_ABILITY_POTENCY', 'CLASS_DISCIPLE');
 

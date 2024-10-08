@@ -140,7 +140,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Hard but minor:
 - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 - [ ] Hall of Mirrors clone spawning
-- [ ] Do we swap Amenities and Housing as Amenities and Housing?
 
 ## CivHard
 - [ ] 4 tile workable cities. CypRyan and Phantagonist versions, Phantagonist less buggy. But how to make single civ?
@@ -165,7 +164,10 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Religion:
 - [x] Investigate Religion as Removing/Allowing Policies Unearthed working Effect, now just need to find a way to have it turn on or off with requirements as its on Player not City. But Bannor specific worked
 - [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
-
+- [ ] Religion specific policies
+- [ ] Non-lua format where EFFECT_ADJUST_IMPROVEMENT_PROPERTY might be on plot as no Lua access? could then check the plot property the vampire castle t4 enables PROPERTY_AIRLIFT on vampire castle tiles. How could i then port it to city plot though, hmmm, the colletion is set as improvement, could set as capital city?
+- [x] POLICY ban framework for all state religions
+- [ ] religion spread within civ tracker in lua for plot_prop req
 ## Great People:
 - [ ] Golden Age modifiers, the whole extra Hammer/ extra gold per tile thing.
 - [ ] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
@@ -446,9 +448,9 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] come up with eurekas
 - [ ] Use eurekas as proxies for techs where soft requirements (i.e. Trade uses something from Sailing or Horseback riding to Eureka? problem is has to be only opposing )
 - [ ] City States didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
-- 
+- [ ] Do we swap Amenities and Housing as Amenities and Housing?
 ## Polish Todo
-- [ ] Trait Descriptions
+- [x] Trait Descriptions
 - [ ] Limit Tech Tree to Renaissance Era techs, and make tree look better 
 
 ## Bugs
