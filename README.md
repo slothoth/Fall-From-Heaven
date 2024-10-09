@@ -180,6 +180,34 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Tower of Mastery Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.
 ## Art Todo
 - [ ] Investigat Landmark / District changes to allow alt buildings. Like why do Wonders like ORzgarzh work in city centre? but buildings wont. also palgum exclamation cultures stuff.
+## Cultures Todo
+- [ ] Cultures.artdef. Map buildings and units.
+- Would be lovely if our asset budget lets us use Leugi's City Styles, for doviello, clan , hippus
+- [ ] Unique unit Cultures: Clan, Infernal, Kuriotates(Centaurs)
+- [ ] Minimal cultures: Mercurian (just do angel units, humans can be mercurian recruits), Dwarves, Elves, Dark Elves, Calabim(pale)
+- [ ] Doviello Barbarian units.
+- [x] Amurite buildings, (AncientEarth -> Mughal -> Colonial), MUGHAL
+- [x] Balseraphs (AncientEarth -> Indonesian -> Colonial), SOUTHAM
+- [x] Bannor (AncientEarth -> Scottish -> Colonial), AFRICAN
+- [x] Calabim (AncientEarth -> DEFAULT -> Colonial), EURO
+- [x] Elohim (AncientEarth -> EastAsian -> Colonial), ASIAN
+- [x] Grigori (AncientEarth -> Baltic -> Colonial), MEDIT
+- [ ] Hippus ((AncientEarth -> Mapuche -> Colonial) ASIAN    cant find mapuche building culture
+- [ ] Infernal (new building style?) for now (AncientEarth -> ), CUSTOM
+- [x] Kuriotates (AncientEarth -> America -> Colonial), CUSTOM MEDIT
+- [x] Lanun (AncientWood -> Brazil -> Colonial), MEDIT
+- [x] Malakim (AncientBrick - > SouthAfrican -> Colonial), AFRICAN
+- [x] Mercurian (AncientBrick -> Mediterranean -> Colonial), EURO
+- [x] Sheaim (AncientEarth -> SouthAmerican -> Colonial), INDIAN
+- [x] Sidar (AncientEarth -> Baltic -> Colonial), EURO
+- [ ] Khazad (AncientBrick -> NorthAfrican -> Colonial), CUSTOM EURO
+- [ ] Luichuirp (AncientBrick -> NorthAfrican -> Colonial), CUSTOM EURO
+- [ ] Ljosalfar (AncientWood -> Mediterranean -> Colonial), CUSTOM EURO
+- [ ] Svartalfar (AncientWood -> Mediterranean -> Colonial), CUSTOM EURO
+- [ ] Doviello (AncientEarth -> Cree -> Colonial), BARB  Cree is not working btw
+- [x] Illian (AncientWood -> Scottish -> Colonial), EURO
+- [ ] Clan of Embers (AncientEarth -> Cree -> Colonial), CUSTOM
+- [ ] Change barbarians to Clan orc ethnicity
 ### Buildings
 #### Redo District Placement
 - [ ] Blasting Workshop(Workshop)

@@ -15,6 +15,7 @@
 			<ConsumerName text="Units"/>
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
+				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="Unit"/>
@@ -35,6 +36,8 @@
 			<ConsumerName text="Landmarks"/>
 			<ArtDefDependencyPaths>
 				<Element text="Resources.artdef"/>
+				<Element text="Cultures.artdef"/>
+				<Element text="Buildings.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="CityBuildings"/>
@@ -243,7 +246,11 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Cultures"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Units.artdef"/>
+				<Element text="Civilizations.artdef"/>
+				<Element text="Cultures.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
@@ -257,7 +264,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Improvements"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Cultures.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
@@ -280,6 +289,7 @@
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
 				<Element text="Resources.artdef"/>
+				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
@@ -394,6 +404,7 @@
 			<ArtDefPath text="Units.artdef"/>
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
+				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 		<Element>
