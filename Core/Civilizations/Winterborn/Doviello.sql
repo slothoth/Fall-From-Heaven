@@ -3,6 +3,14 @@ INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, Random
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('SLTH_LEADER_CHARADON', 'LOC_SLTH_LEADER_CHARADON_NAME', 'LEADER_DEFAULT'),
 ('SLTH_LEADER_MAHALA', 'LOC_SLTH_LEADER_MAHALA_NAME', 'LEADER_DEFAULT');
+
+INSERT INTO	StartBiasTerrains (CivilizationType,			TerrainType,			        Tier	)
+VALUES	                      ('SLTH_CIVILIZATION_DOVIELLO',	'TERRAIN_TUNDRA',		    5	),
+                              ('SLTH_CIVILIZATION_DOVIELLO',	'TERRAIN_TUNDRA_HILLS',		5	);
+
+INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
+VALUES	                      ('SLTH_CIVILIZATION_DOVIELLO',	'FEATURE_FOREST',	    3		);
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('SLTH_LEADER_CHARADON', 'SLTH_CIVILIZATION_DOVIELLO', 'LOC_CITY_DOVIELLO_1_NAME'),
 ('SLTH_LEADER_MAHALA', 'SLTH_CIVILIZATION_DOVIELLO', 'LOC_CITY_DOVIELLO_1_NAME');

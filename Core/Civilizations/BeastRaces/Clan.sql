@@ -1,5 +1,9 @@
 INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, RandomCityNameDepth, StartingCivilizationLevelType, Ethnicity) VALUES
 ('SLTH_CIVILIZATION_CLAN_OF_EMBERS', 'LOC_CIV_CLAN_OF_EMBERS_NAME', 'LOC_CIV_CLAN_OF_EMBERS_DESCRIPTION', 'LOC_SLTH_CIV_CLAN_OF_EMBERS_ADJECTIVE', '10', 'CIVILIZATION_LEVEL_FULL_CIV', 'ETHNICITY_EURO');
+
+INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
+VALUES	                      ('SLTH_CIVILIZATION_CLAN_OF_EMBERS',	'FEATURE_JUNGLE',	        3	);
+
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('SLTH_LEADER_JONAS', 'LOC_SLTH_LEADER_JONAS_NAME', 'LEADER_DEFAULT'),
 ('SLTH_LEADER_SHEELBA', 'LOC_SLTH_LEADER_SHEELBA_NAME', 'LEADER_DEFAULT');

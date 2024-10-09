@@ -3,6 +3,14 @@ INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, Random
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('SLTH_LEADER_TASUNKE', 'LOC_SLTH_LEADER_TASUNKE_NAME', 'LEADER_DEFAULT'),
 ('SLTH_LEADER_RHOANNA', 'LOC_SLTH_LEADER_RHOANNA_NAME', 'LEADER_DEFAULT');
+
+INSERT INTO	StartBiasResources
+		(CivilizationType,			ResourceType,			Tier	)
+VALUES	('SLTH_CIVILIZATION_HIPPUS',	'RESOURCE_HORSE',		5		);
+
+-- INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)           -- do we want a river bias?
+-- VALUES	                    ('SLTH_CIVILIZATION_HIPPUS',	5);
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('SLTH_LEADER_TASUNKE', 'SLTH_CIVILIZATION_HIPPUS', 'LOC_CITY_HIPPUS_1_NAME'),
 ('SLTH_LEADER_RHOANNA', 'SLTH_CIVILIZATION_HIPPUS', 'LOC_CITY_HIPPUS_1_NAME');

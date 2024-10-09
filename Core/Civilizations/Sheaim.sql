@@ -3,6 +3,15 @@ INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, Random
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('SLTH_LEADER_TEBRYN', 'LOC_SLTH_LEADER_TEBRYN_NAME', 'LEADER_DEFAULT'),
 ('SLTH_LEADER_OS-GABELLA', 'LOC_SLTH_LEADER_OS_GABELLA_NAME', 'LEADER_DEFAULT');
+
+INSERT INTO	StartBiasTerrains
+		(CivilizationType,			TerrainType,			Tier	)
+VALUES	('SLTH_CIVILIZATION_SHEAIM',	'TERRAIN_PLAINS',		5		);
+
+INSERT INTO	StartBiasFeatures
+		(CivilizationType,			FeatureType,			Tier	)
+VALUES	('SLTH_CIVILIZATION_SHEAIM',	'FEATURE_JUNGLE',	5		);          -- feels bad but is accurate
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('SLTH_LEADER_TEBRYN', 'SLTH_CIVILIZATION_SHEAIM', 'LOC_CITY_SHEAIM_1_NAME'),
 ('SLTH_LEADER_OS-GABELLA', 'SLTH_CIVILIZATION_SHEAIM', 'LOC_CITY_SHEAIM_1_NAME');

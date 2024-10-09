@@ -3,6 +3,15 @@ INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, Random
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('SLTH_LEADER_CARDITH', 'LOC_SLTH_LEADER_CARDITH_NAME', 'LEADER_DEFAULT');
 
+
+INSERT INTO	StartBiasTerrains                                       -- minimise desert/tundra/snow as cap matters more
+		(CivilizationType,			TerrainType,			        Tier	)
+VALUES	('SLTH_CIVILIZATION_KURIOTATES',	'TERRAIN_GRASS',		5	),
+        ('SLTH_CIVILIZATION_KURIOTATES',	'TERRAIN_PLAINS',		5	);
+
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_KURIOTATES',	5);
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('SLTH_LEADER_CARDITH', 'SLTH_CIVILIZATION_KURIOTATES', 'LOC_CITY_KURIOTATES_1_NAME');
 INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES

@@ -6,6 +6,15 @@ INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('SLTH_LEADER_FALAMAR', 'SLTH_CIVILIZATION_LANUN', 'LOC_CITY_LANUN_1_NAME'),
 ('SLTH_LEADER_HANNAH', 'SLTH_CIVILIZATION_LANUN', 'LOC_CITY_LANUN_1_NAME');
+
+INSERT INTO	StartBiasTerrains
+		(CivilizationType,			TerrainType,			Tier	)
+VALUES	('SLTH_CIVILIZATION_LANUN',	'TERRAIN_COAST',		5		);
+
+INSERT INTO	StartBiasFeatures
+		(CivilizationType,			FeatureType,			Tier	)
+VALUES	('SLTH_CIVILIZATION_LANUN',	'FEATURE_FOREST',	    2		);
+
 INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES
 ('SLTH_CIVILIZATION_LANUN', 'SLTH_TRAIT_SEAFARING'),
 ('SLTH_CIVILIZATION_LANUN', 'SLTH_TRAIT_CIVILIZATION_BUILDING_HARBOR_LANUN'),

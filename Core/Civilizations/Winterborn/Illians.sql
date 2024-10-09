@@ -4,6 +4,17 @@ INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('SLTH_LEADER_AURIC', 'LOC_SLTH_LEADER_AURIC_NAME', 'LEADER_DEFAULT');
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('SLTH_LEADER_AURIC', 'SLTH_CIVILIZATION_ILLIANS', 'LOC_CITY_ILLIANS_1_NAME');
+
+INSERT INTO	StartBiasTerrains (CivilizationType,			TerrainType,			        Tier	)
+VALUES	                      ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_TUNDRA',		    2	),
+                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_TUNDRA_HILLS',		2	),
+                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_SNOW',		        2	),
+                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_SNOW_HILLS',		2	);
+
+INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
+VALUES	                      ('SLTH_CIVILIZATION_ILLIANS',	'FEATURE_FOREST',	        3		);
+
+
 INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES
 ('SLTH_CIVILIZATION_ILLIANS', 'SLTH_TRAIT_CIVILIZATION_BUILDING_TEMPLE_OF_THE_HAND'),
 ('SLTH_CIVILIZATION_ILLIANS', 'SLTH_TRAIT_CIVILIZATION_UNIT_HIGH_PRIEST_OF_WINTER'),

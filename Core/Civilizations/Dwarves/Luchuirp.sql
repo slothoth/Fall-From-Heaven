@@ -1,5 +1,20 @@
 INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, RandomCityNameDepth, StartingCivilizationLevelType, Ethnicity) VALUES
 ('SLTH_CIVILIZATION_LUCHUIRP', 'LOC_CIV_LUCHUIRP_NAME', 'LOC_CIV_LUCHUIRP_DESCRIPTION', 'LOC_SLTH_CIV_LUCHUIRP_ADJECTIVE', '10', 'CIVILIZATION_LEVEL_FULL_CIV', 'ETHNICITY_EURO');
+
+INSERT INTO	StartBiasTerrains (CivilizationType,			TerrainType,			        Tier	)
+VALUES	                      ('SLTH_CIVILIZATION_KHAZAD',	'TERRAIN_GRASS_HILLS',		    3	),
+                              ('SLTH_CIVILIZATION_KHAZAD',	'TERRAIN_PLAINS_HILLS',		    5	),
+                              ('SLTH_CIVILIZATION_KHAZAD',	'TERRAIN_DESERT_HILLS',		    2	);
+
+INSERT INTO	StartBiasResources
+		(CivilizationType,			ResourceType,			Tier	)
+VALUES	('SLTH_CIVILIZATION_KHAZAD',	'RESOURCE_GOLD',		5	),
+        ('SLTH_CIVILIZATION_KHAZAD',	'RESOURCE_MITHRIL',		5	),
+        ('SLTH_CIVILIZATION_KHAZAD',	'RESOURCE_IRON',		5	);
+
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)           -- do we want a river bias?
+VALUES	                   ('SLTH_CIVILIZATION_KHAZAD',	5);
+
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('SLTH_LEADER_GARRIM', 'LOC_SLTH_LEADER_GARRIM_NAME', 'LEADER_DEFAULT'),
 ('SLTH_LEADER_BEERI', 'LOC_SLTH_LEADER_BEERI_NAME', 'LEADER_DEFAULT');
