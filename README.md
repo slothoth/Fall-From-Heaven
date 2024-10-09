@@ -324,26 +324,20 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [x] Vampire Lord
 - [x] Diseased Corpses
 - [x] Drown
+- [x] Saverous
 #### Retint
 - [x] Shadowrider
+- [ ] Eidolon
 #### Rejig
 - [ ] Firebow
 - [ ] Longbowman
 - [ ] Nightwatch
+- [ ] Marksman
 - [ ] Freak
 - [ ] Supplies (cultist wagon + builder)
-- [ ] Eidolon
-- [ ] Govannon
-- [ ] Guybrush
-- [ ] Hemah
-- [ ] Loki
-- [ ] Mary Morbus
-- [ ] Rathus
-- [ ] Donal
 - [ ] Assassin
 - [ ] Ghost
 - [ ] Boarding Party
-- [ ] Marksman
 - [ ] Paramander
 - [ ] Divided Soul
 - [ ] Flagbearer
@@ -351,11 +345,18 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Mimic
 - [ ] Revelers
 - [ ] Son of the Inferno
-- [ ] Gibbon
-- [ ] Chalid
 - [ ] Courtesan
 - [ ] Shadow
 - [ ] Slave
+- [ ] Govannon
+- [ ] Guybrush
+- [ ] Hemah
+- [ ] Loki
+- [ ] Mary Morbus
+- [ ] Rathus
+- [ ] Donal
+- [ ] Gibbon
+- [ ] Chalid
 #### Rejig with Custom Culture
 - [ ] Rantine
 - [ ] Lizardman Ranger
@@ -379,7 +380,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Maros
 - [ ] Orthus
 - [ ] Goblin Archer
-- [ ] Goblin Archer
 - [ ] Lizardman
 - [ ] Lizardman Assassin
 - [ ] Lizardman Druid
@@ -387,7 +387,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Ogre Warchief
 - [ ] Dwarven Shadow
 - [ ] Yvain
-- [ ] Saverous
 #### Custom Parts 
 - [ ] Boar Rider
 - [ ] Bison Rider
