@@ -327,6 +327,7 @@
     <File>Artdefs/Units.artdef</File>
     <File>ArtDefs/Buildings.artdef</File>
     <File>Artdefs/FallbackLeaders.artdef</File>
+    <File>ArtDefs/Civilizations.artdef</File>
     <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons.xml</File>
