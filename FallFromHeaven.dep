@@ -9,6 +9,14 @@
 			<name text="Civ6"/>
 			<id text="cb2f71b7-843e-4af3-9ca7-992acda9c195"/>
 		</Element>
+		<Element>
+			<name text="Expansion1"/>
+			<id text="7446c8fe-29eb-44f8-801f-098f681cc5c5"/>
+		</Element>
+		<Element>
+			<name text="Expansion2"/>
+			<id text="b1b63999-6b16-4dd2-a5b6-eb19794aa8ca"/>
+		</Element>
 	</RequiredGameArtIDs>
 	<SystemDependencies>
 		<Element>
@@ -35,6 +43,7 @@
 		<Element>
 			<ConsumerName text="Landmarks"/>
 			<ArtDefDependencyPaths>
+				<Element text="Landmarks.artdef"/>
 				<Element text="Resources.artdef"/>
 				<Element text="Cultures.artdef"/>
 				<Element text="Buildings.artdef"/>
@@ -433,6 +442,13 @@
 				<Element text="Resources.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
+		<Element>
+			<ArtDefPath text="Landmarks.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Landmarks.artdef"/>
+				<Element text="Buildings.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>Landmarks
 		<Element>
 			<ArtDefPath text="FallbackLeaders.artdef"/>
 			<ArtDefDependencyPaths/>

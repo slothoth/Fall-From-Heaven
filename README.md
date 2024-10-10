@@ -211,36 +211,36 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ### Buildings
 #### Redo District Placement
 - [ ] Blasting Workshop(Workshop)
-- [ ] Breeding Pit (Ordu)
-- [ ] Adventurers Guild (GuildHall)
-- [ ] Chancel of Guardians (GrandMasters Chapel)
-- [ ] Command Post (Pagoda)
-- [ ] Courthouse (Quens BiblioTheque)
-- [ ] Grove (Grove)
-- [ ] Herbalist (MEETING_HOUSE)
-- [ ] Hunting Lodge (Marae)
-- [ ] Infirmary (Chancery)
-- [ ] Inn (Consulate)
-- [ ] Mages Guild (Madrasa)
-- [ ] Shipyard (Shipyard)
+- [x!] Breeding Pit (Ordu)
+- [?] Adventurers Guild (GuildHall)
+- [x] Chancel of Guardians (GrandMasters Chapel)
+- [x] Command Post (Pagoda)
+- [x] Courthouse (Quens BiblioTheque)
+- [x] Grove (Grove)
+- [x] Herbalist (MEETING_HOUSE)
+- [x] Hunting Lodge (Marae)
+- [x] Infirmary (Chancery)
+- [x] Inn (Consulate)
+- [x] Mages Guild (Madrasa)
+- [?] Shipyard (Shipyard)
 - [ ] Shrine of the Champion (Kotoku-In)
-- [ ] Tavern (Meeting House)
+- [?] Tavern (Meeting House)
 - [ ] Grigori Tavern (Foreign Ministry lol)
-- [ ] Arena (Arena)
+- [x] Arena (Arena)
 #### District Clutter
 - [ ] Aqueduct from Aqueduct District Clutter 
-- [ ] Tents from Entertainment Complex Clutter
+- [ ] Carnival from Entertainment Complex Clutter
 - [ ] Bath from Roman Bath District Clutter
-#### Redo Landmarks Wonder
-- [ ] Bazaar of Mammon (Grand Bazaar)
 #### Redo Landmarks Improvements
 - [ ] Cave of Ancestors (Giant Head)
 - [ ] Warrens (Cahokia Mound)
 - [ ] Elder Council (Mekewap)
 - [ ] Temple of the Hand (Monastery)
+#### Redo Landmarks Wonder
+- [ ] Bazaar of Mammon (Grand Bazaar)
+
 #### Redo Landmarks Natural Wonders
 - [ ] Mercurian Gate (Delicate Arch)
-- [ ] 
 #### From elsewhere
 - [ ] Archery Range (JNR_TARGET_RANGE)
 - [ ] Governors Manor (JNR_MANSION)
