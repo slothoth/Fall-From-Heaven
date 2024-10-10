@@ -6,10 +6,11 @@ One the mod is out of Alpha (probably when art assets for three civilizations ar
 ## TOP priority:
 Magic system
 Barbarians[x]
-Fix religion
+Fix religion[x]
 Armageddon[x]
 World Spells
 Items[x]
+Victory Conditions [ ]
 ## Promotion System:
 - [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo? i cannot
 - [x] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
@@ -178,8 +179,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Victory Conditions:
 - [ ] Altar of Luonnotar ez, A series of buildings, then a final project that requires last building. Only difficulty is making building not buildable, but still grantable by Great Person (like Hypatia)
 - [ ] Tower of Mastery Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.
-## Art Todo
-- [ ] Investigat Landmark / District changes to allow alt buildings. Like why do Wonders like ORzgarzh work in city centre? but buildings wont. also palgum exclamation cultures stuff.
 ## Cultures Todo
 - [ ] Cultures.artdef. Map buildings and units.
 - Would be lovely if our asset budget lets us use Leugi's City Styles, for doviello, clan , hippus
