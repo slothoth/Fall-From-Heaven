@@ -2,6 +2,17 @@ INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, Random
 ('SLTH_CIVILIZATION_SVARTALFAR', 'LOC_CIV_SVARTALFAR_NAME', 'LOC_CIV_SVARTALFAR_DESCRIPTION', 'LOC_SLTH_CIV_SVARTALFAR_ADJECTIVE', '10', 'CIVILIZATION_LEVEL_FULL_CIV', 'ETHNICITY_EURO');
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('SLTH_LEADER_FAERYL', 'LOC_SLTH_LEADER_FAERYL_NAME', 'LEADER_DEFAULT');
+
+INSERT INTO	StartBiasTerrains (CivilizationType,			TerrainType,			        Tier	)
+VALUES	                      ('SLTH_CIVILIZATION_SVARTALFAR',	'TERRAIN_GRASS',		    3	),
+                              ('SLTH_CIVILIZATION_SVARTALFAR',	'TERRAIN_GRASS_HILLS',		3	),
+                              ('SLTH_CIVILIZATION_SVARTALFAR',	'TERRAIN_PLAINS',		    3	),
+                              ('SLTH_CIVILIZATION_SVARTALFAR',	'TERRAIN_PLAINS_HILLS',		3	);
+
+INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
+VALUES	                      ('SLTH_CIVILIZATION_SVARTALFAR',	'FEATURE_FOREST',	        5	),
+                              ('SLTH_CIVILIZATION_SVARTALFAR',	'FEATURE_FOREST_ANCIENT',	5	);
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('SLTH_LEADER_FAERYL', 'SLTH_CIVILIZATION_SVARTALFAR', 'LOC_CITY_SVARTALFAR_1_NAME');
 INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES
