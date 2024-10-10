@@ -27,6 +27,7 @@ INSERT INTO Policies(PolicyType, Description, PrereqCivic, PrereqTech, Name, Gov
 ('SLTH_POLICY_MERCANTILISM', 'LOC_SLTH_POLICY_MERCANTILISM_DESCRIPTION', 'CIVIC_MERCANTILISM', NULL, 'LOC_SLTH_POLICY_MERCANTILISM_NAME', 'SLOT_GREAT_PERSON'),
 ('SLTH_POLICY_FOREIGN_TRADE', 'LOC_SLTH_POLICY_FOREIGN_TRADE_DESCRIPTION', NULL, 'TECH_TRADE', 'LOC_SLTH_POLICY_FOREIGN_TRADE_NAME', 'SLOT_GREAT_PERSON'),
 ('SLTH_POLICY_GUARDIAN_OF_NATURE', 'LOC_SLTH_POLICY_GUARDIAN_OF_NATURE_DESCRIPTION', 'CIVIC_HIDDEN_PATHS', NULL, 'LOC_SLTH_POLICY_GUARDIAN_OF_NATURE_NAME', 'SLOT_GREAT_PERSON');
+
 INSERT INTO PolicyModifiers(PolicyType, ModifierId) VALUES
 ('SLTH_POLICY_DESPOTISM', 'MODIFIER_SLTH_POLICY_DESPOTISM_ADJUST_WAR_WEARINESS'),
 ('SLTH_POLICY_CITY_STATES', 'MODIFIER_SLTH_POLICY_CITY_STATES_ADJUST_WAR_WEARINESS'),
@@ -405,11 +406,11 @@ INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_O
 INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyName', 'STATE_RELIGION_ORDER');
 INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyMinimum', '1');
 
--- civ level bans: Bannor only one allowed
+-- civ level bans: Bannor only one allowed. Still ened to implement lower unit support, +2 happiness in state rel
+-- state religion builds faster, no diplo with enemies
 
 INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
 ('BAN_CRUSADE', 'MODIFIER_BAN_POLICY_OWNER', 'NOT_BANNOR_REQUIREMENTS');
-
 INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 ('BAN_CRUSADE', 'PolicyType', 'SLTH_POLICY_CRUSADE');
 
@@ -420,7 +421,6 @@ INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_B
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_BANNOR_REQUIREMENTS', 'PLAYER_IS_NOT_BANNOR');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('PLAYER_IS_NOT_BANNOR', 'REQUIREMENT_PLAYER_TYPE_MATCHES', '1');
 INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('PLAYER_IS_NOT_BANNOR', 'CivilizationType', 'SLTH_CIVILIZATION_BANNOR');
-
 
 INSERT INTO Types(Type, Kind) VALUES
 ('GRANT_EXPERIENCE_SMALL_ABILITY_APPRENTICESHIP', 'KIND_ABILITY'),

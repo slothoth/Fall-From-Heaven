@@ -147,6 +147,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Dynamic allowed city count, based on map size. Map size part is hard and probably needs Lua. 
 - [ ] needs to implement some concept of inherent city identity for being able to produce those units, check civ conquer mode? But then apply only to that city. hmmm
 - [ ] Doviello scavenging prod for nearby city on killing unit.
+- [ ] Crusade unit support, no diplo with warring enemies. +2 happiness, faster unit prod in state rel cities.
 ## World Spell:
   a one time cast spell with often global effects, in civ iv is available to most units to cast, we can just have it be like a 0 prod project? or buyable
 - [ ] Do I even need to do it on a unit? arent all world spells just on units for convenience, I could make a UI button for it, in governor panel?
@@ -165,9 +166,10 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [x] Investigate Religion as Removing/Allowing Policies Unearthed working Effect, now just need to find a way to have it turn on or off with requirements as its on Player not City. But Bannor specific worked
 - [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
 - [ ] Religion specific policies
-- [ ] Non-lua format where EFFECT_ADJUST_IMPROVEMENT_PROPERTY might be on plot as no Lua access? could then check the plot property the vampire castle t4 enables PROPERTY_AIRLIFT on vampire castle tiles. How could i then port it to city plot though, hmmm, the colletion is set as improvement, could set as capital city?
 - [x] POLICY ban framework for all state religions
 - [ ] religion spread within civ tracker in lua for plot_prop req
+- [x] Unit allowed if state rel
+- [ ] Unit also requires state religion (could always do dummy building but we dont wanna)
 ## Great People:
 - [ ] Golden Age modifiers, the whole extra Hammer/ extra gold per tile thing.
 - [ ] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
