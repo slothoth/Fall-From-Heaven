@@ -133,8 +133,6 @@ function ImprovementsWorkOrPillageChange(x, y, improvementIndex, improvementPlay
     local iImprovementToDowngradeIndex = tImprovementsRegression[improvementIndex]
     local pPlot
     if iImprovementToDowngradeIndex and isPillaged > 0 then
-        print(ImprovementBuilder)
-        print(ImprovementBuilder.SetImprovementType)
         pPlot = Map.GetPlot(x, y)
         ImprovementBuilder.SetImprovementType(pPlot, iImprovementToDowngradeIndex, improvementPlayerID)
         return
@@ -188,7 +186,6 @@ function InitCottage(x, y, improvementIndex, playerID)
     local resourceIndex = pPlot:GetResourceType()
 	if not resourceIndex == GameInfo.Resources['RESOURCE_MANA'].Index then return; end
     local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
-    print(iResourceToChangeTo)
     if not iResourceToChangeTo then return; end
     print('changing resource to ' .. tostring(iResourceToChangeTo))
     ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);
@@ -220,7 +217,6 @@ function IncrementCottages(playerId)
 end
 
 function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
-    print(resourceUTypeID)
     local iResourceIndex = tMonitoredStrategic[resourceTypeID]
     if iResourceIndex then
         local pPlayer = Players[ownerPlayerID];
@@ -277,6 +273,7 @@ tLuonnotar = {
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE'].Index]= {civic=GameInfo.Civics['CIVIC_RIGHTEOUSNESS'].Index}}
 
 iLunnotarBlocker = GameInfo.Buildings['BUILDING_BLOCK_ALTAR'].Index
+iAltarBase = GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR'].Index
 
 tLuonnotarCivics = {
     [GameInfo.Civics['CIVIC_MYSTICISM'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR'].Index,
@@ -305,14 +302,7 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
             local pCulture = pPlayer:GetCulture()
             if not pCulture then return; end
             local pCity = CityManager.GetCity(pPlayer, cityID)
-            if pCulture:HasCivic(iCivicForNext) then
-                print('player has civic, can build next tier')
-                -- local iDummyLuonnotarPrereq = tLuonnotarInfo['prereqdummy']
-                -- if iDummyLuonnotarPrereq then
-                --    print('luonnotar has dummy prereq, setting')
-                --    pCity:SetProperty('luonnotar_dummy', iDummyLuonnotarPrereq)
-                -- end
-            else
+            if not pCulture:HasCivic(iCivicForNext) then
                 print('player doesnt have civic, blocking Great Prophet activation.')
                 pCity:AttachModifierByID('MODIFIER_FREE_SLTH_BUILDING_NO_ALTAR_ALWAYS')
             end
@@ -363,15 +353,17 @@ function onGreatPersonActivated(unitOwner, unitID, greatPersonClassID, greatPers
     print(greatPersonClassID)
     if greatPersonClassID == iGreatProphetIndex then
         print('Great person recognised as prophet')
-        print(unitOwner)
-        print(unitID)
-        local pUnit = UnitManager.GetUnit(unitOwner, unitID)
-        local iX, iY =  pUnit:GetX(),  pUnit:GetY()
-        local pPlot = Map.GetPlot(iX, iY)
-        local iAltarLevel = pPlot:GetProperty('altar_level')
-        if iAltarLevel then
-            pPlot:SetProperty('altar_level', iAltarLevel + 1)
-            print('plot prop update GP suceeded')
+        local pPlayerCities = Players[unitOwner]:GetCities()
+        for idx, pCity in pPlayerCities:Members() do
+            if pCity:GetBuildings():HasBuilding(iAltarBase) then
+                local pPlot = pCity:GetPlot();
+                local iAltarLevel = pPlot:GetProperty('altar_level')
+                if iAltarLevel then
+                    pPlot:SetProperty('altar_level', iAltarLevel + 1)
+                    print('plot prop update GP suceeded')
+                end
+                return
+            end
         end
     end
 end
@@ -421,13 +413,14 @@ function onStart()
     Events.ImprovementAddedToMap.Add(InitCottage)
     GameEvents.PlayerTurnStarted.Add(IncrementCottages);
 
-    Events.PlayerResourceChanged.Add(UpdateResource)
+    -- Events.PlayerResourceChanged.Add(UpdateResource)                 -- NOT WORKING AND causing errors
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
+    print('-----------------Gameplay loaded')
 end
 
 onStart()
