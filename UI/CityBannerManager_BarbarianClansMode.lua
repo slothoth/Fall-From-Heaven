@@ -9,7 +9,7 @@ local BASE_OnImprovementRemovedFromMap = OnImprovementRemovedFromMap;
 local BASE_OnImprovementVisibilityChanged = OnImprovementVisibilityChanged;
 local BASE_OnRefreshBannerPositions = OnRefreshBannerPositions;
 local BASE_CBInitialize = CityBanner.Initialize
-print('new Civ banner manager')
+print('SLoth Civ banner manager for barb tribes loaded')
 
 -- ===========================================================================
 -- CONSTANTS
@@ -40,7 +40,6 @@ function CreateBarbarianTribeBanner(pPlot , pBarbTribe )
 	local iActivePlayer = Game.GetLocalPlayer();
 	local pPlayerConfig = PlayerConfigurations[iActivePlayer]
     local sCivName = pPlayerConfig:GetCivilizationTypeName()
-	print(sCivName)
 	if sCivName == 'SLTH_CIVILIZATION_CLAN_OF_EMBERS' then
 		if sTribeType == 'TRIBE_CLAN_MELEE_OPEN' or sTribeType == 'TRIBE_CLAN_MELEE_FOREST' then
 			uiTribeBanner.TribeBannerButton:RegisterCallback( Mouse.eLClick, function() OnTribeBannerButtonClicked(pPlot:GetIndex()); end );
@@ -179,7 +178,6 @@ end
 
 -- ===========================================================================
 function OnImprovementRemovedFromMap( locX , locY , eOwner  )
-	print(eOwner)
 	if(eOwner == -1)then
 		local pPlot  = Map.GetPlot(locX, locY);
 		for k,v in ipairs(m_BarbarianTribeBanners) do

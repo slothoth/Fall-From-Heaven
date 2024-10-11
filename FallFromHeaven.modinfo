@@ -18,6 +18,12 @@
     <Criteria id="Expansion2">
       <GameCoreInUse>Expansion2</GameCoreInUse>
     </Criteria>
+    <Criteria id="PorcelainTowerNotOn">
+      <ModInUse inverse="1">89a948de-5e48-4608-81a4-c52bd68bc4eb</ModInUse>
+    </Criteria>
+    <Criteria id="LeaningTowerNotOn">
+	  <ModInUse inverse="1">d1c3ef16-00ed-4d72-a468-1e584fdb85ad</ModInUse>
+	</Criteria>
   </ActionCriteria>
   <FrontEndActions>
     <UpdateDatabase id="config">
@@ -27,12 +33,11 @@
       <File>Core/frontend_config.sql</File>
     </UpdateDatabase>
     <UpdateText id="UpdateText">
-      <File>Localisation/frontend.sql</File>
-      <File>Localisation/long_localization.sql</File>
-      <File>Localisation/medium_localization.sql</File>
-      <File>Localisation/short_loc.sql</File>
-      <File>Localisation/promo_loc.sql</File>
-      <File>Localisation/Neat.sql</File>
+      <File>Localisation/loc_playeritems.sql</File>
+      <File>Localisation/loc_buildings.sql</File>
+      <File>Localisation/loc_civ_leader.sql</File>
+      <File>Localisation/loc_traits.sql</File>
+      <File>Localisation/loc_units.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
@@ -56,6 +61,19 @@
         <LoadOrder>95</LoadOrder>
       </Properties>
       <File>Core/Delete_Update.sql</File>
+      <File>Core/AbsorbDeletes.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="mod_compatPorcelain" criteria="PorcelainTowerNotOn">
+      <Properties>
+        <LoadOrder>98</LoadOrder>
+      </Properties>
+      <File>Core/Absorb_deletes/Porcelain.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="mod_compatLeaning" criteria="LeaningTowerNotOn">
+      <Properties>
+        <LoadOrder>98</LoadOrder>
+      </Properties>
+      <File>Core/Absorb_deletes/Leaning.sql</File>
     </UpdateDatabase>
     <UpdateDatabase id="Gameplay_first">
       <Properties>
@@ -114,6 +132,7 @@
       <File>Core/BarbarianClans.sql</File>
       <File>Core/Equipment.sql</File>
       <File>Core/Globals.sql</File>
+      <File>Core/Victories.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -122,11 +141,21 @@
       <File>Core/ResourceBuffs.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
-      <File>Localisation/long_localization.sql</File>
-      <File>Localisation/medium_localization.sql</File>
-      <File>Localisation/short_loc.sql</File>
-      <File>Localisation/promo_loc.sql</File>
-      <File>Localisation/Neat.sql</File>
+      <File>Localisation/loc_abilities.sql</File>
+      <File>Localisation/loc_buildings.sql</File>
+      <File>Localisation/loc_cities_great_people_names.sql</File>
+      <File>Localisation/loc_civ_leader.sql</File>
+      <File>Localisation/loc_equipment.sql</File>
+      <File>Localisation/loc_pedia.sql</File>
+      <File>Localisation/loc_policies.sql</File>
+      <File>Localisation/loc_promotions.sql</File>
+      <File>Localisation/loc_techs_civics.sql</File>
+      <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
+      <File>Localisation/loc_traits.sql</File>
+      <File>Localisation/loc_nulls.sql</File>
+      <File>Localisation/loc_units.sql</File>
+      <File>Localisation/loc_beliefs.sql</File>
+      <File>Localisation/loc_barbs.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
       <File>Lua/Maintenance.lua</File>
@@ -235,11 +264,22 @@
     </UpdateIcons>
   </InGameActions>
   <Files>
-    <File>Localisation/long_localization.sql</File>
-    <File>Localisation/medium_localization.sql</File>
-    <File>Localisation/short_loc.sql</File>
-    <File>Localisation/promo_loc.sql</File>
-    <File>Localisation/Neat.sql</File>
+    <File>Localisation/loc_abilities.sql</File>
+    <File>Localisation/loc_barbs.sql</File>
+    <File>Localisation/loc_beliefs.sql</File>
+    <File>Localisation/loc_buildings.sql</File>
+    <File>Localisation/loc_cities_great_people_names.sql</File>
+    <File>Localisation/loc_civ_leader.sql</File>
+    <File>Localisation/loc_equipment.sql</File>
+    <File>Localisation/loc_nulls.sql</File>
+    <File>Localisation/loc_pedia.sql</File>
+    <File>Localisation/loc_policies.sql</File>
+    <File>Localisation/loc_promotions.sql</File>
+    <File>Localisation/loc_techs_civics.sql</File>
+    <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
+    <File>Localisation/loc_traits.sql</File>
+    <File>Localisation/loc_units.sql</File>
+    <File>Localisation/loc_playeritems.sql</File>
     <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
@@ -291,6 +331,10 @@
     <File>Core/BarbarianClans.sql</File>
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
+    <File>Core/Victories.sql</File>
+    <File>Core/AbsorbDeletes.sql</File>
+    <File>Core/Absorb_deletes/Leaning.sql</File>
+    <File>Core/Absorb_deletes/Porcelain.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
@@ -304,9 +348,13 @@
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <!--File>MapUtilities.lua</File-->
-    <File>Artdefs/Units.artdef</File>
     <File>ArtDefs/Buildings.artdef</File>
+    <File>ArtDefs/Civilizations.artdef</File>
+    <File>Artdefs/Cultures.artdef</File>
     <File>Artdefs/FallbackLeaders.artdef</File>
+    <File>Artdefs/Landmarks.artdef</File>
+    <File>Artdefs/Resources.artdef</File>
+    <File>Artdefs/Units.artdef</File>
     <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons.xml</File>

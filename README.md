@@ -6,10 +6,11 @@ One the mod is out of Alpha (probably when art assets for three civilizations ar
 ## TOP priority:
 Magic system
 Barbarians[x]
-Fix religion
+Fix religion[x]
 Armageddon[x]
 World Spells
 Items[x]
+Victory Conditions [ ]
 ## Promotion System:
 - [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo? i cannot
 - [x] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
@@ -140,7 +141,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Hard but minor:
 - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 - [ ] Hall of Mirrors clone spawning
-- [ ] Do we swap Amenities and Housing as Amenities and Housing?
 
 ## CivHard
 - [ ] 4 tile workable cities. CypRyan and Phantagonist versions, Phantagonist less buggy. But how to make single civ?
@@ -165,7 +165,10 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Religion:
 - [x] Investigate Religion as Removing/Allowing Policies Unearthed working Effect, now just need to find a way to have it turn on or off with requirements as its on Player not City. But Bannor specific worked
 - [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
-
+- [ ] Religion specific policies
+- [ ] Non-lua format where EFFECT_ADJUST_IMPROVEMENT_PROPERTY might be on plot as no Lua access? could then check the plot property the vampire castle t4 enables PROPERTY_AIRLIFT on vampire castle tiles. How could i then port it to city plot though, hmmm, the colletion is set as improvement, could set as capital city?
+- [x] POLICY ban framework for all state religions
+- [ ] religion spread within civ tracker in lua for plot_prop req
 ## Great People:
 - [ ] Golden Age modifiers, the whole extra Hammer/ extra gold per tile thing.
 - [ ] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
@@ -176,44 +179,69 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Victory Conditions:
 - [ ] Altar of Luonnotar ez, A series of buildings, then a final project that requires last building. Only difficulty is making building not buildable, but still grantable by Great Person (like Hypatia)
 - [ ] Tower of Mastery Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.
-## Art Todo
-- [ ] Investigat Landmark / District changes to allow alt buildings. Like why do Wonders like ORzgarzh work in city centre? but buildings wont. also palgum exclamation cultures stuff.
+## Cultures Todo
+- [ ] Cultures.artdef. Map buildings and units.
+- Would be lovely if our asset budget lets us use Leugi's City Styles, for doviello, clan , hippus
+- [ ] Unique unit Cultures: Clan, Infernal, Kuriotates(Centaurs)
+- [ ] Minimal cultures: Mercurian (just do angel units, humans can be mercurian recruits), Dwarves, Elves, Dark Elves, Calabim(pale)
+- [ ] Doviello Barbarian units.
+- [x] Amurite buildings, (AncientEarth -> Mughal -> Colonial), MUGHAL
+- [x] Balseraphs (AncientEarth -> Indonesian -> Colonial), SOUTHAM
+- [x] Bannor (AncientEarth -> Scottish -> Colonial), AFRICAN
+- [x] Calabim (AncientEarth -> DEFAULT -> Colonial), EURO
+- [x] Elohim (AncientEarth -> EastAsian -> Colonial), ASIAN
+- [x] Grigori (AncientEarth -> Baltic -> Colonial), MEDIT
+- [ ] Hippus ((AncientEarth -> Mapuche -> Colonial) ASIAN    cant find mapuche building culture
+- [ ] Infernal (new building style?) for now (AncientEarth -> ), CUSTOM
+- [x] Kuriotates (AncientEarth -> America -> Colonial), CUSTOM MEDIT
+- [x] Lanun (AncientWood -> Brazil -> Colonial), MEDIT
+- [x] Malakim (AncientBrick - > SouthAfrican -> Colonial), AFRICAN
+- [x] Mercurian (AncientBrick -> Mediterranean -> Colonial), EURO
+- [x] Sheaim (AncientEarth -> SouthAmerican -> Colonial), INDIAN
+- [x] Sidar (AncientEarth -> Baltic -> Colonial), EURO
+- [ ] Khazad (AncientBrick -> NorthAfrican -> Colonial), CUSTOM EURO
+- [ ] Luichuirp (AncientBrick -> NorthAfrican -> Colonial), CUSTOM EURO
+- [ ] Ljosalfar (AncientWood -> Mediterranean -> Colonial), CUSTOM EURO
+- [ ] Svartalfar (AncientWood -> Mediterranean -> Colonial), CUSTOM EURO
+- [ ] Doviello (AncientEarth -> Cree -> Colonial), BARB  Cree is not working btw
+- [x] Illian (AncientWood -> Scottish -> Colonial), EURO
+- [ ] Clan of Embers (AncientEarth -> Cree -> Colonial), CUSTOM
+- [ ] Change barbarians to Clan orc ethnicity
 ### Buildings
 #### Redo District Placement
 - [ ] Blasting Workshop(Workshop)
-- [ ] Breeding Pit (Ordu)
-- [ ] Adventurers Guild (GuildHall)
-- [ ] Chancel of Guardians (GrandMasters Chapel)
-- [ ] Command Post (Pagoda)
-- [ ] Courthouse (Quens BiblioTheque)
-- [ ] Grove (Grove)
-- [ ] Herbalist (MEETING_HOUSE)
-- [ ] Hunting Lodge (Marae)
-- [ ] Infirmary (Chancery)
-- [ ] Inn (Consulate)
-- [ ] Mages Guild (Madrasa)
-- [ ] Shipyard (Shipyard)
+- [x!] Breeding Pit (Ordu)
+- [?] Adventurers Guild (GuildHall)
+- [x] Chancel of Guardians (GrandMasters Chapel)
+- [x] Command Post (Pagoda)
+- [x] Courthouse (Quens BiblioTheque)
+- [x] Grove (Grove)
+- [x] Herbalist (MEETING_HOUSE)
+- [x] Hunting Lodge (Marae)
+- [x] Infirmary (Chancery)
+- [x] Inn (Consulate)
+- [x] Mages Guild (Madrasa)
+- [?] Shipyard (Shipyard)
 - [ ] Shrine of the Champion (Kotoku-In)
-- [ ] Tavern (Meeting House)
+- [?] Tavern (Meeting House)
 - [ ] Grigori Tavern (Foreign Ministry lol)
-- [ ] Arena (Arena)
+- [x] Arena (Arena)
 #### District Clutter
 - [ ] Aqueduct from Aqueduct District Clutter 
-- [ ] Tents from Entertainment Complex Clutter
+- [ ] Carnival from Entertainment Complex Clutter
 - [ ] Bath from Roman Bath District Clutter
-#### Redo Landmarks Wonder
-- [ ] Bazaar of Mammon (Grand Bazaar)
 #### Redo Landmarks Improvements
 - [ ] Cave of Ancestors (Giant Head)
 - [ ] Warrens (Cahokia Mound)
 - [ ] Elder Council (Mekewap)
 - [ ] Temple of the Hand (Monastery)
+#### Redo Landmarks Wonder
+- [ ] Bazaar of Mammon (Grand Bazaar)
+
 #### Redo Landmarks Natural Wonders
 - [ ] Mercurian Gate (Delicate Arch)
-- [ ] 
 #### From elsewhere
 - [ ] Archery Range (JNR_TARGET_RANGE)
-- [ ] Thousand Slums (Kowloon Walled City?)
 - [ ] Governors Manor (JNR_MANSION)
 - [ ] Dungeon (JNR_PRISON)
 - [ ] Dwarven Smithy (JNR_MANUFACTORY?)
@@ -223,6 +251,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Smugglers Port (JNR_HAVEN)
 - [ ] Tower of Necromancy (LEANING_TOWER_OF_PISA)
 - [ ] Tower of Elements (Porcelain Tower)
+- [ ] Thousand Slums (Kowloon Walled City?)
+
 #### Could find someone elses
 - [ ] Alchemy Lab
 - [ ] Tailor
@@ -294,26 +324,20 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [x] Vampire Lord
 - [x] Diseased Corpses
 - [x] Drown
+- [x] Saverous
 #### Retint
 - [x] Shadowrider
+- [ ] Eidolon
 #### Rejig
 - [ ] Firebow
 - [ ] Longbowman
 - [ ] Nightwatch
+- [ ] Marksman
 - [ ] Freak
 - [ ] Supplies (cultist wagon + builder)
-- [ ] Eidolon
-- [ ] Govannon
-- [ ] Guybrush
-- [ ] Hemah
-- [ ] Loki
-- [ ] Mary Morbus
-- [ ] Rathus
-- [ ] Donal
 - [ ] Assassin
 - [ ] Ghost
 - [ ] Boarding Party
-- [ ] Marksman
 - [ ] Paramander
 - [ ] Divided Soul
 - [ ] Flagbearer
@@ -321,11 +345,18 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Mimic
 - [ ] Revelers
 - [ ] Son of the Inferno
-- [ ] Gibbon
-- [ ] Chalid
 - [ ] Courtesan
 - [ ] Shadow
 - [ ] Slave
+- [ ] Govannon
+- [ ] Guybrush
+- [ ] Hemah
+- [ ] Loki
+- [ ] Mary Morbus
+- [ ] Rathus
+- [ ] Donal
+- [ ] Gibbon
+- [ ] Chalid
 #### Rejig with Custom Culture
 - [ ] Rantine
 - [ ] Lizardman Ranger
@@ -349,7 +380,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Maros
 - [ ] Orthus
 - [ ] Goblin Archer
-- [ ] Goblin Archer
 - [ ] Lizardman
 - [ ] Lizardman Assassin
 - [ ] Lizardman Druid
@@ -357,7 +387,6 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Ogre Warchief
 - [ ] Dwarven Shadow
 - [ ] Yvain
-- [ ] Saverous
 #### Custom Parts 
 - [ ] Boar Rider
 - [ ] Bison Rider
@@ -446,9 +475,9 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] come up with eurekas
 - [ ] Use eurekas as proxies for techs where soft requirements (i.e. Trade uses something from Sailing or Horseback riding to Eureka? problem is has to be only opposing )
 - [ ] City States didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
-- 
+- [ ] Do we swap Amenities and Housing as Amenities and Housing?
 ## Polish Todo
-- [ ] Trait Descriptions
+- [x] Trait Descriptions
 - [ ] Limit Tech Tree to Renaissance Era techs, and make tree look better 
 
 ## Bugs

@@ -37,14 +37,4 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_LEAVES_STATE_SPECIAL', 'The Hidden Paths Civic and Guardian of Nature Policy, forest will transform into Ancient Forest over time, and Treants may spawn in to defend Ancient Forests from invaders', 'en_US'),
 ('LOC_OVERLORDS_STATE_SPECIAL', 'Allows access to the Mind Staping civic, as well as the ability to convert any unit to a Drown.', 'en_US'),
 ('LOC_ESUS_STATE_SPECIAL', 'Any unit with the Esus religion can spread it, for a price. Recon units with the religion can cast Steal to steal gold from enemy cities and Mask to appear to others as barbarians (TODO). Prevents units from being removed from enemy territory on war declaration. Religion choice hidden from other players.', 'en_US'),
-('LOC_VEIL_STATE_SPECIAL', 'Raises Armageddon count per city it is in. The Sacrifice the Weak civic reduces food consumption to 1, but also reduces GPP. One of the best Veil cities can be taken by Hyborem using his world spell.', 'en_US'),
-('LOC_BARBARIAN_CLAN_TYPE_SCORPION', 'Scorpion Clan', 'en_US'),
-('LOC_BARBARIAN_CLAN_SCORPION_1', 'Goblin Fort', 'en_US'),
-('LOC_BARBARIAN_CLAN_TYPE_SKELETON', 'Skeleton', 'en_US'),
-('LOC_BARBARIAN_CLAN_SKELETON_1', 'Barrows', 'en_US'),
-('LOC_BARBARIAN_CLAN_TYPE_LIZARDMEN', 'Lizardmen Clan', 'en_US'),
-('LOC_BARBARIAN_CLAN_LIZARDMEN_1', 'Ruins', 'en_US'),
-('LOC_BARBARIAN_CLAN_TYPE_BEARS', 'Bear Den', 'en_US'),
-('LOC_BARBARIAN_CLAN_BEAR_1', 'Bear Den', 'en_US'),
-('LOC_BARBARIAN_CLAN_TYPE_LION', 'Lion Den', 'en_US'),
-('LOC_BARBARIAN_CLAN_LION_1', 'Lion Den', 'en_US');
+('LOC_VEIL_STATE_SPECIAL', 'Raises Armageddon count per city it is in. The Sacrifice the Weak civic reduces food consumption to 1, but also reduces GPP. One of the best Veil cities can be taken by Hyborem using his world spell.', 'en_US');
