@@ -113,15 +113,19 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local iUnitToGrant
     local iPlotSpawnedLocation
     local iGrantPlayer
+    local bIsEvil
     local pPlayer = Players[killedPlayerID]
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
     if not pUnit then return; end
     local pUnitAbilities = pUnit:GetAbility()
     -- or pUnit:GetExperience():HasPromotion() -- once we have magic do entropy and death promos.
     if pUnitAbilities:HasAbility('ALIGNMENT_EVIL') then
-        iUnitToGrant = GameInfo.Units['SLTH_UNIT_MANES'].Index
-        iPlotSpawnedLocation = Game:GetProperty('InfernalPlot')
-        iGrantPlayer = Game:GetProperty('Infernal', playerID)
+        iGrantPlayer = Game:GetProperty('Infernal')
+        -- check player is alive
+        local bIsAlive = PlayerManager.IsAlive(iGrantPlayer)              -- might disable to store manes if works
+        if bIsAlive then
+            bIsEvil = 1
+        end
     elseif pUnitAbilities:HasAbility('ALIGNMENT_GOOD') then
         iUnitToGrant = GameInfo.Units['SLTH_UNIT_ANGEL'].Index
         iPlotSpawnedLocation = Game:GetProperty('MercurianGatePlot')
@@ -131,7 +135,7 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
         print('unit doesnt have an alignment')
         return
     end
-    if not iPlotSpawnedLocation then print('no spawn location, not spawning'); return; end
+    if not iPlotSpawnedLocation and not bIsEvil then print('no spawn location, not spawning'); return; end
     local pKillingPlayer = Players[playerID]
     local pUnitKiller = pKillingPlayer:GetUnits():FindID(unitID);
     local sUnitName = pUnit:GetType()
@@ -146,10 +150,15 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     end
     -- passed checks for eligibility, now do pseudo random, deaths since success.
     local pGrantPlayer = Players[iGrantPlayer]
-    local playerUnits = pGrantPlayer:GetUnits();
-    local pPlot = Map.GetPlotByIndex(iPlotSpawnedLocation)
-    local iX, iY = pPlot:GetX(), pPlot:GetY()
-	playerUnits:Create(iUnitToGrant, iX, iY);
+    if bIsEvil then
+        print('attaching mod to mane')
+        pGrantPlayer:AttachModifierByID('SLTH_GRANT_MANE')
+    else
+        local playerUnits = pGrantPlayer:GetUnits();
+        local pPlot = Map.GetPlotByIndex(iPlotSpawnedLocation)
+        local iX, iY = pPlot:GetX(), pPlot:GetY()
+	    playerUnits:Create(iUnitToGrant, iX, iY);
+    end
 end
 
 function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstruction)
