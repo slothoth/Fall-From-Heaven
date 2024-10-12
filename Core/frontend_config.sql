@@ -1,4 +1,5 @@
 UPDATE Parameters SET DefaultValue='1', ReadOnly='1' WHERE Key1='Ruleset' AND Key2='RULESET_EXPANSION_2' AND ParameterId='GameMode_BarbarianClans';
+-- UPDATE Parameters SET DefaultValue='1', ReadOnly='1' WHERE Key1='Ruleset' AND Key2='RULESET_EXPANSION_2' AND ParameterId='GameMode_BarbarianClans';
 
 DELETE FROM Players;
 DELETE FROM PlayerItems;
