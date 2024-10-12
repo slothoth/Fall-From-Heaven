@@ -133,6 +133,7 @@
       <File>Core/Equipment.sql</File>
       <File>Core/Globals.sql</File>
       <File>Core/Victories.sql</File>
+      <File>Core/ConditionalBuildings.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -332,6 +333,7 @@
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
     <File>Core/Victories.sql</File>
+    <File>Core/ConditionalBuildings.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
