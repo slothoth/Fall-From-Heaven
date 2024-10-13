@@ -263,19 +263,19 @@
       </Properties>
     </ReplaceUIScript-->
 
-    <ReplaceUIScript id="XP2WROverride">
+    <!--ReplaceUIScript id="XP2WROverride">
       <Properties>
         <LoadOrder>1001</LoadOrder>
         <LuaContext>WorldRankings</LuaContext>
         <LuaReplace>UI/world_rankings.lua</LuaReplace>
       </Properties>
-    </ReplaceUIScript>
-    <ImportFiles id="XP2WRxmlOverride">
+    </ReplaceUIScript-->
+    <!--ImportFiles id="XP2WRxmlOverride">
       <Properties>
         <LoadOrder>101</LoadOrder>
       </Properties>
       <File>UI/WorldRankings.xml</File>
-    </ImportFiles>
+    </ImportFiles-->
     <!--ImportFiles id="ImportMapGenOverrideFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>

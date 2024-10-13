@@ -12,17 +12,6 @@ local SIZE_GENERIC_ITEM_MIN_Y = 54;
 local DATA_FIELD_SELECTION = "Selection";
 local PADDING_TAB_BUTTON_TEXT = 27;
 
-local DATA_FIELD_HEADER_EXPANDED = "HeaderExpanded";
-local DATA_FIELD_HEADER_HEIGHT = "HeaderHeight";
-local OFFSET_ADVISOR_ICON_Y = 5;
-local OFFSET_ADVISOR_TEXT_Y = 70;
-local OFFSET_CONTRACT_BUTTON_Y = 63;
-local PADDING_HEADER = 10;
-local OFFSET_VIEW_CONTENTS = 130;
-local SIZE_STACK_DEFAULT = 225;
-local GREAT_PROPHET = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_PROPHET']
-
-
 local m_ScienceIM = InstanceManager:new("ScienceInstance", "ButtonBG", Controls.ScienceViewStack);
 local m_ScienceTeamIM = InstanceManager:new("ScienceTeamInstance", "ButtonFrame", Controls.ScienceViewStack);
 local m_ScienceHeaderIM = InstanceManager:new("ScienceHeaderInstance", "HeaderTop", Controls.ScienceViewHeader);
@@ -34,7 +23,7 @@ local EARTH_SATELLITE_EXP2_PROJECT_INFOS = {
 local MOON_LANDING_EXP2_PROJECT_INFOS = {
 	GameInfo.Projects["PROJECT_LAUNCH_MOON_LANDING"]
 };
-local MARS_COLONY_EXP2_PROJECT_INFOS = {
+local MARS_COLONY_EXP2_PROJECT_INFOS = { 
 	GameInfo.Projects["PROJECT_LAUNCH_MARS_BASE"],
 };
 local EXOPLANET_EXP2_PROJECT_INFOS = {
@@ -57,74 +46,24 @@ local SCIENCE_REQUIREMENTS = {
 	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_4")
 };
 
-local TOWER_ALTERATION = { GameInfo.Buildings["BUILDING_MAHABODHI_TEMPLE"],
-	GameInfo.Resources["RESOURCE_MANA_BODY"], GameInfo.Resources["RESOURCE_MANA_ENCHANTMENT"],
-	GameInfo.Resources["RESOURCE_MANA_LIFE"], GameInfo.Resources["RESOURCE_MANA_NATURE"],
-	};
-local TOWER_DIVINATION = { GameInfo.Buildings["BUILDING_ORACLE"],
-	GameInfo.Resources["RESOURCE_MANA_LAW"], GameInfo.Resources["RESOURCE_MANA_MIND"],
-	GameInfo.Resources["RESOURCE_MANA_SPIRIT"], GameInfo.Resources["RESOURCE_MANA_SUN"],
-	 };
-local TOWER_ELEMENTS = { GameInfo.Buildings["BUILDING_PORCELAIN_TOWER"],
-	GameInfo.Resources["RESOURCE_MANA_AIR"], GameInfo.Resources["RESOURCE_MANA_EARTH"],
-	GameInfo.Resources["RESOURCE_MANA_FIRE"], GameInfo.Resources["RESOURCE_MANA_WATER"],
-						 };
-local TOWER_NECROMANCY = { GameInfo.Buildings["BUILDING_LEANING_TOWER"],
-	GameInfo.Resources["RESOURCE_MANA_CHAOS"], GameInfo.Resources["RESOURCE_MANA_DEATH"],
-	GameInfo.Resources["RESOURCE_MANA_ENTROPY"], GameInfo.Resources["RESOURCE_MANA_SHADOW"],
-	};
-local TOWER_MASTERY = { GameInfo.Buildings["BUILDING_MAHABODHI_TEMPLE"], GameInfo.Buildings["BUILDING_ORACLE"],
-						GameInfo.Buildings["BUILDING_PORCELAIN_TOWER"], GameInfo.Buildings["BUILDING_LEANING_TOWER"],
-						GameInfo.Buildings["BUILDING_EIFFEL_TOWER"], };
+local TOWER_ALTERATION = { GameInfo.Buildings["BUILDING_MAHABODHI_TEMPLE"] };
+local TOWER_DIVINATION = {GameInfo.Buildings["BUILDING_ORACLE"] };
+local TOWER_ELEMENTS = {GameInfo.Buildings["BUILDING_PORCELAIN_TOWER"], };
+local TOWER_NECROMANCY = {GameInfo.Buildings["BUILDING_LEANING_TOWER"], };
+local TOWER_MASTERY = { GameInfo.Buildings["BUILDING_EIFFEL_TOWER"], };
 local TOWERS = { TOWER_ALTERATION, TOWER_DIVINATION, TOWER_ELEMENTS, TOWER_NECROMANCY,
 				 TOWER_MASTERY };
-local MANAS = {
-	GameInfo.Resources["RESOURCE_MANA_BODY"], GameInfo.Resources["RESOURCE_MANA_ENCHANTMENT"],
-	GameInfo.Resources["RESOURCE_MANA_LIFE"], GameInfo.Resources["RESOURCE_MANA_NATURE"],
-	GameInfo.Resources["RESOURCE_MANA_LAW"], GameInfo.Resources["RESOURCE_MANA_MIND"],
-	GameInfo.Resources["RESOURCE_MANA_SPIRIT"], GameInfo.Resources["RESOURCE_MANA_SUN"],
-	GameInfo.Resources["RESOURCE_MANA_AIR"], GameInfo.Resources["RESOURCE_MANA_EARTH"],
-	GameInfo.Resources["RESOURCE_MANA_FIRE"], GameInfo.Resources["RESOURCE_MANA_WATER"],
-	GameInfo.Resources["RESOURCE_MANA_CHAOS"], GameInfo.Resources["RESOURCE_MANA_DEATH"],
-	GameInfo.Resources["RESOURCE_MANA_ENTROPY"], GameInfo.Resources["RESOURCE_MANA_SHADOW"],
-};
 
 local m_TowerIM = InstanceManager:new("TowerInstance", "ButtonBG", Controls.TowerViewStack);				-- todo change in xml
 local m_TowerTeamIM = InstanceManager:new("TowerTeamInstance", "ButtonFrame", Controls.TowerViewStack);
 local m_TowerHeaderIM = InstanceManager:new("TowerHeaderInstance", "HeaderTop", Controls.TowerViewHeader);
-
 local TOWER_REQUIREMENTS = {
-	Locale.Lookup("test"),
-	Locale.Lookup("two"),
+	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_1"),
+	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_2"),
 	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_3"),
 	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_4"),
 	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_2")
 };
-
-local LUONNOTAR_BASE = { GameInfo.Buildings["SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR"] };
-local LUONNOTAR_ANOINTED = {GameInfo.Buildings["SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_ANOINTED"] };
-local LUONNOTAR_BLESSED = {GameInfo.Buildings["SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_BLESSED"], };
-local LUONNOTAR_CONSECRATED = {GameInfo.Buildings["SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_CONSECRATED"], };
-local LUONNOTAR_DIVINE = { GameInfo.Buildings["SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE"], };
-local LUONNOTAR_EXALTED = { GameInfo.Buildings["SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_EXALTED"], };
-local LUONNOTAR_FINAL = { GameInfo.Buildings["SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_FINAL"], };
-local ALTARS = { LUONNOTAR_BASE, LUONNOTAR_ANOINTED, LUONNOTAR_BLESSED, LUONNOTAR_DIVINE, LUONNOTAR_CONSECRATED,
-				 LUONNOTAR_EXALTED, LUONNOTAR_FINAL};
-
-local m_AltarIM = InstanceManager:new("AltarInstance", "ButtonBG", Controls.AltarViewStack);				-- todo change in xml
-local m_AltarTeamIM = InstanceManager:new("AltarTeamInstance", "ButtonFrame", Controls.AltarViewStack);
-local m_AltarHeaderIM = InstanceManager:new("AltarHeaderInstance", "HeaderTop", Controls.AltarViewHeader);
-
-local Altar_REQUIREMENTS = {
-	Locale.Lookup("test"),
-	Locale.Lookup("two"),
-	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_3"),
-	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_4"),
-	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_2"),
-	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_2"),
-	Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_REQUIREMENT_2"),
-};
-
 -- ===========================================================================
 -- Cached Functions
 -- ===========================================================================
@@ -158,86 +97,44 @@ g_victoryData.VICTORY_DIPLOMATIC = {
 	AdditionalSummary = function(p) return GetDiplomaticVictoryAdditionalSummary(p) end
 };
 
-g_victoryData.VICTORY_TOWER_OF_MASTERY = {
+g_victoryData.VICTORY_TOWER = {
 	GetText = function(p)
-		local level = 0;
-		local mana_controlled = 0
-		local iHasTower
+		local total = GlobalParameters.DIPLOMATIC_VICTORY_POINTS_REQUIRED;
+		local current = 0;
 		if (p:IsAlive()) then
-			local stats =  p:GetStats()
-			for idx, tAltar in pairs(TOWER_MASTERY) do
-				for _, pAltar in ipairs(tAltar) do
-					iHasTower = stats:GetNumBuildingsOfType(pAltar)
-					if iHasTower > 0 then
-						level = level + 1
-					end
-				end
-			end
-			local resources = p:GetResources()
-			for idx, mana in pairs(MANAS) do
-				if resources:GetResourceAmount(mana.Index) > 0 then
-					mana_controlled = mana_controlled + 1
-				end
-			end
+			current = p:GetStats():GetDiplomaticVictoryPoints();
 		end
 
-		return "Completed Towers: " .. level .. "[NEWLINE]Unique Mana Controlled: " .. mana_controlled
+		return Locale.Lookup("LOC_WORLD_RANKINGS_DIPLOMATIC_POINTS_TT", current, total);
 	end,
 	GetScore = function(p)
-		local level = 0
-		local iHasTower
+		local current = 0;
 		if (p:IsAlive()) then
-			local stats =  p:GetStats()
-			for idx, tAltar in pairs(TOWER_MASTERY) do
-				for _, pAltar in ipairs(tAltar) do
-					iHasTower = stats:GetNumBuildingsOfType(pAltar)
-					if iHasTower > 0 then
-						level = idx
-					end
-				end
-			end
+			current = p:GetStats():GetDiplomaticVictoryPoints();
 		end
 
-		return level;
+		return current;
 	end,
 	AdditionalSummary = function(p) return GetDiplomaticVictoryAdditionalSummary(p) end
 };
-g_victoryData.VICTORY_ALTAR_OF_LUONNOTAR = {
+
+g_victoryData.VICTORY_ALTAR = {
 	GetText = function(p)
+		local total = GlobalParameters.DIPLOMATIC_VICTORY_POINTS_REQUIRED;
 		local current = 0;
-		local level = 0
-		local iHasAltar
 		if (p:IsAlive()) then
-			local stats =  p:GetStats()
-			for idx, tAltar in pairs(ALTARS) do
-				for _, pAltar in ipairs(tAltar) do
-					iHasAltar = stats:GetNumBuildingsOfType(pAltar)
-					if iHasAltar > 0 then
-						level = level + 1
-					end
-				end
-			end
-			current = p:GetGreatPeoplePoints():GetPointsPerTurn(GREAT_PROPHET.Index);
+			current = p:GetStats():GetDiplomaticVictoryPoints();
 		end
 
-		return "Altar Tier: " .. level .. "[NEWLINE]Great Prophet Points: " .. current
+		return Locale.Lookup("LOC_WORLD_RANKINGS_DIPLOMATIC_POINTS_TT", current, total);
 	end,
 	GetScore = function(p)
-		local level = 0
-		local iHasAltar
+		local current = 0;
 		if (p:IsAlive()) then
-			local stats =  p:GetStats()
-			for idx, tAltar in pairs(ALTARS) do
-				for _, pAltar in ipairs(tAltar) do
-					iHasAltar = stats:GetNumBuildingsOfType(pAltar)
-					if iHasAltar then
-						level = level + 1
-					end
-				end
-			end
+			current = p:GetStats():GetDiplomaticVictoryPoints();
 		end
 
-		return level;
+		return current;
 	end,
 	AdditionalSummary = function(p) return GetDiplomaticVictoryAdditionalSummary(p) end
 };
@@ -273,7 +170,7 @@ function PopulateGenericTeamInstance(instance, teamData, victoryType)
 
 		local detailsText = "";
 		local innerRequirements = GameEffects.GetRequirementSetInnerRequirements(requirementSetID);
-
+	
 		for _, requirementID in ipairs(innerRequirements) do
 
 			if detailsText ~= "" then
@@ -309,20 +206,20 @@ function PopulateGenericTeamInstance(instance, teamData, victoryType)
 	if itemSize < SIZE_GENERIC_ITEM_MIN_Y then
 		itemSize = SIZE_GENERIC_ITEM_MIN_Y;
 	end
-
+	
 	instance.ButtonFrame:SetSizeY(itemSize);
 end
 
 function PopulateGenericInstance(instance, playerData, victoryType, showTeamDetails )
 	PopulatePlayerInstanceShared(instance, playerData.PlayerID);
-
+	
 	if showTeamDetails then
 		local requirementSetID = Game.GetVictoryRequirements(Players[playerData.PlayerID]:GetTeam(), victoryType);
 		if requirementSetID ~= nil and requirementSetID ~= -1 then
 
 			local detailsText = "";
 			local innerRequirements = GameEffects.GetRequirementSetInnerRequirements(requirementSetID);
-
+	
 			if innerRequirements ~= nil then
 				for _, requirementID in ipairs(innerRequirements) do
 
@@ -363,7 +260,7 @@ function PopulateGenericInstance(instance, playerData, victoryType, showTeamDeta
 	if itemSize < SIZE_GENERIC_ITEM_MIN_Y then
 		itemSize = SIZE_GENERIC_ITEM_MIN_Y;
 	end
-
+	
 	instance.ButtonBG:SetSizeY(itemSize);
 end
 
@@ -372,14 +269,14 @@ end
 -- ===========================================================================
 function GetCulturalVictoryAdditionalSummary(pPlayer)
 	if (g_LocalPlayer == nil) then
-		return "";
+		return "";	
 	end
 
 	local iPlayerID = pPlayer:GetID();
 	local pLocalPlayerCulture = g_LocalPlayer:GetCulture();
 	local pOtherPlayerCulture = pPlayer:GetCulture();
 	if (pLocalPlayerCulture == nil or pOtherPlayerCulture == nil) then
-		return "";
+		return "";	
 	end
 
 	local tSummaryStrings = {};
@@ -393,7 +290,7 @@ function GetCulturalVictoryAdditionalSummary(pPlayer)
 	-- Cultural Dominance summaries
 
 	-- This is us, show the quantity of civs we dominate or that dominate us
-	if (iPlayerID == g_LocalPlayerID) then
+	if (iPlayerID == g_LocalPlayerID) then		
 		local iNumWeDominate = 0;
 		local iNumDominateUs = 0;
 		for _, iLoopID in ipairs(PlayerManager.GetAliveMajorIDs()) do
@@ -436,13 +333,13 @@ function ViewScience()
 
 	ChangeActiveHeader("VICTORY_TECHNOLOGY", m_ScienceHeaderIM, Controls.ScienceViewHeader);
 	PopulateGenericHeader(RealizeScienceStackSize, SCIENCE_TITLE, "", SCIENCE_DETAILS, SCIENCE_ICON);
-
+	
 	local totalCost = 0;
 	local currentProgress = 0;
 	local progressText = "";
 	local progressResults = { 0, 0, 0, 0 }; -- initialize with 3 elements
 	local finishedProjects = { {}, {}, {}, {} };
-
+	
 	local bHasSpaceport = false;
 	if (g_LocalPlayer ~= nil) then
 		for _,district in g_LocalPlayer:GetDistricts():Members() do
@@ -485,7 +382,7 @@ function ViewScience()
 				finishedProjects[2][i] = projectProgress == projectCost;
 			end
 			progressResults[2] = currentProgress / totalCost;
-
+		
 			-- 3rd milestone - mars landing
 			totalCost = 0;
 			currentProgress = 0;
@@ -574,7 +471,7 @@ end
 
 function GetNextStepForScienceProject(pPlayer, projectInfos, bHasSpaceport, finishedProjects)
 
-	if(not bHasSpaceport) then
+	if(not bHasSpaceport) then 
 		return Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NEXT_STEP_BUILD", Locale.Lookup(SPACE_PORT_DISTRICT_INFO.Name));
 	end
 
@@ -600,9 +497,9 @@ end
 function PopulateScienceInstance(instance, pPlayer)
 	local playerID = pPlayer:GetID();
 	PopulatePlayerInstanceShared(instance, playerID);
-
+	
 	-- Progress Data to be returned from function
-	local progressData = nil;
+	local progressData = nil; 
 
 	local bHasSpaceport = false;
 	for _,district in pPlayer:GetDistricts():Members() do
@@ -700,7 +597,7 @@ function GetTooltipForScienceProject(pPlayer, projectInfos, bHasSpaceport, finis
 
 	-- Only show spaceport for first tooltip
 	if bHasSpaceport ~= nil then
-		if(bHasSpaceport) then
+		if(bHasSpaceport) then 
 			result = result .. "[ICON_CheckmarkBlue]";
 		else
 			result = result .. "[ICON_Bolt]";
@@ -743,7 +640,7 @@ function PopulateScienceProgressMeters(instance, progressData)
 		instance["ObjBar_" .. i]:SetPercent(progressData.projectProgresses[i] / progressData.projectTotals[i]);
 		instance["ObjToggle_ON_" .. i]:SetHide(progressData.projectTotals[i] == 0 or progressData.projectProgresses[i] ~= progressData.projectTotals[i]);
 	end
-
+	
     instance["ObjHidden_5"]:SetHide(true);
     -- if bar 4 is at 100%, light up bar 5
     if ((progressData.projectProgresses[4] >= progressData.projectTotals[4]) and (progressData.projectTotals[4] ~= 0)) then
@@ -765,7 +662,7 @@ function PopulateScienceProgressMeters(instance, progressData)
         instance["ObjBar_5"]:SetPercent(0);
 		instance.ObjBG_5:SetToolTipString(Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NO_LAUNCH"));
     end
-
+    		
 	instance.ObjBG_1:SetToolTipString(GetTooltipForScienceProject(pPlayer, EARTH_SATELLITE_EXP2_PROJECT_INFOS, progressData.bHasSpaceport, progressData.finishedProjects[1]));
 	instance.ObjBG_2:SetToolTipString(GetTooltipForScienceProject(pPlayer, MOON_LANDING_EXP2_PROJECT_INFOS, nil, progressData.finishedProjects[2]));
 	instance.ObjBG_3:SetToolTipString(GetTooltipForScienceProject(pPlayer, MARS_COLONY_EXP2_PROJECT_INFOS, nil, progressData.finishedProjects[3]));
@@ -820,9 +717,9 @@ function PopulateTabs()
 			if (victoryType == "VICTORY_DIPLOMATIC") then
 				AddTab(Locale.Lookup("LOC_TOOLTIP_DIPLOMACY_CONGRESS_BUTTON"), function() ViewDiplomatic(victoryType); end);
 			elseif (victoryType == "VICTORY_TOWER_OF_MASTERY") then
-				AddTab(Locale.Lookup("LOC_TOWER_VICTORY_SHORT"), function() ViewTowerMastery(victoryType); end);
+				AddTab(Locale.Lookup("LOC_TOOLTIP_DIPLOMACY_CONGRESS_BUTTON"), function() ViewTowerMastery(victoryType); end);
 			elseif (victoryType == "VICTORY_ALTAR_OF_LUONNOTAR") then
-				AddTab(Locale.Lookup("LOC_ALTAR_VICTORY_SHORT"), function() ViewAltar(victoryType); end);
+				AddTab(Locale.Lookup("LOC_TOOLTIP_DIPLOMACY_CONGRESS_BUTTON"), function() ViewDiplomatic(victoryType); end);
 			else
 				AddTab(Locale.Lookup(row.Name), function() ViewGeneric(victoryType); end);
 			end
@@ -871,7 +768,7 @@ end
 
 function AddExtraTab(label, onClickCallback)
 	local extraTabInst = g_ExtraTabsIM:GetInstance();
-
+	
 	extraTabInst.Button:SetText(label);
 	extraTabInst.Button:RegisterCallback(Mouse.eLClick, OnExtraTabClicked(extraTabInst, onClickCallback));
 
@@ -959,10 +856,16 @@ end
 
 function ViewTowerMastery(victoryType)
 	ResetState(function() ViewTowerMastery(victoryType); end);
-	Controls.TowerView:SetHide(false);
+	Controls.GenericView:SetHide(false);
 
-	ChangeActiveHeader("VICTORY_TECHNOLOGY", m_TowerHeaderIM, Controls.TowerViewHeader);
-	PopulateGenericHeader(RealizeTowerStackSize, 'LOC_VICTORY_TOWER_OF_MASTERY_NAME', "", 'LOC_VICTORY_TOWER_OF_MASTERY_DESCRIPTION', SCIENCE_ICON);
+	ChangeActiveHeader("GENERIC", m_GenericHeaderIM, Controls.GenericViewHeader);		-- todo
+
+	local victoryInfo = GameInfo.Victories[victoryType];
+    if victoryInfo.Icon ~= nil then
+        PopulateGenericHeader(RealizeGenericStackSize, victoryInfo.Name, nil, victoryInfo.Description, victoryInfo.Icon);
+    else
+        PopulateGenericHeader(RealizeGenericStackSize, victoryInfo.Name, nil, victoryInfo.Description, ICON_GENERIC);
+    end
 
 	local totalCost = 0;
 	local currentProgress = 0;
@@ -979,17 +882,14 @@ function ViewTowerMastery(victoryType)
 			totalCost = 0;
 			currentProgress = 0;
 			for i, buildingInfo in ipairs(TOWER_ALTERATION) do
-				if not buildingInfo.ResourceType then
-					print(buildingInfo.ResourceType)
-					local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-					local projectProgress = projectCost;
-					if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-						projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-					end
-					totalCost = totalCost + projectCost;
-					currentProgress = currentProgress + projectProgress;
-					finishedProjects[1][i] = projectProgress == projectCost;
+				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
+				local projectProgress = projectCost;
+				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
+					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
 				end
+				totalCost = totalCost + projectCost;
+				currentProgress = currentProgress + projectProgress;
+				finishedProjects[1][i] = projectProgress == projectCost;
 			end
 			progressResults[1] = currentProgress / totalCost;
 
@@ -997,16 +897,14 @@ function ViewTowerMastery(victoryType)
 			totalCost = 0;
 			currentProgress = 0;
 			for i, buildingInfo in ipairs(TOWER_DIVINATION) do
-				if not buildingInfo.ResourceType then
-					local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-					local projectProgress = projectCost;
-					if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-						projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-					end
-					totalCost = totalCost + projectCost;
-					currentProgress = currentProgress + projectProgress;
-					finishedProjects[2][i] = projectProgress == projectCost;
+				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
+				local projectProgress = projectCost;
+				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
+					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
 				end
+				totalCost = totalCost + projectCost;
+				currentProgress = currentProgress + projectProgress;
+				finishedProjects[2][i] = projectProgress == projectCost;
 			end
 			progressResults[2] = currentProgress / totalCost;
 
@@ -1014,32 +912,28 @@ function ViewTowerMastery(victoryType)
 			totalCost = 0;
 			currentProgress = 0;
 			for i, buildingInfo in ipairs(TOWER_ELEMENTS) do
-				if not buildingInfo.ResourceType then
-					local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-					local projectProgress = projectCost;
-					if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-						projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-					end
-					totalCost = totalCost + projectCost;
-					currentProgress = currentProgress + projectProgress;
-					finishedProjects[3][i] = projectProgress == projectCost;
+				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
+				local projectProgress = projectCost;
+				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
+					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
 				end
+				totalCost = totalCost + projectCost;
+				currentProgress = currentProgress + projectProgress;
+				finishedProjects[3][i] = projectProgress == projectCost;
 			end
 			progressResults[3] = currentProgress / totalCost;
 
 			totalCost = 0;
 			currentProgress = 0;
 			for i, buildingInfo in ipairs(TOWER_NECROMANCY) do
-				if not buildingInfo.ResourceType then
-					local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-					local projectProgress = projectCost;
-					if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-						projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-					end
-					totalCost = totalCost + projectCost;
-					currentProgress = currentProgress + projectProgress;
-					finishedProjects[4][i] = projectProgress == projectCost;
+				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
+				local projectProgress = projectCost;
+				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
+					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
 				end
+				totalCost = totalCost + projectCost;
+				currentProgress = currentProgress + projectProgress;
+				finishedProjects[4][i] = projectProgress == projectCost;
 			end
 			progressResults[4] = currentProgress / totalCost;
 
@@ -1063,9 +957,7 @@ function ViewTowerMastery(victoryType)
 	for i, result in ipairs(progressResults) do
 		if(result < 1) then
 			progressText = progressText .. "[ICON_Bolt]";
-			print(progressText)
 			if(nextStep == "") then
-				print('lnn')
 				nextStep = GetNextStepForTowerBuildings(g_LocalPlayer, TOWERS[i], finishedProjects[i]);
 			end
 		else
@@ -1073,7 +965,6 @@ function ViewTowerMastery(victoryType)
 		end
 		progressText = progressText .. TOWER_REQUIREMENTS[i] .. "[NEWLINE]";
 	end
-	print(progressText)
 
 	m_TowerIM:ResetInstances();
 	m_TowerTeamIM:ResetInstances();
@@ -1091,7 +982,7 @@ function ViewTowerMastery(victoryType)
 		end
 	end
 
-	RealizeTowerStackSize();
+	RealizeScienceStackSize();
 end
 
 function GetNextStepForTowerBuildings(pPlayer, projectInfos, finishedProjects)
@@ -1103,12 +994,11 @@ function GetNextStepForTowerBuildings(pPlayer, projectInfos, finishedProjects)
 	local playerTech = pPlayer:GetTechs();
 	local numProjectInfos = table.count(projectInfos);
 	for i, projectInfo in ipairs(projectInfos) do
-		if not projectInfo.ResourceType then
-			if(projectInfo.PrereqTech ~= nil) then
-				local tech = GameInfo.Technologies[projectInfo.PrereqTech];
-				if(not playerTech:HasTech(tech.Index)) then
-					return Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NEXT_STEP_RESEARCH", Locale.Lookup(tech.Name));
-				end
+
+		if(projectInfo.PrereqTech ~= nil) then
+			local tech = GameInfo.Technologies[projectInfo.PrereqTech];
+			if(not playerTech:HasTech(tech.Index)) then
+				return Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NEXT_STEP_RESEARCH", Locale.Lookup(tech.Name));
 			end
 		end
 
@@ -1270,483 +1160,15 @@ function PopulateTowerProgressMeters(instance, progressData)
 	instance.ObjBG_2:SetToolTipString(GetTooltipForTowerProject(pPlayer, TOWER_DIVINATION, progressData.finishedProjects[2]));
 	instance.ObjBG_3:SetToolTipString(GetTooltipForTowerProject(pPlayer, TOWER_ELEMENTS,  progressData.finishedProjects[3]));
 	instance.ObjBG_4:SetToolTipString(GetTooltipForTowerProject(pPlayer, TOWER_NECROMANCY,  progressData.finishedProjects[4]));
-	instance.ObjBG_5:SetToolTipString(GetTooltipForTowerProject(pPlayer, TOWER_MASTERY,  progressData.finishedProjects[5], true));
 end
 
-function GetTooltipForTowerProject(pPlayer, projectInfos, finishedProjects, isFinal)
-
-	local result = "";
-	local new_result
-	local cache_for_last = ""
-	local precursor_text = Locale.Lookup('Build ')
-	local playerTech = pPlayer:GetTechs();
-	local resources = pPlayer:GetResources()
-	local numProjectInfos = table.count(projectInfos);
-	for i, projectInfo in ipairs(projectInfos) do
-		new_result = ""
-		if(projectInfo.PrereqTech ~= nil) and not projectInfo.ResourceType then
-			local tech = GameInfo.Technologies[projectInfo.PrereqTech];
-			if isFinal and i < numProjectInfos then
-				print('skipping vict tooltip')
-			else
-				if(playerTech:HasTech(tech.Index)) then
-					new_result = new_result .. "[ICON_CheckmarkBlue]";
-				else
-					new_result = new_result .. "[ICON_Bolt]";
-				end
-
-				new_result = new_result .. Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NEXT_STEP_RESEARCH", Locale.Lookup(tech.Name)) .. "[NEWLINE]";
-			end
-		end
-
-		if(projectInfo.ResourceType ~= nil) then
-			if(resources:GetResourceAmount(projectInfo.Index) > 0) then
-				new_result = new_result .. "[ICON_CheckmarkBlue]";
-			else
-				new_result = new_result .. "[ICON_Bolt]";
-			end
-			new_result = new_result .. Locale.Lookup('LOC_MAINTAIN_MANA') .. Locale.Lookup(projectInfo.Name) .. "[NEWLINE]";
-		end
-
-
-		if(projectInfo.BuildingType) then
-			if isFinal and i < numProjectInfos-1 then
-				precursor_text = 'Have '
-			end
-			if finishedProjects[i] then
-				cache_for_last = cache_for_last .. "[ICON_CheckmarkBlue]";
-			else
-				cache_for_last = cache_for_last .. "[ICON_Bolt]";
-			end
-			cache_for_last = cache_for_last .. precursor_text .. Locale.Lookup(projectInfo.Name) .. "[NEWLINE]";
-		end
-
-		-- if(i < numProjectInfos and new_result~="") then new_result = new_result .. "[NEWLINE]"; end
-		result = result .. new_result
-	end
-	result = result .. cache_for_last
-	return result;
-end
-
-function RealizeTowerStackSize()
-	local _, screenY = UIManager:GetScreenSizeVal();
-
-	if(g_activeheader[DATA_FIELD_HEADER_EXPANDED]) then
-		local headerHeight = g_activeheader[DATA_FIELD_HEADER_HEIGHT];
-		headerHeight = headerHeight + g_activeheader.AdvisorTextCentered:GetSizeY() + g_activeheader.AdvisorTextNextStep:GetSizeY() + (PADDING_HEADER * 2);
-		g_activeheader.AdvisorIcon:SetOffsetY(OFFSET_ADVISOR_ICON_Y + headerHeight);
-		g_activeheader.HeaderFrame:SetSizeY(OFFSET_ADVISOR_TEXT_Y + headerHeight);
-		g_activeheader.ContractHeaderButton:SetOffsetY(OFFSET_CONTRACT_BUTTON_Y + headerHeight);
-		Controls.TowerViewContents:SetOffsetY(OFFSET_VIEW_CONTENTS + headerHeight + PADDING_HEADER);
-		Controls.TowerViewScrollbar:SetSizeY(screenY - (SIZE_STACK_DEFAULT + (headerHeight + PADDING_HEADER)));
-		g_activeheader.AdvisorTextCentered:SetHide(false);
-		g_activeheader.AdvisorTextNextStep:SetHide(false);
-	else
-		Controls.TowerViewContents:SetOffsetY(OFFSET_VIEW_CONTENTS);
-		Controls.TowerViewScrollbar:SetSizeY(screenY - SIZE_STACK_DEFAULT);
-		g_activeheader.AdvisorTextCentered:SetHide(true);
-		g_activeheader.AdvisorTextNextStep:SetHide(true);
-	end
-
-	RealizeStackAndScrollbar(Controls.TowerViewStack, Controls.TowerViewScrollbar, true);
-
-	--local textSize = Controls.ScienceDetailsButton:GetTextControl():GetSizeX();
-	--Controls.ScienceDetailsButton:SetSizeX(textSize + PADDING_SCORE_DETAILS_BUTTON_WIDTH);
-end
-
-------------------------------------
-function ViewAltar(victoryType)
-	ResetState(function() ViewAltar(victoryType); end);
-	Controls.AltarView:SetHide(false);
-
-	ChangeActiveHeader("VICTORY_ALTAR", m_AltarHeaderIM, Controls.AltarViewHeader);
-	PopulateGenericHeader(RealizeAltarStackSize, 'LOC_VICTORY_ALTAR_OF_LUONNOTAR_NAME', "", 'LOC_VICTORY_ALTAR_OF_LUONNOTAR_DESCRIPTION', SCIENCE_ICON);
-
-	local totalCost = 0;
-	local currentProgress = 0;
-	local progressText = "";
-	local progressResults = { 0, 0, 0, 0, 0, 0, 0 }; -- initialize with 3 elements
-	local finishedProjects = { {}, {}, {}, {}, {}, {}, {}, {} };
-
-	if (g_LocalPlayer ~= nil) then
-		local pPlayerStats = g_LocalPlayer:GetStats();
-		local pPlayerCities = g_LocalPlayer:GetCities();
-		for _, city in pPlayerCities:Members() do
-			local pBuildQueue = city:GetBuildQueue();
-			-- 1st milestone - satellite launch
-			totalCost = 0;
-			currentProgress = 0;
-			for i, buildingInfo in ipairs(LUONNOTAR_BASE) do
-				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-				local projectProgress = projectCost;
-				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-				end
-				totalCost = totalCost + projectCost;
-				currentProgress = currentProgress + projectProgress;
-				finishedProjects[1][i] = projectProgress == projectCost;
-			end
-			progressResults[1] = currentProgress / totalCost;
-
-			-- 2nd milestone - moon landing
-			totalCost = 0;
-			currentProgress = 0;
-			for i, buildingInfo in ipairs(LUONNOTAR_ANOINTED) do
-				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-				local projectProgress = projectCost;
-				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-				end
-				totalCost = totalCost + projectCost;
-				currentProgress = currentProgress + projectProgress;
-				finishedProjects[2][i] = projectProgress == projectCost;
-			end
-			progressResults[2] = currentProgress / totalCost;
-
-			-- 3rd milestone - mars landing
-			totalCost = 0;
-			currentProgress = 0;
-			for i, buildingInfo in ipairs(LUONNOTAR_BLESSED) do
-				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-				local projectProgress = projectCost;
-				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-				end
-				totalCost = totalCost + projectCost;
-				currentProgress = currentProgress + projectProgress;
-				finishedProjects[3][i] = projectProgress == projectCost;
-			end
-			progressResults[3] = currentProgress / totalCost;
-
-			totalCost = 0;
-			currentProgress = 0;
-			for i, buildingInfo in ipairs(LUONNOTAR_CONSECRATED) do
-				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-				local projectProgress = projectCost;
-				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-				end
-				totalCost = totalCost + projectCost;
-				currentProgress = currentProgress + projectProgress;
-				finishedProjects[4][i] = projectProgress == projectCost;
-			end
-			progressResults[4] = currentProgress / totalCost;
-
-			totalCost = 0;
-			currentProgress = 0;
-			for i, buildingInfo in ipairs(LUONNOTAR_DIVINE) do
-				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-				local projectProgress = projectCost;
-				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-				end
-				totalCost = totalCost + projectCost;
-				currentProgress = currentProgress + projectProgress;
-				finishedProjects[5][i] = projectProgress == projectCost;
-			end
-			progressResults[5] = currentProgress / totalCost;
-
-			totalCost = 0;
-			currentProgress = 0;
-			for i, buildingInfo in ipairs(LUONNOTAR_EXALTED) do
-				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-				local projectProgress = projectCost;
-				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-				end
-				totalCost = totalCost + projectCost;
-				currentProgress = currentProgress + projectProgress;
-				finishedProjects[6][i] = projectProgress == projectCost;
-			end
-			progressResults[6] = currentProgress / totalCost;
-
-			-- 4th milestone - exoplanet expeditiion
-			totalCost = 0;
-			currentProgress = 0;
-			for i, buildingInfo in ipairs(LUONNOTAR_FINAL) do
-				local projectCost = pBuildQueue:GetBuildingCost(buildingInfo.Index);
-				local projectProgress = projectCost;
-				if pPlayerStats:GetNumBuildingsOfType(buildingInfo.Index) == 0 then
-					projectProgress = pBuildQueue:GetBuildingProgress(buildingInfo.Index);
-				end
-				totalCost = totalCost + projectCost;
-				currentProgress = currentProgress + projectProgress;
-				finishedProjects[7][i] = projectProgress == projectCost;
-			end
-			progressResults[7] = currentProgress / totalCost;
-		end
-	end
-	local nextStep = "";
-	for i, result in ipairs(progressResults) do
-		if(result < 1) then
-			progressText = progressText .. "[ICON_Bolt]";
-			if(nextStep == "") then
-				nextStep = GetNextStepForAltarBuildings(g_LocalPlayer, ALTARS[i], finishedProjects[i]);
-			end
-		else
-			progressText = progressText .. "[ICON_CheckmarkBlue] ";
-		end
-		progressText = progressText .. Altar_REQUIREMENTS[i] .. "[NEWLINE]";
-	end
-
-	m_AltarIM:ResetInstances();
-	m_AltarTeamIM:ResetInstances();
-
-	for teamID, team in pairs(Teams) do
-		if teamID >= 0 then
-			if #team > 1 then
-				PopulateAltarTeamInstance(m_AltarTeamIM:GetInstance(), teamID);
-			else
-				local pPlayer = Players[team[1]];
-				if (pPlayer:IsAlive() == true and pPlayer:IsMajor() == true) then
-					PopulateAltarInstance(m_AltarIM:GetInstance(), pPlayer);
-				end
-			end
-		end
-	end
-
-	RealizeAltarStackSize();
-end
-
-function GetNextStepForAltarBuildings(pPlayer, projectInfos, finishedProjects)
-
-	-- if(not bHasSpaceport) then 		-- TODO use this if needs more mana
-	--	return Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NEXT_STEP_BUILD", Locale.Lookup(SPACE_PORT_DISTRICT_INFO.Name));
-	-- end
-
-	local playerTech = pPlayer:GetCulture();
-	local numProjectInfos = table.count(projectInfos);
-	for i, projectInfo in ipairs(projectInfos) do
-
-		if(projectInfo.PrereqCivic ~= nil) then
-			local civic = GameInfo.Civics[projectInfo.PrereqCivic];
-			if(not playerTech:HasCivic(civic.Index)) then
-				return Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NEXT_STEP_RESEARCH", Locale.Lookup(civic.Name));
-			end
-		end
-
-		if(not finishedProjects[i]) then
-			return Locale.Lookup(projectInfo.Name);
-		end
-	end
-	return "";
-end
-
-function PopulateAltarTeamInstance(instance, teamID)
-
-	PopulateTeamInstanceShared(instance, teamID);
-
-	-- Add team members to player stack
-	if instance.PlayerStackIM == nil then
-		instance.PlayerStackIM = InstanceManager:new("AltarInstance", "ButtonBG", instance.AltarPlayerInstanceStack);
-	end
-
-	instance.PlayerStackIM:ResetInstances();
-
-	local teamProgressData = {};
-	for i, playerID in ipairs(Teams[teamID]) do
-		if IsAliveAndMajor(playerID) then
-			local pPlayer = Players[playerID];
-			local progressData = PopulateAltarInstance(instance.PlayerStackIM:GetInstance(), pPlayer);
-			if progressData then
-				table.insert(teamProgressData, progressData);
-			end
-		end
-	end
-
-	-- Sort team progress data
-	table.sort(teamProgressData, function(a, b)
-		-- Compare stage 1 progress
-		local aScore = a.projectProgresses[1] / a.projectTotals[1];
-		local bScore = b.projectProgresses[1] / b.projectTotals[1];
-		if aScore == bScore then
-			-- Compare stage 2 progress
-			aScore = a.projectProgresses[2] / a.projectTotals[2];
-			bScore = b.projectProgresses[2] / b.projectTotals[2];
-			if aScore == bScore then
-				-- Compare stage 3 progress
-				aScore = a.projectProgresses[3] / a.projectTotals[3];
-				bScore = b.projectProgresses[3] / b.projectTotals[3];
-				if aScore == bScore then
-					return a.playerID < b.playerID;
-				end
-			end
-		end
-		return aScore > bScore;
-	end);
-
-	-- Populate the team progress with the progress of the furthest player
-	if teamProgressData and #teamProgressData > 0 then
-		PopulateAltarProgressMeters(instance, teamProgressData[1]);
-	end
-end
-
-function PopulateAltarInstance(instance, pPlayer)
-	local playerID = pPlayer:GetID();
-	PopulatePlayerInstanceShared(instance, playerID);
-
-	-- Progress Data to be returned from function
-	local progressData = nil;
-
-	local pPlayerStats = pPlayer:GetStats();
-	local pPlayerCities = pPlayer:GetCities();
-	local projectTotals = { 0, 0, 0, 0, 0, 0, 0 };
-	local projectProgresses = { 0, 0, 0, 0, 0, 0, 0 };
-	local finishedProjects = { {}, {}, {}, {}, {}, {}, {} };
-	for _, city in pPlayerCities:Members() do
-		local pBuildQueue = city:GetBuildQueue();
-
-		-- 1st milestone - satelite launch
-		for i, projectInfo in ipairs(LUONNOTAR_BASE) do
-			local projectCost = pBuildQueue:GetBuildingCost(projectInfo.Index);
-			local projectProgress = projectCost;
-			if pPlayerStats:GetNumBuildingsOfType(projectInfo.Index) == 0 then
-				projectProgress = pBuildQueue:GetBuildingProgress(projectInfo.Index);
-			end
-			finishedProjects[1][i] = false;
-			if projectProgress ~= 0 then
-				projectTotals[1] = projectTotals[1] + projectCost;
-				projectProgresses[1] = projectProgresses[1] + projectProgress;
-				finishedProjects[1][i] = projectProgress == projectCost;
-			end
-		end
-
-		-- 2nd milestone - moon landing
-		for i, projectInfo in ipairs(LUONNOTAR_ANOINTED) do
-			local projectCost = pBuildQueue:GetBuildingCost(projectInfo.Index);
-			local projectProgress = projectCost;
-			if pPlayerStats:GetNumBuildingsOfType(projectInfo.Index) == 0 then
-				projectProgress = pBuildQueue:GetBuildingProgress(projectInfo.Index);
-			end
-			finishedProjects[2][i] = false;
-			if projectProgress ~= 0 then
-				projectTotals[2] = projectTotals[2] + projectCost;
-				projectProgresses[2] = projectProgresses[2] + projectProgress;
-				finishedProjects[2][i] = projectProgress == projectCost;
-			end
-		end
-
-		-- 3rd milestone - mars landing
-		for i, projectInfo in ipairs(LUONNOTAR_BLESSED) do
-			local projectCost = pBuildQueue:GetBuildingCost(projectInfo.Index);
-			local projectProgress = projectCost;
-			if pPlayerStats:GetNumBuildingsOfType(projectInfo.Index) == 0 then
-				projectProgress = pBuildQueue:GetBuildingProgress(projectInfo.Index);
-			end
-			finishedProjects[3][i] = false;
-			projectTotals[3] = projectTotals[3] + projectCost;
-			if projectProgress ~= 0 then
-				projectProgresses[3] = projectProgresses[3] + projectProgress;
-				finishedProjects[3][i] = projectProgress == projectCost;
-			end
-		end
-
-		for i, projectInfo in ipairs(LUONNOTAR_CONSECRATED) do
-			local projectCost = pBuildQueue:GetBuildingCost(projectInfo.Index);
-			local projectProgress = projectCost;
-			if pPlayerStats:GetNumBuildingsOfType(projectInfo.Index) == 0 then
-				projectProgress = pBuildQueue:GetBuildingProgress(projectInfo.Index);
-			end
-			finishedProjects[4][i] = false;
-			projectTotals[4] = projectTotals[4] + projectCost;
-			if projectProgress ~= 0 then
-				projectProgresses[4] = projectProgresses[4] + projectProgress;
-				finishedProjects[4][i] = projectProgress == projectCost;
-			end
-		end
-
-		for i, projectInfo in ipairs(LUONNOTAR_DIVINE) do
-			local projectCost = pBuildQueue:GetBuildingCost(projectInfo.Index);
-			local projectProgress = projectCost;
-			if pPlayerStats:GetNumBuildingsOfType(projectInfo.Index) == 0 then
-				projectProgress = pBuildQueue:GetBuildingProgress(projectInfo.Index);
-			end
-			finishedProjects[5][i] = false;
-			projectTotals[5] = projectTotals[5] + projectCost;
-			if projectProgress ~= 0 then
-				projectProgresses[5] = projectProgresses[5] + projectProgress;
-				finishedProjects[5][i] = projectProgress == projectCost;
-			end
-		end
-
-		for i, projectInfo in ipairs(LUONNOTAR_EXALTED) do
-			local projectCost = pBuildQueue:GetBuildingCost(projectInfo.Index);
-			local projectProgress = projectCost;
-			if pPlayerStats:GetNumBuildingsOfType(projectInfo.Index) == 0 then
-				projectProgress = pBuildQueue:GetBuildingProgress(projectInfo.Index);
-			end
-			finishedProjects[6][i] = false;
-			projectTotals[6] = projectTotals[6] + projectCost;
-			if projectProgress ~= 0 then
-				projectProgresses[6] = projectProgresses[6] + projectProgress;
-				finishedProjects[6][i] = projectProgress == projectCost;
-			end
-		end
-		-- 4th milestone - exoplanet expedition
-		for i, projectInfo in ipairs(LUONNOTAR_FINAL) do
-			local projectCost = pBuildQueue:GetBuildingCost(projectInfo.Index);
-			local projectProgress = projectCost;
-			if pPlayerStats:GetNumBuildingsOfType(projectInfo.Index) == 0 then
-				projectProgress = pBuildQueue:GetBuildingProgress(projectInfo.Index);
-			end
-			finishedProjects[7][i] = false;
-			projectTotals[7] = projectTotals[7] + projectCost;
-			if projectProgress ~= 0 then
-				projectProgresses[7] = projectProgresses[7] + projectProgress;
-				finishedProjects[7][i] = projectProgress == projectCost;
-			end
-		end
-	end
-
-	-- Save data to be returned
-	progressData = {};
-	progressData.playerID = playerID;
-	progressData.projectTotals = projectTotals;
-	progressData.projectProgresses = projectProgresses;
-	progressData.bHasSpaceport = true;
-	progressData.finishedProjects = finishedProjects;
-
-	PopulateAltarProgressMeters(instance, progressData);
-
-	return progressData;
-end
-
-function PopulateAltarProgressMeters(instance, progressData)
-	local pPlayer = Players[progressData.playerID];
-
-	for i = 1, 7 do
-		instance["ObjHidden_" .. i]:SetHide(true);
-		instance["ObjFill_" .. i]:SetHide(progressData.projectProgresses[i] == 0);
-		instance["ObjBar_" .. i]:SetPercent(progressData.projectProgresses[i] / progressData.projectTotals[i]);
-		instance["ObjToggle_ON_" .. i]:SetHide(progressData.projectTotals[i] == 0 or progressData.projectProgresses[i] ~= progressData.projectTotals[i]);
-	end
-	instance.ObjBG_1:SetToolTipString(GetTooltipForAltarProject(pPlayer, LUONNOTAR_BASE, progressData.finishedProjects[1]));
-	instance.ObjBG_2:SetToolTipString(GetTooltipForAltarProject(pPlayer, LUONNOTAR_ANOINTED, progressData.finishedProjects[2]));
-	instance.ObjBG_3:SetToolTipString(GetTooltipForAltarProject(pPlayer, LUONNOTAR_BLESSED,  progressData.finishedProjects[3]));
-	instance.ObjBG_4:SetToolTipString(GetTooltipForAltarProject(pPlayer, LUONNOTAR_CONSECRATED,  progressData.finishedProjects[4]));
-	instance.ObjBG_5:SetToolTipString(GetTooltipForAltarProject(pPlayer, LUONNOTAR_DIVINE,  progressData.finishedProjects[5]));
-	instance.ObjBG_6:SetToolTipString(GetTooltipForAltarProject(pPlayer, LUONNOTAR_EXALTED,  progressData.finishedProjects[6]));
-	instance.ObjBG_7:SetToolTipString(GetTooltipForAltarProject(pPlayer, LUONNOTAR_FINAL,  progressData.finishedProjects[7]));
-end
-
-function GetTooltipForAltarProject(pPlayer, projectInfos, finishedProjects)
+function GetTooltipForTowerProject(pPlayer, projectInfos, finishedProjects)
 
 	local result = "";
 
-	local playerCivic = pPlayer:GetCulture();
 	local playerTech = pPlayer:GetTechs();
 	local numProjectInfos = table.count(projectInfos);
 	for i, projectInfo in ipairs(projectInfos) do
-
-		if(projectInfo.PrereqCivic ~= nil) then
-			local civic = GameInfo.Civics[projectInfo.PrereqCivic];
-			if(playerCivic:HasCivic(civic.Index)) then
-				result = result .. "[ICON_CheckmarkBlue]";
-			else
-				result = result .. "[ICON_Bolt]";
-			end
-			result = result .. Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NEXT_STEP_RESEARCH", Locale.Lookup(civic.Name)) .. " Civic [NEWLINE]";
-		end
 
 		if(projectInfo.PrereqTech ~= nil) then
 			local tech = GameInfo.Technologies[projectInfo.PrereqTech];
@@ -1763,65 +1185,11 @@ function GetTooltipForAltarProject(pPlayer, projectInfos, finishedProjects)
 		else
 			result = result .. "[ICON_Bolt]";
 		end
-		if projectInfo.Name == 'LOC_SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_FINAL_NAME' then
-			result = result .. Locale.Lookup('LOC_SLTH_BUILD') .. Locale.Lookup(projectInfo.Name);
-		elseif projectInfo.Name == 'LOC_SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_NAME' then
-			result = result .. Locale.Lookup('LOC_USE_GP') .. Locale.Lookup(projectInfo.Name);
-		else
-			result = result .. Locale.Lookup('LOC_USE_GP') .. Locale.Lookup(projectInfo.Name) .. ' in your city with the Altar of Luonnotar.';
-		end
+		result = result .. Locale.Lookup(projectInfo.Name);
 		if(i < numProjectInfos) then result = result .. "[NEWLINE]"; end
 	end
-	print(result)
 
 	return result;
-end
-
-function RealizeAltarStackSize()
-	local _, screenY = UIManager:GetScreenSizeVal();
-
-	if(g_activeheader[DATA_FIELD_HEADER_EXPANDED]) then
-		local headerHeight = g_activeheader[DATA_FIELD_HEADER_HEIGHT];
-		headerHeight = headerHeight + g_activeheader.AdvisorTextCentered:GetSizeY() + g_activeheader.AdvisorTextNextStep:GetSizeY() + (PADDING_HEADER * 2);
-		g_activeheader.AdvisorIcon:SetOffsetY(OFFSET_ADVISOR_ICON_Y + headerHeight);
-		g_activeheader.HeaderFrame:SetSizeY(OFFSET_ADVISOR_TEXT_Y + headerHeight);
-		g_activeheader.ContractHeaderButton:SetOffsetY(OFFSET_CONTRACT_BUTTON_Y + headerHeight);
-		Controls.AltarViewContents:SetOffsetY(OFFSET_VIEW_CONTENTS + headerHeight + PADDING_HEADER);
-		Controls.AltarViewScrollbar:SetSizeY(screenY - (SIZE_STACK_DEFAULT + (headerHeight + PADDING_HEADER)));
-		g_activeheader.AdvisorTextCentered:SetHide(false);
-		g_activeheader.AdvisorTextNextStep:SetHide(false);
-	else
-		Controls.AltarViewContents:SetOffsetY(OFFSET_VIEW_CONTENTS);
-		Controls.AltarViewScrollbar:SetSizeY(screenY - SIZE_STACK_DEFAULT);
-		g_activeheader.AdvisorTextCentered:SetHide(true);
-		g_activeheader.AdvisorTextNextStep:SetHide(true);
-	end
-
-	RealizeStackAndScrollbar(Controls.AltarViewStack, Controls.AltarViewScrollbar, true);
-
-	--local textSize = Controls.ScienceDetailsButton:GetTextControl():GetSizeX();
-	--Controls.ScienceDetailsButton:SetSizeX(textSize + PADDING_SCORE_DETAILS_BUTTON_WIDTH);
-end
-
-
-function ResetState(newView)
-	g_activeheader = nil;
-	m_ActiveViewUpdate = newView;
-	Controls.OverallView:SetHide(true);
-	Controls.ScoreView:SetHide(true);
-	Controls.ScienceView:SetHide(true);
-	Controls.CultureView:SetHide(true);
-	Controls.DominationView:SetHide(true);
-	Controls.ReligionView:SetHide(true);
-	Controls.GenericView:SetHide(true);
-	Controls.TowerView:SetHide(true);
-	Controls.AltarView:SetHide(true);
-	-- Reset tourism lens unless we're now view the Culture tab
-	if newView ~= ViewCulture then
-		ResetTourismLens();
-	end
-
-	DeactivateReligionLens();
 end
 
 -- ===========================================================================
@@ -1831,4 +1199,3 @@ function Initialize()
 	ToggleExtraTabs(); -- Start with extra tabs opened so DiplomaticVictory tab is visible by default
 end
 Initialize();
-print('load in new world ranking---------------------------------------------------')
