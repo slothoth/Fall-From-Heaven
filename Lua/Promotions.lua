@@ -28,7 +28,6 @@ function onSpawnApplyPromotions(playerID, unitID)
         end
     end
 
-    local pPlayer = Players[playerID]
     local resources = pPlayer:GetResources()
     if resources then                -- DealManager.GetPlayerDeals(0,1)[1]:FindItemByID(2):()
         pUnit = pPlayer:GetUnits():FindID(unitID);

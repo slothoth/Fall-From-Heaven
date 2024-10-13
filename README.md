@@ -10,7 +10,7 @@ Fix religion[x]
 Armageddon[x]
 World Spells
 Items[x]
-Victory Conditions [ ]
+Victory Conditions [x]
 ## Promotion System:
 - [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo? i cannot
 - [x] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
@@ -88,8 +88,10 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Culture Bomb, big grant of culture, and border expansion
 - [ ] Bulbing techs.
 - [ ] Dark elf kidnapping superSpecialist ( apply a modifier  with the reverse values of a superspecialist) and spawn a great person
-- [ ] For single ability units, Manes for example, Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
-
+- [x] For single ability units, Manes for example, Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
+- [ ] Single active, grants to city/player/unit
+- [ ] Bear, Wolf, Lion, Tiger, Gorilla, spider pen, scorpion cages (issue with barbs. Also all_units_attach_modifier fails.)
+- [ ] 
 
 ## Upgrade System:
 - [ ] can upgrade outside borders       probably needs bespoke upgrade system
@@ -137,7 +139,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Manor + Pillar of Chains building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted. Needs rebalacing as sucks under civ vi
 - [ ] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
 - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
-- [ ] Infernal no amenity cost? as they get no unhappiness.
+- [ ] Infernal no amenity cost? as they get no unhappiness. (+2 amenities per 2 pop to balance out cost?)
 ## Hard but minor:
 - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 - [ ] Hall of Mirrors clone spawning
@@ -165,8 +167,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Religion:
 - [x] Investigate Religion as Removing/Allowing Policies Unearthed working Effect, now just need to find a way to have it turn on or off with requirements as its on Player not City. But Bannor specific worked
 - [ ] hero abandonment if leave religion     Event: PolicyChanged (since we are planning religion as a slotable policyType.). Then just iterate over relevant player units and kill them.
-- [ ] Religion specific policies
-- [ ] Non-lua format where EFFECT_ADJUST_IMPROVEMENT_PROPERTY might be on plot as no Lua access? could then check the plot property the vampire castle t4 enables PROPERTY_AIRLIFT on vampire castle tiles. How could i then port it to city plot though, hmmm, the colletion is set as improvement, could set as capital city?
+- [x] Religion specific policies
+- [L] Non-lua format where EFFECT_ADJUST_IMPROVEMENT_PROPERTY might be on plot as no Lua access? could then check the plot property the vampire castle t4 enables PROPERTY_AIRLIFT on vampire castle tiles. How could i then port it to city plot though, hmmm, the colletion is set as improvement, could set as capital city? This failed
 - [x] POLICY ban framework for all state religions
 - [ ] religion spread within civ tracker in lua for plot_prop req
 ## Great People:
@@ -177,8 +179,10 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Nice to Have:
 - [ ] world congress but without inclusive participation : bonus feature really
 ## Victory Conditions:
-- [ ] Altar of Luonnotar ez, A series of buildings, then a final project that requires last building. Only difficulty is making building not buildable, but still grantable by Great Person (like Hypatia)
-- [ ] Tower of Mastery Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.
+- [x] Altar of Luonnotar ez, A series of buildings, then a final project that requires last building. Only difficulty is making building not buildable, but still grantable by Great Person (like Hypatia)
+- [x] Tower of Mastery Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.
+- [ ] UI overrides to show correctly progress to victory
+- [ ] Diplo modifiers to hate on close to winners
 ## Cultures Todo
 - [ ] Cultures.artdef. Map buildings and units.
 - Would be lovely if our asset budget lets us use Leugi's City Styles, for doviello, clan , hippus

@@ -6,7 +6,7 @@
     <Created>1714825549</Created>
     <Teaser>Ports Kael's excellent Fall From Heaven mod to Civ VI</Teaser>
     <Authors>Slothoth</Authors>
-    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi, SeelingCat and Sukritact for their great reference mods for Lua.</SpecialThanks>
+    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi, SeelingCat and Sukritact, Honey for their great reference mods for Lua.</SpecialThanks>
     <Homepage>https://github.com/slothoth/civvitests</Homepage>
     <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>
@@ -133,6 +133,7 @@
       <File>Core/Equipment.sql</File>
       <File>Core/Globals.sql</File>
       <File>Core/Victories.sql</File>
+      <File>Core/ConditionalBuildings.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -156,6 +157,7 @@
       <File>Localisation/loc_units.sql</File>
       <File>Localisation/loc_beliefs.sql</File>
       <File>Localisation/loc_barbs.sql</File>
+      <File>Localisation/loc_ui.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
       <File>Lua/Maintenance.lua</File>
@@ -253,6 +255,27 @@
       <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
       <File>UI/TreatWithTribePopup.lua</File>
     </ImportFiles>
+    <!--ReplaceUIScript id="XP2EndGameOverrideLowPriorityTODO">
+      <Properties>
+        <LoadOrder>1001</LoadOrder>
+        <LuaContext>EndGameMenu</LuaContext>
+        <LuaReplace>UI/XP2/honey_victory_menagerie_endgame_override_xp2.lua</LuaReplace>
+      </Properties>
+    </ReplaceUIScript-->
+
+    <ReplaceUIScript id="XP2WROverride">
+      <Properties>
+        <LoadOrder>1001</LoadOrder>
+        <LuaContext>WorldRankings</LuaContext>
+        <LuaReplace>UI/world_rankings.lua</LuaReplace>
+      </Properties>
+    </ReplaceUIScript>
+    <ImportFiles id="XP2WRxmlOverride">
+      <Properties>
+        <LoadOrder>101</LoadOrder>
+      </Properties>
+      <File>UI/WorldRankings.xml</File>
+    </ImportFiles>
     <!--ImportFiles id="ImportMapGenOverrideFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
@@ -280,6 +303,7 @@
     <File>Localisation/loc_traits.sql</File>
     <File>Localisation/loc_units.sql</File>
     <File>Localisation/loc_playeritems.sql</File>
+    <File>Localisation/loc_ui.sql</File>
     <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
@@ -332,6 +356,7 @@
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
     <File>Core/Victories.sql</File>
+    <File>Core/ConditionalBuildings.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
@@ -376,5 +401,7 @@
     <File>UI/Null.lua</File>
     <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
     <File>UI/TreatWithTribePopup.lua</File>
+    <File>UI/world_rankings.lua</File>
+    <File>UI/WorldRankings.xml</File>
   </Files>
 </Mod>
