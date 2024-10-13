@@ -20,6 +20,7 @@ local OFFSET_CONTRACT_BUTTON_Y = 63;
 local PADDING_HEADER = 10;
 local OFFSET_VIEW_CONTENTS = 130;
 local SIZE_STACK_DEFAULT = 225;
+local GREAT_PROPHET = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_PROPHET']
 
 
 local m_ScienceIM = InstanceManager:new("ScienceInstance", "ButtonBG", Controls.ScienceViewStack);
@@ -77,6 +78,16 @@ local TOWER_MASTERY = { GameInfo.Buildings["BUILDING_MAHABODHI_TEMPLE"], GameInf
 						GameInfo.Buildings["BUILDING_EIFFEL_TOWER"], };
 local TOWERS = { TOWER_ALTERATION, TOWER_DIVINATION, TOWER_ELEMENTS, TOWER_NECROMANCY,
 				 TOWER_MASTERY };
+local MANAS = {
+	GameInfo.Resources["RESOURCE_MANA_BODY"], GameInfo.Resources["RESOURCE_MANA_ENCHANTMENT"],
+	GameInfo.Resources["RESOURCE_MANA_LIFE"], GameInfo.Resources["RESOURCE_MANA_NATURE"],
+	GameInfo.Resources["RESOURCE_MANA_LAW"], GameInfo.Resources["RESOURCE_MANA_MIND"],
+	GameInfo.Resources["RESOURCE_MANA_SPIRIT"], GameInfo.Resources["RESOURCE_MANA_SUN"],
+	GameInfo.Resources["RESOURCE_MANA_AIR"], GameInfo.Resources["RESOURCE_MANA_EARTH"],
+	GameInfo.Resources["RESOURCE_MANA_FIRE"], GameInfo.Resources["RESOURCE_MANA_WATER"],
+	GameInfo.Resources["RESOURCE_MANA_CHAOS"], GameInfo.Resources["RESOURCE_MANA_DEATH"],
+	GameInfo.Resources["RESOURCE_MANA_ENTROPY"], GameInfo.Resources["RESOURCE_MANA_SHADOW"],
+};
 
 local m_TowerIM = InstanceManager:new("TowerInstance", "ButtonBG", Controls.TowerViewStack);				-- todo change in xml
 local m_TowerTeamIM = InstanceManager:new("TowerTeamInstance", "ButtonFrame", Controls.TowerViewStack);
@@ -147,40 +158,86 @@ g_victoryData.VICTORY_DIPLOMATIC = {
 	AdditionalSummary = function(p) return GetDiplomaticVictoryAdditionalSummary(p) end
 };
 
-g_victoryData.VICTORY_TOWER = {
+g_victoryData.VICTORY_TOWER_OF_MASTERY = {
 	GetText = function(p)
-		local total = GlobalParameters.DIPLOMATIC_VICTORY_POINTS_REQUIRED;
-		local current = 0;
+		local level = 0;
+		local mana_controlled = 0
+		local iHasTower
 		if (p:IsAlive()) then
-			current = p:GetStats():GetDiplomaticVictoryPoints();
+			local stats =  p:GetStats()
+			for idx, tAltar in pairs(TOWER_MASTERY) do
+				for _, pAltar in ipairs(tAltar) do
+					iHasTower = stats:GetNumBuildingsOfType(pAltar)
+					if iHasTower > 0 then
+						level = level + 1
+					end
+				end
+			end
+			local resources = p:GetResources()
+			for idx, mana in pairs(MANAS) do
+				if resources:GetResourceAmount(mana.Index) > 0 then
+					mana_controlled = mana_controlled + 1
+				end
+			end
 		end
 
-		return Locale.Lookup("LOC_WORLD_RANKINGS_DIPLOMATIC_POINTS_TT", current, total);
+		return "Completed Towers: " .. level .. "[NEWLINE]Unique Mana Controlled: " .. mana_controlled
 	end,
 	GetScore = function(p)
-		local current = 0;
+		local level = 0
+		local iHasTower
 		if (p:IsAlive()) then
-			current = p:GetStats():GetDiplomaticVictoryPoints();
+			local stats =  p:GetStats()
+			for idx, tAltar in pairs(TOWER_MASTERY) do
+				for _, pAltar in ipairs(tAltar) do
+					iHasTower = stats:GetNumBuildingsOfType(pAltar)
+					if iHasTower > 0 then
+						level = idx
+					end
+				end
+			end
 		end
 
-		return current;
+		return level;
 	end,
 	AdditionalSummary = function(p) return GetDiplomaticVictoryAdditionalSummary(p) end
 };
-g_victoryData.VICTORY_ALTAR = {
+g_victoryData.VICTORY_ALTAR_OF_LUONNOTAR = {
 	GetText = function(p)
 		local current = 0;
-		local current_earned = 0;
-
-		return "Great Prophets earned: " .. current_earned .. "[NEWLINE]Great Prophet Points: " .. current
-	end,
-	GetScore = function(p)
-		local current = 0;
+		local level = 0
+		local iHasAltar
 		if (p:IsAlive()) then
-			current = p:GetStats():GetDiplomaticVictoryPoints();
+			local stats =  p:GetStats()
+			for idx, tAltar in pairs(ALTARS) do
+				for _, pAltar in ipairs(tAltar) do
+					iHasAltar = stats:GetNumBuildingsOfType(pAltar)
+					if iHasAltar > 0 then
+						level = level + 1
+					end
+				end
+			end
+			current = p:GetGreatPeoplePoints():GetPointsPerTurn(GREAT_PROPHET.Index);
 		end
 
-		return current;
+		return "Altar Tier: " .. level .. "[NEWLINE]Great Prophet Points: " .. current
+	end,
+	GetScore = function(p)
+		local level = 0
+		local iHasAltar
+		if (p:IsAlive()) then
+			local stats =  p:GetStats()
+			for idx, tAltar in pairs(ALTARS) do
+				for _, pAltar in ipairs(tAltar) do
+					iHasAltar = stats:GetNumBuildingsOfType(pAltar)
+					if iHasAltar then
+						level = level + 1
+					end
+				end
+			end
+		end
+
+		return level;
 	end,
 	AdditionalSummary = function(p) return GetDiplomaticVictoryAdditionalSummary(p) end
 };
@@ -763,9 +820,9 @@ function PopulateTabs()
 			if (victoryType == "VICTORY_DIPLOMATIC") then
 				AddTab(Locale.Lookup("LOC_TOOLTIP_DIPLOMACY_CONGRESS_BUTTON"), function() ViewDiplomatic(victoryType); end);
 			elseif (victoryType == "VICTORY_TOWER_OF_MASTERY") then
-				AddTab(Locale.Lookup("Tower"), function() ViewTowerMastery(victoryType); end);
+				AddTab(Locale.Lookup("LOC_TOWER_VICTORY_SHORT"), function() ViewTowerMastery(victoryType); end);
 			elseif (victoryType == "VICTORY_ALTAR_OF_LUONNOTAR") then
-				AddTab(Locale.Lookup("Altar"), function() ViewAltar(victoryType); end);
+				AddTab(Locale.Lookup("LOC_ALTAR_VICTORY_SHORT"), function() ViewAltar(victoryType); end);
 			else
 				AddTab(Locale.Lookup(row.Name), function() ViewGeneric(victoryType); end);
 			end
@@ -905,7 +962,7 @@ function ViewTowerMastery(victoryType)
 	Controls.TowerView:SetHide(false);
 
 	ChangeActiveHeader("VICTORY_TECHNOLOGY", m_TowerHeaderIM, Controls.TowerViewHeader);
-	PopulateGenericHeader(RealizeTowerStackSize, 'LOC_TOWER_OF_MASTERY_VICTORY', "", 'Gather Mana Sources to allow building powerful Tower National Wonders. Once you have all 4 Towers, build the Tower Of Mastery to become unbound from the rules of magic, shaping reality to your whim, winning the game.', SCIENCE_ICON);
+	PopulateGenericHeader(RealizeTowerStackSize, 'LOC_VICTORY_TOWER_OF_MASTERY_NAME', "", 'LOC_VICTORY_TOWER_OF_MASTERY_DESCRIPTION', SCIENCE_ICON);
 
 	local totalCost = 0;
 	local currentProgress = 0;
@@ -1046,11 +1103,8 @@ function GetNextStepForTowerBuildings(pPlayer, projectInfos, finishedProjects)
 	local playerTech = pPlayer:GetTechs();
 	local numProjectInfos = table.count(projectInfos);
 	for i, projectInfo in ipairs(projectInfos) do
-		print(projectInfo.ResourceType)
-		print(projectInfo.PrereqTech)
 		if not projectInfo.ResourceType then
 			if(projectInfo.PrereqTech ~= nil) then
-				print(projectInfo.PrereqTech)
 				local tech = GameInfo.Technologies[projectInfo.PrereqTech];
 				if(not playerTech:HasTech(tech.Index)) then
 					return Locale.Lookup("LOC_WORLD_RANKINGS_SCIENCE_NEXT_STEP_RESEARCH", Locale.Lookup(tech.Name));
@@ -1224,7 +1278,7 @@ function GetTooltipForTowerProject(pPlayer, projectInfos, finishedProjects, isFi
 	local result = "";
 	local new_result
 	local cache_for_last = ""
-	local precursor_text = 'Build '
+	local precursor_text = Locale.Lookup('Build ')
 	local playerTech = pPlayer:GetTechs();
 	local resources = pPlayer:GetResources()
 	local numProjectInfos = table.count(projectInfos);
@@ -1246,13 +1300,12 @@ function GetTooltipForTowerProject(pPlayer, projectInfos, finishedProjects, isFi
 		end
 
 		if(projectInfo.ResourceType ~= nil) then
-			local rsc = GameInfo.Resources[projectInfo.ResourceType];
-			if(resources:GetResourceAmount(rsc.Index) > 0) then
+			if(resources:GetResourceAmount(projectInfo.Index) > 0) then
 				new_result = new_result .. "[ICON_CheckmarkBlue]";
 			else
 				new_result = new_result .. "[ICON_Bolt]";
 			end
-			new_result = new_result .. Locale.Lookup("Maintain a source of " .. Locale.Lookup(rsc.Name)) .. "[NEWLINE]";
+			new_result = new_result .. Locale.Lookup('LOC_MAINTAIN_MANA') .. Locale.Lookup(projectInfo.Name) .. "[NEWLINE]";
 		end
 
 
@@ -1307,7 +1360,7 @@ function ViewAltar(victoryType)
 	Controls.AltarView:SetHide(false);
 
 	ChangeActiveHeader("VICTORY_ALTAR", m_AltarHeaderIM, Controls.AltarViewHeader);
-	PopulateGenericHeader(RealizeAltarStackSize, 'LOC_ALTAR_VICTORY', "", 'Activate Great Prophets to build up tiers of the Altar of Luonnotar, once you have the corresponding civic. Altar tiers make priest specialists stronger and grant xp to Disciple units. Once the Exalted altar is built, manually build the Final Altar to reconvene with the One, winning the game.', SCIENCE_ICON);
+	PopulateGenericHeader(RealizeAltarStackSize, 'LOC_VICTORY_ALTAR_OF_LUONNOTAR_NAME', "", 'LOC_VICTORY_ALTAR_OF_LUONNOTAR_DESCRIPTION', SCIENCE_ICON);
 
 	local totalCost = 0;
 	local currentProgress = 0;
@@ -1711,11 +1764,11 @@ function GetTooltipForAltarProject(pPlayer, projectInfos, finishedProjects)
 			result = result .. "[ICON_Bolt]";
 		end
 		if projectInfo.Name == 'LOC_SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_FINAL_NAME' then
-			result = result .. 'Build ' .. Locale.Lookup(projectInfo.Name);
+			result = result .. Locale.Lookup('LOC_SLTH_BUILD') .. Locale.Lookup(projectInfo.Name);
 		elseif projectInfo.Name == 'LOC_SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_NAME' then
-			result = result .. 'Use Great Prophet to grant ' .. Locale.Lookup(projectInfo.Name);
+			result = result .. Locale.Lookup('LOC_USE_GP') .. Locale.Lookup(projectInfo.Name);
 		else
-			result = result .. 'Use Great Prophet to grant ' .. Locale.Lookup(projectInfo.Name) .. ' in your city with the Altar of Luonnotar.';
+			result = result .. Locale.Lookup('LOC_USE_GP') .. Locale.Lookup(projectInfo.Name) .. ' in your city with the Altar of Luonnotar.';
 		end
 		if(i < numProjectInfos) then result = result .. "[NEWLINE]"; end
 	end

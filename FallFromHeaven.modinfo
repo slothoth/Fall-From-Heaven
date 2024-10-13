@@ -157,6 +157,7 @@
       <File>Localisation/loc_units.sql</File>
       <File>Localisation/loc_beliefs.sql</File>
       <File>Localisation/loc_barbs.sql</File>
+      <File>Localisation/loc_ui.sql</File>
     </UpdateText>
     <AddGameplayScripts id="NewAction">
       <File>Lua/Maintenance.lua</File>
@@ -302,6 +303,7 @@
     <File>Localisation/loc_traits.sql</File>
     <File>Localisation/loc_units.sql</File>
     <File>Localisation/loc_playeritems.sql</File>
+    <File>Localisation/loc_ui.sql</File>
     <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
