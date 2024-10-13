@@ -168,7 +168,7 @@
       <File>Lua/Promotions.lua</File>
       <File>Lua/Alignment.lua</File>
       <File>Lua/Equipment.lua</File>
-      <!--File>Lua/Combat.lua</File-->
+      <File>Lua/Combat.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>

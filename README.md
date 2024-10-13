@@ -29,9 +29,8 @@ Victory Conditions [x]
 - [x] resource transformation, ie can build Death Well improvement on raw mana node and it becomes Death mana
 
 ## Combat System:
-- [ ] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though. ('SANGUINE_PACT_VAMPIRE_COMBAT_STRENGTH_ON_DEAD_UNIT', 'MODIFIER_ALL_COMBAT_RESULTS_APPLY_MODIFIER_TO_UNITS_ON_TILE'); MODIFIER_COMBAT_RESULTS_ATTACH_UNIT_MODIFIER
+- [x] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though. ('SANGUINE_PACT_VAMPIRE_COMBAT_STRENGTH_ON_DEAD_UNIT', 'MODIFIER_ALL_COMBAT_RESULTS_APPLY_MODIFIER_TO_UNITS_ON_TILE'); MODIFIER_COMBAT_RESULTS_ATTACH_UNIT_MODIFIER
 - [ ] buff effects : ditto as before. Attacking debuffs (withered, Diseased can use Event :: OnUnitRetreated ?)
-- [ ] debug buggy spawning system from it
 - [ ] some summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%. VERY HARD
 - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
 - [ ] Element damage system. Need to test the range of resistance. Each damage is really 5. Some immunities exist. 20% MR plus 50% MR specific.

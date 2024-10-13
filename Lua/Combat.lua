@@ -1,26 +1,6 @@
-I_DISEASE_INDEX = GameInfo.UnitAbilities('DISEASED').Index
-I_PLAGUE_INDEX = GameInfo.UnitAbilities('PLAGUED').Index
-I_WITHERED_TOUCH_INDEX = GameInfo.UnitAbilities('WITHERED_TOUCH').Index
-I_ATHAME_ABILITY_INDEX = GameInfo.UnitAbilities('EQUIPMENT_ABILITY_ATHAME').Index
-I_WITHERED_INDEX = GameInfo.UnitAbilities('WITHERED').Index
-I_POISONED_BLADE_INDEX = GameInfo.UnitAbilities('POISONED_BLADE').Index
-I_POISONED_INDEX = GameInfo.UnitAbilities('POISONED').Index
-I_PLAGUE_CARRIER_INDEX = GameInfo.UnitAbilities('PLAGUE_CARRIER').Index
-PYRE_ZOMBIE_INDEX =  GameInfo.Units('SLTH_UNIT_PYRE_ZOMBIE').Index
-bSheaimPresent = false
-iExplosionDamage = 40
-
-function onStart()
-    local sCivType
-    for k, v in ipairs(PlayerManager.GetWasEverAliveIDs()) do
-        if not bSheaimPresent then
-            sCivType = PlayerConfigurations[v]:GetCivilizationTypeName()
-            if sCivType == 'SLTH_CIVILIZATION_SHEAIM' then
-                bSheaimPresent = true
-            end
-        end
-    end
-end
+local PYRE_ZOMBIE_INDEX =  GameInfo.Units['SLTH_UNIT_PYRE_ZOMBIE'].Index
+local bSheaimPresent = false
+local iExplosionDamage = 40
 
 -- Diseased: Granted by Diseased. Permanent, removeable by Cure Disease. All units adjaceny -10% healing. Infirmary remove
 -- Plagued: granted by Plagued, Plague Carrier, Athame. Permanent. Infirmary remove
@@ -31,19 +11,21 @@ end
 -- events.  Combat, Enter City
 --
 function CombatApplyDebuffs(combatResult)
+    print('in combat')
     local defender = combatResult[CombatResultParameters.DEFENDER]
     local pDefenderID =  defender[CombatResultParameters.ID]
     local iDefenderTypeID = pDefenderID.type            -- check its a unit
-    print(iDefenderTypeID)
-    if iDefenderTypeID ~= 'UNIT' then return end
+    if iDefenderTypeID ~= 1 then return end
 
-    local attacker = combatResult[CombatResultParameters.DEFENDER]
+    local attacker = combatResult[CombatResultParameters.ATTACKER]
     local pAttackerID =  attacker[CombatResultParameters.ID]
     local iAttackerTypeID = pAttackerID.type            -- check its a unit
-    if iAttackerTypeID ~= 'UNIT' then return end
+    if iAttackerTypeID ~= 1 then return end
 
     local iDefenderOwnerID = pDefenderID.player
     local iDefenderUnitID = pDefenderID.id
+
+
     local pDefenderUnit = UnitManager.GetUnit(iDefenderOwnerID, iDefenderUnitID);
     local pDefUnitAbilities = pDefenderUnit:GetAbility()
 
@@ -52,72 +34,81 @@ function CombatApplyDebuffs(combatResult)
     local pAttackerUnit = UnitManager.GetUnit(iAttackerOwnerID, iAttackerUnitID);
     local pAttackUnitAbilities = pAttackerUnit:GetAbility()
 
-    local bDefHasDiseased = pDefUnitAbilities:HasAbility(I_DISEASE_INDEX)
-    local bDefHasPlagued = pDefUnitAbilities:HasAbility(I_PLAGUE_INDEX)
-    local bDefHasWitheredTouch = pDefUnitAbilities:HasAbility(I_WITHERED_TOUCH_INDEX) or pDefUnitAbilities:HasAbility(I_ATHAME_ABILITY_INDEX)
-    local bDefHasPoisonedBlade = pDefUnitAbilities:HasAbility(I_POISONED_BLADE_INDEX)
-    local bDefHasPlagueCarrier = pDefUnitAbilities:HasAbility(I_PLAGUE_CARRIER_INDEX)
+    print(iDefenderOwnerID)
+    print(iDefenderUnitID)
+    print(iAttackerOwnerID)
+    print(iAttackerUnitID)
 
-    local bAttHasDiseased = pAttackUnitAbilities:HasAbility(I_DISEASE_INDEX)
-    local bAttHasPlagued = pAttackUnitAbilities:HasAbility(I_PLAGUE_INDEX)
-    local bAttHasWitheredTouch = pAttackUnitAbilities:HasAbility(I_WITHERED_TOUCH_INDEX) or pAttackUnitAbilities:HasAbility(I_ATHAME_ABILITY_INDEX)
-    local bAttHasPoisonedBlade = pAttackUnitAbilities:HasAbility(I_POISONED_BLADE_INDEX)
-    local bAttHasPlagueCarrier = pAttackUnitAbilities:HasAbility(I_PLAGUE_CARRIER_INDEX)
+    local bDefHasDiseased = pDefUnitAbilities:HasAbility('DISEASED') or pDefUnitAbilities:HasAbility('DISEASED_INHERENT')
+    local bDefHasPlagued = pDefUnitAbilities:HasAbility('PLAGUED')
+    local bDefHasWitheredTouch = pDefUnitAbilities:HasAbility('WITHERED_TOUCH') or pDefUnitAbilities:HasAbility('EQUIPMENT_ABILITY_ATHAME')
+    local bDefHasPoisonedBlade = pDefUnitAbilities:HasAbility('POISONED_BLADE')
+    local bDefHasPlagueCarrier = pDefUnitAbilities:HasAbility('PLAGUE_CARRIER')
+
+    local bAttHasDiseased = pAttackUnitAbilities:HasAbility('DISEASED') or pAttackUnitAbilities:HasAbility('DISEASED_INHERENT')
+    local bAttHasPlagued = pAttackUnitAbilities:HasAbility('PLAGUED')
+    local bAttHasWitheredTouch = pAttackUnitAbilities:HasAbility('WITHERED_TOUCH') or pAttackUnitAbilities:HasAbility('EQUIPMENT_ABILITY_ATHAME')
+    local bAttHasPoisonedBlade = pAttackUnitAbilities:HasAbility('POISONED_BLADE')
+    local bAttHasPlagueCarrier = pAttackUnitAbilities:HasAbility('PLAGUE_CARRIER')
+    print('doing checks')
 
     if bDefHasDiseased then
         if not bAttHasDiseased then
-            pAttackUnitAbilities:AddAbilityCount(I_DISEASE_INDEX)
+            pAttackUnitAbilities:AddAbilityCount('DISEASED')
+            print('add diseased to attacker')
         end
     else
+        print('check if attacker has diseased')
         if bAttHasDiseased then
-            pDefUnitAbilities:AddAbilityCount(I_DISEASE_INDEX)
+            pDefUnitAbilities:AddAbilityCount('DISEASED')
+            print('add diseased to defender')
         end
     end
 
     if bDefHasPlagued then
         if not bAttHasPlagued then
-            pAttackUnitAbilities:AddAbilityCount(I_PLAGUE_INDEX)
+            pAttackUnitAbilities:AddAbilityCount('PLAGUED')
         end
     else
         if bAttHasPlagued then
-            pDefUnitAbilities:AddAbilityCount(I_PLAGUE_INDEX)
+            pDefUnitAbilities:AddAbilityCount('PLAGUED')
         end
     end
 
     if bDefHasPoisonedBlade then
-        local bAttHasPoisoned = pAttackUnitAbilities:HasAbility(I_POISONED_INDEX)
+        local bAttHasPoisoned = pAttackUnitAbilities:HasAbility('POISONED')
         if not bAttHasPoisoned then
-            pAttackUnitAbilities:AddAbilityCount(I_POISONED_INDEX)
+            pAttackUnitAbilities:AddAbilityCount('POISONED')
         end
     end
     if bAttHasPoisonedBlade then
-        local bDefHasPoisoned = pDefUnitAbilities:HasAbility(I_POISONED_INDEX)
+        local bDefHasPoisoned = pDefUnitAbilities:HasAbility('POISONED')
         if not bDefHasPoisoned then
-            pDefUnitAbilities:AddAbilityCount(I_POISONED_INDEX)
+            pDefUnitAbilities:AddAbilityCount('POISONED')
         end
     end
 
     if bDefHasWitheredTouch then
-        local bAttHasWithered = pAttackUnitAbilities:HasAbility(I_WITHERED_INDEX)
+        local bAttHasWithered = pAttackUnitAbilities:HasAbility('WITHERED')
         if not bAttHasWithered then
-            pAttackUnitAbilities:AddAbilityCount(I_WITHERED_INDEX)
+            pAttackUnitAbilities:AddAbilityCount('WITHERED')
         end
     end
     if bAttHasWitheredTouch then
-        local bDefHasWithered = pDefUnitAbilities:HasAbility(I_WITHERED_INDEX)
+        local bDefHasWithered = pDefUnitAbilities:HasAbility('WITHERED')
         if not bDefHasWithered then
-            pDefUnitAbilities:AddAbilityCount(I_WITHERED_INDEX)
+            pDefUnitAbilities:AddAbilityCount('WITHERED')
         end
     end
 
     if bDefHasPlagueCarrier then
         if not bAttHasPlagued then
-            pAttackUnitAbilities:AddAbilityCount(I_PLAGUE_INDEX)
+            pAttackUnitAbilities:AddAbilityCount('PLAGUED')
         end
     end
     if bAttHasPlagueCarrier then
         if not bDefHasPlagued then
-            pDefUnitAbilities:AddAbilityCount(I_PLAGUE_INDEX)
+            pDefUnitAbilities:AddAbilityCount('PLAGUED')
         end
     end
 
@@ -147,5 +138,20 @@ function CombatApplyDebuffs(combatResult)
     end
 end
 
+function onStart()
+    local sCivType
+    for k, v in ipairs(PlayerManager.GetWasEverAliveIDs()) do
+        if not bSheaimPresent then
+            sCivType = PlayerConfigurations[v]:GetCivilizationTypeName()
+            if sCivType == 'SLTH_CIVILIZATION_SHEAIM' then
+                bSheaimPresent = true
+            end
+        end
+    end
+end
+
 Events.Combat.Add(CombatApplyDebuffs)
 LuaEvents.NewGameInitialized.Add(onStart);
+
+print('------------------------------------')
+print('initiating combat module')
