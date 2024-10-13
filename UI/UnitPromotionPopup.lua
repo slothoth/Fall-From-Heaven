@@ -287,7 +287,7 @@ function OnPromoteUnitPopup()
 				promotionInstance.PromotionSelection:SetSizeVal(62,100)
 				promotionInstance.PromotionSelection:SetOffsetVal((row.Column+10)*35, (row.Level-1)*SIZE_NODE_Y);
 				promotionInstance.PromotionName:SetOffsetX(15)
-				print(promotionInstance.PromotionDescription.WrapWidth)
+				--print(promotionInstance.PromotionDescription.WrapWidth)
 				promotionInstance.PromotionDescription.WrapWidth=55
 			else
 				promotionInstance.PromotionSelection:SetOffsetVal((row.Column-1)*SIZE_NODE_X, (row.Level-1)*SIZE_NODE_Y);

@@ -3,8 +3,8 @@
 -- ===========================================================================
 include( "UnitPanel" );
 
-tSkipPromos = { [GameInfo.UnitPromotions['PROMOTION_IS_UNDEAD'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_IS_UNDEAD_COMBATV'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index] = 1,
-				[GameInfo.UnitPromotions['PROMOTION_IS_DEMON'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_NIGHTMARE'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ORDER_STATE'].Index] = 1,
+tSkipPromos = { [GameInfo.UnitPromotions['PROMOTION_IS_UNDEAD'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_CAN_GET_FEAR'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index] = 1,
+				[GameInfo.UnitPromotions['PROMOTION_IS_DEMON'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ORDER_STATE'].Index] = 1,
 				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WARFARE'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_HIDDEN_PATHS'].Index] = 1,
 				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ANIMAL_HUSBANDRY'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ANIMAL_MASTERY'].Index] = 1,
 				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_CORRUPTION_OF_SPIRIT'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index] = 1,
@@ -198,9 +198,7 @@ function ReadUnitData( unit:table )
 				Desc = promotionDef.Description,
 				Level = promotionDef.Level
 				})
-			print(promotionDef.Name)
-		else
-			print(promotion)
+			--print(promotionDef.Name)
 		end
 	end
 

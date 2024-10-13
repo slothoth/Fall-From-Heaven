@@ -341,7 +341,6 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
                 for idx, pPlot in pairs(more_than_four_plots) do
                     -- count coast within 3 tiles. choose smallest
                     iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
-                    print(iCurrentWaterTiles)
                     if iCurrentWaterTiles < iLeastWaterTiles then
                         print('found better')
                         iInfernalPlot = pPlot
@@ -355,7 +354,6 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
                     print('some 4 plots exist')
                     for idx, pPlot in pairs(four_range_plots) do
                         iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
-                        print(iCurrentWaterTiles)
                         if iCurrentWaterTiles < iLeastWaterTiles then
                             iInfernalPlot = pPlot
                             iLeastWaterTiles = iCurrentWaterTiles
