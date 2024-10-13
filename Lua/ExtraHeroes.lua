@@ -278,6 +278,14 @@ function TimerSystem(playerID)
 	end
 end
 
+function SetPlotProperty(iX, iY, sProperty, ValueToSet)
+	print(iX)
+	print(iY)
+	local pPlot = Map.GetPlot(iX, iY)
+	print(pPlot)
+	pPlot:SetProperty(sProperty, ValueToSet)
+end
+
 function Initialize()
 	if ExposedMembers.ExtraHeroes == nil then
 		ExposedMembers.ExtraHeroes = {}
@@ -287,6 +295,7 @@ function Initialize()
 	ExposedMembers.ExtraHeroes.GrantSuperSpecialist = GrantSuperSpecialist;
 	ExposedMembers.ExtraHeroes.GrantGoldenAge = GrantGoldenAge
 	ExposedMembers.ExtraHeroes.ConsumeEquipment = ConsumeEquipment
+	ExposedMembers.ExtraHeroes.SetPlotProperty = SetPlotProperty
 	tTimers = {GoldenAges = { sProperty = 'GoldenAgeDuration', callback = FlushGoldenAge}}
 end
 

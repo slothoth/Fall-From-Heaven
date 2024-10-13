@@ -71,6 +71,7 @@ like barbarian encampments but with different classes that spawn different units
 - [x] Embers diplomacy with Clans only
 - [x] No diplomacy with some clans
 - [ ] Animal Clans cant become cities
+- [x] natural wonder clans
 
 ## Terrain Alteration:
 - [ ] The Deepening project to add tundra and snow (terrain changes dont show up except on reload)

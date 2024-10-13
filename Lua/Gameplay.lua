@@ -16,6 +16,12 @@ RESOURCE_MANA_WATER='MANA',  RESOURCE_MANA_SUN='MANA',  RESOURCE_MANA_SHADOW='MA
     end
 end
 
+local tBarbNW = {
+	[GameInfo.Features['FEATURE_UBSUNUR_HOLLOW'].Index] = 1,
+	[GameInfo.Features['FEATURE_GOBUSTAN'].Index] = 1,
+	[GameInfo.Features['FEATURE_DELICATE_ARCH'].Index] = 1,
+	[GameInfo.Features['FEATURE_YOSEMITE'].Index] = 1}
+
 function SlthLog(sMessage)
     SLTH_DEBUG_ON = nil
     if SLTH_DEBUG_ON then
@@ -235,32 +241,43 @@ end
 function EventCollapse(x, y)
     local pPlot = Map.GetPlot(x, y)
     local tUnits = Map.GetUnitsAt(pPlot)
-    for idx, pUnit in tUnits do
+    for idx, pUnit in ipairs(tUnits) do
         pUnit:ChangeDamage(20)
         if pUnit:GetDamage() < 1 then           -- is it at 0 or at 100?
             UnitManager.Kill(pUnit)
         end
     end
 end
+local TRIBE_CLAN_SCORPION = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_OPEN'].Index
+local TRIBE_CLAN_SKELETON = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_HILLS'].Index
+local TRIBE_CLAN_LIZARDMEN = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_FOREST'].Index
+local TRIBE_CLAN_BEAR = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Index
+local TRIBE_CLAN_LION = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
+local tTribeDeck = {[TRIBE_CLAN_SCORPION] = 1, [TRIBE_CLAN_SKELETON] = {[1]=EventCollapse},
+              [TRIBE_CLAN_LIZARDMEN] = {[1]=EventCollapse}}
 
-tTribeDeck = {TRIBE_CLAN_SCORPION = 1, TRIBE_CLAN_SKELETON = {[1]=EventCollapse},
-              TRIBE_CLAN_LIZARDMEN = {[1]=EventCollapse}}
 function RemovedBarbCamp(x, y, owningPlayerID)
     print('Owning playerID is ' .. tostring(owningPlayerID))
     -- hopefully this is unneeded
     local pPlot = Map.GetPlot(x, y)
     local owner = pPlot:GetOwner()
     print('Plot owner is ' .. tostring(owner))
-    if not owningPlayerID then
+    if owningPlayerID == 63 or owner == -1 then
+        local feature = pPlot:GetFeatureType()
+        local tribeIndex = pPlot:GetProperty('barbclantype') or 1
+        if tBarbNW[feature] then
+            local iPlotID = pPlot:GetIndex()
+            Game.GetBarbarianManager():CreateTribeOfType(tribeIndex, iPlotID)
+        end
         -- draw from deck of events
-        local pBarbarianManager  = Game.GetBarbarianManager();
-	    local tribeIndex = pBarbarianManager:GetTribeIndexAtLocation(x, y);
-        local tribeType = pBarbarianManager:GetTribeType(tribeIndex)
-        local tTribeEvents = tTribeDeck['tribeType']            --TRIBE_CLAN_SKELETON
-        local lengthTribeEvents = table.count(tTribeEvents)
-        local dice_roll = math.random(1, lengthTribeEvents)
-        local fEvent = tTribeEvents[dice_roll]
-        fEvent(x, y)
+        print(tribeIndex)
+        local tTribeEvents = tTribeDeck[tribeIndex]            --TRIBE_CLAN_SKELETON
+        if tTribeEvents then
+            local lengthTribeEvents = table.count(tTribeEvents)
+            local dice_roll = math.random(1, lengthTribeEvents)
+            local fEvent = tTribeEvents[dice_roll]
+            fEvent(x, y)
+        end
         -- do event. Sometimes we reinstantiate barb camp
     end
 end
@@ -368,6 +385,24 @@ function onGreatPersonActivated(unitOwner, unitID, greatPersonClassID, greatPers
     end
 end
 
+function InitializeClans()
+    if not Game.GetProperty('NW_Clans_Set') then
+        local iW, iH = Map.GetGridSize()
+        for x = 0, iW - 1 do
+            for y = 0, iH - 1 do
+                local i = y * iW + x;
+                local pPlot = Map.GetPlotByIndex(i);
+                local feature = pPlot:GetFeatureType()
+                if tBarbNW[feature] then
+                    print(feature)
+                    Game.GetBarbarianManager():CreateTribeOfType(1, i)
+                end
+            end
+        end
+        Game.SetProperty('NW_Clans_Set', 1)
+    end
+end
+
 function onStart()
     tImprovementsProgression = {
         [GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
@@ -420,6 +455,7 @@ function onStart()
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
+    InitializeClans()
     print('-----------------Gameplay loaded')
 end
 

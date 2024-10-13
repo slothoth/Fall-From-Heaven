@@ -171,6 +171,7 @@ function OnImprovementAddedToMap(locX , locY , eImprovementType , eOwner )
 		local pBarbTribe  = GameInfo.BarbarianTribeNames[barbType];
 		if(pBarbTribe ~= nil)then
 			local pPlot  = Map.GetPlot(locX, locY);
+			-- ExposedMembers.ExtraHeroes.SetPlotProperty(locX, locY, 'barbclantype', tribeIndex);
 			CreateBarbarianTribeBanner(pPlot, pBarbTribe);
 		end
 	end
@@ -292,4 +293,7 @@ function Initialize()
 	Events.LocalPlayerTurnBegin.Add(OnLocalPlayerTurnBegin);
 
 	LuaEvents.PlayerChange_Close.Add(OnPlayerChangeClosed);
+	if ExposedMembers.ExtraHeroes == nil then
+		ExposedMembers.ExtraHeroes = {}
+	end
 end
