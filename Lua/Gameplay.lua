@@ -316,35 +316,6 @@ function IncrementCottages(playerId)
     end
 end
 
-function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
-    local iResourceInfo = tMonitoredResources[resourceTypeID]
-    if iResourceInfo then
-        local pPlayer = Players[ownerPlayerID];
-        local resources = pPlayer:GetResources()
-        local iResourceCount = resources:GetResourceAmount(resourceTypeID);
-        -- local iResourceCount = ExposedMembers.ExtraHeroesOperations.GetResourceCount(ownerPlayerID, resourceTypeID)
-        local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-        local pCapitalPlot = pCapitalCity:GetPlot()
-        local sRscName = iResourceInfo['name']
-        local sPropKeyCount =  sRscName .. '_COUNT'
-        local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or -1
-        print('previous: '  .. sRscName .. tostring(iPastResource))
-        print('new Gameplay: '  .. sRscName .. tostring(iResourceCount))
-        print('new UI: '  .. sRscName .. tostring(iResourceCount))
-        if iResourceCount ~= iPastResource then
-            pCapitalPlot:SetProperty(sPropKeyCount, iResourceCount)
-            local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
-            local sPropKey =  sRscName .. '_BINARY_'
-            local sFullPropKey
-            for key, val in pairs(tBinariesToSet) do
-                sFullPropKey = sPropKey .. key
-                pCapitalPlot:SetProperty(sPropKeyCount, val)
-                print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
-            end
-        end
-    end
-end
-
 function EventCollapse(x, y)
     print('doing collapse')
     local pPlot = Map.GetPlot(x, y)

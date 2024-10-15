@@ -122,7 +122,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] UI to press buttons (try make something like for building improvements but above) maybe hijack unitCommands system for populating?
 - [ ] Puppets, inheriting from summoner
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
-- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit
+- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit. Or with modifier as do a modifier on city with REQUIREMENT_PLOT_ADJACENT_FRIENDLY_UNIT_TYPE_MATCHES
 
 
 ## Civ Spawn System:
