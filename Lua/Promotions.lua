@@ -1,14 +1,14 @@
-tAggressive = {['SLTH_LEADER_ALEXIS']=1, ['SLTH_LEADER_BASIUM']=1, ['SLTH_LEADER_CHARADON']=1, ['SLTH_LEADER_KANDROS']=1,
+local tAggressive = {['SLTH_LEADER_ALEXIS']=1, ['SLTH_LEADER_BASIUM']=1, ['SLTH_LEADER_CHARADON']=1, ['SLTH_LEADER_KANDROS']=1,
                    ['SLTH_LEADER_SHEELBA']=1, ['SLTH_LEADER_TASUNKE']=1}
-tAggressivePromos = {['PROMOTION_CLASS_MELEE']=GameInfo.UnitPromotions['PROMOTION_COMBAT1_MELEE'].Index,
+local tAggressivePromos = {['PROMOTION_CLASS_MELEE']=GameInfo.UnitPromotions['PROMOTION_COMBAT1_MELEE'].Index,
                     ['PROMOTION_CLASS_LIGHT_CAVALRY']=GameInfo.UnitPromotions['PROMOTION_COMBAT1_LIGHT_CAVALRY'].Index}
 
-tSpiritual = {['SLTH_LEADER_ARENDEL']=1, ['SLTH_LEADER_AURIC']=1, ['SLTH_LEADER_CAPRIA']=1, ['SLTH_LEADER_JONAS']=1,
+local tSpiritual = {['SLTH_LEADER_ARENDEL']=1, ['SLTH_LEADER_AURIC']=1, ['SLTH_LEADER_CAPRIA']=1, ['SLTH_LEADER_JONAS']=1,
             ['SLTH_LEADER_OS-GABELLA']=1, ['SLTH_LEADER_VARN']=1}
 
-tSpiritualPromos = {['PROMOTION_CLASS_DISCIPLE']=GameInfo.UnitPromotions['PROMOTION_MOBILITY1_DISCIPLE'].Index}
+local tSpiritualPromos = {['PROMOTION_CLASS_DISCIPLE']=GameInfo.UnitPromotions['PROMOTION_MOBILITY1_DISCIPLE'].Index}
 
-tAllowSphereOne = {
+local tAllowSphereOne = {
         [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED'].Index,
         [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED'].Index,
         [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED'].Index,
@@ -28,7 +28,7 @@ tAllowSphereOne = {
         [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED'].Index
     }
 
-tAllowSphereTwo = {
+local tAllowSphereTwo = {
         [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index,
         [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_2'].Index,
         [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_2'].Index,
@@ -48,7 +48,7 @@ tAllowSphereTwo = {
         [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_2'].Index
     }
 
-tAllowSphereThree = {
+local tAllowSphereThree = {
         [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index,
         [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_3'].Index,
         [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_3'].Index,
@@ -88,16 +88,16 @@ tFreePromos = {
         [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_ONE'].Index
     }
 
-tSciencePromoUnlocks = {
+local tSciencePromoUnlocks = {
     [GameInfo.Technologies['TECH_HORSEBACK_RIDING'].Index] = GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_HORSEBACK_RIDING'].Index
 }
 
-tCivicPromoUnlocks = {
+local tCivicPromoUnlocks = {
     [GameInfo.Civics['CIVIC_MILITARY_TRADITION'].Index] = GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WARFARE'].Index ,
     [GameInfo.Civics['CIVIC_CORRUPTION_OF_SPIRIT'].Index] = GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_CORRUPTION_OF_SPIRIT'].Index ,        -- stigmata pain
 }
 
-tConditionalUnlocks = {
+local tConditionalUnlocks = {
     [GameInfo.UnitPromotions['PROMOTION_EXTENSION1_ADEPT'].Index]={tech=GameInfo.Technologies['TECH_ARCANE_LORE'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARCANE_LORE'].Index},
     [GameInfo.UnitPromotions['PROMOTION_COMBAT1_MELEE'].Index]={{civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WICKED'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WICKED'].Index},
                                                                 {civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WISE'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WISE'].Index}
@@ -124,12 +124,12 @@ tConditionalUnlocks = {
 }
 
 -- not implemented as reversible
-tPolicyUnlocks ={
+local tPolicyUnlocks ={
     GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ORDER_STATE'].Index ,
     GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index
 }
 
-tHasPromoAndUnlocks = {
+local tHasPromoAndUnlocks = {
     [GameInfo.UnitPromotions['PROMOTION_CAN_GET_FEAR'].Index] = 1,
     [GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index] = 1}
 
@@ -170,13 +170,13 @@ function onSpawnApplyPromotions(playerID, unitID)
     if resources then                -- DealManager.GetPlayerDeals(0,1)[1]:FindItemByID(2):()
         pUnit = pPlayer:GetUnits():FindID(unitID);
         local pUnitAbilities = pUnit:GetAbility()
+        if pUnitAbilities:HasAbility('ABILITY_DIVINE') then return; end                 -- if divine we ignore it
         for iResourceIndex, iPromoIndex in ipairs(tFreePromos) do
             local iResource = resources:GetResourceAmount(iResourceIndex) or 0;
             if iResource > 1 then
                 pUnitExp:SetPromotion(iPromoIndex)
             end
         end
-        if pUnitAbilities:HasAbility('ABILITY_DIVINE') then return; end                 -- if divine we ignore it
         local tHasResource = {}
         if pUnitAbilities:HasAbility('ABILITY_CHANNELING1') then
             for iResourceIndex, iPromoIndex in ipairs(tAllowSphereOne) do

@@ -78,4 +78,8 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_WOODSMAN1_ABILITY_FEATUREATTACKS_DESCRIPTION', '+11[ICON_Strength] Combat Strength while on jungle, Woods and Ancient Forest.', 'en_US'),
 ('LOC_WOODSMAN1_ABILITY_FEATUREDEFENSES_DESCRIPTION', '+11[ICON_Strength] Combat Strength while on jungle, Woods and Ancient Forest.', 'en_US'),
 ('LOC_WOODSMAN2_ABILITY_FEATUREATTACKS_DESCRIPTION', '+11[ICON_Strength] Combat Strength while on jungle, Woods and Ancient Forest.', 'en_US'),
-('LOC_WOODSMAN2_ABILITY_FEATUREDEFENSES_DESCRIPTION', '+11[ICON_Strength] Combat Strength while on jungle, Woods and Ancient Forest.', 'en_US');
+('LOC_WOODSMAN2_ABILITY_FEATUREDEFENSES_DESCRIPTION', '+11[ICON_Strength] Combat Strength while on jungle, Woods and Ancient Forest.', 'en_US'),
+('LOC_AFFINITY_8_DESCRIPTION', '+8[ICON_Strength] Combat Strength From Resource Affinity', 'en_US'),
+('LOC_AFFINITY_16_DESCRIPTION', '+16[ICON_Strength] Combat Strength From Resource Affinity', 'en_US'),
+('LOC_AFFINITY_32_DESCRIPTION', '+32[ICON_Strength] Combat Strength From Resource Affinity', 'en_US'),
+('LOC_AFFINITY_64_DESCRIPTION', '+64[ICON_Strength] Combat Strength From Resource Affinity', 'en_US');
