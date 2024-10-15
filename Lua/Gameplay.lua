@@ -22,7 +22,7 @@ local tMonitoredResources = {
     [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='WATER'},
     [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='SUN'},
     [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='SHADOW'},
-    [GameInfo.Resources['RESOURCE_BANANAS'].Index] = { rtype='AFFINITY', name='BANANAS'},
+    [GameInfo.Resources['RESOURCE_BANANA'].Index] = { rtype='AFFINITY', name='BANANA'},
     [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='COPPER'},
     [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='IRON'},
     [GameInfo.Resources['RESOURCE_MITHRIL'].Index] = { rtype='AFFINITY', name='MITHRIL'},
@@ -73,22 +73,22 @@ local tBarbNW = {
 	[GameInfo.Features['FEATURE_YOSEMITE'].Index] = 1}
 
 local tBinaryMap = {
-    [0]={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
-    [1]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [2]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [3]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [4]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [5]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [6]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [7]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [8]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [9]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [10]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [11]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [12]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [13]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [14]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [15]={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
+    ['0']={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
+    ['1']={['8']=0, ['4']=0, ['2']=0, ['1']=1,},
+    ['2']={['8']=0, ['4']=0, ['2']=1, ['1']=0,},
+    ['3']={['8']=0, ['4']=0, ['2']=1, ['1']=1,},
+    ['4']={['8']=0, ['4']=1, ['2']=0, ['1']=0,},
+    ['5']={['8']=0, ['4']=1, ['2']=0, ['1']=1,},
+    ['6']={['8']=0, ['4']=1, ['2']=1, ['1']=0,},
+    ['7']={['8']=0, ['4']=1, ['2']=1, ['1']=1,},
+    ['8']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['9']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['10']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['11']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['12']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['13']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['14']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['15']={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
 }
 
 function SlthLog(sMessage)
@@ -238,6 +238,7 @@ local tBarbClanUnitMapper = {
     [GameInfo.Units['SLTH_UNIT_LION'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Index,
     [GameInfo.Units['SLTH_UNIT_BEAR'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
 }
+local MANA_INDEX = GameInfo.Resources['RESOURCE_MANA'].Index
 function InitCottage(x, y, improvementIndex, playerID)
     local iImprovementUpgradeIndex = tImprovementsProgression[improvementIndex]
     if iImprovementUpgradeIndex then
@@ -266,9 +267,11 @@ function InitCottage(x, y, improvementIndex, playerID)
     end
     local pPlot = Map.GetPlot(x,y);
     local resourceIndex = pPlot:GetResourceType()
-	if resourceIndex == GameInfo.Resources['RESOURCE_MANA'].Index then
-         local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
-        if not iResourceToChangeTo then
+    print('Resource Index: ' .. tostring(resourceIndex))
+    print('Mana Resource Index: ' .. tostring(MANA_INDEX))
+	if resourceIndex == MANA_INDEX then
+        local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
+        if iResourceToChangeTo then
             print('changing resource to ' .. tostring(iResourceToChangeTo))
             ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);
         end
@@ -324,13 +327,15 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
         local sRscName = iResourceInfo['name']
         local sPropKeyCount =  sRscName .. '_COUNT'
         local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or -1
+        print('previous: '  .. sRscName .. tostring(iPastResource))
+        print('new: '  .. sRscName .. tostring(iResourceCount))
         if iResourceCount ~= iPastResource then
             pCapitalPlot:SetProperty(sPropKeyCount, iResourceCount)
-            local tBinariesToSet = tBinaryMap[iResourceCount]
+            local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
             local sPropKey =  sRscName .. '_BINARY_'
             local sFullPropKey
             for key, val in pairs(tBinariesToSet) do
-                sFullPropKey = sPropKey + key
+                sFullPropKey = sPropKey .. key
                 pCapitalPlot:SetProperty(sPropKeyCount, val)
                 print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
             end
