@@ -3,24 +3,93 @@ local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN =
                       SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
                       SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2}
 
-local TrackedResources = {}
-for resourceType, resourceClass in pairs({RESOURCE_MANA_DEATH='MANA', RESOURCE_MANA_FIRE='MANA',
-RESOURCE_MANA_AIR='MANA', RESOURCE_MANA_BODY='MANA', RESOURCE_MANA_CHAOS='MANA', RESOURCE_MANA_EARTH='MANA',
-                                          RESOURCE_MANA_ENCHANTMENT='MANA', RESOURCE_MANA_ENTROPY='MANA',
-                                          RESOURCE_MANA_ICE='MANA', RESOURCE_MANA_LAW='MANA',  RESOURCE_MANA_LIFE='MANA',
-RESOURCE_MANA_METAMAGIC='MANA', RESOURCE_MANA_MIND='MANA',  RESOURCE_MANA_NATURE='MANA',  RESOURCE_MANA_SPIRIT='MANA',
-RESOURCE_MANA_WATER='MANA',  RESOURCE_MANA_SUN='MANA',  RESOURCE_MANA_SHADOW='MANA'}) do
-    local resource = GameInfo.Resources[resourceType]
-    if resource then
-        TrackedResources[resource.Name] = resource
-    end
-end
+local tMonitoredResources = {
+    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='DEATH'},
+    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='FIRE'},
+    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index] = { rtype='MANA', name='AIR'},
+    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index] = { rtype='MANA', name='BODY'},
+    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index] = { rtype='MANA', name='CHAOS'},
+    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index] = { rtype='MANA', name='EARTH'},
+    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index] = { rtype='MANA', name='ENCHANTMENT'},
+    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index] = { rtype='MANA', name='ENTROPY'},
+    [GameInfo.Resources['RESOURCE_MANA_ICE'].Index] = { rtype='MANA', name='ICE'},
+    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index] = { rtype='MANA', name='LAW'},
+    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index] = { rtype='MANA', name='LIFE'},
+    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index] = { rtype='MANA', name='METAMAGIC'},
+    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index] = { rtype='MANA', name='MIND'},
+    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index] = { rtype='MANA', name='NATURE'},
+    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index] = { rtype='MANA', name='SPIRIT'},
+    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='WATER'},
+    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='SUN'},
+    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='SHADOW'},
+    [GameInfo.Resources['RESOURCE_BANANAS'].Index] = { rtype='AFFINITY', name='BANANAS'},
+    [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='COPPER'},
+    [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='IRON'},
+    [GameInfo.Resources['RESOURCE_MITHRIL'].Index] = { rtype='AFFINITY', name='MITHRIL'},
+    [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='SHEUT_STONE'},
+    [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype='AFFINITY', name='NIGHTMARE'}}
 
+local tImprovementsProgression = {
+        [GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index]    = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index}
+    local tImprovementsRegression = {
+        [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index]       = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index}
+    local tImprovementsCivProgression = {
+        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index}
+
+
+    local tManaNodeMapper = {
+        [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Index]         = GameInfo.Resources['RESOURCE_MANA_AIR'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Index]        = GameInfo.Resources['RESOURCE_MANA_BODY'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Index]       = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Index]       = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Index]       = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Index] = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Index]     = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Index]        = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Index]         = GameInfo.Resources['RESOURCE_MANA_LAW'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Index]        = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Index]   = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Index]        = GameInfo.Resources['RESOURCE_MANA_MIND'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Index]      = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Index]      = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Index]      = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Index]         = GameInfo.Resources['RESOURCE_MANA_SUN'].Index,
+        [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Index]       = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
+    }
 local tBarbNW = {
 	[GameInfo.Features['FEATURE_UBSUNUR_HOLLOW'].Index] = 1,
 	[GameInfo.Features['FEATURE_GOBUSTAN'].Index] = 1,
 	[GameInfo.Features['FEATURE_DELICATE_ARCH'].Index] = 1,
 	[GameInfo.Features['FEATURE_YOSEMITE'].Index] = 1}
+
+local tBinaryMap = {
+    [0]={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
+    [1]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
+    [2]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
+    [3]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
+    [4]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
+    [5]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
+    [6]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
+    [7]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
+    [8]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    [9]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    [10]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    [11]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    [12]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    [13]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    [14]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    [15]={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
+}
 
 function SlthLog(sMessage)
     SLTH_DEBUG_ON = nil
@@ -29,7 +98,7 @@ function SlthLog(sMessage)
     end
 end
 
-function GrantXP(playerId)
+function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
     for i, unit in pPlayer:GetUnits():Members() do
         local iUnitIndex = unit:GetType();
@@ -245,17 +314,26 @@ function IncrementCottages(playerId)
 end
 
 function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
-    local iResourceIndex = tMonitoredStrategic[resourceTypeID]
-    if iResourceIndex then
+    local iResourceInfo = tMonitoredResources[resourceTypeID]
+    if iResourceInfo then
         local pPlayer = Players[ownerPlayerID];
         local resources = pPlayer:GetResources()
-        local iResourceCount = resources:GetResourceAmount(iResourceIndex);
+        local iResourceCount = resources:GetResourceAmount(resourceTypeID);
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
         local pCapitalPlot = pCapitalCity:GetPlot()
-        local sPropKey = 'has_resource_' + tostring(iResourceIndex)
-        local iPastResource = pCapitalPlot:GetProperty(sPropKey)
+        local sRscName = iResourceInfo['name']
+        local sPropKeyCount =  sRscName .. '_COUNT'
+        local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or -1
         if iResourceCount ~= iPastResource then
-            pCapitalPlot:SetProperty(sPropKey, iResourceCount)
+            pCapitalPlot:SetProperty(sPropKeyCount, iResourceCount)
+            local tBinariesToSet = tBinaryMap[iResourceCount]
+            local sPropKey =  sRscName .. '_BINARY_'
+            local sFullPropKey
+            for key, val in pairs(tBinariesToSet) do
+                sFullPropKey = sPropKey + key
+                pCapitalPlot:SetProperty(sPropKeyCount, val)
+                print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
+            end
         end
     end
 end
@@ -427,44 +505,7 @@ function InitializeClans()
 end
 
 function onStart()
-    tImprovementsProgression = {
-        [GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index]    = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index}
-    tImprovementsRegression = {
-        [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index]       = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index}
-    tImprovementsCivProgression = {
-        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index}
-
-
-    tManaNodeMapper = {
-        [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Index]         = GameInfo.Resources['RESOURCE_MANA_AIR'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Index]        = GameInfo.Resources['RESOURCE_MANA_BODY'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Index]       = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Index]       = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Index]       = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Index] = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Index]     = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Index]        = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Index]         = GameInfo.Resources['RESOURCE_MANA_LAW'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Index]        = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Index]   = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Index]        = GameInfo.Resources['RESOURCE_MANA_MIND'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Index]      = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Index]      = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Index]      = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Index]         = GameInfo.Resources['RESOURCE_MANA_SUN'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Index]       = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
-    }
-    GameEvents.PlayerTurnStarted.Add(GrantXP);
+    GameEvents.PlayerTurnStarted.Add(onTurnStartGameplay);
     -- GameEvents.PlayerTurnStarted.Add(checkDeals);
 
     Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
@@ -478,6 +519,7 @@ function onStart()
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
+    Events.PlayerResourceChanged.Add(UpdateResourceAvailability)
     InitializeClans()
     print('-----------------Gameplay loaded')
 end

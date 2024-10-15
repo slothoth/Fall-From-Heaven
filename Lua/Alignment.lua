@@ -199,7 +199,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         end
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
         local iBasiumPlayerID = Game:GetProperty('Mercurian')
-        if playerID == iBasiumPlayerID then return end              -- city transfer rebuilds the wonder so stops recursive calls
+        if playerID == iBasiumPlayerID or not Game:GetProperty('mercurian_spawned') then return end              -- city transfer rebuilds the wonder so stops recursive calls
         print('Mercurian Gate founded')
         Game:SetProperty('MercurianGatePlot', plotID)
         if iBasiumPlayerID then
@@ -208,6 +208,9 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
                 CityManager.TransferCity(pCity, iBasiumPlayerID, -1821839791)     -- enum CityTransferTypes.BY_GIFT
                 GrantTechParity(iBasiumPlayerID, playerID)
                 GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
+                local pPlayer = Players[playerID]
+                pPlayer:GetDiplomacy():SetPermanentAlliance(iBasiumPlayerID)
+                Game:SetProperty('mercurian_spawned', 1)
             end
         end
         AdjustArmageddonCount(5)            -- Compact broken
@@ -289,6 +292,8 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
     end
     if civicIndex == iINFERNAL_PACT_INDEX then
         local iInfernalPlayerId = Game:GetProperty('Infernal')
+        local bInfernalSpawned = Game:GetProperty('infernal_spawned')
+        if bInfernalSpawned then return end;
         -- find strongest city state. what if no cs
         local tpMinorCivs = PlayerManager.GetAliveMinors()
         local pCity
@@ -367,6 +372,7 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
                 pInfernal:GetCities():Create(iCityMakeX, iCityMakeY)
                 GrantTechParity(iInfernalPlayerId, playerID)
                 GrantCultureParity(iInfernalPlayerId, playerID)
+                Game:SetProperty('infernal_spawned', 1)
             else
                 print('not yet implemented random city outside of camps')
             end
@@ -408,9 +414,9 @@ function GrantCultureParity(iPlayerGrantedCivics, iPlayerCivicGranter)
 end
 
 function AdjustArmageddonCount(iAmount)
-    local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
+    local iArmageddonCount = Game:GetProperty('ARMAGEDDON')
     if iArmageddonCount then
-        Game.SetProperty('ARMAGEDDON', iArmageddonCount + iAmount)
+        Game:SetProperty('ARMAGEDDON', iArmageddonCount + iAmount)
     else
         print('Armageddon count not initilizaed!')
     end
@@ -492,8 +498,8 @@ function onStart()
             Game:SetProperty('Mercurian', iPlayerID)
         end
     end
-    if not Game.GetProperty('ARMAGEDDON') then          -- initalize armageddon
-        Game.SetProperty('ARMAGEDDON',  0)
+    if not Game:GetProperty('ARMAGEDDON') then          -- initalize armageddon
+        Game:SetProperty('ARMAGEDDON',  0)
     end
 end
 

@@ -1,5 +1,5 @@
 -- 7 levels:
-ranges = {{min = 0, max = 49, category = 1},        -- Empty (<50): -2 amenities
+local ranges = {{min = 0, max = 49, category = 1},        -- Empty (<50): -2 amenities
           { min = 50, max = 99, category = 2 },     -- Low (50 - 100): -1 amenities
           { min = 100, max = 149, category = 3 },   -- Normal (100 - 149): nothing
           { min = 150, max = 199, category = 4 },   -- Stocked (150 - 199): +1 Amenity

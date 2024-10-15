@@ -136,15 +136,41 @@ function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginal
 end
 -- covered destroyed buildings in city raze logic
 
+
+function customFunc(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+end
+
 -- CityProjectCompleted for Elohim, Sheaim, Illian the Draw.
-tProjectArmaCost = { [GameInfo.Projects['ELEGY_OF_THE_SHEAIM'].Index]   = 3,
-                     [GameInfo.Projects['HALLOW_OF_ELOHIM'].Index]      = -3,
-                     [GameInfo.Projects['THE_DRAW'].Index]              = 10}
+tProjectArmaCost = { [GameInfo.Projects['PROJECT_ELEGY_OF_THE_SHEAIM'].Index]   = 5,
+                     [GameInfo.Projects['PROJECT_HALLOWING_OF_ELOHIM'].Index]      = -5,
+                     [GameInfo.Projects['PROJECT_PURGE_THE_UNFAITHFUL'].Index]      = 3,
+                     [GameInfo.Projects['PROJECT_THE_DRAW'].Index]              = 10}
+
+ -- make some functions on this
+tProjectFunctions = {
+    [GameInfo.Projects['PROJECT_SAMHAIN'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_DEEPENING'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_THE_DRAW'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_ASCENSION'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_BANE_DIVINE'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_GLORY_EVERLASTING'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_BIRTHRIGHT_REGAINED'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_GENESIS'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_NATURES_REVOLT'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_RITES_OGHMA'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_PURGE_THE_UNFAITHFUL'].Index]   = customFunc,
+    [GameInfo.Projects['PROJECT_PHOENIX'].Index]   = customFunc
+}
 function ArmaProjectComplete(playerID, cityID, projectID, buildingIndex, x, y, isCancelled)
     if isCancelled then return; end
     local iArmaCost = tProjectArmaCost[projectID]
     if iArmaCost then
         AdjustArmageddonCount(iArmaCost)
+    end
+    local fCustomAction = tProjectFunctions[projectID]
+    if fCustomAction then
+        fCustomAction(playerID, cityID, projectID, buildingIndex, x, y)
     end
 end
 

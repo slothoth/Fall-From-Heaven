@@ -4,7 +4,7 @@ Mod to faithfully recreate the glorious Civ IV FallFromHeaven mod by Kael in Civ
 To download the mod, git clone or go to the Releases page, and select the highest number, for most recent. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder.
 One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
 ## TOP priority:
-Magic system
+Magic system[ ]
 Barbarians[x]
 Fix religion[x]
 Armageddon[x]
@@ -29,13 +29,34 @@ Victory Conditions [x]
 - [x] resource transformation, ie can build Death Well improvement on raw mana node and it becomes Death mana
 
 ## Combat System:
-- [x] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though. ('SANGUINE_PACT_VAMPIRE_COMBAT_STRENGTH_ON_DEAD_UNIT', 'MODIFIER_ALL_COMBAT_RESULTS_APPLY_MODIFIER_TO_UNITS_ON_TILE'); MODIFIER_COMBAT_RESULTS_ATTACH_UNIT_MODIFIER
-- [ ] buff effects : ditto as before. Attacking debuffs (withered, Diseased can use Event :: OnUnitRetreated ?)
+- [x] debuff effects : Lua Unit:GetAbility():ChangeAbilityCount, and then implement abilities. Seems undocumented though. Modifier attempts failed ('SANGUINE_PACT_VAMPIRE_COMBAT_STRENGTH_ON_DEAD_UNIT', 'MODIFIER_ALL_COMBAT_RESULTS_APPLY_MODIFIER_TO_UNITS_ON_TILE'); MODIFIER_COMBAT_RESULTS_ATTACH_UNIT_MODIFIER
+- [ ] buff effects : % chance to remove each turn. big concern on desyncs here. Maybe just do counter
 - [ ] some summoned units being "illusions", heal after combat, but cant kill enemy units, only damage up to 90%. VERY HARD
 - [ ] aoe explosion damage from death of pyre zombie    Lua : Event : UnitRemovedFromMap
-- [ ] Element damage system. Need to test the range of resistance. Each damage is really 5. Some immunities exist. 20% MR plus 50% MR specific.
-- [ ] is it additive or not?
-- [ ] can then just do as modifier with requirements in a binaryish way, if only 5 possible ways. i.e. if unit doesnt have 20% tag, do 1 damage. if unit doesnt have 50% tag, do 3 damage. if unit doesnt have immune tag, do 2 damage for full 6.
+- [x] Element damage system. Need to test the range of resistance. Each damage is really 5. Some immunities exist. 20% MR plus 50% MR specific.
+- [ ] Fire resistance. 100% Fire immune, 100% Godslayer. 50% Magic immune, 50% Stoneskin. 20 %Magic Resistance.
+- [x] Fire resistance. 20% Angel.  Negatives: Frostling -50%, -50% vulnerable to fire.
+- [L] Fire resistance. 20% Demon, Orc. -10 Winterborn
+- [ ] Cold resistance: 100%, Godslayer, Frostling, Frost Immune. 50% Magic Immune, Stoneskin 20% Magic Resistance, Winterborn   negative: elf -25%
+- [x] Cold resistance: 100% Frostling.
+- [L] Cold resistance: 20% Winterborn   negative: elf -25%
+- [ ] Lightning resistance: 100%, GodSlayer, Lightning Immune. 50% Magic Immune, Stoneskin. 20% Magic Resistance   negative: Bronze, Iron weapons -25%
+- [L] Lightning resistance: 20%  Winterborn
+- [ ] Poison resistance: 100%, Godslayer, Illusion, Jade Torc. 50% Magic Immune, Stoneskin. 20% Magic Resistance
+- [x] Poison resistance: 100%, Angel, Elemental, Golem, Undead.
+- [L] Poison resistance: 100%, Demon.  20% Dwarf
+- [ ] Unholy resistance: 100%, GodSlayer. 50 Stoneskin. 25 Sundered, Unholy Taint
+- [x] Unholy resistance:  50 Undead.
+- [L] Unholy resistance: 100%, Demon.
+- [ ] Holy resistance: 100%, GodSlayer, Angel. Stoneskin  negative: Demon -25%, -10 Sheut, -50 Undead
+- [x] Holy resistance: 100%, Angel. negative: -50 Undead
+- [L] Holy resistance: negative: Demon -25%,
+- [ ] Death resistance: 100%, GodSlayer,  Illusion. 50% Magic Immune, Stoneskin. 20% Magic Resistance, Sheut Stone 
+- [x] Death resistance: 100%,Demon, Elemental, Golem, Undead. 50% Angel
+- [x] can then just do as modifier with requirements in a binaryish way, if only 5 possible ways. i.e. if unit doesnt have 20% tag, do 1 damage. if unit doesnt have 50% tag, do 3 damage. if unit doesnt have immune tag, do 2 damage for full 6.
+- [ ] Affinity system
+- [ ] On three equipments
+- [ ] With different damage types.
 ## Armageddon Counter:
 - [x] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
 - [x] Lowering Armageddon count (Razing Veil Cities, Sanctifying city ruins, Hallowing of Elohim project, Prophecy Mark units dying, Wonders destroyed? )
@@ -51,12 +72,12 @@ in civ iv, act as promotions that give buffs, and allow the dropping of item, to
 - [x] ability that can be removed by lua on button press : Reasonably easy to implement for player as button, not for AI. Attempts with custom FormationClasses have failed as entering formation fails for combining novel formationClasses. Would limit a unit to one unit, one item.
 - [x] 0 movement ingame unit that is destroyed/summoned, support class? A button to apply an effect on the combat unit in the same tile seems feasible. As does removing it. We don't need to store unit state, beyond its UnitType. Lua Event: UnitRemovedFromMap to respawn all items when a unit with them dies?
 - [x] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted. Seems reasonable in SQL. weapons cant stack.
-
+- [ ] Implement ability modifiers
 ## Lairs and barbarians:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
 - [x] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
 - [x] Have to implement spawning on mapgeneration, MapUtilities override was possible, but instead just gave GoodyHut columns to barb camp
-- [ ] Implement "deck" of different events that can happen when a lair is explored: probably do this with plot:SetProperty() then hook into barbarian clans removal and trigger event, if it shouldnt clear the lair, replace the lair lol
+- [x] Implement "deck" of different events that can happen when a lair is explored: probably do this with plot:SetProperty() then hook into barbarian clans removal and trigger event, if it shouldnt clear the lair, replace the lair lol
 - [x] Deck selection skeleton
 - [ ] All deck options
 - [ ] Peace with barbarians trait, shared with embers        WildW was thinking of something like this, look at comments on discord
@@ -118,22 +139,23 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] UI prompt from events to do city switch        doable
 
 ## Projects:
-- [ ] Armageddon count projects
-- [ ] Bane Divine (remove promos of Disciple units, 70 arma)
+- [x] Armageddon count projects
+- [ ] Bane Divine (remove promos of Disciple units, 70 arma) Removing promotions is technically impossible :(. Replace units with one of same type and owner and health? Also ability tracking ugh.
 - [ ] Birthright regained (world spell back)
-- [ ] Blood of the Phoenix (let all current units be able to respawn in cap once)
+- [ ] Blood of the Phoenix (let all current units be able to respawn in cap once) probably cant do as modifier sadly as no ability to respawn
 - [ ] Genesis (upgrade terrain in civ)
-- [ ] Glory everlasting (kill all demon units once, 70 Arma)
+- [ ] Glory everlasting (kill all demon units once, 70 Arma) 
 - [ ] Pact of Nilhorn (3 giants spawn, only plausible one non-lua)
 - [ ] Rites of Oghma (new mana resources spawn)
-- [ ] Samhain (spawn barb frostlings and Mokaa, allow White Hand once civic)
-- [ ] The White Hand (spawn 3 priest of Winters for player, can do The Deepening)
-- [ ] The Deepening (convert some desert to plains, plains/grassland to tundra, tundra to snow. cba with blizards tho, can do the Draw?)
-- [ ] The Draw (+10 to Arma, halve all your cities pops, damage all units, declare war with all other civs, suspend any diplomacy. Can start Ascension) Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
+- [ ] Purge the Unfaithful (there is a modifier to remove for inquisition, but we have a different definition of state religion)
+- [ ] Samhain (spawn barb frostlings and Mokka)   lua i think
+- [ ] The White Hand (spawn 3 priest of Winters for player)
+- [ ] The Deepening (convert some desert to plains, plains/grassland to tundra, tundra to snow. cba with blizards tho.)
+- [ ] The Draw (+10 to Arma, halve all your cities pops, damage all units, declare war with all other civs, suspend any diplomacy.) Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
 - [ ] Ascension (Summons Auric Unleashed for player)
 ## Misc:
-- [ ] Double prod with Copper Form of Titan example. Also for some projects (Blood of Phoenix)
-- [ ] Need 3 libraries for Great Library, same with Theatre
+- [x] Double prod with Copper Form of Titan example. Also for some projects (Blood of Phoenix)
+- [x] Need 3 libraries for Great Library, same with Theatre
 
 ## LowHangingCiv:
 - [ ] Manor + Pillar of Chains building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted. Needs rebalacing as sucks under civ vi
@@ -143,6 +165,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Hard but minor:
 - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 - [ ] Hall of Mirrors clone spawning
+- [ ] Hidden nationality units
 
 ## CivHard
 - [ ] 4 tile workable cities. CypRyan and Phantagonist versions, Phantagonist less buggy. But how to make single civ?
@@ -181,7 +204,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Victory Conditions:
 - [x] Altar of Luonnotar ez, A series of buildings, then a final project that requires last building. Only difficulty is making building not buildable, but still grantable by Great Person (like Hypatia)
 - [x] Tower of Mastery Attach modifier that allows each tower to be built, if req_set: has_mana_1, has_mana_2... Tower of Mastery attach modifier has req_set: has_tower_1, ... Then victory condition on Tower of Mastery.
-- [ ] UI overrides to show correctly progress to victory
+- [x] UI overrides to show correctly progress to victory
 - [ ] Diplo modifiers to hate on close to winners
 ## Cultures Todo
 - [ ] Cultures.artdef. Map buildings and units.
