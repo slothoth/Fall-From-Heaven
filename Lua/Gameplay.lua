@@ -322,13 +322,15 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
         local pPlayer = Players[ownerPlayerID];
         local resources = pPlayer:GetResources()
         local iResourceCount = resources:GetResourceAmount(resourceTypeID);
+        -- local iResourceCount = ExposedMembers.ExtraHeroesOperations.GetResourceCount(ownerPlayerID, resourceTypeID)
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
         local pCapitalPlot = pCapitalCity:GetPlot()
         local sRscName = iResourceInfo['name']
         local sPropKeyCount =  sRscName .. '_COUNT'
         local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or -1
         print('previous: '  .. sRscName .. tostring(iPastResource))
-        print('new: '  .. sRscName .. tostring(iResourceCount))
+        print('new Gameplay: '  .. sRscName .. tostring(iResourceCount))
+        print('new UI: '  .. sRscName .. tostring(iResourceCount))
         if iResourceCount ~= iPastResource then
             pCapitalPlot:SetProperty(sPropKeyCount, iResourceCount)
             local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
@@ -524,10 +526,20 @@ function onStart()
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
-    Events.PlayerResourceChanged.Add(UpdateResourceAvailability)
     InitializeClans()
     print('-----------------Gameplay loaded')
 end
+
+local function SetCapitalProperty(iPlayer: number, tParameters: table)
+    local sPropKey = tParameters.sPropKey;
+    local iPropValue = tParameters.iPropValue;
+    local pPlayer = Players[iPlayer];
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    local pCapitalPlot = pCapitalCity:GetPlot()
+    pCapitalPlot:SetProperty(sPropKey, iPropValue)
+end
+
+GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 
 onStart()
 

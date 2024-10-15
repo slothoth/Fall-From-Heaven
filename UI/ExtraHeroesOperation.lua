@@ -11,6 +11,51 @@ local m_wbInterfaceMode = false
 
 local HEX_COLORING_MOVEMENT = UILens.CreateLensLayerHash("Hex_Coloring_Movement");--LensLayers.HEX_COLORING_MOVEMENT;
 
+local tMonitoredResources = {
+    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='DEATH'},
+    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='FIRE'},
+    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index] = { rtype='MANA', name='AIR'},
+    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index] = { rtype='MANA', name='BODY'},
+    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index] = { rtype='MANA', name='CHAOS'},
+    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index] = { rtype='MANA', name='EARTH'},
+    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index] = { rtype='MANA', name='ENCHANTMENT'},
+    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index] = { rtype='MANA', name='ENTROPY'},
+    [GameInfo.Resources['RESOURCE_MANA_ICE'].Index] = { rtype='MANA', name='ICE'},
+    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index] = { rtype='MANA', name='LAW'},
+    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index] = { rtype='MANA', name='LIFE'},
+    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index] = { rtype='MANA', name='METAMAGIC'},
+    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index] = { rtype='MANA', name='MIND'},
+    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index] = { rtype='MANA', name='NATURE'},
+    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index] = { rtype='MANA', name='SPIRIT'},
+    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='WATER'},
+    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='SUN'},
+    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='SHADOW'},
+    [GameInfo.Resources['RESOURCE_BANANA'].Index] = { rtype='AFFINITY', name='BANANA'},
+    [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='COPPER'},
+    [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='IRON'},
+    [GameInfo.Resources['RESOURCE_MITHRIL'].Index] = { rtype='AFFINITY', name='MITHRIL'},
+    [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='SHEUT_STONE'},
+    [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype='AFFINITY', name='NIGHTMARE'}}
+
+local tBinaryMap = {
+    ['0']={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
+    ['1']={['8']=0, ['4']=0, ['2']=0, ['1']=1,},
+    ['2']={['8']=0, ['4']=0, ['2']=1, ['1']=0,},
+    ['3']={['8']=0, ['4']=0, ['2']=1, ['1']=1,},
+    ['4']={['8']=0, ['4']=1, ['2']=0, ['1']=0,},
+    ['5']={['8']=0, ['4']=1, ['2']=0, ['1']=1,},
+    ['6']={['8']=0, ['4']=1, ['2']=1, ['1']=0,},
+    ['7']={['8']=0, ['4']=1, ['2']=1, ['1']=1,},
+    ['8']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['9']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['10']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['11']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['12']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['13']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['14']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['15']={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
+}
+
 
 function myRefresh(iPlayerID, iUnitID, iOldID)
     local iBuilding
@@ -473,3 +518,40 @@ Events.UnitOperationsCleared.Add(onOperationMoveEnded)
 
 Events.InterfaceModeChanged.Add(OnUiModChange)
 LuaEvents.WorldInput_WBSelectPlot.Add(OnSelectPlot)
+
+-- gameplay esque
+function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
+    local iResourceInfo = tMonitoredResources[resourceTypeID]
+    if iResourceInfo then
+        local pPlayer = Players[ownerPlayerID];
+        local resources = pPlayer:GetResources()
+        local iResourceCount = resources:GetResourceAmount(resourceTypeID);
+        local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+        local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+        local sRscName = iResourceInfo['name']
+        local sPropKeyCount =  sRscName .. '_COUNT'
+        local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or -1
+        print('previous: '  .. sRscName .. tostring(iPastResource))
+        print('new Gameplay: '  .. sRscName .. tostring(iResourceCount))
+        print('new UI: '  .. sRscName .. tostring(iResourceCount))
+        if iResourceCount ~= iPastResource then
+            local tParameters = {}
+            tParameters.sPropKey = sPropKeyCount;
+            tParameters.iPropValue = iResourceCount;
+            tParameters.OnStart = "SlthSetCapitalProperty";
+            UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+            local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
+            local sPropKey =  sRscName .. '_BINARY_'
+            local sFullPropKey
+            for key, val in pairs(tBinariesToSet) do
+                sFullPropKey = sPropKey .. key
+                tParameters.sPropKey = sFullPropKey;
+                tParameters.iPropValue = val;
+                UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+                print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
+            end
+        end
+    end
+end
+
+Events.PlayerResourceChanged.Add(UpdateResourceAvailability)
