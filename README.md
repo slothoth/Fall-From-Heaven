@@ -94,7 +94,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] 
 
 ## Upgrade System:
-- [ ] can upgrade outside borders       probably needs bespoke upgrade system
+- [ ] can upgrade outside borders       probably needs bespoke upgrade system. what about using strategic forts to briefly grant the tile to the player?
 - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. That would solve a lot of issues. WildW unit transfer system?
 
 ## Magic System:

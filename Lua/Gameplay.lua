@@ -3,7 +3,7 @@ local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN =
                       SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
                       SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2}
 
-TrackedResources = {}
+local TrackedResources = {}
 for resourceType, resourceClass in pairs({RESOURCE_MANA_DEATH='MANA', RESOURCE_MANA_FIRE='MANA',
 RESOURCE_MANA_AIR='MANA', RESOURCE_MANA_BODY='MANA', RESOURCE_MANA_CHAOS='MANA', RESOURCE_MANA_EARTH='MANA',
                                           RESOURCE_MANA_ENCHANTMENT='MANA', RESOURCE_MANA_ENTROPY='MANA',
@@ -162,6 +162,13 @@ function ImprovementsWorkOrPillageChange(x, y, improvementIndex, improvementPlay
      end
 end
 
+local tBarbClanUnitMapper = {
+    [GameInfo.Units['SLTH_UNIT_ARCHER_SCORPION_CLAN'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_OPEN'].Index,
+    [GameInfo.Units['SLTH_UNIT_SKELETON'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_HILLS'].Index,
+    [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_FOREST'].Index,
+    [GameInfo.Units['SLTH_UNIT_LION'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Index,
+    [GameInfo.Units['SLTH_UNIT_BEAR'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
+}
 function InitCottage(x, y, improvementIndex, playerID)
     local iImprovementUpgradeIndex = tImprovementsProgression[improvementIndex]
     if iImprovementUpgradeIndex then
@@ -190,11 +197,26 @@ function InitCottage(x, y, improvementIndex, playerID)
     end
     local pPlot = Map.GetPlot(x,y);
     local resourceIndex = pPlot:GetResourceType()
-	if not resourceIndex == GameInfo.Resources['RESOURCE_MANA'].Index then return; end
-    local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
-    if not iResourceToChangeTo then return; end
-    print('changing resource to ' .. tostring(iResourceToChangeTo))
-    ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);
+	if resourceIndex == GameInfo.Resources['RESOURCE_MANA'].Index then
+         local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
+        if not iResourceToChangeTo then
+            print('changing resource to ' .. tostring(iResourceToChangeTo))
+            ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);
+        end
+    end
+    print(improvementIndex)
+    if improvementIndex then
+        local tUnits = Map.GetUnitsAt(pPlot)
+        for pUnit in tUnits:Units() do
+            local iUnitIndex = pUnit:GetType()
+            print(iUnitIndex)
+            local iClanIndex = tBarbClanUnitMapper[iUnitIndex]
+            if iClanIndex then
+                pPlot:SetProperty('barbclantype', iClanIndex)
+            end
+        end
+    end
+
 end
 
 function IncrementCottages(playerId)
@@ -239,9 +261,11 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
 end
 
 function EventCollapse(x, y)
+    print('doing collapse')
     local pPlot = Map.GetPlot(x, y)
     local tUnits = Map.GetUnitsAt(pPlot)
-    for idx, pUnit in ipairs(tUnits) do
+    for pUnit in tUnits:Units() do
+        print('remove health')
         pUnit:ChangeDamage(20)
         if pUnit:GetDamage() < 1 then           -- is it at 0 or at 100?
             UnitManager.Kill(pUnit)
@@ -253,15 +277,14 @@ local TRIBE_CLAN_SKELETON = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_HILLS'].I
 local TRIBE_CLAN_LIZARDMEN = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_FOREST'].Index
 local TRIBE_CLAN_BEAR = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Index
 local TRIBE_CLAN_LION = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
-local tTribeDeck = {[TRIBE_CLAN_SCORPION] = 1, [TRIBE_CLAN_SKELETON] = {[1]=EventCollapse},
+-- local TRIBE_CLAN_NAT_WON = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
+local tTribeDeck = {[TRIBE_CLAN_SCORPION] = {[1]=EventCollapse}, [TRIBE_CLAN_SKELETON] = {[1]=EventCollapse},
               [TRIBE_CLAN_LIZARDMEN] = {[1]=EventCollapse}}
 
 function RemovedBarbCamp(x, y, owningPlayerID)
-    print('Owning playerID is ' .. tostring(owningPlayerID))
-    -- hopefully this is unneeded
     local pPlot = Map.GetPlot(x, y)
     local owner = pPlot:GetOwner()
-    print('Plot owner is ' .. tostring(owner))
+    print('destroying')
     if owningPlayerID == 63 or owner == -1 then
         local feature = pPlot:GetFeatureType()
         local tribeIndex = pPlot:GetProperty('barbclantype') or 1
@@ -271,28 +294,28 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         end
         -- draw from deck of events
         print(tribeIndex)
-        local tTribeEvents = tTribeDeck[tribeIndex]            --TRIBE_CLAN_SKELETON
+        local tTribeEvents = tTribeDeck[tribeIndex]
         if tTribeEvents then
             local lengthTribeEvents = table.count(tTribeEvents)
             local dice_roll = math.random(1, lengthTribeEvents)
             local fEvent = tTribeEvents[dice_roll]
             fEvent(x, y)
         end
-        -- do event. Sometimes we reinstantiate barb camp
+        -- do event. Sometimes we reinstantiate barb camp. maybe we can also removal of gold on disperse
     end
 end
 
-tLuonnotar = {
+local tLuonnotar = {
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR'].Index]= {civic=GameInfo.Civics['CIVIC_MYSTICISM'].Index},
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_ANOINTED'].Index]= {civic=GameInfo.Civics['CIVIC_POLITICAL_PHILOSOPHY'].Index},
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_BLESSED'].Index]= {civic=GameInfo.Civics['CIVIC_PRIESTHOOD'].Index},
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_CONSECRATED'].Index]= {civic=GameInfo.Civics['CIVIC_FANATICISM'].Index},
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE'].Index]= {civic=GameInfo.Civics['CIVIC_RIGHTEOUSNESS'].Index}}
 
-iLunnotarBlocker = GameInfo.Buildings['BUILDING_BLOCK_ALTAR'].Index
-iAltarBase = GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR'].Index
+local iLunnotarBlocker = GameInfo.Buildings['BUILDING_BLOCK_ALTAR'].Index
+local iAltarBase = GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR'].Index
 
-tLuonnotarCivics = {
+local tLuonnotarCivics = {
     [GameInfo.Civics['CIVIC_MYSTICISM'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR'].Index,
     [GameInfo.Civics['CIVIC_POLITICAL_PHILOSOPHY'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_ANOINTED'].Index,
     [GameInfo.Civics['CIVIC_PRIESTHOOD'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_BLESSED'].Index,
@@ -347,7 +370,7 @@ end
 -- Great Bard on Drama
 -- there are others im pretty sure
 -- function OnTechnologyGrantFirst()  end
-tCivicsGreatPeople = {[GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index] = 'GREAT_GENERAL',
+local tCivicsGreatPeople = {[GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index] = 'GREAT_GENERAL',
                       [GameInfo.Civics['CIVIC_DRAMA_POETRY'].Index] = 'GREAT_ARTIST'}
 
 function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
@@ -364,7 +387,7 @@ function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
     end
 end
 
-iGreatProphetIndex = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_PROPHET'].Index
+local iGreatProphetIndex = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_PROPHET'].Index
 function onGreatPersonActivated(unitOwner, unitID, greatPersonClassID, greatPersonIndividualID)
     print('Great person activated!')
     print(greatPersonClassID)

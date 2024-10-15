@@ -27,11 +27,13 @@ function CombatApplyDebuffs(combatResult)
 
 
     local pDefenderUnit = UnitManager.GetUnit(iDefenderOwnerID, iDefenderUnitID);
+    if not pDefenderUnit then return end
     local pDefUnitAbilities = pDefenderUnit:GetAbility()
 
     local iAttackerOwnerID = pAttackerID.player
     local iAttackerUnitID = pAttackerID.id
     local pAttackerUnit = UnitManager.GetUnit(iAttackerOwnerID, iAttackerUnitID);
+    if not pAttackerUnit then return end
     local pAttackUnitAbilities = pAttackerUnit:GetAbility()
 
     print(iDefenderOwnerID)

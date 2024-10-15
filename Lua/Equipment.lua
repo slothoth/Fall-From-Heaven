@@ -26,8 +26,10 @@ tEquipmentAbilities = { [GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY']
 -- this seems maybe expensive, iterating over every equipment on any unit dying in combat?
 function EquipmentUnitDied(killedPlayerID, killedUnitID, playerID, unitID)
     local pKilledUnit = UnitManager.GetUnit(killedPlayerID, killedUnitID)
+    if not pKilledUnit then return end
     local pKilledUnitAbilities = pKilledUnit:GetAbility()
     local pUnit = UnitManager.GetUnit(playerID, unitID)
+    if not pUnit then return end
     local pAbilityUnit = pUnit:GetAbility()
     local iX = pUnit:GetX()
     local iY = pUnit:GetY()
