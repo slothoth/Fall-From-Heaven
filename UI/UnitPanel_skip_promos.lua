@@ -509,17 +509,9 @@ function GetUnitActionsTable( pUnit )
 			else
 				-- The UI check of an operation is a loose check where it only fails if the unit could never do the command.
 				local bCanStart = UnitManager.CanStartCommand( pUnit, actionHash, true);
-				if commandRow.Description == 'LOC_MY_CUST_DESCRIPTION' then
-					bCanStart = 1				-- we can also do checks if unit has the promo relevant
-				end
 				if (bCanStart) then
 					-- Check again if the operation can occur, this time for real.
-					local bCanStartNow, tResults
-					if commandRow.Description == 'LOC_MY_CUST_DESCRIPTION' then
-						bCanStartNow, tResults = true, nil
-					else
-						bCanStartNow, tResults = UnitManager.CanStartCommand( pUnit, actionHash, false, true);
-					end
+					local bCanStartNow, tResults = UnitManager.CanStartCommand( pUnit, actionHash, false, true);
 					local bDisabled = not bCanStartNow;
 					local toolTipString;
 
@@ -721,11 +713,18 @@ function GetUnitActionsTable( pUnit )
 				-- Is this operation visible in the UI?
 				-- The UI check of an operation is a loose check where it only fails if the unit could never do the operation.
 				if ( operationRow.VisibleInUI ) then
-					local bCanStart, tResults = UnitManager.CanStartOperation( pUnit, actionHash, nil, true );
-
+					if GameInfo.CustomOperations[operationRow.OperationType] then				-- do promtion check here
+						bCanStart, tResults = true, nil
+					else
+						bCanStart, tResults = UnitManager.CanStartOperation( pUnit, actionHash, nil, true );
+					end
 					if (bCanStart) then
 						-- Check again if the operation can occur, this time for real.
-						bCanStart, tResults = UnitManager.CanStartOperation(pUnit, actionHash, nil, false, OperationResultsTypes.NO_TARGETS);		-- Hint that we don't require possibly expensive target results.
+						if GameInfo.CustomOperations[operationRow.OperationType] then
+							bCanStart, tResults = true, nil
+						else
+							bCanStart, tResults = UnitManager.CanStartOperation(pUnit, actionHash, nil, false, OperationResultsTypes.NO_TARGETS);		-- Hint that we don't require possibly expensive target results.
+						end
 						local bDisabled = not bCanStart;
 						local toolTipString = GetUnitOperationTooltip(operationRow);
 
@@ -2595,8 +2594,25 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 							UI.SetInterfaceMode(eInterfaceMode, tParameters);
 						end
 					else
-						-- No mode needed, just do the operation
-						UnitManager.RequestOperation( pSelectedUnit, actionHash );
+						local opName =  GameInfo.UnitOperations[actionHash].OperationType
+						local CustomOperation = GameInfo.CustomOperations[opName]
+						print(opName)
+						print(CustomOperation)
+						if CustomOperation then
+							local sOpType = CustomOperation.OperationType
+							local sOpCallback = CustomOperation.Callback
+							local iUnit = pSelectedUnit:GetID()
+							local iOwner = pSelectedUnit:GetOwner()
+							local tParameters = {}
+							tParameters.UnitOperationType = sOpType;
+							tParameters.iCastingUnit = iUnit;
+							tParameters.OnStart = sOpCallback;
+							print(sOpType .. ', ' .. sOpCallback .. tostring(iUnit).. tostring(iOwner))
+							local uh = UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
+						else
+							UnitManager.RequestOperation( pSelectedUnit, actionHash );		-- No mode needed, just do the operation
+						end
+
 					end
 				end
 			end

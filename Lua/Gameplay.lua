@@ -510,7 +510,42 @@ local function SetCapitalProperty(iPlayer: number, tParameters: table)
     pCapitalPlot:SetProperty(sPropKey, iPropValue)
 end
 
-GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+local function OnSummon(iPlayer: number, tParameters: table)
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local iUnitToSummon = GameInfo.Units[OperationInfo.simpleText].Index
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+	local playerReal = Players[iPlayer];
+	local playerUnits = playerReal:GetUnits();
+    print('summonin ' .. tostring(iUnitToSummon) .. ' and x ' .. tostring(iX) .. ' and y ' .. tostring(iY))
+	playerUnits:Create(iUnitToSummon, iX, iY);
+end
 
+local function OnSummonPermanent(iPlayer: number, tParameters: table)
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local iUnitToSummon = GameInfo.Units[OperationInfo.simpleText].Index
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+	local playerReal = Players[iPlayer];
+	local playerUnits = playerReal:GetUnits();
+    print('summonin ' .. tostring(iUnitToSummon) .. ' and x ' .. tostring(iX) .. ' and y ' .. tostring(iY))
+	playerUnits:Create(iUnitToSummon, iX, iY);              -- put a property on the unit summoned and the unit summoning. on unit summoned death remove the property on unit creator, allowing cast again.
+end
+
+local function OnGrantBuffSelf(iPlayer: number, tParameters: table)
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local iAbilityToGrant = GameInfo.Units[OperationInfo.simpleText].Index
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+end
+
+GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+GameEvents.SlthOnSummon.Add(OnSummon);
+GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);
+GameEvents.SlthOnGrantBuffSelf.Add(OnGrantBuffSelf);
 onStart()
 
