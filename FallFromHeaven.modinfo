@@ -125,7 +125,6 @@
       <File>Core/Specialists/Specialists.sql</File>
       <File>Core/Specialists/GreatPersons.sql</File>
       <File>Core/National_Units.sql</File>
-      <File>Core/CombatBuffs.sql</File>
       <File>Core/CivPolishing.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
@@ -137,6 +136,7 @@
       <File>Core/NaturalWonders.sql</File>
       <File>Core/ElementalDamage.sql</File>
       <File>Core/Affinity.sql</File>
+      <File>Core/UnitCommands.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -354,7 +354,6 @@
     <File>Core/Civilizations/BeastRaces/Clan.sql</File>
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
     <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
-    <File>Core/CombatBuffs.sql</File>
     <File>Core/BarbarianClans.sql</File>
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
@@ -363,6 +362,7 @@
     <File>Core/NaturalWonders.sql</File>
     <File>Core/ElementalDamage.sql</File>
     <File>Core/Affinity.sql</File>
+    <File>Core/UnitCommands.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>

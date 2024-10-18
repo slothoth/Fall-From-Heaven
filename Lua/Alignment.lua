@@ -199,18 +199,19 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         end
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
         local iBasiumPlayerID = Game:GetProperty('Mercurian')
-        if playerID == iBasiumPlayerID or not Game:GetProperty('mercurian_spawned') then return end              -- city transfer rebuilds the wonder so stops recursive calls
+        if playerID == iBasiumPlayerID or Game:GetProperty('mercurian_spawned') then return; end              -- city transfer rebuilds the wonder so stops recursive calls
         print('Mercurian Gate founded')
         Game:SetProperty('MercurianGatePlot', plotID)
         if iBasiumPlayerID then
             local pCity = CityManager.GetCity(playerID, cityID)
             if pCity then
-                CityManager.TransferCity(pCity, iBasiumPlayerID, -1821839791)     -- enum CityTransferTypes.BY_GIFT
+                --
+                Game:SetProperty('mercurian_spawned', 1)
+                CityManager.TransferCity(pCity, iBasiumPlayerID, CityTransferTypes.BY_GIFT)     -- enum CityTransferTypes.BY_GIFT
                 GrantTechParity(iBasiumPlayerID, playerID)
                 GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
                 local pPlayer = Players[playerID]
                 pPlayer:GetDiplomacy():SetPermanentAlliance(iBasiumPlayerID)
-                Game:SetProperty('mercurian_spawned', 1)
             end
         end
         AdjustArmageddonCount(5)            -- Compact broken

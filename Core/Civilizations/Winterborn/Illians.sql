@@ -6,10 +6,10 @@ INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUE
 ('SLTH_LEADER_AURIC', 'SLTH_CIVILIZATION_ILLIANS', 'LOC_CITY_ILLIANS_1_NAME');
 
 INSERT INTO	StartBiasTerrains (CivilizationType,			TerrainType,			        Tier	)
-VALUES	                      ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_TUNDRA',		    2	),
-                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_TUNDRA_HILLS',		2	),
-                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_SNOW',		        2	),
-                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_SNOW_HILLS',		2	);
+VALUES	                      ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_TUNDRA',		    3	),
+                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_TUNDRA_HILLS',		3	),
+                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_SNOW',		        5	),
+                              ('SLTH_CIVILIZATION_ILLIANS',	'TERRAIN_SNOW_HILLS',		5	);
 
 INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
 VALUES	                      ('SLTH_CIVILIZATION_ILLIANS',	'FEATURE_FOREST',	        3		);
@@ -72,6 +72,9 @@ INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedComba
 ('SLTH_UNIT_HIGH_PRIEST_OF_WINTER', 'LOC_SLTH_UNIT_HIGH_PRIEST_OF_WINTER_NAME', '2', '1', '29', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '240', '0', 'LOC_SLTH_UNIT_HIGH_PRIEST_OF_WINTER_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_HIGH_PRIEST_OF_WINTER', '1', 'PROMOTION_CLASS_DISCIPLE', NULL, 'CIVIC_THEOLOGY', '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', NULL, '1'),
 ('SLTH_UNIT_AURIC_ASCENDED', 'LOC_SLTH_UNIT_AURIC_ASCENDED_NAME', '2', '3', '144', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '-1', '0', 'LOC_SLTH_UNIT_AURIC_ASCENDED_DESCRIPTION', NULL, '1', NULL, 'TECH_OMNISCIENCE', NULL, '0', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '1', NULL, '1'),
 ('SLTH_UNIT_DRIFA', 'LOC_SLTH_UNIT_DRIFA_NAME', '2', '3', '68', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '-1', '0', 'LOC_SLTH_UNIT_DRIFA_DESCRIPTION', NULL, '1', 'PROMOTION_CLASS_BEAST', NULL, 'CIVIC_DIVINE_ESSENCE', '0', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', NULL, '1');
+
+INSERT INTO Units_Presentation(UnitType, UIFlagOffset) VALUES ('SLTH_UNIT_DRIFA', '20'),
+                                                              ('SLTH_UNIT_AURIC_ASCENDED', '20');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_UNIT_HIGH_PRIEST_OF_WINTER', 'CLASS_DISCIPLE'),

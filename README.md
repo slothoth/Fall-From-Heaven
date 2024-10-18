@@ -510,6 +510,9 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ## Bugs
 - [ ] Why are civ colours always green blue?
 - [ ] Why does UnitPanel buttons always show on reload of game?
+- [ ] Accuracy promo granted on aggressive?
+- [ ] Basium spawning crashing game, but Infernal not? we are using a property to gate, but maybe its set after city transfer so stuck in loop
+- [ ] use MODIFIER_PLAYER_UNITS_GRANT_PROMOTION instead of promotion lua grant system?
 # Done
 ##### Mercurians:
   Not directly playable, needs Wonder completed to summon, and then takes over that city. Needs to also be switchable to that player via ui prompt Units spawn on mercurian gate when Good units die, that whole headache as with Infernal

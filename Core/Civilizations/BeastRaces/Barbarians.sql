@@ -97,6 +97,9 @@ INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_UNIT_SON_OF_THE_INFERNO', 'CAN_BE_RACIALIZED'),
 ('SLTH_UNIT_SON_OF_THE_INFERNO', 'CLASS_ADEPT');
 
+INSERT INTO Units_Presentation(UnitType, UIFlagOffset) VALUES ('SLTH_UNIT_ACHERON', '20'),
+                                                              ('SLTH_UNIT_WRATH', '20');
+
 INSERT INTO Types(Type, Kind) VALUES
 ('SLTH_UNIT_ACHERON', 'KIND_UNIT'),
 ('SLTH_UNIT_ARS', 'KIND_UNIT'),
