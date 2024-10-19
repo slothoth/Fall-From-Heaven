@@ -669,11 +669,16 @@ local function OnSpellAoeDamage(iPlayer: number, tParameters: table)
 		end
 	end
 end
-
+local function UpdateResourcePromotion(iPlayer: number, tParameters: table)
+    local iResource = tParameters.ResourceID
+    -- iterate over player units, grant prereq promo
+end
 local function OnBespokeSpell(iPlayer: number, tParameters: table)
     print('bespoke spell not implemented')
 end
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+
+GameEvents.SlthSetResourcePromotions.Add(SetCapitalProperty);
 
 GameEvents.SlthOnSummon.Add(OnSummon);
 GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);

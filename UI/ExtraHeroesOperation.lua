@@ -1,3 +1,4 @@
+
 -- UnitOperation
 -- Original Author: Flactine --
 -- Altered by: Slothoth --
@@ -12,30 +13,30 @@ local m_wbInterfaceMode = false
 local HEX_COLORING_MOVEMENT = UILens.CreateLensLayerHash("Hex_Coloring_Movement");--LensLayers.HEX_COLORING_MOVEMENT;
 
 local tMonitoredResources = {
-    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='DEATH'},
-    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='FIRE'},
-    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index] = { rtype='MANA', name='AIR'},
-    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index] = { rtype='MANA', name='BODY'},
-    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index] = { rtype='MANA', name='CHAOS'},
-    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index] = { rtype='MANA', name='EARTH'},
-    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index] = { rtype='MANA', name='ENCHANTMENT'},
-    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index] = { rtype='MANA', name='ENTROPY'},
-    [GameInfo.Resources['RESOURCE_MANA_ICE'].Index] = { rtype='MANA', name='ICE'},
-    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index] = { rtype='MANA', name='LAW'},
-    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index] = { rtype='MANA', name='LIFE'},
-    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index] = { rtype='MANA', name='METAMAGIC'},
-    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index] = { rtype='MANA', name='MIND'},
-    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index] = { rtype='MANA', name='NATURE'},
-    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index] = { rtype='MANA', name='SPIRIT'},
-    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='WATER'},
-    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='SUN'},
-    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='SHADOW'},
-    [GameInfo.Resources['RESOURCE_BANANA'].Index] = { rtype='AFFINITY', name='BANANA'},
-    [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='COPPER'},
-    [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='IRON'},
-    [GameInfo.Resources['RESOURCE_MITHRIL'].Index] = { rtype='AFFINITY', name='MITHRIL'},
-    [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='SHEUT_STONE'},
-    [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype='AFFINITY', name='NIGHTMARE'}}
+    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='RESOURCE_MANA_DEATH'},
+    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='RESOURCE_MANA_FIRE'},
+    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index] = { rtype='MANA', name='RESOURCE_MANA_AIR'},
+    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index] = { rtype='MANA', name='RESOURCE_MANA_BODY'},
+    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index] = { rtype='MANA', name='RESOURCE_MANA_CHAOS'},
+    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index] = { rtype='MANA', name='RESOURCE_MANA_EARTH'},
+    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index] = { rtype='MANA', name='RESOURCE_MANA_ENCHANTMENT'},
+    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index] = { rtype='MANA', name='RESOURCE_MANA_ENTROPY'},
+    [GameInfo.Resources['RESOURCE_MANA_ICE'].Index] = { rtype='MANA', name='RESOURCE_MANA_ICE'},
+    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index] = { rtype='MANA', name='RESOURCE_MANA_LAW'},
+    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index] = { rtype='MANA', name='RESOURCE_MANA_LIFE'},
+    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index] = { rtype='MANA', name='RESOURCE_MANA_METAMAGIC'},
+    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index] = { rtype='MANA', name='RESOURCE_MANA_MIND'},
+    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index] = { rtype='MANA', name='RESOURCE_MANA_NATURE'},
+    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index] = { rtype='MANA', name='RESOURCE_MANA_SPIRIT'},
+    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='RESOURCE_MANA_WATER'},
+    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='RESOURCE_MANA_SUN'},
+    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='RESOURCE_MANA_SHADOW'},
+    [GameInfo.Resources['RESOURCE_BANANA'].Index] = { rtype='AFFINITY', name='RESOURCE_BANANA'},
+    [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='RESOURCE_COPPER'},
+    [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='RESOURCE_IRON'},
+    [GameInfo.Resources['RESOURCE_MITHRIL'].Index] = { rtype='AFFINITY', name='RESOURCE_MITHRIL'},
+    [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='RESOURCE_SHEUT_STONE'},
+    [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype='AFFINITY', name='RESOURCE_NIGHTMARE'}}
 
 local tBinaryMap = {
     ['0']={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
@@ -549,6 +550,11 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
                 tParameters.iPropValue = val;
                 UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
                 print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
+            end
+            if iPastResource == 0 then
+                tParameters.OnStart= 'SlthSetResourcePromotions'
+                tParameters.ResourceID = resourceTypeID
+                UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
             end
         end
     end
