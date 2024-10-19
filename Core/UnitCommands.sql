@@ -113,67 +113,67 @@ INSERT INTO Types(Type, Kind) VALUES
 ('UNITOPERATION_FEED_ON_CITY', 'KIND_UNITOPERATION');
 
 
-CREATE TABLE IF NOT EXISTS CustomOperations(OperationType text primary key, Callback text, SimpleText text,
-                                            simpleAmount integer default 0, SecondAmount integer default 0,
+CREATE TABLE IF NOT EXISTS CustomOperations(OperationType text primary key, Callback text, SimpleText text, PromotionPrereq text,
+                                            UnitPrereq text, simpleAmount integer default 0, SecondAmount integer default 0,
                                             ThirdAmount integer default 0);
 
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SimpleAmount) VALUES
-('UNITOPERATION_SUMMON_AIR_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_AIR_ELEMENTAL', 0),
-('UNITOPERATION_SUMMON_DJINN', 'SlthOnSummon', 'SLTH_UNIT_DJINN', 0),
-('UNITOPERATION_SUMMON_EYE', 'SlthOnSummon', 'SLTH_UNIT_EYE', 0),
-('UNITOPERATION_SUMMON_EARTH_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_EARTH_ELEMENTAL', 0),
-('UNITOPERATION_SUMMON_FIRE_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_FIRE_ELEMENTAL', 0),
-('UNITOPERATION_SUMMON_FIREBALL', 'SlthOnSummon', 'SLTH_UNIT_FIREBALL', 0),
-('UNITOPERATION_SUMMON_ICE_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_ICE_ELEMENTAL', 0),
-('UNITOPERATION_SUMMON_EINHERJAR', 'SlthOnSummon', 'SLTH_UNIT_EINHERJAR', 0),
-('UNITOPERATION_SUMMON_AUREALIS', 'SlthOnSummon', 'SLTH_UNIT_AUREALIS', 0),
-('UNITOPERATION_SUMMON_PIT_BEAST', 'SlthOnSummon', 'SLTH_UNIT_PIT_BEAST', 0),
-('UNITOPERATION_SUMMON_MISTFORM', 'SlthOnSummon', 'SLTH_UNIT_MISTFORM', 0),
-('UNITOPERATION_SUMMON_SPECTRE', 'SlthOnSummon', 'SLTH_UNIT_SPECTRE', 0),
-('UNITOPERATION_SUMMON_WATER_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_WATER_ELEMENTAL', 0),
-('UNITOPERATION_SUMMON_WRAITH', 'SlthOnSummon', 'SLTH_UNIT_WRAITH', 0),
-('UNITOPERATION_SUMMON_FLESH_GOLEM', 'SlthOnSummonPerm', 'SLTH_UNIT_FLESH_GOLEM', 0),
-('UNITOPERATION_SUMMON_SKELETON', 'SlthOnSummonPerm', 'SLTH_UNIT_SKELETON', 0),
-('UNITOPERATION_SUMMON_IRA', 'SlthOnSummonPerm', 'SLTH_UNIT_IRA', 0),
-('UNITOPERATION_GRANT_STONESKIN_SELF', 'SlthOnGrantBuffSelf', 'BUFF_STONESKIN', 0),
-('UNITOPERATION_GRANT_WATERWALKING_SELF', 'SlthOnGrantBuffSelf', 'BUFF_WATERWALKING', 0),
-('UNITOPERATION_GRANT_SPELL_STAFF_SELF', 'SlthOnGrantBuffSelf', 'SLTH_EQUIPMENT_SPELL_STAFF_ABILITY', 0),
-('UNITOPERATION_GRANT_ENCHANTED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_ENCHANTED_BLADE', 0),
-('UNITOPERATION_GRANT_FAIR_WINDS', 'SlthOnGrantBuffAoEAlly', 'BUFF_FAIR_WINDS', 0),
-('UNITOPERATION_GRANT_HASTE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_HASTE', 0),
-('UNITOPERATION_GRANT_REGENERATION_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_REGENERATION', 0),
-('UNITOPERATION_GRANT_DANCE_OF_BLADES_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_DANCE_OF_BLADES', 0),
-('UNITOPERATION_GRANT_FLAMING_ARROWS_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_FLAMING_ARROWS', 0),
-('UNITOPERATION_GRANT_LOYALTY_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_LOYALTY', 0),
-('UNITOPERATION_GRANT_VALOR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_VALOR', 0),
-('UNITOPERATION_GRANT_POISONED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_POISONED_BLADE', 0),
-('UNITOPERATION_GRANT_TREETOP_DEFENSE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_TREETOP', 0),
-('UNITOPERATION_GRANT_BLUR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_BLUR', 0),
-('UNITOPERATION_GRANT_SHADOWWALK_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHADOWWALK', 0),
-('UNITOPERATION_GRANT_COURAGE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_COURAGE', 0),
-('UNITOPERATION_GRANT_MUTATION_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_MUTATION', 0),
-('UNITOPERATION_DEBUFF_CHARMED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_CHARMED', 0),
-('UNITOPERATION_DEBUFF_RUSTED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_RUSTED', 0),
-('UNITOPERATION_DEBUFF_BLINDED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_BLINDED', 0),
-('UNITOPERATION_DEBUFF_SLOW_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_SLOW', 0),
-('UNITOPERATION_TERRAIN_CHANGE_SPRING', 'SlthOnChangeTerrain', 'SpringTo', 0),
-('UNITOPERATION_TERRAIN_CHANGE_SCORCH', 'SlthOnChangeTerrain', 'ScorchTo', 0),
-('UNITOPERATION_TERRAIN_CHANGE_VITALIZE', 'SlthOnChangeTerrain', 'VitalizeTo', 0),
-('UNITOPERATION_WONDER', 'SlthOnBespokeSpell', NULL, 0),
-('UNITOPERATION_BLAZE', 'SlthOnBespokeSpell', NULL, 0),
-('UNITOPERATION_RESURRECTION', 'SlthOnBespokeSpell', NULL, 0),
-('UNITOPERATION_DOMINATION', 'SlthOnBespokeSpell', NULL, 0),             -- this needs targetting
-('UNITOPERATION_TRUST', 'SlthOnBespokeSpell', NULL, 0),
-('UNITOPERATION_SANCTIFY', 'SlthOnBespokeSpell', NULL, 0),
-('UNITOPERATION_DISPELL_MAGIC', 'SlthOnBespokeSpell', NULL, 0),
-('UNITOPERATION_FEED_ON_CITY', 'SlthOnBespokeSpell', NULL, 0);
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, UnitPrereq) VALUES
+('UNITOPERATION_SUMMON_AIR_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_AIR_ELEMENTAL', 'AIR_THREE', NULL),
+('UNITOPERATION_SUMMON_DJINN', 'SlthOnSummon', 'SLTH_UNIT_DJINN', 'METAMAGIC_THREE', NULL),
+('UNITOPERATION_SUMMON_EYE', 'SlthOnSummon', 'SLTH_UNIT_EYE', 'METAMAGIC_ONE', NULL),
+('UNITOPERATION_SUMMON_EARTH_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_EARTH_ELEMENTAL', 'EARTH_THREE', NULL),
+('UNITOPERATION_SUMMON_FIRE_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_FIRE_ELEMENTAL', 'FIRE_THREE', NULL),
+('UNITOPERATION_SUMMON_FIREBALL', 'SlthOnSummon', 'SLTH_UNIT_FIREBALL', 'FIRE_TWO', NULL),
+('UNITOPERATION_SUMMON_ICE_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_ICE_ELEMENTAL', 'ICE_TWO', NULL),
+('UNITOPERATION_SUMMON_EINHERJAR', 'SlthOnSummon', 'SLTH_UNIT_EINHERJAR', 'LAW_TWO', NULL),
+('UNITOPERATION_SUMMON_AUREALIS', 'SlthOnSummon', 'SLTH_UNIT_AUREALIS', 'SUN_THREE', NULL),
+('UNITOPERATION_SUMMON_PIT_BEAST', 'SlthOnSummon', 'SLTH_UNIT_PIT_BEAST', 'ENTROPY_TWO', NULL),
+('UNITOPERATION_SUMMON_MISTFORM', 'SlthOnSummon', 'SLTH_UNIT_MISTFORM', 'SHADOW_THREE', NULL),
+('UNITOPERATION_SUMMON_SPECTRE', 'SlthOnSummon', 'SLTH_UNIT_SPECTRE', 'DEATH_TWO', NULL),
+('UNITOPERATION_SUMMON_WATER_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_WATER_ELEMENTAL', 'WATER_THREE', NULL),
+('UNITOPERATION_SUMMON_WRAITH', 'SlthOnSummon', 'SLTH_UNIT_WRAITH', 'DEATH_THREE', NULL),
+('UNITOPERATION_SUMMON_FLESH_GOLEM', 'SlthOnSummonPerm', 'SLTH_UNIT_FLESH_GOLEM', 'BODY_THREE', NULL),
+('UNITOPERATION_SUMMON_SKELETON', 'SlthOnSummonPerm', 'SLTH_UNIT_SKELETON', 'DEATH_ONE', NULL),
+('UNITOPERATION_SUMMON_IRA', 'SlthOnSummonPerm', 'SLTH_UNIT_IRA', NULL, 'SLTH_UNIT_WRATH'),
+('UNITOPERATION_GRANT_STONESKIN_SELF', 'SlthOnGrantBuffSelf', 'BUFF_STONESKIN', 'EARTH_TWO', NULL),
+('UNITOPERATION_GRANT_WATERWALKING_SELF', 'SlthOnGrantBuffSelf', 'BUFF_WATERWALKING', 'WATER_TWO', NULL),
+('UNITOPERATION_GRANT_SPELL_STAFF_SELF', 'SlthOnGrantBuffSelf', 'SLTH_EQUIPMENT_SPELL_STAFF_ABILITY', 'ENCHANTMENT_THREE', NULL),
+('UNITOPERATION_GRANT_ENCHANTED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_ENCHANTED_BLADE', 'ENCHANTMENT_ONE', NULL),
+('UNITOPERATION_GRANT_FAIR_WINDS', 'SlthOnGrantBuffAoEAlly', 'BUFF_FAIR_WINDS', 'AIR_ONE', NULL),
+('UNITOPERATION_GRANT_HASTE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_HASTE', 'BODY_ONE', NULL),
+('UNITOPERATION_GRANT_REGENERATION_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_REGENERATION', 'BODY_TWO', NULL),
+('UNITOPERATION_GRANT_DANCE_OF_BLADES_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_DANCE_OF_BLADES', 'CHAOS_ONE', NULL),
+('UNITOPERATION_GRANT_FLAMING_ARROWS_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_FLAMING_ARROWS', 'ENCHANTMENT_TWO', NULL),
+('UNITOPERATION_GRANT_LOYALTY_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_LOYALTY', 'LAW_ONE', NULL),
+('UNITOPERATION_GRANT_VALOR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_VALOR', 'LAW_THREE', NULL),
+('UNITOPERATION_GRANT_POISONED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_POISONED_BLADE', 'NATURE_ONE', NULL),
+('UNITOPERATION_GRANT_TREETOP_DEFENSE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_TREETOP', 'NATURE_TWO', NULL),
+('UNITOPERATION_GRANT_BLUR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_BLUR', 'SHADOW_ONE', NULL),
+('UNITOPERATION_GRANT_SHADOWWALK_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHADOWWALK', 'SHADOW_TWO', NULL),
+('UNITOPERATION_GRANT_COURAGE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_COURAGE', 'SPIRIT_ONE', NULL),
+('UNITOPERATION_GRANT_MUTATION_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_MUTATION', 'CHAOS_TWO', NULL),
+('UNITOPERATION_DEBUFF_CHARMED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_CHARMED', 'MIND_TWO', NULL),
+('UNITOPERATION_DEBUFF_RUSTED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_RUSTED', 'ENTROPY_ONE', NULL),
+('UNITOPERATION_DEBUFF_BLINDED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_BLINDED', 'SUN_TWO', NULL),
+('UNITOPERATION_DEBUFF_SLOW_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_SLOW', 'ICE_ONE', NULL),
+('UNITOPERATION_TERRAIN_CHANGE_SPRING', 'SlthOnChangeTerrain', 'SpringTo', 'WATER_ONE', NULL),
+('UNITOPERATION_TERRAIN_CHANGE_SCORCH', 'SlthOnChangeTerrain', 'ScorchTo', 'SUN_ONE', NULL),
+('UNITOPERATION_TERRAIN_CHANGE_VITALIZE', 'SlthOnChangeTerrain', 'VitalizeTo', 'NATURE_THREE', NULL),
+('UNITOPERATION_WONDER', 'SlthOnBespokeSpell', NULL, 'CHAOS_THREE', NULL),
+('UNITOPERATION_BLAZE', 'SlthOnBespokeSpell', NULL, 'FIRE_ONE', NULL),
+('UNITOPERATION_RESURRECTION', 'SlthOnBespokeSpell', NULL, 'LIFE_THREE', NULL),
+('UNITOPERATION_DOMINATION', 'SlthOnBespokeSpell', NULL, 'MIND_THREE', NULL),             -- this needs targetting
+('UNITOPERATION_TRUST', 'SlthOnBespokeSpell', NULL, 'SPIRIT_THREE', NULL),
+('UNITOPERATION_SANCTIFY', 'SlthOnBespokeSpell', NULL, 'LIFE_ONE', NULL),
+('UNITOPERATION_DISPELL_MAGIC', 'SlthOnBespokeSpell', NULL, 'METAMAGIC_TWO', NULL),
+('UNITOPERATION_FEED_ON_CITY', 'SlthOnBespokeSpell', NULL, NULL, 'SLTH_UNIT_VAMPIRE');          -- port to ability
 
 
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SimpleAmount, SecondAmount, ThirdAmount) VALUES
-('UNITOPERATION_AOE_DAMAGE_MAELSTROM', 'SlthOnAoeDamage', NULL, 10, 40, 60),                    -- placeholder amounts for now
-('UNITOPERATION_AOE_DAMAGE_DESTROY_UNDEAD', 'SlthOnAoeDamage', 'IS_UNDEAD', 10, 40, 60),
-('UNITOPERATION_AOE_DAMAGE_WITHER', 'SlthOnAoeDamage', 'WITHERED', 10, 40,  60),
-('UNITOPERATION_AOE_DAMAGE_SNOWFALL', 'SlthOnAoeDamage', 'TERRAIN_SNOW', 30, 50, 90);
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, UnitPrereq, SimpleAmount, SecondAmount, ThirdAmount) VALUES
+('UNITOPERATION_AOE_DAMAGE_MAELSTROM', 'SlthOnAoeDamage', NULL, 'AIR_TWO', NULL, 10, 40, 60),                    -- placeholder amounts for now
+('UNITOPERATION_AOE_DAMAGE_DESTROY_UNDEAD', 'SlthOnAoeDamage', NULL, 'LIFE_TWO', 'IS_UNDEAD', 10, 40, 60),
+('UNITOPERATION_AOE_DAMAGE_WITHER', 'SlthOnAoeDamage', NULL, 'ENTROPY_THREE', NULL, 10, 40,  60),
+('UNITOPERATION_AOE_DAMAGE_SNOWFALL', 'SlthOnAoeDamage', 'TERRAIN_SNOW', 'ICE_THREE', NULL, 30, 50, 90);
 
 
        -- Hope, Inspiration, Wall of Stone. just do REQUIREMENT_PLOT_ADJACENT_TO_OWNER? and ability on unit? PLAYER_CITIES Modifier?
@@ -186,18 +186,12 @@ INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SimpleAmount,
        -- Zoo buildings, Svartalfar kidnapping
 
 CREATE TABLE IF NOT EXISTS TerrainTransforms(
-    TerrainType references Terrains
-            on update cascade on delete cascade,
- VitalizeTo references Terrains
-            on update cascade on delete cascade,
-    ScorchTo references Terrains
-            on update cascade on delete cascade,
-    SpringTo references Terrains
-            on update cascade on delete cascade,
-    HellTerrainVariant references Terrains
-            on update cascade on delete cascade,
-    IsHellTerrain boolean,
-primary key (TerrainType));
+    TerrainType text primary key,
+    VitalizeTo text,
+    ScorchTo text,
+    SpringTo text,
+    HellTerrainVariant text,
+    IsHellTerrain boolean);
 
 INSERT INTO TerrainTransforms (TerrainType, VitalizeTo, ScorchTo, SpringTo, HellTerrainVariant, IsHellTerrain) VALUES
 ('TERRAIN_BURNING_SANDS', 'TERRAIN_BROKEN_LANDS', NULL, 'TERRAIN_BROKEN_LANDS', 'TERRAIN_DESERT', 1),
@@ -218,14 +212,10 @@ INSERT INTO TerrainTransforms (TerrainType, VitalizeTo, ScorchTo, SpringTo, Hell
 ('TERRAIN_SNOW_HILLS', 'TERRAIN_TUNDRA_HILLS',  'TERRAIN_TUNDRA_HILLS', NULL, NULL, 0);
 
 CREATE TABLE IF NOT EXISTS ResourceTransforms(
-    ResourceType references Resources
-            on update cascade on delete cascade,
- ConvertedResource references Resources
-            on update cascade on delete cascade,
-    ConvertedResourceVariant references Resources
-            on update cascade on delete cascade,
-    IsHellResource boolean,
-primary key (ResourceType));
+    ResourceType text primary key ,
+    ConvertedResource text,
+    ConvertedResourceVariant text,
+    IsHellResource boolean);
 
 INSERT INTO ResourceTransforms (ResourceType, ConvertedResource, ConvertedResourceVariant, IsHellResource) VALUES
 ('RESOURCE_PIG', 'RESOURCE_TOAD', NULL, 0),

@@ -587,6 +587,7 @@ function GetUnitActionsTable( pUnit )
 	-- Only show the operations if the unit has moves left.
     local isHasMovesLeft = pUnit:GetMovesRemaining() > 0;
 	if isHasMovesLeft then
+		local pUnitExp = pUnit:GetExperience()
 
 		for operationRow in GameInfo.UnitOperations() do
 
@@ -713,8 +714,18 @@ function GetUnitActionsTable( pUnit )
 				-- Is this operation visible in the UI?
 				-- The UI check of an operation is a loose check where it only fails if the unit could never do the operation.
 				if ( operationRow.VisibleInUI ) then
-					if GameInfo.CustomOperations[operationRow.OperationType] then				-- do promtion check here, have pUnit.
-						bCanStart, tResults = true, nil
+					local CustomOperationInfo = GameInfo.CustomOperations[operationRow.OperationType]
+					if CustomOperationInfo then				-- do promtion check here, have pUnit.
+						local sReqPromo = CustomOperationInfo.PromotionPrereq
+						if sReqPromo then
+							if pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index) then
+								bCanStart, tResults = true, nil
+							end
+						end
+						local reqUnitType = CustomOperationInfo.UnitPrereq
+						if reqUnitType == unitType then
+							bCanStart, tResults = true, nil
+						end
 					else
 						bCanStart, tResults = UnitManager.CanStartOperation( pUnit, actionHash, nil, true );
 					end
