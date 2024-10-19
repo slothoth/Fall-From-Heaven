@@ -77,7 +77,7 @@ tEquipmentAbilities = {
 	[23] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index,
 	[24] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index}
 
-function AndyLawFunction(iAndyPlayer, iUnit, unit_summoned, iX, iY)
+function SummonUnit(iAndyPlayer, iUnit, unit_summoned, iX, iY)
 	local pUnit = UnitManager.GetUnit(iAndyPlayer, iUnit);
 	local player = pUnit:GetOwner();
 	local playerReal = Players[player];
@@ -292,7 +292,7 @@ function Initialize()
 	if ExposedMembers.ExtraHeroes == nil then
 		ExposedMembers.ExtraHeroes = {}
 	end
-	ExposedMembers.ExtraHeroes.AndyLawFunction = AndyLawFunction;
+	ExposedMembers.ExtraHeroes.SummonUnit = SummonUnit;
 	ExposedMembers.ExtraHeroes.GrantBuildingFunction = GrantBuildingFunction;
 	ExposedMembers.ExtraHeroes.GrantSuperSpecialist = GrantSuperSpecialist;
 	ExposedMembers.ExtraHeroes.GrantGoldenAge = GrantGoldenAge
@@ -300,6 +300,32 @@ function Initialize()
 	ExposedMembers.ExtraHeroes.SetPlotProperty = SetPlotProperty
 	tTimers = {GoldenAges = { sProperty = 'GoldenAgeDuration', callback = FlushGoldenAge}}
 end
+
+local function SetCapitalProperty(iPlayer, tParameters)
+    local sPropKey = tParameters.sPropKey;
+    local iPropValue = tParameters.iPropValue;
+    local pPlayer = Players[iPlayer];
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    local pCapitalPlot = pCapitalCity:GetPlot()
+    pCapitalPlot:SetProperty(sPropKey, iPropValue)
+end
+
+GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+-- Summon Unit
+-- Grant ability to adjacent unit
+-- AoE Damage
+-- Grant building to city
+-- remove ability (Enchanted blade)
+-- Grant ability to self
+-- Grant ability in aoe
+-- Create Forest Fire
+-- adjust PlotProperty, remove Improvement (sanctify)
+-- 7 turn delay, resurrect civ hero
+-- Revert resource to Raw mana
+-- steal unit (domination)
+-- Fortify allied units?
+-- Change terrain (Vitalize, Scorch, Water)
+-- Trust (Permanent diplo boost)
 
 Initialize();
 GameEvents.PlayerTurnDeactivated.Add(TimerSystem);

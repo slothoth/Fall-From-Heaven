@@ -713,7 +713,7 @@ function GetUnitActionsTable( pUnit )
 				-- Is this operation visible in the UI?
 				-- The UI check of an operation is a loose check where it only fails if the unit could never do the operation.
 				if ( operationRow.VisibleInUI ) then
-					if GameInfo.CustomOperations[operationRow.OperationType] then				-- do promtion check here
+					if GameInfo.CustomOperations[operationRow.OperationType] then				-- do promtion check here, have pUnit.
 						bCanStart, tResults = true, nil
 					else
 						bCanStart, tResults = UnitManager.CanStartOperation( pUnit, actionHash, nil, true );

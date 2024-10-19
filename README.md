@@ -119,7 +119,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. That would solve a lot of issues. WildW unit transfer system?
 
 ## Magic System:
-- [ ] UI to press buttons (try make something like for building improvements but above) maybe hijack unitCommands system for populating?
+- [x] UI to press buttons (try make something like for building improvements but above) maybe hijack unitCommands system for populating?
 - [ ] Puppets, inheriting from summoner
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
 - [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit. Or with modifier as do a modifier on city with REQUIREMENT_PLOT_ADJACENT_FRIENDLY_UNIT_TYPE_MATCHES
@@ -140,7 +140,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 ## Projects:
 - [x] Armageddon count projects
-- [ ] Bane Divine (remove promos of Disciple units, 70 arma) Removing promotions is technically impossible :(. Replace units with one of same type and owner and health? Also ability tracking ugh.
+- [ ] Bane Divine (replace religious Priest and High priests with disciples, 70 arma) 
 - [ ] Birthright regained (world spell back)
 - [ ] Blood of the Phoenix (let all current units be able to respawn in cap once) probably cant do as modifier sadly as no ability to respawn
 - [ ] Genesis (upgrade terrain in civ)
@@ -212,6 +212,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Unique unit Cultures: Clan, Infernal, Kuriotates(Centaurs)
 - [ ] Minimal cultures: Mercurian (just do angel units, humans can be mercurian recruits), Dwarves, Elves, Dark Elves, Calabim(pale)
 - [ ] Doviello Barbarian units.
+- [ ] Palaces?
 - [x] Amurite buildings, (AncientEarth -> Mughal -> Colonial), MUGHAL
 - [x] Balseraphs (AncientEarth -> Indonesian -> Colonial), SOUTHAM
 - [x] Bannor (AncientEarth -> Scottish -> Colonial), AFRICAN
@@ -513,6 +514,11 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Accuracy promo granted on aggressive?
 - [ ] Basium spawning crashing game, but Infernal not? we are using a property to gate, but maybe its set after city transfer so stuck in loop
 - [ ] use MODIFIER_PLAYER_UNITS_GRANT_PROMOTION instead of promotion lua grant system?
+## couldnt find a way:
+- [ ] Courage, immunity to slave taking mod, charm resist
+- [ ] Blur, first strike Immune
+- [ ] Valor resist magic
+- [ ] Courage Fear immune
 # Done
 ##### Mercurians:
   Not directly playable, needs Wonder completed to summon, and then takes over that city. Needs to also be switchable to that player via ui prompt Units spawn on mercurian gate when Good units die, that whole headache as with Infernal

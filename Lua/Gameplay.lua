@@ -513,7 +513,7 @@ end
 local function OnSummon(iPlayer: number, tParameters: table)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
-    local iUnitToSummon = GameInfo.Units[OperationInfo.simpleText].Index
+    local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
@@ -521,12 +521,13 @@ local function OnSummon(iPlayer: number, tParameters: table)
 	local playerUnits = playerReal:GetUnits();
     print('summonin ' .. tostring(iUnitToSummon) .. ' and x ' .. tostring(iX) .. ' and y ' .. tostring(iY))
 	playerUnits:Create(iUnitToSummon, iX, iY);
+    UI.DeselectUnit(pUnit);
 end
 
 local function OnSummonPermanent(iPlayer: number, tParameters: table)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
-    local iUnitToSummon = GameInfo.Units[OperationInfo.simpleText].Index
+    local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
@@ -534,18 +535,160 @@ local function OnSummonPermanent(iPlayer: number, tParameters: table)
 	local playerUnits = playerReal:GetUnits();
     print('summonin ' .. tostring(iUnitToSummon) .. ' and x ' .. tostring(iX) .. ' and y ' .. tostring(iY))
 	playerUnits:Create(iUnitToSummon, iX, iY);              -- put a property on the unit summoned and the unit summoning. on unit summoned death remove the property on unit creator, allowing cast again.
+    UI.DeselectUnit(pUnit);
 end
 
 local function OnGrantBuffSelf(iPlayer: number, tParameters: table)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
-    local iAbilityToGrant = GameInfo.Units[OperationInfo.simpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local pAbilityUnit = pUnit:GetAbility()
+    if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
+        pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+    end
+    UI.DeselectUnit(pUnit);
 end
 
+local function OnGrantBuffAoe(iPlayer: number, tParameters: table)
+    local pAbilityUnit
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if pNearUnit then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer == iPlayer) then
+                    pAbilityUnit = pNearUnit:GetAbility()
+                    if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
+                        pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+                    end
+				end
+			end
+		end
+	end
+    UI.DeselectUnit(pUnit);
+end
+
+local function OnGrantDebuffAoe(iPlayer: number, tParameters: table)
+    local pAbilityUnit
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if pNearUnit then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer ~= iPlayer) then
+                    pAbilityUnit = pNearUnit:GetAbility()
+                    if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
+                        pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+                    end
+				end
+			end
+		end
+	end
+    UI.DeselectUnit(pUnit);
+end
+
+local function OnSpellChangeTerrain(iPlayer: number, tParameters: table)
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local pPlot = Map.GetPlot(iX, iY)
+    local iCurrentTerrain = pPlot:GetTerrainType()
+    local TerrainTransformInfo = GameInfo.TerrainTransforms[iCurrentTerrain]
+    local sSpellType = OperationInfo.SimpleText
+    local attempt = TerrainTransformInfo[sSpellType]
+    print(attempt)
+    local iNewTerrain = TerrainTransformInfo.sSpellType
+    if iNewTerrain then
+        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+    end
+end
+
+local function OnSpellAoeDamage(iPlayer: number, tParameters: table)
+    local pAbilityUnit
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+    local iDamage = OperationInfo.SecondAmount
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if (pNearUnit) then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer ~= iPlayer) then
+					if Players[iCaster]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
+                        local tagInfo = true
+                        local UnitTypeInfo = GameInfo.Units[pNearUnit:GetType()]
+                        if OperationInfo.SimpleText == 'IS_UNDEAD' then
+                            local tagInfo = GameInfo.TypeTags[(UnitTypeInfo.UnitType, 'IS_UNDEAD')]
+                        end
+						if (UnitTypeInfo.Combat ~= 0 and UnitTypeInfo.Domain ~= "DOMAIN_AIR") and tagInfo then
+							pNearUnit:ChangeDamage(iDamage);
+							if pNearUnit:GetDamage() >= 100 then
+								UnitManager.Kill(pNearUnit, false);
+                            else
+                                if OperationInfo.SimpleText == 'WITHERED' then
+                                    pAbilityUnit = pNearUnit:GetAbility()
+                                    if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
+                                        pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+                                    end
+                                end
+							end
+                            if OperationInfo.SimpleText == 'TERRAIN_SNOW' then
+                                local pPlot = Map.GetPlot(iX, iY)
+                                local iCurrentTerrain = pPlot:GetTerrainType()
+                                if pPlot:IsHills() then
+                                    iNewTerrain = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
+                                    if  iCurrentTerrain ~= iNewTerrain then
+                                        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+                                    end
+                                elseif pPlot:IsMountain() then
+                                    iNewTerrain = GameInfo.Terrains['TERRAIN_SNOW_MOUNTAIN'].Index
+                                    if iCurrentTerrain ~= iNewTerrain then
+                                        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+                                    end
+                                else
+                                    iNewTerrain = GameInfo.Terrains['TERRAIN_SNOW'].Index
+                                    if iCurrentTerrain ~= iNewTerrain then
+                                        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+                                    end
+                                end
+                            end
+						end
+					end
+				end
+			end
+		end
+	end
+    UI.DeselectUnit(pUnit);
+end
+
+local function OnBespokeSpell(iPlayer: number, tParameters: table)
+    print('bespoke spell not implemented')
+end
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthOnSummon.Add(OnSummon);
 GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);
 GameEvents.SlthOnGrantBuffSelf.Add(OnGrantBuffSelf);
+GameEvents.SlthOnGrantBuffAoEAlly.Add(OnGrantBuffAoe);
+GameEvents.SlthOnGrantAbilityAoeEnemy.Add(OnGrantDebuffAoe);
+GameEvents.SlthOnChangeTerrain.Add(OnSpellChangeTerrain);
+GameEvents.SlthOnAoeDamage.Add(OnSpellAoeDamage);
+GameEvents.SlthOnBespokeSpell.Add(OnBespokeSpell);
+
+
 onStart()
 
