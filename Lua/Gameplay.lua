@@ -674,6 +674,7 @@ local function OnBespokeSpell(iPlayer: number, tParameters: table)
     print('bespoke spell not implemented')
 end
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+
 GameEvents.SlthOnSummon.Add(OnSummon);
 GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);
 GameEvents.SlthOnGrantBuffSelf.Add(OnGrantBuffSelf);
@@ -683,6 +684,6 @@ GameEvents.SlthOnChangeTerrain.Add(OnSpellChangeTerrain);
 GameEvents.SlthOnAoeDamage.Add(OnSpellAoeDamage);
 GameEvents.SlthOnBespokeSpell.Add(OnBespokeSpell);
 
-
+GameEvents.SlthCanSummon.Add(OnSummon);
 onStart()
 
