@@ -716,11 +716,10 @@ function GetUnitActionsTable( pUnit )
 				if ( operationRow.VisibleInUI ) then
 					local CustomOperationInfo = GameInfo.CustomOperations[operationRow.OperationType]
 					if CustomOperationInfo then				-- do promtion check here, have pUnit.
+						bCanStart, tResults = nil, nil
 						local sReqPromo = CustomOperationInfo.PromotionPrereq
 						if sReqPromo then
-							if pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index) then
-								bCanStart, tResults = true, nil
-							end
+							bCanStart, tResults = pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index), nil
 						end
 						local reqUnitType = CustomOperationInfo.UnitPrereq
 						if reqUnitType == unitType then
