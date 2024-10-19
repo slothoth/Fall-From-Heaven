@@ -521,7 +521,6 @@ local function OnSummon(iPlayer: number, tParameters: table)
 	local playerUnits = playerReal:GetUnits();
     print('summonin ' .. tostring(iUnitToSummon) .. ' and x ' .. tostring(iX) .. ' and y ' .. tostring(iY))
 	playerUnits:Create(iUnitToSummon, iX, iY);
-    UI.DeselectUnit(pUnit);
 end
 
 local function OnSummonPermanent(iPlayer: number, tParameters: table)
@@ -535,7 +534,6 @@ local function OnSummonPermanent(iPlayer: number, tParameters: table)
 	local playerUnits = playerReal:GetUnits();
     print('summonin ' .. tostring(iUnitToSummon) .. ' and x ' .. tostring(iX) .. ' and y ' .. tostring(iY))
 	playerUnits:Create(iUnitToSummon, iX, iY);              -- put a property on the unit summoned and the unit summoning. on unit summoned death remove the property on unit creator, allowing cast again.
-    UI.DeselectUnit(pUnit);
 end
 
 local function OnGrantBuffSelf(iPlayer: number, tParameters: table)
@@ -546,7 +544,6 @@ local function OnGrantBuffSelf(iPlayer: number, tParameters: table)
     if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
         pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
     end
-    UI.DeselectUnit(pUnit);
 end
 
 local function OnGrantBuffAoe(iPlayer: number, tParameters: table)
@@ -570,7 +567,6 @@ local function OnGrantBuffAoe(iPlayer: number, tParameters: table)
 			end
 		end
 	end
-    UI.DeselectUnit(pUnit);
 end
 
 local function OnGrantDebuffAoe(iPlayer: number, tParameters: table)
@@ -594,7 +590,6 @@ local function OnGrantDebuffAoe(iPlayer: number, tParameters: table)
 			end
 		end
 	end
-    UI.DeselectUnit(pUnit);
 end
 
 local function OnSpellChangeTerrain(iPlayer: number, tParameters: table)
@@ -629,11 +624,11 @@ local function OnSpellAoeDamage(iPlayer: number, tParameters: table)
 			if (pNearUnit) then
 				local iOwnerPlayer = pNearUnit:GetOwner();
 				if (iOwnerPlayer ~= iPlayer) then
-					if Players[iCaster]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
+					if Players[iPlayer]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
                         local tagInfo = true
                         local UnitTypeInfo = GameInfo.Units[pNearUnit:GetType()]
                         if OperationInfo.SimpleText == 'IS_UNDEAD' then
-                            local tagInfo = GameInfo.TypeTags[(UnitTypeInfo.UnitType, 'IS_UNDEAD')]
+                            local tagInfo = GameInfo.TypeTags[{UnitTypeInfo.UnitType, 'IS_UNDEAD'}]
                         end
 						if (UnitTypeInfo.Combat ~= 0 and UnitTypeInfo.Domain ~= "DOMAIN_AIR") and tagInfo then
 							pNearUnit:ChangeDamage(iDamage);
@@ -673,7 +668,6 @@ local function OnSpellAoeDamage(iPlayer: number, tParameters: table)
 			end
 		end
 	end
-    UI.DeselectUnit(pUnit);
 end
 
 local function OnBespokeSpell(iPlayer: number, tParameters: table)
