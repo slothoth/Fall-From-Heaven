@@ -735,8 +735,14 @@ function GetUnitActionsTable( pUnit )
 					end
 					if (bCanStart) then
 						-- Check again if the operation can occur, this time for real.
-						if GameInfo.CustomOperations[operationRow.OperationType] then
-							bCanStart, tResults = true, nil
+						if CustomOperationInfo then
+							tResults = nil
+							if CustomOperationInfo.ActivationPrereq then
+								bCanStart = CustomCheck(CustomOperationInfo, pUnit)
+							else
+								bCanStart = true
+							end
+
 						else
 							bCanStart, tResults = UnitManager.CanStartOperation(pUnit, actionHash, nil, false, OperationResultsTypes.NO_TARGETS);		-- Hint that we don't require possibly expensive target results.
 						end
@@ -968,7 +974,7 @@ function View(data)
 				end
 			end
 		end
-			-- Create columns (each able to hold x3 icons) and fill them top to bottom
+			-- Create columns (each able to hold x3 icons) and fill the top to bottom
 		local numBuildCommands = table.count(tBuildActions);
 		for i=1,numBuildCommands,3 do
 			local buildColumnInstance = m_buildActionsIM:GetInstance();
@@ -4306,6 +4312,212 @@ function OnPortraitRightClick()
 	end
 end
 
+local tDeserts = {[GameInfo.Terrains['TERRAIN_DESERT_HILLS'].Index]= true,
+			[GameInfo.Terrains['TERRAIN_DESERT'].Index = true}
+local tFlames = {	[GameInfo.Features['FEATURE_BURNING_FOREST'].Index]= true,
+			[GameInfo.Features['FEATURE_BURNING_JUNGLE'].Index]= true}			-- once i implement flames feature  todo
+local tScorch = {[GameInfo.Terrains['TERRAIN_SNOW'].Index]= true,
+			[GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index = true,
+			[GameInfo.Terrains['TERRAIN_PLAINS'].Index]= true,
+			[GameInfo.Terrains['TERRAIN_PLAINS_HILLS'].Index = true}
+local tForested = {[GameInfo.Features['FEATURE_FOREST'].Index]= true,
+			[GameInfo.Features['FEATURE_JUNGLE'].Index]= true}
+local tGrassland = {[GameInfo.Terrains['TERRAIN_GRASS'].Index]= true,
+			[GameInfo.Terrains['TERRAIN_GRASS_HILLS'].Index]= true}
+local tSanctify = {[GameInfo.Features['FEATURE_MARSH'].Index]= true}					--	once i implement graveyards, city ruins todo
+
+function CustomCheck(CustomOperationInfo, pUnit)
+	local bCanStart
+	local tParameters = {}
+	local iUnit = pUnit:GetID()
+	local iOwner = pUnit:GetOwner()
+	tParameters.UnitOperationType = CustomOperationInfo.OperationType;
+	tParameters.iCastingUnit = iUnit;
+	if CustomOperationInfo.ActivationPrereq == 'SingleSummon' then
+		local hasSummon = pUnit:GetProperty(CustomOperationInfo.SimpleText) or 0
+		if hasSummon > 0 then
+			bCanStart = nil
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'PlayerHeroDead'
+		local pPlayer = Players[iOwner]
+		bCanStart = (pPlayer:GetProperty('HERO_DEAD') or 0) > 0
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyUnit'
+		bCanStart = CheckAdjacentUnitIsEnemy(pUnit)
+	elseif CustomOperationInfo.ActivationPrereq == 'DesertOrFlamesAdjacent'
+		local iPlotID = pUnit:GetPlotId()
+		local pPlot = Map.GetPlotByIndex(iPlotID)
+		local iFeature = pPlot:GetFeatureType()										-- need logic for aoe flames
+		if iFeature then
+			bCanStart = tFlames[iFeature]
+			if not bCanStart then
+				local iTerrain = pPlot:GetTerrainType()
+				bCanStart = tDeserts[iTerrain]
+			end
+		end
+
+	elseif CustomOperationInfo.ActivationPrereq == 'OnSnowOrPlains'
+		local iPlotID = pUnit:GetPlotId()
+		local pPlot = Map.GetPlotByIndex(iPlotID)
+		local iTerrain = pPlot:GetTerrainType()
+		bCanStart = tScorch[iTerrain]
+	elseif CustomOperationInfo.ActivationPrereq == 'OnLandNotWoodedGrass'
+		local iPlotID = pUnit:GetPlotId()
+		local pPlot = Map.GetPlotByIndex(iPlotID)
+		local iFeature = pPlot:GetFeatureType()
+		if tForested[iFeature] then
+			local iTerrain = pPlot:GetTerrainType()
+			bCanStart = not tGrassland[iTerrain]
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'OnForestOrJungle'
+		local iPlotID = pUnit:GetPlotId()
+		local pPlot = Map.GetPlotByIndex(iPlotID)
+		local iFeature = pPlot:GetFeatureType()
+		if iFeature then
+			bCanStart = tForested[iFeature]
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'OnCityRuinsOrGraveyardOrHellTerrain'
+		local iPlotID = pUnit:GetPlotId()
+		local pPlot = Map.GetPlotByIndex(iPlotID)
+		local iFeature = pPlot:GetFeatureType()
+		bCanStart = tSanctify[iFeature]
+		if not bCanStart then
+			bCanStart = pPlot:GetProperty('HellConversion') > 9
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff'
+		local ResourceInfo = GameInfo.Resources[pPlot:GetResourceType()]
+		bCanStart = ResourceInfo and ResourceInfo.ResourceClassType == 'RESOURCECLASS_MANA'
+		if not bCanStart then
+ 			bCanStart = CheckAdjacentOwnUnitsHasAbility(pUnit, iOwner, -1)
+			if not bCanStart then
+ 				bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, -1)
+			end
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyEligibleAbility'
+		bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, GameInfo.UnitAbilities[CustomOperationInfo.ActivationPrereq].Index)
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentAllyEligibleAbility'
+		bCanStart = CheckAdjacentOwnUnitsHasAbility(pUnit, iOwner, GameInfo.UnitAbilities[CustomOperationInfo.ActivationPrereq].Index)
+	elseif CustomOperationInfo.ActivationPrereq == 'HasntAbility'
+		local pAbilities = pNearUnit:GetAbility():GetAbilities()
+		local bAllyUnitFound
+		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOperationInfo.ActivationPrereq].Index
+		if (pAbilities and table.count(pAbilities) > 0) then
+			for i,ability in ipairs (pAbilities) do
+				if not bAllyUnitFound then
+					bAllyUnitFound = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
+				end
+			end
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'OnCityPopTwoPlus'
+		local pCity = Cities.GetCityInPlot(iX, iY)
+		if pCity then
+			bCanStart = pCity:GetPopulation() > 1
+		end
+	else
+		tParameters.OnStart = CustomOperationInfo.ActivationPrereq;
+		GetAbilities()
+		bCanStart = UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
+		if pUnit
+	end
+	return bCanStart
+--
+-- OnManaOrAdjacentUnitHasMagicDebuffOrBuff
+--
+--
+end
+
+function CheckAdjacentUnitIsEnemy(pUnit, iPlayer)
+	local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+	local bEnemyUnitFound
+	for _, plot in ipairs(tNeighborPlots) do
+		if not bEnemyUnitFound then
+			for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+				if (pNearUnit) then
+					local iOwnerPlayer = pNearUnit:GetOwner();
+					if (iOwnerPlayer ~= iPlayer) then
+						if Players[iPlayer]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
+							bEnemyUnitFound = true
+						end
+					end
+				end
+			end
+		end
+	end
+	return bEnemyUnitFound
+end
+
+tMagicBuffs = {[GameInfo.UnitAbilities['BUFF_ENCHANTED_BLADE'].Index]}								-- incomplete list
+tMagicDebuffs = {[GameInfo.UnitAbilities['BUFF_RUSTED'].Index]}
+function CheckAdjacentOwnUnitsHasAbility(pUnit, iPlayer, iAbilityToCheck)
+	if iAbilityToCheck == -1 then
+		bMultipleChecks = true
+	end
+	local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+	local bAllyUnitFound
+	local pAbilities
+	for _, plot in ipairs(tNeighborPlots) do
+		if not bAllyUnitFound then
+			for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+				if (pNearUnit) then
+					local iOwnerPlayer = pNearUnit:GetOwner();
+					if (iOwnerPlayer == iPlayer) then
+						pAbilities = pNearUnit:GetAbility():GetAbilities()
+						if (pAbilities and table.count(pAbilities) > 0) then
+							for i,ability in ipairs (pAbilities) do
+								if not bAllyUnitFound then
+									if bMultipleChecks then
+										bAllyUnitFound = tMagicDebuffs[ability]
+									else
+										bAllyUnitFound = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return bAllyUnitFound
+end
+
+function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, iAbilityToCheck)
+	if iAbilityToCheck == -1 then
+		bMultipleChecks = true
+	end
+	local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+	local bEnemyUnitFound
+	local pAbilities
+	for _, plot in ipairs(tNeighborPlots) do
+		if not bEnemyUnitFound then
+			for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+				if (pNearUnit) then
+					local iOwnerPlayer = pNearUnit:GetOwner();
+					if (iOwnerPlayer ~= iPlayer) then
+						pAbilities = pNearUnit:GetAbility():GetAbilities()
+						if (pAbilities and table.count(pAbilities) > 0) then
+							for i,ability in ipairs (pAbilities) do
+								if not bEnemyUnitFound then
+									if bMultipleChecks then
+										bEnemyUnitFound = tMagicBuffs[ability]
+									else
+										bEnemyUnitFound = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return bEnemyUnitFound
+end
 -- ===========================================================================
 function LateInitialize()
 	-- Needed for UnitPanel_CivRoyaleScenario

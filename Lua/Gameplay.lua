@@ -733,7 +733,6 @@ local function UpdateResourcePromotion(iPlayer: number, tParameters: table)
     local iChanOneGrant = tAllowSphereOne[iResource]
     local iChanTwoGrant = tAllowSphereTwo[iResource]
     local iChanThreeGrant = tAllowSphereTwo[iResource]
-    print('in update resource promotions')
     for i, unit in pPlayer:GetUnits():Members() do
         local iUnitIndex = unit:GetType();
         local pUnitAbilities = unit:GetAbility()
