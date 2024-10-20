@@ -15,9 +15,9 @@ local tLeaderAlignmentMap = {
     ['SLTH_LEADER_GARRIM']=2, ['SLTH_LEADER_BEERI']=2
 }
 
-local tReligionFromGood = {['RELIGION_ISLAM']=1, ['RELIGION_HINDUISM']=1}
-local tReligionFromEvil = {['RELIGION_JUDAISM']=1, ['RELIGION_CONFUCIANISM']=1}
-local tReligionForceAlignment = {['RELIGION_PROTESTANTISM']=2, ['RELIGION_BUDDHISM']=0}
+local tReligionFromGood = {['SLTH_POLICY_STATE_ESUS']=1, ['SLTH_POLICY_STATE_OCTOPUS']=1}
+local tReligionFromEvil = {['SLTH_POLICY_STATE_EMPYREAN']=1, ['SLTH_POLICY_STATE_RUNES']=1}
+local tReligionForceAlignment = {['SLTH_POLICY_STATE_ORDER']=2, ['SLTH_POLICY_STATE_VEIL']=0}
 
 local tReligionAlignment = {
     ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
@@ -66,8 +66,10 @@ local iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
 local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 
 
-function onReligionSwitch(sReligion)                -- TODO not attached to anything currently
+function onReligionSwitch(playerID, policyID, wasEnacted)                -- TODO not attached to anything currently
     -- get pPlayer somehow
+    if not wasEnacted then return end
+    local sReligion = GameInfo.Policies[policyID].
     local iCurrentAlignment = pPlayer:GetProperty('alignment')
     local iNewAlignment = tReligionForceAlignment[sReligion]
     if not iNewAlignment then
@@ -205,7 +207,6 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         if iBasiumPlayerID then
             local pCity = CityManager.GetCity(playerID, cityID)
             if pCity then
-                --
                 Game:SetProperty('mercurian_spawned', 1)
                 CityManager.TransferCity(pCity, iBasiumPlayerID, CityTransferTypes.BY_GIFT)     -- enum CityTransferTypes.BY_GIFT
                 GrantTechParity(iBasiumPlayerID, playerID)
@@ -510,3 +511,4 @@ Events.UnitAddedToMap.Add(GrantReligion)                         -- test UnitAbi
 LuaEvents.NewGameInitialized.Add(onStart);
 LuaEvents.NewGameInitialized.Add(InitiateReligions);
 Events.CivicCompleted.Add(GrantReligionFromCivicCompleted)
+GameEvents.PolicyChanged.Add(onReligionSwitch)
