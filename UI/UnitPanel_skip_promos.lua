@@ -2630,6 +2630,7 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 							tParameters.OnStart = sOpCallback;
 							print(sOpType .. ', ' .. sOpCallback .. tostring(iUnit).. tostring(iOwner))
 							local uh = UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
+							UI.DeselectUnit(pSelectedUnit);
 						else
 							UnitManager.RequestOperation( pSelectedUnit, actionHash );		-- No mode needed, just do the operation
 						end
@@ -4313,13 +4314,13 @@ function OnPortraitRightClick()
 end
 
 local tDeserts = {[GameInfo.Terrains['TERRAIN_DESERT_HILLS'].Index]= true,
-			[GameInfo.Terrains['TERRAIN_DESERT'].Index = true}
-local tFlames = {	[GameInfo.Features['FEATURE_BURNING_FOREST'].Index]= true,
+			[GameInfo.Terrains['TERRAIN_DESERT'].Index] = true}
+local tFlames = {[GameInfo.Features['FEATURE_BURNING_FOREST'].Index]= true,
 			[GameInfo.Features['FEATURE_BURNING_JUNGLE'].Index]= true}			-- once i implement flames feature  todo
 local tScorch = {[GameInfo.Terrains['TERRAIN_SNOW'].Index]= true,
-			[GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index = true,
+			[GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index] = true,
 			[GameInfo.Terrains['TERRAIN_PLAINS'].Index]= true,
-			[GameInfo.Terrains['TERRAIN_PLAINS_HILLS'].Index = true}
+			[GameInfo.Terrains['TERRAIN_PLAINS_HILLS'].Index] = true}
 local tForested = {[GameInfo.Features['FEATURE_FOREST'].Index]= true,
 			[GameInfo.Features['FEATURE_JUNGLE'].Index]= true}
 local tGrassland = {[GameInfo.Terrains['TERRAIN_GRASS'].Index]= true,
@@ -4334,16 +4335,19 @@ function CustomCheck(CustomOperationInfo, pUnit)
 	tParameters.UnitOperationType = CustomOperationInfo.OperationType;
 	tParameters.iCastingUnit = iUnit;
 	if CustomOperationInfo.ActivationPrereq == 'SingleSummon' then
-		local hasSummon = pUnit:GetProperty(CustomOperationInfo.SimpleText) or 0
-		if hasSummon > 0 then
-			bCanStart = nil
+		local iSummonID = pUnit:GetProperty(CustomOperationInfo.SimpleText)
+		if iSummonID then
+			local pSummonUnit = UnitManager.GetUnit(iOwner, iSummonID)
+			bCanStart = not pSummonUnit
+		else
+			bCanStart = True
 		end
-	elseif CustomOperationInfo.ActivationPrereq == 'PlayerHeroDead'
+	elseif CustomOperationInfo.ActivationPrereq == 'PlayerHeroDead' then
 		local pPlayer = Players[iOwner]
 		bCanStart = (pPlayer:GetProperty('HERO_DEAD') or 0) > 0
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyUnit'
-		bCanStart = CheckAdjacentUnitIsEnemy(pUnit)
-	elseif CustomOperationInfo.ActivationPrereq == 'DesertOrFlamesAdjacent'
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyUnit' then
+		bCanStart = CheckAdjacentUnitIsEnemy(pUnit, iOwner)
+	elseif CustomOperationInfo.ActivationPrereq == 'DesertOrFlamesAdjacent' then
 		local iPlotID = pUnit:GetPlotId()
 		local pPlot = Map.GetPlotByIndex(iPlotID)
 		local iFeature = pPlot:GetFeatureType()										-- need logic for aoe flames
@@ -4355,12 +4359,12 @@ function CustomCheck(CustomOperationInfo, pUnit)
 			end
 		end
 
-	elseif CustomOperationInfo.ActivationPrereq == 'OnSnowOrPlains'
+	elseif CustomOperationInfo.ActivationPrereq == 'OnSnowOrPlains' then
 		local iPlotID = pUnit:GetPlotId()
 		local pPlot = Map.GetPlotByIndex(iPlotID)
 		local iTerrain = pPlot:GetTerrainType()
 		bCanStart = tScorch[iTerrain]
-	elseif CustomOperationInfo.ActivationPrereq == 'OnLandNotWoodedGrass'
+	elseif CustomOperationInfo.ActivationPrereq == 'OnLandNotWoodedGrass' then
 		local iPlotID = pUnit:GetPlotId()
 		local pPlot = Map.GetPlotByIndex(iPlotID)
 		local iFeature = pPlot:GetFeatureType()
@@ -4368,14 +4372,14 @@ function CustomCheck(CustomOperationInfo, pUnit)
 			local iTerrain = pPlot:GetTerrainType()
 			bCanStart = not tGrassland[iTerrain]
 		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnForestOrJungle'
+	elseif CustomOperationInfo.ActivationPrereq == 'OnForestOrJungle' then
 		local iPlotID = pUnit:GetPlotId()
 		local pPlot = Map.GetPlotByIndex(iPlotID)
 		local iFeature = pPlot:GetFeatureType()
 		if iFeature then
 			bCanStart = tForested[iFeature]
 		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnCityRuinsOrGraveyardOrHellTerrain'
+	elseif CustomOperationInfo.ActivationPrereq == 'OnCityRuinsOrGraveyardOrHellTerrain' then
 		local iPlotID = pUnit:GetPlotId()
 		local pPlot = Map.GetPlotByIndex(iPlotID)
 		local iFeature = pPlot:GetFeatureType()
@@ -4383,7 +4387,7 @@ function CustomCheck(CustomOperationInfo, pUnit)
 		if not bCanStart then
 			bCanStart = pPlot:GetProperty('HellConversion') > 9
 		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff'
+	elseif CustomOperationInfo.ActivationPrereq == 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff' then
 		local ResourceInfo = GameInfo.Resources[pPlot:GetResourceType()]
 		bCanStart = ResourceInfo and ResourceInfo.ResourceClassType == 'RESOURCECLASS_MANA'
 		if not bCanStart then
@@ -4392,14 +4396,14 @@ function CustomCheck(CustomOperationInfo, pUnit)
  				bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, -1)
 			end
 		end
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyEligibleAbility'
-		bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, GameInfo.UnitAbilities[CustomOperationInfo.ActivationPrereq].Index)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentAllyEligibleAbility'
-		bCanStart = CheckAdjacentOwnUnitsHasAbility(pUnit, iOwner, GameInfo.UnitAbilities[CustomOperationInfo.ActivationPrereq].Index)
-	elseif CustomOperationInfo.ActivationPrereq == 'HasntAbility'
-		local pAbilities = pNearUnit:GetAbility():GetAbilities()
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyEligibleAbility' then
+		bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, GameInfo.UnitAbilities[CustomOperationInfo.SimpleText].Index)
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentAllyEligibleAbility' then
+		bCanStart = CheckAdjacentOwnUnitsHasAbility(pUnit, iOwner, GameInfo.UnitAbilities[CustomOperationInfo.SimpleText].Index)
+	elseif CustomOperationInfo.ActivationPrereq == 'HasntAbility' then
+		local pAbilities = pUnit:GetAbility():GetAbilities()
 		local bAllyUnitFound
-		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOperationInfo.ActivationPrereq].Index
+		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOperationInfo.SimpleText].Index
 		if (pAbilities and table.count(pAbilities) > 0) then
 			for i,ability in ipairs (pAbilities) do
 				if not bAllyUnitFound then
@@ -4407,81 +4411,75 @@ function CustomCheck(CustomOperationInfo, pUnit)
 				end
 			end
 		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnCityPopTwoPlus'
-		local pCity = Cities.GetCityInPlot(iX, iY)
+	elseif CustomOperationInfo.ActivationPrereq == 'OnCityPopTwoPlus' then
+		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
+		print(pCity)
 		if pCity then
+			print(pCity:GetPopulation())
 			bCanStart = pCity:GetPopulation() > 1
 		end
 	else
-		tParameters.OnStart = CustomOperationInfo.ActivationPrereq;
-		GetAbilities()
-		bCanStart = UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
-		if pUnit
+		bCanStart = true
 	end
 	return bCanStart
---
--- OnManaOrAdjacentUnitHasMagicDebuffOrBuff
---
---
 end
 
 function CheckAdjacentUnitIsEnemy(pUnit, iPlayer)
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
 	local bEnemyUnitFound
 	for _, plot in ipairs(tNeighborPlots) do
-		if not bEnemyUnitFound then
-			for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-				if (pNearUnit) then
-					local iOwnerPlayer = pNearUnit:GetOwner();
-					if (iOwnerPlayer ~= iPlayer) then
-						if Players[iPlayer]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
-							bEnemyUnitFound = true
-						end
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if (pNearUnit) then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer ~= iPlayer) then
+					if Players[iPlayer]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
+						return true
 					end
 				end
 			end
 		end
 	end
-	return bEnemyUnitFound
+	return false
 end
 
-tMagicBuffs = {[GameInfo.UnitAbilities['BUFF_ENCHANTED_BLADE'].Index]}								-- incomplete list
-tMagicDebuffs = {[GameInfo.UnitAbilities['BUFF_RUSTED'].Index]}
+tMagicBuffs = {[GameInfo.UnitAbilities['BUFF_ENCHANTED_BLADE'].Index] = true}								-- incomplete list
+tMagicDebuffs = {[GameInfo.UnitAbilities['BUFF_RUSTED'].Index] = true}
 function CheckAdjacentOwnUnitsHasAbility(pUnit, iPlayer, iAbilityToCheck)
 	if iAbilityToCheck == -1 then
 		bMultipleChecks = true
 	end
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
-	local bAllyUnitFound
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+	local bAllyUnitHasAbility
 	local pAbilities
 	for _, plot in ipairs(tNeighborPlots) do
-		if not bAllyUnitFound then
-			for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-				if (pNearUnit) then
-					local iOwnerPlayer = pNearUnit:GetOwner();
-					if (iOwnerPlayer == iPlayer) then
-						pAbilities = pNearUnit:GetAbility():GetAbilities()
-						if (pAbilities and table.count(pAbilities) > 0) then
-							for i,ability in ipairs (pAbilities) do
-								if not bAllyUnitFound then
-									if bMultipleChecks then
-										bAllyUnitFound = tMagicDebuffs[ability]
-									else
-										bAllyUnitFound = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
-									end
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if (pNearUnit) then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer == iPlayer) then
+					pAbilities = pNearUnit:GetAbility():GetAbilities()
+					if (pAbilities and table.count(pAbilities) > 0) then
+						for i,ability in ipairs (pAbilities) do
+							if not bAllyUnitHasAbility then
+								if bMultipleChecks then
+									bAllyUnitHasAbility = tMagicDebuffs[ability]
+								else
+									bAllyUnitHasAbility = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
 								end
 							end
+						end
+						if not bAllyUnitHasAbility then
+							return true
 						end
 					end
 				end
 			end
 		end
 	end
-	return bAllyUnitFound
+	return false
 end
 
 function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, iAbilityToCheck)
@@ -4490,26 +4488,27 @@ function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, iAbilityToCheck)
 	end
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
-	local bEnemyUnitFound
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+	local bEnemyUnitHasAbility
 	local pAbilities
 	for _, plot in ipairs(tNeighborPlots) do
-		if not bEnemyUnitFound then
-			for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-				if (pNearUnit) then
-					local iOwnerPlayer = pNearUnit:GetOwner();
-					if (iOwnerPlayer ~= iPlayer) then
-						pAbilities = pNearUnit:GetAbility():GetAbilities()
-						if (pAbilities and table.count(pAbilities) > 0) then
-							for i,ability in ipairs (pAbilities) do
-								if not bEnemyUnitFound then
-									if bMultipleChecks then
-										bEnemyUnitFound = tMagicBuffs[ability]
-									else
-										bEnemyUnitFound = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
-									end
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if (pNearUnit) then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer ~= iPlayer) then
+					pAbilities = pNearUnit:GetAbility():GetAbilities()
+					if (pAbilities and table.count(pAbilities) > 0) then
+						for i,ability in ipairs (pAbilities) do
+							if not bEnemyUnitHasAbility then
+								if bMultipleChecks then
+									bEnemyUnitHasAbility = tMagicBuffs[ability]
+								else
+									bEnemyUnitHasAbility = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
 								end
 							end
+						end
+						if not bEnemyUnitFound then
+							return true
 						end
 					end
 				end

@@ -23,46 +23,6 @@ local tAllowSphereOne = {
         ['RESOURCE_MANA_WATER']        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED'].Index
     }
 
-local tAllowSphereTwo = {
-        ['RESOURCE_MANA_AIR']        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_BODY']        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_CHAOS']        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_DEATH']        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_EARTH']        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_ENCHANTMENT']=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_ENTROPY']        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_FIRE']        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_LAW']        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_LIFE']        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_METAMAGIC']        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_MIND']        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_NATURE']        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_SHADOW']        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_SPIRIT']        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_SUN']        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_2'].Index,
-        ['RESOURCE_MANA_WATER']        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_2'].Index
-    }
-
-local tAllowSphereThree = {
-        ['RESOURCE_MANA_AIR']        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_BODY']        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_CHAOS']        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_DEATH']        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_EARTH']        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_ENCHANTMENT']=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_ENTROPY']        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_FIRE']        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_LAW']        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_LIFE']        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_METAMAGIC']        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_MIND']        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_NATURE']        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_SHADOW']        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_SPIRIT']        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_SUN']        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_3'].Index,
-        ['RESOURCE_MANA_WATER']        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_3'].Index
-    }
-
 local tFreePromos = {
         ['RESOURCE_MANA_AIR']        =    GameInfo.UnitPromotions['AIR_ONE'].Index,
         ['RESOURCE_MANA_BODY']        =    GameInfo.UnitPromotions['BODY_ONE'].Index,
@@ -93,29 +53,118 @@ local tCivicPromoUnlocks = {
 }
 
 local tConditionalUnlocks = {
-    [GameInfo.UnitPromotions['PROMOTION_EXTENSION1_ADEPT'].Index]={[1]={tech=GameInfo.Technologies['TECH_ARCANE_LORE'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARCANE_LORE'].Index}},
-    [GameInfo.UnitPromotions['PROMOTION_COMBAT1_MELEE'].Index]={[1]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WICKED'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WICKED'].Index},
-                                                                [2]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WISE'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WISE'].Index}
+    [GameInfo.UnitPromotions['PROMOTION_EXTENSION1_ADEPT'].Index]={[1]={tech=GameInfo.Technologies['TECH_ARCANE_LORE'].Index,
+                                                                        promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARCANE_LORE'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT1_MELEE'].Index]={[1]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WICKED'].Index,
+                                                                     promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WICKED'].Index},
+                                                                [2]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WISE'].Index,
+                                                                     promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WISE'].Index}
     },
-    [GameInfo.UnitPromotions['PROMOTION_COMBAT1_BEAST'].Index]={[1]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WICKED'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WICKED'].Index},
-                                                                [2]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WISE'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WISE'].Index}
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT1_BEAST'].Index]={[1]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WICKED'].Index,
+                                                                     promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WICKED'].Index},
+                                                                [2]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WISE'].Index,
+                                                                     promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WISE'].Index}
     },
-    [GameInfo.UnitPromotions['PROMOTION_COMBAT1_RECON'].Index]={[1]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WICKED'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WICKED'].Index},
-                                                                [2]={tech=GameInfo.Technologies['TECH_ANIMAL_HUSBANDRY'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ANIMAL_HUSBANDRY'].Index}
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT1_RECON'].Index]={[1]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WICKED'].Index,
+                                                                     promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WICKED'].Index},
+                                                                [2]={tech=GameInfo.Technologies['TECH_ANIMAL_HUSBANDRY'].Index,
+                                                                     promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ANIMAL_HUSBANDRY'].Index}
     },
-    [GameInfo.UnitPromotions['PROMOTION_COMBAT1_DISCIPLE'].Index]={[1]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WISE'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WISE'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT1_DISCIPLE'].Index]={[1]={civic=GameInfo.Civics['CIVIC_WAY_OF_THE_WISE'].Index,
+                                                                        promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WISE'].Index}},
 
-    [GameInfo.UnitPromotions['PROMOTION_DRILL4_MELEE'].Index]={[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_MELEE'].Index} },
-    [GameInfo.UnitPromotions['PROMOTION_DRILL4_BEAST'].Index]={[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_BEAST'].Index} },
-    [GameInfo.UnitPromotions['PROMOTION_DRILL4_RECON'].Index]={[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_RECON'].Index }},
-    [GameInfo.UnitPromotions['PROMOTION_DRILL4_DISCIPLE'].Index]={[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_DISCIPLE'].Index}},
-    [GameInfo.UnitPromotions['PROMOTION_DRILL4_LIGHT_CAVALRY'].Index] = {[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_LIGHT_CAVALRY'].Index }},
-    [GameInfo.UnitPromotions['PROMOTION_DRILL4_RANGED'].Index]= {[1]={civic = GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index, promo_grant = GameInfo.UnitPromotions['PROMOTION_BLITZ_RANGED'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_DRILL4_MELEE'].Index]={[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index,
+                                                                    promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_MELEE'].Index} },
+    [GameInfo.UnitPromotions['PROMOTION_DRILL4_BEAST'].Index]={[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index,
+                                                                    promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_BEAST'].Index} },
+    [GameInfo.UnitPromotions['PROMOTION_DRILL4_RECON'].Index]={[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index,
+                                                                    promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_RECON'].Index }},
+    [GameInfo.UnitPromotions['PROMOTION_DRILL4_DISCIPLE'].Index]={[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index,
+                                                                       promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_DISCIPLE'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_DRILL4_LIGHT_CAVALRY'].Index] = {[1]={civic=GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index,
+                                                                              promo_grant=GameInfo.UnitPromotions['PROMOTION_BLITZ_LIGHT_CAVALRY'].Index }},
+    [GameInfo.UnitPromotions['PROMOTION_DRILL4_RANGED'].Index]= {[1]={civic = GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index,
+                                                                      promo_grant = GameInfo.UnitPromotions['PROMOTION_BLITZ_RANGED'].Index}},
 
-    [GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_BEAST'].Index]={[1]={civic=GameInfo.Civics['CIVIC_HIDDEN_PATHS'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_HIDDEN_PATHS'].Index} },
-    [GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_RECON'].Index]={[1]={civic=GameInfo.Civics['CIVIC_HIDDEN_PATHS'].Index, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_HIDDEN_PATHS'].Index }},
-    [GameInfo.UnitPromotions['PROMOTION_COMBAT3_RECON'].Index]={[1]={civic=GameInfo.Technologies['TECH_ANIMAL_MASTERY'].Index, extra_promo=GameInfo.UnitPromotions['PROMOTION_SUBDUE_ANIMAL_RECON'].Index,
+    [GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_BEAST'].Index]={[1]={civic=GameInfo.Civics['CIVIC_HIDDEN_PATHS'].Index,
+                                                                       promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_HIDDEN_PATHS'].Index} },
+    [GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_RECON'].Index]={[1]={civic=GameInfo.Civics['CIVIC_HIDDEN_PATHS'].Index,
+                                                                       promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_HIDDEN_PATHS'].Index }},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT3_RECON'].Index]={[1]={civic=GameInfo.Technologies['TECH_ANIMAL_MASTERY'].Index,
+                                                                     extra_promo=GameInfo.UnitPromotions['PROMOTION_SUBDUE_ANIMAL_RECON'].Index,
                                                                  promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ANIMAL_MASTERY'].Index }},
+    [GameInfo.UnitPromotions['AIR_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['BODY_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['CHAOS_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['DEATH_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['EARTH_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['ENCHANTMENT_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['ENTROPY_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['FIRE_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['ICE_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['ICE_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['LAW_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['LIFE_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['METAMAGIC_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['MIND_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['NATURE_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['SPIRIT_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['WATER_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['WATER_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['SUN_ONE'].Index]={[1]={ability='ABILITY_CHANNELING2',
+                                                                        promo_grant=GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index}},
+    [GameInfo.UnitPromotions['AIR_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['BODY_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['CHAOS_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['DEATH_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['EARTH_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['ENCHANTMENT_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['ENTROPY_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['FIRE_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['ICE_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['ICE_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['LAW_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['LIFE_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['METAMAGIC_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['MIND_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['NATURE_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['SPIRIT_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['WATER_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['WATER_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_3'].Index}},
+    [GameInfo.UnitPromotions['SUN_TWO'].Index]={[1]={ability='ABILITY_CHANNELING3',
+                                                                        promo_grant=GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index}}
 }
 
 -- not implemented as reversible
@@ -168,22 +217,6 @@ function onSpawnApplyPromotions(playerID, unitID)
             for sResourceName, iPromoIndex in pairs(tAllowSphereOne) do
                 iResource = tCurrentResource[sResourceName]
                 if iResource > 0 then                                                    -- grant sphere ability
-                    pUnitExp:SetPromotion(iPromoIndex)
-                end
-            end
-        end
-        if pUnitAbilities:HasAbility('ABILITY_CHANNELING2') then
-             for sResourceName, iPromoIndex in pairs(tAllowSphereTwo) do
-                 iResource = tCurrentResource[sResourceName]
-                 if iResource > 0 then
-                     pUnitExp:SetPromotion(iPromoIndex)
-                 end
-            end
-        end
-        if pUnitAbilities:HasAbility('ABILITY_CHANNELING3') then
-            for sResourceName, iPromoIndex in pairs(tAllowSphereThree) do
-                iResource = tCurrentResource[sResourceName]
-                if iResource > 0 then
                     pUnitExp:SetPromotion(iPromoIndex)
                 end
             end
@@ -284,6 +317,7 @@ function PostPromoGrant(playerID, unitID)
     local pUnitExp = pUnit:GetExperience()
     local pTechs = pPlayer:GetTechs()
     local pCulture = pPlayer:GetCulture()
+    local pUnitAbilities = pUnit:GetAbility()
     for iCheckPromo, tPossiblePromos in pairs(tConditionalUnlocks) do
         local hasPromo = pUnitExp:HasPromotion(iCheckPromo)
         if hasPromo then
@@ -293,6 +327,7 @@ function PostPromoGrant(playerID, unitID)
                     local tech_req = tPromoInfo['tech']
                     local civic_req = tPromoInfo['civic']
                     local promo_extra = tPromoInfo['extra_promo']
+                    local sAbility_req = tPromoInfo['ability']
                     local bar = 0
                     local score = 0
                     if tech_req then
@@ -310,6 +345,13 @@ function PostPromoGrant(playerID, unitID)
                     if promo_extra then
                         bar = bar + 1
                         if pUnitExp:HasPromotion(promo_extra) then
+                            score = score + 1
+                        end
+                    end
+
+                    if sAbility_req then
+                        bar = bar + 1
+                        if pUnitAbilities:HasAbility(sAbility_req) then
                             score = score + 1
                         end
                     end

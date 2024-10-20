@@ -267,8 +267,8 @@ function InitCottage(x, y, improvementIndex, playerID)
     end
     local pPlot = Map.GetPlot(x,y);
     local resourceIndex = pPlot:GetResourceType()
-    print('Resource Index: ' .. tostring(resourceIndex))
-    print('Mana Resource Index: ' .. tostring(MANA_INDEX))
+    --print('Resource Index: ' .. tostring(resourceIndex))
+    --print('Mana Resource Index: ' .. tostring(MANA_INDEX))
 	if resourceIndex == MANA_INDEX then
         local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
         if iResourceToChangeTo then
@@ -276,14 +276,13 @@ function InitCottage(x, y, improvementIndex, playerID)
             ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);
         end
     end
-    print(improvementIndex)
     if improvementIndex then
         local tUnits = Map.GetUnitsAt(pPlot)
         for pUnit in tUnits:Units() do
             local iUnitIndex = pUnit:GetType()
-            print(iUnitIndex)
             local iClanIndex = tBarbClanUnitMapper[iUnitIndex]
             if iClanIndex then
+                -- print(iUnitIndex)
                 pPlot:SetProperty('barbclantype', iClanIndex)
             end
         end
@@ -528,12 +527,34 @@ local function OnSummonPermanent(iPlayer: number, tParameters: table)
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iCheckExistingUnit = pUnit:GetProperty(CustomOperationInfo.SimpleText)
+    if iCheckExistingUnit and iCheckExistingUnit > 0 then return end
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
 	local playerReal = Players[iPlayer];
 	local playerUnits = playerReal:GetUnits();
+    local pPlot = Map.GetPlot(iX, iY)
+    local tBeforeSummonUnits = {}
+    for loop, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+        if pOnTileUnit then
+            tBeforeSummonUnits[pOnTileUnit:GetID()] = true
+        end
+    end
     print('summonin ' .. tostring(iUnitToSummon) .. ' and x ' .. tostring(iX) .. ' and y ' .. tostring(iY))
 	playerUnits:Create(iUnitToSummon, iX, iY);              -- put a property on the unit summoned and the unit summoning. on unit summoned death remove the property on unit creator, allowing cast again.
+    local tNewUnits = {}
+    for loop, pOnTileUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+        if pOnTileUnit then
+            local iUnitID = pOnTileUnit:GetID()
+            if not tBeforeSummonUnits[iUnitID] then
+                tNewUnits[iUnitID] = pOnTileUnit
+            end
+        end
+    end
+    for iUnitID, pNewUnit in pairs(tNewUnits) do
+        print('set inherited abilities here')
+        pUnit:SetProperty(CustomOperationInfo.SimpleText, iUnitID)
+    end
 end
 
 local function OnGrantBuffSelf(iPlayer: number, tParameters: table)
@@ -553,7 +574,7 @@ local function OnGrantBuffAoe(iPlayer: number, tParameters: table)
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
 	for _, plot in ipairs(tNeighborPlots) do
 		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
 			if pNearUnit then
@@ -576,7 +597,7 @@ local function OnGrantDebuffAoe(iPlayer: number, tParameters: table)
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
 	for _, plot in ipairs(tNeighborPlots) do
 		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
 			if pNearUnit then
@@ -617,7 +638,7 @@ local function OnSpellAoeDamage(iPlayer: number, tParameters: table)
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
     local iDamage = OperationInfo.SecondAmount
 	for _, plot in ipairs(tNeighborPlots) do
 		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
