@@ -715,14 +715,17 @@ function GetUnitActionsTable( pUnit )
 				-- The UI check of an operation is a loose check where it only fails if the unit could never do the operation.
 				if ( operationRow.VisibleInUI ) then
 					local CustomOperationInfo = GameInfo.CustomOperations[operationRow.OperationType]
+					local bHasRelevantPromotion
+					bCanStart, tResults = nil, nil
 					if CustomOperationInfo then				-- do promtion check here, have pUnit.
 						local sReqPromo = CustomOperationInfo.PromotionPrereq
 						if sReqPromo then
-							if pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index) then
-								bCanStart, tResults = pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index), nil
+							bHasRelevantPromotion = pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index)
+							if bHasRelevantPromotion then
+								bCanStart, tResults = bHasRelevantPromotion, nil
 							end
 						end
-						bCanStart, tResults = nil, nil
+
 						local reqUnitType = CustomOperationInfo.UnitPrereq
 						if reqUnitType == unitType then
 							bCanStart, tResults = true, nil

@@ -529,12 +529,11 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
         local iResourceCount = resources:GetResourceAmount(resourceTypeID);
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
         local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
-        local sRscName = iResourceInfo['name']
-        local sPropKeyCount =  sRscName .. '_COUNT'
-        local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or -1
-        print('previous: '  .. sRscName .. tostring(iPastResource))
-        print('new Gameplay: '  .. sRscName .. tostring(iResourceCount))
-        print('new UI: '  .. sRscName .. tostring(iResourceCount))
+        local sPropKeyCount = iResourceInfo['name']
+        local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or 0
+        print('previous: '  .. sPropKeyCount .. tostring(iPastResource))
+        print('new Gameplay: '  .. sPropKeyCount .. tostring(iResourceCount))
+        print('new UI: '  .. sPropKeyCount .. tostring(iResourceCount))
         if iResourceCount ~= iPastResource then
             local tParameters = {}
             tParameters.sPropKey = sPropKeyCount;
@@ -542,7 +541,7 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
             tParameters.OnStart = "SlthSetCapitalProperty";
             UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
             local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
-            local sPropKey =  sRscName .. '_BINARY_'
+            local sPropKey =  sPropKeyCount .. '_BINARY_'
             local sFullPropKey
             for key, val in pairs(tBinariesToSet) do
                 sFullPropKey = sPropKey .. key
