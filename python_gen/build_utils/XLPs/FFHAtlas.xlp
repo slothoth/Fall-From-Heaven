@@ -14,8 +14,8 @@
 			<m_ObjectName text="SLTH_LEADER_AMELANCHIER_NEUTRAL"/>
 		</Element>
 		<Element>
-			<m_EntryID text="SLTH_LEADER_ALEXIS_NEUTRAL"/>
-			<m_ObjectName text="SLTH_LEADER_ALEXIS_NEUTRAL"/>
+			<m_EntryID text="LEADER_ALEXIS_NEUTRAL"/>
+			<m_ObjectName text="LEADER_ALEXIS_NEUTRAL"/>
 		</Element>
 		<Element>
 			<m_EntryID text="SLTH_LEADER_ARENDEL_NEUTRAL"/>

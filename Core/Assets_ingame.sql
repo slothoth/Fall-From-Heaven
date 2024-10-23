@@ -1,6 +1,6 @@
 INSERT INTO LoadingInfo
 			(LeaderType,			ForegroundImage,					BackgroundImage,					PlayDawnOfManAudio	)
-VALUES		('SLTH_LEADER_ALEXIS',	'SLTH_LEADER_ALEXIS_NEUTRAL',		NULL,		0					),
+VALUES		('LEADER_ALEXIS',	'LEADER_ALEXIS_NEUTRAL',		NULL,		0					),
             ('SLTH_LEADER_AMELANCHIER',	'SLTH_LEADER_AMELANCHIER_NEUTRAL',		NULL,		0					),
             ('SLTH_LEADER_CAPRIA',	'SLTH_LEADER_CAPRIA_NEUTRAL',		NULL,		0					),
             ('SLTH_LEADER_DECIUS_BANNOR',	'SLTH_LEADER_DECIUS_NEUTRAL',		NULL,		0					),

@@ -14,7 +14,7 @@
 				<m_Fields>
 					<m_Values/>
 				</m_Fields>
-				<m_ChildCollections>
+				<m_ChildCollections>F
 					<Element>
 						<m_CollectionName text="Animations"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
@@ -22,7 +22,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_ALEXIS"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_ALEXIS"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -37,7 +37,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_ALEXIS"/>
+				<m_Name text="LEADER_ALEXIS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
