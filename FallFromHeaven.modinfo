@@ -45,10 +45,10 @@
     <UpdateColors id="FFH_UpdateColorsFrontend">
       <File>Core/Civilization_Colors.sql</File>
     </UpdateColors>
-  <UpdateIcons id="Icons">
-    <File>Icons.xml</File>
-    <File>LeaderIcons.sql</File>
-  </UpdateIcons>
+    <UpdateIcons id="Icons">
+      <File>Icons.xml</File>
+      <File>LeaderIcons.sql</File>
+    </UpdateIcons>
    </FrontEndActions>
   <InGameActions>
     <UpdateArt id="Art">
