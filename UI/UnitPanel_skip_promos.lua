@@ -722,13 +722,16 @@ function GetUnitActionsTable( pUnit )
 						if sReqPromo then
 							bHasRelevantPromotion = pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index)
 							if bHasRelevantPromotion then
-								bCanStart, tResults = bHasRelevantPromotion, nil
+								bCanStart = bHasRelevantPromotion
 							end
 						end
-
 						local reqUnitType = CustomOperationInfo.UnitPrereq
 						if reqUnitType == unitType then
-							bCanStart, tResults = true, nil
+							bCanStart = true
+						end
+						local reqAbility = CustomOperationInfo.AbilityPrereq			-- need to iterate over abilities here
+						if reqAbility == unitType then
+							bCanStart = true
 						end
 					else
 						bCanStart, tResults = UnitManager.CanStartOperation( pUnit, actionHash, nil, true );
@@ -4413,10 +4416,41 @@ function CustomCheck(CustomOperationInfo, pUnit)
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnCityPopTwoPlus' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
-		print(pCity)
 		if pCity then
-			print(pCity:GetPopulation())
 			bCanStart = pCity:GetPopulation() > 1
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGeneric' then
+		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
+		if pCity then
+			bCanStart = true
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGrantBuilding' then
+		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
+		if pCity then
+			bCanStart = not pCity:GetBuildings():HasBuilding(GameInfo.Buildings[CustomOperationInfo.SimpleText].Index)
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGrantBuildingPrereqBuilding' then
+		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
+		if pCity then
+			local pBuildings = pCity:GetBuildings()
+			if pBuildings:HasBuilding(GameInfo.Buildings[CustomOperationInfo.SecondText].Index) then
+				if not pBuildings:HasBuilding(GameInfo.Buildings[CustomOperationInfo.SimpleText].Index) then
+					bCanStart = true
+				end
+			end
+		end
+	elseif CustomOperationInfo.ActivationPrereq == 'EnoughGreatPeople' then
+		local pPlayer = Players[iOwner]
+		local iBar = Player:GetProperty('GOLDEN_AGE_GP') or 1
+		local bCanStart = GPChecker(pPlayer, iBar)
+	elseif CustomOperationInfo.ActivationPrereq == 'OnHolyCity' then
+		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
+		if pCity then
+			local pBuildings = pCity:GetBuildings()
+			if not pBuildings:HasBuilding(GameInfo.Buildings[CustomOperationInfo.SimpleText].Index) then
+				local bIsCorrectHolyCity = pCity:GetProperty(CustomOperationInfo.SecondText)
+				bCanStart = bIsCorrectHolyCity and bIsCorrectHolyCity > 0
+			end
 		end
 	else
 		bCanStart = true
@@ -4516,6 +4550,17 @@ function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, iAbilityToCheck)
 		end
 	end
 	return bEnemyUnitFound
+end
+
+function GPChecker(pPlayer, iBar)
+	local iGpAmount = 0
+	for _, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
+		if pPlayerUnit:GetGreatPerson():IsGreatPerson() then
+			iGpAmount = iGpAmount + 1
+			if iGpAmount >= iBar then return true
+		end
+	end
+	return false
 end
 -- ===========================================================================
 function LateInitialize()

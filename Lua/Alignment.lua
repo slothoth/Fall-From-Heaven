@@ -219,7 +219,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
     end
 end
 
-function GrantReligion(playerID, unitID)
+function GrantReligionUnit(playerID, unitID)
     -- deal with Encampment district issues
     -- if somehow not in a city, its a summon, implement that later (or dont even)?
     local pPlayer = Players[playerID]
@@ -242,8 +242,9 @@ function GrantReligion(playerID, unitID)
                         elseif iAlignment == 1 then
                             pUnitAbilities:AddAbilityCount('ALIGNMENT_GOOD')
                         end
-                        break
                     end
+                    pUnitAbilities:AddAbilityCount('WORSHIPS_ESUS')
+                    break
                 end
             end
         end
@@ -253,7 +254,8 @@ end
 function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
     local iReligion = tReligousCivicTrigger[civicIndex]
     if iReligion then
-        local bHolyCityEstablished = Game:GetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS') or 0
+        local sReligion = GameInfo.Religions[iReligion]
+        local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
         local pPlayer = Players[playerID]
         local pPlayerCities = pPlayer:GetCities()
         local tCityReligionFollowers
@@ -284,9 +286,10 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
         end
         pLeastReligionsCity:GetReligion():AddReligiousPressure(playerID, iReligion, 1000)
         if bHolyCityEstablished < 1 then
-            Game:SetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS', 1)
+            Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)
             local pPlot = pLeastReligionsCity:GetPlot()
-            pPlot:SetProperty(tostring(iReligion)..'_HOLY_CITY', 1)
+            pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
+            pLeastReligionsCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
             if iReligion == iReligionVeil then
                 AdjustArmageddonCount(5)
             end
@@ -507,7 +510,7 @@ end
 
 Events.UnitKilledInCombat.Add(alignmentDeath)
 GameEvents.BuildingConstructed.Add(RespawnerSpawned)
-Events.UnitAddedToMap.Add(GrantReligion)                         -- test UnitAbilityGained
+Events.UnitAddedToMap.Add(GrantReligionUnit)                         -- test UnitAbilityGained
 LuaEvents.NewGameInitialized.Add(onStart);
 LuaEvents.NewGameInitialized.Add(InitiateReligions);
 Events.CivicCompleted.Add(GrantReligionFromCivicCompleted)
