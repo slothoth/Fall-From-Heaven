@@ -234,7 +234,14 @@ INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, A
 ('UNITOPERATION_GRANT_BURNING_BLOOD', 'SlthOnGrantBuffSelf', 'BUFF_BURNING_BLOOD', 'SLTH_UNIT_MOROI', 'HasntAbility');
 
 INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlternateAbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_FEED_ON_CITY', 'SlthOnBespokeSpell', NULL, 'ABILITY_VAMPIRISM', 'IS_SIRED_VAMPIRE', 'OnCityPopTwoPlus');                           -- need to implement these abilities first
+('UNITOPERATION_FEED_ON_CITY', 'SlthOnBespokeSpell', NULL, 'ABILITY_VAMPIRISM', 'IS_SIRED_VAMPIRE', 'OnCityPopTwoPlus');        -- need to implement these abilities first
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlternateAbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_CONSUME_BLOODPET', 'SlthOnBespokeSpell', 'UNIT_WARRIOR', 'ABILITY_VAMPIRISM', 'IS_SIRED_VAMPIRE', 'AdjacentAllyUnitMatches');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_REPAIR_GOLEM', 'SlthOnBespokeSpell', 'GOLEM_RACE_LOW_HEALING_ABILITY', 'ENCHANTMENT_ONE', 'AdjacentAllyUnitAbilityMatches');
+
 
 INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
 ('UNITOPERATION_CONSUME_SOULS', 'SlthOnBespokeSpell', NULL, 'SLTH_UNIT_EATER_OF_DREAMS', 'OnCityPopTwoPlus');                               -- also need to ensure hasnt cast spells yet
@@ -315,7 +322,6 @@ INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_UNIT_VAMPIRE_LORD', 'CLASS_VAMPIRE'),
 ('ABILITY_VAMPIRISM', 'CLASS_VAMPIRE');
 
-
 INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
 ('UNITOPERATION_CAST_MIRROR', 'SlthOnBespokeSpell', NULL, 'SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY', NULL),
 ('UNITOPERATION_READ_GRIMOIRE', 'SlthOnBespokeSpell', NULL, 'SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY', NULL),
@@ -347,6 +353,26 @@ INSERT INTO TypeTags(Type, Tag) VALUES
 -- }
 
 -- ADJACENT UNITType MATCHES: Consume Bloodpet, Repair Golem
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_HERALDS_CALL', 'SlthOnGrantBuffAdjacentAllyTargeted', 'BUFF_HERALDS_CALL', 'SLTH_UNIT_HERALD', 'AdjacentAllyEligibleAbility');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_MORALE', 'SlthOnGrantBuffAoEAlly', 'BUFF_MORALE', 'SLTH_UNIT_FLAGBEARER', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_TEACH_SPELLS', 'SlthOnBespokeSpell', NULL, 'SLTH_UNIT_GOVANNON', 'AdjacentUnitCanHavePromoGovannonHas'),     -- grants promotions based on govannon.
+('UNITOPERATION_ENTANGLE', 'SlthOnBespokeSpell', 'ABILITY_ENTANGLED', 'SLTH_UNIT_DRUID', 'AdjacentEnemyEligibleAbility'),              -- placeholder abilities
+('UNITOPERATION_SPORES', 'SlthOnBespokeSpell', 'ABILITY_SLEPT', 'SLTH_UNIT_MYCONID', 'AdjacentEnemyEligibleAbility'),
+('UNITOPERATION_TAUNT', 'SlthOnBespokeSpell', 'BUFF_TAUNT', 'SLTH_UNIT_HARLEQUIN', 'AdjacentEnemyEligibleAbility');
+
+INSERT INTO CustomOperations (OperationType, Callback, simpleAmount, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_CRUSH', 'SlthOnBespokeSpell',   80, 'SLTH_UNIT_DWARVEN_DRUID', 'AdjacentEnemyUnit'),
+('UNITOPERATION_HASTURS_RAZOR', 'SlthOnBespokeSpell', 90, 'SLTH_UNIT_HEMAH', 'AdjacentEnemyUnit'),
+('UNITOPERATION_PILLAR_OF_FIRE', 'SlthOnBespokeSpell', 90, 'SLTH_UNIT_CHALID', 'AdjacentEnemyUnit');
+
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_MESMERISE_ANIMAL', 'SlthOnBespokeSpell', 'BUFF_CAPTURE', 'ABILITY_FAWN', 'AdjacentEnemyEligibleAbility');
+
+
 -- AdjacentAllyEligibleAbility:  Heralds Call(Herald), Morale (Flagbearer), Taunt (Harlequin, possible?),  Teach Spell(Govannon)
 -- AdjacentEnemyEligibleAbility: Myconid Spores,Druid Entangle,  Mesmerise Animal (Satyr, Fawn)
 -- AdjacentEnemyUnit: Crush (Dwarven Druid), Hasturs Razor (Hemah), Pillar of Fire (Chalid)
