@@ -47,6 +47,7 @@
     </UpdateColors>
     <UpdateIcons id="Icons">
       <File>Icons.xml</File>
+      <File>LeaderIcons.sql</File>
     </UpdateIcons>
    </FrontEndActions>
   <InGameActions>
@@ -286,9 +287,10 @@
       </Properties>
       <File>MapUtilities.lua</File>
     </ImportFiles-->
-    <UpdateIcons id="Icons">
-      <File>Icons.xml</File>
-    </UpdateIcons>
+  <UpdateIcons id="Icons">
+    <File>Icons.xml</File>
+    <File>LeaderIcons.sql</File>
+  </UpdateIcons>
   </InGameActions>
   <Files>
     <File>Localisation/loc_abilities.sql</File>
@@ -383,18 +385,20 @@
     <!--File>MapUtilities.lua</File-->
     <File>ArtDefs/Buildings.artdef</File>
     <File>ArtDefs/Civilizations.artdef</File>
+    <File>Artdefs/Clutter.artdef</File>
     <File>Artdefs/Cultures.artdef</File>
     <File>Artdefs/FallbackLeaders.artdef</File>
     <File>Artdefs/Landmarks.artdef</File>
     <File>Artdefs/Resources.artdef</File>
     <File>Artdefs/Units.artdef</File>
+    <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons.xml</File>
-    <!--File>XLP/LeaderFallbacks.xlp</File-->
-    <!--File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
+    <File>LeaderIcons.sql</File>
+    <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
-    <File>Platforms/Windows/BLPs/UI/Icons.blp</File-->
+    <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
     <File>UI/ToolTipHelper_PlayerYields.lua</File>
     <File>UI/FFH_TopPanel.lua</File>
     <File>UI/FFH_TopPanel_XP2.lua</File>

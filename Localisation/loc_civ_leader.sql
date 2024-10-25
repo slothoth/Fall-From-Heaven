@@ -62,7 +62,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_CIV_SHEAIM_ADJECTIVE', 'Sheaimian', 'en_US'),
 ('LOC_SLTH_CIV_SIDAR_ADJECTIVE', 'Sidarian', 'en_US'),
 ('LOC_SLTH_CIV_SVARTALFAR_ADJECTIVE', 'Svartalfarian', 'en_US'),
-('LOC_SLTH_LEADER_ALEXIS_NAME', 'Alexis', 'en_US'),
+('LOC_LEADER_ALEXIS_NAME', 'Alexis', 'en_US'),
 ('LOC_SLTH_LEADER_AMELANCHIER_NAME', 'Amelanchier', 'en_US'),
 ('LOC_SLTH_LEADER_ARENDEL_NAME', 'Arendel', 'en_US'),
 ('LOC_SLTH_LEADER_ARTURUS_NAME', 'Arturus', 'en_US'),

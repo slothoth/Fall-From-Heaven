@@ -4388,7 +4388,7 @@ function CustomCheck(CustomOperationInfo, pUnit)
 		local iFeature = pPlot:GetFeatureType()
 		bCanStart = tSanctify[iFeature]
 		if not bCanStart then
-			bCanStart = pPlot:GetProperty('HellConversion') > 9
+			bCanStart = pPlot:GetProperty('HellConversion') or 0 > 9
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff' then
 		local ResourceInfo = GameInfo.Resources[pPlot:GetResourceType()]
@@ -4557,7 +4557,7 @@ function GPChecker(pPlayer, iBar)
 	for _, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
 		if pPlayerUnit:GetGreatPerson():IsGreatPerson() then
 			iGpAmount = iGpAmount + 1
-			if iGpAmount >= iBar then return true
+			if iGpAmount >= iBar then return true end
 		end
 	end
 	return false

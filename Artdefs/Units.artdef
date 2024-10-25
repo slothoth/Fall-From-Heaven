@@ -78508,9 +78508,9 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>160.000000</m_r>
+										<m_g>46.000000</m_g>
+										<m_b>22.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
@@ -78536,9 +78536,9 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>22.000000</m_r>
+										<m_g>22.000000</m_g>
+										<m_b>22.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
@@ -78551,9 +78551,9 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>22.000000</m_r>
+										<m_g>22.000000</m_g>
+										<m_b>22.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
@@ -78566,9 +78566,9 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>51.000000</m_r>
+										<m_g>7.000000</m_g>
+										<m_b>4.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
