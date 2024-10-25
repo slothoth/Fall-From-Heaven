@@ -2069,7 +2069,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_RAW_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2148,7 +2148,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_AIR_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2227,7 +2227,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_BODY"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2306,7 +2306,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_CHAOS_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2385,7 +2385,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_EARTH_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2464,7 +2464,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_ENCHANTED_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2543,7 +2543,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_ENTROPY_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2622,7 +2622,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_ICE_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2701,7 +2701,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_LAW_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2780,7 +2780,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_BODY"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2859,7 +2859,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_METAMAGIC_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -2938,7 +2938,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_SPIRIT_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -3017,7 +3017,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_NATURE_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -3096,7 +3096,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_SPIRIT_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -3175,7 +3175,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_METAMAGIC_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -3254,7 +3254,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_FIRE_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -3333,7 +3333,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_DEATH_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -3412,7 +3412,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_DEATH_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
@@ -3491,7 +3491,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="CLUTTER_GYPSUM"/>
+										<m_Value text="CLUTTER_FIRE_MANA"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">

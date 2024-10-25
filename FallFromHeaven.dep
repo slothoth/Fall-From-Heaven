@@ -34,7 +34,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Clutter"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Clutter.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="Landmark"/>
 			</LibraryDependencies>
@@ -46,6 +48,7 @@
 				<Element text="Landmarks.artdef"/>
 				<Element text="Resources.artdef"/>
 				<Element text="Cultures.artdef"/>
+				<Element text="Clutter.artdef"/>
 				<Element text="Buildings.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
@@ -267,6 +270,7 @@
 			<ConsumerName text="Resources"/>
 			<ArtDefDependencyPaths>
 				<Element text="Resources.artdef"/>
+				<Element text="Clutter.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
@@ -283,13 +287,17 @@
 			<ConsumerName text="WorldView_Translate"/>
 			<ArtDefDependencyPaths>
 				<Element text="Resources.artdef"/>
+				<Element text="Clutter.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
 		<Element>
 			<ConsumerName text="StrategicView_Translate"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Clutter.artdef"/>
+				<Element text="Landmarks.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
@@ -299,6 +307,7 @@
 				<Element text="Units.artdef"/>
 				<Element text="Resources.artdef"/>
 				<Element text="Cultures.artdef"/>
+				<Element text="Clutter.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
@@ -418,7 +427,9 @@
 		</Element>
 		<Element>
 			<ArtDefPath text="Clutter.artdef"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Clutter.artdef"/>
+			</ArtDefDependencyPaths>
 		</Element>
 		<Element>
 			<ArtDefPath text="UserInterface.artdef"/>
@@ -433,6 +444,7 @@
 		<Element>
 			<ArtDefPath text="Resources.artdef"/>
 			<ArtDefDependencyPaths>
+				<Element text="Landmarks.artdef"/>
 				<Element text="Clutter.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
@@ -448,7 +460,7 @@
 				<Element text="Landmarks.artdef"/>
 				<Element text="Buildings.artdef"/>
 			</ArtDefDependencyPaths>
-		</Element>Landmarks
+		</Element>
 		<Element>
 			<ArtDefPath text="FallbackLeaders.artdef"/>
 			<ArtDefDependencyPaths/>
@@ -481,7 +493,9 @@
 		</Element>
 		<Element>
 			<LibraryName text="Landmark"/>
-			<PackageDependencies/>
+			<PackageDependencies>
+				<Element text="environment/clutter.blp"/>
+			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="Leader"/>

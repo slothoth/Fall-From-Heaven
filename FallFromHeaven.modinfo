@@ -385,6 +385,7 @@
     <!--File>MapUtilities.lua</File-->
     <File>ArtDefs/Buildings.artdef</File>
     <File>ArtDefs/Civilizations.artdef</File>
+    <File>Artdefs/Clutter.artdef</File>
     <File>Artdefs/Cultures.artdef</File>
     <File>Artdefs/FallbackLeaders.artdef</File>
     <File>Artdefs/Landmarks.artdef</File>
