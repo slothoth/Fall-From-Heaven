@@ -26,6 +26,12 @@ local tReligionAlignment = {
 }
 local tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
 
+local tReligionAbility = {
+    ['RELIGION_ISLAM']='ABILITY_WORSHIPS_ESUS', ['RELIGION_HINDUISM']='ABILITY_WORSHIPS_OCTOPUS',
+    ['RELIGION_BUDDHISM']='ABILITY_WORSHIPS_VEIL',
+    ['RELIGION_CATHOLICISM']='ABILITY_WORSHIPS_LEAVES', ['RELIGION_JUDAISM']='ABILITY_WORSHIPS_EMPYREAN',
+    ['RELIGION_CONFUCIANISM']='ABILITY_WORSHIPS_KILMORPH', ['RELIGION_PROTESTANTISM']='ABILITY_WORSHIPS_ORDER'
+}
 -- pPlayerUnits:SetBuildDisabled(m_ePlagueDoctorUnit, true);
 
 local tReligousCivicTrigger = {
@@ -60,10 +66,57 @@ local tReligions = {
         [1] = GameInfo.Beliefs["BELIEF_INITIATION_RITES"].Hash,
         [2] = GameInfo.Beliefs["BELIEF_CROSS_CULTURAL_DIALOGUE"].Hash } }
 
+local tInherentReligion = { [GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_ARTHENDAIN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_BAMBUR'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_MITHRIL_GOLEM'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PARAMANDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DROWN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SAVEROUS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_STYGIAN_GUARD'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_CRUSADER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_VALIN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SPHENER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_BEAST_OF_AGARES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISEASED_CORPSE'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_ROSIER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_MARDERO'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_FAWN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SATYR'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_KITHRA'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_RATHA'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_RADIANT_GUARD'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_CHALID'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SHADOW'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_GIBBON'].Index] = true
+}
+
 local tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
 local iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
 local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
+
 
 
 function onReligionSwitch(playerID, policyID, wasEnacted)                -- TODO not attached to anything currently
@@ -222,15 +275,20 @@ end
 function GrantReligionUnit(playerID, unitID)
     -- deal with Encampment district issues
     -- if somehow not in a city, its a summon, implement that later (or dont even)?
+    local pUnitAbilities
+    local sReligionAbility
     local pPlayer = Players[playerID]
     local pUnit =  pPlayer:GetUnits():FindID(unitID)
+    local iUnitType = pUnit:GetType()                       -- check that the unit doesnt have a default religion
+    if tInherentReligion[iUnitType] then return; end
     local iX, iY = pUnit:GetLocation()
     local pPlot = Map.GetPlot(iX, iY)
     local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
+
     if pCity then
         local tiReligions = City:GetReligion():GetReligionsInCity()
         if tiReligions then
-            local pUnitAbilities = pUnit:GetAbility()
+            pUnitAbilities = pUnit:GetAbility()
             local CHANCE_OF_GRANT_RELIGION = 15
             for idx, val in ipairs(tiReligions) do                  --TODO needs testing to see what this table contains
                 local iAttempt = math.random(0, 99)
@@ -243,7 +301,8 @@ function GrantReligionUnit(playerID, unitID)
                             pUnitAbilities:AddAbilityCount('ALIGNMENT_GOOD')
                         end
                     end
-                    pUnitAbilities:AddAbilityCount('WORSHIPS_ESUS')
+                    sReligionAbility = tReligionAbility[val]
+                    pUnitAbilities:AddAbilityCount(sReligionAbility)
                     break
                 end
             end

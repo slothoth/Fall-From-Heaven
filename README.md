@@ -54,8 +54,8 @@ Victory Conditions [x]
 - [ ] Death resistance: 100%, GodSlayer,  Illusion. 50% Magic Immune, Stoneskin. 20% Magic Resistance, Sheut Stone 
 - [x] Death resistance: 100%,Demon, Elemental, Golem, Undead. 50% Angel
 - [x] can then just do as modifier with requirements in a binaryish way, if only 5 possible ways. i.e. if unit doesnt have 20% tag, do 1 damage. if unit doesnt have 50% tag, do 3 damage. if unit doesnt have immune tag, do 2 damage for full 6.
-- [ ] Affinity system
-- [ ] On three equipments
+- [x] Affinity system
+- [ ] Affinities on on three equipments.
 - [ ] With different damage types.
 ## Armageddon Counter:
 - [x] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
@@ -72,7 +72,7 @@ in civ iv, act as promotions that give buffs, and allow the dropping of item, to
 - [x] ability that can be removed by lua on button press : Reasonably easy to implement for player as button, not for AI. Attempts with custom FormationClasses have failed as entering formation fails for combining novel formationClasses. Would limit a unit to one unit, one item.
 - [x] 0 movement ingame unit that is destroyed/summoned, support class? A button to apply an effect on the combat unit in the same tile seems feasible. As does removing it. We don't need to store unit state, beyond its UnitType. Lua Event: UnitRemovedFromMap to respawn all items when a unit with them dies?
 - [x] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted. Seems reasonable in SQL. weapons cant stack.
-- [ ] Implement ability modifiers
+- [x] Implement ability modifiers
 ## Lairs and barbarians:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
 - [x] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
@@ -112,7 +112,6 @@ like barbarian encampments but with different classes that spawn different units
 - [x] For single ability units, Manes for example, Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
 - [ ] Single active, grants to city/player/unit
 - [ ] Bear, Wolf, Lion, Tiger, Gorilla, spider pen, scorpion cages (issue with barbs. Also all_units_attach_modifier fails.)
-- [ ] 
 
 ## Upgrade System:
 - [ ] can upgrade outside borders       probably needs bespoke upgrade system. what about using strategic forts to briefly grant the tile to the player?
@@ -145,14 +144,14 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Blood of the Phoenix (let all current units be able to respawn in cap once) probably cant do as modifier sadly as no ability to respawn
 - [ ] Genesis (upgrade terrain in civ)
 - [ ] Glory everlasting (kill all demon units once, 70 Arma) 
-- [ ] Pact of Nilhorn (3 giants spawn, only plausible one non-lua)
+- [x] Pact of Nilhorn (3 giants spawn, only plausible one non-lua)
 - [ ] Rites of Oghma (new mana resources spawn)
 - [ ] Purge the Unfaithful (there is a modifier to remove for inquisition, but we have a different definition of state religion)
 - [ ] Samhain (spawn barb frostlings and Mokka)   lua i think
-- [ ] The White Hand (spawn 3 priest of Winters for player)
+- [x] The White Hand (spawn 3 priest of Winters for player)
 - [ ] The Deepening (convert some desert to plains, plains/grassland to tundra, tundra to snow. cba with blizards tho.)
 - [ ] The Draw (+10 to Arma, halve all your cities pops, damage all units, declare war with all other civs, suspend any diplomacy.) Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
-- [ ] Ascension (Summons Auric Unleashed for player)
+- [x] Ascension (Summons Auric Unleashed for player)
 ## Misc:
 - [x] Double prod with Copper Form of Titan example. Also for some projects (Blood of Phoenix)
 - [x] Need 3 libraries for Great Library, same with Theatre
@@ -196,7 +195,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] religion spread within civ tracker in lua for plot_prop req
 ## Great People:
 - [ ] Golden Age modifiers, the whole extra Hammer/ extra gold per tile thing.
-- [ ] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
+- [x] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
 - [ ] first to tech Great People or other things
 
 ## Nice to Have:
@@ -343,7 +342,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ### Resources
 - [ ] Nightmare
 - [ ] Toad
-- [ ] Mana Tints ( and change to Gypsum)
+- [x] Mana Tints ( and change to Gypsum)
 
 ### Units
 #### Rebin

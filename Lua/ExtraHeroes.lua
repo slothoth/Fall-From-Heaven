@@ -90,7 +90,7 @@ function GrantSuperSpecialist(iAndyPlayer, iUnit, iX, iY)
 	local iUnitType = pUnit:GetType();
 	local pCity = Cities.GetCityInPlot(iX, iY)
 	for idx, sModifier in ipairs(tSuperSpecialistModifiers[iUnitType]) do
-		pCity:AttachModifierByID(sModifier)
+		pCity:AttachModifierByID(sModifier)									-- maybe do binary magic and plotProp
 	end
 	for idx, sModifier in ipairs(tSuperSpecialistGenericModifiers) do
 		pCity:AttachModifierByID(sModifier)
