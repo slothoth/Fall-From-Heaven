@@ -91,6 +91,29 @@ local tBinaryMap = {
     ['15']={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
 }
 
+local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
+	[GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]={
+	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_SCIENCE', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION',
+	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_SIDAR', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_GUILD_OF_HAMMERS'},
+	[GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]={
+		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_PROD', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE',
+		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_SIDAR', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_GREAT_LIB'},
+	[GameInfo.Units['UNIT_GREAT_ARTIST'].Index]={
+		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_GOLD',
+		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_SIDAR', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_THEATRE_OF_DREAMS'},
+	[GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]={
+		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
+		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
+}
+
+local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_HALL_OF_KINGS',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_CASTE_SYSTEM',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
+
 function SlthLog(sMessage)
     SLTH_DEBUG_ON = nil
     if SLTH_DEBUG_ON then
@@ -500,7 +523,7 @@ function onStart()
     print('-----------------Gameplay loaded')
 end
 
-local function SetCapitalProperty(iPlayer: number, tParameters: table)
+local function SetCapitalProperty(iPlayer, tParameters)
     local sPropKey = tParameters.sPropKey;
     local iPropValue = tParameters.iPropValue;
     local pPlayer = Players[iPlayer];
@@ -509,7 +532,7 @@ local function SetCapitalProperty(iPlayer: number, tParameters: table)
     pCapitalPlot:SetProperty(sPropKey, iPropValue)
 end
 
-local function OnSummon(iPlayer: number, tParameters: table)
+local function OnSummon(iPlayer, tParameters)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
@@ -522,7 +545,7 @@ local function OnSummon(iPlayer: number, tParameters: table)
 	playerUnits:Create(iUnitToSummon, iX, iY);
 end
 
-local function OnSummonPermanent(iPlayer: number, tParameters: table)
+local function OnSummonPermanent(iPlayer, tParameters)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
@@ -553,11 +576,11 @@ local function OnSummonPermanent(iPlayer: number, tParameters: table)
     end
     for iUnitID, pNewUnit in pairs(tNewUnits) do
         print('set inherited abilities here')
-        pUnit:SetProperty(CustomOperationInfo.SimpleText, iUnitID)
+        pUnit:SetProperty(OperationInfo.SimpleText, iUnitID)                -- used to link summoner and summoned
     end
 end
 
-local function OnGrantBuffSelf(iPlayer: number, tParameters: table)
+local function OnGrantBuffSelf(iPlayer, tParameters)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
@@ -567,7 +590,7 @@ local function OnGrantBuffSelf(iPlayer: number, tParameters: table)
     end
 end
 
-local function OnGrantBuffAoe(iPlayer: number, tParameters: table)
+local function OnGrantBuffAoe(iPlayer, tParameters)
     local pAbilityUnit
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
@@ -590,7 +613,7 @@ local function OnGrantBuffAoe(iPlayer: number, tParameters: table)
 	end
 end
 
-local function OnGrantDebuffAoe(iPlayer: number, tParameters: table)
+local function OnGrantDebuffAoe(iPlayer, tParameters)
     local pAbilityUnit
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
@@ -613,7 +636,7 @@ local function OnGrantDebuffAoe(iPlayer: number, tParameters: table)
 	end
 end
 
-local function OnSpellChangeTerrain(iPlayer: number, tParameters: table)
+local function OnSpellChangeTerrain(iPlayer, tParameters)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
@@ -631,7 +654,7 @@ local function OnSpellChangeTerrain(iPlayer: number, tParameters: table)
     end
 end
 
-local function OnSpellAoeDamage(iPlayer: number, tParameters: table)
+local function OnSpellAoeDamage(iPlayer, tParameters)
     local pAbilityUnit
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
@@ -690,6 +713,70 @@ local function OnSpellAoeDamage(iPlayer: number, tParameters: table)
 		end
 	end
 end
+
+local function GrantGoldenAge(iPlayer, tParameters)
+	local pPlayer = Players[iPlayer]
+	local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
+    local t_iUnits = {}
+    t_iUnits[1] = tParameters.iCastingUnit                      -- set to just the owner for now
+	for iUnitType, iUnitID in pairs(t_iUnits) do
+		local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+		UnitManager.Kill(pUnit);
+	end
+	for idx, pCity in pPlayer:GetCities():Members() do
+		local pPlot = pCity:GetPlot();
+		print(pPlot)						-- plot exists
+        pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instea of nil?
+	end
+	pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + 10)
+	pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
+end
+
+local function GrantBuildingFunction(iPlayer, tParameters)
+    local iUnit = tParameters.iCastingUnit
+    local sUnitOperationType =  tParameters.UnitOperationType
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local sModifierGrant = OperationInfo.SimpleText
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+	local pCity = Cities.GetCityInPlot(iX, iY)
+	pCity:AttachModifierByID(sModifierGrant);
+	UnitManager.Kill(pUnit);
+end
+
+local function GrantSuperSpecialist(iPlayer, tParameters)
+    local iUnit = tParameters.iCastingUnit
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+	local iUnitType = pUnit:GetType();
+	local pCity = Cities.GetCityInPlot(iX, iY)
+	for idx, sModifier in ipairs(tSuperSpecialistModifiers[iUnitType]) do
+		pCity:AttachModifierByID(sModifier)									-- maybe do binary magic and plotProp
+	end
+	for idx, sModifier in ipairs(tSuperSpecialistGenericModifiers) do
+		pCity:AttachModifierByID(sModifier)
+	end
+	UnitManager.Kill(pUnit);
+end
+
+local function ConsumeBloodpet(iPlayer, tParameters)
+    print('consuming bloodpet')
+    local iUnit = tParameters.iCastingUnit
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+    local iConsumeUnitID = tParameters.iTargetID
+    local pConsumeUnit = UnitManager.GetUnit(iPlayer, iConsumeUnitID);
+	local iUnitType = pConsumeUnit:GetType();
+    if iUnitType == GameInfo.Units['UNIT_WARRIOR'].Index then
+        UnitManager.RestoreMovement(pUnit)
+        UnitManager.RestoreUnitAttacks(pUnit)
+	    UnitManager.Kill(pConsumeUnit);
+    end
+end
+
+
+
 local tAllowSphereOne = {
         [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED'].Index,
         [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED'].Index,
@@ -748,7 +835,7 @@ local tAllowSphereThree = {
         [GameInfo.Resources['RESOURCE_MANA_SUN'].Index]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_3'].Index,
         [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_3'].Index
     }
-local function UpdateResourcePromotion(iPlayer: number, tParameters: table)
+local function UpdateResourcePromotion(iPlayer, tParameters)
     local iResource = tParameters.ResourceID
     local pPlayer = Players[iPlayer]
     local iChanOneGrant = tAllowSphereOne[iResource]
@@ -773,9 +860,10 @@ local function UpdateResourcePromotion(iPlayer: number, tParameters: table)
     -- iterate over player units, grant prereq promo
     end
 end
-local function OnBespokeSpell(iPlayer: number, tParameters: table)
+local function OnBespokeSpell(iPlayer, tParameters)
     print('bespoke spell not implemented')
 end
+
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 
 GameEvents.SlthSetResourcePromotions.Add(UpdateResourcePromotion);
@@ -789,6 +877,10 @@ GameEvents.SlthOnChangeTerrain.Add(OnSpellChangeTerrain);
 GameEvents.SlthOnAoeDamage.Add(OnSpellAoeDamage);
 GameEvents.SlthOnBespokeSpell.Add(OnBespokeSpell);
 
-GameEvents.SlthCanSummon.Add(OnSummon);
+GameEvents.SlthOnGrantGoldenAge.Add(GrantGoldenAge);
+GameEvents.SlthOnGrantBuilding.Add(GrantBuildingFunction);
+GameEvents.SlthOnGrantSuperSpecialist.Add(GrantSuperSpecialist);
+GameEvents.SlthOnConsumeBloodpet.Add(ConsumeBloodpet);
+
 onStart()
 

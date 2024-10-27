@@ -122,7 +122,7 @@ local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 function onReligionSwitch(playerID, policyID, wasEnacted)                -- TODO not attached to anything currently
     -- get pPlayer somehow
     if not wasEnacted then return end
-    local sReligion = GameInfo.Policies[policyID].
+    local sReligion = GameInfo.Policies[policyID].PolicyType
     local iCurrentAlignment = pPlayer:GetProperty('alignment')
     local iNewAlignment = tReligionForceAlignment[sReligion]
     if not iNewAlignment then
@@ -313,7 +313,7 @@ end
 function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
     local iReligion = tReligousCivicTrigger[civicIndex]
     if iReligion then
-        local sReligion = GameInfo.Religions[iReligion]
+        local sReligion = GameInfo.Religions[iReligion].ReligionType
         local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
         local pPlayer = Players[playerID]
         local pPlayerCities = pPlayer:GetCities()

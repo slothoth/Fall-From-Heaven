@@ -78,42 +78,6 @@ local tEquipmentAbilities = {
 	[24] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index}
 
 
-function GrantBuildingFunction(iAndyPlayer, iUnit, iX, iY, sModifierGrant)
-	local pUnit = UnitManager.GetUnit(iAndyPlayer, iUnit);
-	local pCity = Cities.GetCityInPlot(iX, iY)
-	pCity:AttachModifierByID(sModifierGrant);
-	UnitManager.Kill(pUnit);
-end
-
-function GrantSuperSpecialist(iAndyPlayer, iUnit, iX, iY)
-	local pUnit = UnitManager.GetUnit(iAndyPlayer, iUnit);
-	local iUnitType = pUnit:GetType();
-	local pCity = Cities.GetCityInPlot(iX, iY)
-	for idx, sModifier in ipairs(tSuperSpecialistModifiers[iUnitType]) do
-		pCity:AttachModifierByID(sModifier)									-- maybe do binary magic and plotProp
-	end
-	for idx, sModifier in ipairs(tSuperSpecialistGenericModifiers) do
-		pCity:AttachModifierByID(sModifier)
-	end
-	UnitManager.Kill(pUnit);
-end
-
-function GrantGoldenAge(iPlayer, t_iUnits)
-	local pPlayer = Players[iPlayer]
-	local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
-	for iUnitType, iUnitID in pairs(t_iUnits) do
-		local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
-		UnitManager.Kill(pUnit);
-	end
-	for idx, pCity in pPlayer:GetCities():Members() do
-		local pPlot = pCity:GetPlot();
-		print(pPlot)						-- plot exists
-        pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instea of nil?
-	end
-	pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + 10)
-	pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
-end
-
 function ConsumeEquipment(iPlayer, iUnitID, consumeUnitID)
 	local hasEquipment
 	local iEquipmentAbilityToGrant

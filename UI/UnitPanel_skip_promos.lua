@@ -730,8 +730,18 @@ function GetUnitActionsTable( pUnit )
 							bCanStart = true
 						end
 						local reqAbility = CustomOperationInfo.AbilityPrereq			-- need to iterate over abilities here
-						if reqAbility == unitType then
-							bCanStart = true
+						if reqAbility then
+							local iAbilityToCheck = GameInfo.UnitAbilities[reqAbility].Index
+							if CustomOperationInfo.AlternateAbilityPrereq then
+								local iAbilityAltToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlternateAbilityPrereq].Index;
+							end
+							if CustomOperationInfo.AlsoAbilityPrereq then
+								local iAbilityAlsoToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlsoAbilityPrereq].Index;
+							end
+							if CustomOperationInfo.AlsoTwoAbilityPrereq then
+								local iAbilityAlsoTwoToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlsoTwoAbilityPrereq].Index;
+							end
+							bCanStart = AbilityChecker(pUnit, iAbilityToCheck, iAbilityAltToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
 						end
 					else
 						bCanStart, tResults = UnitManager.CanStartOperation( pUnit, actionHash, nil, true );
@@ -979,6 +989,7 @@ function View(data)
 		end
 			-- Create columns (each able to hold x3 icons) and fill the top to bottom
 		local numBuildCommands = table.count(tBuildActions);
+		tSlthBuildActions = {}
 		for i=1,numBuildCommands,3 do
 			local buildColumnInstance = m_buildActionsIM:GetInstance();
 			for iRow=1,3,1 do
@@ -986,7 +997,8 @@ function View(data)
 					local slotName	= "Row"..tostring(iRow);
 					local action	= tBuildActions[(i+iRow)-1];
 					local instance	= {};
-					ContextPtr:BuildInstanceForControl( "BuildActionInstance", instance, buildColumnInstance[slotName]);
+					ContextPtr:BuildInstanceForControl( "BuildActionInstance", instance, buildColumnInstance[slotName])
+					table.insert(tSlthBuildActions, instance);
 
 					BuildActionModHook(instance, action);
 
@@ -1003,6 +1015,9 @@ function View(data)
 					if ( action.IsBestImprovement ~= nil and action.IsBestImprovement == true ) then
 						bestBuildAction = action;
 					end
+
+					instance.UnitActionButton:SetTag( action.userTag );
+					print(action.userTag)
 				end
 			end
 		end
@@ -2574,6 +2589,9 @@ function OnUnitAbilityLost(player :number, unitId :number, eAbilityType :number)
 	end
 end
 
+local tCachedViableActionPlots = {}
+local tCachedViableActionUnits = {}
+
 -- ===========================================================================
 --	UnitAction was clicked.
 -- ===========================================================================
@@ -2582,17 +2600,21 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 		local pSelectedUnit :table= UI.GetHeadSelectedUnit();
 		if (pSelectedUnit ~= nil) then
 			if (actionType == UnitCommandTypes.TYPE) then
+				print('trying interface mode')
 				local eInterfaceMode = InterfaceModeTypes.NONE;
 				local interfaceMode = GameInfo.UnitCommands[actionHash].InterfaceMode;
 				if (interfaceMode) then
+					print('successful interface mode')
 					eInterfaceMode = DB.MakeHash(interfaceMode);
 				end
 
 				if (eInterfaceMode ~= InterfaceModeTypes.NONE) then
 					-- Must change to the interface mode or if we are already in that mode, the user wants to cancel.
 					if (currentMode == eInterfaceMode) then
+						print('set to selection interface')
 						UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
 					else
+						print('set to selection interface alt')
 						UI.SetInterfaceMode(eInterfaceMode);
 					end
 				else
@@ -2614,8 +2636,34 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 							UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
 						else
 							local tParameters = {};
-							tParameters[UnitOperationTypes.PARAM_OPERATION_TYPE] = actionHash;
-							UI.SetInterfaceMode(eInterfaceMode, tParameters);
+							print('set to selection interfaceMode in custom with different interfacemode')
+							local opName =  GameInfo.UnitOperations[actionHash].OperationType
+							local CustomOperation = GameInfo.CustomOperations[opName]
+							print(opName)
+							print(CustomOperation)
+							if CustomOperation then
+								local sOpType = CustomOperation.OperationType
+								local sOpCallback = CustomOperation.Callback
+								local iUnit = pSelectedUnit:GetID()
+								local iOwner = pSelectedUnit:GetOwner()
+								-- use tCachedViableActionPlots to do hex select, then use the return value to determine action taken
+								unitCommandParameters = {}
+								local tParameters = {}
+								tParameters.UnitOperationType = sOpType;
+								tParameters.iCastingUnit = iUnit;
+								tParameters.OnStart = sOpCallback;
+								tCachedUnitOperation = sOpCallback
+								UI.SetInterfaceMode(InterfaceModeTypes.SELECTION)
+								UI.SetInterfaceMode(InterfaceModeTypes.WB_SELECT_PLOT)
+								m_wbInterfaceMode = true
+								-- GET BUTTON SELECTED  SetSelected(true)
+								local green = UI.GetColorValue("COLOR_GREEN")
+								UILens.SetLayerHexesColoredArea(SLTH_HEX_COLORING_MOVEMENT, Game.GetLocalPlayer(), tCachedViableActionPlots, green)
+								UILens.ToggleLayerOn(SLTH_HEX_COLORING_MOVEMENT)
+								print('should have hex colouring on')
+							else
+								UnitManager.RequestOperation( pSelectedUnit, actionHash );
+							end
 						end
 					else
 						local opName =  GameInfo.UnitOperations[actionHash].OperationType
@@ -2632,7 +2680,7 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 							tParameters.iCastingUnit = iUnit;
 							tParameters.OnStart = sOpCallback;
 							print(sOpType .. ', ' .. sOpCallback .. tostring(iUnit).. tostring(iOwner))
-							local uh = UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
+							UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
 							UI.DeselectUnit(pSelectedUnit);
 						else
 							UnitManager.RequestOperation( pSelectedUnit, actionHash );		-- No mode needed, just do the operation
@@ -3777,6 +3825,8 @@ end
 function OnInterfaceModeChanged( eOldMode:number, eNewMode:number )
 
 	m_airAttackTargetPlots = {};
+	print(eOldMode)
+	print(eNewMode)
 
 	if (eNewMode == InterfaceModeTypes.CITY_RANGE_ATTACK) then
 		ContextPtr:SetHide(false);
@@ -3932,6 +3982,14 @@ function OnInterfaceModeChanged( eOldMode:number, eNewMode:number )
 		SetTheSelectedButton("UNITOPERATION_AIR_ATTACK", false);
 	end
 
+	if (eNewMode == InterfaceModeTypes.WB_SELECT_PLOT) then
+		print('setting wb plot')
+		SetTheSelectedButton("UNITOPERATION_CONSUME_BLOODPET", true);
+	elseif (eOldMode == InterfaceModeTypes.WB_SELECT_PLOT) then
+		print('leaving wb plot')
+		SetTheSelectedButton("UNITOPERATION_CONSUME_BLOODPET", false);
+	end
+
 	if (eOldMode == InterfaceModeTypes.CITY_RANGE_ATTACK or eOldMode == InterfaceModeTypes.DISTRICT_RANGE_ATTACK) then
 		ContextPtr:SetHide(true);
 	end
@@ -3984,6 +4042,23 @@ function SetTheSelectedButton( operationOrCommand:string, isSelected:boolean )
 					if command == operationOrCommand then
 						instance.UnitActionButton:SetSelected(isSelected);
 					end
+				end
+			end
+		end
+	end
+	print('trying Build Action Selection')
+	local slth_instance = tSlthBuildActions
+	for idx, instanceButton in ipairs(tSlthBuildActions) do
+		print(instanceButton)
+		if instanceButton.UnitActionButton then
+			local actionHash = instanceButton.UnitActionButton:GetTag();
+			local unitOperation = GameInfo.UnitOperations[actionHash];
+			if unitOperation then
+				local operation = unitOperation.OperationType;
+				print(operation)
+				if operation == operationOrCommand then
+					instanceButton.UnitActionButton:SetSelected(isSelected);
+					print(sUnitCommandContext)
 				end
 			end
 		end
@@ -4330,7 +4405,7 @@ local tGrassland = {[GameInfo.Terrains['TERRAIN_GRASS'].Index]= true,
 			[GameInfo.Terrains['TERRAIN_GRASS_HILLS'].Index]= true}
 local tSanctify = {[GameInfo.Features['FEATURE_MARSH'].Index]= true}					--	once i implement graveyards, city ruins todo
 
-function CustomCheck(CustomOperationInfo, pUnit)
+function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a possible allowed unitcommand pressable in the current context
 	local bCanStart
 	local tParameters = {}
 	local iUnit = pUnit:GetID()
@@ -4426,7 +4501,9 @@ function CustomCheck(CustomOperationInfo, pUnit)
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGrantBuilding' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
+		print(' City grant building')
 		if pCity then
+			print(CustomOperationInfo.SimpleText)
 			bCanStart = not pCity:GetBuildings():HasBuilding(GameInfo.Buildings[CustomOperationInfo.SimpleText].Index)
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGrantBuildingPrereqBuilding' then
@@ -4441,7 +4518,7 @@ function CustomCheck(CustomOperationInfo, pUnit)
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'EnoughGreatPeople' then
 		local pPlayer = Players[iOwner]
-		local iBar = Player:GetProperty('GOLDEN_AGE_GP') or 1
+		local iBar = pPlayer:GetProperty('GOLDEN_AGE_GP') or 1
 		local bCanStart = GPChecker(pPlayer, iBar)
 	elseif CustomOperationInfo.ActivationPrereq == 'OnHolyCity' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
@@ -4452,6 +4529,10 @@ function CustomCheck(CustomOperationInfo, pUnit)
 				bCanStart = bIsCorrectHolyCity and bIsCorrectHolyCity > 0
 			end
 		end
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyEligiblePromoClass' then
+		bCanStart = CheckAdjacentEnemyUnitsHasPromoClass(pUnit, iOwner, CustomOperationInfo.SimpleText)
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleAllyUnitMatches' then
+		bCanStart = CheckAdjacentAllyUnitTypeMatches(pUnit, iOwner, GameInfo.Units[CustomOperationInfo.SimpleText].Index)
 	else
 		bCanStart = true
 	end
@@ -4562,6 +4643,172 @@ function GPChecker(pPlayer, iBar)
 	end
 	return false
 end
+
+function AbilityChecker(pUnit, iAbilityToCheck, iAbilityAltToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
+	local bCanStart
+	local pAbilities = pUnit:GetAbility():GetAbilities()
+	if (pAbilities and table.count(pAbilities) > 0) then
+		if iAbilityAltToCheck then
+			AltAbilityCheck(pUnit, pAbilities, iAbilityToCheck, iAbilityAltToCheck)
+		elseif iAbilityAlsoToCheck then
+			if iAbilityAlsoTwoToCheck then
+				bCanStart = AbilityCheckThrice(pUnit, pAbilities, iAbilityToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
+			else
+				bCanStart = AbilityCheckTwice(pUnit, pAbilities, iAbilityToCheck, iAbilityAlsoToCheck)
+			end
+		else
+			bCanStart = SimpleAbilityCheck(pUnit, pAbilities, iAbilityToCheck)
+		end
+	end
+	return bCanStart
+end
+
+function SimpleAbilityCheck(pUnit, pAbilities, iAbilityToCheck)
+	local bCanStart
+	for i,ability in ipairs (pAbilities) do
+		if not bCanStart then
+			bCanStart = ability == iAbilityToCheck
+		end
+	end
+	return bCanStart
+end
+
+function AltAbilityCheck(pUnit, pAbilities, iAbilityToCheck, iAbilityAltToCheck)
+	local bCanStart
+	for i,ability in ipairs (pAbilities) do
+		if not bCanStart then
+			bCanStart = ability == iAbilityToCheck
+			if not bCanStart then
+				bCanStart = ability == iAbilityAltToCheck
+			end
+		end
+	end
+	return bCanStart
+end
+
+function AbilityCheckTwice(pUnit, pAbilities, iAbilityToCheck, iAbilityAlsoToCheck)
+	local bCanStart
+	local bFirstCheckPassed
+	for i,ability in ipairs (pAbilities) do
+		if not bCanStart then
+			bFirstCheckPassed = ability == iAbilityToCheck
+			if bFirstCheckPassed then
+				bCanStart = ability == iAbilityAlsoToCheck
+			end
+		end
+	end
+	return bCanStart
+end
+
+function AbilityCheckThrice(pUnit, pAbilities, iAbilityToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
+	local bCanStart
+	local bFirstCheckPassed
+	local bSecondCheckPassed
+	for i,ability in ipairs (pAbilities) do
+		if not bCanStart then
+			bFirstCheckPassed = ability == iAbilityToCheck
+			if bFirstCheckPassed then
+				bSecondCheckPassed = ability == iAbilityAlsoToCheck
+				if bSecondCheckPassed then
+					bCanStart = ability == iAbilityAlsoToCheck
+				end
+			end
+		end
+	end
+	return bCanStart
+end
+
+function CheckAdjacentEnemyUnitsHasPromoClass(pUnit, iPlayer, sPromoClass)
+	local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+	local unitType
+	local sUnitPromoClass
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if (pNearUnit) then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer ~= iPlayer) then
+					unitType = pNearUnit:GetUnitType();
+					sUnitPromoClass = GameInfo.Units[unitType].PromotionClass
+					if sPromoClass == sUnitPromoClass then
+						return true
+					end
+				end
+			end
+		end
+	end
+	return false
+end
+
+function CheckAdjacentAllyUnitTypeMatches(pUnit, iPlayer, iUnitTypeRequired)
+	local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+	local iUnitType
+	local iPlotID
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if pNearUnit then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer == iPlayer) then
+					iUnitType = pNearUnit:GetUnitType();
+					if iUnitType == iUnitTypeRequired then
+						iPlotID = plot:GetIndex()
+						iUnitID = pNearUnit:GetID()
+						tCachedViableActionUnits[iPlotID] = iUnitID
+						table.insert(tCachedViableActionPlots, iPlotID)
+					end
+				end
+			end
+		end
+	end
+	if table.count(tCachedViableActionPlots) > 0 then
+		return true
+	else
+		return false
+	end
+end
+
+function OnSelectPlot(plotId, plotEdge, boolDown, rButton)
+	--print('plotId, plotEdge, boolDown, rButton', plotId, plotEdge, boolDown, rButton)
+    if not boolDown then
+        if rButton then
+            QuitWBInterfaceMode(true)
+        else
+            print('selected plot')
+
+            local tParameters = {}
+			local iTargetID = tCachedViableActionUnits[plotId]
+			if iTargetID then
+				local pUnit = UI.GetHeadSelectedUnit()
+				local iOwner = pUnit:GetOwner()
+				tParameters.iTargetID = iTargetID
+				tParameters.OnStart = tCachedUnitOperation;
+				tParameters.iCastingUnit = pUnit:GetID()
+				UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
+			end
+			QuitWBInterfaceMode(true)
+			UI.DeselectUnit(pUnit);
+        end
+    end
+end
+
+function QuitWBInterfaceMode(ifChangeInterfaceMode)
+	if ifChangeInterfaceMode then
+		UI.SetInterfaceMode( InterfaceModeTypes.SELECTION )
+	end
+	UILens.ClearLayerHexes(SLTH_HEX_COLORING_MOVEMENT);
+	UILens.ToggleLayerOff(SLTH_HEX_COLORING_MOVEMENT);
+	m_wbInterfaceMode = false
+end
+
+function OnUiModChange(intPara, currentInterfaceMode)
+    print('ui mode changed')
+	if m_wbInterfaceMode and currentInterfaceMode ~= InterfaceModeTypes.WB_SELECT_PLOT then
+		QuitWBInterfaceMode(false)
+ 	end
+end
 -- ===========================================================================
 function LateInitialize()
 	-- Needed for UnitPanel_CivRoyaleScenario
@@ -4625,6 +4872,11 @@ function Initialize()
 	LuaEvents.UnitFlagManager_PointerEntered.Add(		OnUnitFlagPointerEntered );
 	LuaEvents.UnitFlagManager_PointerExited.Add(		OnUnitFlagPointerExited );
 	LuaEvents.PlayerChange_Close.Add(					OnPlayerChangeClose );
+
+	LuaEvents.WorldInput_WBSelectPlot.Add(OnSelectPlot)
+	SLTH_HEX_COLORING_MOVEMENT = UILens.CreateLensLayerHash("Hex_Coloring_Movement");
+	-- Events.InterfaceModeChanged.Add(OnUiModChange)
+
 
 	-- Setup settlement water guide colors
 	local FreshWaterColor:number = UI.GetColorValue("COLOR_BREATHTAKING_APPEAL");

@@ -8,9 +8,8 @@ g_selectedUnitId = -1;
 
 local m_markedPlots = {}  -- plotIndex
 local m_markedPlotsMap = {}  -- key: plotIndex, value: BuildingIndex
-local m_wbInterfaceMode = false
+m_wbInterfaceMode = false
 
-local HEX_COLORING_MOVEMENT = UILens.CreateLensLayerHash("Hex_Coloring_Movement");--LensLayers.HEX_COLORING_MOVEMENT;
 
 local tMonitoredResources = {
     [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='RESOURCE_MANA_DEATH'},
@@ -254,60 +253,12 @@ function OnGrantGoldenAgeClicked()
 	UI.DeselectUnit(pUnit);
 	return;
 end
--- instead what if we do plot targetting logic, and just adjust valid plots. dont need 30+ buttons then
-function OnGrantEquipmentClicked()
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-    -- search chosen plot for equipment, choose first found
-    -- get unitID of equipment
-    -- handle which unittype, unitability on gameplay side
 
-	if m_wbInterfaceMode then
-		QuitWBInterfaceMode(true)
-	else
-		UI.SetInterfaceMode(InterfaceModeTypes.SELECTION)
-		UI.SetInterfaceMode(InterfaceModeTypes.WB_SELECT_PLOT)
-		m_wbInterfaceMode = true
-		Controls.SettleButtonTakeEquipment:SetSelected(true)
-
-		m_markedPlots, m_markedPlotsMap = GetNearbyEquipment(iPlayer, iX, iY)
-		if #m_markedPlots > 0 then
-			local green = UI.GetColorValue("COLOR_GREEN")
-			UILens.SetLayerHexesColoredArea(HEX_COLORING_MOVEMENT, Game.GetLocalPlayer(), m_markedPlots, green)
-
-			UILens.ToggleLayerOn(HEX_COLORING_MOVEMENT)
-		end
- 	end
-end
 
 -- nicked from QINMachuPichu
-function OnUiModChange(intPara, currentInterfaceMode)
-	if m_wbInterfaceMode and currentInterfaceMode ~= InterfaceModeTypes.WB_SELECT_PLOT then
-		QuitWBInterfaceMode(false)
- 	end
-end
+
 -- nicked from QINMachuPichu
-function OnSelectPlot(plotId, plotEdge, boolDown, rButton)
-	--print('plotId, plotEdge, boolDown, rButton', plotId, plotEdge, boolDown, rButton)
-	if not boolDown then
-		if rButton then
-			QuitWBInterfaceMode(true)
-		else
-			local consumeUnitID = m_markedPlotsMap[plotId]
-			if consumeUnitID ~= nil then
-				print('equipment unit selected!')
-				local pUnit = UI.GetHeadSelectedUnit()
-                local iUnit = pUnit:GetID()
-                local iPlayer = pUnit:GetOwner()
-                local bSuccess = ExposedMembers.ExtraHeroes.ConsumeEquipment(iPlayer, iUnit, consumeUnitID);
-                if bSuccess < 1 then
-                    local pPlot = Map.GetPlotByIndex()
-                    UI.AddWorldViewText(0, 'Already has equipment', pPlot:GetX(), pPlot:GetY());
-                end
-                QuitWBInterfaceMode(true)
-			end
-		end
-	end
-end
+
 
 function GetNearbyEquipment(iPlayerID, iPlotX, iPlotY)
 	local markedPlots = {}
@@ -343,15 +294,7 @@ function GetNearbyEquipment(iPlayerID, iPlotX, iPlotY)
     return markedPlots, markedPlotsMap
 end
 
-function QuitWBInterfaceMode(ifChangeInterfaceMode)
-	if ifChangeInterfaceMode then
-		UI.SetInterfaceMode( InterfaceModeTypes.SELECTION )
-	end
-	UILens.ClearLayerHexes( HEX_COLORING_MOVEMENT );
-	UILens.ToggleLayerOff( HEX_COLORING_MOVEMENT );
-	m_wbInterfaceMode = false
-	Controls.SettleButtonTakeEquipment:SetSelected(false)
-end
+
 
 -- helper functions
 function UnitGatherInfo()
@@ -390,7 +333,7 @@ function Setup()
             gridButton:ChangeParent(ctrl)
         end
         Controls.SettleButtonGridTakeEquipment:ChangeParent(ctrl)
-        Controls.SettleButtonTakeEquipment:RegisterCallback(Mouse.eLClick, OnGrantEquipmentClicked)
+        -- Controls.SettleButtonTakeEquipment:RegisterCallback(Mouse.eLClick, OnGrantEquipmentClicked)
     end
     for gridButton, tButton in pairs(tControlsAdded) do
         for button, callbackFunc in pairs(tButton) do
@@ -512,13 +455,12 @@ function Setup()
 	end
 end
 
-Events.LoadGameViewStateDone.Add(Setup)
-Events.UnitSelectionChanged.Add(OnUnitSelectionChanged)
+-- Events.LoadGameViewStateDone.Add(Setup)
+-- Events.UnitSelectionChanged.Add(OnUnitSelectionChanged)
 
-Events.UnitOperationsCleared.Add(onOperationMoveEnded)
+-- Events.UnitOperationsCleared.Add(onOperationMoveEnded)
 
-Events.InterfaceModeChanged.Add(OnUiModChange)
-LuaEvents.WorldInput_WBSelectPlot.Add(OnSelectPlot)
+-- LuaEvents.WorldInput_WBSelectPlot.Add(OnSelectPlot)
 
 -- gameplay esque
 function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
