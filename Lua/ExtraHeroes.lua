@@ -90,9 +90,7 @@ function ConsumeEquipment(iPlayer, iUnitID, consumeUnitID)
 	if equipAbility then
 		if not pUnitAbilityManager:HasAbility(equipAbility) then
 			pUnit:GetAbility():AddAbilityCount(equipAbility)
-			print('Added ability to unit')
 			UnitManager.Kill(pConsumeUnit);
-			print('killed equipment')
 			bSuccess = 1
 		else
 			print('not granted as unit already has ability')

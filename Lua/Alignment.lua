@@ -123,6 +123,7 @@ function onReligionSwitch(playerID, policyID, wasEnacted)                -- TODO
     -- get pPlayer somehow
     if not wasEnacted then return end
     local sReligion = GameInfo.Policies[policyID].PolicyType
+    local pPlayer = Players[playerID]
     local iCurrentAlignment = pPlayer:GetProperty('alignment')
     local iNewAlignment = tReligionForceAlignment[sReligion]
     if not iNewAlignment then
@@ -173,7 +174,7 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
     if not pUnit then return; end
     local pUnitAbilities = pUnit:GetAbility()
-    -- or pUnit:GetExperience():HasPromotion() -- once we have magic do entropy and death promos.
+    -- or pUnit:GetExperience():HasPromotion() -- todo once we have magic do entropy and death promos.
     if pUnitAbilities:HasAbility('ALIGNMENT_EVIL') then
         iGrantPlayer = Game:GetProperty('Infernal')
         -- check player is alive
