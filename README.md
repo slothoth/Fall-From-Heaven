@@ -112,6 +112,7 @@ like barbarian encampments but with different classes that spawn different units
 - [x] For single ability units, Manes for example, Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
 - [ ] Single active, grants to city/player/unit
 - [ ] Bear, Wolf, Lion, Tiger, Gorilla, spider pen, scorpion cages (issue with barbs. Also all_units_attach_modifier fails.)
+- [ ] Free magic promos.
 
 ## Upgrade System:
 - [ ] can upgrade outside borders       probably needs bespoke upgrade system. what about using strategic forts to briefly grant the tile to the player?
@@ -498,23 +499,28 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Shadowrider as Keshig?
 ## Design Todo
 - [ ] Display SuperSpecialists in the City UI somehow 
-- [ ] Reexamine if buildings path and districts makes sense.
+- [ ] Reexamine if buildings path and districts makes sense. Maybe make districts nearly free but dont provide any benefits on their own?
 - [ ] come up with eurekas
 - [ ] Use eurekas as proxies for techs where soft requirements (i.e. Trade uses something from Sailing or Horseback riding to Eureka? problem is has to be only opposing )
 - [ ] City States didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 - [ ] Do we swap Amenities and Housing as Amenities and Housing?
+- [ ] We are making districts easy to get but not worth anything. How to fix trade routes sucking? Also how do we make sure district sonly unlock whena building needs them, but with multiple techs/civics
 ## Polish Todo
 - [x] Trait Descriptions
 - [ ] Limit Tech Tree to Renaissance Era techs, and make tree look better 
 
 ## Bugs
-- [ ] Why are civ colours always green blue?
-- [ ] Why does UnitPanel buttons always show on reload of game?
-- [ ] Accuracy promo granted on aggressive?
-- [ ] Basium spawning crashing game, but Infernal not? we are using a property to gate, but maybe its set after city transfer so stuck in loop
-- [ ] use MODIFIER_PLAYER_UNITS_GRANT_PROMOTION instead of promotion lua grant system?
+- [x] Why are civ colours always green blue? Units.artdef jerseys
+- [x] Why does UnitPanel buttons always show on reload of game? Deprecated in favour of Unitpanel BuildActions
+- [x] Accuracy promo granted on aggressive?
+- [x] Basium spawning crashing game, but Infernal not? we are using a property to gate, but maybe its set after city transfer so stuck in loop
+- [L] use MODIFIER_PLAYER_UNITS_GRANT_PROMOTION instead of promotion lua grant system? THIS WILL NEVER WORK, PROMOS HAVE TO BE IN RIGHT CLASS AND IMMEDIATELY AVAILABLE
+- [ ] Traits not converting LOC on dawn of Man speech
+- [ ] Both PLAYER_BAN_UNIT_PRODUCTION and reverse PLAYER_ALLOW_UNIT (nihang) dont seem to stop upgrading into next unit tier. More fuel for custom upgrade system
+- [ ] Upgrade system also takes precedence in removing obsolete units even if the replacement is not buildable due to a no BuildingPrereq for example
+- [ ] Shipyard Lighthouse, Harbor only in naval towns, Brewery only in river. Hawk on Hunters lodge
 ## couldnt find a way:
-- [ ] Courage, immunity to slave taking mod, charm resist
+- [ ] Courage, immunity to slave taking mod as no OPPONENT_HAS_ABILITY requirement, charm resist seems doable tho
 - [ ] Blur, first strike Immune
 - [ ] Valor resist magic
 - [ ] Courage Fear immune

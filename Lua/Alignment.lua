@@ -19,6 +19,15 @@ local tReligionFromGood = {['SLTH_POLICY_STATE_ESUS']=1, ['SLTH_POLICY_STATE_OCT
 local tReligionFromEvil = {['SLTH_POLICY_STATE_EMPYREAN']=1, ['SLTH_POLICY_STATE_RUNES']=1}
 local tReligionForceAlignment = {['SLTH_POLICY_STATE_ORDER']=2, ['SLTH_POLICY_STATE_VEIL']=0}
 
+local tReligionPolicies = {['SLTH_POLICY_STATE_ESUS']=true, ['SLTH_POLICY_STATE_OCTOPUS']=true,
+                           ['SLTH_POLICY_STATE_EMPYREAN']=true, ['SLTH_POLICY_STATE_RUNES']=true,
+                           ['SLTH_POLICY_STATE_ORDER']=true, ['SLTH_POLICY_STATE_VEIL']=true,
+                           ['SLTH_POLICY_STATE_LEAVES']=true}
+
+local tReligionNames = {[1]='SLTH_POLICY_STATE_ESUS', [2]='SLTH_POLICY_STATE_OCTOPUS',
+                           [3]= 'SLTH_POLICY_STATE_EMPYREAN', [4]='SLTH_POLICY_STATE_RUNES',
+                           [5]='SLTH_POLICY_STATE_ORDER', [6]='SLTH_POLICY_STATE_VEIL', [7] = 'SLTH_POLICY_STATE_LEAVES'}
+
 local tReligionAlignment = {
     ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
     ['RELIGION_CATHOLICISM']=1,
@@ -119,10 +128,10 @@ local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 
 
 
-function onReligionSwitch(playerID, policyID, wasEnacted)                -- TODO not attached to anything currently
-    -- get pPlayer somehow
-    if not wasEnacted then return end
+function onReligionSwitch(playerID, policyID, wasEnacted)
+    if not wasEnacted then return; end
     local sReligion = GameInfo.Policies[policyID].PolicyType
+    if not tReligionPolicies[sReligion] then return; end
     local pPlayer = Players[playerID]
     local iCurrentAlignment = pPlayer:GetProperty('alignment')
     local iNewAlignment = tReligionForceAlignment[sReligion]
@@ -133,11 +142,18 @@ function onReligionSwitch(playerID, policyID, wasEnacted)                -- TODO
             iNewAlignment = tReligionFromEvil[sReligion]
         end
     end
+    local pPlot = pPlayer:GetCities():GetCapitalCity():GetPlot()
     if iNewAlignment then
         pPlayer:SetProperty('alignment', iNewAlignment)
-        local pPlot = pPlayer:GetCities():GetCapitalCity():GetPlot()
         pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
         pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
+    end
+    for idx, sReligionPropKey in ipairs(tReligionNames) do
+        if sReligionPropKey == sReligion then
+            pPlot:SetProperty(sReligionPropKey, 1)
+        else
+            pPlot:SetProperty(sReligionPropKey, 0)
+        end
     end
 end
 
@@ -226,8 +242,11 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
             AdjustArmageddonCount(5)            -- Compact broken
         end
         local iAlignment = pPlayer:GetProperty('alignment') or 0                                -- set player alignment
+        print('Player alignment on capital settle was ' .. tostring(iAlignment))
+
         local pPlot = Map.GetPlotByIndex(plotID)
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
+        if tAlignmentPropKeys[iAlignment] then print('Setting to 1 capital property ' .. tostring(tAlignmentPropKeys[iAlignment])); end
 
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')
@@ -552,6 +571,7 @@ function onStart()
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
+                print('setting player alignment to ' .. tostring(iLeaderAlignment))
             else
                 pPlayer:SetProperty('alignment', -1)                -- to catch errors, remove at production
             end
