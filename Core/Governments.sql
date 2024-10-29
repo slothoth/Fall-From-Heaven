@@ -194,8 +194,8 @@ INSERT INTO ModifierArguments(ModifierId, Name, Type, Value) VALUES
 ('MODIFIER_SLTH_POLICY_SACRIFICE_THE_WEAK_ADJUST_HOUSING', 'Amount', 'ARGTYPE_IDENTITY', '-4'),
 ('MODIFIER_SLTH_POLICY_SACRIFICE_THE_WEAK_ADD_GOLDYIELD', 'Amount', 'ARGTYPE_IDENTITY', '10'),
 ('MODIFIER_SLTH_POLICY_SACRIFICE_THE_WEAK_ADD_GOLDYIELD', 'YieldType', 'ARGTYPE_IDENTITY', 'YIELD_GOLD'),
-('MODIFIER_SLTH_POLICY_SACRIFICE_THE_WEAK_ADD_HALF_FOOD', 'Amount', 'ARGTYPE_IDENTITY', '2'),
-('MODIFIER_SLTH_POLICY_SACRIFICE_THE_WEAK_ADD_HALF_FOOD', 'YieldType', 'ARGTYPE_IDENTITY', 'YIELD_FOOD'),
+('MODIFIER_SLTH_POLICY_SACRIFICE_THE_WEAK_HALF_FOOD', 'Amount', 'ARGTYPE_IDENTITY', '2'),
+('MODIFIER_SLTH_POLICY_SACRIFICE_THE_WEAK_HALF_FOOD', 'YieldType', 'ARGTYPE_IDENTITY', 'YIELD_FOOD'),
 ('MODIFIER_SLTH_POLICY_SOCIAL_ORDER_BUILDING_COURTHOUSE_ADD_AMENITIES', 'SLTH_POLICY_SOCIAL_ORDER', 'ARGTYPE_IDENTITY', '1'),
 ('MODIFIER_SLTH_POLICY_SOCIAL_ORDER_BUILDING_BASILICA_ADD_AMENITIES', 'SLTH_POLICY_SOCIAL_ORDER', 'ARGTYPE_IDENTITY', '1'),
 ('MODIFIER_SLTH_POLICY_CONSUMPTION_ADD_GOLDYIELD', 'Amount', 'ARGTYPE_IDENTITY', '20'),
@@ -389,26 +389,26 @@ INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_VEIL_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ALL');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_VEIL_STATE_RELIGION_REQS', 'NOT_VEIL_STATE_RELIGION');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_VEIL_STATE_RELIGION', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_VEIL_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_VEIL');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_VEIL_STATE_RELIGION', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_VEIL_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_VEIL');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_VEIL_STATE_RELIGION', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_LEAVES_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ALL');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_LEAVES_STATE_RELIGION_REQS', 'NOT_LEAVES_STATE_RELIGION');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_LEAVES_STATE_RELIGION', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_LEAVES_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_LEAVES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_LEAVES_STATE_RELIGION', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_LEAVES_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_LEAVES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_LEAVES_STATE_RELIGION', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_RUNES_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ALL');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_RUNES_STATE_RELIGION_REQS', 'NOT_RUNES_STATE_RELIGION');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_RUNES_STATE_RELIGION', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_RUNES_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_RUNES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_RUNES_STATE_RELIGION', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_RUNES_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_RUNES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_RUNES_STATE_RELIGION', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_ORDER_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ALL');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_ORDER_STATE_RELIGION_REQS', 'NOT_ORDER_STATE_RELIGION');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_ORDER_STATE_RELIGION', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_ORDER');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_ORDER');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyMinimum', '1');
 
 
 -- religion policies, initially banned
@@ -626,7 +626,7 @@ INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 INSERT INTO Requirements(RequirementId, RequirementType) VALUES
 ('PLAYER_IS_GRIGORI', 'REQUIREMENT_PLAYER_TYPE_MATCHES'),
 ('PLAYER_IS_ILLIAN', 'REQUIREMENT_PLAYER_TYPE_MATCHES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
 ('PLAYER_IS_GRIGORI', 'CivilizationType', 'SLTH_CIVILIZATION_GRIGORI'),
 ('PLAYER_IS_ILLIAN', 'CivilizationType', 'SLTH_CIVILIZATION_ILLIANS');
 
@@ -636,8 +636,8 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
 ('CAN_VEIL_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
 ('CAN_VEIL_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('HAS_NO_CITIES_WITH_VEIL', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_VEIL', 'PropertyName', 'VEIL_CITIES');                       -- this property not yet implemented
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_VEIL', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_VEIL', 'PropertyName', 'VEIL_CITIES');                       -- this property not yet implemented
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_VEIL', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('CAN_LEAVES_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
@@ -645,8 +645,8 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
 ('CAN_LEAVES_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
 ('CAN_LEAVES_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('HAS_NO_CITIES_WITH_LEAVES', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_LEAVES', 'PropertyName', 'LEAVES_CITIES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_LEAVES', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_LEAVES', 'PropertyName', 'LEAVES_CITIES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_LEAVES', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('CAN_RUNES_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
@@ -654,8 +654,8 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
 ('CAN_RUNES_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
 ('CAN_RUNES_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('HAS_NO_CITIES_WITH_RUNES', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_RUNES', 'PropertyName', 'RUNES_CITIES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_RUNES', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_RUNES', 'PropertyName', 'RUNES_CITIES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_RUNES', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('CAN_ORDER_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
@@ -663,8 +663,8 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
 ('CAN_ORDER_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
 ('CAN_ORDER_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('HAS_NO_CITIES_WITH_ORDER', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_ORDER', 'PropertyName', 'ORDER_CITIES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_ORDER', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_ORDER', 'PropertyName', 'ORDER_CITIES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_ORDER', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('CAN_OCTOPUS_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
@@ -672,8 +672,8 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
 ('CAN_OCTOPUS_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
 ('CAN_OCTOPUS_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('HAS_NO_CITIES_WITH_OCTOPUS', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_OCTOPUS', 'PropertyName', 'OCTOPUS_CITIES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_OCTOPUS', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_OCTOPUS', 'PropertyName', 'OCTOPUS_CITIES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_OCTOPUS', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('CAN_EMPYREAN_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
@@ -681,8 +681,8 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
 ('CAN_EMPYREAN_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
 ('CAN_EMPYREAN_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('HAS_NO_CITIES_WITH_EMPYREAN', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_EMPYREAN', 'PropertyName', 'EMPYREAN_CITIES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_EMPYREAN', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_EMPYREAN', 'PropertyName', 'EMPYREAN_CITIES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_EMPYREAN', 'PropertyMinimum', '1');
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('CAN_ESUS_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
@@ -690,8 +690,8 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
 ('CAN_ESUS_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
 ('CAN_ESUS_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('HAS_NO_CITIES_WITH_ESUS', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_ESUS', 'PropertyName', 'ESUS_CITIES');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('HAS_NO_CITIES_WITH_ESUS', 'PropertyMinimum', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_ESUS', 'PropertyName', 'ESUS_CITIES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('HAS_NO_CITIES_WITH_ESUS', 'PropertyMinimum', '1');
 
 -- civ level bans: Bannor only one allowed
 
@@ -707,7 +707,7 @@ INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_BANNOR_REQUIREMENTS', 'REQUIREMENTSET_TEST_ALL');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_BANNOR_REQUIREMENTS', 'PLAYER_IS_NOT_BANNOR');
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('PLAYER_IS_NOT_BANNOR', 'REQUIREMENT_PLAYER_TYPE_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES ('PLAYER_IS_NOT_BANNOR', 'CivilizationType', 'SLTH_CIVILIZATION_BANNOR');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('PLAYER_IS_NOT_BANNOR', 'CivilizationType', 'SLTH_CIVILIZATION_BANNOR');
 
 
 INSERT INTO Types(Type, Kind) VALUES

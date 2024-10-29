@@ -2109,7 +2109,31 @@ function GetCombatModifierList(combatantHash:number)
 		end
 	end
 	if (modifierModifierText ~= nil) then
+		local tModifierUniques = {}
+		local tNumStrippedUniques = {}
+		local tNumStrippedUniquesAmounts = {}
+		local sStrippedItem
+		local sNewItem
+		local iStrippedAmount
 		for i, item in ipairs(modifierModifierText) do
+			iStrippedAmount = item:match("%d+")
+			if iStrippedAmount then
+				sStrippedItem = item:gsub(iStrippedAmount, '{{PLACEHOLDER}}', 1)
+				if tNumStrippedUniques[sStrippedItem] then
+					tNumStrippedUniques[sStrippedItem] = tNumStrippedUniques[sStrippedItem] + iStrippedAmount
+				else
+					tNumStrippedUniques[sStrippedItem] = iStrippedAmount
+				end
+			else
+				tModifierUniques[item] = 1
+			end
+		end
+		for item, amount in pairs(tNumStrippedUniques) do
+			sNewItem = item:gsub('{{PLACEHOLDER}}', tostring(amount), 1)
+			item = sNewItem
+			modifierList, modifierListSize = AddModifierToList(modifierList, modifierListSize, Locale.Lookup(item), "ICON_STRENGTH");
+		end
+		for item, amount in pairs(tModifierUniques) do
 			modifierList, modifierListSize = AddModifierToList(modifierList, modifierListSize, Locale.Lookup(item), "ICON_STRENGTH");
 		end
 	end

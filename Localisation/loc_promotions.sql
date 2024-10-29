@@ -141,7 +141,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_PROMOTION_CITY_RAIDER2_DESCRIPTION', '+8 [ICON_Strength] Combat Strength while fighting in a District', 'en_US'),
 ('LOC_PROMOTION_CITY_RAIDER3_DESCRIPTION', '+10 [ICON_Strength] Combat Strength while fighting in a District +4 [ICON_Strength] Combat Strength against Melee units', 'en_US'),
 ('LOC_PROMOTION_COMBAT1_DESCRIPTION', '+4[ICON_Strength] Combat Strength', 'en_US'),
-('LOC_PROMOTION_MINOR_GENERIC_STRENGTH', '+4[ICON_Strength] Combat Strength', 'en_US'),
+('LOC_PROMOTION_MINOR_GENERIC_STRENGTH', '+{1_Amount}[ICON_Strength] Combat Strength', 'en_US'),
 ('LOC_PROMOTION_COVER2_DESCRIPTION', '+7 [ICON_Strength] Combat Strength against Archer units', 'en_US'),
 ('LOC_PROMOTION_COVER_DESCRIPTION', '+7 [ICON_Strength] Combat Strength against Archer units', 'en_US'),
 ('LOC_PROMOTION_DRILL4_DESCRIPTION', '+4 [ICON_Strength] Combat Strength against Mounted units', 'en_US'),
