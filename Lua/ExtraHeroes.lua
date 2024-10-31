@@ -2,7 +2,7 @@
 -- Original Author: Flactine --
 -- Altered by: Slothoth --
 --------------------------------------------------------------
-tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
+local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
@@ -19,12 +19,12 @@ tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
 		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
 		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
 }
-tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_HALL_OF_KINGS',
+local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_HALL_OF_KINGS',
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_CASTE_SYSTEM',
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
 
-tEquipmentUnits = {
+local tEquipmentUnits = {
 	[GameInfo.Units['SLTH_EQUIPMENT_ATHAME'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
 	[GameInfo.Units['SLTH_EQUIPMENT_BLACK_MIRROR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
 	[GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
@@ -45,12 +45,13 @@ tEquipmentUnits = {
 	[GameInfo.Units['SLTH_EQUIPMENT_ROD_OF_WINDS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index,
 	[GameInfo.Units['SLTH_EQUIPMENT_SCORCHED_STAFF'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index,
 	[GameInfo.Units['SLTH_EQUIPMENT_STAFF_OF_SOULS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_SPELL_STAFF'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index,
 	[GameInfo.Units['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index,
 	[GameInfo.Units['SLTH_EQUIPMENT_TIMOR_MASK'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index,
 	[GameInfo.Units['SLTH_EQUIPMENT_TREASURE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TREASURE_ABILITY'].Index,
 	[GameInfo.Units['SLTH_EQUIPMENT_WAR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index }
 
-tEquipmentAbilities = {
+local tEquipmentAbilities = {
 	[1] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
 	[2] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
 	[3] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
@@ -73,133 +74,9 @@ tEquipmentAbilities = {
 	[20] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index,
 	[21] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index,
 	[22] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index,
-	[23] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index}
+	[23] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index,
+	[24] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index}
 
-function AndyLawFunction(iAndyPlayer, iUnit, unit_summoned, iX, iY)
-	local pUnit = UnitManager.GetUnit(iAndyPlayer, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	playerUnits:Create(unit_summoned, iX, iY);
-end
-
-function AoeDamageFunction(iCaster, iUnit, iDamage, iX, iY)
-	local pUnit = UnitManager.GetUnit(iCaster, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	UnitManager.FinishMoves(pUnit);
-	local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 2);
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit ~= nil) then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer ~= iCaster) then
-					if Players[iCaster]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
-						if (GameInfo.Units[pNearUnit:GetType()].Combat ~= 0 and GameInfo.Units[pNearUnit:GetType()].Domain ~= "DOMAIN_AIR") then
-							pNearUnit:ChangeDamage(iDamage);
-							if pNearUnit:GetDamage() >= 100 then
-								UnitManager.Kill(pNearUnit, false);
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end
-
-function ApplyDebuffAoeFunction(iCaster, iUnit, iX, iY)
-	local pUnit = UnitManager.GetUnit(iCaster, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	-- playerUnits:Create(unit_summoned, iX, iY);
-end
-
-function ApplyBuffAoeFunction(iCaster, iUnit, iX, iY)
-	local pUnit = UnitManager.GetUnit(iCaster, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	-- playerUnits:Create(unit_summoned, iX, iY);
-end
-
-function ChangeTerrainFunction(iCaster, iUnit, iX, iY)
-	local pUnit = UnitManager.GetUnit(iCaster, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	-- playerUnits:Create(unit_summoned, iX, iY);
-end
-
-function PickUpItemFunction(iCaster, iUnit, iX, iY)
-	local pUnit = UnitManager.GetUnit(iCaster, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	-- playerUnits:Create(unit_summoned, iX, iY);
-end
-
-function DropItemFunction(iCaster, iUnit, iX, iY)
-	local pUnit = UnitManager.GetUnit(iCaster, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	-- playerUnits:Create(unit_summoned, iX, iY);
-end
-
-function TakeItemFunction(iCaster, iUnit, iX, iY)
-	local pUnit = UnitManager.GetUnit(iCaster, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	-- playerUnits:Create(unit_summoned, iX, iY);
-end
-
-function SummonFunction(iAndyPlayer, iUnit, unit_summoned, iX, iY)
-	local pUnit = UnitManager.GetUnit(iAndyPlayer, iUnit);
-	local player = pUnit:GetOwner();
-	local playerReal = Players[player];
-	local playerUnits = playerReal:GetUnits();
-	playerUnits:Create(unit_summoned, iX, iY);
-end
-
-function GrantBuildingFunction(iAndyPlayer, iUnit, iX, iY, sModifierGrant)
-	local pUnit = UnitManager.GetUnit(iAndyPlayer, iUnit);
-	local pCity = Cities.GetCityInPlot(iX, iY)
-	pCity:AttachModifierByID(sModifierGrant);
-	UnitManager.Kill(pUnit);
-end
-
-function GrantSuperSpecialist(iAndyPlayer, iUnit, iX, iY)
-	local pUnit = UnitManager.GetUnit(iAndyPlayer, iUnit);
-	local iUnitType = pUnit:GetType();
-	local pCity = Cities.GetCityInPlot(iX, iY)
-	for idx, sModifier in ipairs(tSuperSpecialistModifiers[iUnitType]) do
-		pCity:AttachModifierByID(sModifier)
-	end
-	for idx, sModifier in ipairs(tSuperSpecialistGenericModifiers) do
-		pCity:AttachModifierByID(sModifier)
-	end
-	UnitManager.Kill(pUnit);
-end
-
-function GrantGoldenAge(iPlayer, t_iUnits)
-	local pPlayer = Players[iPlayer]
-	local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
-	for iUnitType, iUnitID in pairs(t_iUnits) do
-		local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
-		UnitManager.Kill(pUnit);
-	end
-	for idx, pCity in pPlayer:GetCities():Members() do
-		local pPlot = pCity:GetPlot();
-		print(pPlot)						-- plot exists
-        pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instea of nil?
-	end
-	pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + 10)
-	pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
-end
 
 function ConsumeEquipment(iPlayer, iUnitID, consumeUnitID)
 	local hasEquipment
@@ -213,9 +90,7 @@ function ConsumeEquipment(iPlayer, iUnitID, consumeUnitID)
 	if equipAbility then
 		if not pUnitAbilityManager:HasAbility(equipAbility) then
 			pUnit:GetAbility():AddAbilityCount(equipAbility)
-			print('Added ability to unit')
 			UnitManager.Kill(pConsumeUnit);
-			print('killed equipment')
 			bSuccess = 1
 		else
 			print('not granted as unit already has ability')
@@ -278,26 +153,27 @@ function TimerSystem(playerID)
 	end
 end
 
-function SetPlotProperty(iX, iY, sProperty, ValueToSet)
-	print(iX)
-	print(iY)
-	local pPlot = Map.GetPlot(iX, iY)
-	print(pPlot)
-	pPlot:SetProperty(sProperty, ValueToSet)
-end
-
 function Initialize()
 	if ExposedMembers.ExtraHeroes == nil then
 		ExposedMembers.ExtraHeroes = {}
 	end
-	ExposedMembers.ExtraHeroes.AndyLawFunction = AndyLawFunction;
 	ExposedMembers.ExtraHeroes.GrantBuildingFunction = GrantBuildingFunction;
 	ExposedMembers.ExtraHeroes.GrantSuperSpecialist = GrantSuperSpecialist;
 	ExposedMembers.ExtraHeroes.GrantGoldenAge = GrantGoldenAge
 	ExposedMembers.ExtraHeroes.ConsumeEquipment = ConsumeEquipment
-	ExposedMembers.ExtraHeroes.SetPlotProperty = SetPlotProperty
 	tTimers = {GoldenAges = { sProperty = 'GoldenAgeDuration', callback = FlushGoldenAge}}
 end
+
+local function SetCapitalProperty(iPlayer, tParameters)
+    local sPropKey = tParameters.sPropKey;
+    local iPropValue = tParameters.iPropValue;
+    local pPlayer = Players[iPlayer];
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    local pCapitalPlot = pCapitalCity:GetPlot()
+    pCapitalPlot:SetProperty(sPropKey, iPropValue)
+end
+
+GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 
 Initialize();
 GameEvents.PlayerTurnDeactivated.Add(TimerSystem);

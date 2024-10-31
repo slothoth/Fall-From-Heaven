@@ -22,8 +22,8 @@
 			<m_ObjectName text="FALLBACK_NEUTRAL_SLTH_LEADER_ARTURUS"/>
 		</Element>
 		<Element>
-			<m_EntryID text="FALLBACK_NEUTRAL_SLTH_LEADER_ALEXIS"/>
-			<m_ObjectName text="FALLBACK_NEUTRAL_SLTH_LEADER_ALEXIS"/>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_ALEXIS"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_ALEXIS"/>
 		</Element>
 		<Element>
 			<m_EntryID text="FALLBACK_NEUTRAL_SLTH_LEADER_AURIC"/>

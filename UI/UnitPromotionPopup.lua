@@ -38,6 +38,8 @@ local tSmallNodes = { ['DEATH_ONE'] = 1, ['FIRE_ONE'] = 1, ['AIR_ONE'] = 1, ['BO
 -- ===========================================================================
 local m_PromotionListInstanceMgr			:table	= InstanceManager:new( "PromotionSelectionInstance",			"PromotionSelection",	Controls.PromotionContainer );
 local m_CompletedPromotionListInstanceMgr	:table	= InstanceManager:new( "CompletedPromotionSelectionInstance",	"PromotionSelection",	Controls.PromotionContainer );
+local m_PromotionListManaInstanceMgr			:table	= InstanceManager:new( "PromotionSelectionInstanceMana",			"PromotionSelection",	Controls.PromotionContainer );
+local m_CompletedPromotionListManaInstanceMgr	:table	= InstanceManager:new( "CompletedPromotionSelectionInstanceMana",	"PromotionSelection",	Controls.PromotionContainer );
 local m_kLineIM		:table	= InstanceManager:new( "LineImageInstance", 					"LineImage",			Controls.PromotionContainer );
 local m_uiNodes		:table	= {};
 
@@ -124,6 +126,8 @@ function OnPromoteUnitPopup()
 
 	m_PromotionListInstanceMgr:ResetInstances();
 	m_CompletedPromotionListInstanceMgr:ResetInstances();
+	m_PromotionListManaInstanceMgr:ResetInstances();
+	m_CompletedPromotionListManaInstanceMgr:ResetInstances();
 	m_kLineIM:ResetInstances();
 	m_uiNodes = {};
 	local hasPromotion:boolean;
@@ -276,19 +280,22 @@ function OnPromoteUnitPopup()
 			local promotionInstance;
 			local promotionDefinition = row;
 			m_uiNodes[row.UnitPromotionType] = row;
-			
-			if hasPromotion then
-				promotionInstance = m_CompletedPromotionListInstanceMgr:GetInstance();
-			else
-				promotionInstance = m_PromotionListInstanceMgr:GetInstance();
-			end
 			local bIsSmallNode = tSmallNodes[row.UnitPromotionType]
 			if bIsSmallNode then
-				promotionInstance.PromotionSelection:SetSizeVal(62,100)
+				if hasPromotion then
+					promotionInstance = m_CompletedPromotionListManaInstanceMgr:GetInstance();
+				else
+					promotionInstance = m_PromotionListManaInstanceMgr:GetInstance();
+				end
+			else
+				if hasPromotion then
+					promotionInstance = m_CompletedPromotionListInstanceMgr:GetInstance();
+				else
+					promotionInstance = m_PromotionListInstanceMgr:GetInstance();
+				end
+			end
+			if bIsSmallNode then
 				promotionInstance.PromotionSelection:SetOffsetVal((row.Column+10)*35, (row.Level-1)*SIZE_NODE_Y);
-				promotionInstance.PromotionName:SetOffsetX(15)
-				--print(promotionInstance.PromotionDescription.WrapWidth)
-				promotionInstance.PromotionDescription.WrapWidth=55
 			else
 				promotionInstance.PromotionSelection:SetOffsetVal((row.Column-1)*SIZE_NODE_X, (row.Level-1)*SIZE_NODE_Y);
 				promotionInstance.PromotionSelection:SetSizeVal(248,100)

@@ -22,7 +22,7 @@ local tMonitoredResources = {
     [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='WATER'},
     [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='SUN'},
     [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='SHADOW'},
-    [GameInfo.Resources['RESOURCE_BANANAS'].Index] = { rtype='AFFINITY', name='BANANAS'},
+    [GameInfo.Resources['RESOURCE_BANANA'].Index] = { rtype='AFFINITY', name='BANANA'},
     [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='COPPER'},
     [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='IRON'},
     [GameInfo.Resources['RESOURCE_MITHRIL'].Index] = { rtype='AFFINITY', name='MITHRIL'},
@@ -73,29 +73,80 @@ local tBarbNW = {
 	[GameInfo.Features['FEATURE_YOSEMITE'].Index] = 1}
 
 local tBinaryMap = {
-    [0]={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
-    [1]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [2]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [3]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [4]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [5]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [6]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [7]={['8']=0, ['4']=0, ['2']=0, ['1']=0,},
-    [8]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [9]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [10]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [11]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [12]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [13]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [14]={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
-    [15]={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
+    ['0']={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
+    ['1']={['8']=0, ['4']=0, ['2']=0, ['1']=1,},
+    ['2']={['8']=0, ['4']=0, ['2']=1, ['1']=0,},
+    ['3']={['8']=0, ['4']=0, ['2']=1, ['1']=1,},
+    ['4']={['8']=0, ['4']=1, ['2']=0, ['1']=0,},
+    ['5']={['8']=0, ['4']=1, ['2']=0, ['1']=1,},
+    ['6']={['8']=0, ['4']=1, ['2']=1, ['1']=0,},
+    ['7']={['8']=0, ['4']=1, ['2']=1, ['1']=1,},
+    ['8']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['9']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['10']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['11']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['12']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['13']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['14']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['15']={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
 }
+
+local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
+	[GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]={
+	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_SCIENCE', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION',
+	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_SIDAR', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_GUILD_OF_HAMMERS'},
+	[GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]={
+		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_PROD', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE',
+		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_SIDAR', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_GREAT_LIB'},
+	[GameInfo.Units['UNIT_GREAT_ARTIST'].Index]={
+		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_GOLD',
+		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_SIDAR', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_THEATRE_OF_DREAMS'},
+	[GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]={
+		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
+		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
+}
+
+local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_HALL_OF_KINGS',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_CASTE_SYSTEM',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
 
 function SlthLog(sMessage)
     SLTH_DEBUG_ON = nil
     if SLTH_DEBUG_ON then
         print(sMessage)
     end
+end
+
+local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
+    local iX =  pCasterUnit:GetX()
+    local iY =  pCasterUnit:GetY()
+    local playerReal = Players[iPlayer];
+    local playerUnits = playerReal:GetUnits();
+    local pPlot = Map.GetPlot(iX, iY)
+    local tBeforeSummonUnits = {}
+    for loop, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+        if pOnTileUnit then
+            tBeforeSummonUnits[pOnTileUnit:GetID()] = true
+        end
+    end
+    playerUnits:Create(iUnitIndex, iX, iY);
+    local tNewUnits = {}
+    for loop, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+        if pOnTileUnit then
+            local iUnitID = pOnTileUnit:GetID()
+            if not tBeforeSummonUnits[iUnitID] then
+                tNewUnits[iUnitID] = pOnTileUnit
+            end
+        end
+    end
+    for iUnitID, pNewUnit in pairs(tNewUnits) do
+        print('set inherited abilities here')
+    end
+    return tNewUnits
 end
 
 function onTurnStartGameplay(playerId)
@@ -238,6 +289,7 @@ local tBarbClanUnitMapper = {
     [GameInfo.Units['SLTH_UNIT_LION'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Index,
     [GameInfo.Units['SLTH_UNIT_BEAR'].Index] = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
 }
+local MANA_INDEX = GameInfo.Resources['RESOURCE_MANA'].Index
 function InitCottage(x, y, improvementIndex, playerID)
     local iImprovementUpgradeIndex = tImprovementsProgression[improvementIndex]
     if iImprovementUpgradeIndex then
@@ -266,21 +318,22 @@ function InitCottage(x, y, improvementIndex, playerID)
     end
     local pPlot = Map.GetPlot(x,y);
     local resourceIndex = pPlot:GetResourceType()
-	if resourceIndex == GameInfo.Resources['RESOURCE_MANA'].Index then
-         local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
-        if not iResourceToChangeTo then
+    --print('Resource Index: ' .. tostring(resourceIndex))
+    --print('Mana Resource Index: ' .. tostring(MANA_INDEX))
+	if resourceIndex == MANA_INDEX then
+        local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
+        if iResourceToChangeTo then
             print('changing resource to ' .. tostring(iResourceToChangeTo))
             ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);
         end
     end
-    print(improvementIndex)
     if improvementIndex then
         local tUnits = Map.GetUnitsAt(pPlot)
         for pUnit in tUnits:Units() do
             local iUnitIndex = pUnit:GetType()
-            print(iUnitIndex)
             local iClanIndex = tBarbClanUnitMapper[iUnitIndex]
             if iClanIndex then
+                -- print(iUnitIndex)
                 pPlot:SetProperty('barbclantype', iClanIndex)
             end
         end
@@ -308,31 +361,6 @@ function IncrementCottages(playerId)
             else
                 pPlot:SetProperty('worked_turns', iWorkedTurns+1)
                 print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
-            end
-        end
-    end
-end
-
-function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
-    local iResourceInfo = tMonitoredResources[resourceTypeID]
-    if iResourceInfo then
-        local pPlayer = Players[ownerPlayerID];
-        local resources = pPlayer:GetResources()
-        local iResourceCount = resources:GetResourceAmount(resourceTypeID);
-        local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-        local pCapitalPlot = pCapitalCity:GetPlot()
-        local sRscName = iResourceInfo['name']
-        local sPropKeyCount =  sRscName .. '_COUNT'
-        local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or -1
-        if iResourceCount ~= iPastResource then
-            pCapitalPlot:SetProperty(sPropKeyCount, iResourceCount)
-            local tBinariesToSet = tBinaryMap[iResourceCount]
-            local sPropKey =  sRscName .. '_BINARY_'
-            local sFullPropKey
-            for key, val in pairs(tBinariesToSet) do
-                sFullPropKey = sPropKey + key
-                pCapitalPlot:SetProperty(sPropKeyCount, val)
-                print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
             end
         end
     end
@@ -519,10 +547,518 @@ function onStart()
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
-    Events.PlayerResourceChanged.Add(UpdateResourceAvailability)
     InitializeClans()
     print('-----------------Gameplay loaded')
 end
+
+local function SetCapitalProperty(iPlayer, tParameters)
+    local sPropKey = tParameters.sPropKey;
+    local iPropValue = tParameters.iPropValue;
+    local pPlayer = Players[iPlayer];
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    local pCapitalPlot = pCapitalCity:GetPlot()
+    pCapitalPlot:SetProperty(sPropKey, iPropValue)
+end
+
+local function OnSummon(iPlayer, tParameters)
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    BaseSummon(pUnit, iPlayer, iUnitToSummon)
+end
+
+local function OnSummonPermanent(iPlayer, tParameters)
+    print('in summon permanent')
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iCheckExistingUnit = pUnit:GetProperty(OperationInfo.SimpleText)
+    print(iCheckExistingUnit)
+    if iCheckExistingUnit then
+        local pUnitPrecursor = UnitManager.GetUnit(iPlayer, iCheckExistingUnit);
+        if pUnitPrecursor then return end
+    end
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    for iUnitID, pNewUnit in pairs(tNewUnits) do
+        print('set inherited abilities here')
+        print(OperationInfo.SimpleText)
+        pUnit:SetProperty(OperationInfo.SimpleText, iUnitID)                -- used to link summoner and summoned
+        pNewUnit:SetProperty('owner', tParameters.iCastingUnit)             -- used to link summoner and summoned
+    end
+end
+
+local function OnGrantBuffSelf(iPlayer, tParameters)
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local pAbilityUnit = pUnit:GetAbility()
+    if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
+        pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+    end
+end
+
+local function OnGrantBuffAoe(iPlayer, tParameters)
+    local pAbilityUnit
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if pNearUnit then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer == iPlayer) then
+                    pAbilityUnit = pNearUnit:GetAbility()
+                    if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
+                        pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+                    end
+				end
+			end
+		end
+	end
+end
+
+local function OnGrantDebuffAoe(iPlayer, tParameters)
+    local pAbilityUnit
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if pNearUnit then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer ~= iPlayer) then
+                    pAbilityUnit = pNearUnit:GetAbility()
+                    if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
+                        pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+                    end
+				end
+			end
+		end
+	end
+end
+
+local function OnSpellChangeTerrain(iPlayer, tParameters)
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local pPlot = Map.GetPlot(iX, iY)
+    local iCurrentTerrain = pPlot:GetTerrainType()
+    local TerrainTransformInfo = GameInfo.TerrainTransforms[iCurrentTerrain]
+    local sSpellType = OperationInfo.SimpleText
+    local attempt = TerrainTransformInfo[sSpellType]
+    print(attempt)
+    local iNewTerrain = TerrainTransformInfo.sSpellType
+    if iNewTerrain then
+        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+    end
+end
+
+local function OnSpellAoeDamage(iPlayer, tParameters)
+    local pAbilityUnit
+    local sUnitOperationType = tParameters.UnitOperationType;
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+    local iDamage = OperationInfo.SecondAmount
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if (pNearUnit) then
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if (iOwnerPlayer ~= iPlayer) then
+					if Players[iPlayer]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
+                        local tagInfo = true
+                        local UnitTypeInfo = GameInfo.Units[pNearUnit:GetType()]
+                        if OperationInfo.SimpleText == 'IS_UNDEAD' then
+                            local tagInfo = GameInfo.TypeTags[{UnitTypeInfo.UnitType, 'IS_UNDEAD'}]
+                        end
+						if (UnitTypeInfo.Combat ~= 0 and UnitTypeInfo.Domain ~= "DOMAIN_AIR") and tagInfo then
+							pNearUnit:ChangeDamage(iDamage);
+							if pNearUnit:GetDamage() >= 100 then
+								UnitManager.Kill(pNearUnit, false);
+                            else
+                                if OperationInfo.SimpleText == 'WITHERED' then
+                                    pAbilityUnit = pNearUnit:GetAbility()
+                                    if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
+                                        pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+                                    end
+                                end
+							end
+                            if OperationInfo.SimpleText == 'TERRAIN_SNOW' then
+                                local pPlot = Map.GetPlot(iX, iY)
+                                local iCurrentTerrain = pPlot:GetTerrainType()
+                                if pPlot:IsHills() then
+                                    iNewTerrain = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
+                                    if  iCurrentTerrain ~= iNewTerrain then
+                                        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+                                    end
+                                elseif pPlot:IsMountain() then
+                                    iNewTerrain = GameInfo.Terrains['TERRAIN_SNOW_MOUNTAIN'].Index
+                                    if iCurrentTerrain ~= iNewTerrain then
+                                        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+                                    end
+                                else
+                                    iNewTerrain = GameInfo.Terrains['TERRAIN_SNOW'].Index
+                                    if iCurrentTerrain ~= iNewTerrain then
+                                        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+                                    end
+                                end
+                            end
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+local function GrantGoldenAge(iPlayer, tParameters)
+	local pPlayer = Players[iPlayer]
+	local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
+    local t_iUnits = {}
+    t_iUnits[1] = tParameters.iCastingUnit                      -- set to just the owner for now
+	for iUnitType, iUnitID in pairs(t_iUnits) do
+		local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+		UnitManager.Kill(pUnit);
+	end
+	for idx, pCity in pPlayer:GetCities():Members() do
+		local pPlot = pCity:GetPlot();
+		print(pPlot)						-- plot exists
+        pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instea of nil?
+	end
+	pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + 10)
+	pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
+end
+
+local function GrantBuildingFunction(iPlayer, tParameters)
+    local iUnit = tParameters.iCastingUnit
+    local sUnitOperationType =  tParameters.UnitOperationType
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local sModifierGrant = OperationInfo.SimpleText
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+	local pCity = Cities.GetCityInPlot(iX, iY)
+	pCity:AttachModifierByID(sModifierGrant);
+	UnitManager.Kill(pUnit);
+end
+
+local function GrantSuperSpecialist(iPlayer, tParameters)
+    local iUnit = tParameters.iCastingUnit
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+	local iUnitType = pUnit:GetType();
+	local pCity = Cities.GetCityInPlot(iX, iY)
+	for idx, sModifier in ipairs(tSuperSpecialistModifiers[iUnitType]) do
+		pCity:AttachModifierByID(sModifier)									-- maybe do binary magic and plotProp
+	end
+	for idx, sModifier in ipairs(tSuperSpecialistGenericModifiers) do
+		pCity:AttachModifierByID(sModifier)
+	end
+	UnitManager.Kill(pUnit);
+end
+
+local function ConsumeAlly(iPlayer, tParameters)
+    print('consuming ally')
+    local iUnit = tParameters.iCastingUnit
+    local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+    local iConsumeUnitID = tParameters.iTargetID
+    local sUnitOperationType =  tParameters.UnitOperationType
+    if sUnitOperationType == 'UNITOPERATION_CONSUME_BLOODPET' then
+        local pConsumeUnit = UnitManager.GetUnit(iPlayer, iConsumeUnitID);
+        local iUnitType = pConsumeUnit:GetType();
+        if iUnitType == GameInfo.Units['UNIT_WARRIOR'].Index then
+            UnitManager.RestoreMovement(pUnit)
+            UnitManager.RestoreUnitAttacks(pUnit)
+            UnitManager.Kill(pConsumeUnit);
+        end
+    elseif sUnitOperationType == 'UNITOPERATION_ABSORB_UNIT' then
+        print('placeholder, flesh golem grafts seem painful.')
+    else
+        print('no behaviour defined for this UnitOp on ConsumeAlly: ' .. sUnitOperationType)
+    end
+end
+
+local tEquipmentOps = {
+['SLTH_EQUIPMENT_ATHAME_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
+['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
+['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
+['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index,
+['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index,
+['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index,
+['SLTH_EQUIPMENT_GELA_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index,
+['SLTH_EQUIPMENT_GODSLAYER_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index,
+['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index,
+['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index,
+['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index,
+['SLTH_EQUIPMENT_JADE_TORC_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index,
+['SLTH_EQUIPMENT_MOKKA_CAULDRON_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_MOKKA_CAULDRON_ABILITY'].Index,
+['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index,
+['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index,
+['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index,
+['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index,
+['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index,
+['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index,
+['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index,
+['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index,
+['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index,
+['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index,
+['SLTH_EQUIPMENT_WAR_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index,
+['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index}
+
+local function UnitCityInteract(iPlayer, tParameters)
+    local iUnit = tParameters.iCastingUnit
+    local sUnitOperationType =  tParameters.UnitOperationType
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local sOperationAbility = OperationInfo.AbilityPrereq
+    if sUnitOperationType == 'UNITOPERATION_LOKI_DISRUPT_CITY' then
+        print('whatever that does lol')
+    elseif sUnitOperationType == 'UNITOPERATION_LOKI_ENTERTAIN_CITY' then
+        print('placeholder, grant gold to casting unit and amenity to city casted in for a turn. ideally will stay as long as loki is nearby, its the Inspiration problem')
+    elseif sUnitOperationType == 'UNITOPERATION_DROWN_WARRIOR' then
+        print('placeholder, kill warrior, replace with Drown. No carry over of state?')
+    elseif sUnitOperationType == 'UNITOPERATION_SACRIFICE_ALTAR' then
+        print('placeholder, kill unit, grant player science.')
+    elseif sUnitOperationType == 'UNITOPERATION_ARENA_FIGHT' then
+        print('placeholder, grant transient amenities, either unit experience or unit dies. no idea on calculation chance.')
+    elseif sOperationAbility and tEquipmentOps[sOperationAbility] then
+        local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+        local iX =  pUnit:GetX()
+        local iY =  pUnit:GetY()
+        local pCity = Cities.GetCityInPlot(iX, iY)
+        pCity:AttachModifierByID(OperationInfo.SimpleText);
+        local pUnitAbilityManager = pUnit:GetAbility()
+        pUnitAbilityManager:RemoveAbilityCount(tEquipmentOps[sOperationAbility]);
+    else
+        print('no behaviour defined for this UnitOp on UnitCityInteract: ' .. sUnitOperationType)
+    end
+end
+
+local function ConvertSelfUnit(iPlayer, tParameters)
+    local sUnitOperationType =  tParameters.UnitOperationType
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    UnitManager.Kill(pUnit);
+end
+
+local tEquipmentUnits = {
+	[GameInfo.Units['SLTH_EQUIPMENT_ATHAME'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_BLACK_MIRROR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_COMMAND'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_DRAGONS_HORDE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_EMPTY_BIER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_GELA'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_GODSLAYER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_GOLDEN_HAMMER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_HEALING_SALVE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_JADE_TORC'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_NETHER_BLADE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_ORTHUSS_AXE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_RESTORATION'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_ROD_OF_WINDS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_SCORCHED_STAFF'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_STAFF_OF_SOULS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_SPELL_STAFF'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_TIMOR_MASK'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_TREASURE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TREASURE_ABILITY'].Index,
+	[GameInfo.Units['SLTH_EQUIPMENT_WAR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index }
+
+local tEquipmentAbilities = {
+	[1] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
+	[2] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
+	[3] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
+	[4] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index,
+	[5] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index,
+	[6] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index,
+	[7] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index,
+	[8] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index,
+	[9] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index,
+	[10] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index,
+	[11] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index,
+	[12] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index,
+	[13] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index,
+	[14] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index,
+	[15] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index,
+	[16] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index,
+	[17] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index,
+	[18] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index,
+	[19] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index,
+	[20] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index,
+	[21] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index,
+	[22] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index,
+	[23] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index,
+	[24] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index}
+
+local function ConsumeEquipment(iPlayer, tParameters)
+	local hasEquipment
+	local iEquipmentAbilityToGrant
+	local iUnitID = tParameters.iCastingUnit
+    local consumeUnitID = tParameters.iTargetID
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+	local pUnitAbilityManager = pUnit:GetAbility()
+	local pConsumeUnit = UnitManager.GetUnit(iPlayer, consumeUnitID);			-- assumes consume unit is owned by same
+	local iConsumeUnitType = pConsumeUnit:GetType()
+	local equipAbility = tEquipmentUnits[iConsumeUnitType]
+	if equipAbility then
+		if not pUnitAbilityManager:HasAbility(equipAbility) then
+			pUnit:GetAbility():AddAbilityCount(equipAbility)
+			UnitManager.Kill(pConsumeUnit);
+		else
+			print('not granted as unit already has ability')
+		end
+	else
+		local pConsumeUnitAbilityManager = pConsumeUnit:GetAbility()
+		for idx, equipAbilityAb in ipairs(tEquipmentAbilities) do
+			hasEquipment = pConsumeUnitAbilityManager:HasAbility(equipAbilityAb)
+			if hasEquipment then
+				iEquipmentAbilityToGrant = equipAbilityAb
+				break
+			end
+		end
+		if iEquipmentAbilityToGrant then
+			if not pUnitAbilityManager:HasAbility(iEquipmentAbilityToGrant) then
+				pUnitAbilityManager:AddAbilityCount(iEquipmentAbilityToGrant)
+				print('Added ability to unit')
+				pConsumeUnitAbilityManager:RemoveAbilityCount(iEquipmentAbilityToGrant);
+				print('removed ability from consumer')
+			else
+				print('dont get ability as already have it')
+			end
+		else
+			print('ERROR: somehow sent command to consume equipment that wasnt configured or had ')
+		end
+	end
+end
+
+
+
+
+local tAllowSphereOne = {
+        [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index]        =    GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_LAW'].Index]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_MIND'].Index]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SUN'].Index]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED'].Index
+    }
+local tAllowSphereTwo = {
+        [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index]=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_LAW'].Index]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_MIND'].Index]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SUN'].Index]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_2'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_2'].Index
+    }
+
+local tAllowSphereThree = {
+        [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index]=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_LAW'].Index]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_MIND'].Index]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_SUN'].Index]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_3'].Index,
+        [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_3'].Index
+    }
+local function UpdateResourcePromotion(iPlayer, tParameters)
+    local iResource = tParameters.ResourceID
+    local pPlayer = Players[iPlayer]
+    local iChanOneGrant = tAllowSphereOne[iResource]
+    local iChanTwoGrant = tAllowSphereTwo[iResource]
+    local iChanThreeGrant = tAllowSphereTwo[iResource]
+    for i, unit in pPlayer:GetUnits():Members() do
+        local iUnitIndex = unit:GetType();
+        local pUnitAbilities = unit:GetAbility()
+        local pUnitExp = unit:GetExperience()
+        if pUnitAbilities:HasAbility('ABILITY_CHANNELING1') then
+            pUnitExp:SetPromotion(iChanOneGrant)
+            print('allow tier 1 of type' .. tostring(iChantGrant))
+        end
+        if pUnitAbilities:HasAbility('ABILITY_CHANNELING2') then
+            pUnitExp:SetPromotion(iChanTwoGrant)
+            print('allow tier 2 of type' .. tostring(iChanTwoGrant))
+        end
+        if pUnitAbilities:HasAbility('ABILITY_CHANNELING3') then
+            pUnitExp:SetPromotion(iChanThreeGrant)
+            print('allow tier 3 of type' .. tostring(iChanThreeGrant))
+        end
+    -- iterate over player units, grant prereq promo
+    end
+end
+local function OnBespokeSpell(iPlayer, tParameters)
+    print('bespoke spell not implemented')
+end
+
+GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+
+GameEvents.SlthSetResourcePromotions.Add(UpdateResourcePromotion);
+
+GameEvents.SlthOnSummon.Add(OnSummon);
+GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);
+GameEvents.SlthOnGrantBuffSelf.Add(OnGrantBuffSelf);
+GameEvents.SlthOnGrantBuffAoEAlly.Add(OnGrantBuffAoe);
+GameEvents.SlthOnGrantAbilityAoeEnemy.Add(OnGrantDebuffAoe);
+GameEvents.SlthOnChangeTerrain.Add(OnSpellChangeTerrain);
+GameEvents.SlthOnAoeDamage.Add(OnSpellAoeDamage);
+GameEvents.SlthOnBespokeSpell.Add(OnBespokeSpell);
+
+GameEvents.SlthOnGrantGoldenAge.Add(GrantGoldenAge);
+GameEvents.SlthOnGrantBuilding.Add(GrantBuildingFunction);
+GameEvents.SlthOnGrantSuperSpecialist.Add(GrantSuperSpecialist);
+GameEvents.SlthOnConsumeAlly.Add(ConsumeAlly);
+GameEvents.SlthOnUnitCityInteract.Add(UnitCityInteract);
+GameEvents.SlthOnConvertSelf.Add(ConvertSelfUnit);
+GameEvents.SlthOnTakeEquipment.Add(ConsumeEquipment);
 
 onStart()
 

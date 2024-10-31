@@ -5,8 +5,9 @@ DELETE FROM BarbarianTribe_MapConditions;
 DELETE FROM BarbarianTribe_MapConditionSets;
 DELETE FROM BarbarianTribeNames;
 
+-- CAN_MOVE_AFTER_PURCHASE TypeProperties, CAN_EVER_TRAIN_CITY_STATE (seems unneeded), CAN_EVER_TRAIN_FREE_CITY (maybe useful to limit barb cities?)
 DELETE FROM UnitCommands WHERE CommandType='UNITCOMMAND_TREAT_WITH_CLAN_RAID';
-
+UPDATE TypeProperties SET Value=0 WHERE Type = 'UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE' and Name='XP_EARNED';
 -- spawn into game. keeping same as goody huts for now
 UPDATE Improvements SET Goody = 1, TilesPerGoody = 64, GoodyRange = 3 WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';
 

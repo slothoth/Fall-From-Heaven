@@ -17,6 +17,7 @@ tEquipmentAbilities = { [GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY']
                         [GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_RESTORATION'].Index,
                         [GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_ROD_OF_WINDS'].Index,
                         [GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_SCORCHED_STAFF'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_SPELL_STAFF'].Index,
                         [GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_STAFF_OF_SOULS'].Index,
                         [GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE'].Index,
                         [GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_TIMOR_MASK'].Index,

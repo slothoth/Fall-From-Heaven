@@ -45,10 +45,11 @@
     <UpdateColors id="FFH_UpdateColorsFrontend">
       <File>Core/Civilization_Colors.sql</File>
     </UpdateColors>
+    <UpdateIcons id="Icons">
+      <File>Icons.xml</File>
+      <File>LeaderIcons.sql</File>
+    </UpdateIcons>
    </FrontEndActions>
-  <UpdateIcons id="Icons">
-    <File>Icons.xml</File>
-  </UpdateIcons>
   <InGameActions>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
@@ -125,7 +126,6 @@
       <File>Core/Specialists/Specialists.sql</File>
       <File>Core/Specialists/GreatPersons.sql</File>
       <File>Core/National_Units.sql</File>
-      <File>Core/CombatBuffs.sql</File>
       <File>Core/CivPolishing.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
@@ -137,6 +137,8 @@
       <File>Core/NaturalWonders.sql</File>
       <File>Core/ElementalDamage.sql</File>
       <File>Core/Affinity.sql</File>
+      <File>Core/UnitCommands.sql</File>
+      <File>Core/LeaderTraits.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -285,9 +287,10 @@
       </Properties>
       <File>MapUtilities.lua</File>
     </ImportFiles-->
-    <UpdateIcons id="Icons">
-      <File>Icons.xml</File>
-    </UpdateIcons>
+  <UpdateIcons id="Icons">
+    <File>Icons.xml</File>
+    <File>LeaderIcons.sql</File>
+  </UpdateIcons>
   </InGameActions>
   <Files>
     <File>Localisation/loc_abilities.sql</File>
@@ -354,7 +357,6 @@
     <File>Core/Civilizations/BeastRaces/Clan.sql</File>
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
     <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
-    <File>Core/CombatBuffs.sql</File>
     <File>Core/BarbarianClans.sql</File>
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
@@ -363,6 +365,8 @@
     <File>Core/NaturalWonders.sql</File>
     <File>Core/ElementalDamage.sql</File>
     <File>Core/Affinity.sql</File>
+    <File>Core/UnitCommands.sql</File>
+    <File>Core/LeaderTraits.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
@@ -381,6 +385,7 @@
     <!--File>MapUtilities.lua</File-->
     <File>ArtDefs/Buildings.artdef</File>
     <File>ArtDefs/Civilizations.artdef</File>
+    <File>Artdefs/Clutter.artdef</File>
     <File>Artdefs/Cultures.artdef</File>
     <File>Artdefs/FallbackLeaders.artdef</File>
     <File>Artdefs/Landmarks.artdef</File>
@@ -389,6 +394,7 @@
     <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons.xml</File>
+    <File>LeaderIcons.sql</File>
     <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>

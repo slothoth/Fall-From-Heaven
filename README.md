@@ -54,8 +54,8 @@ Victory Conditions [x]
 - [ ] Death resistance: 100%, GodSlayer,  Illusion. 50% Magic Immune, Stoneskin. 20% Magic Resistance, Sheut Stone 
 - [x] Death resistance: 100%,Demon, Elemental, Golem, Undead. 50% Angel
 - [x] can then just do as modifier with requirements in a binaryish way, if only 5 possible ways. i.e. if unit doesnt have 20% tag, do 1 damage. if unit doesnt have 50% tag, do 3 damage. if unit doesnt have immune tag, do 2 damage for full 6.
-- [ ] Affinity system
-- [ ] On three equipments
+- [x] Affinity system
+- [ ] Affinities on on three equipments.
 - [ ] With different damage types.
 ## Armageddon Counter:
 - [x] Contributons to Armageddon count (Razing non-Veil cities (makes City Ruins improvement), Prophecy Mark units being created, Wonders being created. Ashen Veil founding, Ashen Veil spread, Compact broken (hyborem or Basium), Sheaim project, Illian projects? War equipment kills)
@@ -72,7 +72,7 @@ in civ iv, act as promotions that give buffs, and allow the dropping of item, to
 - [x] ability that can be removed by lua on button press : Reasonably easy to implement for player as button, not for AI. Attempts with custom FormationClasses have failed as entering formation fails for combining novel formationClasses. Would limit a unit to one unit, one item.
 - [x] 0 movement ingame unit that is destroyed/summoned, support class? A button to apply an effect on the combat unit in the same tile seems feasible. As does removing it. We don't need to store unit state, beyond its UnitType. Lua Event: UnitRemovedFromMap to respawn all items when a unit with them dies?
 - [x] Need to distribute hidden ability to all combat units, to be able to pick up any of the items implemeneted. Seems reasonable in SQL. weapons cant stack.
-- [ ] Implement ability modifiers
+- [x] Implement ability modifiers
 ## Lairs and barbarians:
 like barbarian encampments but with different classes that spawn different units, can be explored, that will trigger random event from deck, may spawn enemies, like existing raid encampment bonus feature, to add to natural wonders like Pyre of the Seraphic, have to build map generator to add these
 - [x] Implement multiple barbarian factions (animal, orc/goblin, skeletons, lizardmen)   Look into Barb Clans different clans. There is some UniqueBarbarianUnits table.
@@ -112,17 +112,17 @@ like barbarian encampments but with different classes that spawn different units
 - [x] For single ability units, Manes for example, Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
 - [ ] Single active, grants to city/player/unit
 - [ ] Bear, Wolf, Lion, Tiger, Gorilla, spider pen, scorpion cages (issue with barbs. Also all_units_attach_modifier fails.)
-- [ ] 
+- [ ] Free magic promos.
 
 ## Upgrade System:
 - [ ] can upgrade outside borders       probably needs bespoke upgrade system. what about using strategic forts to briefly grant the tile to the player?
 - [ ] Plural upgrade paths for a unit                 We can maybe implement this by making our own upgrade system. That would solve a lot of issues. WildW unit transfer system?
 
 ## Magic System:
-- [ ] UI to press buttons (try make something like for building improvements but above) maybe hijack unitCommands system for populating?
+- [x] UI to press buttons (try make something like for building improvements but above) maybe hijack unitCommands system for populating?
 - [ ] Puppets, inheriting from summoner
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
-- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit
+- [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit. Or with modifier as do a modifier on city with REQUIREMENT_PLOT_ADJACENT_FRIENDLY_UNIT_TYPE_MATCHES
 
 
 ## Civ Spawn System:
@@ -140,19 +140,19 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 ## Projects:
 - [x] Armageddon count projects
-- [ ] Bane Divine (remove promos of Disciple units, 70 arma) Removing promotions is technically impossible :(. Replace units with one of same type and owner and health? Also ability tracking ugh.
+- [ ] Bane Divine (replace religious Priest and High priests with disciples, 70 arma) 
 - [ ] Birthright regained (world spell back)
 - [ ] Blood of the Phoenix (let all current units be able to respawn in cap once) probably cant do as modifier sadly as no ability to respawn
 - [ ] Genesis (upgrade terrain in civ)
 - [ ] Glory everlasting (kill all demon units once, 70 Arma) 
-- [ ] Pact of Nilhorn (3 giants spawn, only plausible one non-lua)
+- [x] Pact of Nilhorn (3 giants spawn, only plausible one non-lua)
 - [ ] Rites of Oghma (new mana resources spawn)
 - [ ] Purge the Unfaithful (there is a modifier to remove for inquisition, but we have a different definition of state religion)
 - [ ] Samhain (spawn barb frostlings and Mokka)   lua i think
-- [ ] The White Hand (spawn 3 priest of Winters for player)
+- [x] The White Hand (spawn 3 priest of Winters for player)
 - [ ] The Deepening (convert some desert to plains, plains/grassland to tundra, tundra to snow. cba with blizards tho.)
 - [ ] The Draw (+10 to Arma, halve all your cities pops, damage all units, declare war with all other civs, suspend any diplomacy.) Damage all units is simple, pPlayer:GetDiplomacy():DeclareWarOn(), city pop, unsure
-- [ ] Ascension (Summons Auric Unleashed for player)
+- [x] Ascension (Summons Auric Unleashed for player)
 ## Misc:
 - [x] Double prod with Copper Form of Titan example. Also for some projects (Blood of Phoenix)
 - [x] Need 3 libraries for Great Library, same with Theatre
@@ -196,7 +196,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] religion spread within civ tracker in lua for plot_prop req
 ## Great People:
 - [ ] Golden Age modifiers, the whole extra Hammer/ extra gold per tile thing.
-- [ ] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
+- [x] Luonnotar buildup using Great Person action rather than Lua, so the ai can win with it. Issue with doing same action to make next building iteration. And enabling/disabling based on that.
 - [ ] first to tech Great People or other things
 
 ## Nice to Have:
@@ -212,6 +212,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Unique unit Cultures: Clan, Infernal, Kuriotates(Centaurs)
 - [ ] Minimal cultures: Mercurian (just do angel units, humans can be mercurian recruits), Dwarves, Elves, Dark Elves, Calabim(pale)
 - [ ] Doviello Barbarian units.
+- [ ] Palaces?
 - [x] Amurite buildings, (AncientEarth -> Mughal -> Colonial), MUGHAL
 - [x] Balseraphs (AncientEarth -> Indonesian -> Colonial), SOUTHAM
 - [x] Bannor (AncientEarth -> Scottish -> Colonial), AFRICAN
@@ -342,7 +343,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 ### Resources
 - [ ] Nightmare
 - [ ] Toad
-- [ ] Mana Tints ( and change to Gypsum)
+- [x] Mana Tints ( and change to Gypsum)
 
 ### Units
 #### Rebin
@@ -498,18 +499,31 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Shadowrider as Keshig?
 ## Design Todo
 - [ ] Display SuperSpecialists in the City UI somehow 
-- [ ] Reexamine if buildings path and districts makes sense.
+- [ ] Reexamine if buildings path and districts makes sense. Maybe make districts nearly free but dont provide any benefits on their own?
 - [ ] come up with eurekas
 - [ ] Use eurekas as proxies for techs where soft requirements (i.e. Trade uses something from Sailing or Horseback riding to Eureka? problem is has to be only opposing )
 - [ ] City States didnt exist in civ iv, so dont know how i would approach it? Could just have them be a generic race (orc, human, dwarf, elf), or inherit the governance of nearby civs, like Age of Wonders
 - [ ] Do we swap Amenities and Housing as Amenities and Housing?
+- [ ] We are making districts easy to get but not worth anything. How to fix trade routes sucking? Also how do we make sure district sonly unlock whena building needs them, but with multiple techs/civics
 ## Polish Todo
 - [x] Trait Descriptions
 - [ ] Limit Tech Tree to Renaissance Era techs, and make tree look better 
 
 ## Bugs
-- [ ] Why are civ colours always green blue?
-- [ ] Why does UnitPanel buttons always show on reload of game?
+- [x] Why are civ colours always green blue? Units.artdef jerseys
+- [x] Why does UnitPanel buttons always show on reload of game? Deprecated in favour of Unitpanel BuildActions
+- [x] Accuracy promo granted on aggressive?
+- [x] Basium spawning crashing game, but Infernal not? we are using a property to gate, but maybe its set after city transfer so stuck in loop
+- [L] use MODIFIER_PLAYER_UNITS_GRANT_PROMOTION instead of promotion lua grant system? THIS WILL NEVER WORK, PROMOS HAVE TO BE IN RIGHT CLASS AND IMMEDIATELY AVAILABLE
+- [ ] Traits not converting LOC on dawn of Man speech
+- [ ] Both PLAYER_BAN_UNIT_PRODUCTION and reverse PLAYER_ALLOW_UNIT (nihang) dont seem to stop upgrading into next unit tier. More fuel for custom upgrade system
+- [ ] Upgrade system also takes precedence in removing obsolete units even if the replacement is not buildable due to a no BuildingPrereq for example
+- [ ] Shipyard Lighthouse, Harbor only in naval towns, Brewery only in river. Hawk on Hunters lodge
+## couldnt find a way:
+- [ ] Courage, immunity to slave taking mod as no OPPONENT_HAS_ABILITY requirement, charm resist seems doable tho
+- [ ] Blur, first strike Immune
+- [ ] Valor resist magic
+- [ ] Courage Fear immune
 # Done
 ##### Mercurians:
   Not directly playable, needs Wonder completed to summon, and then takes over that city. Needs to also be switchable to that player via ui prompt Units spawn on mercurian gate when Good units die, that whole headache as with Infernal

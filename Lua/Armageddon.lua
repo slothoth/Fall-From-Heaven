@@ -1,5 +1,7 @@
 -- [ ] Hijack Global Warming panel. We probably just steal the UI design of it.
 -- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
+ --[ ]  Attach some Projects when armageddon hits 70. To do not unlock, need it to be pPlot:SetProperty() on capital
+
 tArmageddonEvents = {[10]=fWarning,[30]=Blight, [40]=ArmaSummonSteph, [50]=ArmaSummonBuboes, [60]=ArmaSummonYersinia,
                      [70]=ArmaSummonArs,  [90]=ArmaSpawnWrath, [100]=ArmaKillHalf}
 -- helper
@@ -141,27 +143,93 @@ function customFunc(playerID, cityID, projectID, buildingIndex, x, y)
     print('in custom project action UNIMPLEMENTED')
 end
 
+
+function Samhain(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- Spawn frostling barbarian units in some tundra and snow tiles. Based on number of Snow and Tundra tiles?
+    -- spawn Mokka barbarian
+end
+
+function Deepening(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- When it is completed, the entire world will be cooled down - changing some of the deserts to plains,
+    -- some of the plains and grassland to tundra, and some of the tundra to snow tiles. Additionally, it spawns a
+    -- random amount of Blizzards on the map. Blizzards are more like a Feature that changes a tile to Snow in civ
+end
+
+function TheDraw(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- Illians will declare war on all other civilizations,
+    -- the population of all Illian cities will be halved,
+    -- The Illians cannot attempt diplomacy after the Draw has been completed.
+end
+
+function Ascension(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- Give Godslayer to highest Score/ Highest military strength
+end
+
+function BaneDivine(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- All Disciple Units in the world are replaced with Tier 1 Disciples of the same religion
+end
+
+function BirthrightRegained(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- Set Player Property that controls if can do world spell
+end
+
+function Genesis(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- All tiles have Vitalize cast upon them, if tile is grassland with no improvments Bloom is cast
+    -- Vitalize: Converts Snow-Tundra, Tundra - Plains, Desert - Plains, Plains - Grassland, Grassland gets Forest
+end
+
+function NaturesRevolt(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- Turns Barbarian units into Animals
+    --            Goblin Worker-> Wolf, Goblin-> Lion, Warrior-> Lion, Lizardman->Tiger, Axeman->Bear
+    --            wtf happens to skeletons, to goblin archers
+    --All animals in the world receive Heroic Strength I, Heroic Strength II, Heroic Defense I, and Heroic Defense II
+    -- can do this second part as abilities in Modifier system
+end
+
+function RitesOghma(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    --  Grant Manas           Duel: 4, Tiny: 5, Small: 6, Standard: 7, Large: 8, Huge: 10
+end
+
+function PurgeUnfaithful(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    --   	Removes any non-state Religions and religious buildings from all cities
+    --      Causes revolts in cities where multiple religions are removed
+end
+
+function BloodOfThePhoenix(playerID, cityID, projectID, buildingIndex, x, y)
+    print('in custom project action UNIMPLEMENTED')
+    -- Grant all units an ability that respawns the unit in the capital. This doesnt exist sadly.
+end
+
 -- CityProjectCompleted for Elohim, Sheaim, Illian the Draw.
 tProjectArmaCost = { [GameInfo.Projects['PROJECT_ELEGY_OF_THE_SHEAIM'].Index]   = 5,
                      [GameInfo.Projects['PROJECT_HALLOWING_OF_ELOHIM'].Index]      = -5,
                      [GameInfo.Projects['PROJECT_PURGE_THE_UNFAITHFUL'].Index]      = 3,
                      [GameInfo.Projects['PROJECT_THE_DRAW'].Index]              = 10}
 
- -- make some functions on this
 tProjectFunctions = {
-    [GameInfo.Projects['PROJECT_SAMHAIN'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_DEEPENING'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_THE_DRAW'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_ASCENSION'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_BANE_DIVINE'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_GLORY_EVERLASTING'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_BIRTHRIGHT_REGAINED'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_GENESIS'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_NATURES_REVOLT'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_RITES_OGHMA'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_PURGE_THE_UNFAITHFUL'].Index]   = customFunc,
-    [GameInfo.Projects['PROJECT_PHOENIX'].Index]   = customFunc
+    [GameInfo.Projects['PROJECT_SAMHAIN'].Index]   = Samhain,
+    [GameInfo.Projects['PROJECT_DEEPENING'].Index]   = Deepening,
+    [GameInfo.Projects['PROJECT_THE_DRAW'].Index]   = TheDraw,
+    [GameInfo.Projects['PROJECT_ASCENSION'].Index]   = Ascension,
+    [GameInfo.Projects['PROJECT_BANE_DIVINE'].Index]   = BaneDivine,
+    [GameInfo.Projects['PROJECT_BIRTHRIGHT_REGAINED'].Index]   = BirthrightRegained,
+    [GameInfo.Projects['PROJECT_GENESIS'].Index]   = Genesis,
+    [GameInfo.Projects['PROJECT_NATURES_REVOLT'].Index]   = NaturesRevolt,
+    [GameInfo.Projects['PROJECT_RITES_OGHMA'].Index]   = RitesOghma,
+    [GameInfo.Projects['PROJECT_PURGE_THE_UNFAITHFUL'].Index]   = PurgeUnfaithful,
+    [GameInfo.Projects['PROJECT_PHOENIX'].Index]   = BloodOfThePhoenix
 }
+
 function ArmaProjectComplete(playerID, cityID, projectID, buildingIndex, x, y, isCancelled)
     if isCancelled then return; end
     local iArmaCost = tProjectArmaCost[projectID]

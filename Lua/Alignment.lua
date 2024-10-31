@@ -1,5 +1,5 @@
 local tLeaderAlignmentMap = {
-    ['SLTH_LEADER_ALEXIS']=0, ['SLTH_LEADER_FLAUROS']=0, ['SLTH_LEADER_KEELYN']=0, ['SLTH_LEADER_PERPENTACH']=0,
+    ['LEADER_ALEXIS']=0, ['SLTH_LEADER_FLAUROS']=0, ['SLTH_LEADER_KEELYN']=0, ['SLTH_LEADER_PERPENTACH']=0,
     ['SLTH_LEADER_HYBOREM']=0, ['SLTH_LEADER_TEBRYN']=0, ['SLTH_LEADER_OS-GABELLA']=0, ['SLTH_LEADER_JONAS']=0,
     ['SLTH_LEADER_SHEELBA']=0, ['SLTH_LEADER_CHARADON']=0, ['SLTH_LEADER_MAHALA']=0,
     ['SLTH_LEADER_AURIC']=0, ['SLTH_LEADER_FAERYL']=0,
@@ -15,9 +15,18 @@ local tLeaderAlignmentMap = {
     ['SLTH_LEADER_GARRIM']=2, ['SLTH_LEADER_BEERI']=2
 }
 
-local tReligionFromGood = {['RELIGION_ISLAM']=1, ['RELIGION_HINDUISM']=1}
-local tReligionFromEvil = {['RELIGION_JUDAISM']=1, ['RELIGION_CONFUCIANISM']=1}
-local tReligionForceAlignment = {['RELIGION_PROTESTANTISM']=2, ['RELIGION_BUDDHISM']=0}
+local tReligionFromGood = {['SLTH_POLICY_STATE_ESUS']=1, ['SLTH_POLICY_STATE_OCTOPUS']=1}
+local tReligionFromEvil = {['SLTH_POLICY_STATE_EMPYREAN']=1, ['SLTH_POLICY_STATE_RUNES']=1}
+local tReligionForceAlignment = {['SLTH_POLICY_STATE_ORDER']=2, ['SLTH_POLICY_STATE_VEIL']=0}
+
+local tReligionPolicies = {['SLTH_POLICY_STATE_ESUS']=true, ['SLTH_POLICY_STATE_OCTOPUS']=true,
+                           ['SLTH_POLICY_STATE_EMPYREAN']=true, ['SLTH_POLICY_STATE_RUNES']=true,
+                           ['SLTH_POLICY_STATE_ORDER']=true, ['SLTH_POLICY_STATE_VEIL']=true,
+                           ['SLTH_POLICY_STATE_LEAVES']=true}
+
+local tReligionNames = {[1]='SLTH_POLICY_STATE_ESUS', [2]='SLTH_POLICY_STATE_OCTOPUS',
+                           [3]= 'SLTH_POLICY_STATE_EMPYREAN', [4]='SLTH_POLICY_STATE_RUNES',
+                           [5]='SLTH_POLICY_STATE_ORDER', [6]='SLTH_POLICY_STATE_VEIL', [7] = 'SLTH_POLICY_STATE_LEAVES'}
 
 local tReligionAlignment = {
     ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
@@ -26,6 +35,12 @@ local tReligionAlignment = {
 }
 local tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
 
+local tReligionAbility = {
+    ['RELIGION_ISLAM']='ABILITY_WORSHIPS_ESUS', ['RELIGION_HINDUISM']='ABILITY_WORSHIPS_OCTOPUS',
+    ['RELIGION_BUDDHISM']='ABILITY_WORSHIPS_VEIL',
+    ['RELIGION_CATHOLICISM']='ABILITY_WORSHIPS_LEAVES', ['RELIGION_JUDAISM']='ABILITY_WORSHIPS_EMPYREAN',
+    ['RELIGION_CONFUCIANISM']='ABILITY_WORSHIPS_KILMORPH', ['RELIGION_PROTESTANTISM']='ABILITY_WORSHIPS_ORDER'
+}
 -- pPlayerUnits:SetBuildDisabled(m_ePlagueDoctorUnit, true);
 
 local tReligousCivicTrigger = {
@@ -60,14 +75,64 @@ local tReligions = {
         [1] = GameInfo.Beliefs["BELIEF_INITIATION_RITES"].Hash,
         [2] = GameInfo.Beliefs["BELIEF_CROSS_CULTURAL_DIALOGUE"].Hash } }
 
+local tInherentReligion = { [GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_ARTHENDAIN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_BAMBUR'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_MITHRIL_GOLEM'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_PARAMANDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DROWN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SAVEROUS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_STYGIAN_GUARD'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_CRUSADER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_VALIN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SPHENER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_BEAST_OF_AGARES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_DISEASED_CORPSE'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_ROSIER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_MARDERO'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_FAWN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SATYR'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_KITHRA'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_RATHA'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_RADIANT_GUARD'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_CHALID'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SHADOW'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_GIBBON'].Index] = true
+}
+
 local tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
 local iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
 local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 
 
-function onReligionSwitch(sReligion)                -- TODO not attached to anything currently
-    -- get pPlayer somehow
+
+function onReligionSwitch(playerID, policyID, wasEnacted)
+    if not wasEnacted then return; end
+    local sReligion = GameInfo.Policies[policyID].PolicyType
+    if not tReligionPolicies[sReligion] then return; end
+    local pPlayer = Players[playerID]
     local iCurrentAlignment = pPlayer:GetProperty('alignment')
     local iNewAlignment = tReligionForceAlignment[sReligion]
     if not iNewAlignment then
@@ -77,11 +142,18 @@ function onReligionSwitch(sReligion)                -- TODO not attached to anyt
             iNewAlignment = tReligionFromEvil[sReligion]
         end
     end
+    local pPlot = pPlayer:GetCities():GetCapitalCity():GetPlot()
     if iNewAlignment then
         pPlayer:SetProperty('alignment', iNewAlignment)
-        local pPlot = pPlayer:GetCities():GetCapitalCity():GetPlot()
         pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
         pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
+    end
+    for idx, sReligionPropKey in ipairs(tReligionNames) do
+        if sReligionPropKey == sReligion then
+            pPlot:SetProperty(sReligionPropKey, 1)
+        else
+            pPlot:SetProperty(sReligionPropKey, 0)
+        end
     end
 end
 
@@ -118,7 +190,7 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
     if not pUnit then return; end
     local pUnitAbilities = pUnit:GetAbility()
-    -- or pUnit:GetExperience():HasPromotion() -- once we have magic do entropy and death promos.
+    -- or pUnit:GetExperience():HasPromotion() -- todo once we have magic do entropy and death promos.
     if pUnitAbilities:HasAbility('ALIGNMENT_EVIL') then
         iGrantPlayer = Game:GetProperty('Infernal')
         -- check player is alive
@@ -170,8 +242,11 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
             AdjustArmageddonCount(5)            -- Compact broken
         end
         local iAlignment = pPlayer:GetProperty('alignment') or 0                                -- set player alignment
+        print('Player alignment on capital settle was ' .. tostring(iAlignment))
+
         local pPlot = Map.GetPlotByIndex(plotID)
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
+        if tAlignmentPropKeys[iAlignment] then print('Setting to 1 capital property ' .. tostring(tAlignmentPropKeys[iAlignment])); end
 
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')
@@ -199,36 +274,41 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         end
     elseif buildingID == GameInfo.Buildings['SLTH_BUILDING_MERCURIAN_GATE'].Index then
         local iBasiumPlayerID = Game:GetProperty('Mercurian')
-        if playerID == iBasiumPlayerID or not Game:GetProperty('mercurian_spawned') then return end              -- city transfer rebuilds the wonder so stops recursive calls
+        if playerID == iBasiumPlayerID or Game:GetProperty('mercurian_spawned') then return; end              -- city transfer rebuilds the wonder so stops recursive calls
         print('Mercurian Gate founded')
         Game:SetProperty('MercurianGatePlot', plotID)
         if iBasiumPlayerID then
             local pCity = CityManager.GetCity(playerID, cityID)
             if pCity then
-                CityManager.TransferCity(pCity, iBasiumPlayerID, -1821839791)     -- enum CityTransferTypes.BY_GIFT
+                Game:SetProperty('mercurian_spawned', 1)
+                CityManager.TransferCity(pCity, iBasiumPlayerID, CityTransferTypes.BY_GIFT)     -- enum CityTransferTypes.BY_GIFT
                 GrantTechParity(iBasiumPlayerID, playerID)
                 GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
                 local pPlayer = Players[playerID]
                 pPlayer:GetDiplomacy():SetPermanentAlliance(iBasiumPlayerID)
-                Game:SetProperty('mercurian_spawned', 1)
             end
         end
         AdjustArmageddonCount(5)            -- Compact broken
     end
 end
 
-function GrantReligion(playerID, unitID)
+function GrantReligionUnit(playerID, unitID)
     -- deal with Encampment district issues
     -- if somehow not in a city, its a summon, implement that later (or dont even)?
+    local pUnitAbilities
+    local sReligionAbility
     local pPlayer = Players[playerID]
     local pUnit =  pPlayer:GetUnits():FindID(unitID)
+    local iUnitType = pUnit:GetType()                       -- check that the unit doesnt have a default religion
+    if tInherentReligion[iUnitType] then return; end
     local iX, iY = pUnit:GetLocation()
     local pPlot = Map.GetPlot(iX, iY)
     local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
+
     if pCity then
         local tiReligions = City:GetReligion():GetReligionsInCity()
         if tiReligions then
-            local pUnitAbilities = pUnit:GetAbility()
+            pUnitAbilities = pUnit:GetAbility()
             local CHANCE_OF_GRANT_RELIGION = 15
             for idx, val in ipairs(tiReligions) do                  --TODO needs testing to see what this table contains
                 local iAttempt = math.random(0, 99)
@@ -240,8 +320,10 @@ function GrantReligion(playerID, unitID)
                         elseif iAlignment == 1 then
                             pUnitAbilities:AddAbilityCount('ALIGNMENT_GOOD')
                         end
-                        break
                     end
+                    sReligionAbility = tReligionAbility[val]
+                    pUnitAbilities:AddAbilityCount(sReligionAbility)
+                    break
                 end
             end
         end
@@ -251,7 +333,8 @@ end
 function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
     local iReligion = tReligousCivicTrigger[civicIndex]
     if iReligion then
-        local bHolyCityEstablished = Game:GetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS') or 0
+        local sReligion = GameInfo.Religions[iReligion].ReligionType
+        local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
         local pPlayer = Players[playerID]
         local pPlayerCities = pPlayer:GetCities()
         local tCityReligionFollowers
@@ -282,9 +365,10 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
         end
         pLeastReligionsCity:GetReligion():AddReligiousPressure(playerID, iReligion, 1000)
         if bHolyCityEstablished < 1 then
-            Game:SetProperty(tostring(iReligion)..'_HOLY_CITY_EXISTS', 1)
+            Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)
             local pPlot = pLeastReligionsCity:GetPlot()
-            pPlot:SetProperty(tostring(iReligion)..'_HOLY_CITY', 1)
+            pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
+            pLeastReligionsCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
             if iReligion == iReligionVeil then
                 AdjustArmageddonCount(5)
             end
@@ -487,6 +571,7 @@ function onStart()
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
+                print('setting player alignment to ' .. tostring(iLeaderAlignment))
             else
                 pPlayer:SetProperty('alignment', -1)                -- to catch errors, remove at production
             end
@@ -505,7 +590,8 @@ end
 
 Events.UnitKilledInCombat.Add(alignmentDeath)
 GameEvents.BuildingConstructed.Add(RespawnerSpawned)
-Events.UnitAddedToMap.Add(GrantReligion)                         -- test UnitAbilityGained
+Events.UnitAddedToMap.Add(GrantReligionUnit)                         -- test UnitAbilityGained
 LuaEvents.NewGameInitialized.Add(onStart);
 LuaEvents.NewGameInitialized.Add(InitiateReligions);
 Events.CivicCompleted.Add(GrantReligionFromCivicCompleted)
+GameEvents.PolicyChanged.Add(onReligionSwitch)

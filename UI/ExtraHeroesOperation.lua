@@ -1,3 +1,4 @@
+
 -- UnitOperation
 -- Original Author: Flactine --
 -- Altered by: Slothoth --
@@ -7,9 +8,53 @@ g_selectedUnitId = -1;
 
 local m_markedPlots = {}  -- plotIndex
 local m_markedPlotsMap = {}  -- key: plotIndex, value: BuildingIndex
-local m_wbInterfaceMode = false
+m_wbInterfaceMode = false
 
-local HEX_COLORING_MOVEMENT = UILens.CreateLensLayerHash("Hex_Coloring_Movement");--LensLayers.HEX_COLORING_MOVEMENT;
+
+local tMonitoredResources = {
+    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='RESOURCE_MANA_DEATH'},
+    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='RESOURCE_MANA_FIRE'},
+    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index] = { rtype='MANA', name='RESOURCE_MANA_AIR'},
+    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index] = { rtype='MANA', name='RESOURCE_MANA_BODY'},
+    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index] = { rtype='MANA', name='RESOURCE_MANA_CHAOS'},
+    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index] = { rtype='MANA', name='RESOURCE_MANA_EARTH'},
+    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index] = { rtype='MANA', name='RESOURCE_MANA_ENCHANTMENT'},
+    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index] = { rtype='MANA', name='RESOURCE_MANA_ENTROPY'},
+    [GameInfo.Resources['RESOURCE_MANA_ICE'].Index] = { rtype='MANA', name='RESOURCE_MANA_ICE'},
+    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index] = { rtype='MANA', name='RESOURCE_MANA_LAW'},
+    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index] = { rtype='MANA', name='RESOURCE_MANA_LIFE'},
+    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index] = { rtype='MANA', name='RESOURCE_MANA_METAMAGIC'},
+    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index] = { rtype='MANA', name='RESOURCE_MANA_MIND'},
+    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index] = { rtype='MANA', name='RESOURCE_MANA_NATURE'},
+    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index] = { rtype='MANA', name='RESOURCE_MANA_SPIRIT'},
+    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='RESOURCE_MANA_WATER'},
+    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='RESOURCE_MANA_SUN'},
+    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='RESOURCE_MANA_SHADOW'},
+    [GameInfo.Resources['RESOURCE_BANANA'].Index] = { rtype='AFFINITY', name='RESOURCE_BANANA'},
+    [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='RESOURCE_COPPER'},
+    [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='RESOURCE_IRON'},
+    [GameInfo.Resources['RESOURCE_MITHRIL'].Index] = { rtype='AFFINITY', name='RESOURCE_MITHRIL'},
+    [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='RESOURCE_SHEUT_STONE'},
+    [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype='AFFINITY', name='RESOURCE_NIGHTMARE'}}
+
+local tBinaryMap = {
+    ['0']={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
+    ['1']={['8']=0, ['4']=0, ['2']=0, ['1']=1,},
+    ['2']={['8']=0, ['4']=0, ['2']=1, ['1']=0,},
+    ['3']={['8']=0, ['4']=0, ['2']=1, ['1']=1,},
+    ['4']={['8']=0, ['4']=1, ['2']=0, ['1']=0,},
+    ['5']={['8']=0, ['4']=1, ['2']=0, ['1']=1,},
+    ['6']={['8']=0, ['4']=1, ['2']=1, ['1']=0,},
+    ['7']={['8']=0, ['4']=1, ['2']=1, ['1']=1,},
+    ['8']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['9']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['10']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['11']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['12']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['13']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['14']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['15']={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
+}
 
 
 function myRefresh(iPlayerID, iUnitID, iOldID)
@@ -208,60 +253,12 @@ function OnGrantGoldenAgeClicked()
 	UI.DeselectUnit(pUnit);
 	return;
 end
--- instead what if we do plot targetting logic, and just adjust valid plots. dont need 30+ buttons then
-function OnGrantEquipmentClicked()
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-    -- search chosen plot for equipment, choose first found
-    -- get unitID of equipment
-    -- handle which unittype, unitability on gameplay side
 
-	if m_wbInterfaceMode then
-		QuitWBInterfaceMode(true)
-	else
-		UI.SetInterfaceMode(InterfaceModeTypes.SELECTION)
-		UI.SetInterfaceMode(InterfaceModeTypes.WB_SELECT_PLOT)
-		m_wbInterfaceMode = true
-		Controls.SettleButtonTakeEquipment:SetSelected(true)
-
-		m_markedPlots, m_markedPlotsMap = GetNearbyEquipment(iPlayer, iX, iY)
-		if #m_markedPlots > 0 then
-			local green = UI.GetColorValue("COLOR_GREEN")
-			UILens.SetLayerHexesColoredArea(HEX_COLORING_MOVEMENT, Game.GetLocalPlayer(), m_markedPlots, green)
-
-			UILens.ToggleLayerOn(HEX_COLORING_MOVEMENT)
-		end
- 	end
-end
 
 -- nicked from QINMachuPichu
-function OnUiModChange(intPara, currentInterfaceMode)
-	if m_wbInterfaceMode and currentInterfaceMode ~= InterfaceModeTypes.WB_SELECT_PLOT then
-		QuitWBInterfaceMode(false)
- 	end
-end
+
 -- nicked from QINMachuPichu
-function OnSelectPlot(plotId, plotEdge, boolDown, rButton)
-	--print('plotId, plotEdge, boolDown, rButton', plotId, plotEdge, boolDown, rButton)
-	if not boolDown then
-		if rButton then
-			QuitWBInterfaceMode(true)
-		else
-			local consumeUnitID = m_markedPlotsMap[plotId]
-			if consumeUnitID ~= nil then
-				print('equipment unit selected!')
-				local pUnit = UI.GetHeadSelectedUnit()
-                local iUnit = pUnit:GetID()
-                local iPlayer = pUnit:GetOwner()
-                local bSuccess = ExposedMembers.ExtraHeroes.ConsumeEquipment(iPlayer, iUnit, consumeUnitID);
-                if bSuccess < 1 then
-                    local pPlot = Map.GetPlotByIndex()
-                    UI.AddWorldViewText(0, 'Already has equipment', pPlot:GetX(), pPlot:GetY());
-                end
-                QuitWBInterfaceMode(true)
-			end
-		end
-	end
-end
+
 
 function GetNearbyEquipment(iPlayerID, iPlotX, iPlotY)
 	local markedPlots = {}
@@ -297,15 +294,7 @@ function GetNearbyEquipment(iPlayerID, iPlotX, iPlotY)
     return markedPlots, markedPlotsMap
 end
 
-function QuitWBInterfaceMode(ifChangeInterfaceMode)
-	if ifChangeInterfaceMode then
-		UI.SetInterfaceMode( InterfaceModeTypes.SELECTION )
-	end
-	UILens.ClearLayerHexes( HEX_COLORING_MOVEMENT );
-	UILens.ToggleLayerOff( HEX_COLORING_MOVEMENT );
-	m_wbInterfaceMode = false
-	Controls.SettleButtonTakeEquipment:SetSelected(false)
-end
+
 
 -- helper functions
 function UnitGatherInfo()
@@ -344,7 +333,7 @@ function Setup()
             gridButton:ChangeParent(ctrl)
         end
         Controls.SettleButtonGridTakeEquipment:ChangeParent(ctrl)
-        Controls.SettleButtonTakeEquipment:RegisterCallback(Mouse.eLClick, OnGrantEquipmentClicked)
+        -- Controls.SettleButtonTakeEquipment:RegisterCallback(Mouse.eLClick, OnGrantEquipmentClicked)
     end
     for gridButton, tButton in pairs(tControlsAdded) do
         for button, callbackFunc in pairs(tButton) do
@@ -466,10 +455,50 @@ function Setup()
 	end
 end
 
-Events.LoadGameViewStateDone.Add(Setup)
-Events.UnitSelectionChanged.Add(OnUnitSelectionChanged)
+-- Events.LoadGameViewStateDone.Add(Setup)
+-- Events.UnitSelectionChanged.Add(OnUnitSelectionChanged)
 
-Events.UnitOperationsCleared.Add(onOperationMoveEnded)
+-- Events.UnitOperationsCleared.Add(onOperationMoveEnded)
 
-Events.InterfaceModeChanged.Add(OnUiModChange)
-LuaEvents.WorldInput_WBSelectPlot.Add(OnSelectPlot)
+-- LuaEvents.WorldInput_WBSelectPlot.Add(OnSelectPlot)
+
+-- gameplay esque
+function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
+    local iResourceInfo = tMonitoredResources[resourceTypeID]
+    if iResourceInfo then
+        local pPlayer = Players[ownerPlayerID];
+        local resources = pPlayer:GetResources()
+        local iResourceCount = resources:GetResourceAmount(resourceTypeID);
+        local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+        local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+        local sPropKeyCount = iResourceInfo['name']
+        local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or 0
+        print('previous: '  .. sPropKeyCount .. tostring(iPastResource))
+        print('new Gameplay: '  .. sPropKeyCount .. tostring(iResourceCount))
+        print('new UI: '  .. sPropKeyCount .. tostring(iResourceCount))
+        if iResourceCount ~= iPastResource then
+            local tParameters = {}
+            tParameters.sPropKey = sPropKeyCount;
+            tParameters.iPropValue = iResourceCount;
+            tParameters.OnStart = "SlthSetCapitalProperty";
+            UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+            local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
+            local sPropKey =  sPropKeyCount .. '_BINARY_'
+            local sFullPropKey
+            for key, val in pairs(tBinariesToSet) do
+                sFullPropKey = sPropKey .. key
+                tParameters.sPropKey = sFullPropKey;
+                tParameters.iPropValue = val;
+                UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+                print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
+            end
+            if iPastResource == 0 then
+                tParameters.OnStart= 'SlthSetResourcePromotions'
+                tParameters.ResourceID = resourceTypeID
+                UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+            end
+        end
+    end
+end
+
+Events.PlayerResourceChanged.Add(UpdateResourceAvailability)
