@@ -4,24 +4,21 @@ Mod to faithfully recreate the glorious Civ IV FallFromHeaven mod by Kael in Civ
 To download the mod, git clone or go to the Releases page, and select the highest number, for most recent. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder.
 One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
 ## TOP priority:
-Magic system[ ]
-Barbarians[x]
-Fix religion[x]
-Armageddon[x]
-World Spells
-Items[x]
-Victory Conditions [x]
+- [ ] World Spells
+- [ ] Regional City Spellcasting
+- [ ] Timed buffs
+- [ ] Music system
 ## Promotion System:
 - [x] promotions based on resource availabilty, ie can only learn Death 1 with access to Death Mana resource.Achieved, but irreversibly as based on promotion. can i unset promo? i cannot
 - [x] UI improvements hiding dummy promos in pips on UnitPanel, should be just a skip line
-- [ ] clean up UI by doing includes instead of whole file
+- [ ] clean up UI by doing includes instead of whole file.
 - [ ] Low prio: unitFlagManager counts hidden promos, hide em
 - [x] Lines linking promos where dummy promo is used in promop popup screen
 - [x] Mess with sphere promos to get them to look better. Get placeholder Amber icon in for test? Also line formatting, aligning title. Maybe just replace the promotion icon with unique one?
 - [ ] How are we gonna handle other non-adepts getting channeling I or II. Disciple is common enough we should plan for it, others, no clue.
 
 ## Alignment System:
-- [ ] Certain actions like switching religion set as Good, Evil, Neutral  Need to find the right trigger, policy change as thats how religion?
+- [x] Certain actions like switching religion set as Good, Evil, Neutral
 - [x] limit units depending on alignment         Used the settler ban from isolation. But does it cover upgrading?
 - [ ] diplomacy penalties, advantages      Annoyingly diplo penalties seem to be done as modifiers, but no requirements would work.
 
@@ -91,7 +88,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Acheron Free City
 - [x] Embers diplomacy with Clans only
 - [x] No diplomacy with some clans
-- [ ] Animal Clans cant become cities
+- [ ] Animal Clans cant become cities, but orc clans can, and maybe ruins too
 - [x] natural wonder clans
 
 ## Terrain Alteration:
@@ -131,7 +128,7 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Switch player midgame              very hard
 - [x] Summoned through first to tech, takes over a barbarian city           easy to do first to tech. Barb city is harder tho. Need to implement Free City spawning
 - [x] need to do inheriting techs/civics and extra units(Basium/Hyborem, stack of angels/manes)
-- [ ] Diplomatic modifiers for bringing into world. Not permanent alliance with basium tho
+- [x] Diplomatic modifiers for bringing into world.
 - [x] Ban Mercurian gate from palace. Mutually exclusives?. Also needs to grant palace after building, and maybe set capital
 ## Event System:
 dialogue boxes with a choice that appear randomly, if the conditions satisfy the event. ex. library burning if u have library : tricky, as ui elements involved, choice will lead to lua script execution. Low priority.
@@ -159,7 +156,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 ## LowHangingCiv:
 - [ ] Manor + Pillar of Chains building that does Required Amenities * int = prod          Probably also a lua thing.  Lua : Event : PlayerTurnStarted. Needs rebalacing as sucks under civ vi
-- [ ] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
+- [x] Free starting hero Lucian         I think someone has implemented multiple starting units per civ. Could also just grant him on first settle.
 - [ ] planar gates randomly summon units              Lua : Event : PlayerTurnStarted : Iterate through cities with planar gates. Check if they have the other buildings. Have random chance to spawn.
 - [ ] Infernal no amenity cost? as they get no unhappiness. (+2 amenities per 2 pop to balance out cost?)
 ## Hard but minor:
@@ -235,6 +232,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [x] Illian (AncientWood -> Scottish -> Colonial), EURO
 - [ ] Clan of Embers (AncientEarth -> Cree -> Colonial), CUSTOM
 - [ ] Change barbarians to Clan orc ethnicity
+- [ ] Convert all but Illian/Doviello euro civs to mediterreanean
 ### Buildings
 #### Redo District Placement
 - [ ] Blasting Workshop(Workshop)
@@ -328,7 +326,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Sylivens Lyre
 - [ ] Dragons Horde
 ### Improvements
-- [ ] Hamlet
+- [ ] Hamlet (use existing city clutter?)
 - [ ] Cottage
 - [ ] Village
 - [ ] Town
@@ -518,7 +516,9 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Traits not converting LOC on dawn of Man speech
 - [ ] Both PLAYER_BAN_UNIT_PRODUCTION and reverse PLAYER_ALLOW_UNIT (nihang) dont seem to stop upgrading into next unit tier. More fuel for custom upgrade system
 - [ ] Upgrade system also takes precedence in removing obsolete units even if the replacement is not buildable due to a no BuildingPrereq for example
+- [ ] Use CanTrain = 0 for only upgradable-to-units (todo Immortal?, Eater of Dreams, probably more)
 - [ ] Shipyard Lighthouse, Harbor only in naval towns, Brewery only in river. Hawk on Hunters lodge
+- [ ] Free Sphere promos applying to all units accidentally.
 ## couldnt find a way:
 - [ ] Courage, immunity to slave taking mod as no OPPONENT_HAS_ABILITY requirement, charm resist seems doable tho
 - [ ] Blur, first strike Immune
