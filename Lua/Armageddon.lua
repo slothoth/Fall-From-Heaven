@@ -77,7 +77,6 @@ function OnCityRaze(playerID, districtID, icityID, idistrictX, idistrictY, iDist
             end
 
             if bConquerChecker == true then
-                print ("this city was (we think) razed by a steppe civ!")
                 local pPlayer = Players[playerID];
                 local pPlot = Map.GetPlot(idistrictX, idistrictY)
                 ImprovementBuilder.SetImprovementType(pPlot, iCityRuins, 63)     -- barb
@@ -158,10 +157,33 @@ function Deepening(playerID, cityID, projectID, buildingIndex, x, y)
 end
 
 function TheDraw(playerID, cityID, projectID, buildingIndex, x, y)
-    print('in custom project action UNIMPLEMENTED')
-    -- Illians will declare war on all other civilizations,
-    -- the population of all Illian cities will be halved,
-    -- The Illians cannot attempt diplomacy after the Draw has been completed.
+    local pPlayer = Players[playerID];
+    local pDiplo = pPlayer:GetDiplomacy()
+    local pAllMajors = PlayerManager.GetAliveMajorIDs();            -- just hating on all civs
+    for k, iterPlayerID in ipairs(pAllMajors) do
+        if (pPlayer:GetID() ~= iterPlayerID) then
+            pDiplo:SetHasMet(iterPlayerID);
+            pDiplo:DeclareWarOn(iterPlayerID, WarTypes.FORMAL_WAR, true);           -- Illians will declare war on all other civilizations
+            pDiplo:NeverMakePeaceWith(iterPlayerID);
+            local pOtherPlayer = Players[iterPlayerID];
+            if(pOtherPlayer ~= nil) then
+                local pOtherDiplo = pOtherPlayer:GetDiplomacy();
+                if(pOtherDiplo ~= nil) then
+                    pOtherDiplo:NeverMakePeaceWith(playerID);                   -- The Illians cannot attempt diplomacy after the Draw has been completed.
+                end
+            end
+        end
+    end
+    local pPlayerCities = pPlayer:GetCities()
+    local iCityPop
+    local iPopReduction
+    for idx, pCity in pPlayerCities:Members() do
+        iCityPop = pCity:GetPopulation()
+        iPopReduction = math.floor(iCityPop / 2) * -1
+        if iPopReduction < 0 then
+            pCity:ChangePopulation(iPopReduction)           -- the population of all Illian cities will be halved
+        end
+    end
 end
 
 function Ascension(playerID, cityID, projectID, buildingIndex, x, y)
