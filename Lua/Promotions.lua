@@ -177,6 +177,67 @@ local tHasPromoAndUnlocks = {
     [GameInfo.UnitPromotions['PROMOTION_CAN_GET_FEAR'].Index] = 1,
     [GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index] = 1}
 
+-- upgrade only, marksmen, immortal, skuld, ogre warchief
+
+-- we are missing channelling two for brujah, death knight,
+-- devout channelling 1
+-- disciple of acheron fire 1 and 2, and channelling 2,
+-- druid life 1 and chan 3.
+-- dwarven driud, earth 1
+-- firebow, channelling 1
+local tUnitFreePromos = {
+    [GameInfo.Units['SLTH_UNIT_ARCANE_BARGE'].Index] = {GameInfo.UnitPromotions['FIRE_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_BRUJAH'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_CRUSADER'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['SLTH_UNIT_DEATH_KNIGHT'].Index] = {GameInfo.UnitPromotions['DEATH_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_DEVOUT'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_DISCIPLE_OF_ACHERON'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index, GameInfo.UnitPromotions['FIRE_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_DRUID'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_DWARVEN_DRUID'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_EIDOLON'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_DISCIPLE'].Index},
+    [GameInfo.Units['SLTH_UNIT_FAWN'].Index] = {GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_RECON'].Index},             -- could be done as modifier
+    [GameInfo.Units['SLTH_UNIT_FIREBOW'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_FLURRY'].Index] = {GameInfo.UnitPromotions['PROMOTION_BLITZ_RANGED'].Index},
+    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_LIGHTBRINGER'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_DISCIPLE'].Index},            -- modifier?
+    [GameInfo.Units['SLTH_UNIT_MONK'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['SLTH_UNIT_PALADIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['SLTH_UNIT_PARAMANDER'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_PYRE_ZOMBIE'].Index] = {GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_MELEE'].Index},
+    [GameInfo.Units['SLTH_UNIT_RADIANT_GUARD'].Index] = {GameInfo.UnitPromotions['SUN_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_RATHA'].Index] = {GameInfo.UnitPromotions['SUN_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_ROYAL_GUARD'].Index] = {GameInfo.UnitPromotions['SPIRIT_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_SATYR'].Index] = {GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_RECON'].Index},             -- could be done as modifier
+    [GameInfo.Units['SLTH_UNIT_SERAPH'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_SON_OF_THE_INFERNO'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index, GameInfo.UnitPromotions['FIRE_TWO'].Index, GameInfo.UnitPromotions['FIRE_THREE'].Index},
+    [GameInfo.Units['SLTH_UNIT_STYGIAN_GUARD'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_MELEE'].Index},
+    [GameInfo.Units['SLTH_UNIT_SUCCUBUS'].Index] = {GameInfo.UnitPromotions['MIND_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_VAMPIRE'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_VAMPIRE_LORD'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_ABASHI'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
+    [GameInfo.Units['SLTH_UNIT_ACHERON'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},              -- also sentry 2 but diff promo GameInfo.UnitPromotions['class'].Index},
+    [GameInfo.Units['SLTH_UNIT_ARTHENDAIN'].Index] = {GameInfo.UnitPromotions['LIFE_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_BAMBUR'].Index] = {GameInfo.UnitPromotions['ENCHANTMENT_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_DUIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_MAGIC_RESISTANCE_BEAST'].Index},
+    [GameInfo.Units['SLTH_UNIT_BASIUM'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_MELEE'].Index},
+    [GameInfo.Units['SLTH_UNIT_BUBOES'].Index] = {GameInfo.UnitPromotions['PROMOTION_BLITZ_LIGHT_CAVALRY'].Index, GameInfo.UnitPromotions['PROMOTION_FEAR_LIGHT_CAVALRY'].Index},
+    [GameInfo.Units['SLTH_UNIT_CHALID'].Index] = {GameInfo.UnitPromotions['LAW_ONE'].Index, GameInfo.UnitPromotions['SUN_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_SENTRY_DISCIPLE'].Index},
+    [GameInfo.Units['SLTH_UNIT_CORLINDALE'].Index] = {GameInfo.UnitPromotions['EARTH_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index, GameInfo.UnitPromotions['SPIRIT_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_DONAL'].Index] = {GameInfo.UnitPromotions['SPIRIT_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_DRIFA'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
+    [GameInfo.Units['SLTH_UNIT_EURABATRES'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
+    [GameInfo.Units['SLTH_UNIT_HYBOREM'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_MELEE'].Index},
+    [GameInfo.Units['SLTH_UNIT_LOKI'].Index] = {GameInfo.UnitPromotions['CHAOS_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_EXTENSION1_ADEPT'].Index},
+    [GameInfo.Units['SLTH_UNIT_LOSHA'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_MARDERO'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_DISCIPLE'].Index, GameInfo.UnitPromotions['ENTROPY_ONE'].Index},
+    [GameInfo.Units['SLTH_UNIT_MESHABBER'].Index] = {GameInfo.UnitPromotions['FIRE_TWO'].Index},
+    [GameInfo.Units['SLTH_UNIT_SPHENER'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['SLTH_UNIT_VALIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},                             -- technically more like an ability as cav dont get access
+    [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = { GameInfo.UnitPromotions['LIFE_ONE'].Index, GameInfo.UnitPromotions['NATURE_ONE'].Index }
+}
+
 function onSpawnApplyPromotions(playerID, unitID)
     if playerID == nil then return end
     if unitID == nil then return end
@@ -185,11 +246,11 @@ function onSpawnApplyPromotions(playerID, unitID)
     local pUnit = pPlayer:GetUnits():FindID(unitID)
     if pUnit == nil then return end
     local sCivName = PlayerConfigurations[playerID]:GetLeaderTypeName()         -- do traits
-    local sPromoClass
     local iPromoToGive
     local pUnitExp = pUnit:GetExperience()
+    local iUnitIndex = pUnit:GetType()
+    local sPromoClass = GameInfo.Units[iUnitIndex].PromotionClass
     if tSpiritual[sCivName] then
-        sPromoClass = GameInfo.Units[pUnit:GetType()].PromotionClass
         iPromoToGive = tSpiritualPromos[sPromoClass]
         if iPromoToGive then
             pUnitExp:SetPromotion(iPromoToGive, true)
@@ -205,15 +266,28 @@ function onSpawnApplyPromotions(playerID, unitID)
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
         local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
         local iResource
+        local hasChannellingOne = pUnitAbilities:HasAbility('ABILITY_CHANNELING1')
         for sResourceName, iPromoIndex in pairs(tFreePromos) do
             iResource = pCapitalPlot:GetProperty(sResourceName) or 0;
-            if iResource > 1 then
+            if iResource > 1 and hasChannellingOne then
                 pUnitExp:SetPromotion(iPromoIndex)
             end
             tCurrentResource[sResourceName] = iResource             -- CACHE it
         end
+        local tWeaponResources = {
+            ['RESOURCE_COPPER']    =    'ABILITY_BRONZE_WEAPONS',
+            ['RESOURCE_IRON']      =    'ABILITY_IRON_WEAPONS',
+            ['RESOURCE_MITHRIL']   =    'ABILITY_MITHRIL_WEAPONS'
+        }
 
-        if pUnitAbilities:HasAbility('ABILITY_CHANNELING1') then
+        for sResourceName, sAbilityToGrant in pairs(tWeaponResources) do
+            iResource = pCapitalPlot:GetProperty(sResourceName) or 0;
+            if iResource > 0 then
+                pUnitAbilities:AddAbilityCount(sAbilityToGrant)
+            end
+        end
+
+        if hasChannellingOne then
             for sResourceName, iPromoIndex in pairs(tAllowSphereOne) do
                 iResource = tCurrentResource[sResourceName]
                 if iResource > 0 then                                                    -- grant sphere ability
@@ -276,6 +350,13 @@ function onSpawnApplyPromotions(playerID, unitID)
         if pCulture:HasCivic(iCivicIndex) then
             pUnitExp:SetPromotion(iPromoIndex)
             print('granting promo to unit by civic on spawn')
+        end
+    end
+
+    local tFreeUnitSpecificPromos = tUnitFreePromos[iUnitIndex]
+    if tFreeUnitSpecificPromos then
+        for i, iPromoIndex in pairs(tFreeUnitSpecificPromos) do
+            pUnitExp:SetPromotion(iPromoIndex)
         end
     end
 
