@@ -719,25 +719,37 @@ function GetUnitActionsTable( pUnit )
 					local sReqPromo
 					local reqAbility
 					local reqUnitType
+					local failedReq
 					bCanStart, tResults = nil, nil
 					if CustomOperationInfo then				-- do promtion check here, have pUnit.
 						local sReqDomain =  CustomOperationInfo.DomainPrereq
 						if sReqDomain then
-							if GameInfo.Units[unitType].Domain == 'DOMAIN_LAND' then bCanStart = true; end
+							if GameInfo.Units[unitType].Domain == 'DOMAIN_LAND' then
+								bCanStart = true;
+							else
+								failedReq = true
+							end
 						end
+
 						sReqPromo = CustomOperationInfo.PromotionPrereq
-						if sReqPromo then
+						if sReqPromo and not failedReq then
 							bHasRelevantPromotion = pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index)
 							if bHasRelevantPromotion then
 								bCanStart = bHasRelevantPromotion
+							else
+								failedReq = true
 							end
 						end
 						reqUnitType = CustomOperationInfo.UnitPrereq
-						if reqUnitType == unitType then
-							bCanStart = true
+						if reqUnitType and not failedReq then
+							if reqUnitType == unitType then
+								bCanStart = true
+							else
+								failedReq = true
+							end
 						end
 						reqAbility = CustomOperationInfo.AbilityPrereq			-- need to iterate over abilities here
-						if reqAbility then
+						if reqAbility and not failedReq then
 							local iAbilityToCheck = GameInfo.UnitAbilities[reqAbility].Index
 							if CustomOperationInfo.AlternateAbilityPrereq then
 								local iAbilityAltToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlternateAbilityPrereq].Index;
@@ -750,18 +762,39 @@ function GetUnitActionsTable( pUnit )
 							end
 							bCanStart = AbilityChecker(pUnit, iAbilityToCheck, iAbilityAltToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
 						end
+						reqBuildingType = CustomOperationInfo.BuildingPrereq
+						if reqBuildingType and not failedReq then
+							local iOwner = pUnit:GetOwner()
+							local pPlayer = Players[iOwner]
+							local pPlayerCities = pPlayer:GetCities()
+							local iPrereqBuilding = GameInfo.Buildings[reqBuildingType].Index
+							if pPlayerCities then
+								for idx, pCity in pPlayerCities:Members() do
+									if not bCanStart then
+										local pBuildings = pCity:GetBuildings()
+										if pBuildings:HasBuilding(iPrereqBuilding) then
+											bCanStart = true
+										end
+									end
+								end
+							end
+						end
 					else
 						bCanStart, tResults = UnitManager.CanStartOperation( pUnit, actionHash, nil, true );
 					end
 					if (bCanStart) then
 						-- Check again if the operation can occur, this time for real.
 						if CustomOperationInfo then
-							if CustomOperationInfo.ActivationPrereq then
-								bCanStart = CustomCheck(CustomOperationInfo, pUnit)
+							local iHasCast = pUnit:GetProperty('HasCast') or 0
+							if iHasCast == 0 then
+								if CustomOperationInfo.ActivationPrereq then
+									bCanStart = CustomCheck(CustomOperationInfo, pUnit)
+								else
+									bCanStart = true
+								end
 							else
-								bCanStart = true
+								bCanStart = false
 							end
-
 						else
 							bCanStart, tResults = UnitManager.CanStartOperation(pUnit, actionHash, nil, false, OperationResultsTypes.NO_TARGETS);		-- Hint that we don't require possibly expensive target results.
 						end
@@ -796,7 +829,7 @@ function GetUnitActionsTable( pUnit )
 						end
 						isDisabled = bDisabled or isDisabled;
 
-						if(not IsActionLimited(operationRow.PrimaryKey, pUnit))then
+						if(not IsActionLimited(operationRow.PrimaryKey, pUnit, bCanStart))then
 							local overrideIcon = nil;
 
 							isDisabled, toolTipString, overrideIcon = LateCheckOperationBeforeAdd( tResults, actionsTable, actionHash, isDisabled, toolTipString, overrideIcon );
@@ -4368,8 +4401,13 @@ end
 -- For override in scenarios, such as red death, where actions have to be more
 -- specifically validated based on unit or civilization types
 -- ===========================================================================
-function IsActionLimited(actionType : string, pUnit : table)
-	return false;
+function IsActionLimited(actionType : string, pUnit : table, bCanStart)
+	local CustomOperationInfo = GameInfo.CustomOperations[actionType]
+	if CustomOperationInfo and CustomOperationInfo.DontShowOnDisabled == '1' and not bCanStart then
+		return true;
+	else
+		return false;
+	end
 end
 
 -- ===========================================================================
@@ -4480,16 +4518,16 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 	elseif CustomOperationInfo.ActivationPrereq == 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff' then
 		local ResourceInfo = GameInfo.Resources[pPlot:GetResourceType()]
 		bCanStart = ResourceInfo and ResourceInfo.ResourceClassType == 'RESOURCECLASS_MANA'
-		if not bCanStart then
- 			bCanStart = CheckAdjacentOwnUnitsCanBeGrantedAbility(pUnit, iOwner, -1)
-			if not bCanStart then
- 				bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, -1)
-			end
-		end
+		-- if not bCanStart then
+ 		--	bCanStart = CheckAdjacentOwnUnitsHasntAbility(pUnit, iOwner, -1)
+		--	if not bCanStart then
+ 		--		bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, -1)
+		--	end
+		-- end
 	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyEligibleAbility' then
-		bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, CustomOperationInfo)
+		bCanStart = CheckAdjacentUnitsHasntAbility(pUnit, iOwner, CustomOperationInfo)
 	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentAllyEligibleAbility' then
-		bCanStart = CheckAdjacentOwnUnitsCanBeGrantedAbility(pUnit, iOwner, CustomOperationInfo)
+		bCanStart = CheckAdjacentUnitsHasntAbility(pUnit, iOwner, CustomOperationInfo, true)
 	elseif CustomOperationInfo.ActivationPrereq == 'HasntAbility' then
 		local pAbilities = pUnit:GetAbility():GetAbilities()
 		local bAllyUnitFound
@@ -4564,7 +4602,17 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 		bCanStart = CheckAdjacentCity(pUnit, iOwner, CustomOperationInfo, 2)
 	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleAllyHasEquipmentOrIsEquipment' then
 		bCanStart = GetNearbyEquipment(pUnit, iOwner, CustomOperationInfo)			-- todo
+	elseif CustomOperationInfo.ActivationPrereq == 'UnitIsLevel' then
+		bCanStart = pUnit:GetExperience():GetLevel() > 5
+	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentCityHasBuilding' then
+		bCanStart = CheckAdjacentCity(pUnit, iOwner, CustomOperationInfo, 1, GameInfo.Buildings[CustomOperationInfo.BuildingPrereq].Index)
+	elseif CustomOperationInfo.ActivationPrereq == 'IsDamaged' then
+		bCanStart = pUnit:GetDamage() > 0
+	elseif CustomOperationInfo.ActivationPrereq == 'AtWar' then
+		bCanStart = CheckAtWar(iOwner)
 	else
+		print('Not covered:')
+		print(CustomOperationInfo.ActivationPrereq)
 		bCanStart = true
 	end
 	return bCanStart
@@ -4600,57 +4648,12 @@ end
 
 local tMagicBuffs = {[GameInfo.UnitAbilities['BUFF_ENCHANTED_BLADE'].Index] = true}								-- incomplete list
 local tMagicDebuffs = {[GameInfo.UnitAbilities['BUFF_RUSTED'].Index] = true}
-function CheckAdjacentOwnUnitsCanBeGrantedAbility(pUnit, iPlayer, CustomOpInfo)
-	local iAbilityToCheck
-	local bMultipleChecks
-	local bAllyUnitHasAbility
-	local pAbilities
-	if CustomOpInfo == -1 then
-		bMultipleChecks = true
-	else
-		iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
-	end
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit) then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					pAbilities = pNearUnit:GetAbility():GetAbilities()
-					if (pAbilities and table.count(pAbilities) > 0) then
-						for i,ability in ipairs (pAbilities) do
-							if not bAllyUnitHasAbility then
-								if bMultipleChecks then
-									bAllyUnitHasAbility = tMagicDebuffs[ability]
-								else
-									bAllyUnitHasAbility = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
-								end
-								if bAllyUnitHasAbility then
-									TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
 
 function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, CustomOpInfo)
 	if CustomOpInfo == -1 then
 		bMultipleChecks = true
 	else
-		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOperationInfo.SimpleText].Index
+		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
 	end
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
@@ -4686,8 +4689,59 @@ function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, CustomOpInfo)
 		end
 	end
 	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
+		return false
+	else
+		return true
+	end
+end
+
+function CheckAdjacentUnitsHasntAbility(pUnit, iPlayer, CustomOpInfo, bIsAlly)
+	local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
+	local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+	local bEnemyUnitHasAbility
+	local pAbilities
+	local iUnitID
+	local iPlotID
+	local bCondition
+	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
+	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
+	for _, plot in ipairs(tNeighborPlots) do
+		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+			if (pNearUnit) then
+				local bUnitHasAbility = nil
+				local iOwnerPlayer = pNearUnit:GetOwner();
+				if bIsAlly then
+					bCondition = iOwnerPlayer == iPlayer
+				else
+					bCondition = iOwnerPlayer ~= iPlayer
+				end
+				if bCondition then
+					print('unit is at least eligible')
+					pAbilities = pNearUnit:GetAbility():GetAbilities()
+					if (pAbilities and table.count(pAbilities) > 0) then
+						for i,ability in ipairs (pAbilities) do
+							if not bUnitHasAbility then
+								if ability == iAbilityToCheck then							-- GameInfo.UnitAbilities[ability]
+									bUnitHasAbility = true
+								end
+							end
+						end
+						if not bUnitHasAbility then
+							print('unit hasnt ability')
+							TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
+						end
+					end
+				end
+			end
+		end
+	end
+	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
+		print('some units were found without ability')
 		return true
 	else
+		print('no units were found without ability')
 		return false
 	end
 end
@@ -5011,7 +5065,7 @@ function CheckAdjacentEnemyUnit(pUnit, iPlayer)
 	end
 end
 
-function CheckAdjacentCity(pUnit, iPlayer, CustomOpInfo, iSameOwner)
+function CheckAdjacentCity(pUnit, iPlayer, CustomOpInfo, iSameOwner, iBuildingPrereq)
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
@@ -5034,8 +5088,18 @@ function CheckAdjacentCity(pUnit, iPlayer, CustomOpInfo, iSameOwner)
 				bGatingPassed = iOwnerPlayer ~= iPlayer
 			end
 			if bGatingPassed then
-				TrackPlot(plot, pCity, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-				return true
+				print('Adjacent city')
+				if iBuildingPrereq then
+					print('building check on ' .. tostring(iBuildingPrereq))
+					local pBuildings = pCity:GetBuildings()
+					if pBuildings:HasBuilding(iBuildingPrereq) then
+						TrackPlot(plot, pCity, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
+						return true
+					end
+				else
+					TrackPlot(plot, pCity, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
+					return true
+				end
 			end
 		end
 	end
@@ -5083,6 +5147,17 @@ function CheckAdjacentAllyUnitTypeMatchesOrAbilityMatches(pUnit, iPlayer, Custom
 	else
 		return false
 	end
+end
+
+function CheckAtWar(iPlayer)
+	local pPlayer = Players[iPlayer];
+    local pDiplo = pPlayer:GetDiplomacy()
+    for iOtherPlayer, _ in ipairs(Players) do
+        if pDiplo:IsAtWarWith(iOtherPlayer) then
+			return true
+        end
+    end
+	return false
 end
 
 local tEquipmentUnits = {
