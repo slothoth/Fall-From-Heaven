@@ -3,7 +3,7 @@ import json
 import glob
 import logging
 import os
-import xml.etree.ElementTree as ET
+from copy import deepcopy
 
 class Artdef:
     def __init__(self, asset_map=None):
@@ -497,24 +497,26 @@ class Artdef:
                 fow_def['@Atlas'] += '_FOW'
                 self.icons['GameInfo']['IconDefinitions']['Row'].append(fow_def)
 
-    def unit_culture_artdef(self, folder):
+    def unit_culture_artdef(self, folder, job, jobtype):
         logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
         string = 'Unit_Bins.artdef'
         artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
         position = 1
-        bodies = ['Heads', 'BaseMale_Bodies', 'BaseMale_Heads', 'BaseFemale_Bodies', 'BaseFemale_Heads', 'BaseFemale_Hair']
+        if jobtype == 'skin':
+            filter = ['Bodies', 'Heads', 'BaseMale_Bodies', 'BaseMale_Heads', 'BaseFemale_Bodies', 'BaseFemale_Heads', 'BaseFemale_Hair']
         armors = ['BaseMale_Armor']
-        hairs = ['BaseMale_FaceHair', 'BaseMale_Hair_Ancient_to_Medieval', 'BaseMale_Mustache', 'BaseMale_Hair_Medieval_to_Modern']
-        artdef_to_add = self.absorb_artdef(artdefs[0], bodies)
+        if jobtype == 'hairs':
+            filter = ['BaseMale_FaceHair', 'BaseMale_Hair_Ancient_to_Medieval', 'BaseMale_Mustache', 'BaseMale_Hair_Medieval_to_Modern']
+        artdef_to_add = self.absorb_artdef(artdefs[0], filter, job)
 
         for artdef in artdefs[position:]:
-            self.absorb_artdef(artdef, bodies, artdef_to_add)
+            self.absorb_artdef(artdef, filter, job, artdef_to_add)
 
-        with open('../Artdefs/Unit_Bins.artdef', 'w') as file:
+        with open('../Artdefs/Unit_Bins_alt.artdef', 'w') as file:
             xmltodict.unparse(artdef_to_add, output=file, pretty=True)
 
-    def absorb_artdef(self, filepath, filter, existing_artdef=None):
+    def absorb_artdef(self, filepath, filter, job, existing_artdef=None):
         with open(filepath, 'r') as file:
             string_artdef = file.read()
             string_artdef = string_artdef.replace('\t', '')
@@ -546,10 +548,16 @@ class Artdef:
                     individual_cultures = culture_check['Element']
                     if isinstance(individual_cultures, dict):
                         individual_cultures = [individual_cultures]
-                    new_entry = individual_cultures[0].copy()
-                    new_entry['m_Fields']['m_Values']['Element']['m_ElementName']['@text'] = 'SlthBaseMale_SkinColor_Orc'
-                    new_entry['m_Name'] = {'@text': 'Orcish'}
-                    individual_cultures.append(new_entry)
+                    for culture, tint in job.items():
+                        new_entry = deepcopy(individual_cultures[0])
+                        if 'Skin' in tint:
+                            new_entry['m_Fields']['m_Values']['Element']['m_ElementName']['@text'] = tint
+                        elif tint == 'NO_HAIR':
+                            if isinstance(new_entry['m_ChildCollections']['Element']['Element'], list):
+                                new_entry['m_ChildCollections']['Element']['Element'] = new_entry['m_ChildCollections']['Element']['Element'][0]
+                            new_entry['m_ChildCollections']['Element']['Element']['m_ChildCollections'] = None
+                        new_entry['m_Name'] = {'@text': culture}
+                        individual_cultures.append(new_entry)
                     j['m_ChildCollections']['Element']['Element'] = individual_cultures
                     changed_items.append(j)
                 else:
