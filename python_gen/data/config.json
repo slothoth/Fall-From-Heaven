@@ -1,5 +1,5 @@
 {
-  "civ_install": "YOUR_DIRECTORY_HERE",
+  "civ_install": "E:/Steam/steamapps/common/Sid Meier's Civilization VI",
   "units_specified": {
     "MY_NEW_UNIT": "UNIT_ZOMBIE",
     "ANOTHER_UNIT": "UNIT_PERSIAN_IMMORTAL"
