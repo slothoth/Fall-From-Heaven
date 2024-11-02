@@ -181,6 +181,12 @@
       </Properties>
 	  <File>UI/ExtraHeroesOperation.xml</File>
     </AddUserInterfaces>
+    <AddUserInterfaces id="AddUserInterfaceWorldSpell">
+      <Properties>
+        <Context>InGame</Context>
+      </Properties>
+      <File>UI/WorldSpell.xml</File>
+    </AddUserInterfaces>
     <ImportFiles id="LUA_Replacers">
       <Properties>
         <LoadOrder>150000</LoadOrder>
@@ -237,7 +243,7 @@
             <LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
-        <ReplaceUIScript id="ReplaceUI_UnitPanel">
+     <ReplaceUIScript id="ReplaceUI_UnitPanel">
         <Properties>
             <LoadOrder>1105</LoadOrder>
             <LuaContext>UnitPanel</LuaContext>
@@ -391,6 +397,7 @@
     <File>Artdefs/Landmarks.artdef</File>
     <File>Artdefs/Resources.artdef</File>
     <File>Artdefs/Units.artdef</File>
+    <File>Artdefs/Unit_Bins.artdef</File>
     <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons.xml</File>
@@ -415,5 +422,7 @@
     <File>UI/TreatWithTribePopup.lua</File>
     <File>UI/world_rankings.lua</File>
     <File>UI/WorldRankings.xml</File>
+    <File>UI/WorldSpell.xml</File>
+    <File>UI/WorldSpell.lua</File>
   </Files>
 </Mod>

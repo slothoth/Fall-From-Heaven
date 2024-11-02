@@ -23,6 +23,7 @@
 			<ConsumerName text="Units"/>
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
+				<Element text="Unit_Bins.artdef"/>
 				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
@@ -260,6 +261,7 @@
 			<ConsumerName text="Cultures"/>
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
+				<Element text="Unit_Bins.artdef"/>
 				<Element text="Civilizations.artdef"/>
 				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
@@ -422,7 +424,14 @@
 			<ArtDefPath text="Units.artdef"/>
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
+				<Element text="Unit_Bins.artdef"/>
 				<Element text="Cultures.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Unit_Bins.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Units.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 		<Element>

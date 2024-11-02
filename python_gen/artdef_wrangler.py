@@ -2,14 +2,14 @@ import xmltodict
 import json
 import glob
 import logging
-import platform
 import os
-
+import xml.etree.ElementTree as ET
 
 class Artdef:
-    def __init__(self):
-        with open("plans/asset_map_plan.json", 'r') as json_file:
-            self.asset_map = json.load(json_file)
+    def __init__(self, asset_map=None):
+        if asset_map is not None:
+            with open("plans/asset_map_plan.json", 'r') as json_file:
+                self.asset_map = json.load(json_file)
         with open("data/config.json", 'r') as json_file:
             config = json.load(json_file)
         self.folder = config.get('civ_install', None)
@@ -497,3 +497,70 @@ class Artdef:
                 fow_def['@Atlas'] += '_FOW'
                 self.icons['GameInfo']['IconDefinitions']['Row'].append(fow_def)
 
+    def unit_culture_artdef(self, folder):
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
+        string = 'Unit_Bins.artdef'
+        artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
+        position = 1
+        bodies = ['Heads', 'BaseMale_Bodies', 'BaseMale_Heads', 'BaseFemale_Bodies', 'BaseFemale_Heads', 'BaseFemale_Hair']
+        armors = ['BaseMale_Armor']
+        hairs = ['BaseMale_FaceHair', 'BaseMale_Hair_Ancient_to_Medieval', 'BaseMale_Mustache', 'BaseMale_Hair_Medieval_to_Modern']
+        artdef_to_add = self.absorb_artdef(artdefs[0], bodies)
+
+        for artdef in artdefs[position:]:
+            self.absorb_artdef(artdef, bodies, artdef_to_add)
+
+        with open('../Artdefs/Unit_Bins.artdef', 'w') as file:
+            xmltodict.unparse(artdef_to_add, output=file, pretty=True)
+
+    def absorb_artdef(self, filepath, filter, existing_artdef=None):
+        with open(filepath, 'r') as file:
+            string_artdef = file.read()
+            string_artdef = string_artdef.replace('\t', '')
+            artdef_info = xmltodict.parse(string_artdef)
+
+        artdef_classes = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']
+        artdef_index = [idx for idx, i in enumerate(artdef_classes) if i['m_CollectionName'] == {'@text': 'UnitAttachmentBins'}][0]
+        artdef_info_ = artdef_classes[artdef_index].get('Element', None)
+        if artdef_info_ is None:
+            return existing_artdef
+        elif isinstance(artdef_info_, dict):
+            artdef_info_ = [artdef_info_]
+        bodies_info = [i for i in artdef_info_ if i['m_Name']['@text'] in filter]
+        if len(bodies_info) == 0:
+            return existing_artdef
+        if existing_artdef:
+            mapper = {i['m_Name']['@text']: i['m_ChildCollections']['Element']['Element'] for i in
+                      existing_artdef['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index][
+                          'Element']}
+        new_bodies = []
+        for body_type in bodies_info:
+            items_to_edit = body_type['m_ChildCollections']['Element']['Element']
+            if isinstance(items_to_edit, dict):
+                items_to_edit = [items_to_edit]
+            changed_items = []
+            for j in items_to_edit:
+                culture_check = j['m_ChildCollections']['Element']
+                if culture_check['m_CollectionName']['@text'] == 'Cultures':
+                    individual_cultures = culture_check['Element']
+                    if isinstance(individual_cultures, dict):
+                        individual_cultures = [individual_cultures]
+                    new_entry = individual_cultures[0].copy()
+                    new_entry['m_Fields']['m_Values']['Element']['m_ElementName']['@text'] = 'SlthBaseMale_SkinColor_Orc'
+                    new_entry['m_Name'] = {'@text': 'Orcish'}
+                    individual_cultures.append(new_entry)
+                    j['m_ChildCollections']['Element']['Element'] = individual_cultures
+                    changed_items.append(j)
+                else:
+                    print('error, collection isnt cultures')
+            if existing_artdef is not None:
+                body_key = body_type['m_Name']['@text']
+                existing_collection = mapper[body_key]
+                existing_collection += changed_items
+            else:
+                body_type['m_ChildCollections']['Element']['Element'] = changed_items
+                new_bodies.append(body_type)
+        if existing_artdef is None:
+            artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index]['Element'] = new_bodies
+            return artdef_info
