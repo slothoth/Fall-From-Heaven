@@ -512,6 +512,14 @@ local function SetCapitalProperty(iPlayer, tParameters)
     pCapitalPlot:SetProperty(sPropKey, iPropValue)
 end
 
+local function SetPlayerProperty(iPlayer, tParameters)
+    local sPropKey = tParameters.sPropKey;
+    local iPropValue = tParameters.iPropValue;
+    local pPlayer = Players[iPlayer];
+    pPlayer:SetProperty(sPropKey, iPropValue)
+    print('set '.. sPropKey .. 'to ' .. iPropValue)
+end
+
 local function OnSummon(iPlayer, tParameters)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
@@ -1155,6 +1163,7 @@ local function OnBespokeSpell(iPlayer, tParameters)
 end
 
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
 
 GameEvents.SlthSetResourcePromotions.Add(UpdateResourcePromotion);
 
