@@ -2711,7 +2711,9 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 								UILens.SetLayerHexesColoredArea(SLTH_HEX_COLORING_MOVEMENT, Game.GetLocalPlayer(), tCachedViableActionPlots[sOpType], green)
 								UILens.ToggleLayerOn(SLTH_HEX_COLORING_MOVEMENT)			-- await user input in OnSelectPlot
 							else
-								UnitManager.RequestOperation( pSelectedUnit, actionHash );
+								local tParameters = {};
+								tParameters[UnitOperationTypes.PARAM_OPERATION_TYPE] = actionHash;
+								UI.SetInterfaceMode(eInterfaceMode, tParameters);
 							end
 						end
 					else
