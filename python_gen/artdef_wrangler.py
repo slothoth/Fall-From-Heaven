@@ -511,10 +511,9 @@ class Artdef:
         artdef_to_add = self.absorb_artdef(artdefs[0], filter, job)
 
         for artdef in artdefs[position:]:
-            self.absorb_artdef(artdef, filter, job, artdef_to_add)
+            artdef_to_add = self.absorb_artdef(artdef, filter, job, deepcopy(artdef_to_add))
 
-        with open('../Artdefs/Unit_Bins_alt.artdef', 'w') as file:
-            xmltodict.unparse(artdef_to_add, output=file, pretty=True)
+        return artdef_to_add
 
     def absorb_artdef(self, filepath, filter, job, existing_artdef=None):
         with open(filepath, 'r') as file:
@@ -548,14 +547,25 @@ class Artdef:
                     individual_cultures = culture_check['Element']
                     if isinstance(individual_cultures, dict):
                         individual_cultures = [individual_cultures]
-                    for culture, tint in job.items():
+                    for culture, action in job.items():
                         new_entry = deepcopy(individual_cultures[0])
-                        if 'Skin' in tint:
-                            new_entry['m_Fields']['m_Values']['Element']['m_ElementName']['@text'] = tint
-                        elif tint == 'NO_HAIR':
+                        if 'Skin' in action:
+                            new_entry['m_Fields']['m_Values']['Element']['m_ElementName']['@text'] = action
+                        elif action == 'NO_HAIR':
                             if isinstance(new_entry['m_ChildCollections']['Element']['Element'], list):
                                 new_entry['m_ChildCollections']['Element']['Element'] = new_entry['m_ChildCollections']['Element']['Element'][0]
                             new_entry['m_ChildCollections']['Element']['Element']['m_ChildCollections'] = None
+                        elif 'SCALE' in action:
+                            new_scaler = action.split('$_')[1]
+                            if isinstance(new_entry['m_ChildCollections']['Element']['Element'], dict):
+                                new_entry['m_ChildCollections']['Element']['Element'] = [new_entry['m_ChildCollections']['Element']['Element']]
+                            for child_to_alter in new_entry['m_ChildCollections']['Element']['Element']:
+                                found_scale_entries = [i for i in child_to_alter['m_Fields']['m_Values']['Element'] if i['m_ParamName'] == {'@text': 'Scale'}]
+                                if len(found_scale_entries) == 1:
+                                    scale_entry = found_scale_entries[0]
+                                    scale_entry['m_fValue'] = new_scaler
+                                else:
+                                    print(f'ERROR: Found {len(found_scale_entries)} matching text: scale in element, skipping.')
                         new_entry['m_Name'] = {'@text': culture}
                         individual_cultures.append(new_entry)
                     j['m_ChildCollections']['Element']['Element'] = individual_cultures
@@ -564,11 +574,18 @@ class Artdef:
                     print('error, collection isnt cultures')
             if existing_artdef is not None:
                 body_key = body_type['m_Name']['@text']
-                existing_collection = mapper[body_key]
-                existing_collection += changed_items
+                existing_collection = mapper.get(body_key, None)
+                if existing_collection is not None:
+                    existing_collection += changed_items
+                else:
+                    body_type['m_ChildCollections']['Element']['Element'] = changed_items
+                    existing_artdef['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index]['Element'].append(body_type)
+                    mapper[body_key] = existing_artdef['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index]['Element'][-1]
             else:
                 body_type['m_ChildCollections']['Element']['Element'] = changed_items
                 new_bodies.append(body_type)
         if existing_artdef is None:
             artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index]['Element'] = new_bodies
             return artdef_info
+        else:
+            return existing_artdef
