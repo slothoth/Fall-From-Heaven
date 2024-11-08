@@ -592,7 +592,9 @@
 		</Element>
 		<Element>
 			<LibraryName text="Unit"/>
-			<PackageDependencies/>
+			<PackageDependencies>
+				<Element text="UnitBinAccessories.blp"/>
+			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="VFX"/>

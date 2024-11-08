@@ -1691,10 +1691,10 @@
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"></m_EntryName>
+																<m_EntryName text="Orc_Tusk"></m_EntryName>
 																<m_XLPClass text="Unit"></m_XLPClass>
 																<m_XLPPath text="Units.xlp"></m_XLPPath>
-																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
 																<m_LibraryName text="Unit"></m_LibraryName>
 																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
@@ -3452,10 +3452,10 @@
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"></m_EntryName>
+																<m_EntryName text="Orc_Tusk"></m_EntryName>
 																<m_XLPClass text="Unit"></m_XLPClass>
 																<m_XLPPath text="Units.xlp"></m_XLPPath>
-																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
 																<m_LibraryName text="Unit"></m_LibraryName>
 																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
@@ -3883,10 +3883,10 @@
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="Male_Cauc_Beard_03"></m_EntryName>
+																<m_EntryName text="Orc_Tusk"></m_EntryName>
 																<m_XLPClass text="Unit"></m_XLPClass>
 																<m_XLPPath text="units.xlp"></m_XLPPath>
-																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
 																<m_LibraryName text="Unit"></m_LibraryName>
 																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
@@ -5224,10 +5224,10 @@
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"></m_EntryName>
+																<m_EntryName text="Orc_Tusk"></m_EntryName>
 																<m_XLPClass text="Unit"></m_XLPClass>
 																<m_XLPPath text="Units.xlp"></m_XLPPath>
-																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
 																<m_LibraryName text="Unit"></m_LibraryName>
 																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
@@ -6594,10 +6594,10 @@
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"></m_EntryName>
+																<m_EntryName text="Orc_Tusk"></m_EntryName>
 																<m_XLPClass text="Unit"></m_XLPClass>
 																<m_XLPPath text="units.xlp"></m_XLPPath>
-																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
 																<m_LibraryName text="Unit"></m_LibraryName>
 																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
@@ -7767,10 +7767,10 @@
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"></m_EntryName>
+																<m_EntryName text="Orc_Tusk"></m_EntryName>
 																<m_XLPClass text="Unit"></m_XLPClass>
 																<m_XLPPath text="units.xlp"></m_XLPPath>
-																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
 																<m_LibraryName text="Unit"></m_LibraryName>
 																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
