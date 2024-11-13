@@ -266,7 +266,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
 #### Redo Landmarks Natural Wonders
 - [ ] Mercurian Gate (Delicate Arch)
-#### From elsewhere
+#### From elsewhere with permissions?
 - [ ] Archery Range (JNR_TARGET_RANGE)
 - [ ] Governors Manor (JNR_MANSION)
 - [ ] Dungeon (JNR_PRISON)
@@ -279,7 +279,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Tower of Elements (Porcelain Tower)
 - [ ] Thousand Slums (Kowloon Walled City?)
 
-#### Could find someone elses
+#### Custom
 - [ ] Alchemy Lab
 - [ ] Tailor
 - [ ] Gambling House
@@ -465,7 +465,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 #### Cultures
 - [ ] Elf
 - [ ] Dwarf
-- [ ] Infernal
+- [x] Infernal
 - [ ] Orc
 - [ ] Goblin
 - [ ] Lizardman
@@ -473,7 +473,7 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 - [ ] Ogre
 - [ ] Angel
 - [ ] Skeleton (Skeleton, Wraith, Ars, Bone Golem, Lich)
-- [ ] Liquid (Tar demon, Water Elemental)
+- [ ] Liquid (Tar demon, Water Elemental, seems like a bad idea.)
 #### VFX
 - [ ] Air Elemental  (We now know Ambient VFX is possible. Just need to hide unit (we have done this before accidentally by calling non-existant assets, but will the VFX stay?))
 - [ ] Fire Elemental
