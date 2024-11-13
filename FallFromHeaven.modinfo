@@ -31,6 +31,7 @@
         <LoadOrder>100</LoadOrder>
       </Properties>
       <File>Core/frontend_config.sql</File>
+      <!--File>Core/CompactFrontendBan.sql</File-->
     </UpdateDatabase>
     <UpdateText id="UpdateText">
       <File>Localisation/loc_playeritems.sql</File>
@@ -377,6 +378,7 @@
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
     <File>Core/frontend_config.sql</File>
+    <File>Core/CompactFrontendBan.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Gameplay.lua</File>
