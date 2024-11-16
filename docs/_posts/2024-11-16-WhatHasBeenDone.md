@@ -29,7 +29,11 @@ Items can be both 0 movement units as well as abilities that empower the unit th
 Promotions are limited as in FFH, like Scourge being unpickable without Way of the Wicked, or Twincast/Heroic Strength needing a Hero unit.
 
 ## Free promotions
-Traits like Aggressive and Spiritual grant their promotions to units on spawn, as does having an excess of a mana resource for magical units. 
+Traits like Aggressive and Spiritual grant their promotions to units on spawn, as does having an excess of a mana resource for magical units.
+
+## Expand Promotion UI
+Made the UI for promotions bigger and changed line transitions to allow dummy promotion precursors.
+![Alt text](/Fall-From-Heaven//Images/PromotionTree.png)
 
 ## Resource Affinities
 Units with a resource affinity like the Shadowrider gain bonus combat strength based on the amount of the resource you have, both improved in your territory and gained via trade/modifiers.

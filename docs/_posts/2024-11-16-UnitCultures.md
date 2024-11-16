@@ -11,13 +11,13 @@ The main hurdle was writing a script that gathered all the existing units cultur
 
 Orcs were reasonably simple, two shades of green that looked both realistic and popped decently against the terrain, and a brown to add some variance and emphasise a loose band of clans. Initially I had difficulty getting a brown that fit in Civ, that wasn't an existing real world race. But i found a clayish brown that suited. Here are some earlier efforts that didnt quite pan out, too dark for civs palette:
 
-![Alt text](../Images/JustTintOrc.webp)
+![Alt text](/Fall-From-Heaven/Images/JustTintOrc.webp)
 
 I then had to do some work in removing more human-like clutter, like the hairstyles. I am still unsure of giving Orcs hair, I feel the trend towards it is very World of Warcraft, and was probably done to humanise the characters (sure Thrall has hair, but the lowly Peon certainly does not). I think I'm going for a more Tolkienesque Orc, well maybe not quite as black and white as Tolkien, but certainly Evil. So no hair, and to add more flavour rather than people thinking its just a college bodypainting party where they only had one paint colour, some unit culture stuff to make them well, Orcish. My first thought was a pair of tusks, which I thought would clearly portray them as Orcs, and give a brutish strength they should have. This was my first proper encounter with blender, and after some great difficulty, I extruded a pipe and kinked it at 45 degrees twice to give a very low poly horn. Then after some help from the lovely people at the Modding Helpline, I managed to get it in game using the CivNexus blender scripts and then CivNexus itself, using the rather exhaustive UnitTutorial provided by LINK. I was far too new to know how to colour it, so I figured i would just use a white material, which ended up being a Sail texture amusingly. Immediately it was clear it had some design problems:
 
-![Not very clear](../Images/first_orc_tusk_close.webp)
+![Not very clear](/Fall-From-Heaven//Images/first_orc_tusk_close.webp)
 
-![Very hard to see from afar](../Images/first_orc_tusk_far.png)
+![Very hard to see from afar](/Fall-From-Heaven//Images/first_orc_tusk_far.png)
 Its teeeny. It also isnt that clear against the Orcs themselves. I had planned to make even smaller versions with broken tusks, but clearly i needed to scale up. Also its not that noticeable, but the tusk never makes contact with the head, it just sort of floats there.
 
 It also was a bad allocation of polygon budget. It was something like 150 triangles, for a very small effect, which could have performance issues. So i resolved to change some things for V2.
@@ -33,25 +33,25 @@ For devil horns, I had quite a few inspirations. I wanted the traditional devils
 
 I also learnt from the Orc debacle and imported a male head from the game for context and scale and to make sure the horns broke the skin! I haven't got round to it, but I'm also planning on setting up some rendering camera angles to replicate the default game height, but there is some debate on what it would be, and also some pain in fiddling with the camera aperture and other settings to replicate VI.
 
-![Alt text](../Images/ImpHorns.png)
+![Alt text](/Fall-From-Heaven//Images/ImpHorns.png)
 
-![Alt text](../Images/IlladinHorns.png)
+![Alt text](/Fall-From-Heaven//Images/IlladinHorns.png)
 
-![Alt text](../Images/DemonHornsBack.png)
+![Alt text](/Fall-From-Heaven//Images/DemonHornsBack.png)
 
-![Alt text](../Images/RamHorns.png)
+![Alt text](/Fall-From-Heaven//Images/RamHorns.png)
 
 Unfortunately, the rams horn has fallen through, theres some bug where the top half of the mesh is invisible, and you can see through it ingame. Once i figure out that it will be back to the races.
 
 When doing these horns, my plan was to colour them white, but then i thought, white horns/tusks are more bleached with age/after death. And looking at actual Ram horns showed they tended to be brownish/tan/black. I also thought for some variety and because there was no rendering cost it would be nice to do some features seen in horns like growth rings. ChatGPT (or rather, Claude) came through here, it took me about 5 minutes to set up a nice procedurally generated method to apply a set of rings travelling up each horn, and it definitely made them more grounded and "real". Then about twenty minutes dealing with the finicky stuff, like it not applying across the right axis sometimes. But this was good, it was a great crash course in the Node system used for shading.
 
-![Alt text](../Images/Nodes.png)
+![Alt text](/Fall-From-Heaven//Images/Nodes.png)
 
 I haven't gone too much into the exporting process for meshs, mostly because I follow it religiuosly and superstitiously, not really understanding it. But the process of exporting textures for a material helped me understand how textures work in games. Baking was a bit contrived, but made sense, although I just used the default UV unwrapping, as I still dont understand seams. But its amazing the level of control the game gives you once you are willing to commit to blender.
 
 Following all the import process and making the materials from the imported textures in Asset Editor, here was the result in game (helmets and do-rags subject to removal):
 
-![Alt text](../Images/image.png)
+![Alt text](/Fall-From-Heaven//Images/image.png)
 
 You can see I also did some UnitTints here, but they are very WIP. The blue feels more undead/ Octopus Overlords, and the black is unfortunately close to Blackface as the eyes are not the same colour. The red too is a bit too saturated, when I was testing different colours without any horns, a darker realistic red colour felt quite Native American, which is definitely not what i want, but I think the horns and eventually wings will clear that up. If I could do an overhaul of the material, using greys and blacks amongst a darker red, that would be ideal, but given all the different body types, that opens another whole kettle of fish and about 50 materials I would think. I plan to do some more testing with the console and 'reload artdef unit_bins', which has vastly sped up my time choosing colours.
 
@@ -69,4 +69,4 @@ But I think I would only do that level of polish once I have other cultures and 
 
 There are also some orc plans, as I said I dont like hair, but just baldness is boring. I'm thinking of doing some bone spikes, maybe like the exposed bones from the Titans from Arkham Asylum:
 
-![Alt text](https://static.wikia.nocookie.net/arkhamcity/images/6/67/TitanHenchmanModel1_%281%29.png/revision/latest?cb=20240923153905)
+![Alt text](/Fall-From-Heaven//Images/TitanHenchmanModel1.png)

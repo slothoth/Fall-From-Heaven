@@ -49,7 +49,15 @@ Replacing this system would suck, as we would have to set amenities to always be
 
 I'd then have to change the amenity stuff in the UI, and could replace that with our custom one.
 
-## Trade Routes
+# Trade Routes
 With the proposed district changes, trade routes will either be overpowered, or underpowered. If we leave it as is, all cities can just build as many districts as possible for free, and each gives an increase in yields to trade routes. But if we remove all trade route district yields, then those trade routes will never scale from the early to the late game. Annoyingly its not that easy to modify trade route yields.
+
+# Damage Conversion
+Civ IV had a much smaller damage scale, where a 4 damage unit was quite a bit stronger than a 3 damage unit. This mattered because of % scaling.
+Since % scaling is not possible in Civ VI, and existing values like crossing a river, city strengths are kept the same, we needed to upscale the old units strength, multiplying them by 5.
+We also made 20% damage increases just +4 damage, which does mean the damage isnt as well represented at high strength amounts.
+
+I did attempt to mathematically solve how I could get the same effect from a combat in Civ VI vs FFH, and it was so unintelligible and unsolvable I gave up. See below:
+![Alt text](/Fall-From-Heaven//Images/DamageModelAttempt.png)
 
 
