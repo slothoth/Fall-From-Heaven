@@ -288,6 +288,14 @@
       </Properties>
       <File>UI/WorldRankings.xml</File>
     </ImportFiles>
+    <ImportFiles id="ImportUIGovScreen">
+      <Properties>
+        <LoadOrder>901</LoadOrder>
+      </Properties>
+      <File>UI/GovernmentScreen.lua</File>
+      <File>UI/GovernmentScreen.xml</File>
+      <File>UI/TabSupport.lua</File>
+    </ImportFiles>
     <!--ImportFiles id="ImportMapGenOverrideFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
@@ -426,5 +434,8 @@
     <File>UI/WorldRankings.xml</File>
     <File>UI/WorldSpell.xml</File>
     <File>UI/WorldSpell.lua</File>
+    <File>UI/GovernmentScreen.lua</File>
+    <File>UI/GovernmentScreen.xml</File>
+    <File>UI/TabSupport.lua</File>
   </Files>
 </Mod>
