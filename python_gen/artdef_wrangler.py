@@ -2,14 +2,14 @@ import xmltodict
 import json
 import glob
 import logging
-import platform
 import os
-
+from copy import deepcopy
 
 class Artdef:
-    def __init__(self):
-        with open("plans/asset_map_plan.json", 'r') as json_file:
-            self.asset_map = json.load(json_file)
+    def __init__(self, asset_map=None):
+        if asset_map is not None:
+            with open("plans/asset_map_plan.json", 'r') as json_file:
+                self.asset_map = json.load(json_file)
         with open("data/config.json", 'r') as json_file:
             config = json.load(json_file)
         self.folder = config.get('civ_install', None)
@@ -497,3 +497,95 @@ class Artdef:
                 fow_def['@Atlas'] += '_FOW'
                 self.icons['GameInfo']['IconDefinitions']['Row'].append(fow_def)
 
+    def unit_culture_artdef(self, folder, job, jobtype):
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
+        string = 'Unit_Bins.artdef'
+        artdefs = [f for f in glob.glob(f'{folder}/**/*{string}*', recursive=True)]
+        position = 1
+        if jobtype == 'skin':
+            filter = ['Bodies', 'Heads', 'BaseMale_Bodies', 'BaseMale_Heads', 'BaseFemale_Bodies', 'BaseFemale_Heads', 'BaseFemale_Hair']
+        armors = ['BaseMale_Armor']
+        if jobtype == 'hairs':
+            filter = ['BaseMale_FaceHair', 'BaseMale_Hair_Ancient_to_Medieval', 'BaseMale_Mustache', 'BaseMale_Hair_Medieval_to_Modern']
+        artdef_to_add = self.absorb_artdef(artdefs[0], filter, job)
+
+        for artdef in artdefs[position:]:
+            artdef_to_add = self.absorb_artdef(artdef, filter, job, deepcopy(artdef_to_add))
+
+        return artdef_to_add
+
+    def absorb_artdef(self, filepath, filter, job, existing_artdef=None):
+        with open(filepath, 'r') as file:
+            string_artdef = file.read()
+            string_artdef = string_artdef.replace('\t', '')
+            artdef_info = xmltodict.parse(string_artdef)
+
+        artdef_classes = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']
+        artdef_index = [idx for idx, i in enumerate(artdef_classes) if i['m_CollectionName'] == {'@text': 'UnitAttachmentBins'}][0]
+        artdef_info_ = artdef_classes[artdef_index].get('Element', None)
+        if artdef_info_ is None:
+            return existing_artdef
+        elif isinstance(artdef_info_, dict):
+            artdef_info_ = [artdef_info_]
+        bodies_info = [i for i in artdef_info_ if i['m_Name']['@text'] in filter]
+        if len(bodies_info) == 0:
+            return existing_artdef
+        if existing_artdef:
+            mapper = {i['m_Name']['@text']: i['m_ChildCollections']['Element']['Element'] for i in
+                      existing_artdef['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index][
+                          'Element']}
+        new_bodies = []
+        for body_type in bodies_info:
+            items_to_edit = body_type['m_ChildCollections']['Element']['Element']
+            if isinstance(items_to_edit, dict):
+                items_to_edit = [items_to_edit]
+            changed_items = []
+            for j in items_to_edit:
+                culture_check = j['m_ChildCollections']['Element']
+                if culture_check['m_CollectionName']['@text'] == 'Cultures':
+                    individual_cultures = culture_check['Element']
+                    if isinstance(individual_cultures, dict):
+                        individual_cultures = [individual_cultures]
+                    for culture, action in job.items():
+                        new_entry = deepcopy(individual_cultures[0])
+                        if 'Skin' in action:
+                            new_entry['m_Fields']['m_Values']['Element']['m_ElementName']['@text'] = action
+                        elif action == 'NO_HAIR':
+                            if isinstance(new_entry['m_ChildCollections']['Element']['Element'], list):
+                                new_entry['m_ChildCollections']['Element']['Element'] = new_entry['m_ChildCollections']['Element']['Element'][0]
+                            new_entry['m_ChildCollections']['Element']['Element']['m_ChildCollections'] = None
+                        elif 'SCALE' in action:
+                            new_scaler = action.split('$_')[1]
+                            if isinstance(new_entry['m_ChildCollections']['Element']['Element'], dict):
+                                new_entry['m_ChildCollections']['Element']['Element'] = [new_entry['m_ChildCollections']['Element']['Element']]
+                            for child_to_alter in new_entry['m_ChildCollections']['Element']['Element']:
+                                found_scale_entries = [i for i in child_to_alter['m_Fields']['m_Values']['Element'] if i['m_ParamName'] == {'@text': 'Scale'}]
+                                if len(found_scale_entries) == 1:
+                                    scale_entry = found_scale_entries[0]
+                                    scale_entry['m_fValue'] = new_scaler
+                                else:
+                                    print(f'ERROR: Found {len(found_scale_entries)} matching text: scale in element, skipping.')
+                        new_entry['m_Name'] = {'@text': culture}
+                        individual_cultures.append(new_entry)
+                    j['m_ChildCollections']['Element']['Element'] = individual_cultures
+                    changed_items.append(j)
+                else:
+                    print('error, collection isnt cultures')
+            if existing_artdef is not None:
+                body_key = body_type['m_Name']['@text']
+                existing_collection = mapper.get(body_key, None)
+                if existing_collection is not None:
+                    existing_collection += changed_items
+                else:
+                    body_type['m_ChildCollections']['Element']['Element'] = changed_items
+                    existing_artdef['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index]['Element'].append(body_type)
+                    mapper[body_key] = existing_artdef['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index]['Element'][-1]
+            else:
+                body_type['m_ChildCollections']['Element']['Element'] = changed_items
+                new_bodies.append(body_type)
+        if existing_artdef is None:
+            artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][artdef_index]['Element'] = new_bodies
+            return artdef_info
+        else:
+            return existing_artdef

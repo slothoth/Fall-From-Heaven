@@ -152,6 +152,10 @@ end
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
     for i, unit in pPlayer:GetUnits():Members() do
+        if unit:GetProperty('HasCast') then
+            print('setting HasCast to 0')
+            unit:SetProperty('HasCast', 0)
+        end
         local iUnitIndex = unit:GetType();
         local sUnitType = GameInfo.Units[iUnitIndex].UnitType
         if not sUnitType then return; end                       -- remove once table correct
@@ -197,59 +201,6 @@ function onTurnStartGameplay(playerId)
             print('player turn started: removed blocker')
             return
         end
-    end
-end
-
-function checkDeals(playerId)
-    pPlayer = Players[playerId]
-    if not pPlayer:IsMajor() then return; end;
-    tLivingMajorIds = PlayerManager.GetAliveMajorIDs();
-    table.remove(tLivingMajorIds, playerId);
-    local tResourceExportImport = {}
-    local length_prev_deals = 0
-    for _, otherPlayerId in ipairs(tLivingMajorIds) do
-        local deals = DealManager.GetPlayerDeals(playerId,otherPlayerId) -- [1]:FindItemByID(2):()
-        local previous_deals = pPlayer:GetProperty('deals_' .. otherPlayerId)
-        if not previous_deals then
-            previous_deals = {};
-        else
-            length_prev_deals = #previous_deals
-        end
-        if deals then
-            if length_prev_deals ~= #deals then
-                for idx, deal in ipairs(deals) do
-                    if deal ~= previous_deals[idx] then
-                        for dealItem in deal:Items() do
-                            local resource_name = dealItem:GetValueTypeNameID();
-                            if resource_name then
-                                local resource_row = TrackedResources[resource_name]
-                                if resource_row then
-                                    if not dealItem:GetFromPlayerID() == playerId then
-                                        local resourceChange = dealItem:GetAmount()
-                                        SlthLog('hit');
-                                        SlthLog(resource_name)
-                                        local existing = 0;
-                                        if tResourceExportImport[resource_row.ResourceType] then
-                                            existing = tResourceExportImport[resource_row.ResourceType]
-                                        end
-                                        tResourceExportImport[resource_name] = existing + resourceChange
-                                    end
-                                end
-                                SlthLog(resource_name);
-                            end
-                        end
-                    end
-                end
-            end
-            pPlayer:SetProperty('deals_' .. otherPlayerId, deals)
-        end
-    end
-    SlthLog('finally:')
-    SlthLog(#tResourceExportImport);
-    for rsc_name, rsc_amount in pairs(tResourceExportImport) do
-        SlthLog(rsc_name);
-        SlthLog(rsc_amount);
-        pPlayer:SetProperty(rsc_name, rsc_amount);
     end
 end
 
@@ -324,7 +275,8 @@ function InitCottage(x, y, improvementIndex, playerID)
         local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
         if iResourceToChangeTo then
             print('changing resource to ' .. tostring(iResourceToChangeTo))
-            ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);
+            ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);         -- error with getting raw mana, remove improvement and place again>
+            -- ImprovementBuilder.SetImprovementType(pPlot, improvementIndex, playerId)
         end
     end
     if improvementIndex then
@@ -560,12 +512,57 @@ local function SetCapitalProperty(iPlayer, tParameters)
     pCapitalPlot:SetProperty(sPropKey, iPropValue)
 end
 
+local function SetPlayerProperty(iPlayer, tParameters)
+    local sPropKey = tParameters.sPropKey;
+    local iPropValue = tParameters.iPropValue;
+    local pPlayer = Players[iPlayer];
+    pPlayer:SetProperty(sPropKey, iPropValue)
+    print('set '.. sPropKey .. 'to ' .. iPropValue)
+end
+
 local function OnSummon(iPlayer, tParameters)
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
-    BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    local pUnitExp = pUnit:GetExperience()
+    local pUnitAbility = pUnit:GetAbility()
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    for iUnitID, pNewUnit in pairs(tNewUnits) do
+        print(OperationInfo.SimpleText)
+        pUnit:SetProperty(OperationInfo.SimpleText, iUnitID)                -- used to link summoner and summoned
+        pNewUnit:SetProperty('owner', tParameters.iCastingUnit)             -- used to link summoner and summoned
+        if pNewUnit:GetProperty('LifespanRemaining') == 1 then
+            if pUnitAbility:HasAbility('SLTH_ABILITY_SUMMONER') then
+                pNewUnit:SetProperty('LifespanRemaining', 2)                -- set duration
+            else
+                pNewUnit:SetProperty('LifespanRemaining', 1)
+            end
+        end
+        InheritSummon(pNewUnit, pUnitExp, pUnitAbility)
+    end
+    pUnit:SetProperty('HasCast', 1)
+end
+
+local tPromoCombat = {
+[GameInfo.UnitPromotions['PROMOTION_COMBAT1_ADEPT'].Index] = 1,
+[GameInfo.UnitPromotions['PROMOTION_COMBAT2_ADEPT'].Index] = 1,
+[GameInfo.UnitPromotions['PROMOTION_COMBAT3_ADEPT'].Index] = 1,
+[GameInfo.UnitPromotions['PROMOTION_COMBAT4_ADEPT'].Index] = 1,
+[GameInfo.UnitPromotions['PROMOTION_COMBAT5_ADEPT'].Index] = 1,
+}
+
+function InheritSummon(pSummonedUnit, pSummonerUnitExp, pSummonerUnitAbility)
+    local pSummonUnitAbility = pSummonedUnit:GetAbility()
+    if pSummonerUnitAbility:HasAbility('SLTH_ABILITY_SUMMONER') then
+        pSummonUnitAbility:AddAbilityCount('ABILITY_SUMMONER_INHERITED_STRENGTH')
+    end
+
+    for iPromoCombatIndex, _ in pairs(tPromoCombat) do
+        if pSummonerUnitExp:HasPromotion(iPromoCombatIndex) then
+            pSummonUnitAbility:AddAbilityCount('ABILITY_SUMMONER_INHERITED_STRENGTH')
+        end
+    end
 end
 
 local function OnSummonPermanent(iPlayer, tParameters)
@@ -575,6 +572,8 @@ local function OnSummonPermanent(iPlayer, tParameters)
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local iCheckExistingUnit = pUnit:GetProperty(OperationInfo.SimpleText)
+    local pUnitExp = pUnit:GetExperience()
+    local pUnitAbility = pUnit:GetAbility()
     print(iCheckExistingUnit)
     if iCheckExistingUnit then
         local pUnitPrecursor = UnitManager.GetUnit(iPlayer, iCheckExistingUnit);
@@ -584,9 +583,11 @@ local function OnSummonPermanent(iPlayer, tParameters)
     for iUnitID, pNewUnit in pairs(tNewUnits) do
         print('set inherited abilities here')
         print(OperationInfo.SimpleText)
-        pUnit:SetProperty(OperationInfo.SimpleText, iUnitID)                -- used to link summoner and summoned
+        pUnit:SetProperty(OperationInfo.SimpleText, iUnitID)                -- used to link summoner and summoned. todo breaks on twinspell
         pNewUnit:SetProperty('owner', tParameters.iCastingUnit)             -- used to link summoner and summoned
+        InheritSummon(pNewUnit, pUnitExp, pUnitAbility)
     end
+    pUnit:SetProperty('HasCast', 1)
 end
 
 local function OnGrantBuffSelf(iPlayer, tParameters)
@@ -597,6 +598,7 @@ local function OnGrantBuffSelf(iPlayer, tParameters)
     if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
         pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
     end
+    pUnit:SetProperty('HasCast', 1)
 end
 
 local function OnGrantBuffAoe(iPlayer, tParameters)
@@ -620,6 +622,7 @@ local function OnGrantBuffAoe(iPlayer, tParameters)
 			end
 		end
 	end
+    pUnit:SetProperty('HasCast', 1)
 end
 
 local function OnGrantDebuffAoe(iPlayer, tParameters)
@@ -643,6 +646,7 @@ local function OnGrantDebuffAoe(iPlayer, tParameters)
 			end
 		end
 	end
+    pUnit:SetProperty('HasCast', 1)
 end
 
 local function OnSpellChangeTerrain(iPlayer, tParameters)
@@ -661,10 +665,13 @@ local function OnSpellChangeTerrain(iPlayer, tParameters)
     if iNewTerrain then
         TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
     end
+    pUnit:SetProperty('HasCast', 1)
 end
 
 local function OnSpellAoeDamage(iPlayer, tParameters)
     local pAbilityUnit
+    local tagInfo
+    local iNewTerrain
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
@@ -678,10 +685,10 @@ local function OnSpellAoeDamage(iPlayer, tParameters)
 				local iOwnerPlayer = pNearUnit:GetOwner();
 				if (iOwnerPlayer ~= iPlayer) then
 					if Players[iPlayer]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
-                        local tagInfo = true
+                        tagInfo = true
                         local UnitTypeInfo = GameInfo.Units[pNearUnit:GetType()]
                         if OperationInfo.SimpleText == 'IS_UNDEAD' then
-                            local tagInfo = GameInfo.TypeTags[{UnitTypeInfo.UnitType, 'IS_UNDEAD'}]
+                            tagInfo = GameInfo.TypeTags[{UnitTypeInfo.UnitType, 'IS_UNDEAD'}]
                         end
 						if (UnitTypeInfo.Combat ~= 0 and UnitTypeInfo.Domain ~= "DOMAIN_AIR") and tagInfo then
 							pNearUnit:ChangeDamage(iDamage);
@@ -721,6 +728,7 @@ local function OnSpellAoeDamage(iPlayer, tParameters)
 			end
 		end
 	end
+    pUnit:SetProperty('HasCast', 1)
 end
 
 local function GrantGoldenAge(iPlayer, tParameters)
@@ -741,11 +749,23 @@ local function GrantGoldenAge(iPlayer, tParameters)
 	pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
 end
 
+local tBuildingGrantModiferMap = {
+    ['SLTH_BUILDING_CODE_OF_JUNIL'] = 'SLTH_MODIFIER_GRANT_CODE_OF_JUNIL',
+    ['BUILDING_ANGKOR_WAT'] = 'SLTH_MODIFIER_GRANT_DIES_DEI',
+    ['SLTH_BUILDING_TABLETS_OF_BAMBUR'] = 'SLTH_MODIFIER_GRANT_TABLETS_OF_BAMBUR',
+    ['SLTH_BUILDING_SONG_OF_AUTUMN'] = 'SLTH_MODIFIER_GRANT_SONG_OF_AUTUMN',
+    ['SLTH_BUILDING_THE_NECRONOMICON'] = 'SLTH_MODIFIER_GRANT_THE_NECRONOMICON',
+    ['SLTH_BUILDING_NOX_NOCTIS'] = 'SLTH_MODIFIER_GRANT_NOX_NOCTIS',
+    ['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'] = 'SLTH_MODIFIER_GRANT_STIGMATA_ON_THE_UNBORN'
+}
+
 local function GrantBuildingFunction(iPlayer, tParameters)
     local iUnit = tParameters.iCastingUnit
     local sUnitOperationType =  tParameters.UnitOperationType
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
-    local sModifierGrant = OperationInfo.SimpleText
+    local sModifierGrant = tBuildingGrantModiferMap[OperationInfo.SimpleText]
+    if not sModifierGrant then print('building didnt have a modifier grant mapping, returning..'); return; end
+    print(sModifierGrant)
 	local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
@@ -824,7 +844,7 @@ local function UnitCityInteract(iPlayer, tParameters)
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local sOperationAbility = OperationInfo.AbilityPrereq
     if sUnitOperationType == 'UNITOPERATION_LOKI_DISRUPT_CITY' then
-        print('whatever that does lol')
+        print('Causes unhappiness. Decreases city Culture. Converts citys without culture.')
     elseif sUnitOperationType == 'UNITOPERATION_LOKI_ENTERTAIN_CITY' then
         print('placeholder, grant gold to casting unit and amenity to city casted in for a turn. ideally will stay as long as loki is nearby, its the Inspiration problem')
     elseif sUnitOperationType == 'UNITOPERATION_DROWN_WARRIOR' then
@@ -949,6 +969,109 @@ local function ConsumeEquipment(iPlayer, tParameters)
 	end
 end
 
+local function SummonClone( iPlayer, tParameters)
+    local iUnitID = tParameters.iCastingUnit
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+    local iUnitToSummon = pUnit:GetType()
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    for iUnitSummonID, pNewUnit in pairs(tNewUnits) do
+        print('set inherited abilities here')
+        pNewUnit:SetProperty('LifespanRemaining', 1)                -- set duration
+    end
+end
+
+local function BreakStaff( iPlayer, tParameters)
+    local iUnitID = tParameters.iCastingUnit
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+    local pUnitAbilityManager = pUnit:GetAbility()
+    pUnitAbilityManager:RemoveAbilityCount('SLTH_EQUIPMENT_SPELL_STAFF_ABILITY');
+    pUnit:SetProperty('HasCast', 0)
+end
+
+local function RefreshCastTakePop( iPlayer, tParameters)
+    local iUnitID = tParameters.iCastingUnit
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+	local pCity = Cities.GetCityInPlot(iX, iY)
+    pCity:ChangePopulation(-1)
+    pUnit:SetProperty('HasCast', 0)
+end
+
+local function GainExperienceTakePop( iPlayer, tParameters)
+    local iUnitID = tParameters.iCastingUnit
+	local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+    local iX =  pUnit:GetX()
+    local iY =  pUnit:GetY()
+	local pCity = Cities.GetCityInPlot(iX, iY)
+    local pUnitExp = pUnit:GetExperience()
+    pUnitExp:ChangeExperience(10)
+    pCity:ChangePopulation(-1)
+end
+
+local function SpreadEsus( iPlayer, tParameters)
+    local targetCityID = tParameters.iTargetID
+	local pCity = CityManager.GetCity(iPlayer, targetCityID);
+    local pCityReligion = pCity:GetReligion()
+    local iReligion = GameInfo.Religions["RELIGION_ISLAM"].Index
+    pCityReligion:AddReligiousPressure(0, iReligion,300, iPlayer)
+end
+
+local function TeleportUnitToSummon( iPlayer, tParameters)
+    local sUnitOperationType =  tParameters.UnitOperationType
+    local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local iUnitLink = pUnit:GetProperty(OperationInfo.SimpleText)
+    local pUnitLink = UnitManager.GetUnit(iPlayer, iUnitLink)
+    local iX =  pUnitLink:GetX()
+    local iY =  pUnitLink:GetY()
+    if pUnitLink then
+        UnitManager.PlaceUnit(pUnit, iX, iY)
+        UnitManager.Kill(pUnitLink)
+    end
+end
+
+local function TeleportUnitToCapital( iPlayer, tParameters)
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local pPlayer = Players[iPlayer];
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    if pCapitalCity then
+        local iX =  pCapitalCity:GetX()
+        local iY =  pCapitalCity:GetY()
+        UnitManager.PlaceUnit(pUnit, iX, iY)
+    end
+end
+local function ForcePeace( iPlayer, tParameters)
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local pPlayer = Players[iPlayer];
+    local pDiplo = pPlayer:GetDiplomacy()
+    for iOtherPlayer, _ in ipairs(Players) do
+        if pDiplo:IsAtWarWith(iOtherPlayer) then
+            pDiplo:MakePeaceWith(iOtherPlayer)
+        end
+    end
+    local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
+    if iArmageddonCount then
+        local iNewArmageddonCount = math.floor(iArmageddonCount / 2)
+        Game.SetProperty('ARMAGEDDON', iNewArmageddonCount)
+    end
+    UnitManager.Kill(pUnit)
+end
+
+local function HealSelf( iPlayer, tParameters)
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    Game.SetProperty('SIRONA_CAST', 1)                      -- todo setup gating
+    local iCurrentHealth = pUnit:GetDamage() * -1
+    pUnit:ChangeDamage(iCurrentHealth);
+end
+
+local function HealTileUnits( iPlayer, tParameters)
+    local iUnitToHealID = tParameters.iTargetID
+    local pUnitToHeal = UnitManager.GetUnit(iPlayer, iUnitToHealID);
+    local iCurrentHealth = pUnitToHeal:GetDamage() * -1
+    pUnitToHeal:ChangeDamage(iCurrentHealth);
+end
+
 
 
 
@@ -1040,6 +1163,7 @@ local function OnBespokeSpell(iPlayer, tParameters)
 end
 
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
 
 GameEvents.SlthSetResourcePromotions.Add(UpdateResourcePromotion);
 
@@ -1059,6 +1183,21 @@ GameEvents.SlthOnConsumeAlly.Add(ConsumeAlly);
 GameEvents.SlthOnUnitCityInteract.Add(UnitCityInteract);
 GameEvents.SlthOnConvertSelf.Add(ConvertSelfUnit);
 GameEvents.SlthOnTakeEquipment.Add(ConsumeEquipment);
+GameEvents.SlthOnCastMirror.Add(SummonClone)
+GameEvents.SlthOnBreakStaff.Add(BreakStaff)
+GameEvents.SlthDreamsConsume.Add(RefreshCastTakePop)
+GameEvents.SlthVampireConsumePop.Add(GainExperienceTakePop)
+GameEvents.SlthOnSpreadEsus.Add(SpreadEsus)
+GameEvents.SlthOnTeleportToSummon.Add(TeleportUnitToSummon)
+GameEvents.SlthOnTeleportToCapital.Add(TeleportUnitToCapital)
+GameEvents.SlthOnForcePeace.Add(ForcePeace)
+GameEvents.SlthOnHealSelf.Add(HealSelf)
+GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
+
+
 
 onStart()
+
+
+
 

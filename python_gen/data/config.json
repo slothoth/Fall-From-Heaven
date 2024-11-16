@@ -1,8 +1,0 @@
-{
-  "civ_install": "YOUR_DIRECTORY_HERE",
-  "units_specified": {
-    "MY_NEW_UNIT": "UNIT_ZOMBIE",
-    "ANOTHER_UNIT": "UNIT_PERSIAN_IMMORTAL"
-  },
-  "show_all_possible_units": false
-}
