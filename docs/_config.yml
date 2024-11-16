@@ -20,11 +20,9 @@
 
 title: Fall From Heaven
 email: smayobiz@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
+description: >-
   Documenting the development of the Civilization VI mod Fall From Heaven, a port of
   the Civilization IV mod Fall From Heaven.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  slothoth
 
 # Build settings
