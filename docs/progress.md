@@ -113,8 +113,6 @@ like barbarian encampments but with different classes that spawn different units
 - [ ] Dark elf kidnapping superSpecialist ( apply a modifier  with the reverse values of a superspecialist) and spawn a great person
 - [x] For single ability units, Manes for example, Hero Hijacking, see if the relic system is in Lua and if we can override, so the ai can use abilities of units hopefully. or maybe Great People
 - [ ] Single active, grants to city/player/unit
-- [ ] Bear, Wolf, Lion, Tiger, Gorilla, spider pen, scorpion cages (issue with barbs. Also all_units_attach_modifier fails.)
-- [ ] Free magic promos.
 
 ## Upgrade System:
 - [ ] can upgrade outside borders       probably needs bespoke upgrade system. what about using strategic forts to briefly grant the tile to the player?
@@ -122,7 +120,6 @@ like barbarian encampments but with different classes that spawn different units
 
 ## Magic System:
 - [x] UI to press buttons (try make something like for building improvements but above) maybe hijack unitCommands system for populating?
-- [ ] Puppets, inheriting from summoner
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
 - [ ] Summoning Buildings : Modifier with 3 tile AOE? So can only affect one city. Needs to be Lua as requirements cant check if unit has promotion, and needs to be rooted in city not unit. Or with modifier as do a modifier on city with REQUIREMENT_PLOT_ADJACENT_FRIENDLY_UNIT_TYPE_MATCHES
 
