@@ -281,6 +281,12 @@
         <LuaReplace>UI/world_rankings.lua</LuaReplace>
       </Properties>
     </ReplaceUIScript>
+    <ImportFiles id="GovScreenPanelReligion">
+      <Properties>
+        <LoadOrder>101</LoadOrder>
+      </Properties>
+      <File>UI/GovernmentScreen.xml</File>
+    </ImportFiles>
     <ImportFiles id="XP2WRxmlOverride">
       <Properties>
         <LoadOrder>101</LoadOrder>
@@ -424,5 +430,7 @@
     <File>UI/WorldRankings.xml</File>
     <File>UI/WorldSpell.xml</File>
     <File>UI/WorldSpell.lua</File>
+    <File>UI/GovernmentScreen.lua</File>
+    <File>UI/GovernmentScreen.xml</File>
   </Files>
 </Mod>

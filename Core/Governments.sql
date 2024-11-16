@@ -410,6 +410,8 @@ INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_O
 INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyName', 'SLTH_POLICY_STATE_ORDER');
 INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyMinimum', '1');
 
+-- INSERT INTO GovernmentSlots (GovernmentSlotType, Name, AllowsAnyPolicy) VALUES
+-- ('SLOT_NEWSLOT1', 'LOC_SLOT_STATE_REL_NAME', 0);
 
 -- religion policies, initially banned
 -- change to new slot type in future
