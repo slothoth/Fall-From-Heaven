@@ -1,8 +1,9 @@
---
+---
 layout: page
 title: "Progress"
 permalink: /progress
---
+---
+
 # Mod progress
 Here is where I am keeping track of things to be done, and what has currently been achieved in the mod.
 ## TOP priority:
