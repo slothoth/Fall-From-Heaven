@@ -75,7 +75,7 @@ local PIC_CARD_TYPE_DIPLOMACY		:string = "Governments_DiplomacyCard";
 local PIC_CARD_TYPE_ECONOMIC		:string = "Governments_EconomicCard";
 local PIC_CARD_TYPE_MILITARY		:string = "Governments_MilitaryCard";
 local PIC_CARD_TYPE_SLTHCUL			:string = "Governments_WildcardCard";
-local PIC_CARD_TYPE_SLTHREL			:string = "Governments_WildcardCard";
+local PIC_CARD_TYPE_SLTHREL			:string = "Governments_DarkCard";
 local PIC_PERCENT_BRIGHT			:string = "Governments_PercentWhite";
 local PIC_PERCENT_DARK				:string = "Governments_PercentBlue";
 local PICS_SLOT_TYPE_CARD_BGS		:table  = {
@@ -1057,7 +1057,7 @@ function RealizeTabs()
 		Controls.ButtonPolicies:SetText( Locale.Lookup("LOC_GOVT_VIEW_POLICIES") );
 	end
 
-	RealizeFilterTabs();
+	-- RealizeFilterTabs();
 end
 
 -- ===========================================================================
@@ -1067,7 +1067,6 @@ end
 function RealizePolicyCatalog()
 	--m_policyCardIM:ResetInstances();
 	for idx, cardManagerInstance in pairs(m_policyCardTypeIM) do
-		print(idx);
 		cardManagerInstance:ResetInstances();
 	end
 	local isCivilopediaAvailable:boolean = not IsTutorialRunning();
@@ -2008,10 +2007,9 @@ function GetCurrentDragTargetRowIndex( pDraggedControl:table, strPolicyType:stri
 		table.insert( kViableDragTargets, Controls.RowSLTHCUL );
 		kTargetToTypeMap[Controls.RowSLTHCUL] = ROW_INDEX.SLTHCUL;
 	end
-
 	if ( IsPolicyTypeLegalInRow( ROW_INDEX.SLTHREL, strPolicyType ) ) then
 		table.insert( kViableDragTargets, Controls.RowSLTHREL );
-		kTargetToTypeMap[Controls.RowSLTHCUL] = ROW_INDEX.SLTHREL;
+		kTargetToTypeMap[Controls.RowSLTHREL] = ROW_INDEX.SLTHREL;
 	end
 
 	local pBest:table = pDraggedControl:GetBestOverlappingControl( kViableDragTargets );
@@ -2069,7 +2067,6 @@ function OnDragFromCatalog(dragStruct:table, cardInstance:table )
 	local dragControl:table  = dragStruct:GetControl();
 	local policyType :string = cardInstance[KEY_POLICY_TYPE];
 	local nTargetRow :number = GetCurrentDragTargetRowIndex( dragControl, policyType );
-	
 	local tAcceptableTarget	 :table = nil;
 
 	if nTargetRow ~= -1 then
@@ -2087,7 +2084,6 @@ function OnDropFromCatalog( dragStruct:table, cardInstance:table )
 	local dragControl:table  = dragStruct:GetControl();
 	local policyType :string = cardInstance[KEY_POLICY_TYPE];
 	local nTargetRow :number = GetCurrentDragTargetRowIndex( dragControl, policyType );
-
 	cardInstance.Shadow:SetHide(true);
 	UI.PlaySound("UI_Policies_Card_Drop");
 	local bDropAccepted	:boolean = false;
@@ -2825,7 +2821,8 @@ function Initialize()
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
 	LuaEvents.Advisor_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
-
+	Controls.TabArea:SetHide(true)
+	Contrls.FilterStack:SetHide(true)
 end
 if HasCapability("CAPABILITY_GOVERNMENTS_VIEW") then
 	Initialize();
