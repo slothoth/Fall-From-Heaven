@@ -2068,7 +2068,6 @@ function OnDragFromCatalog(dragStruct:table, cardInstance:table )
 	local dragControl:table  = dragStruct:GetControl();
 	local policyType :string = cardInstance[KEY_POLICY_TYPE];
 	local nTargetRow :number = GetCurrentDragTargetRowIndex( dragControl, policyType );
-
 	local tAcceptableTarget	 :table = nil;
 
 	if nTargetRow ~= -1 then
@@ -2086,7 +2085,6 @@ function OnDropFromCatalog( dragStruct:table, cardInstance:table )
 	local dragControl:table  = dragStruct:GetControl();
 	local policyType :string = cardInstance[KEY_POLICY_TYPE];
 	local nTargetRow :number = GetCurrentDragTargetRowIndex( dragControl, policyType );
-
 	cardInstance.Shadow:SetHide(true);
 	UI.PlaySound("UI_Policies_Card_Drop");
 	local bDropAccepted	:boolean = false;
@@ -2825,7 +2823,7 @@ function Initialize()
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
 	LuaEvents.Advisor_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
 	Controls.TabArea:SetHide(true)
-	Controls.FilterStack:SetHide(true)
+	Contrls.FilterStack:SetHide(true)
 end
 if HasCapability("CAPABILITY_GOVERNMENTS_VIEW") then
 	Initialize();
