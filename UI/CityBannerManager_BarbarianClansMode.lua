@@ -39,6 +39,7 @@ function CreateBarbarianTribeBanner(pPlot , pBarbTribe )
 	local sTribeType = pBarbTribe.TribeType
 	local iActivePlayer = Game.GetLocalPlayer();
 	local pPlayerConfig = PlayerConfigurations[iActivePlayer]
+	if not pPlayerConfig then return end;				-- just done for doing autoplay
     local sCivName = pPlayerConfig:GetCivilizationTypeName()
 	if sCivName == 'SLTH_CIVILIZATION_CLAN_OF_EMBERS' then
 		if sTribeType == 'TRIBE_CLAN_MELEE_OPEN' or sTribeType == 'TRIBE_CLAN_MELEE_FOREST' then

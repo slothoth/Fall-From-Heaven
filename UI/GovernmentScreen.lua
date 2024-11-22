@@ -2823,7 +2823,7 @@ function Initialize()
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
 	LuaEvents.Advisor_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
 	Controls.TabArea:SetHide(true)
-	Contrls.FilterStack:SetHide(true)
+	Controls.FilterStack:SetHide(true)
 end
 if HasCapability("CAPABILITY_GOVERNMENTS_VIEW") then
 	Initialize();
