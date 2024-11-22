@@ -309,7 +309,9 @@ function IncrementCottages(playerId)
                 local iImprovementIndex = pPlot:GetImprovementType()
                 print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
                 local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
-                ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
+                if iImprovementUpgradedIndex then
+                    ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
+                end
             else
                 pPlot:SetProperty('worked_turns', iWorkedTurns+1)
                 print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )

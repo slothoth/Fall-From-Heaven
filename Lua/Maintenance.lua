@@ -4,14 +4,14 @@
  --civ changes in or out of maintenance policies?
 -- gov plaza buiLt/destroyed, palace built/destroyed. hopefully recapital covers palace part. gov plaza unbuilt
 -- CONSTANTS
-MaintenanceReductionBuildings = {BUILDING_QUEENS_BIBLIOTHEQUE=-40, SLTH_BUILDING_GOVERNORS_MANOR=-20,
+local MaintenanceReductionBuildings = {BUILDING_QUEENS_BIBLIOTHEQUE=-40, SLTH_BUILDING_GOVERNORS_MANOR=-20,
                                  SLTH_BUILDING_BASILICA=-40, SLTH_BUILDING_HARBOR_LANUN=-10,
                                  SLTH_BUILDING_GAMBLING_HOUSE=10, BUILDING_BIG_BEN=-50,
                                  SLTH_BUILDING_TAVERN=10, SLTH_BUILDING_TAVERN_GRIGORI=10};
-MaintenanceReductionPolicies = {SLTH_POLICY_DESPOTISM={CityReduction=25}, SLTH_POLICY_GOD_KING={CityReduction=10},
+local MaintenanceReductionPolicies = {SLTH_POLICY_DESPOTISM={CityReduction=25}, SLTH_POLICY_GOD_KING={CityReduction=10},
                                 SLTH_POLICY_CITY_STATES={CityReduction=-25, DistanceReduction=-80},
                                 SLTH_POLICY_ARISTOCRACY={CityReduction=-40}};
-GovernCentres = {SLTH_BUILDING_SUMMER_PALACE='summer', BUILDING_ORSZAGHAZ='winter'};
+local GovernCentres = {SLTH_BUILDING_SUMMER_PALACE='summer', BUILDING_ORSZAGHAZ='winter'};
 
 function MasterTax(playerId)
     local pPlayer = Players[playerId];
@@ -90,7 +90,8 @@ end
 
 function BuildingTaxPillageStateChange(playerID, cityID, buildingID, isPillaged)
     local buildingName = GameInfo.Buildings[buildingID];                                -- i suspec buildingID is wrong
-    local building_row = GameInfo.MaintenanceReductionBuildings[buildingName.BuildingType];     -- MaintenanceReductionBuildings[buildingName.BuildingType]
+    if not buildingName then print('MAINTENANCE BuildingTaxPillageStateChange fails, likely BuildingID is not BuildingType'); return; end
+    local building_row = MaintenanceReductionBuildings[buildingName.BuildingType];     -- MaintenanceReductionBuildings[buildingName.BuildingType]
     if building_row then
         local pCity = CityManager.GetCity(playerID, cityID);
         local tax_val = pCity:GetProperty('city_mult');

@@ -264,34 +264,36 @@ function onSpawnApplyPromotions(playerID, unitID)
         if pUnitAbilities:HasAbility('ABILITY_DIVINE') then return; end                 -- if divine we ignore it
         local tCurrentResource = {}
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-        local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
-        local iResource
-        local hasChannellingOne = pUnitAbilities:HasAbility('ABILITY_CHANNELING1')
-        for sResourceName, iPromoIndex in pairs(tFreePromos) do
-            iResource = pCapitalPlot:GetProperty(sResourceName) or 0;
-            if iResource > 1 and hasChannellingOne then
-                pUnitExp:SetPromotion(iPromoIndex)
-            end
-            tCurrentResource[sResourceName] = iResource             -- CACHE it
-        end
-        local tWeaponResources = {
-            ['RESOURCE_COPPER']    =    'ABILITY_BRONZE_WEAPONS',
-            ['RESOURCE_IRON']      =    'ABILITY_IRON_WEAPONS',
-            ['RESOURCE_MITHRIL']   =    'ABILITY_MITHRIL_WEAPONS'
-        }
-
-        for sResourceName, sAbilityToGrant in pairs(tWeaponResources) do
-            iResource = pCapitalPlot:GetProperty(sResourceName) or 0;
-            if iResource > 0 then
-                pUnitAbilities:AddAbilityCount(sAbilityToGrant)
-            end
-        end
-
-        if hasChannellingOne then
-            for sResourceName, iPromoIndex in pairs(tAllowSphereOne) do
-                iResource = tCurrentResource[sResourceName]
-                if iResource > 0 then                                                    -- grant sphere ability
+        if pCapitalCity then
+            local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+            local iResource
+            local hasChannellingOne = pUnitAbilities:HasAbility('ABILITY_CHANNELING1')
+            for sResourceName, iPromoIndex in pairs(tFreePromos) do
+                iResource = pCapitalPlot:GetProperty(sResourceName) or 0;
+                if iResource > 1 and hasChannellingOne then
                     pUnitExp:SetPromotion(iPromoIndex)
+                end
+                tCurrentResource[sResourceName] = iResource             -- CACHE it
+            end
+            local tWeaponResources = {
+                ['RESOURCE_COPPER']    =    'ABILITY_BRONZE_WEAPONS',
+                ['RESOURCE_IRON']      =    'ABILITY_IRON_WEAPONS',
+                ['RESOURCE_MITHRIL']   =    'ABILITY_MITHRIL_WEAPONS'
+            }
+
+            for sResourceName, sAbilityToGrant in pairs(tWeaponResources) do
+                iResource = pCapitalPlot:GetProperty(sResourceName) or 0;
+                if iResource > 0 then
+                    pUnitAbilities:AddAbilityCount(sAbilityToGrant)
+                end
+            end
+
+            if hasChannellingOne then
+                for sResourceName, iPromoIndex in pairs(tAllowSphereOne) do
+                    iResource = tCurrentResource[sResourceName]
+                    if iResource > 0 then                                                    -- grant sphere ability
+                        pUnitExp:SetPromotion(iPromoIndex)
+                    end
                 end
             end
         end
@@ -395,6 +397,7 @@ function PostPromoGrant(playerID, unitID)
     -- table of promos. check has promo. check if has prerq, if so grant promoprereq
     local pPlayer = Players[playerID]
     local pUnit = pPlayer:GetUnits():FindID(unitID)
+    if not pUnit then print('CRITICAL: couldnt find unit after promoting'); return; end
     local pUnitExp = pUnit:GetExperience()
     local pTechs = pPlayer:GetTechs()
     local pCulture = pPlayer:GetCulture()
