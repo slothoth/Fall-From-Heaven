@@ -554,10 +554,15 @@ local tPromoCombat = {
 [GameInfo.UnitPromotions['PROMOTION_COMBAT5_ADEPT'].Index] = 1,
 }
 
+local SUMMONER_PROMOTION_IDX = GameInfo.UnitPromotions['PROMOTION_SUMMONER_ADEPT'].Index
+
 function InheritSummon(pSummonedUnit, pSummonerUnitExp, pSummonerUnitAbility)
     local pSummonUnitAbility = pSummonedUnit:GetAbility()
-    if pSummonerUnitAbility:HasAbility('SLTH_ABILITY_SUMMONER') then
+    if pSummonerUnitAbility:HasAbility('SLTH_ABILITY_SUMMONER') or pSummonerUnitExp:HasPromotion(SUMMONER_PROMOTION_IDX) then
         pSummonUnitAbility:AddAbilityCount('ABILITY_SUMMONER_INHERITED_STRENGTH')
+        -- also work out a way to add an additional turn of duration
+        local lifespan = pSummonedUnit:GetProperty('LIFESPAN') or 1
+        pSummonedUnit:SetProperty'LIFESPAN', lifespan + 1)
     end
 
     for iPromoCombatIndex, _ in pairs(tPromoCombat) do
