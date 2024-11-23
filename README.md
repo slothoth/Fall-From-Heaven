@@ -1,8 +1,11 @@
 # Welcome
 Mod to faithfully recreate the glorious Civ IV FallFromHeaven mod by Kael in Civ VI. 
 
-To download the mod, git clone or go to the Releases page, and select the highest number, for most recent. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder.
+To download the mod, git clone the repo. Put the downloaded folder in your Sid Meier's Civilization VI/Sid Meier's Civilization VI/Mods/ folder. If you want to see the latest art assets, download the Platforms folder in Releases and place it in the repo.
 One the mod is out of Alpha (probably when art assets for three civilizations are done), I will publish on Steam Workshop.
+
+Check out my [website](https://slothoth.github.io/Fall-From-Heaven/) where I will be detailing some of the progress I have made, cool screenshots of assets, and mechanics I have BEATEN civ vi into submission to get to work.
+
 ## TOP priority:
 - [ ] World Spells
 - [ ] Regional City Spellcasting
