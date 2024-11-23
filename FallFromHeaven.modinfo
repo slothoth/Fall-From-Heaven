@@ -139,6 +139,7 @@
       <File>Core/Affinity.sql</File>
       <File>Core/UnitCommands.sql</File>
       <File>Core/LeaderTraits.sql</File>
+      <File>Core/AiInfos.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -381,6 +382,7 @@
     <File>Core/Affinity.sql</File>
     <File>Core/UnitCommands.sql</File>
     <File>Core/LeaderTraits.sql</File>
+    <File>Core/AiInfos.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
