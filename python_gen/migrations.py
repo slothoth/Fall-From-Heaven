@@ -2,7 +2,7 @@ import sqlite3
 
 import pandas as pd
 
-with open('../Core/frontend_config.sql') as file:
+with open('../Core/Frontend/frontend_config.sql') as file:
     lines = file.readlines()
 
 insert_indices = [idx for idx, i in enumerate(lines) if 'INSERT' in i]
