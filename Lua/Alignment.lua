@@ -209,10 +209,16 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     end
     if not iPlotSpawnedLocation and not bIsEvil then print('no spawn location, not spawning'); return; end
     local pKillingPlayer = Players[playerID]
-    local pUnitKiller = pKillingPlayer:GetUnits():FindID(unitID);
+    if pKillingPlayer then
+        local pUnitKiller = pKillingPlayer:GetUnits():FindID(unitID);
+        if pUnitKiller:GetAbility():HasAbility('NETHER_BLADE') then
+            print('killed by nether blade')
+            return
+        end
+    end
     local sUnitName = pUnit:GetType()
-    if tAnimalBeastSiege[GameInfo.Units[sUnitName].PromotionClass] or pUnitKiller:GetAbility():HasAbility('NETHER_BLADE') then
-        print('unit is beast or siege or animal or killed by nether blade')
+    if tAnimalBeastSiege[GameInfo.Units[sUnitName].PromotionClass] then
+        print('unit is beast or siege or animal')
         return
     end
     local bIsNotAlive = pUnitAbilities:HasAbility('ABILITY_ANGEL') or pUnitAbilities:HasAbility('ABILITY_DEMON') or pUnitAbilities:HasAbility('ABILITY_UNDEAD')
@@ -299,6 +305,7 @@ function GrantReligionUnit(playerID, unitID)
     local sReligionAbility
     local pPlayer = Players[playerID]
     local pUnit =  pPlayer:GetUnits():FindID(unitID)
+    if not pUnit then print('UNIT NOT FOUND ON SPAWN BIG ERROR'); return; end
     local iUnitType = pUnit:GetType()                       -- check that the unit doesnt have a default religion
     if tInherentReligion[iUnitType] then return; end
     local iX, iY = pUnit:GetLocation()
