@@ -115,9 +115,9 @@ local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTUR
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
 
 local transientBuffKeys = {
-        BUFF_HASTE = 100, BUFF_DANCE_OF_BLADES = 100, BUFF_CHARMED = 20, BUFF_SLOW = 30,
-        BUFF_BLUR = 50, BUFF_SHADOWWALK = 25, BUFF_FAIR_WINDS = 5, BUFF_BURNING_BLOOD = 10,
-        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 20, BUFF_MORALE = 10, BUFF_WARCRY = 5
+        BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
+        BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
+        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
     }
 
 function SlthLog(sMessage)
@@ -211,12 +211,11 @@ function onTurnStartGameplay(playerId)
     -- SECTION: transient buff cycling
     for sBuffAbility, percent_gate in pairs(transientBuffKeys) do
         local sPropbuff_propkey = sBuffAbility .. ('_UNITS')
-        local tSpecificBuffState = Game:GetProperty(sPropbuff_propkey)
+        local tSpecificBuffState = Game:GetProperty(sPropbuff_propkey) or {}
         local tNewBuffState = {}
         for _, tUnitInfos in ipairs(tSpecificBuffState) do
-            local iCurrentPlayerTurnEnd = calculatethis
             local iCasterPlayer = tUnitInfos['iCasterPlayer']
-            if iCurrentPlayerTurnEnd == iCasterPlayer then
+            if playerId == iCasterPlayer then
                 local percent_roll = math.random(100)
                 local iPlayer = tUnitInfos['iPlayer']
                 local iUnit = tUnitInfos['iUnit']
@@ -503,64 +502,6 @@ function onGreatPersonActivated(unitOwner, unitID, greatPersonClassID, greatPers
     end
 end
 
--- these numbers seem wrong on small and medium to BIG
-local tExperienceAbilities = {GRANT_EXPERIENCE_SMALL_ABILITY_CONQUEST=16, GRANT_EXPERIENCE_SMALL_ABILITY_APPRENTICESHIP=16,
-                        GRANT_EXPERIENCE_SMALL_ABILITY_THEOCRACY=16, GRANT_EXPERIENCE_SMALL_ABILITY_TITAN=16,
-                        GRANT_EXPERIENCE_SMALL_ABILITY_ADVENT_GUILD=16, GRANT_EXPERIENCE_SMALL_ABILITY_DESERT_SHRINE_DISCIPLE=16,
-                        GRANT_EXPERIENCE_SMALL_ABILITY_NOX_NOCTIS_RECON=16, GRANT_EXPERIENCE_SMALL_ABILITY_DIES_DEII_DISCIPLE=16,
-                        GRANT_EXPERIENCE_SMALL_ABILITY_COMMAND_POST=16, GRANT_EXPERIENCE_SMALL_ABILITY_LUONNOTAR_DISCIPLE=16,
-                        GRANT_EXPERIENCE_MEDIUM_ABILITY_LUONNOTAR=32,
-                        GRANT_EXPERIENCE_SMALL_ABILITY_SHIPYARD_NAVAL=32,
-                        GRANT_EXPERIENCE_BIG_ABILITY_LUONNOTAR=25,
-                        GRANT_EXPERIENCE_LARGE_ABILITY_LUONNOTAR=33,
-                        GRANT_EXPERIENCE_HUGE_ABILITY_LUONNOTAR=41,
-                        GRANT_EXPERIENCE_MASSIVE_ABILITY_LUONNOTAR=49,
-                        GRANT_EXPERIENCE_ENORMOUS_ABILITY_LUONNOTAR= 58
-}
-
-
-function onUnitCreated(playerId, unitID)
-    local pUnit = UnitManager.GetUnit(playerId, unitID);
-    local pExperience = pUnit:GetExperience()
-    if pExperience:CanPromote() then
-        print('unit has free promo! calculating free experience')
-        local pAbilities = pUnit:GetAbility()
-        local freeExpAmount = 0
-        for sExperienceGrantingAbility, amount in pairs(tExperienceAbilities) do
-            if pAbilities:HasAbility(sExperienceGrantingAbility) then
-                freeExpAmount = freeExpAmount + amount
-            end
-        end
-        local iReservedExperience = freeExpAmount - 15
-        if iReservedExperience > 0 then
-            pUnit:SetProperty('reservedExperience', iReservedExperience)
-        end
-        -- currently acting like you always get a free promo. this is kinda bad ugh.
-        -- Maybe can check for uses of FreePromotion abilities / unit is of the type it gets a freePromo.
-        -- make sure not to use -1 for granting experience.
-    end
-end
-
-local tExperienceForLevels = {[3]=30, [4]=45, [5]=60, [6]=75, [7]=90, [8] = 105, [9]= 120, [10]=135}
-
-function onUnitPromoted(playerID, unitID)
-    local pUnit = UnitManager.GetUnit(playerID, unitID);
-    local iReservedExperience = pUnit:GetProperty('reservedExperience') or 0
-    if iReservedExperience > 0 then
-        local pExperience = pUnit:GetExperience()
-        local iUnitLevel = pExperience:GetLevel()
-        local iExperienceNeeded = tExperienceForLevels[iUnitLevel]
-        if iReservedExperience > iExperienceNeeded then
-            iReservedExperience = iReservedExperience - iExperienceNeeded
-            pExperience:ChangeExperience(iExperienceNeeded)
-        else
-            pExperience:ChangeExperience(iReservedExperience)
-            iReservedExperience = 0
-        end
-        pUnit:SetProperty('reservedExperience', iReservedExperience)
-    end
-end
-
 function InitializeClans()
     if not Game.GetProperty('NW_Clans_Set') then
         local iW, iH = Map.GetGridSize()
@@ -594,8 +535,6 @@ function onStart()
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
-    Events.UnitCreated(onUnitCreated)
-    Events.UnitPromoted(onUnitPromoted)
     InitializeClans()
     print('-----------------Gameplay loaded')
 end

@@ -2694,7 +2694,7 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 						if (currentMode == eInterfaceMode) then
 							UI.SetInterfaceMode(InterfaceModeTypes.SELECTION);
 						else
-							print('set to selection interfaceMode in custom with different interfacemode')
+							-- print('set to selection interfaceMode in custom with different interfacemode')
 							local opName =  GameInfo.UnitOperations[actionHash].OperationType
 							local CustomOperation = GameInfo.CustomOperations[opName]
 							if CustomOperation then
@@ -3046,7 +3046,7 @@ end
 function OnPlayerChangeClose( ePlayer:number )
 
 	local isPaused:boolean = GameConfiguration.IsPaused();
-	print("OnPlayerChangeClose: " .. ePlayer .. ", GameConfiguration.IsPaused()=" .. tostring(isPaused));
+	-- print("OnPlayerChangeClose: " .. ePlayer .. ", GameConfiguration.IsPaused()=" .. tostring(isPaused));
 	if(isPaused) then
 		Events.GameConfigChanged.Add(OnGameConfigChanged_Hotseat_Paused);
 	end
@@ -4553,7 +4553,7 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGrantBuilding' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
-		print(' City grant building')
+		-- print(' City grant building')
 		if pCity then
 			bCanStart = not pCity:GetBuildings():HasBuilding(GameInfo.Buildings[CustomOperationInfo.SimpleText].Index)
 		end
@@ -4720,7 +4720,7 @@ function CheckAdjacentUnitsHasntAbility(pUnit, iPlayer, CustomOpInfo, bIsAlly)
 					bCondition = iOwnerPlayer ~= iPlayer
 				end
 				if bCondition then
-					print('unit is at least eligible')
+					-- print('unit is at least eligible')
 					pAbilities = pNearUnit:GetAbility():GetAbilities()
 					if (pAbilities and table.count(pAbilities) > 0) then
 						for i,ability in ipairs (pAbilities) do
@@ -4731,7 +4731,7 @@ function CheckAdjacentUnitsHasntAbility(pUnit, iPlayer, CustomOpInfo, bIsAlly)
 							end
 						end
 						if not bUnitHasAbility then
-							print('unit hasnt ability')
+							-- print('unit hasnt ability')
 							TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
 						end
 					end
@@ -4740,10 +4740,10 @@ function CheckAdjacentUnitsHasntAbility(pUnit, iPlayer, CustomOpInfo, bIsAlly)
 		end
 	end
 	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		print('some units were found without ability')
+		-- print('some units were found without ability')
 		return true
 	else
-		print('no units were found without ability')
+		-- print('no units were found without ability')
 		return false
 	end
 end
@@ -5090,7 +5090,7 @@ function CheckAdjacentCity(pUnit, iPlayer, CustomOpInfo, iSameOwner, iBuildingPr
 				bGatingPassed = iOwnerPlayer ~= iPlayer
 			end
 			if bGatingPassed then
-				print('Adjacent city')
+				-- print('Adjacent city')
 				if iBuildingPrereq then
 					print('building check on ' .. tostring(iBuildingPrereq))
 					local pBuildings = pCity:GetBuildings()
@@ -5261,7 +5261,7 @@ function OnSelectPlot(plotId, plotEdge, boolDown, rButton)
         if rButton then
             QuitWBInterfaceMode(true)
         else
-            print('selected plot')
+            -- print('selected plot')
             local tParameters = {}
 			local iTargetID = tCachedViableActionUnits[m_CachedUnitOperation][plotId]
 			if iTargetID then
