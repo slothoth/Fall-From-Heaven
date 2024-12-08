@@ -238,9 +238,26 @@ local tUnitFreePromos = {
     [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = { GameInfo.UnitPromotions['LIFE_ONE'].Index, GameInfo.UnitPromotions['NATURE_ONE'].Index }
 }
 
+-- these numbers seem wrong on small and medium to BIG
+local tExperienceAbilities = {GRANT_EXPERIENCE_SMALL_ABILITY_CONQUEST=16, GRANT_EXPERIENCE_SMALL_ABILITY_APPRENTICESHIP=16,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_THEOCRACY=16, GRANT_EXPERIENCE_SMALL_ABILITY_TITAN=16,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_ADVENT_GUILD=16, GRANT_EXPERIENCE_SMALL_ABILITY_DESERT_SHRINE_DISCIPLE=16,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_NOX_NOCTIS_RECON=16, GRANT_EXPERIENCE_SMALL_ABILITY_DIES_DEII_DISCIPLE=16,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_COMMAND_POST=16, GRANT_EXPERIENCE_SMALL_ABILITY_LUONNOTAR_DISCIPLE=16,
+                        GRANT_EXPERIENCE_MEDIUM_ABILITY_LUONNOTAR=32,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_SHIPYARD_NAVAL=32,
+                        GRANT_EXPERIENCE_BIG_ABILITY_LUONNOTAR=25,
+                        GRANT_EXPERIENCE_LARGE_ABILITY_LUONNOTAR=33,
+                        GRANT_EXPERIENCE_HUGE_ABILITY_LUONNOTAR=41,
+                        GRANT_EXPERIENCE_MASSIVE_ABILITY_LUONNOTAR=49,
+                        GRANT_EXPERIENCE_ENORMOUS_ABILITY_LUONNOTAR= 58
+}
+local tExperienceForLevels = {[3]=30, [4]=45, [5]=60, [6]=75, [7]=90, [8] = 105, [9]= 120, [10]=135}
+
 function onSpawnApplyPromotions(playerID, unitID)
     if playerID == nil then return end
     if unitID == nil then return end
+    local pUnitAbilities
     local pPlayer = Players[playerID]
     if pPlayer == nil then return end
     local pUnit = pPlayer:GetUnits():FindID(unitID)
@@ -260,7 +277,7 @@ function onSpawnApplyPromotions(playerID, unitID)
     local resources = pPlayer:GetResources()
     if resources then                -- DealManager.GetPlayerDeals(0,1)[1]:FindItemByID(2):()
         pUnit = pPlayer:GetUnits():FindID(unitID);
-        local pUnitAbilities = pUnit:GetAbility()
+        pUnitAbilities = pUnit:GetAbility()
         if pUnitAbilities:HasAbility('ABILITY_DIVINE') then return; end                 -- if divine we ignore it
         local tCurrentResource = {}
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
@@ -448,6 +465,43 @@ function PostPromoGrant(playerID, unitID)
             end
         end
     end
+    -- SECTION: experience overflow
+    local iReservedExperience = pUnit:GetProperty('reservedExperience')
+    if not iReservedExperience then                     -- on first promotion, define exp overflow property
+        local freeExpAmount = 0
+        for sExperienceGrantingAbility, amount in pairs(tExperienceAbilities) do
+            print('checking: ' .. sExperienceGrantingAbility)
+            if pUnitAbilities:HasAbility(sExperienceGrantingAbility) then
+                freeExpAmount = freeExpAmount + amount
+                print('Has ' .. sExperienceGrantingAbility .. '. So grant this much reserved xp: ' .. tostring(amount))
+            end
+        end
+        iReservedExperience = freeExpAmount - 15
+        if iReservedExperience < 0 then
+            iReservedExperience = 0
+        end
+        pUnit:SetProperty('reservedExperience', iReservedExperience)
+        -- currently acting like you always get a free promo. this is kinda bad ugh.
+        -- Maybe can check for uses of FreePromotion abilities / unit is of the type it gets a freePromo.
+        -- make sure not to use -1 for granting experience.
+    end
+    print('checking after promotion if unit needs granting extra xp')
+    local iExperienceNeeded = pUnitExp:GetExperienceForNextLevel()
+    local iCurrentExperience = pUnitExp:GetExperiencePoints()
+    local iNeededExperience = iExperienceNeeded - iCurrentExperience
+    print('Experience needed on this level: ' .. tostring(iExperienceNeeded) .. '. Current experience is: ' .. tostring(iCurrentExperience) .. '. required: '.. tostring(iNeededExperience))
+    if iReservedExperience > 0 and iNeededExperience > 0 then
+        print('it does need extra xp. Granting this much ' .. tostring(iNeededExperience) .. ' from reserves ' .. tostring(iReservedExperience))
+        if iReservedExperience > iExperienceNeeded then
+            iReservedExperience = iReservedExperience - iExperienceNeeded
+            pUnitExp:ChangeExperience(iExperienceNeeded)
+        else
+            pUnitExp:ChangeExperience(iReservedExperience)
+            iReservedExperience = 0
+        end
+        pUnit:SetProperty('reservedExperience', iReservedExperience)
+    end
+
 end
 
 
