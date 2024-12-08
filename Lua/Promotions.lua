@@ -252,7 +252,82 @@ local tExperienceAbilities = {GRANT_EXPERIENCE_SMALL_ABILITY_CONQUEST=16, GRANT_
                         GRANT_EXPERIENCE_MASSIVE_ABILITY_LUONNOTAR=49,
                         GRANT_EXPERIENCE_ENORMOUS_ABILITY_LUONNOTAR= 58
 }
-local tExperienceForLevels = {[3]=30, [4]=45, [5]=60, [6]=75, [7]=90, [8] = 105, [9]= 120, [10]=135}
+
+
+local tInherentReligion = { [GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_ARTHENDAIN'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_BAMBUR'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_MITHRIL_GOLEM'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_PARAMANDER'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_DROWN'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_SAVEROUS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_STYGIAN_GUARD'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_CRUSADER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_VALIN'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_SPHENER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_BEAST_OF_AGARES'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_DISEASED_CORPSE'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_ROSIER'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_MARDERO'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_FAWN'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_SATYR'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_KITHRA'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_RATHA'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_RADIANT_GUARD'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_CHALID'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_SHADOW'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['SLTH_UNIT_GIBBON'].Index] = 'RELIGION_ISLAM'
+}
+
+local tReligionAbility = {
+    ['RELIGION_ISLAM']='ABILITY_WORSHIPS_ESUS', ['RELIGION_HINDUISM']='ABILITY_WORSHIPS_OCTOPUS',
+    ['RELIGION_BUDDHISM']='ABILITY_WORSHIPS_VEIL',
+    ['RELIGION_CATHOLICISM']='ABILITY_WORSHIPS_LEAVES', ['RELIGION_JUDAISM']='ABILITY_WORSHIPS_EMPYREAN',
+    ['RELIGION_CONFUCIANISM']='ABILITY_WORSHIPS_KILMORPH', ['RELIGION_PROTESTANTISM']='ABILITY_WORSHIPS_ORDER'
+}
+
+local tReligionAlignment = {
+    ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
+    ['RELIGION_CATHOLICISM']=1,
+    ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
+}
+
+function GrantUnitReligion(pUnit, sReligion)
+    local pUnitAbilities = pUnit:GetAbility()
+    local sReligionAbility = tReligionAbility[sReligion]
+    pUnitAbilities:AddAbilityCount(sReligionAbility)
+    local iAlignment = tReligionAlignment[sReligion]
+    if iAlignment then
+        if iAlignment == 0 then
+            pUnitAbilities:AddAbilityCount('ALIGNMENT_EVIL')
+        elseif iAlignment == 2 then
+            pUnitAbilities:AddAbilityCount('ALIGNMENT_GOOD')
+        end
+    end
+end
+
+
 
 function onSpawnApplyPromotions(playerID, unitID)
     if playerID == nil then return end
@@ -275,9 +350,9 @@ function onSpawnApplyPromotions(playerID, unitID)
     end
 
     local resources = pPlayer:GetResources()
+    pUnit = pPlayer:GetUnits():FindID(unitID);
+    pUnitAbilities = pUnit:GetAbility()
     if resources then                -- DealManager.GetPlayerDeals(0,1)[1]:FindItemByID(2):()
-        pUnit = pPlayer:GetUnits():FindID(unitID);
-        pUnitAbilities = pUnit:GetAbility()
         if pUnitAbilities:HasAbility('ABILITY_DIVINE') then return; end                 -- if divine we ignore it
         local tCurrentResource = {}
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
@@ -380,6 +455,35 @@ function onSpawnApplyPromotions(playerID, unitID)
     end
 
     -- weird checks for fear, for twincast
+
+    -- SECTION Grant unit Religion
+    -- deal with Encampment district issues
+    -- if somehow not in a city, its a summon, implement that later (or dont even)?
+    local sReligionAbility
+    if not pUnit then print('UNIT NOT FOUND ON SPAWN BIG ERROR'); return; end
+    local iUnitType = pUnit:GetType()                       -- check that the unit doesnt have a default religion
+    local sInherentReligion = tInherentReligion[iUnitType]
+    if sInherentReligion then
+        GrantUnitReligion(pUnit, sInherentReligion)
+        return;
+    end
+    local iX, iY = pUnit:GetLocation()
+    local pPlot = Map.GetPlot(iX, iY)
+    local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
+
+    if pCity then
+        local tiReligions = City:GetReligion():GetReligionsInCity()
+        if tiReligions then
+            local CHANCE_OF_GRANT_RELIGION = 15                     -- TODO currently this will favour first table entries of religions
+            for idx, val in ipairs(tiReligions) do                  --TODO needs testing to see what this table contains
+                local iAttempt = math.random(0, 99)
+                if iAttempt > CHANCE_OF_GRANT_RELIGION then
+                    GrantUnitReligion(pUnit, val)
+                    return
+                end
+            end
+        end
+    end
 end
 
 function GrantPromoPrereqFromCivicCompleted(playerID, civicIndex, isCancelled)
