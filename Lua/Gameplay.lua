@@ -127,6 +127,67 @@ function SlthLog(sMessage)
     end
 end
 
+local tAllPromotions = {}
+for row in GameInfo.UnitPromotions() do
+    table.insert(tAllPromotions, row.UnitPromotionType)
+end
+
+local tAllAbilities = {}
+for row in GameInfo.UnitAbilities() do
+    table.insert(tAllAbilities, row.UnitAbilityType)
+end
+
+function InheritUnitAttributes(iPlayer, iUnit)
+    local pUnit = UnitManager.GetUnit(iPlayer, iUnit)
+    local pUnitExp = pUnit:GetExperience()
+    local pUnitAbilities = pUnit:GetAbility()
+    local iUnitHealth = pUnit:GetDamage()
+    local iX = pUnit:GetX()
+    local iY = pUnit:GetY()
+    local tPromosToGrant = {}
+    for _, sUnitPromotionType in ipairs(tAllPromotions) do
+        if pUnitExp:HasPromotion(sUnitPromotionType) then
+            table.insert(tPromosToGrant, sUnitPromotionType)            -- need to watch out for dummy promos being granted twice
+        end
+    end
+
+    local tAbilitiesToGrant = {}
+    for _, sUnitAbilityType in ipairs(tAllAbilities) do
+        if pUnitAbilities:HasAbility(sUnitAbilityType) then
+            table.insert(tAbilitiesToGrant, sUnitAbilityType)
+        end
+    end
+end
+
+function GetFullUpgradePath(iPlayer, iUnitIndex)
+    local bHasTech
+    local bHasCivic
+    local iUnitUpgradeIndex
+    local sUnitUpgradeUnitType = GameInfo.UnitUpgradeAlt[iUnitIndex].UpgradeUnit
+    local sPrereqTech = GameInfo.Units[sUnitUpgradeUnitType].PrereqTech
+    local sPrereqCivic = GameInfo.Units[sUnitUpgradeUnitType].PrereqCivic
+    -- we should probably also look at other prereqs like strategic resources, or national units?
+    local pPlayer = Players[iPlayer]
+    -- check if its string or index tech, and civic
+    if sPrereqTech then
+        bHasTech = pPlayer:GetTechs():HasTech(sPrereqTech)
+    else
+        bHasTech = true
+    end
+
+    if sPrereqCivic then
+        bHasCivic = pPlayer:GetCulture():HasCivic(sPrereqCivic)
+    else
+        bHasCivic = true
+    end
+
+    if bHasTech and bHasCivic then
+        iUnitUpgradeIndex = GameInfo.Units[sUnitUpgradeUnitType].Index
+        -- iUnitUpgradeIndex = GetFullUpgradePath(iPlayer, iUnitUpgradeIndex)  -- recursive variant. but no cost summing
+    end                                                                        -- also doesnt deal with alt/normal path
+    return iUnitUpgradeIndex                                                   -- mixing.
+end
+
 local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
     local iX =  pCasterUnit:GetX()
     local iY =  pCasterUnit:GetY()
