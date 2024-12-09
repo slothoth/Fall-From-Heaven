@@ -6,11 +6,6 @@
 g_selectedPlayerId = -1;
 g_selectedUnitId = -1;
 
-local m_markedPlots = {}  -- plotIndex
-local m_markedPlotsMap = {}  -- key: plotIndex, value: BuildingIndex
-m_wbInterfaceMode = false
-
-
 local tMonitoredResources = {
     [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='RESOURCE_MANA_DEATH'},
     [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='RESOURCE_MANA_FIRE'},
@@ -255,47 +250,6 @@ function OnGrantGoldenAgeClicked()
 end
 
 
--- nicked from QINMachuPichu
-
--- nicked from QINMachuPichu
-
-
-function GetNearbyEquipment(iPlayerID, iPlotX, iPlotY)
-	local markedPlots = {}
-	local markedPlotsMap = {}
-    local tAdjacentPlots = Map.GetAdjacentPlots(iPlotX, iPlotY)
-    local tUnits
-    for idx, pAdjPlot in ipairs(tAdjacentPlots) do          -- is this idx an index or plotID?
-        tUnits = Units.GetUnitsInPlot(pAdjPlot)
-        if tUnits then
-            for _, pAdjUnit in ipairs(tUnits) do
-                local iOwnerID = pAdjUnit:GetOwner()
-                if iOwnerID == iPlayerID then
-                    local iUnitType = pAdjUnit:GetType()
-                    if tEquipmentUnits[iUnitType] then              -- is equipment
-                        local iUnitID = pAdjUnit:GetID()
-                        markedPlotsMap[pAdjPlot:GetIndex()] = iUnitID
-                        table.insert(markedPlots, pAdjPlot:GetIndex())
-                        break
-                    end
-                    local pAdjUnitAbilities = pAdjUnit:GetAbility():GetAbilities()
-                    for _, iAbilityIndex in ipairs(pAdjUnitAbilities) do
-                        if tEquipmentAbilities[iAbilityIndex] then                  -- has equipment
-                            local iUnitID = pAdjUnit:GetID()
-                            markedPlotsMap[pAdjPlot:GetIndex()] = iUnitID
-                            table.insert(markedPlots, pAdjPlot:GetIndex())
-                            break
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return markedPlots, markedPlotsMap
-end
-
-
-
 -- helper functions
 function UnitGatherInfo()
     local pUnit = UI.GetHeadSelectedUnit();
@@ -455,12 +409,6 @@ function Setup()
 	end
 end
 
--- Events.LoadGameViewStateDone.Add(Setup)
--- Events.UnitSelectionChanged.Add(OnUnitSelectionChanged)
-
--- Events.UnitOperationsCleared.Add(onOperationMoveEnded)
-
--- LuaEvents.WorldInput_WBSelectPlot.Add(OnSelectPlot)
 
 -- gameplay esque
 function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
