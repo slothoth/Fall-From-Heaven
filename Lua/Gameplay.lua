@@ -165,7 +165,7 @@ function GetFullUpgradePath(iPlayer, iUnitIndex)
     local iUnitUpgradeIndex
     local iUpgradeCost
     local sUnit = GameInfo.Units[iUnitIndex].UnitType
-    local sUnitUpgradeUnitType = GameInfo.UnitUpgrades[sUnit].UpgradeUnit
+    local sUnitUpgradeUnitType = GameInfo.UnitUpgradesAlt[sUnit].UpgradeUnit
     local sPrereqTech = GameInfo.Units[sUnitUpgradeUnitType].PrereqTech
     local sPrereqCivic = GameInfo.Units[sUnitUpgradeUnitType].PrereqCivic
     -- we should probably also look at other prereqs like strategic resources, or national units?
