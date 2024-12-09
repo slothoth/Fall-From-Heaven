@@ -56,7 +56,7 @@ class Units:
         custom_mapping = {'SLTH_UNIT_BLOODPET': 'SLTH_UNIT_WARRIOR', 'SLTH_UNIT_AXEMAN': 'SLTH_UNIT_SWORDSMAN',
                           'SLTH_UNIT_LIZARDMAN_RANGER': 'SLTH_UNIT_RANGER',
                           'SLTH_UNIT_LIZARDMAN_ASSASSIN': 'SLTH_UNIT_ASSASSIN'}
-        custom_rename = {'SLTH_UNIT_WARRIOR': 'UNIT_WARRIOR'}
+        custom_rename = {'SLTH_UNIT_WARRIOR': 'UNIT_WARRIOR', 'SLTH_UNIT_ADVENTURER': 'UNIT_GREAT_WRITER'}
         custom_full_mapping = custom_mapping
         custom_full_mapping.update(custom_rename)
         new_upgrades = {0: {}}
@@ -95,6 +95,13 @@ class Units:
                 if unit_name not in lines:
                     missed.append(unit_name)
         missed_uniques = set(missed)
+
+        sql_strings = ''
+        for idx, upgradeTree in new_upgrades.items():
+            sql_strings += '\n\n'
+            for unit, upgradeUnit in upgradeTree.items():
+                line = (f"('{unit}', '{upgradeUnit}'),\n")
+                sql_strings += line
 
         # backport dealing with doviello units
         two_civs_units = unit_prebuilt['two_civs_units']
