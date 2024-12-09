@@ -127,6 +127,80 @@ function SlthLog(sMessage)
     end
 end
 
+local tAllPromotions = {}
+for row in GameInfo.UnitPromotions() do
+    table.insert(tAllPromotions, row.UnitPromotionType)
+end
+
+local tAllAbilities = {}
+for row in GameInfo.UnitAbilities() do
+    table.insert(tAllAbilities, row.UnitAbilityType)
+end
+
+function InheritUnitAttributes(iPlayer, iUnit)
+    local pUnit = UnitManager.GetUnit(iPlayer, iUnit)
+    local pUnitExp = pUnit:GetExperience()
+    local pUnitAbilities = pUnit:GetAbility()
+    local iUnitHealth = pUnit:GetDamage()
+    local iX = pUnit:GetX()
+    local iY = pUnit:GetY()
+    local tPromosToGrant = {}
+    for _, sUnitPromotionType in ipairs(tAllPromotions) do
+        if pUnitExp:HasPromotion(sUnitPromotionType) then
+            table.insert(tPromosToGrant, sUnitPromotionType)            -- need to watch out for dummy promos being granted twice
+        end
+    end
+
+    local tAbilitiesToGrant = {}
+    for _, sUnitAbilityType in ipairs(tAllAbilities) do
+        if pUnitAbilities:HasAbility(sUnitAbilityType) then
+            table.insert(tAbilitiesToGrant, sUnitAbilityType)
+        end
+    end
+end
+
+function GetFullUpgradePath(iPlayer, iUnitIndex)
+    local bHasTech
+    local bHasCivic
+    local iUnitUpgradeIndex
+    local iUpgradeCost
+    local sUnit = GameInfo.Units[iUnitIndex].UnitType
+    local sUnitUpgradeUnitType = GameInfo.UnitUpgrades[sUnit].UpgradeUnit
+    local sPrereqTech = GameInfo.Units[sUnitUpgradeUnitType].PrereqTech
+    local sPrereqCivic = GameInfo.Units[sUnitUpgradeUnitType].PrereqCivic
+    -- we should probably also look at other prereqs like strategic resources, or national units?
+    local pPlayer = Players[iPlayer]
+    print(sUnit)
+    print(sUnitUpgradeUnitType)
+    print(sPrereqTech)
+    print(sPrereqCivic)
+    if sPrereqTech then
+        local iPrereqTech = GameInfo.Technologies[sPrereqTech].TechnologyType
+        bHasTech = pPlayer:GetTechs():HasTech(iPrereqTech)
+    else
+        bHasTech = true
+    end
+
+    if sPrereqCivic then
+        local iPrereqCivic = GameInfo.Civics[sPrereqCivic].CivicType
+        bHasCivic = pPlayer:GetCulture():HasCivic(iPrereqCivic)
+    else
+        bHasCivic = true
+    end
+
+    if bHasTech and bHasCivic then
+        iUnitUpgradeIndex = GameInfo.Units[sUnitUpgradeUnitType].Index
+        local iUnitCost = GameInfo.Units[iUnitIndex].Cost
+        local iUpgradeUnitCost = GameInfo.Units[sUnitUpgradeUnitType].Cost
+        iUpgradeCost = (iUpgradeUnitCost - iUnitCost) *2
+        print('Upgraded unit cost: ' .. tostring(iUpgradeUnitCost) .. ' - original unit cost: ' .. tostring(iUnitCost) .. ' times by two is '.. tostring(iUpgradeCost))
+        -- iUnitUpgradeIndex = GetFullUpgradePath(iPlayer, iUnitUpgradeIndex)  -- recursive variant. but no cost summing
+    end                                                                        -- also doesnt deal with alt/normal path
+    print(iUnitUpgradeIndex)
+    print(iUpgradeCost)
+    return iUnitUpgradeIndex, iUpgradeCost                                                   -- mixing.
+end
+
 local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
     local iX =  pCasterUnit:GetX()
     local iY =  pCasterUnit:GetY()
