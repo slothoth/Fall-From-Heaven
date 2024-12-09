@@ -51,6 +51,30 @@ local tBinaryMap = {
     ['15']={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
 }
 
+local tAltChoiceTables = {[1]=GameInfo.UnitUpgradesAlt, [2]=GameInfo.UnitUpgradesAltTwo, [3]=GameInfo.UnitUpgradesAltThree,
+                   [4]=GameInfo.UnitUpgradesAltFour, [5]=GameInfo.UnitUpgradesAltFive}
+
+local tAltChoiceNames = {[1]='UnitUpgradesAlt', [2]='UnitUpgradesAltTwo', [3]='UnitUpgradesAltThree',
+                   [4]='UnitUpgradesAltFour', [5]='UnitUpgradesAltFive'}
+
+local tAltUpgradeChoices = {}
+
+for row in GameInfo.Units() do
+    tAltUpgradeChoices[row.UnitType] = {}
+    local bHasAltUpgrade
+    for idx, upgradeTable in ipairs(tAltChoiceTables) do
+        local sUpgradeUnit = upgradeTable[row.UnitType].UpgradeUnit
+        local upgradeUnitIndex = GameInfo.Units[sUpgradeUnit].Index
+        local tUpgradeInfos = {['name']= sUpgradeUnit, ['index']= upgradeUnitIndex}
+        table.insert(tAltUpgradeChoices[row.UnitType], tUpgradeInfos)
+        bHasAltUpgrade = true
+    end
+    if ~bHasAltUpgrade then                         -- remove entry if empty
+        tAltUpgradeChoices[row.UnitType] = nil
+    end
+end
+
+
 
 function myRefresh(iPlayerID, iUnitID, iOldID)
     local iBuilding
@@ -101,6 +125,13 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
         end
     else
         FlushButtons()
+    end
+    local tAltUpgrades = tAltUpgradeChoices[iUnitIndex]
+    for idx, upgradeUnitInfos in ipairs(tAltUpgrades) do
+        tAltChoiceNames
+        -- map each upgradetable available to a button
+        -- change what is on the button text, the unit to upgrade to, and the cost
+        -- change some variables for the cost of each upgrade, to use when pressed
     end
 end
 
@@ -247,6 +278,10 @@ function OnGrantGoldenAgeClicked()
     tGreatPeopleUnitIDs = {}                                -- flush out values
 	UI.DeselectUnit(pUnit);
 	return;
+end
+
+function AltUpgradeButton()
+
 end
 
 
