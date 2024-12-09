@@ -94,7 +94,7 @@ INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, Domain, For
 INSERT INTO Traits(TraitType, Name, Description) VALUES ('SLTH_RELIGION_BAN_TRAIT', 'LOC_SLTH_RELIGION_BAN_TRAIT_NAME', 'LOC_SLTH_RELIGION_BAN_TRAIT_DESCRIPTION');
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion, PurchaseYield, MustPurchase) VALUES
-('SLTH_UNIT_PRIEST_OF_WINTER', 'LOC_SLTH_UNIT_PRIEST_OF_WINTER_NAME', '2', '1', '24', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '-1', '0', 'LOC_SLTH_UNIT_PRIEST_OF_WINTER_DESCRIPTION', 'SLTH_RELIGION_BAN_TRAIT', '1', 'PROMOTION_CLASS_DISCIPLE', NULL, NULL, '0', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', NULL, 1);
+('SLTH_UNIT_PRIEST_OF_WINTER', 'LOC_SLTH_UNIT_PRIEST_OF_WINTER_NAME', '2', '1', '24', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '120', '0', 'LOC_SLTH_UNIT_PRIEST_OF_WINTER_DESCRIPTION', 'SLTH_RELIGION_BAN_TRAIT', '1', 'PROMOTION_CLASS_DISCIPLE', NULL, NULL, '0', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', NULL, 1);
 
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
