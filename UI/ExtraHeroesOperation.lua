@@ -51,6 +51,52 @@ local tBinaryMap = {
     ['15']={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
 }
 
+local tAltChoiceTables
+tAltUpgradeChoices = {}
+local tControlsAdded
+
+local tUpgradeUnitValues = {}
+local tUpgradeUnitCosts = {}
+
+local tExperienceUpgrades = {['SLTH_UNIT_MAGE'] = 4, ['SLTH_UNIT_ARCHMAGE'] = 6, ['SLTH_UNIT_ILLUSIONIST'] = 4, ['SLTH_UNIT_WIZARD'] = 4,
+                             ['SLTH_UNIT_EATER_OF_DREAMS'] = 6, ['SLTH_UNIT_IMMORTAL'] = 6, ['SLTH_UNIT_ANGEL_OF_DEATH'] = 4,
+                             ['SLTH_UNIT_VALKYRIE'] = 4, ['SLTH_UNIT_HERALD'] = 4, ['SLTH_UNIT_REPENTANT_ANGEL'] = 3,
+                             ['SLTH_UNIT_SERAPH'] = 4, ['SLTH_UNIT_OPHANIM'] = 4, ['SLTH_UNIT_VAMPIRE_LORD'] = 12, ['SLTH_UNIT_SATYR'] = 4
+}
+
+local tNationalUpgrades = {['SLTH_UNIT_PHALANX']= true, ['SLTH_UNIT_NULLSTONE_GOLEM']= true, ['SLTH_UNIT_STONESKIN_OGRE']= true,
+                           ['SLTH_UNIT_BERSERKER'] = true, ['SLTH_UNIT_BRUJAH'] = true, ['SLTH_UNIT_CLOCKWORK_GOLEM'] = true, ['SLTH_UNIT_BALOR'] = true,
+                           ['SLTH_UNIT_BEASTMASTER'] = true, ['SLTH_UNIT_MYCONID'] = true,
+                           ['SLTH_UNIT_KNIGHT'] = true,  ['SLTH_UNIT_DEATH_KNIGHT'] = true, ['SLTH_UNIT_BISON_RIDER'] = true,  ['SLTH_UNIT_CENTAUR_LANCER'] = true, ['SLTH_UNIT_HORNGUARD'] = true,  ['SLTH_UNIT_WAR_TORTOISE'] = true,
+                           ['SLTH_UNIT_ARCHMAGE'] = true,   ['SLTH_UNIT_EATER_OF_DREAMS'] = true,
+                           ['SLTH_UNIT_LICH'] = true,
+                           ['SLTH_UNIT_IMMORTAL'] = true, ['SLTH_UNIT_VAMPIRE_LORD'] = true, ['SLTH_UNIT_BONE_GOLEM'] = true, ['SLTH_UNIT_OGRE_WARCHIEF'] = true,
+                           ['SLTH_UNIT_OPHANIM'] = true, ['SLTH_UNIT_REPENTANT_ANGEL'] = true, ['SLTH_UNIT_ANGEL_OF_DEATH'] = true, ['SLTH_UNIT_SERAPH'] = true, ['SLTH_UNIT_VALKYRIE'] = true, ['SLTH_UNIT_HERALD'] = true,
+                           ['SLTH_UNIT_SHADOW'] = true, ['SLTH_UNIT_DWARVEN_SHADOW'] = true, ['SLTH_UNIT_COURTESAN'] = true,
+                           ['SLTH_UNIT_SHADOWRIDER'] = true, ['SLTH_BEAST_OF_AGARES'] = true,
+                           ['SLTH_UNIT_HIGH_PRIEST_OF_WINTER'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'] = true,  ['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'] = true,
+                           ['SLTH_UNIT_MARKSMAN'] = true,
+                           ['SLTH_UNIT_EIDOLON'] = true, ['SLTH_UNIT_PALADIN'] = true, ['SLTH_UNIT_DRUID'] = true, ['SLTH_UNIT_DWARVEN_DRUID'] = true, ['SLTH_UNIT_LUONNOTAR'] = true,
+                           ['SLTH_UNIT_CROSSBOWMAN'] = true, ['SLTH_UNIT_FLURRY'] = true,
+                           ['SLTH_UNIT_ROYAL_GUARD'] = true}
+
+local tAlignmentUnits = {
+    ['SLTH_UNIT_EIDOLON'] = 'alignment_evil', ['SLTH_UNIT_PALADIN'] = 'alignment_good', ['SLTH_UNIT_DRUID'] = 'alignment_neutral', ['SLTH_UNIT_DWARVEN_DRUID'] = 'alignment_neutral',
+
+}
+
+local tPolicyUnits = {
+['SLTH_UNIT_SHADOWRIDER'] = 'SLTH_POLICY_STATE_ESUS', ['SLTH_UNIT_SHADOW'] = 'SLTH_POLICY_STATE_ESUS', ['SLTH_UNIT_DWARVEN_SHADOW'] = 'SLTH_POLICY_STATE_ESUS', ['SLTH_UNIT_COURTESAN'] = 'SLTH_POLICY_STATE_ESUS',
+['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'] = 'SLTH_POLICY_STATE_RUNES', ['SLTH_UNIT_PRIEST_OF_KILMORPH'] = 'SLTH_POLICY_STATE_RUNES', ['SLTH_UNIT_PARAMANDER'] = 'SLTH_POLICY_STATE_RUNES',
+['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'] = 'SLTH_POLICY_STATE_LEAVES', ['SLTH_UNIT_PRIEST_OF_LEAVES'] = 'SLTH_POLICY_STATE_LEAVES', ['SLTH_UNIT_SATYR'] = 'SLTH_POLICY_STATE_LEAVES',
+['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'] = 'SLTH_POLICY_STATE_VEIL', ['SLTH_UNIT_PRIEST_OF_THE_VEIL'] = 'SLTH_POLICY_STATE_VEIL', ['SLTH_BEAST_OF_AGARES'] = 'SLTH_POLICY_STATE_VEIL',
+['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'] = 'SLTH_POLICY_STATE_OCTOPUS', ['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'] = 'SLTH_POLICY_STATE_OCTOPUS', ['SLTH_UNIT_STYGIAN_GUARD'] = 'SLTH_POLICY_STATE_OCTOPUS',
+['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'] = 'SLTH_POLICY_STATE_EMPYREAN', ['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'] = 'SLTH_POLICY_STATE_EMPYREAN', ['SLTH_UNIT_RATHA'] = 'SLTH_POLICY_STATE_EMPYREAN',
+['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'] = 'SLTH_POLICY_STATE_ORDER', ['SLTH_UNIT_PRIEST_OF_THE_ORDER'] = 'SLTH_POLICY_STATE_ORDER', ['SLTH_UNIT_CRUSADER'] = 'SLTH_POLICY_STATE_ORDER',
+['SLTH_UNIT_ROYAL_GUARD'] = 'SLTH_POLICY_ARISTOCRACY'
+}
+-- 'SON_OF_THE_INFERNO'
+
 
 function myRefresh(iPlayerID, iUnitID, iOldID)
     local iBuilding
@@ -58,42 +104,103 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     local pPlayer = Players[iPlayerID]
     if pUnit:GetMovesRemaining() == 0 then
         FlushButtons()
-        Controls.SettleButtonGridTakeEquipment:SetHide(true)
         return
     end
-    if pUnit:GetFormationClass() == 0 then
-        Controls.SettleButtonGridTakeEquipment:SetHide(false)
-    else
-        Controls.SettleButtonGridTakeEquipment:SetHide(true)
-    end
-    local iPlotX, iPlotY = pUnit:GetX(), pUnit:GetY()
     local iUnitIndex = pUnit:GetType()
-    local pCity = Cities.GetCityInPlot(iPlotX, iPlotY)
-    local tSpecificUnitControls = tUnitControls[iUnitIndex]
-    if tSpecificUnitControls then
-        for gridButton, tButton in pairs(tControlsAdded) do
-            iBuilding = tSpecificUnitControls[gridButton]
-            print(iBuilding)
-            if iBuilding then
-                if iBuilding == 'GOLDEN_AGE_LOGIC' then
-                    goldenAgeHide(gridButton, iPlayerID, pPlayer, iUnitID, iUnitIndex)
-                elseif pCity then
-                    if iBuilding == 'SHOW_ON_CITY' then
-                        gridButton:SetHide(false)
-                    elseif pCity:GetBuildings():HasBuilding(iBuilding) then
-                        gridButton:SetHide(true)
+    local bCanUpgrade = true
+    local tAltUpgrades = tAltUpgradeChoices[iUnitIndex]
+    local iPlot = pUnit:GetPlotId()
+    local pPlot = Map.GetPlotByIndex(iPlot)
+    local iPlotOwner = pPlot:GetOwner()
+    local bUpgradableTerritory = iPlotOwner == iPlayerID            -- misses on allies, city states suzerains
+    if PlayerConfigurations[iPlayerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_DOVIELLO' then
+        bUpgradableTerritory = true                 -- also hides upgrade options, instead grey them out?
+    end
+    if tAltUpgrades then
+        print('Unit does have alt upgrades')
+        local rscOriginalUnitInfo = GameInfo.Units[iUnitIndex]
+        local iCurrentGold = pPlayer:GetTreasury():GetGoldBalance()
+        for idx, tButtonInfo in pairs(tControlsAdded) do
+            local gridButton = tButtonInfo['grid']
+            local iconButton = tButtonInfo['icon']
+            local tUpgradeInfo = tAltUpgrades[idx]
+            print('on index ' .. tostring(idx))
+            if tUpgradeInfo then
+                print('Unit has upgrade info on index ' .. tostring(idx))
+                local iUnitUpgradeIndex = tUpgradeInfo['index']
+                local rscUnitInfo = GameInfo.Units[iUnitUpgradeIndex]
+                local sPrereqTech = rscUnitInfo.PrereqTech
+                local sPrereqCivic = rscUnitInfo.PrereqCivic
+                if sPrereqTech then
+                    print('checking has tech ' .. tostring(sPrereqTech))
+                    local iPrereqTech = GameInfo.Technologies[sPrereqTech].Index
+                    bCanUpgrade = pPlayer:GetTechs():HasTech(iPrereqTech)
+                end
+
+                if sPrereqCivic then
+                    print('checking has civic ' .. tostring(sPrereqCivic))
+                    local iPrereqCivic = GameInfo.Civics[sPrereqCivic].Index
+                    bCanUpgrade = pPlayer:GetCulture():HasCivic(iPrereqCivic)
+                end
+
+                local sPrereqPolicy = tPolicyUnits[rscUnitInfo.UnitType]
+                if sPrereqPolicy then
+                    bCanUpgrade = pPlayer:GetCulture():IsPolicyActive(sPrereqPolicy)
+                end
+
+                local sPrereqAlignmentPropKey = tAlignmentUnits[rscUnitInfo.UnitType]
+                if sPrereqAlignmentPropKey then
+                    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+                    if pCapitalCity then
+                        local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+                        bCanUpgrade = (pCapitalPlot:GetProperty(sPrereqAlignmentPropKey) or 0) > 0
                     else
-                        local iReligion = tReligiousWonders[iBuilding]
-                        if iReligion then
-                            local iX, iY = pCity:GetX(), pCity:GetY()
-                            local pPlot = Map.GetPlot(iX, iY)
-                            if pPlot:GetProperty(tostring(iReligion)..'_HOLY_CITY') or 0 > 0 then
-                                gridButton:SetHide(false)
-                            end
-                        else
-                            gridButton:SetHide(true)
-                        end
+                        bCanUpgrade = false
                     end
+                end
+
+                local iPrereqExperience = tExperienceUpgrades[rscUnitInfo.UnitType]
+                if iPrereqExperience then
+                    bCanUpgrade = pUnit:GetExperience():GetLevel() >= iPrereqExperience
+                end
+
+                -- local iPrereqNationalMax = tNationalUpgrades[rscUnitInfo.UnitType]
+                -- if iPrereqNationalMax then
+                -- check
+                --    print('')
+                -- end
+
+                if bCanUpgrade then
+                    print('Unit can upgrade, showing button')
+                    gridButton:SetHide(false)
+                    local name = Locale.Lookup('LOC_' .. tUpgradeInfo['name'] .. '_NAME')
+                    local iUpgradeUnitCost = rscUnitInfo.Cost
+                    local iOriginalUnitCost = rscOriginalUnitInfo.Cost
+                    local iUpgradeCost = (iUpgradeUnitCost - iOriginalUnitCost) * 2
+                    local sUpgradeInfo = 'Upgrade to ' .. name .. ': ' .. tostring(iUpgradeCost) .. '[ICON_GOLD] Gold'
+                    if iCurrentGold < iUpgradeCost then
+                        gridButton:SetDisabled(true)
+                        gridButton:SetAlpha(0.4)
+                        gridButton:SetToolTipString(sUpgradeInfo .. '[NEWLINE][COLOR:Red]Not enough Gold in Treasury.[ENDCOLOR]')
+                    elseif not bUpgradableTerritory then
+                        gridButton:SetDisabled(true)
+                        gridButton:SetAlpha(0.4)
+                        gridButton:SetToolTipString(sUpgradeInfo .. '[NEWLINE][COLOR:Red]Not in Friendly Territory.[ENDCOLOR]')
+                    else
+                        gridButton:SetDisabled(false)
+                        gridButton:SetAlpha(1)
+                        gridButton:SetToolTipString(sUpgradeInfo)
+                        tButtonInfo['button']:RegisterCallback(Mouse.eLClick, tButtonInfo['callback'])
+                    end
+                    print('setting up upgrade value on table index ' .. tostring(idx) .. ' to unit index ' .. tostring(iUnitUpgradeIndex))
+                    tUpgradeUnitValues[idx] = iUnitUpgradeIndex
+                    tUpgradeUnitCosts[idx] = iUpgradeCost
+                    local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas('ICON_' .. tUpgradeInfo['name'],38);
+                    if textureSheet then
+                        iconButton:SetTexture(textureOffsetX, textureOffsetY, textureSheet);
+                    end
+                else
+                    gridButton:SetHide(true)
                 end
             else
                 gridButton:SetHide(true)
@@ -102,7 +209,11 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     else
         FlushButtons()
     end
+    -- map each upgradetable available to a button
+    -- change what is on the button text, the unit to upgrade to, and the cost
+    -- change some variables for the cost of each upgrade, to use when pressed
 end
+
 
 function OnUnitSelectionChanged(iPlayerID, iUnitID, iPlotX, iPlotY, iPlotZ, bSelected, bEditable)
     if bSelected then
@@ -113,7 +224,7 @@ function OnUnitSelectionChanged(iPlayerID, iUnitID, iPlotX, iPlotY, iPlotZ, bSel
     end
 end
 
-function onUnitSelectedMoved(playerID, unitID, x, y, locallyVisible ,stateChange)
+function onUnitSelectedMoved(playerID, unitID, x, y, locallyVisible ,stateChange)       -- currently unhooked
     if playerID == g_selectedPlayerId and unitID == g_selectedUnitId then
         myRefresh(playerID, unitID);
     end
@@ -126,8 +237,8 @@ function onOperationMoveEnded(playerID, unitID, commandType, data1)
 end
 
 function FlushButtons(pControl, bHide, sName)
-    for gridButton, tButton in pairs(tControlsAdded) do
-        gridButton:SetHide(true)
+    for idx, tButtonInfo in pairs(tControlsAdded) do
+        tButtonInfo['grid']:SetHide(true)
     end
 end
 
@@ -175,60 +286,70 @@ function goldenAgeHide(gridButton, iPlayerID, pPlayer, iUnitID, iUnitIndex)
     end
 end
 
-function OnGrantNoxNoctisClicked()
+
+function OnBespokeUpgradeTwo()
     local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction(iPlayer, iUnit, iX, iY, 'SLTH_MODIFIER_GRANT_NOX_NOCTIS');
+    local tParameters = {}
+    tParameters.OnStart= 'SlthOnConvertUnitType'
+    tParameters.iUnitID = iUnit
+    tParameters.iUpgradeUnitIndex = tUpgradeUnitValues[1]
+    tParameters.iCost = tUpgradeUnitCosts[1]
+    print('requesting upgrade to unit ' .. GameInfo.Units[tUpgradeUnitValues[1]].UnitType)
+    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	UI.DeselectUnit(pUnit);
+    UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE )
 	return;
 end
 
-function OnGrantDiesDeiClicked()
+function OnBespokeUpgradeThree()
     local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction(iPlayer, iUnit, iX, iY, 'SLTH_MODIFIER_GRANT_DIES_DEI');
+    local tParameters = {}
+    tParameters.OnStart= 'SlthOnConvertUnitType'
+    tParameters.iUnitID = iUnit
+    tParameters.iUpgradeUnitIndex = tUpgradeUnitValues[2]
+    tParameters.iCost = tUpgradeUnitCosts[2]
+    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	UI.DeselectUnit(pUnit);
+    UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE )
 	return;
 end
 
-function OnGrantStigmataUnbornClicked()
+function OnBespokeUpgradeFour()
     local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction(iPlayer, iUnit, iX, iY, 'SLTH_MODIFIER_GRANT_STIGMATA_ON_THE_UNBORN');
+    local tParameters = {}
+    tParameters.OnStart= 'SlthOnConvertUnitType'
+    tParameters.iUnitID = iUnit
+    tParameters.iUpgradeUnitIndex = tUpgradeUnitValues[3]
+    tParameters.iCost = tUpgradeUnitCosts[3]
+    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	UI.DeselectUnit(pUnit);
+    UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE )
 	return;
 end
 
-function OnGrantCodeJunilClicked()
+function OnBespokeUpgradeFive()
     local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction(iPlayer, iUnit, iX, iY, 'SLTH_MODIFIER_GRANT_CODE_OF_JUNIL');
+    local tParameters = {}
+    tParameters.OnStart = 'SlthOnConvertUnitType'
+    tParameters.iUnitID = iUnit
+    tParameters.iUpgradeUnitIndex = tUpgradeUnitValues[4]
+    tParameters.iCost = tUpgradeUnitCosts[4]
+    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	UI.DeselectUnit(pUnit);
+    UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE )
 	return;
 end
 
-function OnGrantNecronomiconClicked()
+function OnBespokeUpgradeSix()
     local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction(iPlayer, iUnit, iX, iY, 'SLTH_MODIFIER_GRANT_THE_NECRONOMICON');
+    local tParameters = {}
+    tParameters.OnStart = 'SlthOnConvertUnitType'
+    tParameters.iUnitID = iUnit
+    tParameters.iUpgradeUnitIndex = tUpgradeUnitValues[5]
+    tParameters.iCost = tUpgradeUnitCosts[5]
+    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	UI.DeselectUnit(pUnit);
-	return;
-end
-
-function OnGrantTabletsBamburClicked()
-    print('in grant tablets')
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction(iPlayer, iUnit, iX, iY, 'SLTH_MODIFIER_GRANT_TABLETS_OF_BAMBUR');
-	UI.DeselectUnit(pUnit);
-	return;
-end
-
-function OnGrantSongAutumnClicked()
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction(iPlayer, iUnit, iX, iY, 'SLTH_MODIFIER_GRANT_SONG_OF_AUTUMN');
-	UI.DeselectUnit(pUnit);
-	return;
-end
-
-function OnGrantAcademyClicked()
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction(iPlayer, iUnit, iX, iY, 'SLTH_MODIFIER_GRANT_ACADEMY');
-	UI.DeselectUnit(pUnit);
+    UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE )
 	return;
 end
 
@@ -272,143 +393,49 @@ function Setup()
     local path = '/InGame/UnitPanel/StandardActionsStack'
     local ctrl = ContextPtr:LookUpControl(path)
     tControlsAdded = {
-                   [Controls.SettleButtonGridGrantAcademy] = { [Controls.SettleButtonGrantAcademy] = OnGrantAcademyClicked },
-                   [Controls.SettleButtonGridGrantSuperSpecialist] = { [Controls.SettleButtonGrantSuperSpecialist] = OnGrantSuperSpecialistClicked },
-                   [Controls.SettleButtonGridGrantNoxNoctis] = { [Controls.SettleButtonGrantNoxNoctis] = OnGrantNoxNoctisClicked },
-                   [Controls.SettleButtonGridGrantDiesDei] = { [Controls.SettleButtonGrantDiesDei] = OnGrantDiesDeiClicked },
-                   [Controls.SettleButtonGridGrantStigmataUnborn] = { [Controls.SettleButtonGrantStigmataUnborn] = OnGrantStigmataUnbornClicked },
-                   [Controls.SettleButtonGridGrantCodeJunil] = { [Controls.SettleButtonGrantCodeJunil] = OnGrantCodeJunilClicked },
-                   [Controls.SettleButtonGridGrantSongAutumn] = { [Controls.SettleButtonGrantSongAutumn] = OnGrantSongAutumnClicked },
-                   [Controls.SettleButtonGridGrantTabletsBambur] = { [Controls.SettleButtonGrantTabletsBambur] = OnGrantTabletsBamburClicked },
-                   [Controls.SettleButtonGridGrantNecronomicon] = { [Controls.SettleButtonGrantNecronomicon] = OnGrantNecronomiconClicked },
-                   [Controls.SettleButtonGridGrantGoldenAge] = { [Controls.SettleButtonGrantGoldenAge] = OnGrantGoldenAgeClicked }}
+                   [1] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltTwo,   ['button'] = Controls.SettleButtonUnitUpgradesAltTwo,   ['callback'] = OnBespokeUpgradeTwo, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltTwo},
+                   [2] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltThree, ['button'] = Controls.SettleButtonUnitUpgradesAltThree, ['callback'] = OnBespokeUpgradeThree, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltThree },
+                   [3] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltFour,  ['button'] = Controls.SettleButtonUnitUpgradesAltFour,  ['callback'] = OnBespokeUpgradeFour, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltFour },
+                   [4] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltFive,  ['button'] = Controls.SettleButtonUnitUpgradesAltFive,  ['callback'] = OnBespokeUpgradeFive, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltFive },
+                   [5] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltSix,  ['button'] = Controls.SettleButtonUnitUpgradesAltSix,  ['callback'] = OnBespokeUpgradeSix, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltSix }
+    }
+
     if ctrl ~= nil then
-        for gridButton, tButton in pairs(tControlsAdded) do
+        for idx, tButtonInfo in pairs(tControlsAdded) do
+            local gridButton = tButtonInfo['grid']
             gridButton:ChangeParent(ctrl)
         end
-        Controls.SettleButtonGridTakeEquipment:ChangeParent(ctrl)
-        -- Controls.SettleButtonTakeEquipment:RegisterCallback(Mouse.eLClick, OnGrantEquipmentClicked)
     end
-    for gridButton, tButton in pairs(tControlsAdded) do
-        for button, callbackFunc in pairs(tButton) do
-            button:RegisterCallback(Mouse.eLClick, callbackFunc)
+
+    tAltChoiceTables = {[1]=GameInfo.UnitUpgradesAlt, [2]=GameInfo.UnitUpgradesAltTwo, [3]=GameInfo.UnitUpgradesAltThree,
+                        [4]=GameInfo.UnitUpgradesAltFour, [5]=GameInfo.UnitUpgradesAltFive}
+
+
+    tAltUpgradeChoices = {}
+
+    for row in GameInfo.Units() do
+        tAltUpgradeChoices[row.Index] = {}
+        local bHasAltUpgrade
+        for idx, upgradeTable in ipairs(tAltChoiceTables) do
+            local tRowUpgradeInfo = upgradeTable[row.UnitType]
+            if tRowUpgradeInfo then
+                local sUpgradeUnit = tRowUpgradeInfo.UpgradeUnit
+                local upgradeUnitIndex = GameInfo.Units[sUpgradeUnit].Index
+                local tUpgradeInfos = {['name']= sUpgradeUnit, ['index']= upgradeUnitIndex}
+                -- print('adding entry ' .. tostring(row.Index) .. ' with upgrade ' .. sUpgradeUnit .. ' and index ' .. tostring(upgradeUnitIndex))
+                table.insert(tAltUpgradeChoices[row.Index], tUpgradeInfos)
+                bHasAltUpgrade = true
+            end
+        end
+        if not bHasAltUpgrade then                         -- remove entry if empty
+            tAltUpgradeChoices[row.UnitType] = nil
         end
     end
 
-    -- can expand this for Dancing Bear etc. but not elf cage etc as that is ability bound.
-    tUnitControls = { [GameInfo.Units['UNIT_GREAT_PROPHET'].Index] = { [Controls.SettleButtonGridGrantNoxNoctis] = GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index, [Controls.SettleButtonGridGrantDiesDei] = GameInfo.Buildings['BUILDING_ANGKOR_WAT'].Index,
-                                                                       [Controls.SettleButtonGridGrantStigmataUnborn] = GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'], [Controls.SettleButtonGridGrantCodeJunil] = GameInfo.Buildings['SLTH_BUILDING_CODE_OF_JUNIL'].Index,
-                                                                       [Controls.SettleButtonGridGrantNecronomicon] = GameInfo.Buildings['SLTH_BUILDING_THE_NECRONOMICON'].Index, [Controls.SettleButtonGridGrantTabletsBambur] = GameInfo.Buildings['SLTH_BUILDING_TABLETS_OF_BAMBUR'].Index,
-                                                                       [Controls.SettleButtonGridGrantSongAutumn] = GameInfo.Buildings['SLTH_BUILDING_SONG_OF_AUTUMN'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-                      [GameInfo.Units['UNIT_GREAT_ENGINEER'].Index] = { [Controls.SettleButtonGridGrantTabletsBambur] = GameInfo.Buildings['SLTH_BUILDING_TABLETS_OF_BAMBUR'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-                      [GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index] = { [Controls.SettleButtonGridGrantStigmataUnborn] = GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index, [Controls.SettleButtonGridGrantDiesDei] = GameInfo.Buildings['BUILDING_ANGKOR_WAT'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-
-                      [GameInfo.Units['UNIT_GREAT_ARTIST'].Index] = { [Controls.SettleButtonGridGrantSongAutumn] = GameInfo.Buildings['SLTH_BUILDING_SONG_OF_AUTUMN'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-                      [GameInfo.Units['UNIT_GREAT_MERCHANT'].Index] = { [Controls.SettleButtonGridGrantNoxNoctis] = GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index, [Controls.SettleButtonGridGrantSuperSpecialist] = 'SHOW_ON_CITY', [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-                      [GameInfo.Units['UNIT_GREAT_GENERAL'].Index] = { [Controls.SettleButtonGridGrantCodeJunil] = GameInfo.Buildings['SLTH_BUILDING_CODE_OF_JUNIL'].Index, [Controls.SettleButtonGridGrantGoldenAge] = 'GOLDEN_AGE_LOGIC' },
-    }
-    -- Golden Age checks
-    tGoldenAgeUnitIDs = {GameInfo.Units['UNIT_GREAT_PROPHET'].Index, GameInfo.Units['UNIT_GREAT_ENGINEER'].Index,
-                         GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index, GameInfo.Units['UNIT_GREAT_ARTIST'].Index,
-                         GameInfo.Units['UNIT_GREAT_MERCHANT'].Index, GameInfo.Units['UNIT_GREAT_GENERAL'].Index}
-    tGreatPeopleUnitIDs = {}
-    tGreatPeopleUnitTypes = {}
-    for _ , key in ipairs(tGoldenAgeUnitIDs) do
-        tGreatPeopleUnitTypes[key] = -1
-    end
-
-    tCurrentButtons = {}
-    tReligiousWonders = {
-        [GameInfo.Buildings['SLTH_BUILDING_CODE_OF_JUNIL'].Index]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
-        [GameInfo.Buildings['BUILDING_ANGKOR_WAT'].Index]=GameInfo.Religions["RELIGION_JUDAISM"].Index,
-        [GameInfo.Buildings['SLTH_BUILDING_TABLETS_OF_BAMBUR'].Index]=GameInfo.Religions["RELIGION_CONFUCIANISM"].Index,
-        [GameInfo.Buildings['SLTH_BUILDING_SONG_OF_AUTUMN'].Index]=GameInfo.Religions["RELIGION_CATHOLICISM"].Index,
-        [GameInfo.Buildings['SLTH_BUILDING_THE_NECRONOMICON'].Index]=GameInfo.Religions["RELIGION_HINDUISM"].Index,
-        [GameInfo.Buildings['SLTH_BUILDING_NOX_NOCTIS'].Index]=GameInfo.Religions["RELIGION_ISLAM"].Index,
-        [GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index]=GameInfo.Religions["RELIGION_BUDDHISM"].Index}
-
-    tEquipmentUnits = {
-	[GameInfo.Units['SLTH_EQUIPMENT_ATHAME'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_BLACK_MIRROR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_COMMAND'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_DRAGONS_HORDE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_EMPTY_BIER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_GELA'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_GODSLAYER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_GOLDEN_HAMMER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_HEALING_SALVE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_JADE_TORC'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_NETHER_BLADE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_ORTHUSS_AXE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_RESTORATION'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_ROD_OF_WINDS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_SCORCHED_STAFF'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_STAFF_OF_SOULS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_TIMOR_MASK'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_TREASURE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TREASURE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_WAR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index }
-
-    tEquipmentAbilities = {
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_TREASURE_ABILITY'].Index] = 1,
-	[GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index] = 1}
-
-    tEquipmentNameAbilities = {
-	['ATHAME'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
-	['BLACK_MIRROR'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
-	['CROWN_OF_AKHARIEN'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
-	['CROWN_OF_COMMAND'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index,
-	['DRAGONS_HORDE'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index,
-	['EMPTY_BIER'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index,
-	['GELA'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index,
-	['GODSLAYER'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index,
-	['GOLDEN_HAMMER'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index,
-	['HEALING_SALVE'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index,
-	['INFERNAL_GRIMOIRE'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index,
-	['JADE_TORC'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index,
-	['NETHER_BLADE'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index,
-	['ORTHUSS_AXE'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index,
-	['PIECES_OF_BARNAXUS'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index,
-	['POTION_OF_INVISIBILITY'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index,
-	['POTION_OF_RESTORATION'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index,
-	['ROD_OF_WINDS'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index,
-	['SCORCHED_STAFF'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index,
-	['STAFF_OF_SOULS'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index,
-	['SYLIVENS_PERFECT_LYRE'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index,
-	['TIMOR_MASK'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index,
-	['TREASURE'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TREASURE_ABILITY'].Index,
-	['WAR'] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index}
 	if ExposedMembers.ExtraHeroes == nil then
 		ExposedMembers.ExtraHeroes = {}
 	end
 end
-
 
 -- gameplay esque
 function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
@@ -451,3 +478,9 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
 end
 
 Events.PlayerResourceChanged.Add(UpdateResourceAvailability)
+
+Events.LoadGameViewStateDone.Add(Setup)
+Events.UnitSelectionChanged.Add(OnUnitSelectionChanged)
+Events.UnitOperationsCleared.Add(onOperationMoveEnded)
+
+

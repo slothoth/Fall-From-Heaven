@@ -147,6 +147,7 @@ function onReligionSwitch(playerID, policyID, wasEnacted)
         pPlayer:SetProperty('alignment', iNewAlignment)
         pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
         pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
+        print('Setting alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]))
     end
     for idx, sReligionPropKey in ipairs(tReligionNames) do
         if sReligionPropKey == sReligion then
@@ -248,11 +249,11 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
             AdjustArmageddonCount(5)            -- Compact broken
         end
         local iAlignment = pPlayer:GetProperty('alignment') or 0                                -- set player alignment
-        print('Player alignment on capital settle was ' .. tostring(iAlignment))
+        print('Player ' .. tostring(playerID) .. ' alignment on capital settle was ' .. tostring(iAlignment))
 
         local pPlot = Map.GetPlotByIndex(plotID)
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
-        if tAlignmentPropKeys[iAlignment] then print('Setting to 1 capital property ' .. tostring(tAlignmentPropKeys[iAlignment])); end
+        if tAlignmentPropKeys[iAlignment] then print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment])); end
 
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')
