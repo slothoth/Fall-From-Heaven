@@ -163,29 +163,42 @@ function GetFullUpgradePath(iPlayer, iUnitIndex)
     local bHasTech
     local bHasCivic
     local iUnitUpgradeIndex
-    local sUnitUpgradeUnitType = GameInfo.UnitUpgradeAlt[iUnitIndex].UpgradeUnit
+    local iUpgradeCost
+    local sUnit = GameInfo.Units[iUnitIndex].UnitType
+    local sUnitUpgradeUnitType = GameInfo.UnitUpgrades[sUnit].UpgradeUnit
     local sPrereqTech = GameInfo.Units[sUnitUpgradeUnitType].PrereqTech
     local sPrereqCivic = GameInfo.Units[sUnitUpgradeUnitType].PrereqCivic
     -- we should probably also look at other prereqs like strategic resources, or national units?
     local pPlayer = Players[iPlayer]
-    -- check if its string or index tech, and civic
+    print(sUnit)
+    print(sUnitUpgradeUnitType)
+    print(sPrereqTech)
+    print(sPrereqCivic)
     if sPrereqTech then
-        bHasTech = pPlayer:GetTechs():HasTech(sPrereqTech)
+        local iPrereqTech = GameInfo.Technologies[sPrereqTech].TechnologyType
+        bHasTech = pPlayer:GetTechs():HasTech(iPrereqTech)
     else
         bHasTech = true
     end
 
     if sPrereqCivic then
-        bHasCivic = pPlayer:GetCulture():HasCivic(sPrereqCivic)
+        local iPrereqCivic = GameInfo.Civics[sPrereqCivic].CivicType
+        bHasCivic = pPlayer:GetCulture():HasCivic(iPrereqCivic)
     else
         bHasCivic = true
     end
 
     if bHasTech and bHasCivic then
         iUnitUpgradeIndex = GameInfo.Units[sUnitUpgradeUnitType].Index
+        local iUnitCost = GameInfo.Units[iUnitIndex].Cost
+        local iUpgradeUnitCost = GameInfo.Units[sUnitUpgradeUnitType].Cost
+        iUpgradeCost = (iUpgradeUnitCost - iUnitCost) *2
+        print('Upgraded unit cost: ' .. tostring(iUpgradeUnitCost) .. ' - original unit cost: ' .. tostring(iUnitCost) .. ' times by two is '.. tostring(iUpgradeCost))
         -- iUnitUpgradeIndex = GetFullUpgradePath(iPlayer, iUnitUpgradeIndex)  -- recursive variant. but no cost summing
     end                                                                        -- also doesnt deal with alt/normal path
-    return iUnitUpgradeIndex                                                   -- mixing.
+    print(iUnitUpgradeIndex)
+    print(iUpgradeCost)
+    return iUnitUpgradeIndex, iUpgradeCost                                                   -- mixing.
 end
 
 local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
