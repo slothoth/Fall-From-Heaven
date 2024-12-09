@@ -129,7 +129,7 @@ end
 
 local tAllPromotions = {}
 for row in GameInfo.UnitPromotions() do
-    table.insert(tAllPromotions, row.UnitPromotionType)
+    table.insert(tAllPromotions, row.Index)
 end
 
 local tAllAbilities = {}
@@ -145,9 +145,9 @@ function InheritUnitAttributes(iPlayer, iUnit)
     local iX = pUnit:GetX()
     local iY = pUnit:GetY()
     local tPromosToGrant = {}
-    for _, sUnitPromotionType in ipairs(tAllPromotions) do
-        if pUnitExp:HasPromotion(sUnitPromotionType) then
-            table.insert(tPromosToGrant, sUnitPromotionType)            -- need to watch out for dummy promos being granted twice
+    for _, iUnitPromotionIndex in ipairs(tAllPromotions) do
+        if pUnitExp:HasPromotion(iUnitPromotionIndex) then
+            table.insert(tPromosToGrant, iUnitPromotionIndex)            -- need to watch out for dummy promos being granted twice
         end
     end
 
@@ -157,6 +157,7 @@ function InheritUnitAttributes(iPlayer, iUnit)
             table.insert(tAbilitiesToGrant, sUnitAbilityType)
         end
     end
+    return iUnitHealth, iX, iY, tPromosToGrant, tAbilitiesToGrant
 end
 
 function GetFullUpgradePath(iPlayer, iUnitIndex)
@@ -165,7 +166,7 @@ function GetFullUpgradePath(iPlayer, iUnitIndex)
     local iUnitUpgradeIndex
     local iUpgradeCost
     local sUnit = GameInfo.Units[iUnitIndex].UnitType
-    local sUnitUpgradeUnitType = GameInfo.UnitUpgrades[sUnit].UpgradeUnit
+    local sUnitUpgradeUnitType = GameInfo.UnitUpgradesAlt[sUnit].UpgradeUnit
     local sPrereqTech = GameInfo.Units[sUnitUpgradeUnitType].PrereqTech
     local sPrereqCivic = GameInfo.Units[sUnitUpgradeUnitType].PrereqCivic
     -- we should probably also look at other prereqs like strategic resources, or national units?
@@ -1222,6 +1223,34 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
+local function ConvertUnitType( iPlayer, tParameters)
+    local iUnitID = tParameters.iUnitID
+    local iNewUnitIndex = tParameters.iUpgradeUnitIndex
+    local iUpgradeCost = tParameters.iCost
+    local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+    local pPlayer = Players[iPlayer]
+    pPlayer:GetTreasury():ChangeGoldBalance(-iUpgradeCost)
+    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iNewUnitIndex)
+    for _, pNewUnit in pairs(tNewUnits) do
+        pNewUnit:SetDamage(iHealth)
+        local pUnitExp = pNewUnit:GetExperience()
+        local pUnitAbilities = pNewUnit:GetAbility()
+        for _, iUnitPromotionIndex in ipairs(tPromos) do
+            if not pUnitExp:HasPromotion(iUnitPromotionIndex) then
+                pUnitExp:SetPromotion(iUnitPromotionIndex)
+            end
+        end
+        for _, sAbility in ipairs(tAbilities) do
+            if not pUnitAbilities:HasAbility(sAbility) then
+                pUnitAbilities:AddAbilityCount(sAbility)
+            end
+        end
+    end
+    pUnit:SetDamage(0)
+    -- do UnitManager delete on UI side
+end
+
 
 
 
@@ -1343,6 +1372,7 @@ GameEvents.SlthOnTeleportToCapital.Add(TeleportUnitToCapital)
 GameEvents.SlthOnForcePeace.Add(ForcePeace)
 GameEvents.SlthOnHealSelf.Add(HealSelf)
 GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
+GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
 
 
 

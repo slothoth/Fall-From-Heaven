@@ -45,8 +45,6 @@ INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedComba
 
 INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES
 ('SLTH_UNIT_DEVOUT', 'SLTH_UNIT_ASSASSIN');
-INSERT INTO UnitUpgrades(Unit, UpgradeUnit) VALUES
-('SLTH_UNIT_MONK', 'SLTH_UNIT_PALADIN');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_UNIT_DEVOUT', 'CLASS_RECON'),
