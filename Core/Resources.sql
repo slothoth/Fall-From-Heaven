@@ -45,20 +45,20 @@ INSERT INTO Resources(ResourceType, Name, ResourceClassType, Happiness, LakeElig
 ('RESOURCE_CLAM', 'LOC_RESOURCE_CLAM', 'RESOURCECLASS_BONUS', '0', '1', '2'),
 ('RESOURCE_WHALE', 'LOC_RESOURCE_WHALE', 'RESOURCECLASS_LUXURY', '4', '0', '2');
 
-UPDATE Resources SET Name = 'LOC_RESOURCE_COPPER', ResourceClassType = 'RESOURCECLASS_STRATEGIC', PrereqTech = 'TECH_MINING', Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_COPPER';
-UPDATE Resources SET Name = 'LOC_RESOURCE_IRON', ResourceClassType = 'RESOURCECLASS_STRATEGIC', PrereqTech = 'TECH_SMELTING', Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_IRON';
-UPDATE Resources SET Name = 'LOC_RESOURCE_MARBLE', ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_MARBLE';
-UPDATE Resources SET Name = 'LOC_RESOURCE_DEER', ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_DEER';
-UPDATE Resources SET Name = 'LOC_RESOURCE_FISH', ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_FISH';
-UPDATE Resources SET Name = 'LOC_RESOURCE_RICE', ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_RICE';
-UPDATE Resources SET Name = 'LOC_RESOURCE_SHEEP', ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_SHEEP';
-UPDATE Resources SET Name = 'LOC_RESOURCE_WHEAT', ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_WHEAT';
-UPDATE Resources SET Name = 'LOC_RESOURCE_INCENSE', ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_INCENSE';
-UPDATE Resources SET Name = 'LOC_RESOURCE_IVORY', ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_IVORY';
-UPDATE Resources SET Name = 'LOC_RESOURCE_SILK', ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_SILK';
-UPDATE Resources SET Name = 'LOC_RESOURCE_SUGAR', ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_SUGAR';
-UPDATE Resources SET Name = 'LOC_RESOURCE_WINE', ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_WINE';
-UPDATE Resources SET Name = 'LOC_RESOURCE_COTTON', ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_COTTON';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_STRATEGIC', PrereqTech = 'TECH_MINING', Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_COPPER';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_STRATEGIC', PrereqTech = 'TECH_SMELTING', Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_IRON';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_MARBLE';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_DEER';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_FISH';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_RICE';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_SHEEP';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_WHEAT';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_INCENSE';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_IVORY';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_SILK';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_SUGAR';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_WINE';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_COTTON';
 
 INSERT INTO Resource_Consumption(ResourceType, Accumulate, StockpileCap) VALUES
 ('RESOURCE_COPPER', '1', '50'),
