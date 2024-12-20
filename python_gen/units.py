@@ -36,7 +36,6 @@ UNIT_NULL = {'UnitType': 'SLTH_UNIT_NULL', 'Name': 'LOC_SLTH_UNIT_NULL_NAME', 'R
              'EnabledByReligion': 0, 'PromotionClass': 'PROMOTION_CLASS_MELEE', 'Range': 0,
              'FormationClass': 'FORMATION_CLASS_LAND_COMBAT', 'CanTrain': 1, 'BuildCharges': 0, 'PrereqCivic': 'NULL'}
 
-
 class Units:
 
     def __init__(self):
@@ -46,11 +45,65 @@ class Units:
     def units_sql(self, model_obj, kept):
         logger = logging.getLogger(__name__)
         civs = model_obj['select_civs']
-        with open('data/XML/Units/CIV4UnitInfos.xml', 'r') as file:
+        with open('../data/XML/Units/CIV4UnitInfos.xml', 'r') as file:
             infos = xmltodict.parse(file.read())['Civ4UnitInfos']['UnitInfos'][('UnitInfo')]
-        with open("data/prebuilt_unit_infos.json", 'r') as json_file:
-            unit_prebuilt = json.load(json_file)
 
+        upgrades = [(i['Type'], i['UnitClassUpgrades']) for i in infos if i['UnitClassUpgrades'] is not None]
+
+        with open('data/for_rebuild_upgrades_collated.sql', 'r') as f:
+            lines = f.readlines()
+        lines = [i.replace('\n', '') for i in lines]
+        custom_mapping = {'SLTH_UNIT_BLOODPET': 'SLTH_UNIT_WARRIOR', 'SLTH_UNIT_AXEMAN': 'SLTH_UNIT_SWORDSMAN',
+                          'SLTH_UNIT_LIZARDMAN_RANGER': 'SLTH_UNIT_RANGER',
+                          'SLTH_UNIT_LIZARDMAN_ASSASSIN': 'SLTH_UNIT_ASSASSIN'}
+        custom_rename = {'SLTH_UNIT_WARRIOR': 'UNIT_WARRIOR', 'SLTH_UNIT_ADVENTURER': 'UNIT_GREAT_WRITER'}
+        custom_full_mapping = custom_mapping
+        custom_full_mapping.update(custom_rename)
+        new_upgrades = {0: {}}
+        user_formatting = {}
+        missed = []
+        for i in upgrades:
+            unit_name = i[0].replace('UNIT_', 'SLTH_UNIT_')
+            if unit_name in custom_rename:
+                unit_name = custom_rename[unit_name]
+            if unit_name in custom_mapping:
+                continue
+            user_formatting[unit_name] = []
+            if isinstance(i[1]['UnitClassUpgrade'], dict):
+                unit_upgrade_to = i[1]['UnitClassUpgrade']['UnitClassUpgradeType'].replace('UNITCLASS', 'SLTH_UNIT')
+                if unit_upgrade_to in custom_full_mapping:
+                    unit_upgrade_to = custom_full_mapping[unit_upgrade_to]
+                new_upgrades[0][unit_name] = unit_upgrade_to
+                user_formatting[unit_name].append(unit_upgrade_to)
+                if unit_upgrade_to not in lines:
+                    missed.append(unit_upgrade_to)
+                if unit_name not in lines:
+                    missed.append(unit_name)
+                continue
+            for idx, j in enumerate(i[1]['UnitClassUpgrade']):
+                unit_upgrade_to = j['UnitClassUpgradeType'].replace('UNITCLASS', 'SLTH_UNIT')
+                if unit_upgrade_to in custom_full_mapping:
+                    unit_upgrade_to = custom_full_mapping[unit_upgrade_to]
+                if idx not in new_upgrades:
+                    new_upgrades[idx] = {}
+                new_upgrades[idx][unit_name] = unit_upgrade_to
+                user_formatting[unit_name].append(unit_upgrade_to)
+                if j['bUnitClassUpgrade'] != '1':
+                    print('interesting')
+                if unit_upgrade_to not in lines:
+                    missed.append(unit_upgrade_to)
+                if unit_name not in lines:
+                    missed.append(unit_name)
+        missed_uniques = set(missed)
+
+        sql_strings = ''
+        for idx, upgradeTree in new_upgrades.items():
+            sql_strings += '\n\n'
+            for unit, upgradeUnit in upgradeTree.items():
+                line = (f"('{unit}', '{upgradeUnit}'),\n")
+                sql_strings += line
+
+        # backport dealing with doviello units
         two_civs_units = unit_prebuilt['two_civs_units']
         religious = unit_prebuilt['religious_units']
         summons = unit_prebuilt['summon_units']
@@ -278,3 +331,6 @@ class Units:
         type_properties.append({"Type": 'UNIT_BIPLANE', "Name": "LIFESPAN", "Value": "1",
                                 "PropertyType": "PROPERTYTYPE_IDENTITY"})
         make_or_add(model_obj['sql_inserts'], type_properties, 'TypeProperties')
+
+my_unit = Units()
+my_unit.units_sql({'select_civs':'uh'}, {})

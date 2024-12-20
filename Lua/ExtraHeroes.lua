@@ -164,16 +164,5 @@ function Initialize()
 	tTimers = {GoldenAges = { sProperty = 'GoldenAgeDuration', callback = FlushGoldenAge}}
 end
 
-local function SetCapitalProperty(iPlayer, tParameters)
-    local sPropKey = tParameters.sPropKey;
-    local iPropValue = tParameters.iPropValue;
-    local pPlayer = Players[iPlayer];
-    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-    local pCapitalPlot = pCapitalCity:GetPlot()
-    pCapitalPlot:SetProperty(sPropKey, iPropValue)
-end
-
-GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
-
 Initialize();
 GameEvents.PlayerTurnDeactivated.Add(TimerSystem);

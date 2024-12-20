@@ -114,11 +114,92 @@ local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTUR
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
 
+local transientBuffKeys = {
+        BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
+        BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
+        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
+    }
+
 function SlthLog(sMessage)
     SLTH_DEBUG_ON = nil
     if SLTH_DEBUG_ON then
         print(sMessage)
     end
+end
+
+local tAllPromotions = {}
+for row in GameInfo.UnitPromotions() do
+    table.insert(tAllPromotions, row.Index)
+end
+
+local tAllAbilities = {}
+for row in GameInfo.UnitAbilities() do
+    table.insert(tAllAbilities, row.UnitAbilityType)
+end
+
+function InheritUnitAttributes(iPlayer, iUnit)
+    local pUnit = UnitManager.GetUnit(iPlayer, iUnit)
+    local pUnitExp = pUnit:GetExperience()
+    local pUnitAbilities = pUnit:GetAbility()
+    local iUnitHealth = pUnit:GetDamage()
+    local iX = pUnit:GetX()
+    local iY = pUnit:GetY()
+    local tPromosToGrant = {}
+    for _, iUnitPromotionIndex in ipairs(tAllPromotions) do
+        if pUnitExp:HasPromotion(iUnitPromotionIndex) then
+            table.insert(tPromosToGrant, iUnitPromotionIndex)            -- need to watch out for dummy promos being granted twice
+        end
+    end
+
+    local tAbilitiesToGrant = {}
+    for _, sUnitAbilityType in ipairs(tAllAbilities) do
+        if pUnitAbilities:HasAbility(sUnitAbilityType) then
+            table.insert(tAbilitiesToGrant, sUnitAbilityType)
+        end
+    end
+    return iUnitHealth, iX, iY, tPromosToGrant, tAbilitiesToGrant
+end
+
+function GetFullUpgradePath(iPlayer, iUnitIndex)
+    local bHasTech
+    local bHasCivic
+    local iUnitUpgradeIndex
+    local iUpgradeCost
+    local sUnit = GameInfo.Units[iUnitIndex].UnitType
+    local sUnitUpgradeUnitType = GameInfo.UnitUpgradesAlt[sUnit].UpgradeUnit
+    local sPrereqTech = GameInfo.Units[sUnitUpgradeUnitType].PrereqTech
+    local sPrereqCivic = GameInfo.Units[sUnitUpgradeUnitType].PrereqCivic
+    -- we should probably also look at other prereqs like strategic resources, or national units?
+    local pPlayer = Players[iPlayer]
+    print(sUnit)
+    print(sUnitUpgradeUnitType)
+    print(sPrereqTech)
+    print(sPrereqCivic)
+    if sPrereqTech then
+        local iPrereqTech = GameInfo.Technologies[sPrereqTech].TechnologyType
+        bHasTech = pPlayer:GetTechs():HasTech(iPrereqTech)
+    else
+        bHasTech = true
+    end
+
+    if sPrereqCivic then
+        local iPrereqCivic = GameInfo.Civics[sPrereqCivic].CivicType
+        bHasCivic = pPlayer:GetCulture():HasCivic(iPrereqCivic)
+    else
+        bHasCivic = true
+    end
+
+    if bHasTech and bHasCivic then
+        iUnitUpgradeIndex = GameInfo.Units[sUnitUpgradeUnitType].Index
+        local iUnitCost = GameInfo.Units[iUnitIndex].Cost
+        local iUpgradeUnitCost = GameInfo.Units[sUnitUpgradeUnitType].Cost
+        iUpgradeCost = (iUpgradeUnitCost - iUnitCost) *2
+        print('Upgraded unit cost: ' .. tostring(iUpgradeUnitCost) .. ' - original unit cost: ' .. tostring(iUnitCost) .. ' times by two is '.. tostring(iUpgradeCost))
+        -- iUnitUpgradeIndex = GetFullUpgradePath(iPlayer, iUnitUpgradeIndex)  -- recursive variant. but no cost summing
+    end                                                                        -- also doesnt deal with alt/normal path
+    print(iUnitUpgradeIndex)
+    print(iUpgradeCost)
+    return iUnitUpgradeIndex, iUpgradeCost                                                   -- mixing.
 end
 
 local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
@@ -128,14 +209,14 @@ local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
     local playerUnits = playerReal:GetUnits();
     local pPlot = Map.GetPlot(iX, iY)
     local tBeforeSummonUnits = {}
-    for loop, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
         if pOnTileUnit then
             tBeforeSummonUnits[pOnTileUnit:GetID()] = true
         end
     end
     playerUnits:Create(iUnitIndex, iX, iY);
     local tNewUnits = {}
-    for loop, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
         if pOnTileUnit then
             local iUnitID = pOnTileUnit:GetID()
             if not tBeforeSummonUnits[iUnitID] then
@@ -151,12 +232,12 @@ end
 
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
-    for i, unit in pPlayer:GetUnits():Members() do
+    for _, unit in pPlayer:GetUnits():Members() do              -- SECTION: do reset castable
         if unit:GetProperty('HasCast') then
             print('setting HasCast to 0')
             unit:SetProperty('HasCast', 0)
         end
-        local iUnitIndex = unit:GetType();
+        local iUnitIndex = unit:GetType();                      -- SECTION: passive experience gain
         local sUnitType = GameInfo.Units[iUnitIndex].UnitType
         if not sUnitType then return; end                       -- remove once table correct
         local fXP_gain = FreeXPUnits[sUnitType] or 0
@@ -191,8 +272,8 @@ function onTurnStartGameplay(playerId)
             end
         end
     end
-    -- update altars. done so all luonnotars arent granted at once
-    for idx, pCity in pPlayer:GetCities():Members() do
+    -- SECTION: update altars. done so all luonnotars arent granted at once
+    for _, pCity in pPlayer:GetCities():Members() do
         local sLuonnotarDummyModifier = pCity:GetProperty('luonnotar_dummy')
         if sLuonnotarDummyModifier then
             print('player turn started: and city valid for next altar. attaching:')
@@ -202,6 +283,34 @@ function onTurnStartGameplay(playerId)
             return
         end
     end
+    -- SECTION: transient buff cycling
+    for sBuffAbility, percent_gate in pairs(transientBuffKeys) do
+        local sPropbuff_propkey = sBuffAbility .. ('_UNITS')
+        local tSpecificBuffState = Game:GetProperty(sPropbuff_propkey) or {}
+        local tNewBuffState = {}
+        for _, tUnitInfos in ipairs(tSpecificBuffState) do
+            local iCasterPlayer = tUnitInfos['iCasterPlayer']
+            if playerId == iCasterPlayer then
+                local percent_roll = math.random(100)
+                local iPlayer = tUnitInfos['iPlayer']
+                local iUnit = tUnitInfos['iUnit']
+                local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+                if pUnit then
+                    if percent_roll > percent_gate then
+                        local pAbility = pUnit:GetAbility()
+                        if pAbility and pAbility:HasAbility(sBuffAbility) then
+                            pAbility:RemoveAbilityCount(sBuffAbility)
+                        end
+                    else
+                        table.insert(tNewBuffState, tUnitInfos)         -- only include in new state if unit exists,
+                    end                                                 -- it has ability, and failed RNG
+                end
+            end
+        end
+    end
+    -- local BUFF_HASTE_UNITS = {[0]= {iPlayer=0, iUnit=130, iCasterPlayer=0}}
+    --BUFF_REGENERATION -- when full
+    -- local afterCombat = {BUFF_BLESSED=true, BUFF_ENRAGED=true, BUFF_STONESKIN=true}
 end
 
 ------------ Cottage / Pirate Cove improvement upgrading over turns  ---------
@@ -438,7 +547,7 @@ function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
     local iCurrentLuonnotar = tLuonnotarCivics[civicIndex]
     if iCurrentLuonnotar then
         print('unlocking altar after civic unlock')
-        for idx, pCity in pPlayer:GetCities():Members() do
+        for _, pCity in pPlayer:GetCities():Members() do
             if pCity:GetBuildings():HasBuilding(iCurrentLuonnotar) then
                 pCity:GetBuildings():RemoveBuilding(iLunnotarBlocker)           -- dont think i need to add back dummy_prereq
                 return
@@ -454,7 +563,7 @@ function onGreatPersonActivated(unitOwner, unitID, greatPersonClassID, greatPers
     if greatPersonClassID == iGreatProphetIndex then
         print('Great person recognised as prophet')
         local pPlayerCities = Players[unitOwner]:GetCities()
-        for idx, pCity in pPlayerCities:Members() do
+        for _, pCity in pPlayerCities:Members() do
             if pCity:GetBuildings():HasBuilding(iAltarBase) then
                 local pPlot = pCity:GetPlot();
                 local iAltarLevel = pPlot:GetProperty('altar_level')
@@ -562,7 +671,7 @@ function InheritSummon(pSummonedUnit, pSummonerUnitExp, pSummonerUnitAbility)
         pSummonUnitAbility:AddAbilityCount('ABILITY_SUMMONER_INHERITED_STRENGTH')
         -- also work out a way to add an additional turn of duration
         local lifespan = pSummonedUnit:GetProperty('LIFESPAN') or 1
-        pSummonedUnit:SetProperty'LIFESPAN', lifespan + 1)
+        pSummonedUnit:SetProperty('LIFESPAN', lifespan + 1)
     end
 
     for iPromoCombatIndex, _ in pairs(tPromoCombat) do
@@ -604,36 +713,62 @@ local function OnGrantBuffSelf(iPlayer, tParameters)
     local pAbilityUnit = pUnit:GetAbility()
     if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
         pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+        if transientBuffKeys[OperationInfo.SimpleText] then
+            local sPropbuff_propkey = OperationInfo.SimpleText .. ('_UNITS')
+            local tSpecificBuffState = Game:GetProperty(sPropbuff_propkey) or {}
+            local tUnitInfos = {iPlayer=iPlayer, iUnit=tParameters.iCastingUnit, iCasterPlayer=iPlayer}
+            table.insert(tSpecificBuffState, tUnitInfos)
+            Game:SetProperty(sPropbuff_propkey, tSpecificBuffState)
+        end
     end
     pUnit:SetProperty('HasCast', 1)
 end
 
 local function OnGrantBuffAoe(iPlayer, tParameters)
     local pAbilityUnit
+    local tSpecificBuffState
+    local sPropbuff_propkey
+    local bBuffPropKeyChange
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+    if transientBuffKeys[OperationInfo.SimpleText] then
+        sPropbuff_propkey = OperationInfo.SimpleText .. ('_UNITS')
+        tSpecificBuffState = Game:GetProperty(sPropbuff_propkey) or {}
+    end
 	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+		for _, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
 			if pNearUnit then
 				local iOwnerPlayer = pNearUnit:GetOwner();
 				if (iOwnerPlayer == iPlayer) then
                     pAbilityUnit = pNearUnit:GetAbility()
                     if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
                         pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+                        if transientBuffKeys[OperationInfo.SimpleText] then
+                            local iUnit = pNearUnit:GetID()
+                            local tUnitInfos = {iPlayer=iPlayer, iUnit=iUnit, iCasterPlayer=iPlayer}
+                            table.insert(tSpecificBuffState, tUnitInfos)
+                            bBuffPropKeyChange = true
+                        end
                     end
 				end
 			end
 		end
 	end
     pUnit:SetProperty('HasCast', 1)
+    if bBuffPropKeyChange then
+        Game:SetProperty(sPropbuff_propkey, tSpecificBuffState)
+    end
 end
 
 local function OnGrantDebuffAoe(iPlayer, tParameters)
     local pAbilityUnit
+    local tSpecificBuffState
+    local sPropbuff_propkey
+    local bBuffPropKeyChange
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
@@ -641,19 +776,28 @@ local function OnGrantDebuffAoe(iPlayer, tParameters)
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
 	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+		for _, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
 			if pNearUnit then
 				local iOwnerPlayer = pNearUnit:GetOwner();
 				if (iOwnerPlayer ~= iPlayer) then
                     pAbilityUnit = pNearUnit:GetAbility()
                     if not pAbilityUnit:HasAbility(OperationInfo.SimpleText) then
                         pAbilityUnit:AddAbilityCount(OperationInfo.SimpleText)
+                        if transientBuffKeys[OperationInfo.SimpleText] then
+                            local iUnit = pNearUnit:GetID()
+                            local tUnitInfos = {iPlayer=iOwnerPlayer, iUnit=iUnit, iCasterPlayer=iPlayer}
+                            table.insert(tSpecificBuffState, tUnitInfos)
+                            bBuffPropKeyChange = true
+                        end
                     end
 				end
 			end
 		end
 	end
     pUnit:SetProperty('HasCast', 1)
+    if bBuffPropKeyChange then
+        Game:SetProperty(sPropbuff_propkey, tSpecificBuffState)
+    end
 end
 
 local function OnSpellChangeTerrain(iPlayer, tParameters)
@@ -687,7 +831,7 @@ local function OnSpellAoeDamage(iPlayer, tParameters)
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
     local iDamage = OperationInfo.SecondAmount
 	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+		for _, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
 			if (pNearUnit) then
 				local iOwnerPlayer = pNearUnit:GetOwner();
 				if (iOwnerPlayer ~= iPlayer) then
@@ -747,7 +891,7 @@ local function GrantGoldenAge(iPlayer, tParameters)
 		local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
 		UnitManager.Kill(pUnit);
 	end
-	for idx, pCity in pPlayer:GetCities():Members() do
+	for _, pCity in pPlayer:GetCities():Members() do
 		local pPlot = pCity:GetPlot();
 		print(pPlot)						-- plot exists
         pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instea of nil?
@@ -788,10 +932,10 @@ local function GrantSuperSpecialist(iPlayer, tParameters)
     local iY =  pUnit:GetY()
 	local iUnitType = pUnit:GetType();
 	local pCity = Cities.GetCityInPlot(iX, iY)
-	for idx, sModifier in ipairs(tSuperSpecialistModifiers[iUnitType]) do
+	for _, sModifier in ipairs(tSuperSpecialistModifiers[iUnitType]) do
 		pCity:AttachModifierByID(sModifier)									-- maybe do binary magic and plotProp
 	end
-	for idx, sModifier in ipairs(tSuperSpecialistGenericModifiers) do
+	for _, sModifier in ipairs(tSuperSpecialistGenericModifiers) do
 		pCity:AttachModifierByID(sModifier)
 	end
 	UnitManager.Kill(pUnit);
@@ -954,7 +1098,7 @@ local function ConsumeEquipment(iPlayer, tParameters)
 		end
 	else
 		local pConsumeUnitAbilityManager = pConsumeUnit:GetAbility()
-		for idx, equipAbilityAb in ipairs(tEquipmentAbilities) do
+		for _, equipAbilityAb in ipairs(tEquipmentAbilities) do
 			hasEquipment = pConsumeUnitAbilityManager:HasAbility(equipAbilityAb)
 			if hasEquipment then
 				iEquipmentAbilityToGrant = equipAbilityAb
@@ -1079,6 +1223,34 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
+local function ConvertUnitType( iPlayer, tParameters)
+    local iUnitID = tParameters.iUnitID
+    local iNewUnitIndex = tParameters.iUpgradeUnitIndex
+    local iUpgradeCost = tParameters.iCost
+    local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+    local pPlayer = Players[iPlayer]
+    pPlayer:GetTreasury():ChangeGoldBalance(-iUpgradeCost)
+    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iNewUnitIndex)
+    for _, pNewUnit in pairs(tNewUnits) do
+        pNewUnit:SetDamage(iHealth)
+        local pUnitExp = pNewUnit:GetExperience()
+        local pUnitAbilities = pNewUnit:GetAbility()
+        for _, iUnitPromotionIndex in ipairs(tPromos) do
+            if not pUnitExp:HasPromotion(iUnitPromotionIndex) then
+                pUnitExp:SetPromotion(iUnitPromotionIndex)
+            end
+        end
+        for _, sAbility in ipairs(tAbilities) do
+            if not pUnitAbilities:HasAbility(sAbility) then
+                pUnitAbilities:AddAbilityCount(sAbility)
+            end
+        end
+    end
+    pUnit:SetDamage(0)
+    -- do UnitManager delete on UI side
+end
+
 
 
 
@@ -1146,7 +1318,7 @@ local function UpdateResourcePromotion(iPlayer, tParameters)
     local iChanOneGrant = tAllowSphereOne[iResource]
     local iChanTwoGrant = tAllowSphereTwo[iResource]
     local iChanThreeGrant = tAllowSphereTwo[iResource]
-    for i, unit in pPlayer:GetUnits():Members() do
+    for _, unit in pPlayer:GetUnits():Members() do
         local iUnitIndex = unit:GetType();
         local pUnitAbilities = unit:GetAbility()
         local pUnitExp = unit:GetExperience()
@@ -1200,6 +1372,7 @@ GameEvents.SlthOnTeleportToCapital.Add(TeleportUnitToCapital)
 GameEvents.SlthOnForcePeace.Add(ForcePeace)
 GameEvents.SlthOnHealSelf.Add(HealSelf)
 GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
+GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
 
 
 

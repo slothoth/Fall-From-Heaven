@@ -147,6 +147,7 @@ function onReligionSwitch(playerID, policyID, wasEnacted)
         pPlayer:SetProperty('alignment', iNewAlignment)
         pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
         pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
+        print('Setting alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]))
     end
     for idx, sReligionPropKey in ipairs(tReligionNames) do
         if sReligionPropKey == sReligion then
@@ -248,11 +249,11 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
             AdjustArmageddonCount(5)            -- Compact broken
         end
         local iAlignment = pPlayer:GetProperty('alignment') or 0                                -- set player alignment
-        print('Player alignment on capital settle was ' .. tostring(iAlignment))
+        print('Player ' .. tostring(playerID) .. ' alignment on capital settle was ' .. tostring(iAlignment))
 
         local pPlot = Map.GetPlotByIndex(plotID)
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
-        if tAlignmentPropKeys[iAlignment] then print('Setting to 1 capital property ' .. tostring(tAlignmentPropKeys[iAlignment])); end
+        if tAlignmentPropKeys[iAlignment] then print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment])); end
 
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')
@@ -295,45 +296,6 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
             end
         end
         AdjustArmageddonCount(5)            -- Compact broken
-    end
-end
-
-function GrantReligionUnit(playerID, unitID)
-    -- deal with Encampment district issues
-    -- if somehow not in a city, its a summon, implement that later (or dont even)?
-    local pUnitAbilities
-    local sReligionAbility
-    local pPlayer = Players[playerID]
-    local pUnit =  pPlayer:GetUnits():FindID(unitID)
-    if not pUnit then print('UNIT NOT FOUND ON SPAWN BIG ERROR'); return; end
-    local iUnitType = pUnit:GetType()                       -- check that the unit doesnt have a default religion
-    if tInherentReligion[iUnitType] then return; end
-    local iX, iY = pUnit:GetLocation()
-    local pPlot = Map.GetPlot(iX, iY)
-    local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
-
-    if pCity then
-        local tiReligions = City:GetReligion():GetReligionsInCity()
-        if tiReligions then
-            pUnitAbilities = pUnit:GetAbility()
-            local CHANCE_OF_GRANT_RELIGION = 15
-            for idx, val in ipairs(tiReligions) do                  --TODO needs testing to see what this table contains
-                local iAttempt = math.random(0, 99)
-                if iAttempt > CHANCE_OF_GRANT_RELIGION then
-                    local iAlignment = tReligionAlignment[val]
-                    if iAlignment then
-                        if iAlignment == 0 then
-                            pUnitAbilities:AddAbilityCount('ALIGNMENT_EVIL')   -- does this function even work.
-                        elseif iAlignment == 1 then
-                            pUnitAbilities:AddAbilityCount('ALIGNMENT_GOOD')
-                        end
-                    end
-                    sReligionAbility = tReligionAbility[val]
-                    pUnitAbilities:AddAbilityCount(sReligionAbility)
-                    break
-                end
-            end
-        end
     end
 end
 
@@ -597,7 +559,6 @@ end
 
 Events.UnitKilledInCombat.Add(alignmentDeath)
 GameEvents.BuildingConstructed.Add(RespawnerSpawned)
-Events.UnitAddedToMap.Add(GrantReligionUnit)                         -- test UnitAbilityGained
 LuaEvents.NewGameInitialized.Add(onStart);
 LuaEvents.NewGameInitialized.Add(InitiateReligions);
 Events.CivicCompleted.Add(GrantReligionFromCivicCompleted)

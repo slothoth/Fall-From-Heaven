@@ -238,9 +238,101 @@ local tUnitFreePromos = {
     [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = { GameInfo.UnitPromotions['LIFE_ONE'].Index, GameInfo.UnitPromotions['NATURE_ONE'].Index }
 }
 
+-- these numbers seem wrong on small and medium to BIG
+local tExperienceAbilities = {GRANT_EXPERIENCE_SMALL_ABILITY_CONQUEST=16, GRANT_EXPERIENCE_SMALL_ABILITY_APPRENTICESHIP=16,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_THEOCRACY=16, GRANT_EXPERIENCE_SMALL_ABILITY_TITAN=16,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_ADVENT_GUILD=16, GRANT_EXPERIENCE_SMALL_ABILITY_DESERT_SHRINE_DISCIPLE=16,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_NOX_NOCTIS_RECON=16, GRANT_EXPERIENCE_SMALL_ABILITY_DIES_DEII_DISCIPLE=16,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_COMMAND_POST=16, GRANT_EXPERIENCE_SMALL_ABILITY_LUONNOTAR_DISCIPLE=16,
+                        GRANT_EXPERIENCE_MEDIUM_ABILITY_LUONNOTAR=32,
+                        GRANT_EXPERIENCE_SMALL_ABILITY_SHIPYARD_NAVAL=32,
+                        GRANT_EXPERIENCE_BIG_ABILITY_LUONNOTAR=25,
+                        GRANT_EXPERIENCE_LARGE_ABILITY_LUONNOTAR=33,
+                        GRANT_EXPERIENCE_HUGE_ABILITY_LUONNOTAR=41,
+                        GRANT_EXPERIENCE_MASSIVE_ABILITY_LUONNOTAR=49,
+                        GRANT_EXPERIENCE_ENORMOUS_ABILITY_LUONNOTAR= 58
+}
+
+
+local tInherentReligion = { [GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_ARTHENDAIN'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_BAMBUR'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_MITHRIL_GOLEM'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_PARAMANDER'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['SLTH_UNIT_DROWN'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_SAVEROUS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_STYGIAN_GUARD'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['SLTH_UNIT_CRUSADER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_VALIN'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_SPHENER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['SLTH_UNIT_BEAST_OF_AGARES'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_DISEASED_CORPSE'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_ROSIER'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_MARDERO'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['SLTH_UNIT_FAWN'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_SATYR'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_KITHRA'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['SLTH_UNIT_RATHA'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_RADIANT_GUARD'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_CHALID'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['SLTH_UNIT_SHADOW'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['SLTH_UNIT_GIBBON'].Index] = 'RELIGION_ISLAM'
+}
+
+local tReligionAbility = {
+    ['RELIGION_ISLAM']='ABILITY_WORSHIPS_ESUS', ['RELIGION_HINDUISM']='ABILITY_WORSHIPS_OCTOPUS',
+    ['RELIGION_BUDDHISM']='ABILITY_WORSHIPS_VEIL',
+    ['RELIGION_CATHOLICISM']='ABILITY_WORSHIPS_LEAVES', ['RELIGION_JUDAISM']='ABILITY_WORSHIPS_EMPYREAN',
+    ['RELIGION_CONFUCIANISM']='ABILITY_WORSHIPS_KILMORPH', ['RELIGION_PROTESTANTISM']='ABILITY_WORSHIPS_ORDER'
+}
+
+local tReligionAlignment = {
+    ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
+    ['RELIGION_CATHOLICISM']=1,
+    ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
+}
+
+function GrantUnitReligion(pUnit, sReligion)
+    local pUnitAbilities = pUnit:GetAbility()
+    local sReligionAbility = tReligionAbility[sReligion]
+    pUnitAbilities:AddAbilityCount(sReligionAbility)
+    local iAlignment = tReligionAlignment[sReligion]
+    if iAlignment then
+        if iAlignment == 0 then
+            pUnitAbilities:AddAbilityCount('ALIGNMENT_EVIL')
+        elseif iAlignment == 2 then
+            pUnitAbilities:AddAbilityCount('ALIGNMENT_GOOD')
+        end
+    end
+end
+
+
+
 function onSpawnApplyPromotions(playerID, unitID)
     if playerID == nil then return end
     if unitID == nil then return end
+    local pUnitAbilities
     local pPlayer = Players[playerID]
     if pPlayer == nil then return end
     local pUnit = pPlayer:GetUnits():FindID(unitID)
@@ -258,9 +350,9 @@ function onSpawnApplyPromotions(playerID, unitID)
     end
 
     local resources = pPlayer:GetResources()
+    pUnit = pPlayer:GetUnits():FindID(unitID);
+    pUnitAbilities = pUnit:GetAbility()
     if resources then                -- DealManager.GetPlayerDeals(0,1)[1]:FindItemByID(2):()
-        pUnit = pPlayer:GetUnits():FindID(unitID);
-        local pUnitAbilities = pUnit:GetAbility()
         if pUnitAbilities:HasAbility('ABILITY_DIVINE') then return; end                 -- if divine we ignore it
         local tCurrentResource = {}
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
@@ -363,6 +455,35 @@ function onSpawnApplyPromotions(playerID, unitID)
     end
 
     -- weird checks for fear, for twincast
+
+    -- SECTION Grant unit Religion
+    -- deal with Encampment district issues
+    -- if somehow not in a city, its a summon, implement that later (or dont even)?
+    local sReligionAbility
+    if not pUnit then print('UNIT NOT FOUND ON SPAWN BIG ERROR'); return; end
+    local iUnitType = pUnit:GetType()                       -- check that the unit doesnt have a default religion
+    local sInherentReligion = tInherentReligion[iUnitType]
+    if sInherentReligion then
+        GrantUnitReligion(pUnit, sInherentReligion)
+        return;
+    end
+    local iX, iY = pUnit:GetLocation()
+    local pPlot = Map.GetPlot(iX, iY)
+    local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
+
+    if pCity then
+        local tiReligions = City:GetReligion():GetReligionsInCity()
+        if tiReligions then
+            local CHANCE_OF_GRANT_RELIGION = 15                     -- TODO currently this will favour first table entries of religions
+            for idx, val in ipairs(tiReligions) do                  --TODO needs testing to see what this table contains
+                local iAttempt = math.random(0, 99)
+                if iAttempt > CHANCE_OF_GRANT_RELIGION then
+                    GrantUnitReligion(pUnit, val)
+                    return
+                end
+            end
+        end
+    end
 end
 
 function GrantPromoPrereqFromCivicCompleted(playerID, civicIndex, isCancelled)
@@ -448,6 +569,43 @@ function PostPromoGrant(playerID, unitID)
             end
         end
     end
+    -- SECTION: experience overflow
+    local iReservedExperience = pUnit:GetProperty('reservedExperience')
+    if not iReservedExperience then                     -- on first promotion, define exp overflow property
+        local freeExpAmount = 0
+        for sExperienceGrantingAbility, amount in pairs(tExperienceAbilities) do
+            print('checking: ' .. sExperienceGrantingAbility)
+            if pUnitAbilities:HasAbility(sExperienceGrantingAbility) then
+                freeExpAmount = freeExpAmount + amount
+                print('Has ' .. sExperienceGrantingAbility .. '. So grant this much reserved xp: ' .. tostring(amount))
+            end
+        end
+        iReservedExperience = freeExpAmount - 15
+        if iReservedExperience < 0 then
+            iReservedExperience = 0
+        end
+        pUnit:SetProperty('reservedExperience', iReservedExperience)
+        -- currently acting like you always get a free promo. this is kinda bad ugh.
+        -- Maybe can check for uses of FreePromotion abilities / unit is of the type it gets a freePromo.
+        -- make sure not to use -1 for granting experience.
+    end
+    print('checking after promotion if unit needs granting extra xp')
+    local iExperienceNeeded = pUnitExp:GetExperienceForNextLevel()
+    local iCurrentExperience = pUnitExp:GetExperiencePoints()
+    local iNeededExperience = iExperienceNeeded - iCurrentExperience
+    print('Experience needed on this level: ' .. tostring(iExperienceNeeded) .. '. Current experience is: ' .. tostring(iCurrentExperience) .. '. required: '.. tostring(iNeededExperience))
+    if iReservedExperience > 0 and iNeededExperience > 0 then
+        print('it does need extra xp. Granting this much ' .. tostring(iNeededExperience) .. ' from reserves ' .. tostring(iReservedExperience))
+        if iReservedExperience > iExperienceNeeded then
+            iReservedExperience = iReservedExperience - iExperienceNeeded
+            pUnitExp:ChangeExperience(iExperienceNeeded)
+        else
+            pUnitExp:ChangeExperience(iReservedExperience)
+            iReservedExperience = 0
+        end
+        pUnit:SetProperty('reservedExperience', iReservedExperience)
+    end
+
 end
 
 

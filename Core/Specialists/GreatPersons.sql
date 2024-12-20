@@ -26,9 +26,6 @@ UPDATE Map_GreatPersonClasses SET MaxWorldInstances = 999 WHERE GreatPersonClass
 
 UPDATE Units SET CanCapture = 1, CanRetreatWhenCaptured = 0 WHERE UnitType IN('UNIT_GREAT_ENGINEER', 'UNIT_GREAT_MERCHANT', 'UNIT_GREAT_PROPHET', 'UNIT_GREAT_SCIENTIST', 'UNIT_GREAT_WRITER', 'UNIT_GREAT_ARTIST');
 
-INSERT INTO UnitUpgrades(Unit, UpgradeUnit) VALUES
-('UNIT_GREAT_WRITER', 'UNIT_WARRIOR');
-
 -- try MODIFIER_SINGLE_CITY_GRANT_BUILDING_IN_CITY and prereqs?
 INSERT INTO Modifiers(ModifierId, ModifierType, RunOnce, Repeatable, SubjectRequirementSetId) VALUES
 ('SLTH_MODIFIER_GRANT_ACADEMY', 'MODIFIER_SINGLE_CITY_GRANT_BUILDING_IN_CITY', '1', '0', NULL),
