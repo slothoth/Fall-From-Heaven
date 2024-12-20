@@ -14,7 +14,7 @@
 				<m_Fields>
 					<m_Values/>
 				</m_Fields>
-				<m_ChildCollections>F
+				<m_ChildCollections>
 					<Element>
 						<m_CollectionName text="Animations"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
@@ -52,7 +52,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_AMELANCHIER"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_AMELANCHIER"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -67,7 +67,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_AMELANCHIER"/>
+				<m_Name text="LEADER_AMELANCHIER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -82,7 +82,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_ARENDEL"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_ARENDEL"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -97,7 +97,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_ARENDEL"/>
+				<m_Name text="LEADER_ARENDEL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -112,7 +112,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_ARTURUS"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_ARTURUS"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -127,7 +127,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_ARTURUS"/>
+				<m_Name text="LEADER_ARTURUS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -142,7 +142,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_AURIC"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_AURIC"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -157,7 +157,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_AURIC"/>
+				<m_Name text="LEADER_AURIC"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -172,7 +172,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_BASIUM"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_BASIUM"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -187,7 +187,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_BASIUM"/>
+				<m_Name text="LEADER_BASIUM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -202,7 +202,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_BEERI"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_BEERI"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -217,7 +217,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_BEERI"/>
+				<m_Name text="LEADER_BEERI"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -232,7 +232,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_CAPRIA"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_CAPRIA"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -247,7 +247,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_CAPRIA"/>
+				<m_Name text="LEADER_CAPRIA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -262,7 +262,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_CARDITH"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_CARDITH"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -277,7 +277,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_CARDITH"/>
+				<m_Name text="LEADER_CARDITH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -292,7 +292,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_CASSIEL"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_CASSIEL"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -307,7 +307,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_CASSIEL"/>
+				<m_Name text="LEADER_CASSIEL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -322,7 +322,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_CHARADON"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_CHARADON"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -337,7 +337,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_CHARADON"/>
+				<m_Name text="LEADER_CHARADON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -352,7 +352,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_DAIN"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_DAIN"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -367,7 +367,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_DAIN"/>
+				<m_Name text="LEADER_DAIN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -382,7 +382,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_DECIUS"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_DECIUS_BANNOR"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -397,7 +397,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_DECIUS"/>
+				<m_Name text="LEADER_DECIUS_CALABIM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -412,7 +412,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_EINION"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_DECIUS_BANNOR"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -427,7 +427,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_EINION"/>
+				<m_Name text="LEADER_DECIUS_BANNOR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -442,7 +442,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_ETHNE"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_DECIUS_BANNOR"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -457,7 +457,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_ETHNE"/>
+				<m_Name text="LEADER_DECIUS_MALAKIM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -472,7 +472,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_FAERYL"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_EINION"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -487,7 +487,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_FAERYL"/>
+				<m_Name text="LEADER_EINION"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -502,7 +502,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_FALAMAR"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_ETHNE"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -517,7 +517,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_FALAMAR"/>
+				<m_Name text="LEADER_ETHNE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -532,7 +532,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_FLAUROS"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_FAERYL"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -547,7 +547,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_FLAUROS"/>
+				<m_Name text="LEADER_FAERYL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -562,7 +562,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_GARRIM"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_FALAMAR"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -577,7 +577,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_GARRIM"/>
+				<m_Name text="LEADER_FALAMAR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -592,7 +592,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_HANNAH"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_FLAUROS"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -607,7 +607,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_HANNAH"/>
+				<m_Name text="LEADER_FLAUROS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -622,7 +622,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_HYBOREM"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_GARRIM"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -637,7 +637,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_HYBOREM"/>
+				<m_Name text="LEADER_GARRIM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -652,7 +652,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_JONAS"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_HANNAH"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -667,7 +667,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_JONAS"/>
+				<m_Name text="LEADER_HANNAH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -682,7 +682,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_KEELYN"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_HYBOREM"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -697,7 +697,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_KEELYN"/>
+				<m_Name text="LEADER_HYBOREM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -712,7 +712,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_MAHALA"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_JONAS"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -727,7 +727,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_MAHALA"/>
+				<m_Name text="LEADER_JONAS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -742,7 +742,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_OS-GABELLA"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_KEELYN"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -757,7 +757,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_OS_GABELLA"/>
+				<m_Name text="LEADER_KEELYN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -772,7 +772,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_PERPENTACH"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_MAHALA"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -787,7 +787,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_PERPENTACH"/>
+				<m_Name text="LEADER_MAHALA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -802,7 +802,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_RHOANNA"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_OSGABELLA"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -817,7 +817,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_RHOANNA"/>
+				<m_Name text="LEADER_OS_GABELLA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -832,7 +832,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_SABATHIEL"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_PERPENTACH"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -847,7 +847,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_SABATHIEL"/>
+				<m_Name text="LEADER_PERPENTACH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -862,7 +862,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_SANDALPHON"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_RHOANNA"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -877,7 +877,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_SANDALPHON"/>
+				<m_Name text="LEADER_RHOANNA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -892,7 +892,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_SHEELBA"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_SABATHIEL"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -907,7 +907,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_SHEELBA"/>
+				<m_Name text="LEADER_SABATHIEL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -922,7 +922,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_TASUNKE"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_SANDALPHON"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -937,7 +937,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_TASUNKE"/>
+				<m_Name text="LEADER_SANDALPHON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -952,7 +952,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_TEBRYN"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_SHEELBA"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -967,7 +967,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_TEBRYN"/>
+				<m_Name text="LEADER_SHEELBA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -982,7 +982,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_THESSA"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_TASUNKE"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -997,7 +997,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_THESSA"/>
+				<m_Name text="LEADER_TASUNKE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -1012,7 +1012,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_VALLEDIA"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_TEBRYN"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -1027,7 +1027,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_VALLEDIA"/>
+				<m_Name text="LEADER_TEBRYN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -1042,7 +1042,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_SLTH_LEADER_VARN"/>
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_THESSA"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -1057,11 +1057,70 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_LEADER_VARN"/>
+				<m_Name text="LEADER_THESSA"/>
+				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+			</Element>
+			<Element>
+				<m_Fields>
+					<m_Values/>
+				</m_Fields>
+				<m_ChildCollections>
+					<Element>
+						<m_CollectionName text="Animations"/>
+						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..BLPEntryValue">
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_VALLEDIA"/>
+										<m_XLPClass text="LeaderFallback"/>
+										<m_XLPPath text="leaderfallbacks.xlp"/>
+										<m_BLPPackage text="LeaderFallbacks"/>
+										<m_LibraryName text="LeaderFallback"/>
+										<m_ParamName text="BLP Entry"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="DEFAULT"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+					</Element>
+				</m_ChildCollections>
+				<m_Name text="LEADER_VALLEDIA"/>
+				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+			</Element>
+			<Element>
+				<m_Fields>
+					<m_Values/>
+				</m_Fields>
+				<m_ChildCollections>
+					<Element>
+						<m_CollectionName text="Animations"/>
+						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..BLPEntryValue">
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_VARN"/>
+										<m_XLPClass text="LeaderFallback"/>
+										<m_XLPPath text="leaderfallbacks.xlp"/>
+										<m_BLPPackage text="LeaderFallbacks"/>
+										<m_LibraryName text="LeaderFallback"/>
+										<m_ParamName text="BLP Entry"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="DEFAULT"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+					</Element>
+				</m_ChildCollections>
+				<m_Name text="LEADER_VARN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>
-
 	</m_RootCollections>
 </AssetObjects..ArtDefSet>
 
