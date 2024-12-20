@@ -51,7 +51,7 @@ UPDATE Districts SET PrereqTech = 'TECH_SMELTING' WHERE DistrictType = 'DISTRICT
 UPDATE Districts SET PrereqTech = 'TECH_SANITATION' WHERE DistrictType = 'DISTRICT_AQUEDUCT';
 
 -- UPDATE Building_YieldChanges SET YieldChange = 100 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
-UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
+-- UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
 -- UPDATE Building_YieldChanges SET YieldChange = 50 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';
 -- UPDATE Building_YieldChanges SET YieldChange = 50 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_SCIENCE';
 
