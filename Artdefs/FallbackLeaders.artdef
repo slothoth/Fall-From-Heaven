@@ -14,7 +14,7 @@
 				<m_Fields>
 					<m_Values/>
 				</m_Fields>
-				<m_ChildCollections>F
+				<m_ChildCollections>
 					<Element>
 						<m_CollectionName text="Animations"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
@@ -1061,7 +1061,6 @@
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>
-
 	</m_RootCollections>
 </AssetObjects..ArtDefSet>
 
