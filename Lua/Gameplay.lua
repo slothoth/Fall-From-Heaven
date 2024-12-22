@@ -388,13 +388,12 @@ function InitCottage(x, y, improvementIndex, playerID)
             -- ImprovementBuilder.SetImprovementType(pPlot, improvementIndex, playerId)
         end
     end
-    if improvementIndex then
+    if improvementIndex then                        -- also check its a barb camp? or has it not spawned yet
         local tUnits = Map.GetUnitsAt(pPlot)
         for pUnit in tUnits:Units() do
             local iUnitIndex = pUnit:GetType()
             local iClanIndex = tBarbClanUnitMapper[iUnitIndex]
             if iClanIndex then
-                -- print(iUnitIndex)
                 pPlot:SetProperty('barbclantype', iClanIndex)
             end
         end
@@ -593,17 +592,18 @@ function InitializeClans()
         end
         Game.SetProperty('NW_Clans_Set', 1)
     end
+    -- iterate over units
+    for _, pUnit in Players[63]:GetUnits():Members() do              -- SECTION: do reset castable
+        UnitManager.Kill(pUnit);
+    end
 end
 
 function onStart()
     GameEvents.PlayerTurnStarted.Add(onTurnStartGameplay);
-    -- GameEvents.PlayerTurnStarted.Add(checkDeals);
 
     Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
     Events.ImprovementAddedToMap.Add(InitCottage)
     GameEvents.PlayerTurnStarted.Add(IncrementCottages);
-
-    -- Events.PlayerResourceChanged.Add(UpdateResource)                 -- NOT WORKING AND causing errors
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
