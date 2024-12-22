@@ -1,5 +1,5 @@
-local tSpiritual = {['SLTH_LEADER_ARENDEL']=1, ['SLTH_LEADER_AURIC']=1, ['SLTH_LEADER_CAPRIA']=1, ['SLTH_LEADER_JONAS']=1,
-            ['SLTH_LEADER_OS-GABELLA']=1, ['SLTH_LEADER_VARN']=1}
+local tSpiritual = {['LEADER_ARENDEL']=1, ['LEADER_AURIC']=1, ['LEADER_CAPRIA']=1, ['LEADER_JONAS']=1,
+            ['LEADER_OSGABELLA']=1, ['LEADER_VARN']=1}
 
 local tSpiritualPromos = {['PROMOTION_CLASS_DISCIPLE']=GameInfo.UnitPromotions['PROMOTION_MOBILITY1_DISCIPLE'].Index}
 
