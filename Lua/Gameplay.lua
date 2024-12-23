@@ -311,6 +311,31 @@ function onTurnStartGameplay(playerId)
     -- local BUFF_HASTE_UNITS = {[0]= {iPlayer=0, iUnit=130, iCasterPlayer=0}}
     --BUFF_REGENERATION -- when full
     -- local afterCombat = {BUFF_BLESSED=true, BUFF_ENRAGED=true, BUFF_STONESKIN=true}
+
+    -- SECTION: Cottage/Pirate Port improvement upgrading.
+    local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')
+    if not tImprovingImprovements then return end
+    for idx, plot_tuple in pairs(tImprovingImprovements) do
+        print(idx)
+        local iX, iY = plot_tuple['x'], plot_tuple['y']
+        local pPlot = Map.GetPlot(iX, iY)
+        local bIsWorked = pPlot:GetProperty('currently_worked')
+        local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
+        if bIsWorked > 0 and not bIsImprovementPillaged then
+            local iWorkedTurns = pPlot:GetProperty('worked_turns')
+            if iWorkedTurns > 2 then
+                local iImprovementIndex = pPlot:GetImprovementType()
+                print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
+                local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
+                if iImprovementUpgradedIndex then
+                    ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
+                end
+            else
+                pPlot:SetProperty('worked_turns', iWorkedTurns+1)
+                print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
+            end
+        end
+    end
 end
 
 ------------ Cottage / Pirate Cove improvement upgrading over turns  ---------
@@ -401,35 +426,7 @@ function InitCottage(x, y, improvementIndex, playerID)
 
 end
 
-function IncrementCottages(playerId)
-    local pPlayer = Players[playerId]
-    local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')     -- could we instead use pPlayer:GetImprovements:GetImprovementPlots()?
-    if not tImprovingImprovements then return end
-    for idx, plot_tuple in pairs(tImprovingImprovements) do
-        print(idx)
-        local iX, iY = plot_tuple['x'], plot_tuple['y']
-        local pPlot = Map.GetPlot(iX, iY)
-        local bIsWorked = pPlot:GetProperty('currently_worked')
-        local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
-        if bIsWorked > 0 and not bIsImprovementPillaged then
-            local iWorkedTurns = pPlot:GetProperty('worked_turns')
-            if iWorkedTurns > 2 then
-                local iImprovementIndex = pPlot:GetImprovementType()
-                print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
-                local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
-                if iImprovementUpgradedIndex then
-                    ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
-                end
-            else
-                pPlot:SetProperty('worked_turns', iWorkedTurns+1)
-                print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
-            end
-        end
-    end
-end
-
 function EventCollapse(x, y)
-    print('doing collapse')
     local pPlot = Map.GetPlot(x, y)
     local tUnits = Map.GetUnitsAt(pPlot)
     for pUnit in tUnits:Units() do
@@ -452,7 +449,6 @@ local tTribeDeck = {[TRIBE_CLAN_SCORPION] = {[1]=EventCollapse}, [TRIBE_CLAN_SKE
 function RemovedBarbCamp(x, y, owningPlayerID)
     local pPlot = Map.GetPlot(x, y)
     local owner = pPlot:GetOwner()
-    print('destroying')
     if owningPlayerID == 63 or owner == -1 then
         local feature = pPlot:GetFeatureType()
         local tribeIndex = pPlot:GetProperty('barbclantype') or 1
@@ -494,16 +490,13 @@ local tLuonnotarCivics = {
 function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     local tLuonnotarInfo = tLuonnotar[buildingID]
     if tLuonnotarInfo then
-        print('altar recognised')
         local pPlot = Map.GetPlotByIndex(plotID)
         local iAltarLevel = pPlot:GetProperty('altar_level')
         if not iAltarLevel then
             pPlot:SetProperty('altar_level', 0)
         end
         local iCivicForNext = tLuonnotarInfo['civic']
-        print('civic check')
         if iCivicForNext then
-            print('civic check exist')
             -- check if has culture
             local pPlayer = Players[playerID]
             if not pPlayer then return; end
@@ -511,7 +504,6 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
             if not pCulture then return; end
             local pCity = CityManager.GetCity(pPlayer, cityID)
             if not pCulture:HasCivic(iCivicForNext) then
-                print('player doesnt have civic, blocking Great Prophet activation.')
                 pCity:AttachModifierByID('MODIFIER_FREE_SLTH_BUILDING_NO_ALTAR_ALWAYS')
             end
         end
@@ -593,7 +585,7 @@ function InitializeClans()
         Game.SetProperty('NW_Clans_Set', 1)
     end
     -- iterate over units
-    for _, pUnit in Players[63]:GetUnits():Members() do              -- SECTION: do reset castable
+    for _, pUnit in Players[63]:GetUnits():Members() do
         UnitManager.Kill(pUnit);
     end
 end
@@ -603,7 +595,6 @@ function onStart()
 
     Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
     Events.ImprovementAddedToMap.Add(InitCottage)
-    GameEvents.PlayerTurnStarted.Add(IncrementCottages);
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
