@@ -345,6 +345,31 @@ function onTurnStartGameplay(playerId)
             SpawnOrthus()
         end
     end
+
+    -- SECTION: Cottage/Pirate Port improvement upgrading.
+    local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')
+    if not tImprovingImprovements then return end
+    for idx, plot_tuple in pairs(tImprovingImprovements) do
+        print(idx)
+        local iX, iY = plot_tuple['x'], plot_tuple['y']
+        local pPlot = Map.GetPlot(iX, iY)
+        local bIsWorked = pPlot:GetProperty('currently_worked')
+        local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
+        if bIsWorked > 0 and not bIsImprovementPillaged then
+            local iWorkedTurns = pPlot:GetProperty('worked_turns')
+            if iWorkedTurns > 2 then
+                local iImprovementIndex = pPlot:GetImprovementType()
+                print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
+                local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
+                if iImprovementUpgradedIndex then
+                    ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
+                end
+            else
+                pPlot:SetProperty('worked_turns', iWorkedTurns+1)
+                print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
+            end
+        end
+    end
 end
 
 ------------ Cottage / Pirate Cove improvement upgrading over turns  ---------
@@ -794,8 +819,18 @@ function onLairCollapse(pUnit, pPlot, sEventInfo)
     end
 end
 
-function onSpawnBadScorpion(pUnit, pPlot, sEventInfo)
+function onSpawnBadScorpion(pUnit, pPlot, sEventInfo) end
 
+function EventCollapse(x, y)
+    local pPlot = Map.GetPlot(x, y)
+    local tUnits = Map.GetUnitsAt(pPlot)
+    for pUnit in tUnits:Units() do
+        print('remove health')
+        pUnit:ChangeDamage(20)
+        if pUnit:GetDamage() < 1 then           -- is it at 0 or at 100?
+            UnitManager.Kill(pUnit)
+        end
+    end
 end
 
 function SLTH_Todo(pUnit, pPlot, sEventInfo)
@@ -1154,16 +1189,13 @@ local tLuonnotarCivics = {
 function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     local tLuonnotarInfo = tLuonnotar[buildingID]
     if tLuonnotarInfo then
-        print('altar recognised')
         local pPlot = Map.GetPlotByIndex(plotID)
         local iAltarLevel = pPlot:GetProperty('altar_level')
         if not iAltarLevel then
             pPlot:SetProperty('altar_level', 0)
         end
         local iCivicForNext = tLuonnotarInfo['civic']
-        print('civic check')
         if iCivicForNext then
-            print('civic check exist')
             -- check if has culture
             local pPlayer = Players[playerID]
             if not pPlayer then return; end
@@ -1171,7 +1203,6 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
             if not pCulture then return; end
             local pCity = CityManager.GetCity(pPlayer, cityID)
             if not pCulture:HasCivic(iCivicForNext) then
-                print('player doesnt have civic, blocking Great Prophet activation.')
                 pCity:AttachModifierByID('MODIFIER_FREE_SLTH_BUILDING_NO_ALTAR_ALWAYS')
             end
         end
@@ -1253,7 +1284,7 @@ function InitializeClans()
         Game.SetProperty('NW_Clans_Set', 1)
     end
     -- iterate over units
-    for _, pUnit in Players[63]:GetUnits():Members() do              -- SECTION: do reset castable
+    for _, pUnit in Players[63]:GetUnits():Members() do
         UnitManager.Kill(pUnit);
     end
 end
@@ -1263,7 +1294,6 @@ function onStart()
 
     Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
     Events.ImprovementAddedToMap.Add(InitCottage)
-    GameEvents.PlayerTurnStarted.Add(IncrementCottages);
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
@@ -2033,10 +2063,4 @@ GameEvents.SlthOnHealSelf.Add(HealSelf)
 GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
 GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
 
-
-
 onStart()
-
-
-
-
