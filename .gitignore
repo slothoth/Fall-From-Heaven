@@ -15,3 +15,11 @@ python_gen/data/foreign_keys.json
 /python_gen/build_utils/FallFromHeaven.Mod.art.xml
 /python_gen/build_utils/correct.xml
 /python_gen/data/
+/data/
+/docs/.obsidian/
+/docs/_site/
+/docs/404.html
+/docs/_posts/.obsidian/
+/docs/Gemfile
+/docs/Gemfile.lock
+/db_search.py
