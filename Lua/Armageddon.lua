@@ -362,7 +362,7 @@ end
 -- big performance concerns on this as getting every land tile, checking terrain, then checking adjacent tiles. every turn
 -- need some initial starting plots, as otherwise it cant spread. Also needs some plots on each landmass, down to a min size. Apparently this last point wasnt in og
 -- Infernal cities alywas convert their terrain to hell equivalent. Thats the seed. Also HellFire improvement but we'll cross that bridge when we come to it
-tHellTerrains = {[GameInfo.Terrains['TERRAIN_BURNING_SANDS'].Index]=1,          -- cba with mountains
+local tHellTerrains = {[GameInfo.Terrains['TERRAIN_BURNING_SANDS'].Index]=1,          -- cba with mountains
                  [GameInfo.Terrains["TERRAIN_BURNING_SANDS_HILLS"].Index]=1,
                  [GameInfo.Terrains['TERRAIN_BROKEN_LANDS'].Index]=1,
                  [GameInfo.Terrains["TERRAIN_BROKEN_LANDS_HILLS"].Index]=1,
@@ -395,7 +395,7 @@ tResourceReverse = {  [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo.Resou
 tHellReverse = reverse_table(tHellTransforms)
 function HellSpread()
     local pPlot
-    local sTerrainType
+    local iTerrainType
     local tAdjacentPlots
     local bIsOwned
     local iAdjPlotID
@@ -408,8 +408,8 @@ function HellSpread()
     local iArmageddonCount = Game.GetProperty('ARMAGEDDON') or 0
     for idx, plotID in tLandTiles do
         pPlot = Map.GetPlotByIndex(plotID)
-        sTerrainType = pPlot:GetTerrainType()
-        if tHellTerrains[sTerrainType] then
+        iTerrainType = pPlot:GetTerrainType()
+        if tHellTerrains[iTerrainType] then
             tCurrentHellTiles[plotID] = 1
         end
     end
