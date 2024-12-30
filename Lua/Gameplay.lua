@@ -2,7 +2,7 @@ local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN =
                       SLTH_UNIT_CORLINDALE = 2, SLTH_UNIT_DISCIPLE_OF_ACHERON = 1, SLTH_UNIT_GAELAN = 1.5, SLTH_UNIT_GIBBON = 2,
                       SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
                       SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2}
-
+local iNotifType = NotificationTypes.USER_DEFINED_2;
 local tMonitoredResources = {
     [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='DEATH'},
     [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='FIRE'},
@@ -654,8 +654,8 @@ function BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, iBarbClanType, iFeatureTyp
     end
     local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
     local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
-    local iPlayer = pUnit:GetOwner()     -- default notification ENUM
-    NotificationManager.SendNotification(iPlayer,-880376630, sTitle, sDescription, iX, iY)
+    local iPlayer = pUnit:GetOwner()
+    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
     -- seems like promo list gives a random promo from the list to the leader, TODO
 end
 
@@ -904,8 +904,8 @@ function doBad(pPlot, iBarbClanType, pUnit, bIsWater)
     local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
     local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
     local iX, iY = pUnit:GetX(), pUnit:GetY()
-    local iPlayer = pUnit:GetOwner()     -- default notification ENUM
-    NotificationManager.SendNotification(iPlayer,-880376630, sTitle, sDescription, iX, iY)
+    local iPlayer = pUnit:GetOwner()
+    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
     local iThreshold = tLairDestroyChance[sEvent]
     return iThreshold
 end
@@ -952,8 +952,8 @@ function doNeutral(pPlot, iBarbClanType, pUnit, bIsWater)
     local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
     local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
     local iX, iY = pUnit:GetX(), pUnit:GetY()
-    local iPlayer = pUnit:GetOwner()     -- default notification ENUM
-    NotificationManager.SendNotification(iPlayer,-880376630, sTitle, sDescription, iX, iY)
+    local iPlayer = pUnit:GetOwner()
+    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
     return iThreshold
 end
 
@@ -1027,7 +1027,7 @@ function doGood(pPlot, pUnit, bIsWater)
     local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
     local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
     local iX, iY = pUnit:GetX(), pUnit:GetY()
-    NotificationManager.SendNotification(iPlayer,-880376630, sTitle, sDescription, iX, iY)
+    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
     local iThreshold = tLairDestroyChance[sEvent]
     return iThreshold
 end
@@ -1066,16 +1066,13 @@ function doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
     print('Chosen Lair event: ' .. sEvent)
     local fEvent = tLairEvents[sEvent]
     local sUnitType = tLairExtraInfos[sEvent]
-    print('Before event unit is')
-    print(pUnit)
     fEvent(pUnit, pPlot, sUnitType)
     local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
     local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
     local iX, iY = pUnit:GetX(), pUnit:GetY()
-    local iPlayer = pUnit:GetOwner()     -- default notification ENUM
-    NotificationManager.SendNotification(iPlayer,-880376630, sTitle, sDescription, iX, iY)
+    local iPlayer = pUnit:GetOwner()
+    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
 end
-
 -- local TRIBE_CLAN_NAT_WON = GameInfo.BarbarianTribes[TRIBE_CLAN_CAVALRY_CHARIOT'].Index
 
 function RemovedBarbCamp(x, y, owningPlayerID)
