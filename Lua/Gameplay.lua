@@ -3,32 +3,6 @@ local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN =
                       SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
                       SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2}
 local iNotifType = NotificationTypes.USER_DEFINED_2;
-local tMonitoredResources = {
-    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='DEATH'},
-    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='FIRE'},
-    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index] = { rtype='MANA', name='AIR'},
-    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index] = { rtype='MANA', name='BODY'},
-    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index] = { rtype='MANA', name='CHAOS'},
-    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index] = { rtype='MANA', name='EARTH'},
-    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index] = { rtype='MANA', name='ENCHANTMENT'},
-    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index] = { rtype='MANA', name='ENTROPY'},
-    [GameInfo.Resources['RESOURCE_MANA_ICE'].Index] = { rtype='MANA', name='ICE'},
-    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index] = { rtype='MANA', name='LAW'},
-    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index] = { rtype='MANA', name='LIFE'},
-    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index] = { rtype='MANA', name='METAMAGIC'},
-    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index] = { rtype='MANA', name='MIND'},
-    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index] = { rtype='MANA', name='NATURE'},
-    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index] = { rtype='MANA', name='SPIRIT'},
-    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='WATER'},
-    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='SUN'},
-    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='SHADOW'},
-    [GameInfo.Resources['RESOURCE_BANANA'].Index] = { rtype='AFFINITY', name='BANANA'},
-    [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='COPPER'},
-    [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='IRON'},
-    [GameInfo.Resources['RESOURCE_MITHRIL'].Index] = { rtype='AFFINITY', name='MITHRIL'},
-    [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='SHEUT_STONE'},
-    [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype='AFFINITY', name='NIGHTMARE'}}
-
 local tImprovementsProgression = {
         [GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
         [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
@@ -920,8 +894,9 @@ function onLairCollapse(pUnit, pPlot, sEventInfo)
     end
 end
 
-function onSpawnBadScorpion(pUnit, pPlot, sEventInfo) end
-
+function onSpawnBadScorpion(pUnit, pPlot, sEventInfo)
+    print('do nothing')
+end
 function EventCollapse(x, y)
     local pPlot = Map.GetPlot(x, y)
     local tUnits = Map.GetUnitsAt(pPlot)
@@ -933,7 +908,6 @@ function EventCollapse(x, y)
         end
     end
 end
-
 function SLTH_Todo(pUnit, pPlot, sEventInfo)
     print('placeholder')
 end
@@ -1097,12 +1071,13 @@ local iCIVIC_MYSTICISM = GameInfo.Civics['CIVIC_MYSTICISM'].Index
 
 function doGood(pPlot, pUnit, bIsWater)
     local tPossible =  {'HIGH_GOLD', 'TREASURE', 'EXPERIENCE'}
-    local sUnitPromoClass
     local iPlayer = pUnit:GetOwner()
     local pPlayer = Players[iPlayer]
     local iUnitIndex = pUnit:GetType()
     local pUnitAbilities = pUnit:GetAbility()
-    local sUnitName = GameInfo.Units[iUnitIndex].UnitType
+    local tUnitInfos = GameInfo.Units[iUnitIndex]
+    local sUnitName = tUnitInfos.UnitType
+    local sUnitPromoClass = tUnitInfos.PromotionClass
     if GameInfo.UnitsNotAlive[sUnitName] then
         if not pUnitAbilities:HasAbility('BUFF_SPIRIT_GUIDE') then          -- todo implement
             table.insert(tPossible, 'SPIRIT_GUIDE')
@@ -1330,8 +1305,11 @@ end
 -- Great Bard on Drama
 -- there are others im pretty sure
 -- function OnTechnologyGrantFirst()  end
-local tCivicsGreatPeople = {[GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index] = 'GREAT_GENERAL',
-                            [GameInfo.Civics['CIVIC_DRAMA_POETRY'].Index] = 'GREAT_ARTIST'}
+local iCivicMilTraining = GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index
+local iCivicDrama = GameInfo.Civics['CIVIC_DRAMA_POETRY'].Index
+local iGreatGeneral = GameInfo.Units['GREAT_GENERAL'].Index
+local iGreatArtist = GameInfo.Units['GREAT_ARTIST'].Index
+local tCivicsGreatPeople = {[iCivicMilTraining] = iGreatGeneral, [iCivicDrama] = iGreatArtist}
 
 function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
     local pPlayer = Players[playerID]
@@ -1343,6 +1321,26 @@ function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
                 pCity:GetBuildings():RemoveBuilding(iLunnotarBlocker)           -- dont think i need to add back dummy_prereq
                 return
             end
+        end
+    end
+    -- do check for first to civic?
+    if civicIndex == iCivicMilTraining then
+        local bMilTrainingDiscovered = Game:GetProperty('MIL_TRAINING_DISCOVERED')
+        if not bMilTrainingDiscovered then
+            local pCapital = pPlayer:GetCities():GetCapitalCity()
+            local iUnitType = tCivicsGreatPeople[civicIndex]
+            Game.GetGreatPeople():CreatePerson(playerID, iUnitType, pCapital:GetX(), pCapital:GetY())
+            Game:SetProperty('MIL_TRAINING_DISCOVERED', 1)
+        end
+    end
+
+    if civicIndex == iCivicMilTraining then
+        local bDramaDiscovered =  Game:GetProperty('DRAMA_DISCOVERED')
+        if not bDramaDiscovered then
+            local pCapital = pPlayer:GetCities():GetCapitalCity()
+            local iUnitType = tCivicsGreatPeople[civicIndex]
+            Game.GetGreatPeople():CreatePerson(playerID, iUnitType, pCapital:GetX(), pCapital:GetY())
+            Game:SetProperty('DRAMA_DISCOVERED', 1)
         end
     end
 end
@@ -1363,6 +1361,218 @@ function onGreatPersonActivated(unitOwner, unitID, greatPersonClassID, greatPers
                     print('plot prop update GP suceeded')
                 end
                 return
+            end
+        end
+    end
+end
+
+-- Gives 2 to 5 new random promotions to the unit from any promotions with bMutation flag set in Civ4PromotionsInfo.xml
+-- that are possible (equal chance of each):
+-- 'AMPHIBIOUS', 'BLITZ', 'CANNABILIZE', 'COLD_RESISTANCE', 'COMBAT1', 'FIRE_RESISTANCE', 'HEROIC_DEFENSE', 'HEROIC_STRENGTH',
+-- 'LIGHTNING_RESISTANCE', 'POISON_RESISTANCE', 'MOBILITY1', 'SENTRY',
+-- 'DISEASED', 'BUFF_EMPOWER', 'ABILITY_HEAVY', 'ABILITY_IMMUNE_TO_DISEASE', 'ABILITY_LIGHT', 'BUFF_REGENERATION', 'BUFF_STONESKIN',
+-- 'ABILITY_STRONG', 'ABILITY_WEAK', 'VULNERABLE_TO_FIRE', 'WITHERED'
+
+-- VULN_fire will not work as it requires tags
+local iABILITY_MUTATED = GameInfo.UnitAbilities['BUFF_MUTATED'].Index
+local iAMPH_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_AMPHIBIOUS_MELEE'].Index
+local iBLITZ_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_BLITZ_MELEE'].Index
+local iCANNIBALIZE_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_MELEE'].Index
+local iCOLD_RES_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_COLD_RESISTANCE_MELEE'].Index
+local iFIRE_RES_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_MELEE'].Index
+local iLIGHTNING_RES_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_LIGHTNING_RESISTANCE_MELEE'].Index
+local iPOISON_RES_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_POISON_RESISTANCE_MELEE'].Index
+local iMOBILITY_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_MOBILITY1_MELEE'].Index
+local iSENTRY_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_SENTRY_MELEE'].Index
+
+local tMutationPromotionsMelee = {
+    ['AMPHIBIOUS'] = iAMPH_MELEE_INDEX,
+    ['BLITZ'] = iBLITZ_MELEE_INDEX,
+    ['CANNABILIZE'] = iCANNIBALIZE_MELEE_INDEX,
+    ['COLD_RESISTANCE'] = iCOLD_RES_MELEE_INDEX,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_MELEE'].Index,
+    ['FIRE_RESISTANCE'] = iFIRE_RES_MELEE_INDEX,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_MELEE'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_MELEE'].Index,
+    ['LIGHTNING_RESISTANCE'] = iLIGHTNING_RES_MELEE_INDEX,
+    ['POISON_RESISTANCE'] = iPOISON_RES_MELEE_INDEX,
+    ['MOBILITY1'] = iMOBILITY_MELEE_INDEX,
+    ['SENTRY'] = iSENTRY_MELEE_INDEX
+}
+
+local tMutationPromotionsRecon = {
+    ['AMPHIBIOUS']= GameInfo.UnitPromotions['PROMOTION_AMPHIBIOUS_RECON'].Index,
+    ['BLITZ'] = GameInfo.UnitPromotions['PROMOTION_BLITZ_RECON'].Index,
+    ['CANNABILIZE'] = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_RECON'].Index,
+    ['COLD_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_COLD_RESISTANCE_RECON'].Index,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_RECON'].Index,
+    ['FIRE_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_RECON'].Index,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_RECON'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_RECON'].Index,
+    ['LIGHTNING_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_LIGHTNING_RESISTANCE_RECON'].Index,
+    ['POISON_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_POISON_RESISTANCE_RECON'].Index,
+    ['MOBILITY1'] = GameInfo.UnitPromotions['PROMOTION_MOBILITY1_RECON'].Index,
+    ['SENTRY'] = GameInfo.UnitPromotions['PROMOTION_SENTRY_RECON'].Index
+}
+
+local tMutationPromotionsRanged = {
+    ['AMPHIBIOUS']= GameInfo.UnitPromotions['PROMOTION_AMPHIBIOUS_RANGED'].Index,
+    ['BLITZ'] = GameInfo.UnitPromotions['PROMOTION_BLITZ_RANGED'].Index,
+    ['CANNABILIZE'] = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_RANGED'].Index,
+    ['COLD_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_COLD_RESISTANCE_RANGED'].Index,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_RANGED'].Index,
+    ['FIRE_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_RANGED'].Index,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_RANGED'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_RANGED'].Index,
+    ['LIGHTNING_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_LIGHTNING_RESISTANCE_RANGED'].Index,
+    ['POISON_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_POISON_RESISTANCE_RANGED'].Index,
+    ['MOBILITY1'] = GameInfo.UnitPromotions['PROMOTION_MOBILITY1_RANGED'].Index,
+    ['SENTRY'] = GameInfo.UnitPromotions['PROMOTION_SENTRY_RANGED'].Index
+}
+
+local tMutationPromotionsLightCav = {
+    ['AMPHIBIOUS']= GameInfo.UnitPromotions['PROMOTION_AMPHIBIOUS_LIGHT_CAVALRY'].Index,
+    ['BLITZ'] = GameInfo.UnitPromotions['PROMOTION_BLITZ_LIGHT_CAVALRY'].Index,
+    ['CANNABILIZE'] = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_LIGHT_CAVALRY'].Index,
+    ['COLD_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_COLD_RESISTANCE_LIGHT_CAVALRY'].Index,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_LIGHT_CAVALRY'].Index,
+    ['FIRE_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_LIGHT_CAVALRY'].Index,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_LIGHT_CAVALRY'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_LIGHT_CAVALRY'].Index,
+    ['LIGHTNING_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_LIGHTNING_RESISTANCE_LIGHT_CAVALRY'].Index,
+    ['POISON_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_POISON_RESISTANCE_LIGHT_CAVALRY'].Index,
+    ['MOBILITY1'] = GameInfo.UnitPromotions['PROMOTION_MOBILITY1_LIGHT_CAVALRY'].Index,
+    ['SENTRY'] = GameInfo.UnitPromotions['PROMOTION_SENTRY_LIGHT_CAVALRY'].Index
+}
+
+local tMutationPromotionsSiege = {
+    ['AMPHIBIOUS'] = iAMPH_MELEE_INDEX,
+    ['BLITZ'] = iBLITZ_MELEE_INDEX,
+    ['CANNABILIZE'] = iCANNIBALIZE_MELEE_INDEX,
+    ['COLD_RESISTANCE'] = iCOLD_RES_MELEE_INDEX,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_SIEGE'].Index,
+    ['FIRE_RESISTANCE'] = iFIRE_RES_MELEE_INDEX,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_SIEGE'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_SIEGE'].Index,
+    ['LIGHTNING_RESISTANCE'] = iLIGHTNING_RES_MELEE_INDEX,
+    ['POISON_RESISTANCE'] = iPOISON_RES_MELEE_INDEX,
+    ['MOBILITY1'] = iMOBILITY_MELEE_INDEX,
+    ['SENTRY'] = GameInfo.UnitPromotions['PROMOTION_SENTRY_SIEGE'].Index
+}
+
+local tMutationPromotionsAnimal = {
+    ['AMPHIBIOUS']= iAMPH_MELEE_INDEX,
+    ['BLITZ'] = iBLITZ_MELEE_INDEX,
+    ['CANNABILIZE'] = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_ANIMAL'].Index,
+    ['COLD_RESISTANCE'] = iCOLD_RES_MELEE_INDEX,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_ANIMAL'].Index,
+    ['FIRE_RESISTANCE'] = iFIRE_RES_MELEE_INDEX,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_ANIMAL'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_ANIMAL'].Index,
+    ['LIGHTNING_RESISTANCE'] = iLIGHTNING_RES_MELEE_INDEX,
+    ['POISON_RESISTANCE'] = iPOISON_RES_MELEE_INDEX,
+    ['MOBILITY1'] = GameInfo.UnitPromotions['PROMOTION_MOBILITY1_ANIMAL'].Index,
+    ['SENTRY'] = iSENTRY_MELEE_INDEX           -- lost
+}
+
+local tMutationPromotionsBeast = {
+    ['AMPHIBIOUS']= GameInfo.UnitPromotions['PROMOTION_AMPHIBIOUS_BEAST'].Index,
+    ['BLITZ'] = GameInfo.UnitPromotions['PROMOTION_BLITZ_BEAST'].Index,
+    ['CANNABILIZE'] = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_BEAST'].Index,
+    ['COLD_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_COLD_RESISTANCE_BEAST'].Index,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_BEAST'].Index,
+    ['FIRE_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_BEAST'].Index,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_BEAST'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_BEAST'].Index,
+    ['LIGHTNING_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_LIGHTNING_RESISTANCE_BEAST'].Index,
+    ['POISON_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_POISON_RESISTANCE_BEAST'].Index,
+    ['MOBILITY1'] = GameInfo.UnitPromotions['PROMOTION_MOBILITY1_BEAST'].Index,
+    ['SENTRY'] = GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index
+}
+
+local tMutationPromotionsAdept = {
+    ['AMPHIBIOUS']= iAMPH_MELEE_INDEX,
+    ['BLITZ'] = iBLITZ_MELEE_INDEX,
+    ['CANNABILIZE'] = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_ADEPT'].Index,
+    ['COLD_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_COLD_RESISTANCE_ADEPT'].Index,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_ADEPT'].Index,
+    ['FIRE_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_ADEPT'].Index,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_ADEPT'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_ADEPT'].Index,
+    ['LIGHTNING_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_LIGHTNING_RESISTANCE_ADEPT'].Index,
+    ['POISON_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_POISON_RESISTANCE_ADEPT'].Index,
+    ['MOBILITY1'] = GameInfo.UnitPromotions['PROMOTION_MOBILITY1_ADEPT'].Index,
+    ['SENTRY'] = iSENTRY_MELEE_INDEX
+}
+
+local tMutationPromotionsDisciple = {
+    ['AMPHIBIOUS']= GameInfo.UnitPromotions['PROMOTION_AMPHIBIOUS_DISCIPLE'].Index,
+    ['BLITZ'] = GameInfo.UnitPromotions['PROMOTION_BLITZ_DISCIPLE'].Index,
+    ['CANNABILIZE'] = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_DISCIPLE'].Index,
+    ['COLD_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_COLD_RESISTANCE_DISCIPLE'].Index,
+    ['COMBAT1'] = GameInfo.UnitPromotions['PROMOTION_COMBAT1_DISCIPLE'].Index,
+    ['FIRE_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_DISCIPLE'].Index,
+    ['HEROIC_DEFENSE'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_DISCIPLE'].Index,
+    ['HEROIC_STRENGTH'] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_DISCIPLE'].Index,
+    ['LIGHTNING_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_LIGHTNING_RESISTANCE_DISCIPLE'].Index,
+    ['POISON_RESISTANCE'] = GameInfo.UnitPromotions['PROMOTION_POISON_RESISTANCE_DISCIPLE'].Index,
+    ['MOBILITY1'] = GameInfo.UnitPromotions['PROMOTION_MOBILITY1_DISCIPLE'].Index,
+    ['SENTRY'] = GameInfo.UnitPromotions['PROMOTION_SENTRY_DISCIPLE'].Index
+}
+local tMutationPromoTables = {['PROMOTION_CLASS_MELEE']=tMutationPromotionsMelee,
+                              ['PROMOTION_CLASS_RECON']=tMutationPromotionsRecon,
+                              ['PROMOTION_CLASS_RANGED']=tMutationPromotionsRanged,
+                              ['PROMOTION_CLASS_LIGHT_CAVALRY']=tMutationPromotionsLightCav,
+                              ['PROMOTION_CLASS_SIEGE']=tMutationPromotionsSiege,
+                              ['PROMOTION_CLASS_ANIMAL']=tMutationPromotionsAnimal,
+                              ['PROMOTION_CLASS_BEAST']=tMutationPromotionsBeast,
+                              ['PROMOTION_CLASS_ADEPT']=tMutationPromotionsAdept,
+                              ['PROMOTION_CLASS_DISCIPLE']=tMutationPromotionsDisciple
+}
+
+-- DIDNT bother with PROMOTION_CLASS_NAVAL_MELEE as shouldnt mutate. Should i do this as a SQL table, where each row is a promoclass?
+-- wait no as i have to use a . accessor, like rowInfo.SENTRY and that cant be a variable
+
+local tMutationAbilitiesAndPromotions = {
+'AMPHIBIOUS', 'BLITZ', 'CANNABILIZE', 'COLD_RESISTANCE', 'COMBAT1', 'FIRE_RESISTANCE', 'HEROIC_DEFENSE', 'HEROIC_STRENGTH',
+'LIGHTNING_RESISTANCE', 'POISON_RESISTANCE', 'MOBILITY1', 'SENTRY',
+'DISEASED', 'BUFF_EMPOWER', 'ABILITY_HEAVY', 'ABILITY_IMMUNE_TO_DISEASE', 'ABILITY_LIGHT', 'BUFF_REGENERATION', 'BUFF_STONESKIN',
+'ABILITY_STRONG', 'ABILITY_WEAK', 'ABILITY_VULNERABLE_TO_FIRE', 'WITHERED'}
+local tAbilityMutations = { ['DISEASED'] = true, ['BUFF_EMPOWER'] = true, ['ABILITY_HEAVY'] = true, ['ABILITY_IMMUNE_TO_DISEASE'] = true,
+                            ['ABILITY_LIGHT'] = true, ['BUFF_REGENERATION'] = true, ['BUFF_STONESKIN'] = true, ['ABILITY_STRONG'] = true,
+                            ['ABILITY_WEAK'] = true, ['ABILITY_VULNERABLE_TO_FIRE'] = true, ['WITHERED'] = true
+}
+local tFive = {2, 3, 4, 5}
+function onAbilityGained(playerID, unitID, unitAbilityIndex)
+    print(unitAbilityIndex)
+    if unitAbilityIndex == iABILITY_MUTATED then
+        local pUnit = UnitManager.GetUnit(playerID, unitID)
+        local pUnitExp = pUnit:GetExperience()
+        local pUnitAbilities = pUnit:GetAbility()
+        local iUnitIndex = pUnit:GetType()
+        local tUnitInfos = GameInfo.Units[iUnitIndex]
+        local sUnitPromoClass = tUnitInfos.PromotionClass
+        local tClassPromos = tMutationPromoTables[sUnitPromoClass]
+        local iNumMutations = tFive[math.random(table.count(tFive))]
+        local tMutationSelection = tMutationAbilitiesAndPromotions
+        local iMutationSuccesses = 0
+        for var=1, 10 do
+            if iMutationSuccesses <= iNumMutations then
+                local iMutationIndex = math.random(table.count(tMutationSelection))
+                local sMutationGrant = tMutationSelection[iMutationIndex]
+                table.remove(tMutationSelection, iMutationIndex)
+                if tAbilityMutations[sMutationGrant] then
+                    if not pUnitAbilities:HasAbility(sMutationGrant) then
+                        pUnitAbilities:AddAbilityCount(sMutationGrant)
+                        iMutationSuccesses = iMutationSuccesses + 1
+                    end
+                else
+                    local iPromoGrant = tClassPromos[sMutationGrant]
+                    if not pUnitExp:HasPromotion(iPromoGrant) then
+                        pUnitExp:SetPromotion(iPromoGrant)
+                        iMutationSuccesses = iMutationSuccesses + 1
+                    end
+                end
             end
         end
     end
@@ -1390,17 +1600,52 @@ function InitializeClans()
     end
 end
 
+-- Hook in events
 function onStart()
     GameEvents.PlayerTurnStarted.Add(onTurnStartGameplay);
-
     Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
     Events.ImprovementAddedToMap.Add(InitCottage)
+    GameEvents.PlayerTurnStarted.Add(IncrementCottages);
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
-    Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)           -- doesnt work
+    Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
+    Events.UnitAbilityGained.Add(onAbilityGained)
+
+    -- UnitOperation Works
+    GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
+    GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
+    GameEvents.SlthSetResourcePromotions.Add(UpdateResourcePromotion);
+    GameEvents.SlthOnSummon.Add(OnSummon);
+    GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);
+    GameEvents.SlthOnGrantBuffSelf.Add(OnGrantBuffSelf);
+    GameEvents.SlthOnGrantBuffAoEAlly.Add(OnGrantBuffAoe);
+    GameEvents.SlthOnGrantAbilityAoeEnemy.Add(OnGrantDebuffAoe);
+    GameEvents.SlthOnChangeTerrain.Add(OnSpellChangeTerrain);
+    GameEvents.SlthOnAoeDamage.Add(OnSpellAoeDamage);
+    GameEvents.SlthOnBespokeSpell.Add(OnBespokeSpell);
+    GameEvents.SlthOnGrantGoldenAge.Add(GrantGoldenAge);
+    GameEvents.SlthOnGrantBuilding.Add(GrantBuildingFunction);
+    GameEvents.SlthOnGrantSuperSpecialist.Add(GrantSuperSpecialist);
+    GameEvents.SlthOnConsumeAlly.Add(ConsumeAlly);
+    GameEvents.SlthOnUnitCityInteract.Add(UnitCityInteract);
+    GameEvents.SlthOnConvertSelf.Add(ConvertSelfUnit);
+    GameEvents.SlthOnTakeEquipment.Add(ConsumeEquipment);
+    GameEvents.SlthOnCastMirror.Add(SummonClone)
+    GameEvents.SlthOnBreakStaff.Add(BreakStaff)
+    GameEvents.SlthDreamsConsume.Add(RefreshCastTakePop)
+    GameEvents.SlthVampireConsumePop.Add(GainExperienceTakePop)
+    GameEvents.SlthOnSpreadEsus.Add(SpreadEsus)
+    GameEvents.SlthOnTeleportToSummon.Add(TeleportUnitToSummon)
+    GameEvents.SlthOnTeleportToCapital.Add(TeleportUnitToCapital)
+    GameEvents.SlthOnForcePeace.Add(ForcePeace)
+    GameEvents.SlthOnHealSelf.Add(HealSelf)
+    GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
+    GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
+
+    -- initialize clans
     InitializeClans()
     print('-----------------Gameplay loaded')
 end
@@ -2041,9 +2286,6 @@ local function ConvertUnitType( iPlayer, tParameters)
     pUnit:SetDamage(0)
     -- do UnitManager delete on UI side
 end
-
-
-
 
 local tAllowSphereOne = {
     [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED'].Index,
