@@ -1,5 +1,5 @@
 local PYRE_ZOMBIE_INDEX =  GameInfo.Units['SLTH_UNIT_PYRE_ZOMBIE'].Index
-local bSheaimPresent = false
+local bSheaimPresent
 local iExplosionDamage = 40
 
 -- Diseased: Granted by Diseased. Permanent, removeable by Cure Disease. All units adjaceny -10% healing. Infirmary remove
@@ -11,7 +11,6 @@ local iExplosionDamage = 40
 -- events.  Combat, Enter City
 --
 function CombatApplyDebuffs(combatResult)
-    print('in combat')
     local defender = combatResult[CombatResultParameters.DEFENDER]
     local pDefenderID =  defender[CombatResultParameters.ID]
     local iDefenderTypeID = pDefenderID.type            -- check its a unit
@@ -36,34 +35,26 @@ function CombatApplyDebuffs(combatResult)
     if not pAttackerUnit then return end
     local pAttackUnitAbilities = pAttackerUnit:GetAbility()
 
-    print(iDefenderOwnerID)
-    print(iDefenderUnitID)
-    print(iAttackerOwnerID)
-    print(iAttackerUnitID)
-
     local bDefHasDiseased = pDefUnitAbilities:HasAbility('DISEASED') or pDefUnitAbilities:HasAbility('DISEASED_INHERENT')
+    local bDefDiseaseImmune = pDefUnitAbilities:HasAbility('ABILITY_IMMUNE_TO_DISEASE')
     local bDefHasPlagued = pDefUnitAbilities:HasAbility('PLAGUED')
     local bDefHasWitheredTouch = pDefUnitAbilities:HasAbility('WITHERED_TOUCH') or pDefUnitAbilities:HasAbility('SLTH_EQUIPMENT_ATHAME_ABILITY')
     local bDefHasPoisonedBlade = pDefUnitAbilities:HasAbility('ABILITY_POISONED_BLADE')
     local bDefHasPlagueCarrier = pDefUnitAbilities:HasAbility('PLAGUE_CARRIER')
 
     local bAttHasDiseased = pAttackUnitAbilities:HasAbility('DISEASED') or pAttackUnitAbilities:HasAbility('DISEASED_INHERENT')
+    local bAttDiseaseImmune = pAttackUnitAbilities:HasAbility('ABILITY_IMMUNE_TO_DISEASE')
     local bAttHasPlagued = pAttackUnitAbilities:HasAbility('PLAGUED')
     local bAttHasWitheredTouch = pAttackUnitAbilities:HasAbility('WITHERED_TOUCH') or pAttackUnitAbilities:HasAbility('SLTH_EQUIPMENT_ATHAME_ABILITY')
     local bAttHasPoisonedBlade = pAttackUnitAbilities:HasAbility('ABILITY_POISONED_BLADE')
     local bAttHasPlagueCarrier = pAttackUnitAbilities:HasAbility('PLAGUE_CARRIER')
-    print('doing checks')
-
     if bDefHasDiseased then
-        if not bAttHasDiseased then
+        if not bAttHasDiseased and (not bAttDiseaseImmune) then
             pAttackUnitAbilities:AddAbilityCount('DISEASED')
-            print('add diseased to attacker')
         end
     else
-        print('check if attacker has diseased')
-        if bAttHasDiseased then
+        if bAttHasDiseased and (not bDefDiseaseImmune) then
             pDefUnitAbilities:AddAbilityCount('DISEASED')
-            print('add diseased to defender')
         end
     end
 
@@ -78,27 +69,23 @@ function CombatApplyDebuffs(combatResult)
     end
 
     if bDefHasPoisonedBlade then
-        local bAttHasPoisoned = pAttackUnitAbilities:HasAbility('POISONED')
-        if not bAttHasPoisoned then
+        if not pAttackUnitAbilities:HasAbility('POISONED') then
             pAttackUnitAbilities:AddAbilityCount('POISONED')
         end
     end
     if bAttHasPoisonedBlade then
-        local bDefHasPoisoned = pDefUnitAbilities:HasAbility('POISONED')
-        if not bDefHasPoisoned then
+        if not pDefUnitAbilities:HasAbility('POISONED') then
             pDefUnitAbilities:AddAbilityCount('POISONED')
         end
     end
 
     if bDefHasWitheredTouch then
-        local bAttHasWithered = pAttackUnitAbilities:HasAbility('WITHERED')
-        if not bAttHasWithered then
+        if not pAttackUnitAbilities:HasAbility('WITHERED') then
             pAttackUnitAbilities:AddAbilityCount('WITHERED')
         end
     end
     if bAttHasWitheredTouch then
-        local bDefHasWithered = pDefUnitAbilities:HasAbility('WITHERED')
-        if not bDefHasWithered then
+        if not pDefUnitAbilities:HasAbility('WITHERED') then
             pDefUnitAbilities:AddAbilityCount('WITHERED')
         end
     end
@@ -115,22 +102,17 @@ function CombatApplyDebuffs(combatResult)
     end
 
     if bSheaimPresent then
-        local tZombies = {}
         if pAttackerUnit:GetType() == PYRE_ZOMBIE_INDEX then
-            local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-            table.insert(tZombies, tNeighborPlots)
-        end
-
-        if table.count(tZombies) == 0 then return end;
-
-        for idx, tNeighborPlots in ipairs(tZombies) do
-            for _, plot in ipairs(tNeighborPlots) do
-                for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-                    if (pNearUnit ~= nil) then
-                        if GameInfo.Units[pNearUnit:GetType()].Combat ~= 0 then
-                            pNearUnit:ChangeDamage(iExplosionDamage);
-                            if pNearUnit:GetDamage() >= 100 then
-                                UnitManager.Kill(pNearUnit, false);
+            local tNeighbors = Map.GetNeighborPlots(pAttackerUnit:GetX(), pAttackerUnit:GetY(), 1);
+            for idx, tNeighborPlots in ipairs(tNeighbors) do
+                for _, plot in ipairs(tNeighborPlots) do
+                    for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+                        if pNearUnit then
+                            if GameInfo.Units[pNearUnit:GetType()].Combat ~= 0 then
+                                pNearUnit:ChangeDamage(iExplosionDamage);
+                                if pNearUnit:GetDamage() >= 100 then
+                                    UnitManager.Kill(pNearUnit, false);
+                                end
                             end
                         end
                     end

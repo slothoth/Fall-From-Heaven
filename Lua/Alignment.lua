@@ -182,11 +182,40 @@ end
 
 -- potential issues: checking city might need to account for spawning on Encampment.
 
+local tEquipmentAbilities = {
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_ATHAME'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_BLACK_MIRROR'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_COMMAND'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_DRAGONS_HORDE'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_EMPTY_BIER'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_GELA'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_GODSLAYER'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_GOLDEN_HAMMER'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_HEALING_SALVE'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_JADE_TORC'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_NETHER_BLADE'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_ORTHUSS_AXE'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_RESTORATION'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_ROD_OF_WINDS'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_SCORCHED_STAFF'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_SPELL_STAFF'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_STAFF_OF_SOULS'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_TIMOR_MASK'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_TREASURE_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_TREASURE'].Index,
+                        [GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index] = GameInfo.Units['SLTH_EQUIPMENT_WAR'].Index }
+
 function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local iUnitToGrant
     local iPlotSpawnedLocation
     local iGrantPlayer
     local bIsEvil
+    local bReincarnate = true
+    local pUnitKiller
     local pPlayer = Players[killedPlayerID]
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
     if not pUnit then return; end
@@ -205,38 +234,79 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
         iGrantPlayer = Game:GetProperty('Mercurian')
         print('prepping to grant angel')
     else
-        print('unit doesnt have an alignment')
-        return
+        bReincarnate = false
     end
-    if not iPlotSpawnedLocation and not bIsEvil then print('no spawn location, not spawning'); return; end
     local pKillingPlayer = Players[playerID]
     if pKillingPlayer then
-        local pUnitKiller = pKillingPlayer:GetUnits():FindID(unitID);
+        pUnitKiller = pKillingPlayer:GetUnits():FindID(unitID);
+    end
+    if bReincarnate then
         if pUnitKiller:GetAbility():HasAbility('NETHER_BLADE') then
-            print('killed by nether blade')
-            return
+            print('killed by nether blade')                     -- this should also alter resurrection through property
+            bReincarnate = false
+        elseif tAnimalBeastSiege[GameInfo.Units[pUnit:GetType()].PromotionClass] then
+            print('unit is beast or siege or animal')
+            bReincarnate = false
+        elseif GameInfo.UnitsNotAlive[pUnit:GetType()] then
+            bReincarnate = false
+        else
+            -- passed checks for eligibility, now do pseudo random, deaths since success.
+            local pGrantPlayer = Players[iGrantPlayer]
+            if bIsEvil then
+                print('attaching mod to mane')
+                pGrantPlayer:AttachModifierByID('SLTH_GRANT_MANE')
+            else
+                local playerUnits = pGrantPlayer:GetUnits();
+                local pPlot = Map.GetPlotByIndex(iPlotSpawnedLocation)
+                local iX, iY = pPlot:GetX(), pPlot:GetY()
+                playerUnits:Create(iUnitToGrant, iX, iY);
+            end
         end
     end
-    local sUnitName = pUnit:GetType()
-    if tAnimalBeastSiege[GameInfo.Units[sUnitName].PromotionClass] then
-        print('unit is beast or siege or animal')
-        return
+
+    -- SECTION: Spirit guide granting experience
+    if pUnitAbilities:HasAbility('BUFF_SPIRIT_GUIDE') then
+        local pUnitExp = pUnit:GetExperience()
+        local iCurrentExperience = pUnitExp:GetExperiencePoints()
+        if  iCurrentExperience > 0 then
+            local lUnits = {}
+            for _, pLoopUnit in pPlayer:GetUnits():Members() do
+                if pLoopUnit:GetFormationClass() == 'FORMATION_CLASS_LAND_COMBAT' then
+                    table.insert(lUnits, pLoopUnit)
+                end
+            end
+            local iCombatUnits = table.count(lUnits)
+            if iCombatUnits > 0 then
+                pUnit = lUnits[math.random(iCombatUnits)]
+                local iXP_Grant = math.ceil(iCurrentExperience / 2)
+                pUnitExp:ChangeExperience(iXP_Grant)
+            end
+        end
     end
-    local bIsNotAlive = pUnitAbilities:HasAbility('ABILITY_ANGEL') or pUnitAbilities:HasAbility('ABILITY_DEMON') or pUnitAbilities:HasAbility('ABILITY_UNDEAD')
-    if bIsNotAlive then
-        print('Unit isnt alive, dont grant')
-        return
+
+    -- SECTION: Immortality
+    if pUnitAbilities:HasAbility('SLTH_IMMORTAL') then
+        print('UNIMPLEMENTED SAVE UNIT')                      -- move unit to capital, and remove ability
+        -- local pCapital = pPlayer:GetCities():GetCapitalCity()
+        -- UnitManager.PlaceUnit(pUnit, pCapital:GetX(), pCapital:GetY())
+        -- or if that fails, use the clone function to save unit values, minus immortality promotion in capital
     end
-    -- passed checks for eligibility, now do pseudo random, deaths since success.
-    local pGrantPlayer = Players[iGrantPlayer]
-    if bIsEvil then
-        print('attaching mod to mane')
-        pGrantPlayer:AttachModifierByID('SLTH_GRANT_MANE')
-    else
-        local playerUnits = pGrantPlayer:GetUnits();
-        local pPlot = Map.GetPlotByIndex(iPlotSpawnedLocation)
-        local iX, iY = pPlot:GetX(), pPlot:GetY()
-	    playerUnits:Create(iUnitToGrant, iX, iY);
+    -- SECTION: Equipment dropping
+    if pUnitKiller then
+        local pAbilityUnit = pUnit:GetAbility()
+        local iX = pUnit:GetX()
+        local iY = pUnit:GetY()
+        for EquipAbility, EquipUnit in pairs(tEquipmentAbilities) do
+            local bHasSpecEquip = pUnitAbilities:HasAbility(EquipAbility)
+            if bHasSpecEquip then
+                local bAlreadyHasEquipment = pAbilityUnit:HasAbility(EquipAbility)
+                if bAlreadyHasEquipment then
+                    UnitManager.InitUnit(playerID, EquipUnit, iX, iY)
+                else
+                    pAbilityUnit:AddAbilityCount(EquipAbility) --- does this work?
+                end
+            end
+        end
     end
 end
 
