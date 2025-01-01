@@ -191,9 +191,7 @@ function GetFullUpgradePath(iPlayer, iUnitIndex)
     return iUnitUpgradeIndex, iUpgradeCost                                                   -- mixing.
 end
 
-local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
-    local iX =  pCasterUnit:GetX()
-    local iY =  pCasterUnit:GetY()
+local function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
     local playerReal = Players[iPlayer];
     local playerUnits = playerReal:GetUnits();
     local pPlot = Map.GetPlot(iX, iY)
@@ -219,6 +217,22 @@ local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
     return tNewUnits
 end
 
+local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
+    local iX =  pCasterUnit:GetX()
+    local iY =  pCasterUnit:GetY()
+    local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
+    return tNewUnits
+end
+
+local iHALL_OF_MIRRORS_INDEX = GameInfo.Buildings['SLTH_BUILDING_HALL_OF_MIRRORS'].Index
+local iPLANAR_GATE_INDEX = GameInfo.Buildings['SLTH_BUILDING_PLANAR_GATE'].Index
+local tPlanarBuildingUnitMap = {    [GameInfo.Buildings['SLTH_BUILDING_PUBLIC_BATHS'].Index] = GameInfo.Units['SLTH_UNIT_SUCCUBUS'].Index,
+                                    [GameInfo.Buildings['SLTH_BUILDING_CARNIVAL'].Index] = GameInfo.Units['SLTH_UNIT_CHAOS_MARAUDER'].Index,
+                                    [GameInfo.Buildings['BUILDING_STUPA'].Index] = GameInfo.Units['SLTH_UNIT_TAR_DEMON'].Index,
+                                    [GameInfo.Buildings['SLTH_BUILDING_GAMBLING_HOUSE'].Index] = GameInfo.Units['SLTH_UNIT_REVELERS'].Index,
+                                    [GameInfo.Buildings['BUILDING_MAGE_GUILD'].Index] = GameInfo.Units['SLTH_UNIT_MOBIUS_WITCH'].Index
+}
+local iGOVERNORS_MANOR_INDEX = GameInfo.Buildings['SLTH_BUILDING_GOVERNORS_MANOR'].Index
 local function SpawnAcheron()
     -- find city states
     -- choose first as reduces randomness, and location is already random. Might screw over ppl.
@@ -345,8 +359,120 @@ function onTurnStartGameplay(playerId)
             SpawnOrthus()
         end
     end
-end
 
+    -- SECTION: Cottage/Pirate Port improvement upgrading.
+    local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')
+    if not tImprovingImprovements then return end
+    for idx, plot_tuple in pairs(tImprovingImprovements) do
+        print(idx)
+        local iX, iY = plot_tuple['x'], plot_tuple['y']
+        local pPlot = Map.GetPlot(iX, iY)
+        local bIsWorked = pPlot:GetProperty('currently_worked')
+        local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
+        if bIsWorked > 0 and not bIsImprovementPillaged then
+            local iWorkedTurns = pPlot:GetProperty('worked_turns')
+            if iWorkedTurns > 2 then
+                local iImprovementIndex = pPlot:GetImprovementType()
+                print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
+                local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
+                if iImprovementUpgradedIndex then
+                    ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
+                end
+            else
+                pPlot:SetProperty('worked_turns', iWorkedTurns+1)
+                print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
+            end
+        end
+    end
+
+    -- SECTION: Hall of Mirror. Currently restricted to Balseraphs
+    if PlayerConfigurations[playerId]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_BALSERAPHS' then
+        for _, pCity in pPlayer:GetCities():Members() do
+            if pCity:GetBuildings():HasBuilding(iHALL_OF_MIRRORS_INDEX) then
+                local iX =  pCity:GetX()
+                local iY =  pCity:GetY()
+                local pUnitClone
+                local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+                for _, plot in ipairs(tNeighborPlots) do
+                    if not pUnitClone then
+                        for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
+                            if (pNearUnit) and (not pUnitClone) then
+                                local iOwnerPlayer = pNearUnit:GetOwner();
+                                if (iOwnerPlayer ~= playerId) then
+                                    if Players[playerId]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
+                                        pUnitClone = pNearUnit
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                if pUnitClone then
+                    local iUnitIndex = pUnitClone:GetType()
+                    local tNewUnits = SimpleSummon(iX, iY, playerId, iUnitIndex)
+                    for iUnitSummonID, pNewUnit in pairs(tNewUnits) do
+                        pNewUnit:SetProperty('LifespanRemaining', 1)                -- set duration
+                    end
+                end
+            end
+        end
+    end
+    -- SECTION: Planar Gate spawning
+    if PlayerConfigurations[playerId]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_SHEAIM' then
+        local iArmageddonCount =  Game.GetProperty('ARMAGEDDON') or 0
+        local iChance = 6
+        local iNumUnitsSpawnable = 1
+        if iArmageddonCount > 50 then
+            iChance = iChance + 3
+            iNumUnitsSpawnable = iNumUnitsSpawnable + 1
+            if iArmageddonCount > 74 then
+                iChance = iChance + 3
+                iNumUnitsSpawnable = iNumUnitsSpawnable + 1
+                if iArmageddonCount > 99 then
+                    iChance = iChance + 3
+                    iNumUnitsSpawnable = iNumUnitsSpawnable + 1
+                end
+            end
+        end
+        for _, pCity in pPlayer:GetCities():Members() do
+            local pBuildings = pCity:GetBuildings()
+            if pBuildings:HasBuilding(iPLANAR_GATE_INDEX) then
+                -- do dice roll to see if succeeds
+                local iRoll = math.random(100)
+                if iRoll <= iChance then
+                    local tUnitsPossible = {}
+                    for iBuildingIndex, iUnitIndex in pairs(tPlanarBuildingUnitMap) do
+                        if pBuildings:HasBuilding(iBuildingIndex) then
+                            table.insert(tUnitsPossible, iUnitIndex)
+                        end
+                    end
+                    if #tUnitsPossible > 0 then
+                        for _=1, iNumUnitsSpawnable do
+                            local iUnitSelectedIndex = tUnitsPossible[math.random(#tUnitsPossible)]
+                            local iX =  pCity:GetX()
+                            local iY =  pCity:GetY()
+                            SimpleSummon(iX, iY, playerId, iUnitSelectedIndex)
+                        end
+                    end
+                end
+            end
+        end
+    end
+    -- SECTION: Governor Manor Amenity PlotProperty BinaryMagic state management
+    if PlayerConfigurations[playerId]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_CALABIM' then
+        for _, pCity in pPlayer:GetCities():Members() do
+            if pCity:GetBuildings():HasBuilding(iGOVERNORS_MANOR_INDEX) then
+                -- local iNeededAmenities = pCity:GetGrowth():GetAmenitiesNeeded()                  -- ui only function :(
+                local iNeededAmenities = math.floor(pCity:GetPopulation() / 2)
+                local pPlot =  pCity:GetPlot()
+                local tPlotPropertyChanges = tBinaryMap[tostring(iNeededAmenities)]
+                for idx, bin_val in pairs(tPlotPropertyChanges) do
+                    pPlot:SetProperty('CITY_AMENITIES_REQUIRED_'.. idx, bin_val)
+                end
+            end
+        end
+    end
+end
 ------------ Cottage / Pirate Cove improvement upgrading over turns  ---------
 
 function ImprovementsWorkOrPillageChange(x, y, improvementIndex, improvementPlayerID, resourceIndex, isPillaged, isWorked)
@@ -794,8 +920,18 @@ function onLairCollapse(pUnit, pPlot, sEventInfo)
     end
 end
 
-function onSpawnBadScorpion(pUnit, pPlot, sEventInfo)
+function onSpawnBadScorpion(pUnit, pPlot, sEventInfo) end
 
+function EventCollapse(x, y)
+    local pPlot = Map.GetPlot(x, y)
+    local tUnits = Map.GetUnitsAt(pPlot)
+    for pUnit in tUnits:Units() do
+        print('remove health')
+        pUnit:ChangeDamage(20)
+        if pUnit:GetDamage() < 1 then           -- is it at 0 or at 100?
+            UnitManager.Kill(pUnit)
+        end
+    end
 end
 
 function SLTH_Todo(pUnit, pPlot, sEventInfo)
@@ -1154,16 +1290,13 @@ local tLuonnotarCivics = {
 function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     local tLuonnotarInfo = tLuonnotar[buildingID]
     if tLuonnotarInfo then
-        print('altar recognised')
         local pPlot = Map.GetPlotByIndex(plotID)
         local iAltarLevel = pPlot:GetProperty('altar_level')
         if not iAltarLevel then
             pPlot:SetProperty('altar_level', 0)
         end
         local iCivicForNext = tLuonnotarInfo['civic']
-        print('civic check')
         if iCivicForNext then
-            print('civic check exist')
             -- check if has culture
             local pPlayer = Players[playerID]
             if not pPlayer then return; end
@@ -1171,7 +1304,6 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
             if not pCulture then return; end
             local pCity = CityManager.GetCity(pPlayer, cityID)
             if not pCulture:HasCivic(iCivicForNext) then
-                print('player doesnt have civic, blocking Great Prophet activation.')
                 pCity:AttachModifierByID('MODIFIER_FREE_SLTH_BUILDING_NO_ALTAR_ALWAYS')
             end
         end
@@ -1253,7 +1385,7 @@ function InitializeClans()
         Game.SetProperty('NW_Clans_Set', 1)
     end
     -- iterate over units
-    for _, pUnit in Players[63]:GetUnits():Members() do              -- SECTION: do reset castable
+    for _, pUnit in Players[63]:GetUnits():Members() do
         UnitManager.Kill(pUnit);
     end
 end
@@ -1263,7 +1395,6 @@ function onStart()
 
     Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
     Events.ImprovementAddedToMap.Add(InitCottage)
-    GameEvents.PlayerTurnStarted.Add(IncrementCottages);
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
     -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
@@ -2033,10 +2164,4 @@ GameEvents.SlthOnHealSelf.Add(HealSelf)
 GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
 GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
 
-
-
 onStart()
-
-
-
-

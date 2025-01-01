@@ -33,8 +33,17 @@ function AdjustArmageddonCount(iAmount)
                 end
             end
         end
+        if (iArmageddonCount < 70) and (iNewArmageddonCount >= 70) then
+            local pFirstPlayer = next(PlayerManager.GetAliveMajors())
+            local iHasHitSeventy = pFirstPlayer:GetProperty('ArmageddonAboveSeventy')
+            if not iHasHitSeventy then
+                for _, pPlayer in ipairs(PlayerManager.GetAliveMajors()) do
+                    pPlayer:SetProperty('ArmageddonAboveSeventy', 1)
+                end
+            end
+        end
     else
-        print('Armageddon count not initilizaed!')
+        print('Armageddon count not initilized!')
     end
 end
 
@@ -97,11 +106,9 @@ function OnCityRaze(playerID, districtID, icityID, idistrictX, idistrictY, iDist
 	end
 end
 
--- Santifying City Ruins improvements. not Event driven afaik. todo IN SPELLS
-
 -- unit tracker, create increase armageddon, delete decrease
 -- not doing 'BASIUM:5', 'HYBOREM:5' as covered in spawning civ
-tArmageddonUnits = {['SLTH_UNIT_BEAST_OF_AGARES']=1, ['SLTH_UNIT_ROSIER']=2, ['SLTH_UNIT_EIDOLON']=1,
+local tArmageddonUnits = {['SLTH_UNIT_BEAST_OF_AGARES']=1, ['SLTH_UNIT_ROSIER']=2, ['SLTH_UNIT_EIDOLON']=1,
                     ['SLTH_UNIT_WRATH']=3,  ['SLTH_UNIT_MARDERO']=3, ['SLTH_UNIT_MESHABBER']=3,
                     ['SLTH_UNIT_SPHENER']=-3, ['SLTH_UNIT_VALIN']=-2}
 function ArmageddonUnitSpawning(playerID, unitID)
@@ -125,7 +132,7 @@ function ArmageddonUnitDied(killedPlayerID, killedUnitID, playerID, unitID)
     end
 end
 -- building tracker, create increase armageddon, delete decrease
-tArmageddonBuildings = {[GameInfo.Buildings['PILLAR_OF_CHAINS'].Index]=4,
+local tArmageddonBuildings = {[GameInfo.Buildings['PILLAR_OF_CHAINS'].Index]=4,
                         [GameInfo.Buildings['STIGMATA_FROM_UNBORN'].Index]=5}
 
 function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)
@@ -141,19 +148,104 @@ end
 function customFunc(playerID, cityID, projectID, buildingIndex, x, y)
     print('in custom project action UNIMPLEMENTED')
 end
+-- helper
+function selectPercentage(sourceTable, percentage)
+    local result = {}
+    local numElements = math.ceil(#sourceTable * (percentage / 100))
+    -- Create a copy of indices to randomly select from
+    local indices = {}
+    for i = 1, #sourceTable do
+        indices[i] = i
+    end
 
+    -- Randomly select elements
+    for i = 1, numElements do
+        -- Get a random index from our remaining indices
+        local randomIndex = math.random(1, #indices)
+        -- Add the element at that index to our result
+        result[i] = sourceTable[indices[randomIndex]]
+        -- Remove the used index to avoid duplicates
+        table.remove(indices, randomIndex)
+    end
+    return result
+end
 
+local iSamhainUnitSpawnPercent = 10
+local iFROSTLING_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING'].Index
+local iFROSTLING_ARCHER_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING_ARCHER'].Index
+local iFROSTLING_RIDER_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING_WOLF_RIDER'].Index
+local tFrostlingProportions = {iFROSTLING_INDEX, iFROSTLING_ARCHER_INDEX, iFROSTLING_RIDER_INDEX, iFROSTLING_INDEX}
 function Samhain(playerID, cityID, projectID, buildingIndex, x, y)
-    print('in custom project action UNIMPLEMENTED')
-    -- Spawn frostling barbarian units in some tundra and snow tiles. Based on number of Snow and Tundra tiles?
+    -- get number of units to spawn based on viable plots
+    local tEligiblePlots = ViableWildernessPlots(true)
+
+    local tUsedPlots = selectPercentage(tEligiblePlots, iSamhainUnitSpawnPercent)
+    tUsedPlots = SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_MOKKA'].Index, tEligiblePlots)
+    local iLoopIterations = math.floor(#tUsedPlots / # tFrostlingProportions)
+    for var=0, iLoopIterations do
+        for _, iUnitToSpawnIndex in ipairs(tFrostlingProportions) do
+            tUsedPlots = SpawnUnitInWilderness(iUnitToSpawnIndex, tUsedPlots)
+        end
+    end
+    -- Spawn frostling barbarian units in some tundra and snow tiles.
     -- spawn Mokka barbarian
 end
 
+-- not bothering with mountains right now
+-- also not affecting hell terrain for now
+local iGRASSLAND = GameInfo.Terrains['TERRAIN_GRASS'].Index
+local iGRASSLAND_HILLS = GameInfo.Terrains['TERRAIN_GRASS_HILLS'].Index
+local iPLAINS = GameInfo.Terrains['TERRAIN_PLAINS'].Index
+local iPLAINS_HILLS = GameInfo.Terrains['TERRAIN_PLAINS_HILLS'].Index
+local iDESERT = GameInfo.Terrains['TERRAIN_DESERT'].Index
+local iDESERT_HILLS = GameInfo.Terrains['TERRAIN_DESERT_HILLS'].Index
+local iTUNDRA = GameInfo.Terrains['TERRAIN_TUNDRA'].Index
+local iTUNDRA_HILLS = GameInfo.Terrains['TERRAIN_TUNDRA_HILLS'].Index
+local tPlotsByTerrainType = {
+                                [iGRASSLAND] = {},
+                                [iGRASSLAND_HILLS] = {},
+                                [iPLAINS] = {},
+                                [iPLAINS_HILLS] = {},
+                                [iDESERT] = {},
+                                [iDESERT_HILLS] = {},
+                                [iTUNDRA] = {},
+                                [iTUNDRA_HILLS] = {},
+}
+local tPlotConversionDeepeningMap = {
+                                [iGRASSLAND] = iTUNDRA,
+                                [iGRASSLAND_HILLS] = iTUNDRA_HILLS,
+                                [iPLAINS] = iTUNDRA,
+                                [iPLAINS_HILLS] = iTUNDRA_HILLS,
+                                [iDESERT] = iPLAINS,
+                                [iDESERT_HILLS] = iPLAINS_HILLS,
+                                [iTUNDRA] = GameInfo.Terrains['TERRAIN_SNOW'].Index,
+                                [iTUNDRA_HILLS] = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
+}
+local iPlotProportionChanged = 20
 function Deepening(playerID, cityID, projectID, buildingIndex, x, y)
-    print('in custom project action UNIMPLEMENTED')
+    local iTerrainType
+    local tMapPlots = Map.Plots()
+    local iCount = 1
+    for _, iPlotIndex in ipairs(tMapPlots) do
+        local pPlot = Map.GetPlotByIndex(iPlotIndex)
+        if (pPlot ~= nil) then
+            iTerrainType = pPlot:GetTerrainType()
+            if tPlotsByTerrainType[iTerrainType] then
+                table.insert(tPlotsByTerrainType[iTerrainType], iPlotIndex)
+            end
+        end
+    end
+    local tPlotsToChange, iNewTerrainIndex, pPlot
+    for idx, tPlotTable in ipairs(tPlotConversionDeepeningMap) do
+        tPlotsToChange = selectPercentage(tPlotTable, iPlotProportionChanged)
+        iNewTerrainIndex = tPlotConversionDeepeningMap[idx]
+        for _, iPlotIndex in ipairs(tPlotsToChange) do
+            pPlot = Map.GetPlotByIndex(iPlotIndex)
+            TerrainBuilder.SetTerrainType(pPlot, iNewTerrainIndex)
+        end
+    end
     -- When it is completed, the entire world will be cooled down - changing some of the deserts to plains,
-    -- some of the plains and grassland to tundra, and some of the tundra to snow tiles. Additionally, it spawns a
-    -- random amount of Blizzards on the map. Blizzards are more like a Feature that changes a tile to Snow in civ
+    -- some of the plains and grassland to tundra, and some of the tundra to snow tiles.
 end
 
 function TheDraw(playerID, cityID, projectID, buildingIndex, x, y)
@@ -169,7 +261,7 @@ function TheDraw(playerID, cityID, projectID, buildingIndex, x, y)
             if(pOtherPlayer ~= nil) then
                 local pOtherDiplo = pOtherPlayer:GetDiplomacy();
                 if(pOtherDiplo ~= nil) then
-                    pOtherDiplo:NeverMakePeaceWith(playerID);                   -- The Illians cannot attempt diplomacy after the Draw has been completed.
+                    pOtherDiplo:NeverMakePeaceWith(playerID);    -- The Illians cannot attempt diplomacy after the Draw has been completed.
                 end
             end
         end
@@ -179,9 +271,11 @@ function TheDraw(playerID, cityID, projectID, buildingIndex, x, y)
     local iPopReduction
     for idx, pCity in pPlayerCities:Members() do
         iCityPop = pCity:GetPopulation()
-        iPopReduction = math.floor(iCityPop / 2) * -1
-        if iPopReduction < 0 then
-            pCity:ChangePopulation(iPopReduction)           -- the population of all Illian cities will be halved
+        if iCityPop > 1 then
+            iPopReduction = math.floor(iCityPop / 2) * -1
+            if iPopReduction < 0 then
+                pCity:ChangePopulation(iPopReduction)       -- the population of all Illian cities will be halved
+            end
         end
     end
 end
@@ -189,11 +283,34 @@ end
 function Ascension(playerID, cityID, projectID, buildingIndex, x, y)
     print('in custom project action UNIMPLEMENTED')
     -- Give Godslayer to highest Score/ Highest military strength
+    -- annoying as its pPlayer:GetStats():GetMilitaryStrength() which is UI only
 end
 
+local tBaneDivineMap = {
+    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index,
+    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
+    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index,
+    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index,
+    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index,
+    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index,
+    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index,
+    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
+    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index,
+    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index,
+    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index,
+    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index
+}     -- All Disciple Units in the world are replaced with Tier 1 Disciples of the same religion
 function BaneDivine(playerID, cityID, projectID, buildingIndex, x, y)
-    print('in custom project action UNIMPLEMENTED')
-    -- All Disciple Units in the world are replaced with Tier 1 Disciples of the same religion
+    local pPlayer = Players[playerID]
+    local playerUnits = pPlayer:GetUnits();
+    for _, pUnit in pPlayer:GetUnits():Members() do
+        local iUnitIndex = pUnit:GetType();
+        local iDiscipleIndex = tBaneDivineMap[iUnitIndex]
+        local iX =  pUnit:GetX()
+        local iY =  pUnit:GetY()
+        playerUnits:Create(iDiscipleIndex, iX, iY);
+        UnitManager.Kill(pUnit)
+    end
 end
 
 function BirthrightRegained(playerID, cityID, projectID, buildingIndex, x, y)
@@ -201,44 +318,263 @@ function BirthrightRegained(playerID, cityID, projectID, buildingIndex, x, y)
     -- Set Player Property that controls if can do world spell
 end
 
+local m_iFOREST_FEATURE = GameInfo.Features['FEATURE_FOREST'].Index
 function Genesis(playerID, cityID, projectID, buildingIndex, x, y)
-    print('in custom project action UNIMPLEMENTED')
-    -- All tiles have Vitalize cast upon them, if tile is grassland with no improvments Bloom is cast
+    -- All owned tiles have Vitalize cast upon them, if tile is grassland with no improvments Bloom is cast
     -- Vitalize: Converts Snow-Tundra, Tundra - Plains, Desert - Plains, Plains - Grassland, Grassland gets Forest
+    -- loop over all player plots
+    local tPlots
+    local iCurrentTerrain
+    local TerrainTransformInfo
+    local sNewTerrain
+    local iNewTerrainIndex
+    local pPlayer = Players[playerID]
+    local pPlayerCities = pPlayer:GetCities();
+    local tCachedTerrains                               -- saves GameInfo lookups
+    for idx, pCity in pPlayerCities:Members() do
+        tPlots = pCity:GetOwnedPlots()
+        for _, pPlot in ipairs(tPlots) do
+            iCurrentTerrain = pPlot:GetTerrainType()
+            TerrainTransformInfo = GameInfo.TerrainTransforms[iCurrentTerrain]
+            sNewTerrain = TerrainTransformInfo.VitalizeTo
+            if sNewTerrain then
+                iNewTerrainIndex = tCachedTerrains[sNewTerrain]
+                if not iNewTerrainIndex then
+                    iNewTerrainIndex = GameInfo.Terrains[sNewTerrain].Index
+                    tCachedTerrains[sNewTerrain] = iNewTerrainIndex
+                end
+                TerrainBuilder.SetTerrainType(pPlot, iNewTerrainIndex)
+            end
+            if sNewTerrain == 'TERRAIN_GRASS_HILLS' or sNewTerrain == 'TERRAIN_GRASS' then
+                TerrainBuilder.SetFeatureType(pPlot, m_iFOREST_FEATURE)
+            end
+        end
+    end
+    --
 end
 
+local iBEAR_INDEX = GameInfo.Units['SLTH_UNIT_BEAR'].Index
+local iWOLF_INDEX = GameInfo.Units['SLTH_UNIT_WOLF'].Index
+local iLION_INDEX = GameInfo.Units['SLTH_UNIT_LION'].Index
+local iTIGER_INDEX = GameInfo.Units['SLTH_UNIT_TIGER'].Index
+local tBarbarianAnimalMap = {[GameInfo.Units['UNIT_BUILDER'].Index] = iWOLF_INDEX,
+                             [GameInfo.Units['SLTH_UNIT_GOBLIN'].Index] = iLION_INDEX,
+                             [GameInfo.Units['SLTH_UNIT_ARCHER_SCORPION_CLAN'].Index] = iLION_INDEX,
+                             [GameInfo.Units['UNIT_WARRIOR'].Index] = iLION_INDEX,
+                             [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = iTIGER_INDEX,
+                             [GameInfo.Units['SLTH_UNIT_SWORDSMAN'].Index] = iBEAR_INDEX
+    }
+local tAnimals = {
+    [GameInfo.Units['SLTH_UNIT_BABY_SPIDER'].Index] = true,
+    [iBEAR_INDEX] = true,
+    [GameInfo.Units['SLTH_UNIT_POLAR_BEAR'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_ELEPHANT'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_GIANT_SPIDER'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_GIANT_TORTOISE'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_GORILLA'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_GRIFFON'].Index] = true,
+    [iLION_INDEX] = true,
+    [GameInfo.Units['SLTH_UNIT_LION_PRIDE'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_SEA_SERPENT'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_SCORPION'].Index] = true,
+    [iWOLF_INDEX] = true,
+    [GameInfo.Units['SLTH_UNIT_WOLF_PACK'].Index] = true,
+    [iTIGER_INDEX] = true
+}
+
+local tExclusionList = {
+                            [GameInfo.Units['SLTH_UNIT_ACHERON'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_ARS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_BUBOES'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_STEPHANOS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_GURID'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_KRAKEN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_LEVIATHAN'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_MARGALARD'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_MANTICORE'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_MOKKA'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_ORTHUS'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_TUMTUM'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_WRATH'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_YERSINIA'].Index] = true,
+                            [GameInfo.Units['SLTH_UNIT_AZER'].Index] = true
+}
+                                    -- we also need to apply this to city states that are actually barbarians
+local tAnimalPromotions = {[1] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_ANIMAL'].Index,
+                           [2] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH2_ANIMAL'].Index,
+                           [3] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE_ANIMAL'].Index,
+                           [4] = GameInfo.UnitPromotions['PROMOTION_HEROIC_DEFENSE2_ANIMAL'].Index
+}
 function NaturesRevolt(playerID, cityID, projectID, buildingIndex, x, y)
-    print('in custom project action UNIMPLEMENTED')
     -- Turns Barbarian units into Animals
-    --            Goblin Worker-> Wolf, Goblin-> Lion, Warrior-> Lion, Lizardman->Tiger, Axeman->Bear
-    --            wtf happens to skeletons, to goblin archers
+    --            Worker-> Wolf, Goblin-> Lion, Warrior-> Lion, Lizardman->Tiger, Axeman->Bear
+    --            wtf happens to skeletons, to goblin archers, currently set to bears and lions respectively
     --All animals in the world receive Heroic Strength I, Heroic Strength II, Heroic Defense I, and Heroic Defense II
-    -- can do this second part as abilities in Modifier system
+    local iX, iY, pUnitExp, pPlayerUnits, iUnitIndex
+    local tMinorPlayers = PlayerManager.GetAliveMinors()        -- we are doing city states because they are barbarians
+    table.insert(tMinorPlayers, Players[63])                -- include barbarian units
+    for _, pPlayer in ipairs(tMinorPlayers) do
+        local pUnits =  pPlayer:GetUnits()
+        for _, pUnit in pUnits:Members() do
+            iUnitIndex = pUnit:GetType()
+            local iAnimalUnitIndex = tBarbarianAnimalMap[iUnitIndex]
+            if not iAnimalUnitIndex then
+                if not tAnimals[iUnitIndex] and not tExclusionList[iUnitIndex] then   -- check its not already an animal or beast or demon or apoc
+                    iAnimalUnitIndex = iBEAR_INDEX                                    -- otherwise default to bear
+                end
+            end
+            if iAnimalUnitIndex then
+                iX = pUnit:GetX()
+                iY = pUnit:GetY()
+                UnitManager.Kill(pUnit);
+                pUnits:Create(iAnimalUnitIndex, iX, iY);
+            end
+        end
+    end
+    -- iterate over all animal units granting them relevant promotions
+    for _, pPlayer in ipairs(Players) do
+        pPlayerUnits = pPlayer:GetUnits()
+        for _, pUnit in pPlayerUnits:Members() do
+            iUnitIndex = pUnit:GetType()
+            if tAnimals[iUnitIndex] then
+                pUnitExp = pUnit:GetExperience()
+                for _, iPromotionIndex in ipairs(tAnimalPromotions) do
+                    if not pUnitExp:HasPromotion(iPromotionIndex) then
+                        pUnitExp:SetPromotion(iPromotionIndex, true)
+                    end
+                end
+            end
+        end
+    end
 end
 
+-- Helper function
+function contains(table, value)
+    for _, v in ipairs(table) do
+        if v == value then return true end
+    end
+    return false
+end
+
+function selectEquidistantPoints(validPlots, width, height, count)          -- need to test this its GPT
+    local points = {}
+    local candidates = {}
+    -- Convert to x,y coordinates
+    for index in pairs(validPlots) do
+        local x = 1 + (index-1) % width
+        local y = 1 + math.floor((index-1) / width)
+        table.insert(candidates, {x=x, y=y, index=index})
+    end
+
+    -- Select first point               .. isnt this always the first plot in the table? does that matter?
+    points[1] = candidates[1].index
+
+    -- Select remaining points maximizing minimum distance to existing points
+    for i = 2, count do
+        local bestCandidate = nil
+        local maxMinDist = 0
+
+        for _, candidate in ipairs(candidates) do
+            if not contains(points, candidate.index) then
+                local minDist = math.huge
+                for _, selectedIndex in ipairs(points) do
+                    local sx = 1 + (selectedIndex-1) % width
+                    local sy = 1 + math.floor((selectedIndex-1) / width)
+                    local dist = math.sqrt((candidate.x-sx)^2 + (candidate.y-sy)^2)
+                    minDist = math.min(minDist, dist)
+                end
+                if minDist > maxMinDist then
+                    maxMinDist = minDist
+                    bestCandidate = candidate.index
+                end
+            end
+        end
+        points[i] = bestCandidate
+    end
+    return points
+end
+
+local tMapSizeManaCount = {[0]=4, [1]=5, [2]=6, [3]=7, [4]=8, [5]= 10}      -- assuming these are
+local iRAW_MANA_INDEX = GameInfo.Resources['RESOURCE_MANA'].Index
 function RitesOghma(playerID, cityID, projectID, buildingIndex, x, y)
-    print('in custom project action UNIMPLEMENTED')
+    local pPlot
+    local iMapSize = Map.GetMapSize()                       -- returns an index, need to check they are correct
+    local iResourceCount = tMapSizeManaCount[iMapSize]
+    local iW, iH = Map.GetGridSize();
+    local tAllPlots = Map.Plots()
+    local tValidResourcePlots = {}
+    for _, iPlotIndex in ipairs(tAllPlots) do
+        pPlot = Map.GetPlotByIndex(iPlotIndex)
+        if (pPlot ~= nil) then
+            if (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
+                tValidResourcePlots[iPlotIndex] = true
+            end
+        end
+    end
+    local tPlotsToPlaceMana = selectEquidistantPoints(tValidResourcePlots, iW, iH, iResourceCount)
+    for _, iPlotIndex in ipairs(tPlotsToPlaceMana) do
+        pPlot = Map.GetPlotByIndex(iPlotIndex)
+        TerrainBuilder.SetResourceType(pPlot, iRAW_MANA_INDEX, 1)       -- what is ResourceAmount
+        TerrainBuilder.CanHaveResource(pPlot, iRAW_MANA_INDEX)
+    end
+    -- get map size MapConfiguration.GetValue(""), need to find what value. cant use MapConfiguration.GetMapSize() as its UI onlu
+    -- distribute resource throughout map
     --  Grant Manas           Duel: 4, Tiny: 5, Small: 6, Standard: 7, Large: 8, Huge: 10
 end
 
+local tPolicyReligionMap = {[GameInfo.Policies['SLTH_POLICY_STATE_ESUS'].Index]     = 'RELIGION_ISLAM',
+                            [GameInfo.Policies['SLTH_POLICY_STATE_OCTOPUS'].Index]  = 'RELIGION_HINDUISM',
+                            [GameInfo.Policies['SLTH_POLICY_STATE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Policies['SLTH_POLICY_STATE_RUNES'].Index]    = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Policies['SLTH_POLICY_STATE_ORDER'].Index]    = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Policies['SLTH_POLICY_STATE_VEIL'].Index]     = 'RELIGION_BUDDHISM',
+                            [GameInfo.Policies['SLTH_POLICY_STATE_LEAVES'].Index]   = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Policies['SLTH_POLICY_NO_STATE_RELIGION'].Index]   = 'NO_RELIGION'}
+
 function PurgeUnfaithful(playerID, cityID, projectID, buildingIndex, x, y)
-    print('in custom project action UNIMPLEMENTED')
     --   	Removes any non-state Religions and religious buildings from all cities
     --      Causes revolts in cities where multiple religions are removed
+    --      get current policy slotted in religion section. Have a map of policy to religion.
+    local sStateReligion            -- should we allow removing all religions if agnostic? Yes.
+    local pCityReligion
+    local pPlayer = Players[playerID]
+    local pPlayerCities = pPlayer:GetCities();
+    local pPlayerCulture = pPlayer:GetCulture()
+    for iPolicy, sReligion in pairs(tPolicyReligionMap) do
+        if not sStateReligion then
+            if pPlayerCulture:IsPolicyActive(iPolicy) then          -- dont trust this function sadly
+                sStateReligion = sReligion
+            end
+        end
+    end
+    if sStateReligion then
+        if sStateReligion == 'NO_RELIGION' then
+            for idx, pCity in pPlayerCities:Members() do
+                pCityReligion = pCity:GetReligion()
+                pCityReligion:RemoveOtherReligions()            -- need to find a better way to remove all religions
+            end
+        else
+            for idx, pCity in pPlayerCities:Members() do
+                pCityReligion = pCity:GetReligion()
+                pCityReligion:RemoveOtherReligions(sStateReligion)      -- this function unused in game, needs testing
+            end
+        end
+    end
+    -- also would need to map revolts. Do that as like -5 amenities for a time period?
 end
 
 function BloodOfThePhoenix(playerID, cityID, projectID, buildingIndex, x, y)
     print('in custom project action UNIMPLEMENTED')
-    -- Grant all units an ability that respawns the unit in the capital. This doesnt exist sadly.
+    -- Grant all units an ability that respawns the unit in the capital. This doesnt exist sadly is a DLL problem.
 end
 
 -- CityProjectCompleted for Elohim, Sheaim, Illian the Draw.
-tProjectArmaCost = { [GameInfo.Projects['PROJECT_ELEGY_OF_THE_SHEAIM'].Index]   = 5,
+local tProjectArmaCost = { [GameInfo.Projects['PROJECT_ELEGY_OF_THE_SHEAIM'].Index]   = 5,
                      [GameInfo.Projects['PROJECT_HALLOWING_OF_ELOHIM'].Index]      = -5,
                      [GameInfo.Projects['PROJECT_PURGE_THE_UNFAITHFUL'].Index]      = 3,
                      [GameInfo.Projects['PROJECT_THE_DRAW'].Index]              = 10}
 
-tProjectFunctions = {
+local tProjectFunctions = {
     [GameInfo.Projects['PROJECT_SAMHAIN'].Index]   = Samhain,
     [GameInfo.Projects['PROJECT_DEEPENING'].Index]   = Deepening,
     [GameInfo.Projects['PROJECT_THE_DRAW'].Index]   = TheDraw,
@@ -264,16 +600,12 @@ function ArmaProjectComplete(playerID, cityID, projectID, buildingIndex, x, y, i
     end
 end
 
-
 -- war equipment ability on kill to increase count. Lets just do that with the rest of the OnKill stuff
-
--- done elsewhere? Hyborem or Basium entered. Veil holy city founded
 
 -- not tracking veil religion state as its hard
 
-
 function fWarning ()
-    -- display popup warning for local player
+    -- display armageddon popup warning for local player
 end
 
 function Blight ()
@@ -310,20 +642,32 @@ function ArmaKillHalf ()
     -- lose half of ALL units, half of all city pop
 end
 
+local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true,
+                        [GameInfo.Terrains['TERRAIN_TUNDRA_HILLS'].Index] = true,
+                        [GameInfo.Terrains['TERRAIN_SNOW'].Index]         = true,
+                        [GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index]   = true
+}
 -- nicked from Leugi Wildlife++
-function ViableWildernessPlots()
+function ViableWildernessPlots(bOnlyTundraOrSnow)
     local tTable = Map.Plots()
     local tNewTable = {}
     local iCount = 1
-    for i, iPlotIndex in ipairs(tTable) do
+    local bViablePlot
+    for _, iPlotIndex in ipairs(tTable) do
         local pPlot = Map.GetPlotByIndex(iPlotIndex)
         if (pPlot ~= nil) then
             local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
             if (pPlot:IsAdjacentOwned() == false) and (pPlot:IsOwned() == false) and (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
+                if bOnlyTundraOrSnow then
+                    local iTerrainIndex = pPlot:GetTerrainType()
+                    bViablePlot = tColdTerrain[iTerrainIndex]
+                else
+                    bViablePlot = true
+                end
                 local bPlotHasUnit = false
                 local unitList = Units.GetUnitsInPlotLayerID(iPlotX, iPlotY, MapLayers.ANY)
                 if unitList ~= nil then
-                    for i, pUnit in ipairs(unitList) do
+                    for _, pUnit in ipairs(unitList) do
                         local tUnitDetails = GameInfo.Units[pUnit:GetType()]
                         if tUnitDetails ~= nil then
                             if not pUnit:IsDead() and not pUnit:IsDelayedDeath() then
@@ -349,7 +693,9 @@ function SpawnUnitInWilderness(iUnitToSpawn, eligiblePlots)
         local iRandomEligiblePlotsPosition = Game.GetRandNum((iNumEligiblePlots + 1) - 1, 'RNG_barb_placement') + 1
         local spawnPlot = eligiblePlots[iRandomEligiblePlotsPosition]
         UnitManager.InitUnitValidAdjacentHex(63, iUnitToSpawn, spawnPlot:GetX(), spawnPlot:GetY());
+        eligiblePlots[iRandomEligiblePlotsPosition] = nil
     end
+    return eligiblePlots
 end
 
 --[[WIKI: The plot counter is what determines if a tile is hell or not. It has a range from 0 to 100, and anything over 10 is hell. Infernal lands are set to 100 every turn. Tiles that are eligible (good civs' lands are never eligible, nor or neutral or non-AV evil lands when the AC is low enough) have their plot counter increased by 1 each turn if they are adjacent to a tile with a plot counter greater than 10; otherwise, the counter decreases by 1 each turn.
@@ -369,14 +715,14 @@ local tHellTerrains = {[GameInfo.Terrains['TERRAIN_BURNING_SANDS'].Index]=1,    
                  [GameInfo.Terrains['TERRAIN_FIELDS_OF_PERDITION'].Index]=1,
                  [GameInfo.Terrains["TERRAIN_FIELDS_OF_PERDITION_HILLS"].Index]=1}
 
-tHellTransforms = { [GameInfo.Terrains['TERRAIN_DESERT'].Index]=GameInfo.Terrains['TERRAIN_BURNING_SANDS'].Index,
+local tHellTransforms = { [GameInfo.Terrains['TERRAIN_DESERT'].Index]=GameInfo.Terrains['TERRAIN_BURNING_SANDS'].Index,
                     [GameInfo.Terrains["TERRAIN_BURNING_SANDS_HILLS"].Index]=GameInfo.Terrains["TERRAIN_DESERT_HILLS"].Index,
                     [GameInfo.Terrains['TERRAIN_BROKEN_LANDS'].Index]=GameInfo.Terrains['TERRAIN_GRASS'].Index,
                     [GameInfo.Terrains["TERRAIN_BROKEN_LANDS_HILLS"].Index]=GameInfo.Terrains["TERRAIN_GRASS_HILLS"].Index,
                     [GameInfo.Terrains['TERRAIN_FIELDS_OF_PERDITION'].Index]=GameInfo.Terrains['TERRAIN_PLAINS'].Index,
                     [GameInfo.Terrains["TERRAIN_FIELDS_OF_PERDITION_HILLS"].Index]=GameInfo.Terrains["TERRAIN_PLAINS_HILLS"].Index}
 
-tResourceTransform = {  [GameInfo.Resources['RESOURCE_PIG'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
+local tResourceTransform = {  [GameInfo.Resources['RESOURCE_PIG'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
                         [GameInfo.Resources['RESOURCE_SHEEP'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
                         [GameInfo.Resources['RESOURCE_COW'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
                         [GameInfo.Resources['RESOURCE_HORSE'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
@@ -386,13 +732,13 @@ tResourceTransform = {  [GameInfo.Resources['RESOURCE_PIG'].Index]=GameInfo.Reso
                         [GameInfo.Resources['RESOURCE_SILK'].Index]=GameInfo.Resources['RESOURCE_RAZORWEED'].Index,
                         [GameInfo.Resources['RESOURCE_COTTON'].Index]=GameInfo.Resources['RESOURCE_RAZORWEED'].Index}
 
-tResourceReverse = {  [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo.Resources['RESOURCE_SHEEP'].Index,
+local tResourceReverse = {  [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo.Resources['RESOURCE_SHEEP'].Index,
                         [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index]=GameInfo.Resources['RESOURCE_HORSE'].Index,
                         [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index]=GameInfo.Resources['RESOURCE_MARBLE'].Index,
                         [GameInfo.Resources['RESOURCE_GULAGARM'].Index]=GameInfo.Resources['RESOURCE_SUGAR'].Index,
                         [GameInfo.Resources['RESOURCE_RAZORWEED'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index}
 
-tHellReverse = reverse_table(tHellTransforms)
+local tHellReverse = reverse_table(tHellTransforms)
 function HellSpread()
     local pPlot
     local iTerrainType
@@ -504,25 +850,11 @@ function ConvertTerrain(pPlot, tTerrainConverter, tResourceConverter)
     end
 end
 
-
-Events.CityReligionFollowersChanged.Add(religionLostCity)
-Events.DistrictRemovedFromMap.Add(OnCityRaze)
-Events.UnitAddedToMap.Add(ArmageddonUnitSpawning)
-Events.UnitKilledInCombat.Add(ArmageddonUnitDied)
-GameEvents.BuildingConstructed.Add(ArmageddonBuildingMade)
-Events.CityProjectCompleted.Add(ArmaProjectComplete)
-
--- hell terrain spread
-Events.TurnEnd.Add(HellSpread)
-
+local tTransformableTiles = {}
+local tLandTiles = {}
 function OnStart()
-    --local bNoGoodies = GameConfiguration.GetValue("GAME_NO_GOODY_HUTS"); use this to remove hell terrain later as opt
-	--if (bNoGoodies == true) then
-	--	print("** The game specified NO GOODY HUTS");
-	--	return false;
-	-- end
     local iW, iH = Map.GetGridSize();
-    tLandTiles = {}
+
     for x = 0, iW - 1 do
         for y = 0, iH - 1 do
             local i = y * iW + x;
@@ -533,7 +865,6 @@ function OnStart()
         end
     end
     local tType
-    tTransformableTiles = {}
     for iPlotID, pLandPlot in pairs(tLandTiles) do
         tType = pLandPlot:GetTerrainType()
         if tHellTransforms[tType] then
@@ -541,5 +872,15 @@ function OnStart()
         end
     end
 end
+
+Events.CityReligionFollowersChanged.Add(religionLostCity)
+Events.DistrictRemovedFromMap.Add(OnCityRaze)
+Events.UnitAddedToMap.Add(ArmageddonUnitSpawning)
+Events.UnitKilledInCombat.Add(ArmageddonUnitDied)
+GameEvents.BuildingConstructed.Add(ArmageddonBuildingMade)
+Events.CityProjectCompleted.Add(ArmaProjectComplete)
+
+-- hell terrain spread
+GameEvents.OnGameTurnStarted.Add(HellSpread)
 
 OnStart()
