@@ -109,145 +109,30 @@ local tWorldSpellPrereqs = {
 
 -- feel doviello should have a prereq
 -- feel illians should have a prereq
-function Rally()
-	-- denagog in every city, degrade each town to village and get demagog
-	-- requires crusade
-	print('world spell not implemented')
-end
 
-function ReligiousFervor()
-	-- Grants one priest of the state religion per city, with experience equal
-	-- to the number of cities in the Malakim civilization with the state religion.
-	print('world spell not implemented')
-end
-
-
-function Sanctuary()
-	-- force out of borders ugh
-	print('world spell not implemented')
-end
-
-function Legends()
-	-- applies every city and every settlement +300 culture (map size: huge).
-	print('world spell not implemented')
-end
-
-function MarchOfTheTrees()
-	-- All forests and ancient forests in your cultural borders will turn into new forests, and create a Treant on the tile, provided it is not occupied by an enemy.
-	-- After 5 turns, all the Treants will disappear. (N.B. does treant death advance forest growth?
-	print('world spell not implemented')
-end
-
-function MotherLode()
-	-- he Mother Lode spell provides your empire with 25 gold for each mine in your cultural borders.
-	-- For each flatlands square you own (Grassland, Plains, Desert, Tundra, Ice), there is a 10% chance of it turning into a hill. This includes Flood Plains.
-	print('world spell not implemented')
-end
-
-function IntoTheMist()
-	-- When used, the spell gives the Hidden Promotion to all of the civilizations units.  I thought it did diplo stuff
-	print('world spell not implemented')
-end
-
-function RagingSeas()
-	-- Damages all non-Lanun units adjacent to a body of water, and has a chance to destroy non-Lanun improvements in the water, such as fishing boats.
-	-- The damage will not cause players to declare war on you.
-	print('world spell not implemented')
-end
-
-function Ardor()
-	-- resets the GreatPeopleCount. Makes no sense in civ vi context
-	print('world spell not implemented')
-end
-
-
-function WarCry()
-	-- Grants the Warcry ability to all units.
-	-- Warcry promotions grants:
-	--- Can attack multiple times per turn
-	--- +1 Movement range
-	--- +4 Strength
-	--- +5% Chance of wearing off each turn
-	print('world spell not implemented')
-end
-
-function ArcaneLacuna()
-	-- . Prevents all spells from being cast, spell casters, priests, demons, or even your world spell can't be used. Not including Amurites?
-	print('world spell not implemented')
-end
-
-function WildHunt()
-	-- Grant a wolf for each combat unit you have. Wolf strength proportional to unit strength.
-	print('world spell not implemented')
-end
-
-function Revelry()
-	-- Double length Golden age.
-	print('world spell not implemented')
-end
-
-function GiftsOfNantosuelta()
-	-- Grant a Golden Hammer equipment in each of your cities
-	print('world spell not implemented')
-end
-
-function ForTheHorde()
-	-- Convert half of the barbarians in the game to your control
-	print('world spell not implemented')
-end
-
-function VeilOfNight()
-	-- Hidden nationality to all units
-	print('world spell not implemented')
-end
-
-function RiverOfBlood()
-	-- Increase all player city pops by 2, decrease all opponent by 2 (unsure on cs)
-	print('world spell not implemented')
-end
-
-function WorldBreak()
-	-- deal damage to all non-sheaim units equal to the armageddon count
-	print('world spell not implemented')
-end
-
-function Stasis()
-	-- prevent all players but the illians researching or producing anything for x turns
-	print('world spell not implemented')
-end
-
-function DivineRetribution()
-	-- deal holy damage to demons and undead.
-	print('world spell not implemented')
-end
-
-function HyboremsWhisper()
-	-- take over best veil city.
-	print('world spell not implemented')
-end
 
 local tWorldSpells = {
-	SLTH_CIVILIZATION_BANNOR= Rally,
-	SLTH_CIVILIZATION_MALAKIM=ReligiousFervor,
-	SLTH_CIVILIZATION_ELOHIM=Sanctuary,
-	SLTH_CIVILIZATION_LUCHUIRP=GiftsOfNantosuelta,
-	SLTH_CIVILIZATION_KURIOTATES=Legends,
-	SLTH_CIVILIZATION_LJOSALFAR=MarchOfTheTrees,
-	SLTH_CIVILIZATION_KHAZAD=MotherLode,
-	SLTH_CIVILIZATION_SIDAR=IntoTheMist,
-	SLTH_CIVILIZATION_LANUN=RagingSeas,
-	SLTH_CIVILIZATION_GRIGORI=Ardor,
-	SLTH_CIVILIZATION_HIPPUS=WarCry,
-	SLTH_CIVILIZATION_AMURITES=ArcaneLacuna,
-	SLTH_CIVILIZATION_DOVIELLO=WildHunt,
-	SLTH_CIVILIZATION_BALSERAPHS=Revelry,
-	SLTH_CIVILIZATION_CLAN_OF_EMBERS=ForTheHorde,
-	SLTH_CIVILIZATION_SVARTALFAR=VeilOfNight,
-	SLTH_CIVILIZATION_CALABIM=RiverOfBlood,
-	SLTH_CIVILIZATION_SHEAIM=WorldBreak,
-	SLTH_CIVILIZATION_ILLIANS=Stasis,
-	SLTH_CIVILIZATION_MERCURIANS=DivineRetribution,
-	SLTH_CIVILIZATION_INFERNAL=HyboremsWhisper
+	SLTH_CIVILIZATION_BANNOR= 'SlthOnRally',
+	SLTH_CIVILIZATION_MALAKIM= 'SlthOnReligiousFervor',
+	SLTH_CIVILIZATION_ELOHIM='SlthOnSanctuary',
+	SLTH_CIVILIZATION_LUCHUIRP='SlthOnGiftsOfNantosuelta',
+	SLTH_CIVILIZATION_KURIOTATES='SlthOnLegends',
+	SLTH_CIVILIZATION_LJOSALFAR='SlthOnMarchOfTheTrees',
+	SLTH_CIVILIZATION_KHAZAD='SlthOnMotherLode',
+	SLTH_CIVILIZATION_SIDAR='SlthOnIntoTheMist',
+	SLTH_CIVILIZATION_LANUN='SlthOnRagingSeas',
+	SLTH_CIVILIZATION_GRIGORI='SlthOnArdor',
+	SLTH_CIVILIZATION_HIPPUS='SlthOnWarCry',
+	SLTH_CIVILIZATION_AMURITES='SlthOnArcaneLacuna',
+	SLTH_CIVILIZATION_DOVIELLO='SlthOnWildHunt',
+	SLTH_CIVILIZATION_BALSERAPHS='SlthOnRevelry',
+	SLTH_CIVILIZATION_CLAN_OF_EMBERS='SlthOnForTheHorde',
+	SLTH_CIVILIZATION_SVARTALFAR='SlthOnVeilOfNight',
+	SLTH_CIVILIZATION_CALABIM='SlthOnRiverOfBlood',
+	SLTH_CIVILIZATION_SHEAIM='SlthOnWorldBreak',
+	SLTH_CIVILIZATION_ILLIANS='SlthOnStasis',
+	SLTH_CIVILIZATION_MERCURIANS='SlthOnDivineRetribution',
+	SLTH_CIVILIZATION_INFERNAL='SlthOnHyboremsWhisper'
 }
 
 function CastWorldSpell()
@@ -256,12 +141,9 @@ function CastWorldSpell()
 	local pPlayerConfig = PlayerConfigurations[iPlayer]
     local sCivName = pPlayerConfig:GetCivilizationTypeName()
 	print(sCivName)
-	print(tWorldSpells[sCivName])
-	tWorldSpells[sCivName]()
+	local sEventFunction = tWorldSpells[sCivName]
 	local tParameters = {}
-	tParameters.sPropKey = 'WorldSpellReady';
-	tParameters.iPropValue = 0;
-	tParameters.OnStart = "SlthSetPlayerProperty";
+	tParameters.OnStart = sEventFunction
 	UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	-- oh dear, the requestPlayerOperation sets the property after we have reran OnLoaded. Multithreaded!!!
 	OnShutdown()

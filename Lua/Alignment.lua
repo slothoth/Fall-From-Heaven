@@ -28,19 +28,8 @@ local tReligionNames = {[1]='SLTH_POLICY_STATE_ESUS', [2]='SLTH_POLICY_STATE_OCT
                            [3]= 'SLTH_POLICY_STATE_EMPYREAN', [4]='SLTH_POLICY_STATE_RUNES',
                            [5]='SLTH_POLICY_STATE_ORDER', [6]='SLTH_POLICY_STATE_VEIL', [7] = 'SLTH_POLICY_STATE_LEAVES'}
 
-local tReligionAlignment = {
-    ['RELIGION_ISLAM']=0, ['RELIGION_HINDUISM']=0, ['RELIGION_BUDDHISM']=0,
-    ['RELIGION_CATHOLICISM']=1,
-    ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
-}
 local tAlignmentPropKeys = {[0]='alignment_evil', [1]='alignment_neutral', [2]='alignment_good'}
 
-local tReligionAbility = {
-    ['RELIGION_ISLAM']='ABILITY_WORSHIPS_ESUS', ['RELIGION_HINDUISM']='ABILITY_WORSHIPS_OCTOPUS',
-    ['RELIGION_BUDDHISM']='ABILITY_WORSHIPS_VEIL',
-    ['RELIGION_CATHOLICISM']='ABILITY_WORSHIPS_LEAVES', ['RELIGION_JUDAISM']='ABILITY_WORSHIPS_EMPYREAN',
-    ['RELIGION_CONFUCIANISM']='ABILITY_WORSHIPS_KILMORPH', ['RELIGION_PROTESTANTISM']='ABILITY_WORSHIPS_ORDER'
-}
 -- pPlayerUnits:SetBuildDisabled(m_ePlagueDoctorUnit, true);
 
 local tReligousCivicTrigger = {
@@ -75,57 +64,10 @@ local tReligions = {
         [1] = GameInfo.Beliefs["BELIEF_INITIATION_RITES"].Hash,
         [2] = GameInfo.Beliefs["BELIEF_CROSS_CULTURAL_DIALOGUE"].Hash } }
 
-local tInherentReligion = { [GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_ARTHENDAIN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_BAMBUR'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_MITHRIL_GOLEM'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_PARAMANDER'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_DROWN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_SAVEROUS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_STYGIAN_GUARD'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_CRUSADER'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_VALIN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_SPHENER'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_BEAST_OF_AGARES'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_DISEASED_CORPSE'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_ROSIER'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_MARDERO'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_FAWN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_SATYR'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_KITHRA'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_RATHA'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_RADIANT_GUARD'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_CHALID'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_SHADOW'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_GIBBON'].Index] = true
-}
-
 local tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL']=1, ['PROMOTION_CLASS_SIEGE']=1}
 
 local iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
 local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
-
 
 
 function onReligionSwitch(playerID, policyID, wasEnacted)
