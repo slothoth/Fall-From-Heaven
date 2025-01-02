@@ -231,9 +231,6 @@ local function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
             end
         end
     end
-    for iUnitID, pNewUnit in pairs(tNewUnits) do
-        print('set inherited abilities here')
-    end
     return tNewUnits
 end
 
@@ -2749,6 +2746,19 @@ local function GiftsOfNantosuelta(iPlayer, tParameters)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
+local function ProcessHordeUnit(pUnit, iPlayer, iUnitID)
+    if pUnit then
+        local iUnitIndex = pUnit:GetType()
+        local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+        pUnit:ChangeDamage(100);
+        if pUnit:GetDamage() >= 100 then
+            UnitManager.Kill(pUnit, false);
+        end
+        local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
+        ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
+    end
+end
+
 local function ForTheHorde(iPlayer, tParameters)                -- TODO
 	-- Convert half of the barbarians in the game to your control
     -- get barbarian units total
@@ -2760,19 +2770,9 @@ local function ForTheHorde(iPlayer, tParameters)                -- TODO
     local iBarbsToConvert = math.ceil(iBarbCount / 2)
     local iIterCount = 0
     for iUnitID, pUnit in pBarbUnits:Members() do
-        if iIterCount < iBarbsToConvert then
-            if pUnit then
-                local iUnitIndex = pUnit:GetType()
-                local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
-                pUnit:ChangeDamage(100);
-                if pUnit:GetDamage() >= 100 then
-                    UnitManager.Kill(pUnit, false);
-                end
-                local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
-                ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
-            end
-            iIterCount = iIterCount + 1
-        end
+        if iConverted >= iBarbsToConvert then break end
+        ProcessHordeUnit(pUnit, iPlayer, iUnitID)
+        iIterCount = iIterCount + 1
     end
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
