@@ -2245,9 +2245,10 @@ local function SummonClone( iPlayer, tParameters)
     local iUnitID = tParameters.iCastingUnit
     local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
     local iUnitToSummon = pUnit:GetType()
+    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
     local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     for iUnitSummonID, pNewUnit in pairs(tNewUnits) do
-        print('set inherited abilities here')
         pNewUnit:SetProperty('LifespanRemaining', 1)                -- set duration
     end
 end
@@ -2344,15 +2345,7 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
-local function ConvertUnitType( iPlayer, tParameters)
-    local iUnitID = tParameters.iUnitID
-    local iNewUnitIndex = tParameters.iUpgradeUnitIndex
-    local iUpgradeCost = tParameters.iCost
-    local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
-    local pPlayer = Players[iPlayer]
-    pPlayer:GetTreasury():ChangeGoldBalance(-iUpgradeCost)
-    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
-    local tNewUnits = BaseSummon(pUnit, iPlayer, iNewUnitIndex)
+local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     for _, pNewUnit in pairs(tNewUnits) do
         pNewUnit:SetDamage(iHealth)
         local pUnitExp = pNewUnit:GetExperience()
@@ -2368,6 +2361,19 @@ local function ConvertUnitType( iPlayer, tParameters)
             end
         end
     end
+end
+
+
+local function ConvertUnitType( iPlayer, tParameters)
+    local iUnitID = tParameters.iUnitID
+    local iNewUnitIndex = tParameters.iUpgradeUnitIndex
+    local iUpgradeCost = tParameters.iCost
+    local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+    local pPlayer = Players[iPlayer]
+    pPlayer:GetTreasury():ChangeGoldBalance(-iUpgradeCost)
+    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iNewUnitIndex)
+    ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     pUnit:SetDamage(0)
     -- do UnitManager delete on UI side
 end
@@ -2753,14 +2759,21 @@ local function ForTheHorde(iPlayer, tParameters)                -- TODO
     local iBarbCount = pBarbUnits:GetCount()
     local iBarbsToConvert = math.ceil(iBarbCount / 2)
     local iIterCount = 0
-    for _, pUnit in pBarbUnits:Members() do
+    for iUnitID, pUnit in pBarbUnits:Members() do
         if iIterCount < iBarbsToConvert then
-            -- convert unit here
-            -- will be done using the hall of mirrors clone version and killing existing unit, on other branch
+            if pUnit then
+                local iUnitIndex = pUnit:GetType()
+                local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+                pUnit:ChangeDamage(100);
+                if pUnit:GetDamage() >= 100 then
+                    UnitManager.Kill(pUnit, false);
+                end
+                local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
+                ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
+            end
             iIterCount = iIterCount + 1
         end
     end
-	print('world spell not implemented')
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
