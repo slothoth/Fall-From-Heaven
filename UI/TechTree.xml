@@ -216,7 +216,7 @@
 	<!-- Era banners -->
 	<Instance Name="EraLabelInstance">
 		<Container ID="Top" Offset="0,-36" Size="90,768">
-			<Image Anchor="L,B" Offset="-20,-300" Size="128,256" Texture="Tree_EraPip">
+			<Image Anchor="L,B" Offset="-20,-300" Size="128,128" Texture="Tree_EraPip">
 				<Label ID="EraTitle" Offset="72,0" Rotate="270" Style="TreeEraBigText"/>
 				<!-- <Label	ID="Date"										Offset="85,8"		Rotate="270" Style="TreeEraSmallText" String="1000 B.C. - 500 AD (placeholder)"/> -->
 			</Image>

@@ -412,6 +412,10 @@ function LayoutNodeGrid()
 		local era		:table  = g_kEras[item.EraType];
 		local columnNum :number = era.PriorColumns + item.Column;
 		-- Only place the node if there isn't already another node there.  See below.
+		print(item.Type)
+		print(item.UITreeRow)
+		print(columnNum)
+		print(kNodeGrid[item.UITreeRow])
 		if kNodeGrid[item.UITreeRow][columnNum] == nil then
 			kNodeGrid[item.UITreeRow][columnNum] = item.Type;
 		end
@@ -1335,9 +1339,23 @@ function OnUpdateUI( type:number, tag:string, iData1:number, iData2:number, strD
 	end
 end
 
-
 function PopulateItemData()
-
+	local tTechTree = {
+ 	['TECH_DIVINATION']=1,
+	['TECH_ALTERATION']=3,
+	['TECH_ELEMENTALISM']=5,
+	['TECH_NECROMANCY']=7,
+	['TECH_KNOWLEDGE_OF_THE_ETHER']=5,
+	['TECH_SORCERY']=4,
+	['TECH_ARCANE_LORE']=4,
+	['TECH_PASS_THROUGH_THE_ETHER']=4,
+	['TECH_STRENGTH_OF_WILL']=4,
+	['TECH_OMNISCIENCE']=4,
+	['TECH_HORSEBACK_RIDING']=5,
+	['TECH_STIRRUPS']= 5,
+	['TECH_WARHORSES']=2,
+	['TECH_TRADE']=3,
+	}
 	local kItemDefaults = {};		-- Table to return
 
 	function GetHash(t)
@@ -1354,7 +1372,7 @@ function PopulateItemData()
 	for _,techNode in ipairs(techNodes) do
 
 		local row = GameInfo.Technologies[techNode.Name];
-		-- print(row.TechnologyType);
+		print(row.TechnologyType);
 		local found, _ = string.find(row.TechnologyType, 'SKIP')
 		if found then do print('SKIP TECH ' .. row.TechnologyType) end
         else
@@ -1371,9 +1389,11 @@ function PopulateItemData()
             kEntry.IsBoostable	= false;
             kEntry.Prereqs		= {};				-- IDs for prerequisite item(s)
             kEntry.Unlocks		= {};				-- Each unlock has: unlockType, iconUnavail, iconAvail, tooltip
-			local iRowAdjustment =  0
-            kEntry.UITreeRow	= iRowAdjustment + techNode.TreeRow;
-
+			local iRowAdjustment = tTechTree[row.TechnologyType] or 0
+            kEntry.UITreeRow	= iRowAdjustment + techNode.TreeRow
+			if iRowAdjustment > 0 then
+				print('TechTree Row change of ' .. row.TechnologyType .. ' from ' .. tostring(techNode.TreeRow) .. ' to ' .. tostring(iRowAdjustment + techNode.TreeRow))
+			end
 
             -- Only add if not debugging or in debug range.
             if	((table.count(debugExplicitList) == 0 and debugFilterTechMaxIndex ==-1 ) or
