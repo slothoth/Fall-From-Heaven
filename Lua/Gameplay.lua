@@ -137,14 +137,16 @@ function SlthLog(sMessage)
 end
 
 local tAllPromotions = {}
+local tAllAbilities = {}
+
 for row in GameInfo.UnitPromotions() do
-    table.insert(tAllPromotions, row.Index)
+    tAllPromotions[#tAllPromotions + 1] = row.Index
 end
 
-local tAllAbilities = {}
 for row in GameInfo.UnitAbilities() do
-    table.insert(tAllAbilities, row.UnitAbilityType)
+    tAllAbilities[#tAllAbilities + 1] = row.UnitAbilityType
 end
+
 
 function InheritUnitAttributes(iPlayer, iUnit)
     local pUnit = UnitManager.GetUnit(iPlayer, iUnit)
@@ -211,24 +213,22 @@ function GetFullUpgradePath(iPlayer, iUnitIndex)
     return iUnitUpgradeIndex, iUpgradeCost                                                   -- mixing.
 end
 
+-- Simplified unit summoning
 local function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
-    local playerReal = Players[iPlayer];
-    local playerUnits = playerReal:GetUnits();
     local pPlot = Map.GetPlot(iX, iY)
     local tBeforeSummonUnits = {}
-    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
-        if pOnTileUnit then
-            tBeforeSummonUnits[pOnTileUnit:GetID()] = true
+    for _, pUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+        if pUnit then
+            tBeforeSummonUnits[pUnit:GetID()] = true
         end
     end
-    playerUnits:Create(iUnitIndex, iX, iY);
+
+    Players[iPlayer]:GetUnits():Create(iUnitIndex, iX, iY)
+
     local tNewUnits = {}
-    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
-        if pOnTileUnit then
-            local iUnitID = pOnTileUnit:GetID()
-            if not tBeforeSummonUnits[iUnitID] then
-                tNewUnits[iUnitID] = pOnTileUnit
-            end
+    for _, pUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+        if pUnit and not tBeforeSummonUnits[pUnit:GetID()] then
+            tNewUnits[pUnit:GetID()] = pUnit
         end
     end
     return tNewUnits
@@ -2342,25 +2342,6 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
-local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
-    for _, pNewUnit in pairs(tNewUnits) do
-        pNewUnit:SetDamage(iHealth)
-        local pUnitExp = pNewUnit:GetExperience()
-        local pUnitAbilities = pNewUnit:GetAbility()
-        for _, iUnitPromotionIndex in ipairs(tPromos) do
-            if not pUnitExp:HasPromotion(iUnitPromotionIndex) then
-                pUnitExp:SetPromotion(iUnitPromotionIndex)
-            end
-        end
-        for _, sAbility in ipairs(tAbilities) do
-            if not pUnitAbilities:HasAbility(sAbility) then
-                pUnitAbilities:AddAbilityCount(sAbility)
-            end
-        end
-    end
-end
-
-
 local function ConvertUnitType( iPlayer, tParameters)
     local iUnitID = tParameters.iUnitID
     local iNewUnitIndex = tParameters.iUpgradeUnitIndex
@@ -2746,36 +2727,80 @@ local function GiftsOfNantosuelta(iPlayer, tParameters)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
-local function ProcessHordeUnit(pUnit, iPlayer, iUnitID)
-    if pUnit then
-        local iUnitIndex = pUnit:GetType()
-        local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
-        pUnit:ChangeDamage(100);
-        if pUnit:GetDamage() >= 100 then
-            UnitManager.Kill(pUnit, false);
+-- Apply single promotion/ability
+local function ApplyPromotion(pUnit, iPromo)
+    local pExp = pUnit:GetExperience()
+    if not pExp:HasPromotion(iPromo) then
+        pExp:SetPromotion(iPromo)
+    end
+end
+
+local function ApplyAbility(pUnit, sAbility)
+    local pAbilities = pUnit:GetAbility()
+    if not pAbilities:HasAbility(sAbility) then
+        pAbilities:AddAbilityCount(sAbility)
+    end
+end
+
+-- Apply attributes in smaller chunks
+local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
+    for _, pUnit in pairs(tNewUnits) do
+        pUnit:SetDamage(iHealth)
+
+        for i = 1, #tPromos do
+            ApplyPromotion(pUnit, tPromos[i])
         end
-        local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
+
+        for i = 1, #tAbilities do
+            ApplyAbility(pUnit, tAbilities[i])
+        end
+    end
+end
+
+-- Get unit attributes
+local function GetUnitAttributes(pUnit)
+    local tPromos = {}
+    local tAbilities = {}
+    local pExp = pUnit:GetExperience()
+    local pAbilities = pUnit:GetAbility()
+    for i = 1, #tAllPromotions do
+        if pExp:HasPromotion(tAllPromotions[i]) then
+            tPromos[#tPromos + 1] = tAllPromotions[i]
+        end
+    end
+    for i = 1, #tAllAbilities do
+        if pAbilities:HasAbility(tAllAbilities[i]) then
+            tAbilities[#tAbilities + 1] = tAllAbilities[i]
+        end
+    end
+    return tPromos, tAbilities, pUnit:GetDamage(), pUnit:GetX(), pUnit:GetY(), pUnit:GetType()
+end
+
+-- Process single unit conversion
+local function ProcessUnitConversion(iPlayer, pUnit)
+    if not pUnit then return end
+    local tPromos, tAbilities, iHealth, iX, iY, iType = GetUnitAttributes(pUnit)
+    pUnit:ChangeDamage(100)
+    if pUnit:GetDamage() >= 100 then
+        UnitManager.Kill(pUnit, false)
+        local tNewUnits = SimpleSummon(iX, iY, iPlayer, iType)
         ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     end
 end
 
-local function ForTheHorde(iPlayer, tParameters)                -- TODO
-	-- Convert half of the barbarians in the game to your control
-    -- get barbarian units total
-    -- get half that integer, iterate up to that point converting the units?
-    -- converting is awkward, dll examples have been done with gifting.
-    local pBarbPlayer = Players[63]
-    local pBarbUnits = pBarbPlayer:GetUnits()
-    local iBarbCount = pBarbUnits:GetCount()
-    local iBarbsToConvert = math.ceil(iBarbCount / 2)
-    local iIterCount = 0
-    for iUnitID, pUnit in pBarbUnits:Members() do
-        if iConverted >= iBarbsToConvert then break end
-        ProcessHordeUnit(pUnit, iPlayer, iUnitID)
-        iIterCount = iIterCount + 1
+function ForTheHorde(iPlayer)
+    local pBarbUnits = Players[63]:GetUnits()
+    local iTargetCount = math.ceil(pBarbUnits:GetCount() / 2)
+    local iConverted = 0
+
+    for _, pUnit in pBarbUnits:Members() do
+        if iConverted >= iTargetCount then break end
+
+        ProcessUnitConversion(iPlayer, pUnit)
+        iConverted = iConverted + 1
     end
-    local pPlayer = Players[iPlayer]
-    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+
+    Players[iPlayer]:SetProperty(sWorldSpellPropKey, 0)
 end
 
 local function VeilOfNight(iPlayer, tParameters)
