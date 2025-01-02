@@ -1,0 +1,90 @@
+F<?xml version="1.0" encoding="utf-8"?>
+<Context xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="..\..\..\..\..\CivTech\Libs\ForgeUI\ForgeUI_Assets\Controls.xsd">
+
+	<!-- =================================================== -->
+	<!-- INLCUDES -->
+	<!-- =================================================== -->
+
+	<Include File="LeaderIcon"/>
+
+	<!-- =================================================== -->
+	<!-- CORE -->
+	<!-- =================================================== -->
+
+	<Container ID="Vignette" Style="FullScreenVignetteConsumer" />
+
+	<Container							ID="PopupContainer"						Anchor="C,C"									Size="1024,768">
+		<Image ID="WoodPaneling" Size="parent,parent" Texture="Parchment_Pattern" StretchMode="Tile" ConsumeMouse="1">
+			<Image ID="ArtParchmentDecoTop" Offset="0,50" Size="parent,103" Texture="Parchment_BorderDeco" FlipY="1" StretchMode="Tile" Alpha="0.2"/>
+			<Image ID="ArtParchmentDecoBottom" Anchor="L,B" Offset="0,10" Size="parent,103" Texture="Parchment_BorderDeco" FlipY="0" StretchMode="Tile" Alpha="0.2"/>
+			<Image ID="ArtParchmentRippleTop" Size="parent,217" Texture="Parchment_Ripple" FlipY="1" StretchMode="Tile" Alpha="1.0"/>
+			<Image ID="ArtParchmentRippleBottom" Anchor="L,B" Size="parent,217" Texture="Parchment_Ripple" FlipY="0" StretchMode="Tile" Alpha="1.0"/>
+		</Image>
+		<Container ID="Content" Size="parent,parent-40" Anchor="C,B">
+			<Stack ID="ContentStack" StackGrowth="Right" Anchor="C,C" Padding="50">
+				<Container Size="300,parent" Anchor="C,C">
+
+					<Container	Anchor="C,T" Size="350,61" Offset="0,-9">
+						<Image Anchor="C,C" Size="150,27" Texture="Controls_TabLedge2_Fill" StretchMode="Tile" />
+						<Image	Anchor="C,T" Size="350,61" Texture="Controls_TabLedge2" StretchMode="Fill">
+							<Stack StackGrowth="Right" Anchor="C,C" Padding="5">
+								<GridButton	ID="Relationships"	Size="150,34"	Style="TabButton"	FontSize="14"	TextOffset="0,2" String="LOC_DIPLOMACY_OVERVIEW_OTHER_RELATIONSHIPS">
+									<GridButton	ID="Relationships_Selected" Size="parent,parent"	Style="TabButtonSelected" ConsumeMouseButton="0" ConsumeMouseOver="1"/>
+								</GridButton>
+								<GridButton	ID="Deals"	Size="150,34"	Style="TabButton"	FontSize="14"	TextOffset="0,2" String="LOC_DIPLOMACY_OVERVIEW_AGREEMENTS">
+									<GridButton	ID="Deals_Selected" Size="parent,parent"	Style="TabButtonSelected" ConsumeMouseButton="0" ConsumeMouseOver="1"/>
+								</GridButton>
+							</Stack>
+						</Image>
+					</Container>
+
+					<Grid ID="KeyPanel" Size="300,auto" Anchor="C,C" Texture="Civilopedia_StatsFrame" SliceCorner="17,17" SliceTextureSize="34,34" Color="255,255,255,128" AutoSizePadding="10,30">
+						<Stack ID="KeyStack" StackGrowth="Bottom" Anchor="C,C" Padding="15" >
+							<Label Anchor="C,T" WrapWidth="250"	Style="Civilopedia_RightColumnStatHeader" String="LOC_TREE_KEY"/>
+							<Line Start="0,0" End="250,0" Color="0,20,20,70" Anchor="C,C"/>
+						</Stack>
+					</Grid>
+				</Container>
+				<Container	ID="DiagramContainer" Size="0,0" Anchor="C,C">
+					<Container	ID="LinesStack" Size="parent,parent" Anchor="C,C">
+						<AlphaAnim	ID="HideLines" AlphaBegin="1" AlphaEnd="0.05" Speed="4" Function="Root" Cycle="Once" Stopped="1"/>
+					</Container>
+					<Container	ID="LeadersStack" Size="parent,parent" Anchor="C,C"/>
+				</Container>
+			</Stack>
+		</Container>
+		<Container						ID="ModalFrame" Style="ModalScreenWide" />
+	</Container>
+
+	<!-- =================================================== -->
+	<!-- INSTANCES -->
+	<!-- =================================================== -->
+
+	<Instance Name="LeaderInstance">
+		<Container ID="Top" Size="auto,auto" Anchor="C,C">
+			<Image ID="CivIconBacking" Size="41,80" Anchor="C,T" Offset="0,48" TextureOffset="0,61" Texture="Controls_Pennant">
+				<Image ID="CivIcon" Size="30,30" Texture="CivSymbols30" Anchor="C,C" Offset="0,-5"/>
+			</Image>
+			<Container Anchor="C,T" Size="auto,auto">
+				<MakeInstance ID="Icon" Name="LeaderIcon55"/>
+				<Image ID="YouIndicator" Anchor="C,T" Size="35,10" Texture="Controls_YouArrowSmall" Hidden="1"/>
+			</Container>
+		</Container>
+	</Instance>
+
+	<Instance Name="KeyInstance">
+		<Container ID="Top" Size="parent,auto" Anchor="C,C">
+			<Label ID="Caption" Style="Civilopedia_RightColumnStatText" WrapWidth="parent-20" String="Caption" Offset="50,0" Anchor="L,C"/>
+			<Box Color="255,0,0" ID="Line" Size="150,3" Offset="50,0" Anchor="R,C"/>
+		</Container>
+	</Instance>
+
+	<Instance Name="FontIconInstance">
+		<Label	ID="Icon" Anchor="C,C" String="[ICON_FOOD]"/>
+	</Instance>
+
+	<Instance Name="LineInstance">
+		<Line Color="255,0,0" Start="0,0" End="0,0" Width="3" ID="Line"/>
+	</Instance>
+
+</Context>

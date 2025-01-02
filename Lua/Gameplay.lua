@@ -3,43 +3,82 @@ local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN =
                       SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
                       SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2}
 local iNotifType = NotificationTypes.USER_DEFINED_2;
+local iIMP_INDEX = GameInfo.Units['SLTH_UNIT_IMP'].Index
+local tArcaneUnits = {
+    [GameInfo.Units['SLTH_UNIT_ADEPT'].Index] = true, iIMP_INDEX = true, [GameInfo.Units['SLTH_UNIT_SHAMAN'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_ARCHMAGE'].Index] = true, [GameInfo.Units['SLTH_UNIT_EATER_OF_DREAMS'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_CORLINDALE'].Index] = true, [GameInfo.Units['SLTH_UNIT_DISCIPLE_OF_ACHERON'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_GAELAN'].Index] = true, [GameInfo.Units['SLTH_UNIT_GIBBON'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_GOVANNON'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = true, [GameInfo.Units['SLTH_UNIT_LICH'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_ILLUSIONIST'].Index] = true, [GameInfo.Units['SLTH_UNIT_MAGE'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = true, [GameInfo.Units['SLTH_UNIT_MOBIUS_WITCH'].Index] = true,
+    [GameInfo.Units['SLTH_UNIT_MOKKA'].Index] = true, [GameInfo.Units['SLTH_UNIT_SON_OF_THE_INFERNO'].Index] = true
+}
+local iCOTTAGE_INDEX = GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index
+local iHAMLET_INDEX = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index
+local iTOWN_INDEX = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index
+local iVILLAGE_INDEX = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index
+local iENCLAVE_INDEX = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index
+local iPIRATE_COVE_INDEX = GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index
+local iPIRATE_HARBOR_INDEX = GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index
+local iPIRATE_PORT_INDEX = GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index
+
 local tImprovementsProgression = {
-        [GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index]    = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index}
-    local tImprovementsRegression = {
-        [GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index]         = GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index]        = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_VILLAGE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index]        = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index]  = GameInfo.Improvements['IMPROVEMENT_PIRATE_COVE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_FEITORIA'].Index]       = GameInfo.Improvements['IMPROVEMENT_PIRATE_HARBOR'].Index}
-    local tImprovementsCivProgression = {
-        [GameInfo.Improvements['IMPROVEMENT_TOWN'].Index]           = GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index}
+        [iCOTTAGE_INDEX]        = iHAMLET_INDEX,
+        [iHAMLET_INDEX]         = iVILLAGE_INDEX,
+        [iVILLAGE_INDEX]        = iTOWN_INDEX,
+        [iTOWN_INDEX]           = iENCLAVE_INDEX,
+        [iPIRATE_COVE_INDEX]    = iPIRATE_HARBOR_INDEX,
+        [iPIRATE_HARBOR_INDEX]  = iPIRATE_PORT_INDEX}
+local tImprovementsRegression = {
+    [iHAMLET_INDEX]         = iCOTTAGE_INDEX,
+    [iVILLAGE_INDEX]        = iHAMLET_INDEX,
+    [iTOWN_INDEX]           = iVILLAGE_INDEX,
+    [iENCLAVE_INDEX]        = iTOWN_INDEX,
+    [iPIRATE_HARBOR_INDEX]  = iPIRATE_COVE_INDEX,
+    [iPIRATE_PORT_INDEX]       = iPIRATE_HARBOR_INDEX}
+local tImprovementsCivProgression = {
+    [iTOWN_INDEX]           = iENCLAVE_INDEX}
+
+local iMANA_AIR_INDEX = GameInfo.Resources['RESOURCE_MANA_AIR'].Index
+local iMANA_BODY_INDEX = GameInfo.Resources['RESOURCE_MANA_BODY'].Index
+local iMANA_CHAOS_INDEX = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index
+local iMANA_DEATH_INDEX = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index
+local iMANA_EARTH_INDEX = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index
+local iMANA_ENCHANTMENT_INDEX = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index
+local iMANA_ENTROPY_INDEX = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index
+local iMANA_FIRE_INDEX = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index
+local iMANA_LAW_INDEX = GameInfo.Resources['RESOURCE_MANA_LAW'].Index
+local iMANA_LIFE_INDEX = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index
+local iMANA_METAMAGIC_INDEX = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index
+local iMANA_MIND_INDEX = GameInfo.Resources['RESOURCE_MANA_MIND'].Index
+local iMANA_NATURE_INDEX = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index
+local iMANA_SHADOW_INDEX = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index
+local iMANA_SPIRIT_INDEX = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index
+local iMANA_SUN_INDEX = GameInfo.Resources['RESOURCE_MANA_SUN'].Index
+local iMANA_WATER_INDEX = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
 
 
-    local tManaNodeMapper = {
-        [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Index]         = GameInfo.Resources['RESOURCE_MANA_AIR'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Index]        = GameInfo.Resources['RESOURCE_MANA_BODY'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Index]       = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Index]       = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Index]       = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Index] = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Index]     = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Index]        = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Index]         = GameInfo.Resources['RESOURCE_MANA_LAW'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Index]        = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Index]   = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Index]        = GameInfo.Resources['RESOURCE_MANA_MIND'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Index]      = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Index]      = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Index]      = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Index]         = GameInfo.Resources['RESOURCE_MANA_SUN'].Index,
-        [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Index]       = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
-    }
+local tManaNodeMapper = {
+    [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Index]         = iMANA_AIR_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Index]        = iMANA_BODY_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Index]       = iMANA_CHAOS_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Index]       = iMANA_DEATH_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Index]       = iMANA_EARTH_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Index] = iMANA_ENCHANTMENT_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Index]     = iMANA_ENTROPY_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Index]        = iMANA_FIRE_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Index]         = iMANA_LAW_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Index]        = iMANA_LIFE_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Index]   = iMANA_METAMAGIC_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Index]        = iMANA_MIND_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Index]      = iMANA_NATURE_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Index]      = iMANA_SHADOW_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Index]      = iMANA_SPIRIT_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Index]         = iMANA_SUN_INDEX,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Index]       = iMANA_WATER_INDEX
+}
 local tBarbNW = {
 	[GameInfo.Features['FEATURE_UBSUNUR_HOLLOW'].Index] = 1,
 	[GameInfo.Features['FEATURE_GOBUSTAN'].Index] = 1,
@@ -73,6 +112,13 @@ local transientBuffKeys = {
         BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
         BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
         BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
+    }
+
+local tResourcePropKeys = { 'RESOURCE_MANA_AIR', 'RESOURCE_MANA_BODY', 'RESOURCE_MANA_CHAOS',
+    'RESOURCE_MANA_DEATH', 'RESOURCE_MANA_EARTH', 'RESOURCE_MANA_ENCHANTMENT',
+    'RESOURCE_MANA_ENTROPY', 'RESOURCE_MANA_FIRE', 'RESOURCE_MANA_LAW', 'RESOURCE_MANA_LIFE',
+    'RESOURCE_MANA_METAMAGIC', 'RESOURCE_MANA_MIND', 'RESOURCE_MANA_NATURE',
+    'RESOURCE_MANA_SHADOW', 'RESOURCE_MANA_SPIRIT', 'RESOURCE_MANA_SUN', 'RESOURCE_MANA_WATER'
     }
 
 function SlthAppend(tFirst, tSecond)
@@ -244,43 +290,75 @@ end
 
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
+    local iArcaneLacuna = Game:GetProperty('ARCANE_LACUNA_COUNTDOWN') or 0
+    local bAllowSpells
+    if iArcaneLacuna > 0 then
+        local iArcaneLacunaCaster = Game:GetProperty('ARCANE_LACUNA_CASTER') or -1
+        if playerId == 63 then          -- barbs are always existing, so once per global turn
+            Game:SetProperty('ARCANE_LACUNA_COUNTDOWN', iArcaneLacuna - 1)
+        elseif playerId == iArcaneLacunaCaster then
+            bAllowSpells = true
+        end
+    else
+        bAllowSpells = true
+    end
+    -- SECTION: count down Timer effects like Stasis and Arcane Lacuna worldspell
+    local iStasisDelay = Game:GetProperty('STASIS_COUNTDOWN')
+    if iStasisDelay then
+        if iStasisDelay > 1 then
+            Game:SetProperty('STASIS_COUNTDOWN', iStasisDelay - 1)
+        elseif iStasisDelay == 1 then
+            Game:SetProperty('STASIS_COUNTDOWN', iStasisDelay - 1)              -- turn off stasis
+            for iPlayerID, pStasisPlayer in ipairs(Players) do
+                local pCapitalCity = pStasisPlayer:GetCities():GetCapitalCity()
+                if pCapitalCity then
+                    local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+                    local iCurrentStasis = pCapitalPlot:GetProperty('InStasis')
+                    if iCurrentStasis then
+                        pCapitalPlot:SetProperty('InStasis', 0)
+                    end
+                end
+            end
+        end
+    end
     for _, unit in pPlayer:GetUnits():Members() do              -- SECTION: do reset castable
-        if unit:GetProperty('HasCast') then
+        if unit:GetProperty('HasCast') and bAllowSpells then
             print('setting HasCast to 0')
             unit:SetProperty('HasCast', 0)
         end
         local iUnitIndex = unit:GetType();                      -- SECTION: passive experience gain
         local sUnitType = GameInfo.Units[iUnitIndex].UnitType
-        if not sUnitType then return; end                       -- remove once table correct
-        local fXP_gain = FreeXPUnits[sUnitType] or 0
-        local pUnitAbilities = unit:GetAbility()
-        if pUnitAbilities and pUnitAbilities:HasAbility('SLTH_ABILITY_POTENCY') then
-            fXP_gain = fXP_gain + 1
-        end
-        if fXP_gain > 0 then
-            if fXP_gain == math.floor(fXP_gain) then
-                -- if integer, simple add xp
-                unit:GetExperience():ChangeExperience(fXP_gain);
-            else
-                -- if float, use property to set state.
-                local iXP_portion, fXP_portion = math.modf(fXP_gain);
-                SlthLog('Decimal portion of xp gain is:')
-                SlthLog(fXP_portion);
-                local existing_xp_portion = unit:GetProperty('xp_portion');
-                if not existing_xp_portion then
-                    unit:SetProperty('xp_portion', fXP_portion);
-                    SlthLog('No prior xp_portion');
+        if sUnitType then                       -- remove once table correct
+            local fXP_gain = FreeXPUnits[sUnitType] or 0
+            local pUnitAbilities = unit:GetAbility()
+            if pUnitAbilities and pUnitAbilities:HasAbility('SLTH_ABILITY_POTENCY') then
+                fXP_gain = fXP_gain + 1
+            end
+            if fXP_gain > 0 then
+                if fXP_gain == math.floor(fXP_gain) then
+                    -- if integer, simple add xp
+                    unit:GetExperience():ChangeExperience(fXP_gain);
                 else
-                    local new_xp_portion = existing_xp_portion + fXP_portion;
-                    if new_xp_portion > 1 then
-                        iXP_portion = iXP_portion + 1;
-                        new_xp_portion = new_xp_portion - 1;
+                    -- if float, use property to set state.
+                    local iXP_portion, fXP_portion = math.modf(fXP_gain);
+                    SlthLog('Decimal portion of xp gain is:')
+                    SlthLog(fXP_portion);
+                    local existing_xp_portion = unit:GetProperty('xp_portion');
+                    if not existing_xp_portion then
+                        unit:SetProperty('xp_portion', fXP_portion);
+                        SlthLog('No prior xp_portion');
+                    else
+                        local new_xp_portion = existing_xp_portion + fXP_portion;
+                        if new_xp_portion > 1 then
+                            iXP_portion = iXP_portion + 1;
+                            new_xp_portion = new_xp_portion - 1;
+                        end
+                        unit:SetProperty('xp_portion', new_xp_portion);
+                        SlthLog('Old xp_portion: ' .. existing_xp_portion .. ' New xp_portion: ' .. new_xp_portion);
                     end
-                    unit:SetProperty('xp_portion', new_xp_portion);
-                    SlthLog('Old xp_portion: ' .. existing_xp_portion .. ' New xp_portion: ' .. new_xp_portion);
+                    SlthLog('Adding ' .. iXP_portion .. ' to unit.')
+                    unit:GetExperience():ChangeExperience(iXP_portion);
                 end
-                SlthLog('Adding ' .. iXP_portion .. ' to unit.')
-                unit:GetExperience():ChangeExperience(iXP_portion);
             end
         end
     end
@@ -320,8 +398,7 @@ function onTurnStartGameplay(playerId)
             end
         end
     end
-    -- local BUFF_HASTE_UNITS = {[0]= {iPlayer=0, iUnit=130, iCasterPlayer=0}}
-    --BUFF_REGENERATION -- when full
+    -- BUFF_REGENERATION -- when full
     -- local afterCombat = {BUFF_BLESSED=true, BUFF_ENRAGED=true, BUFF_STONESKIN=true}
 
     -- SECTION: BarbarianSpawnEvents
@@ -643,7 +720,7 @@ local iUNIT_LION = GameInfo.Units['SLTH_UNIT_LION'].Index
 local iUNIT_TIGER = GameInfo.Units['SLTH_UNIT_TIGER'].Index
 local iUNIT_BABY_SPIDER = GameInfo.Units['SLTH_UNIT_BABY_SPIDER'].Index
 local iUNIT_FAWN = GameInfo.Units['SLTH_UNIT_FAWN'].Index
-
+local iTREANT_INDEX = GameInfo.Units['SLTH_UNIT_TREANT'].Index
 local tBigBadWaterLeader = { iUNIT_AZER, iUNIT_SEA_SERPENT, iUNIT_STYGIAN_GUARD, iUNIT_PIRATE}
 local tBigBadFailedGraceWaterLeader = { iUNIT_AZER,       iUNIT_SEA_SERPENT, iUNIT_STYGIAN_GUARD, iUNIT_PIRATE,
                                         iUNIT_WATER_ELEM, iUNIT_KRAKEN,      iUNIT_AIRELEM }
@@ -676,7 +753,7 @@ local tSnowHenchMan = { GameInfo.Units['SLTH_UNIT_FROSTLING_ARCHER'].Index,
 
 local tArmaLeaders = { GameInfo.Units['SLTH_UNIT_PIT_BEAST'].Index, GameInfo.Units['SLTH_UNIT_DEATH_KNIGHT'].Index,
                            GameInfo.Units['SLTH_UNIT_BALOR'].Index}
-local tArmaHench = { GameInfo.Units['SLTH_UNIT_IMP'].Index, GameInfo.Units['SLTH_UNIT_HELLHOUND'].Index }
+local tArmaHench = { iIMP_INDEX, GameInfo.Units['SLTH_UNIT_HELLHOUND'].Index }
 local tBarbClanExtraUnits = {
     [TRIBE_CLAN_SKELETON]= {'SLTH_UNIT_SKELETON', 'SLTH_UNIT_PYRE_ZOMBIE'},
     [TRIBE_CLAN_LIZARDMEN]= {'SLTH_UNIT_LIZARDMAN', 'SLTH_UNIT_GORILLA'},
@@ -710,7 +787,7 @@ function BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, iBarbClanType, iFeatureTyp
         if bGraceFailed then
             leaderTable = tBigBadFailedGraceLeader
             if iFeatureType == iFEATURE_FOREST then                             -- maybe should include ancient forest too
-                table.insert(leaderTable, GameInfo.Units['SLTH_UNIT_TREANT'].Index)
+                table.insert(leaderTable, iTREANT_INDEX)
             end
             henchTable = tBigBadFailedGraceHench
         else
@@ -1893,8 +1970,8 @@ local function OnSpellAoeDamage(iPlayer, tParameters)
                                 local pPlot = Map.GetPlot(iX, iY)
                                 local iCurrentTerrain = pPlot:GetTerrainType()
                                 if pPlot:IsHills() then
-                                    iNewTerrain = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
-                                    if  iCurrentTerrain ~= iNewTerrain then
+                                    iNewTerrain = iSnowTerrainHills
+                                    if iCurrentTerrain ~= iNewTerrain then
                                         TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
                                     end
                                 elseif pPlot:IsMountain() then
@@ -1903,7 +1980,7 @@ local function OnSpellAoeDamage(iPlayer, tParameters)
                                         TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
                                     end
                                 else
-                                    iNewTerrain = GameInfo.Terrains['TERRAIN_SNOW'].Index
+                                    iNewTerrain = iSnowTerrain
                                     if iCurrentTerrain ~= iNewTerrain then
                                         TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
                                     end
@@ -1927,13 +2004,21 @@ local function GrantGoldenAge(iPlayer, tParameters)
         local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
         UnitManager.Kill(pUnit);
     end
+    local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
+    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
+    local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
+    GoldenAgeGrant(pPlayer, iGoldenAgeLength)                                                             -- should scale by speed
+    pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
+end
+
+local function GoldenAgeGrant(pPlayer, iGoldenDuration)
     for _, pCity in pPlayer:GetCities():Members() do
         local pPlot = pCity:GetPlot();
-        print(pPlot)						-- plot exists
-        pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instea of nil?
+        if pPlot then
+            pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instead of nil?
+        end
     end
-    pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + 10)
-    pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
+    pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + iGoldenDuration)
 end
 
 local tBuildingGrantModiferMap = {
@@ -2160,9 +2245,10 @@ local function SummonClone( iPlayer, tParameters)
     local iUnitID = tParameters.iCastingUnit
     local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
     local iUnitToSummon = pUnit:GetType()
+    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
     local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     for iUnitSummonID, pNewUnit in pairs(tNewUnits) do
-        print('set inherited abilities here')
         pNewUnit:SetProperty('LifespanRemaining', 1)                -- set duration
     end
 end
@@ -2259,15 +2345,7 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
-local function ConvertUnitType( iPlayer, tParameters)
-    local iUnitID = tParameters.iUnitID
-    local iNewUnitIndex = tParameters.iUpgradeUnitIndex
-    local iUpgradeCost = tParameters.iCost
-    local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
-    local pPlayer = Players[iPlayer]
-    pPlayer:GetTreasury():ChangeGoldBalance(-iUpgradeCost)
-    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
-    local tNewUnits = BaseSummon(pUnit, iPlayer, iNewUnitIndex)
+local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     for _, pNewUnit in pairs(tNewUnits) do
         pNewUnit:SetDamage(iHealth)
         local pUnitExp = pNewUnit:GetExperience()
@@ -2283,67 +2361,626 @@ local function ConvertUnitType( iPlayer, tParameters)
             end
         end
     end
+end
+
+
+local function ConvertUnitType( iPlayer, tParameters)
+    local iUnitID = tParameters.iUnitID
+    local iNewUnitIndex = tParameters.iUpgradeUnitIndex
+    local iUpgradeCost = tParameters.iCost
+    local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
+    local pPlayer = Players[iPlayer]
+    pPlayer:GetTreasury():ChangeGoldBalance(-iUpgradeCost)
+    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iNewUnitIndex)
+    ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     pUnit:SetDamage(0)
     -- do UnitManager delete on UI side
 end
 
+local sWorldSpellPropKey = 'WorldSpellReady'
+
+local iDEMAGOG_INDEX = GameInfo.Units['SLTH_UNIT_DEMAGOG'].Index
+local function Rally(iPlayer, tParameters)
+	-- denagog in every city, degrade each town to village and get demagog
+	-- requires crusade
+    -- iterate over each of player city
+    local pPlayer = Players[iPlayer]
+    local pPlayerImprovements = pPlayer:GetImprovements();
+    local playerUnits = pPlayer:GetUnits();
+    if pPlayerImprovements then
+        local tImprovementLocations = pPlayerImprovements:GetImprovementPlots();
+        for _, plotID in ipairs(tImprovementLocations) do
+            local pPlot = Map.GetPlotByIndex(plotID);
+            if pPlot then
+                local eImprovement = pPlot:GetImprovementType();
+                if (eImprovement == iTOWN_INDEX) then
+                    -- make demagog unit
+                    -- displace enemy units if on tile?
+                    local iX = pPlot:GetX()
+                    local iY = pPlot:GetY()
+                    for _, pNearUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+                        if (pNearUnit) then
+                            local iOwnerPlayer = pNearUnit:GetOwner();
+                            if (iOwnerPlayer ~= iPlayer) then
+                                DisplaceUnits(pPlot, pNearUnit, iX, iY)
+                            end
+                        end
+                    end
+                    playerUnits:Create(iDEMAGOG_INDEX, iX, iY);
+                    ImprovementBuilder.SetImprovementType(pPlot, iVILLAGE_INDEX, iPlayer)
+                end
+            end
+        end
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+local iESUS_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_ESUS'].Index
+local iOCTOPUS_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_OCTOPUS'].Index
+local iEMPYREAN_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_EMPYREAN'].Index
+local iRUNES_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_RUNES'].Index
+local iORDER_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_ORDER'].Index
+local iVEIL_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_VEIL'].Index
+local iLEAVES_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_LEAVES'].Index
+local iNO_STATE_RELIGION_INDEX = GameInfo.Policies['SLTH_POLICY_NO_STATE_RELIGION'].Index
+
+local iVEIL_RELIGION_INDEX = GameInfo.Religions["RELIGION_BUDDHISM"].Index
+local tReligionPolicies = {iESUS_INDEX, iOCTOPUS_INDEX, iEMPYREAN_INDEX, iRUNES_INDEX, iORDER_INDEX,
+                           iVEIL_INDEX, iLEAVES_INDEX, iNO_STATE_RELIGION_INDEX}
+
+local tReligionMap = {[iESUS_INDEX]=GameInfo.Religions["RELIGION_ISLAM"].Index,
+                      [iOCTOPUS_INDEX]=GameInfo.Religions["RELIGION_HINDUISM"].Index,
+                      [iEMPYREAN_INDEX]=GameInfo.Religions["RELIGION_JUDAISM"].Index,
+                      [iRUNES_INDEX]=GameInfo.Religions["RELIGION_CONFUCIANISM"].Index,
+                      [iORDER_INDEX]=GameInfo.Religions["RELIGION_PROTESTANTISM"].Index,
+                      [iVEIL_INDEX]=iVEIL_RELIGION_INDEX,
+                      [iLEAVES_INDEX]=GameInfo.Religions["RELIGION_CATHOLICISM"].Index
+}
+local tReligionPriests = {[iESUS_INDEX]=GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index,
+                          [iOCTOPUS_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index,
+                          [iEMPYREAN_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index,
+                          [iRUNES_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index,
+                          [iORDER_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index,
+                          [iVEIL_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index,
+                          [iLEAVES_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index
+}
+local function ReligiousFervor(iPlayer, tParameters)
+    -- Grants one priest of the state religion per city, with experience equal
+    -- to the number of cities in the Malakim civilization with the state religion.
+    local pPlayer = Players[iPlayer]
+    local pCulture = pPlayer:GetCulture()
+    local playerUnits = pPlayer:GetUnits()
+    local iStateReligion
+    for idx, iPolicyIndex in ipairs(tReligionPolicies) do
+        if not iStateReligion then
+            if pCulture:IsPolicyActive(iPolicyIndex) then
+                iStateReligion = iPolicyIndex
+            end
+        end
+    end
+    if iStateReligion == iNO_STATE_RELIGION_INDEX then return; end;
+    local iReligionToCheck = tReligionMap[iStateReligion]
+    local iPriestGrantIndex = tReligionPriests[iStateReligion]
+    local iStateReligionCities = 0
+    local tReligions = Game.GetReligion():GetReligions()
+    local cachedUnits = pPlayer:GetUnits():Members()
+    for _, pCity in pPlayer:GetCities():Members() do
+        local pPlot = pCity:GetPlot();
+        local iX = pPlot:GetX()
+        local iY = pPlot:GetY()
+        playerUnits:Create(iPriestGrantIndex, iX, iY);
+        local pCityReligion = pCity:GetReligion()
+        for _, tReligion in pairs(tReligions) do
+            local iReligion = tReligion.Religion
+            if iReligion == iReligionToCheck then
+                local iNumFollowers = pCityReligion:GetNumFollowers(iReligion)
+                if iNumFollowers > 0 then
+                    iStateReligionCities = iStateReligionCities + 1
+                end
+            end
+        end
+    end
+    for id, pUnit in pPlayer:GetUnits():Members() do
+        if (not cachedUnits[id]) then
+            local pUnitExp = pUnit:GetExperience()
+            pUnitExp:ChangeExperience(iStateReligionCities * 2)
+        end
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+
+local function Sanctuary(iPlayer, tParameters)
+	-- force out of borders ugh. Maybe there is an easy way to do this, since borders close push out exists.
+    -- but dunno how to enforce it continously
+	print('world spell not implemented')
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function Legends(iPlayer, tParameters)
+	-- applies every city and every settlement +300 culture (map size: huge).
+    local pPlayer = Players[iPlayer]
+    local iCultureToAdd = 0
+    for _, pCity in pPlayer:GetCities():Members() do
+        -- todo also add plots in cities but dunno how
+        iCultureToAdd = iCultureToAdd + 300
+    end
+    pPlayer:GetCulture():ChangeCurrentCulturalProgress(iCultureToAdd)
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local iFEATURE_ANCIENT_FOREST = GameInfo.Features['FEATURE_FOREST_ANCIENT'].Index
+local function MarchOfTheTrees(iPlayer, tParameters)
+	-- All forests and ancient forests in your cultural borders will turn into new forests, and create a Treant on the tile,
+    -- provided it is not occupied by an enemy.
+	-- After 5 turns, all the Treants will disappear. (N.B. does treant death advance forest growth?
+
+    -- get all forest, ancient forest in civ
+    -- reduce to new forest, or forest
+    -- spawn treants, give treants duration 5.
+
+    -- waiting for new forest/growth mechanics
+    local pPlayer = Players[iPlayer]
+    local playerUnits = pPlayer:GetUnits()
+    local cachedUnits = playerUnits:Members()
+    for _, pCity in pPlayer:GetCities():Members() do
+        local tOwnedPlots = pCity:GetOwnedPlots()
+        for _, pPlot in ipairs(tOwnedPlots) do
+            local iFeatureType = pPlot:GetFeatureType()
+            if iFeatureType == iFEATURE_FOREST then
+                TerrainBuilder.SetFeatureType(pPlot, -1)                -- does this work
+                playerUnits:Create(iTREANT_INDEX, pPlot:GetX(), pPlot:GetY());
+            elseif iFeatureType == iFEATURE_ANCIENT_FOREST then
+                TerrainBuilder.SetFeatureType(pPlot, iFEATURE_FOREST)
+                playerUnits:Create(iTREANT_INDEX, pPlot:GetX(), pPlot:GetY());
+            end
+        end
+    end
+    local tNewUnits
+    for id, pUnit in pPlayer:GetUnits():Members() do
+        if (not cachedUnits[id]) then
+             pUnit:SetProperty('LifespanRemaining', 5)
+        end
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local iMINE_INDEX = GameInfo.Improvements['IMPROVEMENT_MINE'].Index
+local function MotherLode(iPlayer, tParameters)
+	-- he Mother Lode spell provides your empire with 25 gold for each mine in your cultural borders.
+	-- For each flatlands square you own (Grassland, Plains, Desert, Tundra, Ice), there is a 10% chance of it turning into a hill. This includes Flood Plains.
+    local pPlayer = Players[iPlayer]
+    local pPlayerImprovements = pPlayer:GetImprovements();
+    local iMineCount = 0
+
+    if pPlayerImprovements then
+        local tImprovementLocations = pPlayerImprovements:GetImprovementPlots();
+        for _, plotID in ipairs(tImprovementLocations) do
+            local pPlot = Map.GetPlotByIndex(plotID);
+            if pPlot then
+                local eImprovement = pPlot:GetImprovementType();
+                if (eImprovement == iMINE_INDEX) then
+                    iMineCount = iMineCount + 1
+                end
+            end
+        end
+    end
+    if iMineCount > 0 then
+        pPlayer:GetTreasury():ChangeGoldBalance(iMineCount * 25)
+    end
+    local tFlatlands = {
+                        [GameInfo.Terrains['TERRAIN_GRASS'].Index] = GameInfo.Terrains['TERRAIN_GRASS_HILLS'].Index,
+                        [GameInfo.Terrains['TERRAIN_PLAINS'].Index] = GameInfo.Terrains['TERRAIN_PLAINS_HILLS'].Index,
+                        [GameInfo.Terrains['TERRAIN_DESERT'].Index] = GameInfo.Terrains['TERRAIN_DESERT_HILLS'].Index,
+                        [GameInfo.Terrains['TERRAIN_TUNDRA'].Index] = GameInfo.Terrains['TERRAIN_TUNDRA_HILLS'].Index,
+                        [iSnowTerrain] = iSnowTerrainHills
+    }
+    -- section, converting flatlands to mountains
+    local iThreshold = 90
+    for _, pCity in pPlayer:GetCities():Members() do
+        local tOwnedPlots = pCity:GetOwnedPlots()
+        for _, pPlot in ipairs(tOwnedPlots) do
+            local iCurrentTerrain = pPlot:GetTerrainType()
+            local iNewTerrain = tFlatlands[iCurrentTerrain]
+            if (iNewTerrain) and (math.random(100) > iThreshold) then           -- many rolls
+                TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+            end
+        end
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function IntoTheMist(iPlayer, tParameters)
+	-- When used, the spell gives the Hidden Promotion to all of the civilizations units.  I thought it did diplo stuff
+    -- quite easy, just give ability like Camoflage
+    local pPlayer = Players[iPlayer]
+    pPlayer:AttachModifierByID('MODIFIER_INTO_THE_MIST')
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function RagingSeas(iPlayer, tParameters)
+	-- Damages all non-Lanun units adjacent to a body of water, and has a chance to destroy non-Lanun improvements in the water, such as fishing boats.
+	-- The damage will not cause players to declare war on you.
+    -- iterate over all players and all units, check if plot is coastal
+    -- also puts out smoke and flames?
+    -- also destroys non lanun improvements by sea by chance
+    for idx, pPlayer in ipairs(Players) do
+        if idx ~= iPlayer then
+            for _, pUnit in pPlayer:GetUnits():Members() do
+                local iX = pUnit:GetX()
+                local iY = pUnit:GetY()
+                local pPlot = Map.GetPlot(iX, iY)
+                if (pPlot:IsCoastalLand()) or (pPlot:IsWater()) then
+                    pUnit:ChangeDamage(75);                         -- when we do elemental, this is cold damage
+                    if pUnit:GetDamage() >= 100 then
+                        UnitManager.Kill(pUnit, false);
+                    end
+                end
+            end
+        end
+    end
+    local tTable = Map.Plots()
+    for i, iPlotIndex in ipairs(tTable) do
+        local pPlot = Map.GetPlotByIndex(iPlotIndex)
+        if (pPlot ~= nil) then
+            local iImprovementOwner = pPlot:GetOwner()
+            if iImprovementOwner ~= iPlayer then
+                if (pPlot:IsWater() or (pPlot:IsCoastalLand())) then
+                    local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
+                    if pPlot:GetImprovementType() ~= -1 then                -- does this hold
+                        ImprovementBuilder.SetImprovementType(pPlot, -1, iImprovementOwner)     -- todo do chance
+                    end
+                end
+            end
+        end
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function Ardor(iPlayer, tParameters)
+	-- resets the GreatPeopleCount. Makes no sense in civ vi context.
+    -- RWORK: Maybe it grants like 80% refund on great people then 70 after getting one and so on down to 0?
+	print('world spell not implemented')
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function WarCry(iPlayer, tParameters)
+	-- Grants the Warcry ability to all units.
+	-- Warcry promotions grants:
+    --- Can attack multiple times per turn
+    --- +1 Movement range
+    --- +4 Strength
+    --- +5% Chance of wearing off each turn
+    local pPlayer = Players[iPlayer]
+    local sPropbuff_propkey = ('BUFF_WARCRY_UNITS')
+    local tSpecificBuffState = Game:GetProperty(sPropbuff_propkey) or {}
+    for iUnitIndex, pUnit in pPlayer:GetUnits():Members() do
+        local pUnitAbilities = pUnit:GetAbility()
+        pUnitAbilities:AddAbilityCount('BUFF_WARCRY')
+        local tUnitInfos = {iPlayer=iPlayer, iUnit=iUnitIndex, iCasterPlayer=iPlayer}       -- test iUnitIndex isnt just incremental index
+        table.insert(tSpecificBuffState, tUnitInfos)
+    end
+    Game:SetProperty(sPropbuff_propkey, tSpecificBuffState)
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function ArcaneLacuna(iPlayer, tParameters)
+	-- . Prevents all spells from being cast, spell casters, priests, demons, or even your world spell can't be used. Not including Amurites?
+    -- count mana in empire
+    local pPlayer = Players[iPlayer]
+    local iExpToGrant = 0
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    if pCapitalCity then
+        local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+        for sResourceName, iPromoIndex in pairs(tResourcePropKeys) do
+            local iResource = pCapitalPlot:GetProperty(sResourceName) or 0;
+            iExpToGrant = iExpToGrant + iResource
+        end
+    end
+    for _, pUnit in pPlayer:GetUnits():Members() do
+        local iUnitIndex = pUnit:GetType()
+        if tArcaneUnits[iUnitIndex] then
+            pUnit:GetExperience():ChangeExperience(iExpToGrant);
+        end
+    end
+    -- give xp to each adept unit
+    -- get delay amount based on speed
+    local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
+    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
+    local iDelay = 20 * iSpeedCostMultiplier
+    Game:SetProperty('ARCANE_LACUNA_COUNTDOWN', iDelay)
+    Game:SetProperty('ARCANE_LACUNA_CASTER', iPlayer)
+    -- go through all spell units, set their castable to 0
+    for iPlayerIndex, pOtherPlayer in ipairs(Players) do
+        if iPlayerIndex ~= iPlayer then
+            for _, pUnit in pOtherPlayer:GetUnits():Members() do
+                if pUnit:GetProperty('HasCast') then
+                    pUnit:SetProperty('HasCast', 1)
+                end
+            end
+        end
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function WildHunt(iPlayer, tParameters)
+	-- Grant a wolf for each combat unit you have. Wolf strength proportional to unit strength.
+    local pPlayer = Players[iPlayer]
+    for _, pUnit in pPlayer:GetUnits():Members() do
+        local tNewUnits = BaseSummon(pUnit, iPlayer, iUNIT_WOLF)
+        local iCombatStrength = pUnit:GetCombat()
+        if iCombatStrength > 15 then
+            local iExtraStrength = (iCombatStrength - 10) / 2
+            local iMinorGrants = math.floor(iExtraStrength / 4)
+            if iMinorGrants > 0 then
+                for iUnitID, pWolfUnit in pairs(tNewUnits) do
+                    local pUnitAbilities = pWolfUnit:GetAbility()
+                    for var=1, iMinorGrants do
+                        pUnitAbilities:AddAbilityCount('BUFF_EMPOWER')
+                    end
+                end
+            end
+        end
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function Revelry(iPlayer, tParameters)            -- TODO
+	-- Double length Golden age. Needs to check gamespeed for golden age speed. then fix golden age granting.
+    local pPlayer = Players[iPlayer]
+    local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
+    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
+    local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
+    GoldenAgeGrant(pPlayer,iGoldenAgeLength)
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local iGOLDEN_HAMMER = GameInfo.Units['SLTH_EQUIPMENT_GOLDEN_HAMMER'].Index
+local function GiftsOfNantosuelta(iPlayer, tParameters)
+	-- Grant a Golden Hammer equipment in each of your cities
+    local pPlayer = Players[iPlayer]
+    local playerUnits = pPlayer:GetUnits()
+    for _, pCity in pPlayer:GetCities():Members() do
+        local pPlot = pCity:GetPlot()
+        local iX = pPlot:GetX()
+        local iY = pPlot:GetY()
+        playerUnits:Create(iGOLDEN_HAMMER, iX, iY);
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function ForTheHorde(iPlayer, tParameters)                -- TODO
+	-- Convert half of the barbarians in the game to your control
+    -- get barbarian units total
+    -- get half that integer, iterate up to that point converting the units?
+    -- converting is awkward, dll examples have been done with gifting.
+    local pBarbPlayer = Players[63]
+    local pBarbUnits = pBarbPlayer:GetUnits()
+    local iBarbCount = pBarbUnits:GetCount()
+    local iBarbsToConvert = math.ceil(iBarbCount / 2)
+    local iIterCount = 0
+    for iUnitID, pUnit in pBarbUnits:Members() do
+        if iIterCount < iBarbsToConvert then
+            if pUnit then
+                local iUnitIndex = pUnit:GetType()
+                local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+                pUnit:ChangeDamage(100);
+                if pUnit:GetDamage() >= 100 then
+                    UnitManager.Kill(pUnit, false);
+                end
+                local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
+                ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
+            end
+            iIterCount = iIterCount + 1
+        end
+    end
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function VeilOfNight(iPlayer, tParameters)
+	-- Hidden nationality to all units
+    -- this seems DLL bound
+	print('world spell not implemented')
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function RiverOfBlood(iPlayer, tParameters)
+	-- Increase all player city pops by 2, decrease all opponent by 2
+    -- get all cities of each player not the caster
+    -- if more than 2, reduce pop by 2. if 2, reduce pop by 1, otherwise ignore.
+    for iPlayerID, pPlayer in ipairs(Players) do
+        if (iPlayerID == iPlayer) then
+            for _, pCity in pPlayer:GetCities():Members() do
+                pCity:ChangePopulation(2)
+            end
+        elseif iPlayerID ~= 63 then
+            for _, pCity in pPlayer:GetCities():Members() do
+                local iCityPop = pCity:GetPopulation()
+                local iReduction = 0
+                if iCityPop == 2 then
+                    iReduction = 1
+                elseif iCityPop > 2 then
+                    iReduction = 2
+                end
+            end
+        end
+    end
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function WorldBreak(iPlayer, tParameters)
+	-- deal damage to all non-sheaim units equal to the armageddon count
+    -- it also does a pillar of fire effect on cities, and smoke on forests?
+    local iDamage = Game:GetProperty('ARMA')
+    if iDamage > 100 then
+        iDamage = 100
+    end
+    if iDamage > 0 then
+        for iPlayerID, pPlayer in ipairs(Players) do
+            if iPlayerID ~= iPlayer then
+                for _, pUnit in pPlayer:GetUnits():Members() do
+                    pUnit:ChangeDamage(iDamage)
+                    if pUnit:GetDamage() >= 100 then
+                        UnitManager.Kill(pUnit, false);
+                    end
+                end
+            end
+        end
+    end
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function Stasis(iPlayer, tParameters)
+	-- prevent all players but the illians researching or producing anything for x turns
+    -- that would be a -100% modifier on culture, science and production.
+    -- do this by having a modifier on all player capitals, that needs a plotprop.
+    local iNewStasis
+    local iX, iY
+    local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
+    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
+    local iDelay = math.floor(20 * iSpeedCostMultiplier)
+    local iCurrentStasis = Game:GetProperty('STASIS_COUNTDOWN')
+    if iCurrentStasis then
+        iNewStasis = iCurrentStasis + iDelay
+    else
+        iNewStasis = iDelay
+    end
+    Game:SetProperty('STASIS_COUNTDOWN', iNewStasis)
+    for iPlayerID, pPlayer in ipairs(Players) do
+        if true then
+            local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+            if pCapitalCity then
+                iX = pCapitalCity:GetX()
+                iY = pCapitalCity:GetY()
+                local pCapitalPlot = Map.GetPlot(iX, iU)
+                pCapitalPlot:SetProperty('InStasis', 1)
+            end
+        end
+    end
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+    local sDescription = 'Illians have cast Stasis. No Production, Science or Culture for ' .. tostring(iDelay) .. ' turns.'
+    NotificationManager.SendNotification(iPlayer, NotificationTypes.USER_DEFINED_2, 'Stasis Cast', sDescription, iX, iY)
+end
+
+local tDivineRetribution = {DEMON=true, UNDEAD=true}
+local function DivineRetribution(iPlayer, tParameters)
+	-- deal holy damage to demons and undead.
+    for iPlayerID, pPlayer in ipairs(Players) do
+        for _, pUnit in pPlayer:GetUnits():Members() do
+            local iUnitIndex =  pUnit:GetType()
+            local tUnitInfo = GameInfo.Units[iUnitIndex]
+            if tUnitInfo then
+                local sUnitType = tUnitInfo.UnitType
+                local tRaceInfo = GameInfo.UnitsNotAlive[sUnitType]
+                local sRace = tRaceInfo.Race
+                if tDivineRetribution[sRace] then                          --
+                    local iDamageDealt = math.random(50, 100)
+                    pUnit:ChangeDamage(iDamageDealt)
+                    if pUnit:GetDamage() >= 100 then
+                        UnitManager.Kill(pUnit, false);
+                    end
+                end
+            end
+        end
+    end
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+local function HyboremsWhisper(iPlayer, tParameters)
+	-- take over best veil city.
+    local tVeilCities = {}
+    for iPlayerID, pPlayer in ipairs(Players) do
+        if iPlayerID ~= iPlayer then
+            for _, pCity in pPlayer:GetCities():Members() do
+                local pPlot = pCity:GetPlot();
+                local iX = pPlot:GetX()
+                local iY = pPlot:GetY()
+                local pCityReligion = pCity:GetReligion()
+                local iNumFollowers = pCityReligion:GetNumFollowers(iVEIL_RELIGION_INDEX)
+                if iNumFollowers > 0 then
+                    table.insert(tVeilCities, pCity)
+                end
+            end
+        end
+    end
+    local iLargestVeilPop = 0
+    local pVeilBiggestCity
+    for _, pCity in ipairs(tVeilCities) do
+        local iCityPop = pCity:GetPopulation()
+        if iCityPop > iLargestVeilPop then
+            iLargestVeilPop = iCityPop
+            pVeilBiggestCity = pCity
+        end
+    end
+    -- transfer city
+    CityManager.TransferCity(pVeilBiggestCity, iPlayer, CityTransferTypes.BY_CULTURAL_IDENTITY)
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
 local tAllowSphereOne = {
-    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index]        =    GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED'].Index
+    [iMANA_AIR_INDEX]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED'].Index,
+    [iMANA_BODY_INDEX]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED'].Index,
+    [iMANA_CHAOS_INDEX]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED'].Index,
+    [iMANA_DEATH_INDEX]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED'].Index,
+    [iMANA_EARTH_INDEX]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED'].Index,
+    [iMANA_ENCHANTMENT_INDEX]        =    GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED'].Index,
+    [iMANA_ENTROPY_INDEX]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED'].Index,
+    [iMANA_FIRE_INDEX]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED'].Index,
+    [iMANA_LAW_INDEX]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED'].Index,
+    [iMANA_LIFE_INDEX]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED'].Index,
+    [iMANA_METAMAGIC_INDEX]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED'].Index,
+    [iMANA_MIND_INDEX]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED'].Index,
+    [iMANA_NATURE_INDEX]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED'].Index,
+    [iMANA_SHADOW_INDEX]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED'].Index,
+    [iMANA_SPIRIT_INDEX]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED'].Index,
+    [iMANA_SUN_INDEX]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED'].Index,
+    [iMANA_WATER_INDEX]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED'].Index
 }
 local tAllowSphereTwo = {
-    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index]=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_2'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_2'].Index
+    [iMANA_AIR_INDEX]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index,
+    [iMANA_BODY_INDEX]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_2'].Index,
+    [iMANA_CHAOS_INDEX]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_2'].Index,
+    [iMANA_DEATH_INDEX]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
+    [iMANA_EARTH_INDEX]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_2'].Index,
+    [iMANA_ENCHANTMENT_INDEX]=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
+    [iMANA_ENTROPY_INDEX]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_2'].Index,
+    [iMANA_FIRE_INDEX]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_2'].Index,
+    [iMANA_LAW_INDEX]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_2'].Index,
+    [iMANA_LIFE_INDEX]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_2'].Index,
+    [iMANA_METAMAGIC_INDEX]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_2'].Index,
+    [iMANA_MIND_INDEX]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_2'].Index,
+    [iMANA_NATURE_INDEX]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_2'].Index,
+    [iMANA_SHADOW_INDEX]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_2'].Index,
+    [iMANA_SPIRIT_INDEX]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_2'].Index,
+    [iMANA_SUN_INDEX]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_2'].Index,
+    [iMANA_WATER_INDEX]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_2'].Index
 }
 
 local tAllowSphereThree = {
-    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index]=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_3'].Index,
-    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_3'].Index
+    [iMANA_AIR_INDEX]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index,
+    [iMANA_BODY_INDEX]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_3'].Index,
+    [iMANA_CHAOS_INDEX]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_3'].Index,
+    [iMANA_DEATH_INDEX]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
+    [iMANA_EARTH_INDEX]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_3'].Index,
+    [iMANA_ENCHANTMENT_INDEX]=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
+    [iMANA_ENTROPY_INDEX]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_3'].Index,
+    [iMANA_FIRE_INDEX]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_3'].Index,
+    [iMANA_LAW_INDEX]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_3'].Index,
+    [iMANA_LIFE_INDEX]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_3'].Index,
+    [iMANA_METAMAGIC_INDEX]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_3'].Index,
+    [iMANA_MIND_INDEX]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_3'].Index,
+    [iMANA_NATURE_INDEX]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_3'].Index,
+    [iMANA_SHADOW_INDEX]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_3'].Index,
+    [iMANA_SPIRIT_INDEX]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_3'].Index,
+    [iMANA_SUN_INDEX]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_3'].Index,
+    [iMANA_WATER_INDEX]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_3'].Index
 }
 local function UpdateResourcePromotion(iPlayer, tParameters)
     local iResource = tParameters.ResourceID
@@ -2405,5 +3042,28 @@ GameEvents.SlthOnForcePeace.Add(ForcePeace)
 GameEvents.SlthOnHealSelf.Add(HealSelf)
 GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
 GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
+
+-- world spells
+GameEvents.SlthOnRally.Add(Rally);
+GameEvents.SlthOnReligiousFervor.Add(ReligiousFervor);
+GameEvents.SlthOnSanctuary.Add(Sanctuary);
+GameEvents.SlthOnLegends.Add(Legends);
+GameEvents.SlthOnMarchOfTheTrees.Add(MarchOfTheTrees);
+GameEvents.SlthOnMotherLode.Add(MotherLode);
+GameEvents.SlthOnIntoTheMist.Add(IntoTheMist);
+GameEvents.SlthOnRagingSeas.Add(RagingSeas);
+GameEvents.SlthOnArdor.Add(Ardor);
+GameEvents.SlthOnWarCry.Add(WarCry);
+GameEvents.SlthOnArcaneLacuna.Add(ArcaneLacuna);
+GameEvents.SlthOnWildHunt.Add(WildHunt);
+GameEvents.SlthOnRevelry.Add(Revelry);
+GameEvents.SlthOnGiftsOfNantosuelta.Add(GiftsOfNantosuelta);
+GameEvents.SlthOnForTheHorde.Add(ForTheHorde);
+GameEvents.SlthOnVeilOfNight.Add(VeilOfNight);
+GameEvents.SlthOnRiverOfBlood.Add(RiverOfBlood);
+GameEvents.SlthOnWorldBreak.Add(WorldBreak);
+GameEvents.SlthOnStasis.Add(Stasis);
+GameEvents.SlthOnDivineRetribution.Add(DivineRetribution);
+GameEvents.SlthOnHyboremsWhisper.Add(HyboremsWhisper);
 
 onStart()
