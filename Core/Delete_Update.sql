@@ -6,7 +6,7 @@ UPDATE Routes SET MovementCost = 0.5 WHERE RouteType == 'ROUTE_ANCIENT_ROAD';
 UPDATE Routes SET MovementCost = 0.5 WHERE RouteType == 'ROUTE_MEDIEVAL_ROAD';          -- how to absorb engineering buffing roads?
 
 
-UPDATE Eras SET TechTreeLayoutMethod='Prereq';
+-- UPDATE Eras SET TechTreeLayoutMethod='Prereq';
 DELETE FROM Technologies;
 DELETE FROM TechnologyPrereqs;
 DELETE FROM Technologies_XP2;
