@@ -305,9 +305,9 @@ INSERT INTO TypeTags(Type, Tag) VALUES
 -- all angels, avatars, demons, elemental, golem, illusion, puppet, undead
 
 CREATE TABLE IF NOT EXISTS UnitsNotAlive(
-    UnitType text primary key  references Units
-                                                   on update cascade on delete set null);
-
+    UnitType text primary key);
+--   references Units
+--                                                    on update cascade on delete set null
 INSERT INTO UnitsNotAlive(UnitType) VALUES
 ('SLTH_UNIT_REPENTANT_ANGEL'),
 ('SLTH_UNIT_ANGEL'),
