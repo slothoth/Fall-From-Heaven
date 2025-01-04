@@ -6,6 +6,7 @@ include( "TechFilterFunctions" );
 include( "ModalScreen_PlayerYieldsHelper" );
 include( "GameCapabilities" );
 
+include("AllianceResearchSupport");
 -- ===========================================================================
 --	DEBUG
 --	Toggle these for temporary debugging help.
@@ -91,7 +92,7 @@ local SIZE_OPTIONS_X			:number = 200;
 local SIZE_OPTIONS_Y			:number = 150;
 local SIZE_PATH					:number = 40;
 local SIZE_PATH_HALF			:number = SIZE_PATH / 2;
-local SIZE_TIMELINE_AREA_Y	    = -261;              -- changed to +300
+local SIZE_TIMELINE_AREA_Y	    = -261;              -- changed to -300
 local SIZE_TOP_AREA_Y			:number = 60;
 local SIZE_WIDESCREEN_HEIGHT	:number = 768;
 
@@ -482,6 +483,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 		local instArt :table = m_kEraArtIM:GetInstance();
 		if eraData.BGTexture ~= nil then
 			instArt.BG:SetTexture( eraData.BGTexture );
+			instArt.BG:SetSizeVal(100, 100);
 		else
 			UI.DataError("Tech tree is unable to find an EraTechBackgroundTexture entry for era '"..eraData.Description.."'; using a default.");
 			instArt.BG:SetTexture(PIC_DEFAULT_ERA_BACKGROUND);
@@ -1339,8 +1341,7 @@ function OnUpdateUI( type:number, tag:string, iData1:number, iData2:number, strD
 	end
 end
 
-function PopulateItemData()
-	local tTechTree = {
+local tTechTree = {
  	['TECH_DIVINATION']=1,
 	['TECH_ALTERATION']=3,
 	['TECH_ELEMENTALISM']=5,
@@ -1356,6 +1357,8 @@ function PopulateItemData()
 	['TECH_WARHORSES']=2,
 	['TECH_TRADE']=3,
 	}
+
+function PopulateItemData()
 	local kItemDefaults = {};		-- Table to return
 
 	function GetHash(t)
@@ -1964,6 +1967,17 @@ function BuildTree()
 	local kPaths	:table = nil;			-- Recommended line pathing
 	kNodeGrid, kPaths = LayoutNodeGrid();	-- Layout nodes.
 	AllocateUI( kNodeGrid, kPaths );
+end
+
+function UpdateAllianceIcon(node)
+	local techID = GameInfo.Technologies[node.Type].Index;
+	if AllyHasOrIsResearchingTech(techID) then
+		node.AllianceIcon:SetToolTipString(GetAllianceIconToolTip());
+		node.AllianceIcon:SetColor(GetAllianceIconColor());
+		node.Alliance:SetHide(false);
+	else
+		node.Alliance:SetHide(true);
+	end
 end
 
 

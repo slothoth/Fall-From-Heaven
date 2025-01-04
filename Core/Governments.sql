@@ -885,8 +885,5 @@ INSERT INTO Types(Type, Kind) VALUES
 ('SLTH_POLICY_STATE_ESUS', 'KIND_POLICY'),
 ('SLTH_POLICY_NO_STATE_RELIGION', 'KIND_POLICY');
 
-UPDATE Policies SET PrereqCivic = 'CIVIC_CODE_OF_LAWS' WHERE PolicyType in ('SLTH_POLICY_DESPOTISM', 'SLTH_POLICY_RELIGION',
-                                                                            'SLTH_POLICY_PACIFISM', 'SLTH_POLICY_NATIONHOOD',
-                                                                           'SLTH_POLICY_TRIBALISM', 'SLTH_POLICY_DECENTRALIZATION',
-                                                                           'SLTH_POLICY_NO_STATE_RELIGION');
+-- UPDATE Policies SET PrereqCivic = 'CIVIC_CODE_OF_LAWS' WHERE PolicyType in ('SLTH_POLICY_DESPOTISM', 'SLTH_POLICY_RELIGION', 'SLTH_POLICY_PACIFISM', 'SLTH_POLICY_NATIONHOOD', 'SLTH_POLICY_TRIBALISM', 'SLTH_POLICY_DECENTRALIZATION',  'SLTH_POLICY_NO_STATE_RELIGION');
 -- just for fast debugging
