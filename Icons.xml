@@ -297,6 +297,46 @@
 		<Row Name="ICON_SLTH_UNIT_SHADOWRIDER" Atlas="ICON_ATLAS_BABYLON_UNITS" Index="13"/>
 		<Row Name="ICON_SLTH_UNIT_DEMAGOG" Atlas="ICON_ATLAS_EXPANSION_1_UNITS" Index="9"/>
 		<Row Name="ICON_SLTH_UNIT_YERSINIA" Atlas="ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS" Index="1"/>
+		<Row Name="ICON_TECH_TRADE"							Atlas="ICON_ATLAS_CIVICS"				Index="2" />
+		<Row Name="ICON_TECH_TRADE_FOW"							Atlas="ICON_ATLAS_CIVICS_FOW"			Index="2" />
+		<Row Name="ICON_TECH_OPTICS"							Atlas="ICON_ATLAS_TECH"				Index="11" />
+		<Row Name="ICON_TECH_OPTICS_FOW"							Atlas="ICON_ATLAS_TECH_FOW"			Index="11" />
+		<Row Name="ICON_TECH_EXPLORATION"							Atlas="ICON_ATLAS_CIVICS"				Index="21" />
+		<Row Name="ICON_TECH_EXPLORATION_FOW"							Atlas="ICON_ATLAS_CIVICS_FOW"			Index="21" />
+		<Row Name="ICON_TECH_MITHRIL_WEAPONS"							Atlas="ICON_ATLAS_TECH"				Index="24" />
+		<Row Name="ICON_TECH_MITHRIL_WEAPONS_FOW"							Atlas="ICON_ATLAS_TECH_FOW"			Index="24" />
+		<Row Name="ICON_TECH_MITHRIL_WORKING"							Atlas="ICON_ATLAS_TECH"				Index="33" />
+		<Row Name="ICON_TECH_MITHRIL_WORKING_FOW"							Atlas="ICON_ATLAS_TECH_FOW"			Index="33" />
+		<Row Name="ICON_TECH_SMELTING"							Atlas="ICON_ATLAS_TECH"				Index="20" />
+		<Row Name="ICON_TECH_SMELTING_FOW"							Atlas="ICON_ATLAS_TECH_FOW"			Index="20" />
+		<Row Name="ICON_TECH_BLASTING_POWDER"							Atlas="ICON_ATLAS_TECH"				Index="29" />
+		<Row Name="ICON_TECH_BLASTING_POWDER_FOW"							Atlas="ICON_ATLAS_TECH_FOW"			Index="29" />
+		<Row Name="ICON_SLTH_TECH_ARCHERY"							Atlas="ICON_ATLAS_EXPANSION_2_CIVICS"				Index="13" />
+		<Row Name="ICON_SLTH_TECH_ARCHERY_FOW"							Atlas="ICON_ATLAS_EXPANSION_2_CIVICS_FOW"			Index="13" />
+		<Row Name="ICON_TECH_PRECISION"							Atlas="ICON_ATLAS_TECH"				Index="6" />
+		<Row Name="ICON_TECH_PRECISION_FOW"							Atlas="ICON_ATLAS_TECH_FOW"			Index="6" />
+		<Row Name="ICON_TECH_WARHORSES"							Atlas="ICON_ATLAS_TECH"				Index="38" />
+		<Row Name="ICON_TECH_WARHORSES_FOW"							Atlas="ICON_ATLAS_TECH_FOW"			Index="38" />
+		<Row Name="ICON_TECH_ANIMAL_MASTERY"							Atlas="ICON_ATLAS_CIVICS"				Index="34" />
+		<Row Name="ICON_TECH_ANIMAL_MASTERY_FOW"							Atlas="ICON_ATLAS_CIVICS_FOW"			Index="34" />
+		<Row Name="ICON_CIVIC_WAY_OF_THE_EARTHMOTHER"						Atlas="ICON_ATLAS_CIVICS"				Index="1" />
+		<Row Name="ICON_CIVIC_WAY_OF_THE_EARTHMOTHER_FOW"						Atlas="ICON_ATLAS_CIVICS_FOW"				Index="1" />
+		<Row Name="ICON_CIVIC_ARETE"						Atlas="ICON_ATLAS_CIVICS"				Index="4" />
+		<Row Name="ICON_CIVIC_ARETE_FOW"						Atlas="ICON_ATLAS_CIVICS_FOW"				Index="4" />
+		<Row Name="ICON_CIVIC_WAY_OF_THE_WISE"						Atlas="ICON_ATLAS_CIVICS"				Index="16" />
+		<Row Name="ICON_CIVIC_WAY_OF_THE_WISE_FOW"						Atlas="ICON_ATLAS_CIVICS_FOW"				Index="16" />
+		<Row Name="ICON_CIVIC_DIVINE_ESSENCE"						Atlas="ICON_ATLAS_CIVICS"				Index="20" />
+		<Row Name="ICON_CIVIC_DIVINE_ESSENCE_FOW"						Atlas="ICON_ATLAS_CIVICS_FOW"				Index="20" />
+		<Row Name="ICON_CIVIC_FANATICISM"						Atlas="ICON_ATLAS_CIVICS"				Index="24" />
+		<Row Name="ICON_CIVIC_FANATICISM_FOW"						Atlas="ICON_ATLAS_CIVICS_FOW"				Index="24" />
+		<Row Name="ICON_CIVIC_MALEVOLENT_DESIGNS"						Atlas="ICON_ATLAS_CIVICS"				Index="22" />
+		<Row Name="ICON_CIVIC_MALEVOLENT_DESIGNS_FOW"						Atlas="ICON_ATLAS_CIVICS_FOW"				Index="22" />
+		<Row Name="ICON_CIVIC_EDUCATION"						Atlas="ICON_ATLAS_TECH"				Index="23" />
+		<Row Name="ICON_CIVIC_EDUCATION_FOW"						Atlas="ICON_ATLAS_TECH_FOW"				Index="23" />
+		<Row Name="ICON_CIVIC_CURRENCY"						Atlas="ICON_ATLAS_TECH"				Index="12" />
+		<Row Name="ICON_CIVIC_CURRENCY_FOW"						Atlas="ICON_ATLAS_TECH_FOW"				Index="12" />
+		<Row Name="ICON_CIVIC_TAXATION"						Atlas="ICON_ATLAS_TECH"				Index="28" />
+		<Row Name="ICON_CIVIC_TAXATION_FOW"						Atlas="ICON_ATLAS_TECH_FOW"				Index="28" />
 		<Row Name="ICON_BARBARIAN_CLAN_BEARS_1" Atlas="ICON_ATLAS_BARBARIAN_CLANS_CIVILIZATIONS" Index="7"/>
 		<Row Name="ICON_BARBARIAN_CLAN_BEARS_2" Atlas="ICON_ATLAS_BARBARIAN_CLANS_CIVILIZATIONS" Index="7"/>
 		<Row Name="ICON_BARBARIAN_CLAN_BEARS_3" Atlas="ICON_ATLAS_BARBARIAN_CLANS_CIVILIZATIONS" Index="7"/>
