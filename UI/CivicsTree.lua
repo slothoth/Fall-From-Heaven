@@ -1564,14 +1564,26 @@ end
 --	RETURN: A table of node data (techs/civics/etc...) with a prereq for each entry.
 -- ===========================================================================
 local tCivicTree = {
-	['CIVIC_MESSAGE_FROM_THE_DEEP']=3,
-	['CIVIC_WAY_OF_THE_EARTHMOTHER']=7,
-	['CIVIC_WAY_OF_THE_FORESTS']=9,
-	['CIVIC_MIND_STAPLING'] = 9,
-	['CIVIC_ARETE']=6,
-	['CIVIC_HIDDEN_PATHS']=6,
+	['CIVIC_MESSAGE_FROM_THE_DEEP']=4,
+	['CIVIC_WAY_OF_THE_EARTHMOTHER']=4,
+	['CIVIC_WAY_OF_THE_FORESTS']=4,
+	['CIVIC_MIND_STAPLING'] = 4,
+	['CIVIC_ARETE']=4,
+	['CIVIC_HIDDEN_PATHS']=4,
 	['CIVIC_GAMES_RECREATION']=3,
-	['']
+
+	['CIVIC_CURRENCY']=1,
+
+	['CIVIC_TAXATION']=1,
+	['CIVIC_MILITARY_TRAINING']=2,
+	['CIVIC_GUILDS']=1,
+	['CIVIC_MERCANTILISM']=2,
+	['CIVIC_COMMUNE_WITH_NATURE']=3,
+
+	['CIVIC_CORRUPTION_OF_SPIRIT']=4,
+	['CIVIC_INFERNAL_PACT']=4,
+	['CIVIC_FERAL_BOND']=3,			-- put at 6
+
 }
 function PopulateItemData() -- Note that we are overriding this function without calling its base version. This version requires no parameters.
 
