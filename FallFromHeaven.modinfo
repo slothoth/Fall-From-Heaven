@@ -189,12 +189,6 @@
       </Properties>
       <File>UI/WorldSpell.xml</File>
     </AddUserInterfaces>
-    <ImportFiles id="LUA_Replacers">
-      <Properties>
-        <LoadOrder>150000</LoadOrder>
-      </Properties>
-      <File>UI/TechTree_support.lua</File>
-    </ImportFiles>
     <ReplaceUIScript id="ResearchChooserHideFFH">
       <Properties>
           <LoadOrder>1100</LoadOrder>
@@ -267,6 +261,9 @@
       <File>UI/UnitPromotionPopup.xml</File>
       <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
       <File>UI/TreatWithTribePopup.lua</File>
+      <File>UI/TechTree.xml</File>
+      <File>UI/CivicsTree.xml</File>
+      <File>UI/CivicsTree.lua</File>
     </ImportFiles>
     <!--ReplaceUIScript id="XP2EndGameOverrideLowPriorityTODO">
       <Properties>
@@ -297,6 +294,14 @@
       <File>UI/GovernmentScreen.xml</File>
       <File>UI/TabSupport.lua</File>
     </ImportFiles>
+
+    <ReplaceUIScript id="ReplaceUI_CivicsTree_BaseFFH">
+        <Properties>
+            <LoadOrder>10950</LoadOrder>
+            <LuaContext>CivicsTree</LuaContext>
+            <LuaReplace>UI/CivicsTree.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
     <!--ImportFiles id="ImportMapGenOverrideFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
@@ -424,6 +429,7 @@
     <File>UI/ReportScreen.lua</File>
     <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
     <File>UI/TechTree_support.lua</File>
+    <File>UI/TechTree.xml</File>
     <File>UI/TechTree_overrides.lua</File>
     <File>UI/ResearchChooser_overrides.lua</File>
     <File>UI/UnitPromotionPopup.lua</File>
@@ -439,5 +445,7 @@
     <File>UI/GovernmentScreen.lua</File>
     <File>UI/GovernmentScreen.xml</File>
     <File>UI/TabSupport.lua</File>
+    <File>UI/CivicsTree.xml</File>
+    <File>UI/CivicsTree.lua</File>
   </Files>
 </Mod>
