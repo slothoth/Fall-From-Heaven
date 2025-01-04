@@ -261,6 +261,8 @@
       <File>UI/UnitPromotionPopup.xml</File>
       <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
       <File>UI/TreatWithTribePopup.lua</File>
+      <File>UI/TechTree.xml</File>
+      <File>UI/CivicsTree.xml</File>
     </ImportFiles>
     <!--ReplaceUIScript id="XP2EndGameOverrideLowPriorityTODO">
       <Properties>
@@ -291,12 +293,14 @@
       <File>UI/GovernmentScreen.xml</File>
       <File>UI/TabSupport.lua</File>
     </ImportFiles>
-    <ImportFiles id="TechTreexmlOverride">
-      <Properties>
-        <LoadOrder>101</LoadOrder>
-      </Properties>
-      <File>UI/TechTree.xml</File>
-    </ImportFiles>
+
+    <ReplaceUIScript id="ReplaceUI_CivicsTree_BaseFFH">
+        <Properties>
+            <LoadOrder>10950</LoadOrder>
+            <LuaContext>CivicsTree</LuaContext>
+            <LuaReplace>UI/CivicsTree.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
     <!--ImportFiles id="ImportMapGenOverrideFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
@@ -440,5 +444,7 @@
     <File>UI/GovernmentScreen.lua</File>
     <File>UI/GovernmentScreen.xml</File>
     <File>UI/TabSupport.lua</File>
+    <File>UI/CivicsTree.xml</File>
+    <File>UI/CivicsTree.lua</File>
   </Files>
 </Mod>
