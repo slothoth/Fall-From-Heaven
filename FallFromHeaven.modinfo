@@ -176,6 +176,7 @@
       <File>Lua/Promotions.lua</File>
       <File>Lua/Alignment.lua</File>
       <File>Lua/Combat.lua</File>
+      <File>Lua/WorldSpellSupport.lua</File>
     </AddGameplayScripts>
     <AddUserInterfaces id="NewAction">
 	  <Properties>
@@ -403,6 +404,7 @@
     <File>Lua/Promotions.lua</File>
     <File>Lua/Alignment.lua</File>
     <File>Lua/Combat.lua</File>
+    <File>Lua/WorldSpellSupport.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
     <!--File>MapUtilities.lua</File-->
