@@ -37,7 +37,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_TECH_PASS_THROUGH_THE_ETHER_NAME', 'Pass Through The Ether', 'en_US'),
 ('LOC_TECH_POISONS_NAME', 'Poisons', 'en_US'),
 ('LOC_TECH_PRECISION_NAME', 'Precision', 'en_US'),
-('LOC_TECH_SAILING_NAME', 'Sailing', 'en_US'),
+('LOC_SLTH_TECH_SAILING_NAME', 'Sailing', 'en_US'),
 ('LOC_TECH_SANITATION_NAME', 'Sanitation', 'en_US'),
 ('LOC_TECH_SKIP_NAME', 'Skip', 'en_US'),
 ('LOC_TECH_SMELTING_NAME', 'Smelting', 'en_US'),
