@@ -198,13 +198,6 @@ function GetPrereqsString( prereqs:table )
 end
 
 -- ===========================================================================
-local tExclusionHash = {
-						GameInfo.Types['TECH_ARCHERY_SKIP'].Hash=true,
-						GameInfo.Types['TECH_OMNISCIENCE_SKIP'].Hash=true,
-						GameInfo.Types['TECH_SANITATION_SKIP'].Hash=true,
-						GameInfo.Types['TECH_SORCERY_SKIP'].Hash=true,
-						GameInfo.Types['TECH_TRADE_SKIP'].Hash=true
-}
 function SetCurrentNode( hash:number )
 	if hash ~= nil then
 		if tExclusionHash[hash] then
@@ -470,7 +463,6 @@ end
 --	multiplayer or if a (spy) game rule allows looking at another's tree.
 -- ===========================================================================
 function AllocateUI( kNodeGrid:table, kPaths:table )
-
 	g_uiNodes = {};
 	m_kNodeIM:ResetInstances();
 
@@ -1387,7 +1379,7 @@ function PopulateItemData()
 		local row = GameInfo.Technologies[techNode.Name];
 		print(row.TechnologyType);
 		local found, _ = string.find(row.TechnologyType, 'SKIP')
-		if found then do print('SKIP TECH ' .. row.TechnologyType) end
+		if false then do print('SKIP TECH ' .. row.TechnologyType) end
         else
             local kEntry = {};
             kEntry.Type			= row.TechnologyType;
