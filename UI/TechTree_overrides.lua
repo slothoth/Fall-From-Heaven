@@ -198,6 +198,13 @@ function GetPrereqsString( prereqs:table )
 end
 
 -- ===========================================================================
+local tExclusionHash = {
+						[GameInfo.Types['TECH_ARCHERY_SKIP'].Hash]=true,
+						[GameInfo.Types['TECH_OMNISCIENCE_SKIP'].Hash]=true,
+						[GameInfo.Types['TECH_SANITATION_SKIP'].Hash]=true,
+						[GameInfo.Types['TECH_SORCERY_SKIP'].Hash]=true,
+						[GameInfo.Types['TECH_TRADE_SKIP'].Hash]=true
+}
 function SetCurrentNode( hash:number )
 	if hash ~= nil then
 		if tExclusionHash[hash] then
@@ -552,8 +559,8 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 		PopulateUnlockablesForTech(playerId, tech.Index, node["unlockIM"], function() SetCurrentNode(item.Hash); end);
 
-		node.NodeButton:RegisterCallback( Mouse.eLClick, function() SetCurrentNode(item.Hash); end);
-		node.OtherStates:RegisterCallback( Mouse.eLClick, function() SetCurrentNode(item.Hash); end);
+		-- node.NodeButton:RegisterCallback( Mouse.eLClick, function() SetCurrentNode(item.Hash); end);
+		-- node.OtherStates:RegisterCallback( Mouse.eLClick, function() SetCurrentNode(item.Hash); end);
 
 		-- Set position and save.
 		node.Top:SetOffsetVal( horizontal, vertical);
@@ -948,7 +955,7 @@ end
 --	active player's item data.
 -- ===========================================================================
 function View( playerTechData:table )
-
+	print('populating nodes')
 	-- Output the node states for the tree
 	for _,uiNode in pairs(g_uiNodes) do
 		PopulateNode( uiNode, playerTechData);
@@ -1034,7 +1041,7 @@ end
 --	Load all the 'live' data for a player.
 -- ===========================================================================
 function GetCurrentData( ePlayer:number, eCompletedTech:number )
-
+	print('getting current data')
 	-- If first time, initialize player data tables.
 	local data	:table = m_kAllPlayersTechData[ePlayer];
 	if data == nil then
