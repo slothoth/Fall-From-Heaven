@@ -16,6 +16,11 @@ debugFilterTechMaxIndex	= -1;		-- (-1 default) maximum index to fill the tree wi
 debugOutputTechInfo		= false;	-- (false default) Send to console detailed information on tech?
 debugShowIDWithName		= false;	-- (false default) Show the ID before the name in each node.
 debugShowAllMarkers		= false;	-- (false default) Show all player markers in the timline; even if they haven't been met.
+-- archery = {1, 13, 15, 21, 20}
+-- omni = {2, 47, 48, 51}
+-- sanitation = {3, 22, 32}
+-- sorcery 4
+-- trade = {5, 28, 29, 35}
 debugExplicitList		= {};		-- List of indexes to (only) explicitly show. e.g., {0,1,2,3,4} or {5,11,17}
 debugExcludeList		= {};		-- list of indexes to NOT show (the opposite of debugExplicitList)
 
@@ -197,33 +202,22 @@ function GetPrereqsString( prereqs:table )
 	return "[" .. string.sub(out,1,string.len(out)-1) .. "]";	-- Remove trailing space
 end
 
--- ===========================================================================
-local tExclusionHash = {
-						[GameInfo.Types['TECH_ARCHERY_SKIP'].Hash]=true,
-						[GameInfo.Types['TECH_OMNISCIENCE_SKIP'].Hash]=true,
-						[GameInfo.Types['TECH_SANITATION_SKIP'].Hash]=true,
-						[GameInfo.Types['TECH_SORCERY_SKIP'].Hash]=true,
-						[GameInfo.Types['TECH_TRADE_SKIP'].Hash]=true
-}
+
 function SetCurrentNode( hash:number )
 	if hash ~= nil then
-		if tExclusionHash[hash] then
-			print('ahhh')
-		else
-			local localPlayerTechs = Players[Game.GetLocalPlayer()]:GetTechs();
-			-- Get the complete path to the tech
-			local pathToTech = localPlayerTechs:GetResearchPath( hash );
+		local localPlayerTechs = Players[Game.GetLocalPlayer()]:GetTechs();
+		-- Get the complete path to the tech
+		local pathToTech = localPlayerTechs:GetResearchPath( hash );
 
-			local tParameters = {};
-			tParameters[PlayerOperations.PARAM_TECH_TYPE]	= pathToTech;
-			if m_shiftDown then
-				tParameters[PlayerOperations.PARAM_INSERT_MODE] = PlayerOperations.VALUE_APPEND;
-			else
-				tParameters[PlayerOperations.PARAM_INSERT_MODE] = PlayerOperations.VALUE_EXCLUSIVE;
-			end
-			UI.RequestPlayerOperation(Game.GetLocalPlayer(), PlayerOperations.RESEARCH, tParameters);
-			UI.PlaySound("Confirm_Tech_TechTree");
+		local tParameters = {};
+		tParameters[PlayerOperations.PARAM_TECH_TYPE]	= pathToTech;
+		if m_shiftDown then
+			tParameters[PlayerOperations.PARAM_INSERT_MODE] = PlayerOperations.VALUE_APPEND;
+		else
+			tParameters[PlayerOperations.PARAM_INSERT_MODE] = PlayerOperations.VALUE_EXCLUSIVE;
 		end
+		UI.RequestPlayerOperation(Game.GetLocalPlayer(), PlayerOperations.RESEARCH, tParameters);
+		UI.PlaySound("Confirm_Tech_TechTree");
 	else
 		UI.DataError("Attempt to change current tree item with NIL hash!");
 	end
@@ -423,10 +417,6 @@ function LayoutNodeGrid()
 		local era		:table  = g_kEras[item.EraType];
 		local columnNum :number = era.PriorColumns + item.Column;
 		-- Only place the node if there isn't already another node there.  See below.
-		print(item.Type)
-		print(item.UITreeRow)
-		print(columnNum)
-		print(kNodeGrid[item.UITreeRow])
 		if kNodeGrid[item.UITreeRow][columnNum] == nil then
 			kNodeGrid[item.UITreeRow][columnNum] = item.Type;
 		end
@@ -469,6 +459,16 @@ end
 --	to reuse the nodes across viewing other players' trees for single seat
 --	multiplayer or if a (spy) game rule allows looking at another's tree.
 -- ===========================================================================
+local tDummyPrereqs = {		['TECH_ARCHERY'] = 'TECH_ARCHERY_SKIP',
+							['TECH_OMNISCIENCE'] = 'TECH_OMNISCIENCE_SKIP',
+							['TECH_SANITATION'] = 'TECH_SANITATION_SKIP',
+							['TECH_SORCERY'] = 'TECH_SORCERY_SKIP',
+							['TECH_TRADE'] = 'TECH_TRADE_SKIP'}
+local tDummyTechs = {		['TECH_ARCHERY_SKIP'] = 'TECH_ARCHERY',
+							['TECH_OMNISCIENCE_SKIP'] = 'TECH_OMNISCIENCE',
+							['TECH_SANITATION_SKIP'] = 'TECH_SANITATION',
+							['TECH_SORCERY_SKIP'] = 'TECH_SORCERY',
+							['TECH_TRADE_SKIP'] = 'TECH_TRADE'}
 function AllocateUI( kNodeGrid:table, kPaths:table )
 	g_uiNodes = {};
 	m_kNodeIM:ResetInstances();
@@ -534,13 +534,25 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 			end
 		end
 
+		local era:table = g_kEras[item.EraType];
+		local horizontal, vertical
+		local sActualTech = tDummyTechs[techType]
+		if sActualTech then
+			print(sActualTech)
+			local actualTechInfo:table		= GameInfo.Technologies[sActualTech];
+			local actualItemInfo = g_kItemDefaults[sActualTech]
+			-- print(actualTechInfo.EraType)
+			-- print(g_kEras[actualTechInfo.EraType].PriorColumns)
+			-- print(actualItemInfo.Column)
+			horizontal, vertical = ColumnRowToPixelXY(g_kEras[actualTechInfo.EraType].PriorColumns + actualItemInfo.Column, actualItemInfo.UITreeRow );
+		else
+			-- Horizontal # = All prior nodes across all previous eras + node position in current era (based on cost vs. other nodes in that era)
+			horizontal, vertical = ColumnRowToPixelXY(era.PriorColumns + item.Column, item.UITreeRow );
+		end
+
 		node = m_kNodeIM:GetInstance();
 		node.Top:SetTag( item.Hash );	-- Set the hash of the technology to the tag of the node (for tutorial to be able to callout)
 
-		local era:table = g_kEras[item.EraType];
-
-		-- Horizontal # = All prior nodes across all previous eras + node position in current era (based on cost vs. other nodes in that era)
-		local horizontal, vertical = ColumnRowToPixelXY(era.PriorColumns + item.Column, item.UITreeRow );
 
 		-- Add data fields to UI component
 		node.Type	= techType;						-- Dynamically add "Type" field to UI node for quick look ups in item data table.
@@ -559,9 +571,15 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 		PopulateUnlockablesForTech(playerId, tech.Index, node["unlockIM"], function() SetCurrentNode(item.Hash); end);
 
-		-- node.NodeButton:RegisterCallback( Mouse.eLClick, function() SetCurrentNode(item.Hash); end);
-		-- node.OtherStates:RegisterCallback( Mouse.eLClick, function() SetCurrentNode(item.Hash); end);
 
+		if sActualTech then
+			print('skipping callbacks')
+			node.NodeButton:SetHide(true)
+			node.OtherStates:SetHide(true)
+		else
+			node.NodeButton:RegisterCallback( Mouse.eLClick, function() SetCurrentNode(item.Hash); end);
+			node.OtherStates:RegisterCallback( Mouse.eLClick, function() SetCurrentNode(item.Hash); end);
+		end
 		-- Set position and save.
 		node.Top:SetOffsetVal( horizontal, vertical);
 		g_uiNodes[item.Type] = node;
@@ -579,139 +597,165 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 	local previousRow	:number = 0;
 	local previousColumn:number = 0;
 	for type,item in pairs(g_kItemDefaults) do
-
-		local node:table = g_uiNodes[item.Type];
-		for _,prereqId in pairs(item.Prereqs) do
-
-			previousRow	   = TREE_START_ROW;
-			previousColumn = TREE_START_COLUMN;
-
-			if prereqId ~= PREREQ_ID_TREE_START then
-				-- There had better be a preq if there is a prereq ID (unless debugging the tree).
-				local prereq :table = g_kItemDefaults[prereqId];
-				if (prereq ~= nil) then
-					previousRow		= prereq.UITreeRow;
-					previousColumn	= g_kEras[prereq.EraType].PriorColumns + prereq.Column;
-				else
-					if table.count(debugExplicitList) == 0 then
-						UI.DataError("Unable to find PREREQ for tech '"..item.Type.."'("..tostring(item.Index)..")");
-					end
+		local sTechSkip = tDummyPrereqs[item.Type]
+		local node
+		if sTechSkip then
+			print('tech skip node of ' .. item.Type)
+			print('tech to supplant is ' .. sTechSkip)
+			item = g_kItemDefaults[sTechSkip]
+			if not item then
+				for slth_tech, uh in pairs(g_kItemDefaults) do
+					print(slth_tech)
 				end
 			end
+		else
+			node = g_uiNodes[item.Type];
+			print('Prereqs of ' .. item.Type)
+			for _,prereqId in pairs(item.Prereqs) do
 
-			local startColumn	:number = g_kEras[item.EraType].PriorColumns + item.Column;
-			local column		:number	= startColumn;
-			local isEarlyBend	:boolean= false;
-			local isAtPrior		:boolean= false;
+				previousRow	   = TREE_START_ROW;
+				previousColumn = TREE_START_COLUMN;
+				if prereqId ~= PREREQ_ID_TREE_START then
+					-- There had better be a preq if there is a prereq ID (unless debugging the tree).
+					local prereq :table = g_kItemDefaults[prereqId];
+					if (prereq ~= nil) then
+						print('Prereq tech is ' .. prereq.Type)
+						previousRow		= prereq.UITreeRow;
+						-- previousColumn	= g_kEras[prereq.EraType].PriorColumns + prereq.Column;
+					else
+						if table.count(debugExplicitList) == 0 then
+							UI.DataError("Unable to find PREREQ for tech '"..item.Type.."'("..tostring(item.Index)..")");
+						end
+					end
+				end
 
-			while( not isAtPrior ) do
-				column = column - 1;	-- Move backwards one
+				local iEraColumnAdjust = 0
+				if tDummyTechs[item.Type] then
+					iEraColumnAdjust = 0
+					print('adjusted era to be +1 from ' .. item.EraType)
+				end
+				local startColumn	:number = g_kEras[item.EraType].PriorColumns + item.Column + iEraColumnAdjust;
+				print(startColumn)
+				print(item.EraType)
+				local column		:number	= startColumn;
+				local isEarlyBend	:boolean= false;
+				local isAtPrior		:boolean= false;
 
-				-- If a node is found, make sure it's the previous node this is looking for.
-				if (kNodeGrid[previousRow][column] ~= nil) then
-					if kNodeGrid[previousRow][column] == prereqId then
+				while( not isAtPrior ) do
+					column = column - 1;	-- Move backwards one
+
+					-- If a node is found, make sure it's the previous node this is looking for.
+					if (kNodeGrid[previousRow][column] ~= nil) then
+						if kNodeGrid[previousRow][column] == prereqId then
+							print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+							isAtPrior = true;
+						end
+					elseif column <= TREE_START_COLUMN then
+						print('no prereq found so just doing full')
+						print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 						isAtPrior = true;
 					end
-				elseif column <= TREE_START_COLUMN then
-					isAtPrior = true;
+
+					if (not isAtPrior) and kNodeGrid[item.UITreeRow][column] ~= nil then
+						-- Was trying to hold off bend until start, but it looks to cross
+						-- another node, so move the bend to the end.
+						isEarlyBend = true;
+					end
+
+					if column < 0 then
+						UI.DataError("Tech tree could not find prior for '"..prereqId.."'");
+						break;
+					end
 				end
 
-				if (not isAtPrior) and kNodeGrid[item.UITreeRow][column] ~= nil then
-					-- Was trying to hold off bend until start, but it looks to cross
-					-- another node, so move the bend to the end.
-					isEarlyBend = true;
-				end
 
-				if column < 0 then
-					UI.DataError("Tech tree could not find prior for '"..prereqId.."'");
-					break;
-				end
-			end
+				if previousRow == TREE_START_NONE_ID then
 
+					-- Nothing goes before this, not even a fake start area.
 
-			if previousRow == TREE_START_NONE_ID then
+				elseif previousRow < item.UITreeRow or previousRow > item.UITreeRow  then
 
-				-- Nothing goes before this, not even a fake start area.
+					-- Obtain grid pieces to                            ____________________
+					-- use in order to draw                ___ ________|                    |
+					-- lines.                             |L2 |L1      |        NODE        |
+					--                                    |___|________|                    |
+					--   _____________________            |L3 |   x1   |____________________|
+					--  |                     |___________|___|
+					--	|    PREVIOUS NODE    | L5        |L4 |
+					--  |                     |___________|___|
+					--	|_____________________|     x2
+					--
+					local inst	:table = m_kLineIM:GetInstance();
+					local line1	:table = inst.LineImage; inst = m_kLineIM:GetInstance();
+					local line2	:table = inst.LineImage; inst = m_kLineIM:GetInstance();
+					local line3	:table = inst.LineImage; inst = m_kLineIM:GetInstance();
+					local line4	:table = inst.LineImage; inst = m_kLineIM:GetInstance();
+					local line5	:table = inst.LineImage;
+					-- Find all the empty space before the node before to make a bend.
+					local LineEndX1:number = 0;
+					local LineEndX2:number = 0;
+					local x, y = ColumnRowToPixelXY( column, item.UITreeRow );
+					print('node prereq position is ' .. tostring(x) .. ', ' .. tostring(y))
+					if isEarlyBend then
+						LineEndX1 = (node.x - LINE_LENGTH_BEFORE_CURVE ) ;
+						LineEndX2, _ = ColumnRowToPixelXY( column, item.UITreeRow);
+						LineEndX2 = LineEndX2 + SIZE_NODE_X;
+					else
+						LineEndX1, _ = ColumnRowToPixelXY( column, item.UITreeRow);
+						LineEndX2 = LineEndX1
+						LineEndX1 = LineEndX1 + SIZE_NODE_X + LINE_LENGTH_BEFORE_CURVE;
+						LineEndX2 = LineEndX2 + SIZE_NODE_X;
+					end
 
-			elseif previousRow < item.UITreeRow or previousRow > item.UITreeRow  then
+					local prevY	:number = 0;	-- y position of the previous node being connected to
 
-				-- Obtain grid pieces to                            ____________________
-				-- use in order to draw                ___ ________|                    |
-				-- lines.                             |L2 |L1      |        NODE        |
-				--                                    |___|________|                    |
-				--   _____________________            |L3 |   x1   |____________________|
-				--  |                     |___________|___|
-				--	|    PREVIOUS NODE    | L5        |L4 |
-				--  |                     |___________|___|
-				--	|_____________________|     x2
-				--
-				local inst	:table = m_kLineIM:GetInstance();
-				local line1	:table = inst.LineImage; inst = m_kLineIM:GetInstance();
-				local line2	:table = inst.LineImage; inst = m_kLineIM:GetInstance();
-				local line3	:table = inst.LineImage; inst = m_kLineIM:GetInstance();
-				local line4	:table = inst.LineImage; inst = m_kLineIM:GetInstance();
-				local line5	:table = inst.LineImage;
+					if previousRow < item.UITreeRow  then
+						prevY = node.y-((item.UITreeRow-previousRow)*SIZE_NODE_Y);-- above
+						line2:SetTexture("Controls_TreePathDashSE");
+						line4:SetTexture("Controls_TreePathDashES");
+					else
+						-- print(item.UITreeRow)
+						-- print(node)
+						prevY = node.y+((previousRow-item.UITreeRow)*SIZE_NODE_Y);-- below
+						line2:SetTexture("Controls_TreePathDashNE");
+						line4:SetTexture("Controls_TreePathDashEN");
+					end
 
-				-- Find all the empty space before the node before to make a bend.
-				local LineEndX1:number = 0;
-				local LineEndX2:number = 0;
-				if isEarlyBend then
-					LineEndX1 = (node.x - LINE_LENGTH_BEFORE_CURVE ) ;
-					LineEndX2, _ = ColumnRowToPixelXY( column, item.UITreeRow );
-					LineEndX2 = LineEndX2 + SIZE_NODE_X;
+					line1:SetOffsetVal(LineEndX1 + SIZE_PATH_HALF, node.y - SIZE_PATH_HALF);
+					line1:SetSizeVal( node.x - LineEndX1 - SIZE_PATH_HALF, SIZE_PATH);
+					line1:SetTexture("Controls_TreePathDashEW");
+
+					line2:SetOffsetVal(LineEndX1 - SIZE_PATH_HALF, node.y - SIZE_PATH_HALF);
+					line2:SetSizeVal( SIZE_PATH, SIZE_PATH);
+
+					line3:SetOffsetVal(LineEndX1 - SIZE_PATH_HALF, math.min(node.y + SIZE_PATH_HALF, prevY + SIZE_PATH_HALF) );
+					line3:SetSizeVal( SIZE_PATH, math.abs(node.y - prevY) - SIZE_PATH );
+					line3:SetTexture("Controls_TreePathDashNS");
+
+					line4:SetOffsetVal(LineEndX1 - SIZE_PATH_HALF, prevY - SIZE_PATH_HALF);
+					line4:SetSizeVal( SIZE_PATH, SIZE_PATH);
+
+					line5:SetSizeVal(  LineEndX1 - LineEndX2 - SIZE_PATH_HALF, SIZE_PATH );
+					line5:SetOffsetVal(LineEndX2, prevY - SIZE_PATH_HALF);
+					line1:SetTexture("Controls_TreePathDashEW");
+
+					-- Directly store the line (not instance) with a key name made up of this type and the prereq's type.
+					g_uiConnectorSets[item.Type..","..prereqId] = {line1,line2,line3,line4,line5};
+
 				else
-					LineEndX1, _ = ColumnRowToPixelXY( column, item.UITreeRow );
-					LineEndX2, _ = ColumnRowToPixelXY( column, item.UITreeRow );
-					LineEndX1 = LineEndX1 + SIZE_NODE_X + LINE_LENGTH_BEFORE_CURVE;
-					LineEndX2 = LineEndX2 + SIZE_NODE_X;
+					-- Prereq is on the same row
+					local inst:table = m_kLineIM:GetInstance();
+					local line:table = inst.LineImage;
+					line:SetTexture("Controls_TreePathDashEW");
+					local end1, _ = ColumnRowToPixelXY( column, item.UITreeRow );
+					end1 = end1 + SIZE_NODE_X;
+
+					line:SetOffsetVal(end1, node.y - SIZE_PATH_HALF);
+					line:SetSizeVal( node.x - end1, SIZE_PATH);
+
+					-- Directly store the line (not instance) with a key name made up of this type and the prereq's type.
+					g_uiConnectorSets[item.Type..","..prereqId] = {line};
 				end
-
-				local prevY	:number = 0;	-- y position of the previous node being connected to
-
-				if previousRow < item.UITreeRow  then
-					prevY = node.y-((item.UITreeRow-previousRow)*SIZE_NODE_Y);-- above
-					line2:SetTexture("Controls_TreePathDashSE");
-					line4:SetTexture("Controls_TreePathDashES");
-				else
-					prevY = node.y+((previousRow-item.UITreeRow)*SIZE_NODE_Y);-- below
-					line2:SetTexture("Controls_TreePathDashNE");
-					line4:SetTexture("Controls_TreePathDashEN");
-				end
-
-				line1:SetOffsetVal(LineEndX1 + SIZE_PATH_HALF, node.y - SIZE_PATH_HALF);
-				line1:SetSizeVal( node.x - LineEndX1 - SIZE_PATH_HALF, SIZE_PATH);
-				line1:SetTexture("Controls_TreePathDashEW");
-
-				line2:SetOffsetVal(LineEndX1 - SIZE_PATH_HALF, node.y - SIZE_PATH_HALF);
-				line2:SetSizeVal( SIZE_PATH, SIZE_PATH);
-
-				line3:SetOffsetVal(LineEndX1 - SIZE_PATH_HALF, math.min(node.y + SIZE_PATH_HALF, prevY + SIZE_PATH_HALF) );
-				line3:SetSizeVal( SIZE_PATH, math.abs(node.y - prevY) - SIZE_PATH );
-				line3:SetTexture("Controls_TreePathDashNS");
-
-				line4:SetOffsetVal(LineEndX1 - SIZE_PATH_HALF, prevY - SIZE_PATH_HALF);
-				line4:SetSizeVal( SIZE_PATH, SIZE_PATH);
-
-				line5:SetSizeVal(  LineEndX1 - LineEndX2 - SIZE_PATH_HALF, SIZE_PATH );
-				line5:SetOffsetVal(LineEndX2, prevY - SIZE_PATH_HALF);
-				line1:SetTexture("Controls_TreePathDashEW");
-
-				-- Directly store the line (not instance) with a key name made up of this type and the prereq's type.
-				g_uiConnectorSets[item.Type..","..prereqId] = {line1,line2,line3,line4,line5};
-
-			else
-				-- Prereq is on the same row
-				local inst:table = m_kLineIM:GetInstance();
-				local line:table = inst.LineImage;
-				line:SetTexture("Controls_TreePathDashEW");
-				local end1, _ = ColumnRowToPixelXY( column, item.UITreeRow );
-				end1 = end1 + SIZE_NODE_X;
-
-				line:SetOffsetVal(end1, node.y - SIZE_PATH_HALF);
-				line:SetSizeVal( node.x - end1, SIZE_PATH);
-
-				-- Directly store the line (not instance) with a key name made up of this type and the prereq's type.
-				g_uiConnectorSets[item.Type..","..prereqId] = {line};
 			end
 		end
 	end
@@ -1357,14 +1401,17 @@ local tTechTree = {
 	['TECH_NECROMANCY']=7,
 	['TECH_KNOWLEDGE_OF_THE_ETHER']=5,
 	['TECH_SORCERY']=4,
+	['TECH_SORCERY_SKIP']=4,
 	['TECH_ARCANE_LORE']=4,
 	['TECH_PASS_THROUGH_THE_ETHER']=4,
 	['TECH_STRENGTH_OF_WILL']=4,
 	['TECH_OMNISCIENCE']=4,
+	['TECH_OMNISCIENCE_SKIP']=4,
 	['TECH_HORSEBACK_RIDING']=5,
 	['TECH_STIRRUPS']= 5,
 	['TECH_WARHORSES']=2,
 	['TECH_TRADE']=3,
+	['TECH_TRADE_SKIP']=3,
 	}
 
 function PopulateItemData()
@@ -1382,9 +1429,8 @@ function PopulateItemData()
 	local techNodes = UITree.GetAvailableTechs();
 	print('RH_AI dummy techtree skipper loaded: -------------------------------------------------------------------');
 	for _,techNode in ipairs(techNodes) do
-
+		-- print(techNode.Name)
 		local row = GameInfo.Technologies[techNode.Name];
-		print(row.TechnologyType);
 		local found, _ = string.find(row.TechnologyType, 'SKIP')
 		if false then do print('SKIP TECH ' .. row.TechnologyType) end
         else

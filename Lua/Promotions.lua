@@ -436,14 +436,12 @@ function onSpawnApplyPromotions(playerID, unitID)
     for iTechIndex, iPromoIndex in pairs(tSciencePromoUnlocks) do
         if pTechs:HasTech(iTechIndex) then
             pUnitExp:SetPromotion(iPromoIndex)
-            print('granting promo to unit by tech on spawn')
         end
     end
 
     for iCivicIndex, iPromoIndex in pairs(tCivicPromoUnlocks) do
         if pCulture:HasCivic(iCivicIndex) then
             pUnitExp:SetPromotion(iPromoIndex)
-            print('granting promo to unit by civic on spawn')
         end
     end
 
@@ -491,11 +489,10 @@ function GrantPromoPrereqFromCivicCompleted(playerID, civicIndex, isCancelled)
     if iPromoToGive then
         local pPlayer = Players[playerID]
         if not pPlayer then return end
-        print('granting promo across techs')
+        print('granting promo across civics')
         for idx, pUnit in pPlayer:GetUnits():Members() do
             local pUnitExp = pUnit:GetExperience()
             pUnitExp:SetPromotion(iPromoToGive, true)
-            print('granting promo to unit by tech')
         end
     end
 end
@@ -505,11 +502,10 @@ function GrantPromoPrereqFromTechCompleted(playerID, techIndex)
     if iPromoToGive then
         local pPlayer = Players[playerID]
         if not pPlayer then return end
-        print('granting promo across civics')
+        print('granting promo across techs')
         for idx, pUnit in pPlayer:GetUnits():Members() do
             local pUnitExp = pUnit:GetExperience()
             pUnitExp:SetPromotion(iPromoToGive, true)
-            print('granting promo to unit by civic')
         end
     end
 end
@@ -562,7 +558,7 @@ function PostPromoGrant(playerID, unitID)
                     end
 
                     if bar == score then
-                        print('passed promo gating. Granting : ' .. GameInfo.UnitPromotions[promo_grant].Name)
+                        -- print('passed promo gating. Granting : ' .. GameInfo.UnitPromotions[promo_grant].Name)
                         pUnitExp:SetPromotion(promo_grant)
                     end
                 end
@@ -574,10 +570,10 @@ function PostPromoGrant(playerID, unitID)
     if not iReservedExperience then                     -- on first promotion, define exp overflow property
         local freeExpAmount = 0
         for sExperienceGrantingAbility, amount in pairs(tExperienceAbilities) do
-            print('checking: ' .. sExperienceGrantingAbility)
+            -- print('checking: ' .. sExperienceGrantingAbility)
             if pUnitAbilities:HasAbility(sExperienceGrantingAbility) then
                 freeExpAmount = freeExpAmount + amount
-                print('Has ' .. sExperienceGrantingAbility .. '. So grant this much reserved xp: ' .. tostring(amount))
+                -- print('Has ' .. sExperienceGrantingAbility .. '. So grant this much reserved xp: ' .. tostring(amount))
             end
         end
         iReservedExperience = freeExpAmount - 15
@@ -589,11 +585,10 @@ function PostPromoGrant(playerID, unitID)
         -- Maybe can check for uses of FreePromotion abilities / unit is of the type it gets a freePromo.
         -- make sure not to use -1 for granting experience.
     end
-    print('checking after promotion if unit needs granting extra xp')
     local iExperienceNeeded = pUnitExp:GetExperienceForNextLevel()
     local iCurrentExperience = pUnitExp:GetExperiencePoints()
     local iNeededExperience = iExperienceNeeded - iCurrentExperience
-    print('Experience needed on this level: ' .. tostring(iExperienceNeeded) .. '. Current experience is: ' .. tostring(iCurrentExperience) .. '. required: '.. tostring(iNeededExperience))
+    -- print('Experience needed on this level: ' .. tostring(iExperienceNeeded) .. '. Current experience is: ' .. tostring(iCurrentExperience) .. '. required: '.. tostring(iNeededExperience))
     if iReservedExperience > 0 and iNeededExperience > 0 then
         print('it does need extra xp. Granting this much ' .. tostring(iNeededExperience) .. ' from reserves ' .. tostring(iReservedExperience))
         if iReservedExperience > iExperienceNeeded then
