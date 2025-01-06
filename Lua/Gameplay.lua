@@ -1379,7 +1379,34 @@ end
 -- Great general on Mil Strategy
 -- Great Bard on Drama
 -- there are others im pretty sure
--- function OnTechnologyGrantFirst()  end
+local tExclusionHash = {
+						[GetHash('TECH_ARCHERY_SKIP')]=true,
+						[GetHash('TECH_OMNISCIENCE_SKIP')]=true,
+						[GetHash('TECH_SANITATION_SKIP')]=true,
+						[GetHash('TECH_SORCERY_SKIP')]=true,
+						[GetHash('TECH_TRADE_SKIP')]=true
+}
+local tORTechs = {
+    [GameInfo.Technologies['TECH_ARCHERY'].Index] = GameInfo.Technologies['TECH_ARCHERY_SKIP'].Index,
+    [GameInfo.Technologies['TECH_OMNISCIENCE'].Index] = GameInfo.Technologies['TECH_OMNISCIENCE_SKIP'].Index,
+    [GameInfo.Technologies['TECH_SANITATION'].Index] = GameInfo.Technologies['TECH_SANITATION_SKIP'].Index,
+    [GameInfo.Technologies['TECH_SORCERY'].Index] = GameInfo.Technologies['TECH_SORCERY_SKIP'].Index,
+    [GameInfo.Technologies['TECH_TRADE'].Index] = GameInfo.Technologies['TECH_TRADE_SKIP'].Index
+}
+function OnTechnologyGrantFirst(playerID, technologyIndex)
+    local iOrTechReqIndex = tORTechs[technologyIndex]
+    if iOrTechReqIndex then
+        -- check player has tech
+        local pPlayer = Players[playerID]
+        local pPlayerTechs = pPlayer:GetTechs()
+        if pPlayerTechs then
+            local hasTech = pPlayerTechs:HasTech(iOrTechReqIndex)
+            if hasTech then
+                pPlayerTechs:SetResearchProgress(50)            -- no clue what this does
+            end
+        end
+    end
+end
 local iCivicMilTraining = GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index
 local iCivicDrama = GameInfo.Civics['CIVIC_DRAMA_POETRY'].Index
 local iGreatGeneral = GameInfo.Units['UNIT_GREAT_GENERAL'].Index
@@ -1683,7 +1710,7 @@ function onStart()
     GameEvents.PlayerTurnStarted.Add(IncrementCottages);
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
-    -- Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
+    Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)

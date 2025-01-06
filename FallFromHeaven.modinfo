@@ -142,6 +142,7 @@
       <File>Core/AiInfos.sql</File>
       <File>Core/BespokeUpgrades.sql</File>
       <File>Core/WorldSpellSupport.sql</File>
+      <File>Core/Lua_support/Tech_dummies.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -394,6 +395,7 @@
     <File>Core/AiInfos.sql</File>
     <File>Core/BespokeUpgrades.sql</File>
     <File>Core/WorldSpellSupport.sql</File>
+    <File>Core/Lua_support/Tech_dummies.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>

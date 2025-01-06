@@ -198,22 +198,32 @@ function GetPrereqsString( prereqs:table )
 end
 
 -- ===========================================================================
+local tExclusionHash = {
+						GameInfo.Types['TECH_ARCHERY_SKIP'].Hash=true,
+						GameInfo.Types['TECH_OMNISCIENCE_SKIP'].Hash=true,
+						GameInfo.Types['TECH_SANITATION_SKIP'].Hash=true,
+						GameInfo.Types['TECH_SORCERY_SKIP'].Hash=true,
+						GameInfo.Types['TECH_TRADE_SKIP'].Hash=true
+}
 function SetCurrentNode( hash:number )
 	if hash ~= nil then
-
-		local localPlayerTechs = Players[Game.GetLocalPlayer()]:GetTechs();
-		-- Get the complete path to the tech
-		local pathToTech = localPlayerTechs:GetResearchPath( hash );
-
-		local tParameters = {};
-		tParameters[PlayerOperations.PARAM_TECH_TYPE]	= pathToTech;
-		if m_shiftDown then
-			tParameters[PlayerOperations.PARAM_INSERT_MODE] = PlayerOperations.VALUE_APPEND;
+		if tExclusionHash[hash] then
+			print('ahhh')
 		else
-			tParameters[PlayerOperations.PARAM_INSERT_MODE] = PlayerOperations.VALUE_EXCLUSIVE;
+			local localPlayerTechs = Players[Game.GetLocalPlayer()]:GetTechs();
+			-- Get the complete path to the tech
+			local pathToTech = localPlayerTechs:GetResearchPath( hash );
+
+			local tParameters = {};
+			tParameters[PlayerOperations.PARAM_TECH_TYPE]	= pathToTech;
+			if m_shiftDown then
+				tParameters[PlayerOperations.PARAM_INSERT_MODE] = PlayerOperations.VALUE_APPEND;
+			else
+				tParameters[PlayerOperations.PARAM_INSERT_MODE] = PlayerOperations.VALUE_EXCLUSIVE;
+			end
+			UI.RequestPlayerOperation(Game.GetLocalPlayer(), PlayerOperations.RESEARCH, tParameters);
+			UI.PlaySound("Confirm_Tech_TechTree");
 		end
-		UI.RequestPlayerOperation(Game.GetLocalPlayer(), PlayerOperations.RESEARCH, tParameters);
-        UI.PlaySound("Confirm_Tech_TechTree");
 	else
 		UI.DataError("Attempt to change current tree item with NIL hash!");
 	end
