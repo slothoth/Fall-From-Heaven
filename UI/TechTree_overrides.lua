@@ -202,13 +202,40 @@ function GetPrereqsString( prereqs:table )
 	return "[" .. string.sub(out,1,string.len(out)-1) .. "]";	-- Remove trailing space
 end
 
-
+-- ===========================================================================
+local tExclusionHash = {
+						[GameInfo.Types['TECH_ARCHERY'].Hash]={[GameInfo.Technologies['TECH_ARCHERY_SKIP'].Index]=true, [GameInfo.Technologies['TECH_HUNTING'].Index]=true},
+						[GameInfo.Types['TECH_OMNISCIENCE'].Hash]={[GameInfo.Technologies['TECH_OMNISCIENCE_SKIP'].Index]=true, [GameInfo.Technologies['TECH_STRENGTH_OF_WILL'].Index]=true},
+						[GameInfo.Types['TECH_SANITATION'].Hash]={[GameInfo.Technologies['TECH_SANITATION_SKIP'].Index]=true, [GameInfo.Technologies['TECH_CONSTRUCTION'].Index]=true},
+						[GameInfo.Types['TECH_SORCERY'].Hash]={[GameInfo.Technologies['TECH_SORCERY_SKIP'].Index]=true, [GameInfo.Technologies['TECH_ALTERATION'].Index]=true, [GameInfo.Technologies['TECH_ELEMENTALISM'].Index]=true, [GameInfo.Technologies['TECH_NECROMANCY'].Index]=true},
+						[GameInfo.Types['TECH_TRADE'].Hash]={[GameInfo.Technologies['TECH_TRADE_SKIP'].Index]=true, [GameInfo.Technologies['TECH_HORSEBACK_RIDING'].Index]=true}
+}
+-- build all normal precursors
+-- Archery optional: TECH_MINING, TECH_HUNTING
+-- omniscience optional: TECH_PASS_THROUGH_THE_ETHER, TECH_STRENGTH_OF_WILL
+-- sanitation optional: TECH_CONSTRUCTION, TECH_BRONZE_WORKING
+-- Sorcery NEED writing Optional: TECH_ALTERATION, TECH_DIVINATION, TECH_ELEMENTALISM, TECH_NECROMANCY
+-- Trade NEED writing optional: TECH_SAILING, TECH_HORSEBACK_RIDING
 function SetCurrentNode( hash:number )
 	if hash ~= nil then
 		local localPlayerTechs = Players[Game.GetLocalPlayer()]:GetTechs();
 		-- Get the complete path to the tech
-		local pathToTech = localPlayerTechs:GetResearchPath( hash );
-
+		local pathToTech
+		local tNewTechPathExclusion = tExclusionHash[hash]
+		pathToTech = localPlayerTechs:GetResearchPath( hash );
+		-- if there are any of the techs that have a skip in the path
+		if tNewTechPathExclusion then
+			local newPathToTech = {}
+			for key, val in pairs(pathToTech) do
+				print(key);
+				if tNewTechPathExclusion[val] then
+					print('skipping tech in path: ' ..tostring(val))
+				else
+					table.insert(newPathToTech, val)
+				end
+			end
+			pathToTech = newPathToTech
+		end
 		local tParameters = {};
 		tParameters[PlayerOperations.PARAM_TECH_TYPE]	= pathToTech;
 		if m_shiftDown then
@@ -1431,8 +1458,7 @@ function PopulateItemData()
 	for _,techNode in ipairs(techNodes) do
 		-- print(techNode.Name)
 		local row = GameInfo.Technologies[techNode.Name];
-		local found, _ = string.find(row.TechnologyType, 'SKIP')
-		if false then do print('SKIP TECH ' .. row.TechnologyType) end
+		if row.TechnologyType == 'TECH_SKIP_' then do print('SKIP TECH ' .. row.TechnologyType) end
         else
             local kEntry = {};
             kEntry.Type			= row.TechnologyType;
