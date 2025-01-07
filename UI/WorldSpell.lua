@@ -140,11 +140,13 @@ function CastWorldSpell()
 	local iPlayer = Game.GetLocalPlayer()
 	local pPlayerConfig = PlayerConfigurations[iPlayer]
     local sCivName = pPlayerConfig:GetCivilizationTypeName()
-	print(sCivName)
 	local sEventFunction = tWorldSpells[sCivName]
 	local tParameters = {}
 	tParameters.OnStart = sEventFunction
+	print('casting world spell')
+	print(sEventFunction)
 	UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+	print('request sent')
 	-- oh dear, the requestPlayerOperation sets the property after we have reran OnLoaded. Multithreaded!!!
 	OnShutdown()
 	OnLoaded()
@@ -189,9 +191,6 @@ function OnInit(bIsReload)
 	-- Create the Button
 	OnLoaded()
 
-	-- Set Vignette size
-	m_TopPanelConsideredHeight = Controls.Vignette:GetSizeY() - TOP_PANEL_OFFSET;
-	Controls.Vignette:SetSizeY(m_TopPanelConsideredHeight)
 end
 
 ------------------------------------------------------------------------------

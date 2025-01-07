@@ -232,9 +232,6 @@ local function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
             end
         end
     end
-    for iUnitID, pNewUnit in pairs(tNewUnits) do
-        print('set inherited abilities here')
-    end
     return tNewUnits
 end
 
@@ -2384,15 +2381,13 @@ local sWorldSpellPropKey = 'WorldSpellReady'
 local iDEMAGOG_INDEX = GameInfo.Units['SLTH_UNIT_DEMAGOG'].Index
 local function Rally(iPlayer, tParameters)
 	-- denagog in every city, degrade each town to village and get demagog
-	-- requires crusade
+	-- requires crusade TODO
     -- iterate over each of player city
     local pPlayer = Players[iPlayer]
-    local pPlayerImprovements = pPlayer:GetImprovements();
     local playerUnits = pPlayer:GetUnits();
-    if pPlayerImprovements then
-        local tImprovementLocations = pPlayerImprovements:GetImprovementPlots();
-        for _, plotID in ipairs(tImprovementLocations) do
-            local pPlot = Map.GetPlotByIndex(plotID);
+    for _, pCity in pPlayer:GetCities():Members() do
+        local tOwnedPlots = pCity:GetOwnedPlots()
+        for idx, pPlot in ipairs(tOwnedPlots) do
             if pPlot then
                 local eImprovement = pPlot:GetImprovementType();
                 if (eImprovement == iTOWN_INDEX) then
@@ -2464,7 +2459,8 @@ local function ReligiousFervor(iPlayer, tParameters)
     local iPriestGrantIndex = tReligionPriests[iStateReligion]
     local iStateReligionCities = 0
     local tReligions = Game.GetReligion():GetReligions()
-    local cachedUnits = pPlayer:GetUnits():Members()
+    local cachedUnits = {}
+    for idx, pUnit in pPlayer:GetUnits():Members() do cachedUnits[idx] = true; end
     for _, pCity in pPlayer:GetCities():Members() do
         local pPlot = pCity:GetPlot();
         local iX = pPlot:GetX()
@@ -2481,8 +2477,12 @@ local function ReligiousFervor(iPlayer, tParameters)
             end
         end
     end
+    print('state religion policy is ' .. tostring(iStateReligion))
+    print('state religion is ' .. tostring(iReligionToCheck))
+    print('state religion cities is' .. tostring(iStateReligionCities))
     for id, pUnit in pPlayer:GetUnits():Members() do
         if (not cachedUnits[id]) then
+            print('new unit!')
             local pUnitExp = pUnit:GetExperience()
             pUnitExp:ChangeExperience(iStateReligionCities * 2)
         end
@@ -2504,7 +2504,8 @@ local function MarchOfTheTrees(iPlayer, tParameters)
     -- waiting for new forest/growth mechanics
     local pPlayer = Players[iPlayer]
     local playerUnits = pPlayer:GetUnits()
-    local cachedUnits = playerUnits:Members()
+    local cachedUnits = {}
+    for idx, pUnit in playerUnits:Members() do cachedUnits[idx] = true; end
     for _, pCity in pPlayer:GetCities():Members() do
         local tOwnedPlots = pCity:GetOwnedPlots()
         for _, pPlot in ipairs(tOwnedPlots) do
@@ -2521,53 +2522,45 @@ local function MarchOfTheTrees(iPlayer, tParameters)
     local tNewUnits
     for id, pUnit in pPlayer:GetUnits():Members() do
         if (not cachedUnits[id]) then
-             pUnit:SetProperty('LifespanRemaining', 5)
+            print('new unit, setting lifespan')
+            pUnit:SetProperty('LifespanRemaining', 5)                  -- TODO NOT WORKING
         end
     end
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
 local iMINE_INDEX = GameInfo.Improvements['IMPROVEMENT_MINE'].Index
-local function MotherLode(iPlayer, tParameters)
-	-- he Mother Lode spell provides your empire with 25 gold for each mine in your cultural borders.
-	-- For each flatlands square you own (Grassland, Plains, Desert, Tundra, Ice), there is a 10% chance of it turning into a hill. This includes Flood Plains.
-    local pPlayer = Players[iPlayer]
-    local pPlayerImprovements = pPlayer:GetImprovements();
-    local iMineCount = 0
-
-    if pPlayerImprovements then
-        local tImprovementLocations = pPlayerImprovements:GetImprovementPlots();
-        for _, plotID in ipairs(tImprovementLocations) do
-            local pPlot = Map.GetPlotByIndex(plotID);
-            if pPlot then
-                local eImprovement = pPlot:GetImprovementType();
-                if (eImprovement == iMINE_INDEX) then
-                    iMineCount = iMineCount + 1
-                end
-            end
-        end
-    end
-    if iMineCount > 0 then
-        pPlayer:GetTreasury():ChangeGoldBalance(iMineCount * 25)
-    end
-    local tFlatlands = {
+local tFlatlands = {
                         [GameInfo.Terrains['TERRAIN_GRASS'].Index] = GameInfo.Terrains['TERRAIN_GRASS_HILLS'].Index,
                         [GameInfo.Terrains['TERRAIN_PLAINS'].Index] = GameInfo.Terrains['TERRAIN_PLAINS_HILLS'].Index,
                         [GameInfo.Terrains['TERRAIN_DESERT'].Index] = GameInfo.Terrains['TERRAIN_DESERT_HILLS'].Index,
                         [GameInfo.Terrains['TERRAIN_TUNDRA'].Index] = GameInfo.Terrains['TERRAIN_TUNDRA_HILLS'].Index,
                         [iSnowTerrain] = iSnowTerrainHills
     }
+local function MotherLode(iPlayer, tParameters)
+	-- he Mother Lode spell provides your empire with 25 gold for each mine in your cultural borders.
+	-- For each flatlands square you own (Grassland, Plains, Desert, Tundra, Ice), there is a 10% chance of it turning into a hill. This includes Flood Plains.
+    local pPlayer = Players[iPlayer]
+    local iMineCount = 0
     -- section, converting flatlands to mountains
     local iThreshold = 90
     for _, pCity in pPlayer:GetCities():Members() do
         local tOwnedPlots = pCity:GetOwnedPlots()
-        for _, pPlot in ipairs(tOwnedPlots) do
+        for idx, pPlot in ipairs(tOwnedPlots) do
             local iCurrentTerrain = pPlot:GetTerrainType()
             local iNewTerrain = tFlatlands[iCurrentTerrain]
-            if (iNewTerrain) and (math.random(100) > iThreshold) then           -- many rolls
+            if (iNewTerrain) then           -- many rolls      and (math.random(100) > iThreshold)
                 TerrainBuilder.SetTerrainType(pPlot, iNewTerrain)
+                print(idx)
+            end
+            local eImprovement = pPlot:GetImprovementType();
+            if (eImprovement == iMINE_INDEX) then
+                iMineCount = iMineCount + 1
             end
         end
+    end
+    if iMineCount > 0 then
+        pPlayer:GetTreasury():ChangeGoldBalance(iMineCount * 25)
     end
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -2581,11 +2574,12 @@ local function ArcaneLacuna(iPlayer, tParameters)
     local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
     if pCapitalCity then
         local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
-        for sResourceName, iPromoIndex in pairs(tResourcePropKeys) do
+        for idx, sResourceName in ipairs(tResourcePropKeys) do
             local iResource = pCapitalPlot:GetProperty(sResourceName) or 0;
             iExpToGrant = iExpToGrant + iResource
         end
     end
+    print(iExpToGrant)
     for _, pUnit in pPlayer:GetUnits():Members() do
         local iUnitIndex = pUnit:GetType()
         if tArcaneUnits[iUnitIndex] then
@@ -2602,9 +2596,14 @@ local function ArcaneLacuna(iPlayer, tParameters)
     -- go through all spell units, set their castable to 0
     for iPlayerIndex, pOtherPlayer in ipairs(Players) do
         if iPlayerIndex ~= iPlayer then
-            for _, pUnit in pOtherPlayer:GetUnits():Members() do
-                if pUnit:GetProperty('HasCast') then
-                    pUnit:SetProperty('HasCast', 1)
+            if pOtherPlayer then
+                local pOtherUnits = pOtherPlayer:GetUnits()
+                if pOtherUnits then
+                    for _, pUnit in pOtherUnits:Members() do
+                        if pUnit:GetProperty('HasCast') then
+                            pUnit:SetProperty('HasCast', 1)
+                        end
+                    end
                 end
             end
         end
@@ -2612,8 +2611,44 @@ local function ArcaneLacuna(iPlayer, tParameters)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
+function WildHunt(iPlayer, tParameters)
+	-- Grant a wolf for each combat unit you have. Wolf strength proportional to unit strength.
+    local pPlayer = Players[iPlayer]
+    local tCachedUnits = {}
+    for _, pUnit in pPlayer:GetUnits():Members() do
+        table.insert(tCachedUnits, pUnit)
+    end
+    for _, pUnit in ipairs(tCachedUnits) do
+        local tNewUnits = BaseSummon(pUnit, iPlayer, iUNIT_WOLF)
+        local iCombatStrength = pUnit:GetCombat()
+        if iCombatStrength > 15 then
+            local iExtraStrength = (iCombatStrength - 10) / 2
+            local iMinorGrants = math.floor(iExtraStrength / 4)
+            if iMinorGrants > 0 then
+                for iUnitID, pWolfUnit in pairs(tNewUnits) do
+                    local pUnitAbilities = pWolfUnit:GetAbility()
+                    for var=1, iMinorGrants do
+                        pUnitAbilities:AddAbilityCount('BUFF_EMPOWER')
+                    end
+                end
+            end
+        end
+    end
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+function Revelry(iPlayer, tParameters)            -- TODO
+	-- Double length Golden age. Needs to check gamespeed for golden age speed. then fix golden age granting.
+    local pPlayer = Players[iPlayer]
+    local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
+    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
+    local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
+    GoldenAgeGrant(pPlayer,iGoldenAgeLength)
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
 
 local function ForTheHorde(iPlayer, tParameters)                -- TODO
+    print('doing For the Horde spell')
 	-- Convert half of the barbarians in the game to your control
     -- get barbarian units total
     -- get half that integer, iterate up to that point converting the units?
@@ -2627,11 +2662,13 @@ local function ForTheHorde(iPlayer, tParameters)                -- TODO
         if iIterCount < iBarbsToConvert then
             if pUnit then
                 local iUnitIndex = pUnit:GetType()
-                local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+                local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(63, iUnitID)
                 pUnit:ChangeDamage(100);
                 if pUnit:GetDamage() >= 100 then
                     UnitManager.Kill(pUnit, false);
                 end
+                print(iX)
+                print(iY)
                 local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
                 ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
             end
@@ -2761,27 +2798,16 @@ GameEvents.SlthOnHealSelf.Add(HealSelf)
 GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
 GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
 
+
 -- world spells
 GameEvents.SlthOnRally.Add(Rally);
 GameEvents.SlthOnReligiousFervor.Add(ReligiousFervor);
-GameEvents.SlthOnSanctuary.Add(Sanctuary);
-GameEvents.SlthOnLegends.Add(Legends);
 GameEvents.SlthOnMarchOfTheTrees.Add(MarchOfTheTrees);
 GameEvents.SlthOnMotherLode.Add(MotherLode);
-GameEvents.SlthOnIntoTheMist.Add(IntoTheMist);
-GameEvents.SlthOnRagingSeas.Add(RagingSeas);
-GameEvents.SlthOnArdor.Add(Ardor);
-GameEvents.SlthOnWarCry.Add(WarCry);
 GameEvents.SlthOnArcaneLacuna.Add(ArcaneLacuna);
 GameEvents.SlthOnWildHunt.Add(WildHunt);
-GameEvents.SlthOnRevelry.Add(Revelry);
-GameEvents.SlthOnGiftsOfNantosuelta.Add(GiftsOfNantosuelta);
 GameEvents.SlthOnForTheHorde.Add(ForTheHorde);
-GameEvents.SlthOnVeilOfNight.Add(VeilOfNight);
-GameEvents.SlthOnRiverOfBlood.Add(RiverOfBlood);
-GameEvents.SlthOnWorldBreak.Add(WorldBreak);
-GameEvents.SlthOnStasis.Add(Stasis);
-GameEvents.SlthOnDivineRetribution.Add(DivineRetribution);
-GameEvents.SlthOnHyboremsWhisper.Add(HyboremsWhisper);
+GameEvents.SlthOnRevelry.Add(Revelry);
+
 
 onStart()

@@ -40,10 +40,12 @@ function RagingSeas(iPlayer, tParameters)
                 local iX = pUnit:GetX()
                 local iY = pUnit:GetY()
                 local pPlot = Map.GetPlot(iX, iY)
-                if (pPlot:IsCoastalLand()) or (pPlot:IsWater()) then
-                    pUnit:ChangeDamage(75);                         -- when we do elemental, this is cold damage
-                    if pUnit:GetDamage() >= 100 then
-                        UnitManager.Kill(pUnit, false);
+                if pPlot then
+                    if (pPlot:IsCoastalLand()) or (pPlot:IsWater()) then
+                        pUnit:ChangeDamage(75);                         -- when we do elemental, this is cold damage
+                        if pUnit:GetDamage() >= 100 then
+                            UnitManager.Kill(pUnit, false);
+                        end
                     end
                 end
             end
@@ -95,38 +97,6 @@ function WarCry(iPlayer, tParameters)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
-function WildHunt(iPlayer, tParameters)
-	-- Grant a wolf for each combat unit you have. Wolf strength proportional to unit strength.
-    local pPlayer = Players[iPlayer]
-    for _, pUnit in pPlayer:GetUnits():Members() do
-        local tNewUnits = BaseSummon(pUnit, iPlayer, iUNIT_WOLF)
-        local iCombatStrength = pUnit:GetCombat()
-        if iCombatStrength > 15 then
-            local iExtraStrength = (iCombatStrength - 10) / 2
-            local iMinorGrants = math.floor(iExtraStrength / 4)
-            if iMinorGrants > 0 then
-                for iUnitID, pWolfUnit in pairs(tNewUnits) do
-                    local pUnitAbilities = pWolfUnit:GetAbility()
-                    for var=1, iMinorGrants do
-                        pUnitAbilities:AddAbilityCount('BUFF_EMPOWER')
-                    end
-                end
-            end
-        end
-    end
-    pPlayer:SetProperty(sWorldSpellPropKey, 0)
-end
-
-function Revelry(iPlayer, tParameters)            -- TODO
-	-- Double length Golden age. Needs to check gamespeed for golden age speed. then fix golden age granting.
-    local pPlayer = Players[iPlayer]
-    local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
-    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
-    local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
-    GoldenAgeGrant(pPlayer,iGoldenAgeLength)
-    pPlayer:SetProperty(sWorldSpellPropKey, 0)
-end
-
 local iGOLDEN_HAMMER = GameInfo.Units['SLTH_EQUIPMENT_GOLDEN_HAMMER'].Index
 function GiftsOfNantosuelta(iPlayer, tParameters)
 	-- Grant a Golden Hammer equipment in each of your cities
@@ -149,35 +119,11 @@ function VeilOfNight(iPlayer, tParameters)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
-function RiverOfBlood(iPlayer, tParameters)
-	-- Increase all player city pops by 2, decrease all opponent by 2
-    -- get all cities of each player not the caster
-    -- if more than 2, reduce pop by 2. if 2, reduce pop by 1, otherwise ignore.
-    for iPlayerID, pPlayer in ipairs(Players) do
-        if (iPlayerID == iPlayer) then
-            for _, pCity in pPlayer:GetCities():Members() do
-                pCity:ChangePopulation(2)
-            end
-        elseif iPlayerID ~= 63 then
-            for _, pCity in pPlayer:GetCities():Members() do
-                local iCityPop = pCity:GetPopulation()
-                local iReduction = 0
-                if iCityPop == 2 then
-                    iReduction = 1
-                elseif iCityPop > 2 then
-                    iReduction = 2
-                end
-            end
-        end
-    end
-    local pPlayer = Players[iPlayer]
-    pPlayer:SetProperty(sWorldSpellPropKey, 0)
-end
 
 function WorldBreak(iPlayer, tParameters)
 	-- deal damage to all non-sheaim units equal to the armageddon count
     -- it also does a pillar of fire effect on cities, and smoke on forests?
-    local iDamage = Game:GetProperty('ARMA')
+    local iDamage = Game:GetProperty('ARMAGEDDON') or 0
     if iDamage > 100 then
         iDamage = 100
     end
@@ -204,7 +150,7 @@ function Stasis(iPlayer, tParameters)
     local iNewStasis
     local iX, iY
     local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
-    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
+    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier / 100
     local iDelay = math.floor(20 * iSpeedCostMultiplier)
     local iCurrentStasis = Game:GetProperty('STASIS_COUNTDOWN')
     if iCurrentStasis then
@@ -212,15 +158,19 @@ function Stasis(iPlayer, tParameters)
     else
         iNewStasis = iDelay
     end
+    print('setting Stasis to ' .. tostring(iDelay))
     Game:SetProperty('STASIS_COUNTDOWN', iNewStasis)
     for iPlayerID, pPlayer in ipairs(Players) do
-        if true then
-            local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-            if pCapitalCity then
-                iX = pCapitalCity:GetX()
-                iY = pCapitalCity:GetY()
-                local pCapitalPlot = Map.GetPlot(iX, iY)
-                pCapitalPlot:SetProperty('InStasis', 1)
+        if pPlayer then
+            local pCities = pPlayer:GetCities()
+            if pCities then
+                local pCapitalCity = pCities:GetCapitalCity()
+                if pCapitalCity then
+                    iX = pCapitalCity:GetX()
+                    iY = pCapitalCity:GetY()
+                    local pCapitalPlot = Map.GetPlot(iX, iY)
+                    pCapitalPlot:SetProperty('InStasis', 1)
+                end
             end
         end
     end
@@ -287,3 +237,45 @@ function HyboremsWhisper(iPlayer, tParameters)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
+
+
+function RiverOfBlood(iPlayer, tParameters)
+	-- Increase all player city pops by 2, decrease all opponent by 2
+    -- get all cities of each player not the caster
+    -- if more than 2, reduce pop by 2. if 2, reduce pop by 1, otherwise ignore.
+    for iPlayerID, pPlayer in ipairs(Players) do
+        if (iPlayerID == iPlayer) then
+            for _, pCity in pPlayer:GetCities():Members() do
+                pCity:ChangePopulation(2)
+            end
+        elseif iPlayerID ~= 63 then
+            local pCities = pPlayer:GetCities()
+            for _, pCity in pCities:Members() do
+                local iCityPop = pCity:GetPopulation()
+                local iReduction = 0
+                if iCityPop == 2 then
+                    iReduction = 1
+                elseif iCityPop > 2 then
+                    iReduction = 2
+                end
+            end
+        end
+    end
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty(sWorldSpellPropKey, 0)
+end
+
+-- world spells
+GameEvents.SlthOnSanctuary.Add(Sanctuary);
+GameEvents.SlthOnLegends.Add(Legends);
+GameEvents.SlthOnIntoTheMist.Add(IntoTheMist);
+GameEvents.SlthOnRagingSeas.Add(RagingSeas);
+GameEvents.SlthOnArdor.Add(Ardor);
+GameEvents.SlthOnWarCry.Add(WarCry);
+GameEvents.SlthOnGiftsOfNantosuelta.Add(GiftsOfNantosuelta);
+GameEvents.SlthOnVeilOfNight.Add(VeilOfNight);
+GameEvents.SlthOnWorldBreak.Add(WorldBreak);
+GameEvents.SlthOnStasis.Add(Stasis);
+GameEvents.SlthOnDivineRetribution.Add(DivineRetribution);
+GameEvents.SlthOnHyboremsWhisper.Add(HyboremsWhisper);
+GameEvents.SlthOnRiverOfBlood.Add(RiverOfBlood);
