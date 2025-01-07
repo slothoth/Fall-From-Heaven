@@ -840,10 +840,10 @@ function PopulateNode(uiNode, playerTechData)
 		for _,prereqId in pairs(item.Prereqs) do
 			if(prereqId ~= PREREQ_ID_TREE_START) then
 				local prereq		:table = g_kItemDefaults[prereqId];
-				if prereq ~= nil then
+				if (prereq ~= nil) and (g_uiConnectorSets[item.Type..","..prereqId]) then
 					local previousRow	:number = prereq.UITreeRow;
 					local previousColumn:number = g_kEras[prereq.EraType].PriorColumns;
-
+					for key, val in pairs(g_uiConnectorSets) do print(key); print(val); end
 					for lineNum,line in pairs(g_uiConnectorSets[item.Type..","..prereqId]) do
 						if(lineNum == 1 or lineNum == 5) then
 							line:SetTexture("Controls_TreePathEW");
