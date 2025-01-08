@@ -662,6 +662,9 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 			if previousRow == TREE_START_NONE_ID then
 
+			elseif startColumn > column	+3 then
+				print(' more than two columns away, dont show')
+
 				-- Nothing goes before this, not even a fake start area.
 
 			elseif previousRow < item.UITreeRow or previousRow > item.UITreeRow  then
