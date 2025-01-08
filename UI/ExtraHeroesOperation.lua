@@ -295,8 +295,8 @@ function OnBespokeUpgradeTwo()
     tParameters.iUpgradeUnitIndex = tUpgradeUnitValues[1]
     tParameters.iCost = tUpgradeUnitCosts[1]
     print('requesting upgrade to unit ' .. GameInfo.Units[tUpgradeUnitValues[1]].UnitType)
-    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	UI.DeselectUnit(pUnit);
+    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
     UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE )
 	return;
 end
