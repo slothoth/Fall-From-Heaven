@@ -214,7 +214,7 @@ local iTECH_HORSEBACK_RIDING = GameInfo.Technologies['TECH_HORSEBACK_RIDING'].In
 local iTECH_HUNTING = GameInfo.Technologies['TECH_HUNTING'].Index
 local iTECH_PASS_THROUGH_THE_ETHER = GameInfo.Technologies['TECH_PASS_THROUGH_THE_ETHER'].Index
 local iTECH_BRONZE_WORKING = GameInfo.Technologies['TECH_BRONZE_WORKING'].Index
-local iTECH_SAILING = GameInfo.Technologies['TECH_SAILING'].Index
+local iTECH_SAILING = GameInfo.Technologies['SLTH_TECH_SAILING'].Index
 local iTECH_DIVINATION = GameInfo.Technologies['TECH_DIVINATION'].Index
 local tExclusionHash = {
 						[GameInfo.Technologies['TECH_ARCHERY_SKIP'].Index]={pref=iTECH_MINING, other={iTECH_HUNTING}, skip=true},
@@ -223,7 +223,7 @@ local tExclusionHash = {
 						[GameInfo.Technologies['TECH_SORCERY_SKIP'].Index]={pref=iTECH_DIVINATION ,other={iTECH_ALTERATION, iTECH_ELEMENTALISM, iTECH_NECROMANCY}, skip=true},
 						[GameInfo.Technologies['TECH_TRADE_SKIP'].Index]={pref=iTECH_SAILING, other={iTECH_HORSEBACK_RIDING, skip=true}},
 
-						[GameInfo.Technologies['TECH_ARCHERY'].Index]={pref=iTECH_MINING, other={iTECH_HUNTING}},
+						[GameInfo.Technologies['SLTH_TECH_ARCHERY'].Index]={pref=iTECH_MINING, other={iTECH_HUNTING}},
 						[GameInfo.Technologies['TECH_OMNISCIENCE'].Index]={pref=iTECH_STRENGTH_OF_WILL, other={iTECH_PASS_THROUGH_THE_ETHER}},
 						[GameInfo.Technologies['TECH_SANITATION'].Index]={pref=iTECH_BRONZE_WORKING, other={iTECH_CONSTRUCTION}},
 						[GameInfo.Technologies['TECH_SORCERY'].Index]={pref=iTECH_DIVINATION ,other={iTECH_ALTERATION, iTECH_ELEMENTALISM, iTECH_NECROMANCY}},
@@ -592,12 +592,12 @@ end
 --	to reuse the nodes across viewing other players' trees for single seat
 --	multiplayer or if a (spy) game rule allows looking at another's tree.
 -- ===========================================================================
-local tDummyPrereqs = {		['TECH_ARCHERY'] = 'TECH_ARCHERY_SKIP',
+local tDummyPrereqs = {		['SLTH_TECH_ARCHERY'] = 'TECH_ARCHERY_SKIP',
 							['TECH_OMNISCIENCE'] = 'TECH_OMNISCIENCE_SKIP',
 							['TECH_SANITATION'] = 'TECH_SANITATION_SKIP',
 							['TECH_SORCERY'] = 'TECH_SORCERY_SKIP',
 							['TECH_TRADE'] = 'TECH_TRADE_SKIP'}
-local tDummyTechs = {		['TECH_ARCHERY_SKIP'] = 'TECH_ARCHERY',
+local tDummyTechs = {		['TECH_ARCHERY_SKIP'] = 'SLTH_TECH_ARCHERY',
 							['TECH_OMNISCIENCE_SKIP'] = 'TECH_OMNISCIENCE',
 							['TECH_SANITATION_SKIP'] = 'TECH_SANITATION',
 							['TECH_SORCERY_SKIP'] = 'TECH_SORCERY',
@@ -1077,15 +1077,16 @@ function PopulateNode(uiNode, playerTechData)
 			if (textureOffsetX ~= nil) then
 				uiNode.Icon:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
 			end
-
-			if true then
-				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName, 30);
+			local sExtraPrereq = tExtraPrereqIcons[uiNode.Type]
+			if sExtraPrereq then
+				local sExtraPrereqIcon = DATA_ICON_PREFIX .. sExtraPrereq
+				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(sExtraPrereqIcon, 30);
 				if (textureOffsetX ~= nil) then
 					print('setting prereqTexture' .. iconName)
 					uiNode.ExtraPrereq:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
 				end
-				uiNode.ExtraPrereq:SetHide(textureOffsetX == nil)
 			end
+			uiNode.ExtraPrereq:SetHide(sExtraPrereq == nil)
 		end
 	end
 

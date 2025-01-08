@@ -65,7 +65,7 @@ ITEM_STATUS				= {
 							CURRENT		= 3,
 							RESEARCHED	= 4,
 						};
-ROW_MAX					= 7;			-- Highest level row above 0
+ROW_MAX					= 8;			-- Highest level row above 0
 ROW_MIN					= -3;			-- Lowest level row below 0
 SIZE_NODE_X				= 420;			-- Item node dimensions
 SIZE_NODE_Y				= 84;
@@ -546,6 +546,7 @@ end
 --	to reuse the nodes across viewing other players' trees for single seat
 --	multiplayer or if a (spy) game rule allows looking at another's tree.
 -- ===========================================================================
+local tExtraPrereqIcons = {}
 function AllocateUI( kNodeGrid:table, kPaths:table )
 
 	g_uiNodes = {};
@@ -663,8 +664,8 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 			if previousRow == TREE_START_NONE_ID then
 
 			elseif startColumn > column	+3 then
-				print(' more than two columns away, dont show')
-
+				print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
+				tExtraPrereqIcons[item.Type] = prereqId
 				-- Nothing goes before this, not even a fake start area.
 
 			elseif previousRow < item.UITreeRow or previousRow > item.UITreeRow  then
@@ -1009,6 +1010,7 @@ function PopulateNode(uiNode, playerTechData)
 		uiNode.IconBacking:SetHide(true);
 		uiNode.BoostMeter:SetColor(UI.GetColorValueFromHexLiteral(0x66ffffff));
 		uiNode.BoostIcon:SetColor(UI.GetColorValueFromHexLiteral(0x66000000));
+		uiNode.ExtraPrereq:SetHide(true)
 	else
 		uiNode.NodeButton:SetToolTipString(ToolTipHelper.GetToolTip(item.Type, Game.GetLocalPlayer()));
 
@@ -1029,6 +1031,19 @@ function PopulateNode(uiNode, playerTechData)
 			if (textureOffsetX ~= nil) then
 				uiNode.Icon:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
 			end
+			local sExtraPrereq = tExtraPrereqIcons[uiNode.Type]
+			if sExtraPrereq then
+				print(uiNode.Type)
+				print(sExtraPrereq)
+				local sExtraPrereqIcon = DATA_ICON_PREFIX .. sExtraPrereq
+				print(sExtraPrereqIcon)
+				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(sExtraPrereqIcon, 42);
+				if (textureOffsetX ~= nil) then
+					print('setting prereqTexture' .. iconName)
+					uiNode.ExtraPrereq:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+				end
+			end
+			uiNode.ExtraPrereq:SetHide(sExtraPrereq == nil)
 		end
 	end
 
@@ -1567,25 +1582,42 @@ end
 --	RETURN: A table of node data (techs/civics/etc...) with a prereq for each entry.
 -- ===========================================================================
 local tCivicTree = {
-	['CIVIC_MESSAGE_FROM_THE_DEEP']=4,
-	['CIVIC_WAY_OF_THE_EARTHMOTHER']=4,
-	['CIVIC_WAY_OF_THE_FORESTS']=4,
-	['CIVIC_MIND_STAPLING'] = 4,
-	['CIVIC_ARETE']=4,
-	['CIVIC_HIDDEN_PATHS']=4,
 	['CIVIC_GAMES_RECREATION']=3,
 
-	['CIVIC_CURRENCY']=1,
+	['CIVIC_WAY_OF_THE_FORESTS']=4,
+	['CIVIC_WAY_OF_THE_EARTHMOTHER']=4,
+	['CIVIC_MESSAGE_FROM_THE_DEEP']=4,
 
-	['CIVIC_TAXATION']=1,
-	['CIVIC_MILITARY_TRAINING']=2,
-	['CIVIC_GUILDS']=1,
-	['CIVIC_MERCANTILISM']=2,
-	['CIVIC_COMMUNE_WITH_NATURE']=3,
+	['CIVIC_HIDDEN_PATHS']=4,		  -- 5
+	['CIVIC_ARETE']=4,				  -- 6
+	['CIVIC_MIND_STAPLING'] = 4,	  -- 7
 
-	['CIVIC_CORRUPTION_OF_SPIRIT']=4,
-	['CIVIC_INFERNAL_PACT']=4,
-	['CIVIC_FERAL_BOND']=3,			-- put at 6
+	['CIVIC_FANATICISM']=1,	  		  -- 0
+	['CIVIC_FEUDALISM']=-1,	  		  -- 1
+	['CIVIC_WAY_OF_THE_WICKED']=2,	  -- 2
+	['CIVIC_RELIGIOUS_LAW']=1,		  -- 4
+	['CIVIC_CURRENCY']=2,			  -- 5
+	['CIVIC_MILITARY_TRADITION']=5,	  -- 6
+
+
+	['CIVIC_CORRUPTION_OF_SPIRIT']=0, -- 3
+	['CIVIC_DECEPTION']=0,			  -- 1
+
+	['CIVIC_INFERNAL_PACT']=0,		  -- 3
+
+
+
+	['CIVIC_RAGE']=-2,			  	  -- 0
+	['CIVIC_MALEVOLENT_DESIGNS']=1,   -- 1
+	['CIVIC_THEOLOGY']=1,			  -- 4
+	['CIVIC_TAXATION']=2,			  -- 5
+	['CIVIC_MILITARY_TRAINING']= 3,	  -- 6
+	['CIVIC_FERAL_BOND']=4,			  -- 7
+
+	['CIVIC_DIVINE_ESSENCE']=1,		  -- 3
+	['CIVIC_GUILDS']=2,				  -- 4
+	['CIVIC_MERCANTILISM']=3,		  -- 5
+	['CIVIC_COMMUNE_WITH_NATURE']=4,  -- 7
 
 }
 function PopulateItemData() -- Note that we are overriding this function without calling its base version. This version requires no parameters.
