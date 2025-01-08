@@ -52,7 +52,7 @@ ITEM_STATUS				= {
 							CURRENT		= 3,
 							RESEARCHED	= 4,
 							};
-ROW_MAX					= 7;													-- changed to +3
+ROW_MAX					= 8;													-- changed to +3
 ROW_MIN					= -3;			-- Lowest level row below 0
 SIZE_NODE_X				= 370;			-- Item node dimensions
 SIZE_NODE_Y				= 84;
@@ -203,13 +203,128 @@ function GetPrereqsString( prereqs:table )
 end
 
 -- ===========================================================================
+local iTECH_MINING = GameInfo.Technologies['TECH_MINING'].Index
+local iTECH_STRENGTH_OF_WILL = GameInfo.Technologies['TECH_STRENGTH_OF_WILL'].Index
+local iTECH_CONSTRUCTION = GameInfo.Technologies['TECH_CONSTRUCTION'].Index
+local iTECH_ALTERATION = GameInfo.Technologies['TECH_ALTERATION'].Index
+local iTECH_ELEMENTALISM = GameInfo.Technologies['TECH_ELEMENTALISM'].Index
+local iTECH_NECROMANCY = GameInfo.Technologies['TECH_NECROMANCY'].Index
+local iTECH_HORSEBACK_RIDING = GameInfo.Technologies['TECH_HORSEBACK_RIDING'].Index
+
+local iTECH_HUNTING = GameInfo.Technologies['TECH_HUNTING'].Index
+local iTECH_PASS_THROUGH_THE_ETHER = GameInfo.Technologies['TECH_PASS_THROUGH_THE_ETHER'].Index
+local iTECH_BRONZE_WORKING = GameInfo.Technologies['TECH_BRONZE_WORKING'].Index
+local iTECH_SAILING = GameInfo.Technologies['TECH_SAILING'].Index
+local iTECH_DIVINATION = GameInfo.Technologies['TECH_DIVINATION'].Index
 local tExclusionHash = {
-						[GameInfo.Types['TECH_ARCHERY'].Hash]={[GameInfo.Technologies['TECH_ARCHERY_SKIP'].Index]=true, [GameInfo.Technologies['TECH_HUNTING'].Index]=true},
-						[GameInfo.Types['TECH_OMNISCIENCE'].Hash]={[GameInfo.Technologies['TECH_OMNISCIENCE_SKIP'].Index]=true, [GameInfo.Technologies['TECH_STRENGTH_OF_WILL'].Index]=true},
-						[GameInfo.Types['TECH_SANITATION'].Hash]={[GameInfo.Technologies['TECH_SANITATION_SKIP'].Index]=true, [GameInfo.Technologies['TECH_CONSTRUCTION'].Index]=true},
-						[GameInfo.Types['TECH_SORCERY'].Hash]={[GameInfo.Technologies['TECH_SORCERY_SKIP'].Index]=true, [GameInfo.Technologies['TECH_ALTERATION'].Index]=true, [GameInfo.Technologies['TECH_ELEMENTALISM'].Index]=true, [GameInfo.Technologies['TECH_NECROMANCY'].Index]=true},
-						[GameInfo.Types['TECH_TRADE'].Hash]={[GameInfo.Technologies['TECH_TRADE_SKIP'].Index]=true, [GameInfo.Technologies['TECH_HORSEBACK_RIDING'].Index]=true}
+						[GameInfo.Technologies['TECH_ARCHERY_SKIP'].Index]={pref=iTECH_MINING, other={iTECH_HUNTING}, skip=true},
+						[GameInfo.Technologies['TECH_OMNISCIENCE_SKIP'].Index]={pref=iTECH_STRENGTH_OF_WILL, other={iTECH_PASS_THROUGH_THE_ETHER}, skip=true},
+						[GameInfo.Technologies['TECH_SANITATION_SKIP'].Index]={pref=iTECH_BRONZE_WORKING, other={iTECH_CONSTRUCTION}, skip=true},
+						[GameInfo.Technologies['TECH_SORCERY_SKIP'].Index]={pref=iTECH_DIVINATION ,other={iTECH_ALTERATION, iTECH_ELEMENTALISM, iTECH_NECROMANCY}, skip=true},
+						[GameInfo.Technologies['TECH_TRADE_SKIP'].Index]={pref=iTECH_SAILING, other={iTECH_HORSEBACK_RIDING, skip=true}},
+
+						[GameInfo.Technologies['TECH_ARCHERY'].Index]={pref=iTECH_MINING, other={iTECH_HUNTING}},
+						[GameInfo.Technologies['TECH_OMNISCIENCE'].Index]={pref=iTECH_STRENGTH_OF_WILL, other={iTECH_PASS_THROUGH_THE_ETHER}},
+						[GameInfo.Technologies['TECH_SANITATION'].Index]={pref=iTECH_BRONZE_WORKING, other={iTECH_CONSTRUCTION}},
+						[GameInfo.Technologies['TECH_SORCERY'].Index]={pref=iTECH_DIVINATION ,other={iTECH_ALTERATION, iTECH_ELEMENTALISM, iTECH_NECROMANCY}},
+						[GameInfo.Technologies['TECH_TRADE'].Index]={pref=iTECH_SAILING, other={iTECH_HORSEBACK_RIDING}},
 }
+local tCheckTechsComplete = {	{[iTECH_HUNTING]=true, [iTECH_MINING]=true},
+								{[iTECH_STRENGTH_OF_WILL]=true, [iTECH_PASS_THROUGH_THE_ETHER]=true},
+								{[iTECH_CONSTRUCTION]=true, [iTECH_BRONZE_WORKING]=true},
+								{[iTECH_HORSEBACK_RIDING]=true, [iTECH_SAILING]=true},
+								{[iTECH_ALTERATION]=true, [iTECH_DIVINATION]=true, [iTECH_ELEMENTALISM]=true, [iTECH_NECROMANCY]=true}
+						}
+
+
+function AdjustTechPath(pathToTech, localPlayerTechs)
+	local newPathToTech = {}
+	local tAddedSkips = {}
+	for key, val in pairs(pathToTech) do
+		local bHasORResearched
+		local sTechName = GameInfo.Technologies[val].TechnologyType
+		for idx, tCheckTechs in ipairs(tCheckTechsComplete) do
+			if tCheckTechs[val] then
+				for iCheckOrTech, _ in pairs(tCheckTechs) do
+					if (iCheckOrTech ~= tech) and (not bHasORResearched) then
+						bHasORResearched = localPlayerTechs:HasTech(iCheckOrTech)
+					end
+				end
+			end
+		end
+		local tDummyOrSkips = tExclusionHash[val]
+		if tDummyOrSkips then
+			if tDummyOrSkips['skip'] then bHasORResearched = true; end
+			local iPreferredTechPrereq = tDummyOrSkips['pref']
+			local preferredRequiredTechs = {}
+			local sTech = GameInfo.Technologies[iPreferredTechPrereq].TechnologyType
+			if not localPlayerTechs:HasTech(iPreferredTechPrereq) then
+				print(sTechName .. ' doesnt have preferred prereq ' .. sTech .. ' researched, pre-filtering unpreferred paths.')
+				local prereqHash = GameInfo.Types[sTech].Hash
+				local preferredPath = localPlayerTechs:GetResearchPath( prereqHash );
+				for key_, val_ in pairs(preferredPath) do
+					local prefTechName = GameInfo.Technologies[val_].TechnologyType
+					print('Filtered ' .. tostring(prefTechName) .. ' out of removal list')
+					preferredRequiredTechs[val_] = true
+				end
+			else
+				print('does have preferred prereq researched ' .. sTech)
+			end
+			local pathTechsToFilter = {}
+			for _, iMyTechPrereqs in ipairs(tDummyOrSkips['other']) do
+				-- given preferred A and less pref B
+				-- check if we have A, if so collect techs to B, and filter them out.
+				-- if we dont have A, collect techs to path A first, then collect techs to path B, and only
+				-- take forward techs in B that arent in A, and filter that subtraction out.
+
+				-- if we have tech B, instead filter tech A, and other techs
+				local sTech = GameInfo.Technologies[iMyTechPrereqs].TechnologyType
+				if not localPlayerTechs:HasTech(iMyTechPrereqs) then
+					print('other tech prereq ' .. sTech)
+					local otherHash = GameInfo.Types[sTech].Hash
+					local otherPath = localPlayerTechs:GetResearchPath( otherHash );
+					print('filter techs as we dont have prereq A (preferred)')
+					for key_, val_ in pairs(otherPath) do
+						if not preferredRequiredTechs[val_] then
+							local sTechSkip = GameInfo.Technologies[val_].TechnologyType
+							print('skipping tech in path: ' .. sTechSkip)
+							tAddedSkips[val_] = true
+						end
+					end
+				else
+					print('we have the tech, so proceed with prior skips without filter')
+					for key_, val_ in pairs(preferredRequiredTechs) do
+						local sTechSkip = GameInfo.Technologies[val_].TechnologyType
+						print('skipping tech in path: ' .. sTechSkip)
+						tAddedSkips[val_] = true
+					end
+				end
+			end
+		end
+
+		if bHasORResearched then
+			print('skipping tech in path: ' .. sTechName)
+		else
+			table.insert(newPathToTech, val)
+			print('adding tech: ' .. sTechName)
+		end
+	end
+	return newPathToTech, tAddedSkips
+end
+
+function FilterTechPath(newPathToTech, tAddedSkips)
+	local tRemoveFromPathIndices = {}
+	for key, val in pairs(newPathToTech) do
+		if tAddedSkips[val] then
+			table.insert(tRemoveFromPathIndices, key)
+			print('tech was skipped as was part of dummy path route ' .. GameInfo.Technologies[val].TechnologyType)
+		end
+	end
+	table.sort(tRemoveFromPathIndices, function(a,b) return a > b; end)
+	for _, removeIndex in ipairs(tRemoveFromPathIndices) do table.remove(newPathToTech, removeIndex); end
+	return newPathToTech
+end
+
 -- build all normal precursors
 -- Archery optional: TECH_MINING, TECH_HUNTING
 -- omniscience optional: TECH_PASS_THROUGH_THE_ETHER, TECH_STRENGTH_OF_WILL
@@ -221,21 +336,12 @@ function SetCurrentNode( hash:number )
 		local localPlayerTechs = Players[Game.GetLocalPlayer()]:GetTechs();
 		-- Get the complete path to the tech
 		local pathToTech
-		local tNewTechPathExclusion = tExclusionHash[hash]
 		pathToTech = localPlayerTechs:GetResearchPath( hash );
 		-- if there are any of the techs that have a skip in the path
-		if tNewTechPathExclusion then
-			local newPathToTech = {}
-			for key, val in pairs(pathToTech) do
-				print(key);
-				if tNewTechPathExclusion[val] then
-					print('skipping tech in path: ' ..tostring(val))
-				else
-					table.insert(newPathToTech, val)
-				end
-			end
-			pathToTech = newPathToTech
-		end
+		local newPathToTech, tAddedSkips = AdjustTechPath(pathToTech, localPlayerTechs)
+
+		FilterTechPath(newPathToTech, tAddedSkips)
+		pathToTech = newPathToTech
 		local tParameters = {};
 		tParameters[PlayerOperations.PARAM_TECH_TYPE]	= pathToTech;
 		if m_shiftDown then
@@ -565,7 +671,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 		local horizontal, vertical
 		local sActualTech = tDummyTechs[techType]
 		if sActualTech then
-			print(sActualTech)
+			-- sActualTech)
 			local actualTechInfo:table		= GameInfo.Technologies[sActualTech];
 			local actualItemInfo = g_kItemDefaults[sActualTech]
 			-- print(actualTechInfo.EraType)
@@ -600,7 +706,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 
 		if sActualTech then
-			print('skipping callbacks')
+			-- print('skipping callbacks')
 			node.NodeButton:SetHide(true)
 			node.OtherStates:SetHide(true)
 		else
@@ -627,17 +733,12 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 		local sTechSkip = tDummyPrereqs[item.Type]
 		local node
 		if sTechSkip then
-			print('tech skip node of ' .. item.Type)
-			print('tech to supplant is ' .. sTechSkip)
+			-- print('tech skip node of ' .. item.Type)
+			-- print('tech to supplant is ' .. sTechSkip)
 			item = g_kItemDefaults[sTechSkip]
-			if not item then
-				for slth_tech, uh in pairs(g_kItemDefaults) do
-					print(slth_tech)
-				end
-			end
 		else
 			node = g_uiNodes[item.Type];
-			print('Prereqs of ' .. item.Type)
+			-- print('Prereqs of ' .. item.Type)
 			for _,prereqId in pairs(item.Prereqs) do
 
 				previousRow	   = TREE_START_ROW;
@@ -646,7 +747,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- There had better be a preq if there is a prereq ID (unless debugging the tree).
 					local prereq :table = g_kItemDefaults[prereqId];
 					if (prereq ~= nil) then
-						print('Prereq tech is ' .. prereq.Type)
+						--print('Prereq tech is ' .. prereq.Type)
 						previousRow		= prereq.UITreeRow;
 						-- previousColumn	= g_kEras[prereq.EraType].PriorColumns + prereq.Column;
 					else
@@ -659,11 +760,9 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 				local iEraColumnAdjust = 0
 				if tDummyTechs[item.Type] then
 					iEraColumnAdjust = 0
-					print('adjusted era to be +1 from ' .. item.EraType)
+					-- print('adjusted era to be +1 from ' .. item.EraType)
 				end
 				local startColumn	:number = g_kEras[item.EraType].PriorColumns + item.Column + iEraColumnAdjust;
-				print(startColumn)
-				print(item.EraType)
 				local column		:number	= startColumn;
 				local isEarlyBend	:boolean= false;
 				local isAtPrior		:boolean= false;
@@ -674,12 +773,12 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- If a node is found, make sure it's the previous node this is looking for.
 					if (kNodeGrid[previousRow][column] ~= nil) then
 						if kNodeGrid[previousRow][column] == prereqId then
-							print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+							-- print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 							isAtPrior = true;
 						end
 					elseif column <= TREE_START_COLUMN then
-						print('no prereq found so just doing full')
-						print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+						-- print('no prereq found so just doing full')
+						-- print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 						isAtPrior = true;
 					end
 
@@ -699,6 +798,9 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 				if previousRow == TREE_START_NONE_ID then
 
 					-- Nothing goes before this, not even a fake start area.
+
+				elseif startColumn > column	+3 then
+					print(' more than two columns away, dont show')
 
 				elseif previousRow < item.UITreeRow or previousRow > item.UITreeRow  then
 
@@ -722,7 +824,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					local LineEndX1:number = 0;
 					local LineEndX2:number = 0;
 					local x, y = ColumnRowToPixelXY( column, item.UITreeRow );
-					print('node prereq position is ' .. tostring(x) .. ', ' .. tostring(y))
+					-- print('node prereq position is ' .. tostring(x) .. ', ' .. tostring(y))
 					if isEarlyBend then
 						LineEndX1 = (node.x - LINE_LENGTH_BEFORE_CURVE ) ;
 						LineEndX2, _ = ColumnRowToPixelXY( column, item.UITreeRow);
@@ -843,7 +945,7 @@ function PopulateNode(uiNode, playerTechData)
 				if (prereq ~= nil) and (g_uiConnectorSets[item.Type..","..prereqId]) then
 					local previousRow	:number = prereq.UITreeRow;
 					local previousColumn:number = g_kEras[prereq.EraType].PriorColumns;
-					for key, val in pairs(g_uiConnectorSets) do print(key); print(val); end
+					-- for key, val in pairs(g_uiConnectorSets) do print(key); print(val); end
 					for lineNum,line in pairs(g_uiConnectorSets[item.Type..","..prereqId]) do
 						if(lineNum == 1 or lineNum == 5) then
 							line:SetTexture("Controls_TreePathEW");
@@ -869,7 +971,7 @@ function PopulateNode(uiNode, playerTechData)
 						end
 					end
 				else
-					print("Unresolved prereq "..prereqId);
+					-- print("Unresolved prereq "..prereqId);
 				end
 			end
 		end
@@ -1476,7 +1578,7 @@ function PopulateItemData()
 			local iRowAdjustment = tTechTree[row.TechnologyType] or 0
             kEntry.UITreeRow	= iRowAdjustment + techNode.TreeRow
 			if iRowAdjustment > 0 then
-				print('TechTree Row change of ' .. row.TechnologyType .. ' from ' .. tostring(techNode.TreeRow) .. ' to ' .. tostring(iRowAdjustment + techNode.TreeRow))
+				-- print('TechTree Row change of ' .. row.TechnologyType .. ' from ' .. tostring(techNode.TreeRow) .. ' to ' .. tostring(iRowAdjustment + techNode.TreeRow))
 			end
 
             -- Only add if not debugging or in debug range.
