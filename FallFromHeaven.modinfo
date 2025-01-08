@@ -265,6 +265,7 @@
       <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
       <File>UI/TreatWithTribePopup.lua</File>
       <File>UI/TechTree.xml</File>
+      <File>UI/TechTreeNode.xml</File>
       <File>UI/CivicsTree.xml</File>
       <File>UI/CivicsTree.lua</File>
     </ImportFiles>
@@ -437,6 +438,7 @@
     <File>UI/TechTree_support.lua</File>
     <File>UI/TechTree.xml</File>
     <File>UI/TechTree_overrides.lua</File>
+    <File>UI/TechTreeNode.xml</File>
     <File>UI/ResearchChooser_overrides.lua</File>
     <File>UI/UnitPromotionPopup.lua</File>
     <File>UI/UnitPromotionPopup.xml</File>

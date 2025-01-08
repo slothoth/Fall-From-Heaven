@@ -259,16 +259,16 @@ function AdjustTechPath(pathToTech, localPlayerTechs)
 			local preferredRequiredTechs = {}
 			local sTech = GameInfo.Technologies[iPreferredTechPrereq].TechnologyType
 			if not localPlayerTechs:HasTech(iPreferredTechPrereq) then
-				print(sTechName .. ' doesnt have preferred prereq ' .. sTech .. ' researched, pre-filtering unpreferred paths.')
+				-- print(sTechName .. ' doesnt have preferred prereq ' .. sTech .. ' researched, pre-filtering unpreferred paths.')
 				local prereqHash = GameInfo.Types[sTech].Hash
 				local preferredPath = localPlayerTechs:GetResearchPath( prereqHash );
 				for key_, val_ in pairs(preferredPath) do
 					local prefTechName = GameInfo.Technologies[val_].TechnologyType
-					print('Filtered ' .. tostring(prefTechName) .. ' out of removal list')
+					-- print('Filtered ' .. tostring(prefTechName) .. ' out of removal list')
 					preferredRequiredTechs[val_] = true
 				end
 			else
-				print('does have preferred prereq researched ' .. sTech)
+				-- print('does have preferred prereq researched ' .. sTech)
 			end
 			local pathTechsToFilter = {}
 			for _, iMyTechPrereqs in ipairs(tDummyOrSkips['other']) do
@@ -280,22 +280,22 @@ function AdjustTechPath(pathToTech, localPlayerTechs)
 				-- if we have tech B, instead filter tech A, and other techs
 				local sTech = GameInfo.Technologies[iMyTechPrereqs].TechnologyType
 				if not localPlayerTechs:HasTech(iMyTechPrereqs) then
-					print('other tech prereq ' .. sTech)
+					-- print('other tech prereq ' .. sTech)
 					local otherHash = GameInfo.Types[sTech].Hash
 					local otherPath = localPlayerTechs:GetResearchPath( otherHash );
-					print('filter techs as we dont have prereq A (preferred)')
+					-- print('filter techs as we dont have prereq A (preferred)')
 					for key_, val_ in pairs(otherPath) do
 						if not preferredRequiredTechs[val_] then
 							local sTechSkip = GameInfo.Technologies[val_].TechnologyType
-							print('skipping tech in path: ' .. sTechSkip)
+							-- print('skipping tech in path: ' .. sTechSkip)
 							tAddedSkips[val_] = true
 						end
 					end
 				else
-					print('we have the tech, so proceed with prior skips without filter')
+					-- print('we have the tech, so proceed with prior skips without filter')
 					for key_, val_ in pairs(preferredRequiredTechs) do
 						local sTechSkip = GameInfo.Technologies[val_].TechnologyType
-						print('skipping tech in path: ' .. sTechSkip)
+						-- print('skipping tech in path: ' .. sTechSkip)
 						tAddedSkips[val_] = true
 					end
 				end
@@ -303,10 +303,10 @@ function AdjustTechPath(pathToTech, localPlayerTechs)
 		end
 
 		if bHasORResearched then
-			print('skipping tech in path: ' .. sTechName)
+			-- print('skipping tech in path: ' .. sTechName)
 		else
 			table.insert(newPathToTech, val)
-			print('adding tech: ' .. sTechName)
+			-- print('adding tech: ' .. sTechName)
 		end
 	end
 	return newPathToTech, tAddedSkips
@@ -317,7 +317,7 @@ function FilterTechPath(newPathToTech, tAddedSkips)
 	for key, val in pairs(newPathToTech) do
 		if tAddedSkips[val] then
 			table.insert(tRemoveFromPathIndices, key)
-			print('tech was skipped as was part of dummy path route ' .. GameInfo.Technologies[val].TechnologyType)
+			-- print('tech was skipped as was part of dummy path route ' .. GameInfo.Technologies[val].TechnologyType)
 		end
 	end
 	table.sort(tRemoveFromPathIndices, function(a,b) return a > b; end)
@@ -602,6 +602,7 @@ local tDummyTechs = {		['TECH_ARCHERY_SKIP'] = 'TECH_ARCHERY',
 							['TECH_SANITATION_SKIP'] = 'TECH_SANITATION',
 							['TECH_SORCERY_SKIP'] = 'TECH_SORCERY',
 							['TECH_TRADE_SKIP'] = 'TECH_TRADE'}
+local tExtraPrereqIcons = {}
 function AllocateUI( kNodeGrid:table, kPaths:table )
 	g_uiNodes = {};
 	m_kNodeIM:ResetInstances();
@@ -671,7 +672,6 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 		local horizontal, vertical
 		local sActualTech = tDummyTechs[techType]
 		if sActualTech then
-			-- sActualTech)
 			local actualTechInfo:table		= GameInfo.Technologies[sActualTech];
 			local actualItemInfo = g_kItemDefaults[sActualTech]
 			-- print(actualTechInfo.EraType)
@@ -706,7 +706,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 
 		if sActualTech then
-			-- print('skipping callbacks')
+			print('skipping callbacks for ' .. techType)
 			node.NodeButton:SetHide(true)
 			node.OtherStates:SetHide(true)
 		else
@@ -747,7 +747,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- There had better be a preq if there is a prereq ID (unless debugging the tree).
 					local prereq :table = g_kItemDefaults[prereqId];
 					if (prereq ~= nil) then
-						--print('Prereq tech is ' .. prereq.Type)
+						print('Prereq tech is ' .. prereq.Type)
 						previousRow		= prereq.UITreeRow;
 						-- previousColumn	= g_kEras[prereq.EraType].PriorColumns + prereq.Column;
 					else
@@ -773,12 +773,12 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- If a node is found, make sure it's the previous node this is looking for.
 					if (kNodeGrid[previousRow][column] ~= nil) then
 						if kNodeGrid[previousRow][column] == prereqId then
-							-- print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+							print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 							isAtPrior = true;
 						end
 					elseif column <= TREE_START_COLUMN then
-						-- print('no prereq found so just doing full')
-						-- print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+						print('no prereq found so just doing full')
+						print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 						isAtPrior = true;
 					end
 
@@ -800,7 +800,8 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- Nothing goes before this, not even a fake start area.
 
 				elseif startColumn > column	+3 then
-					print(' more than two columns away, dont show')
+					print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
+					tExtraPrereqIcons[item.Type] = prereqId
 
 				elseif previousRow < item.UITreeRow or previousRow > item.UITreeRow  then
 
@@ -1054,6 +1055,7 @@ function PopulateNode(uiNode, playerTechData)
 		uiNode.IconBacking:SetHide(true);
 		uiNode.BoostMeter:SetColor(UI.GetColorValueFromHexLiteral(0x66ffffff));
 		uiNode.BoostIcon:SetColor(UI.GetColorValueFromHexLiteral(0x66000000));
+		uiNode.ExtraPrereq:SetHide(true)
 	else
 
 		uiNode.NodeButton:SetToolTipString(ToolTipHelper.GetToolTip(item.Type, Game.GetLocalPlayer()));
@@ -1074,6 +1076,15 @@ function PopulateNode(uiNode, playerTechData)
 			local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName, 42);
 			if (textureOffsetX ~= nil) then
 				uiNode.Icon:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+			end
+
+			if true then
+				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName, 30);
+				if (textureOffsetX ~= nil) then
+					print('setting prereqTexture' .. iconName)
+					uiNode.ExtraPrereq:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+				end
+				uiNode.ExtraPrereq:SetHide(textureOffsetX == nil)
 			end
 		end
 	end
@@ -1531,9 +1542,9 @@ local tTechTree = {
 
 
 	['TECH_MATHEMATICS']=1,					-- 4
-	['TECH_DIVINATION']=2,					-- 5
-	['TECH_ALTERATION']=3,					-- 6
-	['TECH_ELEMENTALISM']=4,				-- 7
+	['TECH_DIVINATION']=5,					-- 5
+	['TECH_ALTERATION']=5,					-- 6
+	['TECH_ELEMENTALISM']=5,				-- 7
 	['TECH_NECROMANCY']=5,					-- 8
 
 	['TECH_SANITATION']=0,					-- -3   Renaissance
@@ -1541,10 +1552,10 @@ local tTechTree = {
 	['TECH_SMELTING']=0,					-- -2
 	['TECH_BOWYERS']=0,						-- -1
 	['TECH_STIRRUPS']= 0,					-- 1
-	['TECH_OPTICS']=0,						-- 3
-	['TECH_ENGINEERING']=2,					-- 5
-	['TECH_TRADE']=3,						-- 6
-	['TECH_TRADE_SKIP']=3,					-- 6	SKIP
+	['TECH_OPTICS']=2,						-- 3
+	['TECH_ENGINEERING']=3,					-- 5
+	['TECH_TRADE']=2,						-- 6
+	['TECH_TRADE_SKIP']=2,					-- 6	SKIP
 	['TECH_SORCERY']=4,						-- 7
 	['TECH_SORCERY_SKIP']=4,				-- 7	SKIP
 
