@@ -1524,23 +1524,48 @@ function OnUpdateUI( type:number, tag:string, iData1:number, iData2:number, strD
 end
 
 local tTechTree = {
- 	['TECH_DIVINATION']=1,
-	['TECH_ALTERATION']=3,
-	['TECH_ELEMENTALISM']=5,
-	['TECH_NECROMANCY']=7,
-	['TECH_KNOWLEDGE_OF_THE_ETHER']=5,
-	['TECH_SORCERY']=4,
-	['TECH_SORCERY_SKIP']=4,
-	['TECH_ARCANE_LORE']=4,
-	['TECH_PASS_THROUGH_THE_ETHER']=4,
-	['TECH_STRENGTH_OF_WILL']=4,
-	['TECH_OMNISCIENCE']=4,
-	['TECH_OMNISCIENCE_SKIP']=4,
-	['TECH_HORSEBACK_RIDING']=5,
-	['TECH_STIRRUPS']= 5,
-	['TECH_WARHORSES']=2,
-	['TECH_TRADE']=3,
-	['TECH_TRADE_SKIP']=3,
+	['TECH_FISHING']=1,						-- 3
+	['TECH_WRITING']=2,						-- 5
+	['TECH_KNOWLEDGE_OF_THE_ETHER']=3,		-- 6
+	['TECH_CARTOGRAPHY']=4,					-- 7
+
+
+	['TECH_MATHEMATICS']=1,					-- 4
+	['TECH_DIVINATION']=2,					-- 5
+	['TECH_ALTERATION']=3,					-- 6
+	['TECH_ELEMENTALISM']=4,				-- 7
+	['TECH_NECROMANCY']=5,					-- 8
+
+	['TECH_SANITATION']=0,					-- -3   Renaissance
+	['TECH_SANITATION_SKIP']= 0,			-- -3
+	['TECH_SMELTING']=0,					-- -2
+	['TECH_BOWYERS']=0,						-- -1
+	['TECH_STIRRUPS']= 0,					-- 1
+	['TECH_OPTICS']=0,						-- 3
+	['TECH_ENGINEERING']=2,					-- 5
+	['TECH_TRADE']=3,						-- 6
+	['TECH_TRADE_SKIP']=3,					-- 6	SKIP
+	['TECH_SORCERY']=4,						-- 7
+	['TECH_SORCERY_SKIP']=4,				-- 7	SKIP
+
+	['TECH_MEDICINE']=0,					-- -3	 Industrial
+	['TECH_IRON_WORKING']=0,				-- -2
+	['TECH_MACHINERY']=0,					-- 1
+	['TECH_PRECISION']=0,					-- 0
+	['TECH_ASTRONOMY']=0,					-- 3
+	['TECH_ARCANE_LORE']=4,					-- 7
+
+	['TECH_WARHORSES']=0,					-- -3	  Industrial II
+	['TECH_ANIMAL_MASTERY']=0,				-- -2
+	['TECH_MITHRIL_WORKING']=0,				-- 1
+	['TECH_BLASTING_POWDER']=2,				-- 5
+	['TECH_PASS_THROUGH_THE_ETHER']=4,		-- 6
+	['TECH_STRENGTH_OF_WILL']=4,			-- 7
+
+	['TECH_MITHRIL_WEAPONS']=0,					-- 2	  Industrial III
+	['TECH_FUTURE_TECH']=0,					-- 2
+	['TECH_OMNISCIENCE']=4,					-- 7
+	['TECH_OMNISCIENCE_SKIP']=4			-- 7	SKIP
 	}
 
 function PopulateItemData()
