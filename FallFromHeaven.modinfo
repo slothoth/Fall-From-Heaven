@@ -142,6 +142,7 @@
       <File>Core/AiInfos.sql</File>
       <File>Core/BespokeUpgrades.sql</File>
       <File>Core/WorldSpellSupport.sql</File>
+      <File>Core/Lua_support/Tech_dummies.sql</File>
     </UpdateDatabase>
      <UpdateDatabase id="Gameplay_addon">
       <Properties>
@@ -264,6 +265,7 @@
       <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
       <File>UI/TreatWithTribePopup.lua</File>
       <File>UI/TechTree.xml</File>
+      <File>UI/TechTreeNode.xml</File>
       <File>UI/CivicsTree.xml</File>
       <File>UI/CivicsTree.lua</File>
     </ImportFiles>
@@ -394,6 +396,7 @@
     <File>Core/AiInfos.sql</File>
     <File>Core/BespokeUpgrades.sql</File>
     <File>Core/WorldSpellSupport.sql</File>
+    <File>Core/Lua_support/Tech_dummies.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
@@ -435,6 +438,7 @@
     <File>UI/TechTree_support.lua</File>
     <File>UI/TechTree.xml</File>
     <File>UI/TechTree_overrides.lua</File>
+    <File>UI/TechTreeNode.xml</File>
     <File>UI/ResearchChooser_overrides.lua</File>
     <File>UI/UnitPromotionPopup.lua</File>
     <File>UI/UnitPromotionPopup.xml</File>

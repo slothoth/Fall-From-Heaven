@@ -124,9 +124,9 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
             local gridButton = tButtonInfo['grid']
             local iconButton = tButtonInfo['icon']
             local tUpgradeInfo = tAltUpgrades[idx]
-            print('on index ' .. tostring(idx))
+            -- print('on index ' .. tostring(idx))
             if tUpgradeInfo then
-                print('Unit has upgrade info on index ' .. tostring(idx))
+                -- print('Unit has upgrade info on index ' .. tostring(idx))
                 local iUnitUpgradeIndex = tUpgradeInfo['index']
                 local rscUnitInfo = GameInfo.Units[iUnitUpgradeIndex]
                 local sPrereqTech = rscUnitInfo.PrereqTech
@@ -449,9 +449,9 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
         local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
         local sPropKeyCount = iResourceInfo['name']
         local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or 0
-        print('previous: '  .. sPropKeyCount .. tostring(iPastResource))
-        print('new Gameplay: '  .. sPropKeyCount .. tostring(iResourceCount))
-        print('new UI: '  .. sPropKeyCount .. tostring(iResourceCount))
+        -- print('previous: '  .. sPropKeyCount .. tostring(iPastResource))
+        -- print('new Gameplay: '  .. sPropKeyCount .. tostring(iResourceCount))
+        -- print('new UI: '  .. sPropKeyCount .. tostring(iResourceCount))
         if iResourceCount ~= iPastResource then
             local tParameters = {}
             tParameters.sPropKey = sPropKeyCount;
@@ -466,7 +466,7 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
                 tParameters.sPropKey = sFullPropKey;
                 tParameters.iPropValue = val;
                 UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-                print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
+                -- print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
             end
             if iPastResource == 0 then
                 tParameters.OnStart= 'SlthSetResourcePromotions'

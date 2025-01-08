@@ -226,6 +226,7 @@
         <Grid ID="FilteredOut" Offset="0,0" Size="420,84" Texture="Tree_FilterMask" SliceCorner="35,41" SliceSize="1,1" SliceTextureSize="50,81" NoStateChange="1" ConsumeMouseButton="1" ConsumeMouseOver="1" Color="35,33,31,150" Hidden="1"/>
         <Image ID="Icon" Offset="14,10" Size="42,42" Texture="Civics42"/>
         <Image ID="Bolt" Offset="0,27" Texture="Controls_BoltOn"/>
+        <Image ID="ExtraPrereq" Size="42,42" Offset="280,0" Texture="Civics30"/>
       </GridButton>
     </Container>
   </Instance>
