@@ -588,6 +588,7 @@
 			<LibraryName text="UITexture"/>
 			<PackageDependencies>
 				<Element text="UI/Icons.blp"/>
+				<Element text="Slth_Unit_Atlas_Test.blp"/>
 			</PackageDependencies>
 		</Element>
 		<Element>
