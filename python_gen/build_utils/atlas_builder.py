@@ -1,5 +1,4 @@
-from typing import Dict, Any
-
+from typing import Any
 from PIL import Image
 import os
 from math import ceil, sqrt
@@ -10,7 +9,36 @@ import xml.etree.ElementTree as ET
 from PIL.ImageFile import ImageFile
 
 
-def process_svg(svg_path: str, target_sizes: list = [256]) -> dict[Any, ImageFile]:
+def make_atlas(processed_images: dict, target_sizes: list, output_folder, output_path):
+    for size in target_sizes:
+        size_images = {key: i[size] for key, i in processed_images.items()}
+        atlas_dimension = ceil(sqrt(len(size_images)))
+        atlas_size = atlas_dimension * size
+
+        atlas = Image.new('RGBA', (atlas_size, atlas_size), (255, 255, 255, 0))
+
+        icon_positions = {}
+
+        current_index = 0
+        for svg_file, image in size_images.items():
+            row = current_index // atlas_dimension
+            col = current_index % atlas_dimension
+
+            x = col * size
+            y = row * size
+
+            atlas.paste(image, (x, y), image)
+
+            icon_positions[svg_file] = (col, row)
+            current_index += 1
+
+        atlas.save(
+            f'{output_folder}/{output_path}_{size}.png',
+            format='PNG',
+            optimize=False,
+            compress_level=0)
+
+def process_svg(svg_path: str, target_sizes: list = [256], replace_black=True) -> dict[Any, ImageFile]:
     """
     Process an SVG file with color inversion and border checking.
 
@@ -26,7 +54,8 @@ def process_svg(svg_path: str, target_sizes: list = [256]) -> dict[Any, ImageFil
     # Replace black with white in the SVG content
     with open(svg_path, 'r') as f:
         svg_content = f.read()
-    svg_content = svg_content.replace('/>', ' style="fill:#ffffff"/>')
+    if replace_black:
+        svg_content = svg_content.replace('/>', ' style="fill:#ffffff"/>')
 
     # Convert to PNG with cairosvg
     png_data = cairosvg.svg2png(
@@ -48,7 +77,6 @@ def process_svg(svg_path: str, target_sizes: list = [256]) -> dict[Any, ImageFil
         tree = ET.ElementTree(ET.fromstring(svg_content))
         root = tree.getroot()
 
-        # Get the current viewBox
         viewBox = root.get('viewBox')
         if viewBox:
             minx, miny, width, height = map(float, viewBox.split())
@@ -79,7 +107,6 @@ def process_svg(svg_path: str, target_sizes: list = [256]) -> dict[Any, ImageFil
             'transform': f'translate({pad_x},{pad_y}) scale({scale})'
         })
 
-        # Move all children from original root to new group
         for child in list(root):
             group.append(child)
 
@@ -110,7 +137,6 @@ def check_borders(image: Image.Image, border_size: int = 10) -> bool:
     Returns:
         True if there are non-transparent pixels in the border
     """
-    width, height = image.size
     alpha = np.array(image.split()[3])  # Get alpha channel
 
     # Check top and bottom borders
@@ -124,24 +150,45 @@ def check_borders(image: Image.Image, border_size: int = 10) -> bool:
     return top_border or bottom_border or left_border or right_border
 
 
+def build_sql_def(master_files: list, target_sizes: list, output_path: str, modder: str, iconType: str):
+    sql_icons = "INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES\n"
+    sql_atlas = "INSERT INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, Filename) VALUES\n"
+    for idx, atlas_files in enumerate(master_files):
+        atlas_file_path = f'{output_path}_{idx}'
+        atlas_name = f'ICON_{output_path.upper()}_{str(idx)}'
+        for i, icon_unit in enumerate(atlas_files):
+            icon_unit_fmt = icon_unit.replace('.svg', '').replace('.png', '')
+            sql_icons += f"('{icon_unit_fmt}', '{atlas_name}', {i}),\n".replace('ICON_UNIT', f'ICON_{modder}UNIT').replace('ICON_EQUIPMENT', 'ICON_SLTH_EQUIPMENT')
+
+        atlas_rows = ceil(sqrt(len(atlas_files)))
+        for i, size in enumerate(target_sizes):
+            sql_atlas += f"('{atlas_name}', '{size}', '{atlas_rows}', '1', '{atlas_file_path}_{size}.dds'),\n".replace(
+                '.svg', '')
+    sql_icons = sql_icons[:-2] + ';\n\n'
+    sql_atlas = sql_atlas[:-2] + ';'
+    sql_icons += sql_atlas
+    with open(f'{iconType}_Icons.sql', 'w') as file:
+        file.write(sql_icons)
+
+
 def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = "atlas.png", output_folder: str = "Atlas", target_sizes: list = [256]) -> dict:
     """
     Creates an atlas from SVG files after processing them.
 
     Args:
+        svg_files: list of svgs to process in folder
         svg_folder: Path to the folder containing SVG files
         output_path: Path where the atlas will be saved
-
+        output_folder: folder where atlas saved
+        target_sizes = specifications of each atlas and the size of an element icon
     Returns:
         Dictionary mapping icon filenames to their positions in the atlas
     """
-    # Get all SVG files in the folder
     num_icons = len(svg_files)
 
     if num_icons == 0:
         raise ValueError("No SVG files found in the specified folder")
 
-    # Process all SVGs first
     processed_images = {}
     for svg_file in svg_files:
         svg_path = os.path.join(svg_folder, svg_file)
@@ -151,45 +198,10 @@ def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = 
             print(f"Error processing {svg_file}: {e}")
             continue
 
-    for size in target_sizes:
-        size_images = {key: i[size] for key, i in processed_images.items()}
-        # Calculate atlas dimensions
-        atlas_dimension = ceil(sqrt(len(size_images)))
-        atlas_size = atlas_dimension * size
-
-        # Create the atlas
-        atlas = Image.new('RGBA', (atlas_size, atlas_size), (255, 255, 255, 0))
-
-        # Dictionary to store icon positions
-        icon_positions = {}
-
-        # Place each processed image in the atlas
-        current_index = 0
-        for svg_file, image in size_images.items():
-            row = current_index // atlas_dimension
-            col = current_index % atlas_dimension
-
-            x = col * size
-            y = row * size
-
-            # Paste the processed image
-            atlas.paste(image, (x, y), image)
-
-            # Store the position
-            icon_positions[svg_file] = (col, row)
-            current_index += 1
-
-        # Save with maximum quality
-        atlas.save(
-            f'{output_folder}/{output_path}_{size}.png',
-            format='PNG',
-            optimize=False,
-            compress_level=0
-        )
+        make_atlas(processed_images, target_sizes, output_folder, output_path)
 
 
-
-def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atlas", output_folder: str = 'Atlas', target_sizes: list = [256]) -> dict:
+def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atlas", output_folder: str = 'Atlas', target_sizes: list = [256], modder: str= '', iconType: str = '') -> dict:
     """
     Creates a high-quality atlas from individual icon files with transparency.
     Handles both PNG and SVG files.
@@ -199,14 +211,13 @@ def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atl
         icon_size: Size of each icon (assumes square icons)
         output_path: base Path where the atlas will be saved
         output_folder: Folder where atlases are deposited
+        target_sizes: specifications of each atlas and the size of an element icon
 
     Returns:
         Dictionary mapping icon filenames to their positions in the atlas as (x, y) coordinates
     """
     # Check if we're dealing with SVGs
     MAX_ATLAS_COUNT = 64
-    sql_icons = "INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES\n"
-    sql_atlas = "INSERT INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, Filename) VALUES\n"
     svg_files = [f for f in os.listdir(icon_folder) if f.endswith('.svg')]
     if svg_files:
         if len(svg_files) > MAX_ATLAS_COUNT:
@@ -217,82 +228,31 @@ def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atl
             atlas_file_path = f'{output_path}_{idx}'
             create_atlas_from_svgs(atlas_files, icon_folder, atlas_file_path, output_folder, target_sizes)
 
-        for idx, atlas_files in enumerate(master_files):
-            atlas_file_path = f'{output_path}_{idx}'
-            atlas_name = f'ICON_{output_path.upper()}_{str(idx)}'
-            for i, icon_unit in enumerate(atlas_files):
-                sql_icons += f"('{icon_unit}', '{atlas_name}', {i}),\n".replace('.svg', '').replace('ICON_UNIT',
-                                                                                                    'ICON_SLTH_UNIT').replace('ICON_EQUIPMENT', 'ICON_SLTH_EQUIPMENT')
-
-            atlas_rows = ceil(len(atlas_files) / 8)
-            for i, size in enumerate(target_sizes):
-                sql_atlas += f"('{atlas_name}', '{size}', '{atlas_rows}', '1', '{atlas_file_path}_{size}.dds'),\n".replace('.svg',
-                                                                                                                    '')
-        sql_icons = sql_icons[:-2] + ';\n\n'
-        sql_atlas = sql_atlas[:-2] + ';'
-        sql_icons += sql_atlas
-        with open('UnitIcons.sql', 'w') as file:
-            file.write(sql_icons)
+        build_sql_def(master_files, target_sizes, output_path, modder, iconType)
     else:
-        # Get all PNG files in the folder
         icon_files = [f for f in os.listdir(icon_folder) if f.endswith('.png')]
-        num_icons = len(icon_files)
+        if len(icon_files) > MAX_ATLAS_COUNT:
+            master_files = [icon_files[i:i + MAX_ATLAS_COUNT] for i in range(0, len(icon_files), MAX_ATLAS_COUNT)]
+        else:
+            master_files = [icon_files]
 
-        if num_icons == 0:
-            raise ValueError("No PNG files found in the specified folder")
+        for idx, atlas_files in enumerate(master_files):
+            indexed_output_path = f'{output_path}_{idx}'
+            num_icons = len(atlas_files)
+            if num_icons == 0:
+                raise ValueError("No PNG files found in the specified folder")
+            processed_images = {}
+            for filepath in atlas_files:
+                extended_filepath = f'{icon_folder}/{filepath}'
+                png_dict = {}
+                initial_image = Image.open(extended_filepath).convert('RGBA')
+                for size in target_sizes:
+                    png_dict[size] = initial_image.resize((size, size), Image.Resampling.LANCZOS)
+                processed_images[filepath] = png_dict
 
-        # Calculate atlas dimensions
-        atlas_dimension = ceil(sqrt(num_icons))
-        atlas_size = atlas_dimension * icon_size
+            make_atlas(processed_images, target_sizes, output_folder, indexed_output_path)
 
-        # Create a new image with transparency
-        # RGBA mode: R=255, G=255, B=255, A=0 for transparent white
-        atlas = Image.new('RGBA', (atlas_size, atlas_size), (255, 255, 255, 0))
-
-        # Dictionary to store icon positions
-        icon_positions = {}
-
-        # Place each icon in the atlas
-        for index, icon_file in enumerate(icon_files):
-            # Calculate position in the atlas
-            row = index // atlas_dimension
-            col = index % atlas_dimension
-
-            x = col * icon_size
-            y = row * icon_size
-
-            # Open and paste the icon
-            icon_path = os.path.join(icon_folder, icon_file)
-            try:
-                # Open the image
-                icon = Image.open(icon_path)
-
-                # Convert to RGBA if not already
-                if icon.mode != 'RGBA':
-                    icon = icon.convert('RGBA')
-
-                # Verify icon size using high-quality resampling
-                if icon.size != (icon_size, icon_size):
-                    icon = icon.resize((icon_size, icon_size), Image.Resampling.LANCZOS)
-
-                # Paste the icon into the atlas, using the alpha channel as mask
-                atlas.paste(icon, (x, y), icon)
-
-                # Store the position
-                icon_positions[icon_file] = (col, row)
-
-            except Exception as e:
-                print(f"Error processing {icon_file}: {e}")
-                continue
-
-        # Save with maximum quality settings
-        atlas.save(
-            output_path,
-            format='PNG',
-            optimize=False,  # Avoid lossy optimization
-            compress_level=0  # No compression
-        )
-
+        build_sql_def(master_files, target_sizes, output_path, modder, iconType)
 
 def get_icon_coordinates(position: tuple, icon_size: int = 256) -> tuple:
     """
@@ -315,10 +275,22 @@ def get_icon_coordinates(position: tuple, icon_size: int = 256) -> tuple:
 
 
 if __name__ == "__main__":
-    ATLAS_FILENAME = 'Slth_Units_Atlas'
-    INPUT_FOLDER = 'atlas_wd_svg'
-    OUTPUT_FOLDER = 'Unit_Atlas'
-    TARGET_SIZES = [256, 80, 50, 38, 32, 22]
+    # Set these constants to what you want them to be
+    # Expects an input folder with only .svg or .png files in it, named like ICON_UNIT_WARRIOR
+
+    # ATLAS_FILENAME = 'Slth_Units_Atlas'
+    # INPUT_FOLDER = 'atlas_wd_svg'
+    # OUTPUT_FOLDER = 'Unit_Atlas'
+    # ICON_TYPE = 'UNIT'
+    # TARGET_SIZES = [256, 80, 50, 38, 32, 22]
+
+    ATLAS_FILENAME = 'Slth_Resource_Atlas'
+    INPUT_FOLDER = 'atlas_wd_rsc'
+    OUTPUT_FOLDER = 'Resource_Atlas_Folder'
+    ICON_TYPE = 'RESOURCE'
+    TARGET_SIZES = [256, 64, 50, 38, 32, 22]
+
+    MODDER_TAG = 'SLTH_'
     if not os.path.exists(OUTPUT_FOLDER):
         os.makedirs(OUTPUT_FOLDER)
-    create_atlas(INPUT_FOLDER, 256, ATLAS_FILENAME, OUTPUT_FOLDER, TARGET_SIZES)
+    create_atlas(INPUT_FOLDER, 256, ATLAS_FILENAME, OUTPUT_FOLDER, TARGET_SIZES, MODDER_TAG, ICON_TYPE)
