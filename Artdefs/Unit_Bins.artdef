@@ -1691,10 +1691,10 @@
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"/>
+																<m_EntryName text="Orc_Tusk"/>
 																<m_XLPClass text="Unit"/>
 																<m_XLPPath text="Units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -1733,11 +1733,74 @@
 												<Element>
 													<m_Fields>
 														<m_Values>
-															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"/>
+                                                            <Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornBack"/>
 																<m_XLPClass text="Unit"/>
 																<m_XLPPath text="Units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Assets003"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornFrontSmall"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Assets"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornIllidan"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Assets001"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="RamHorn"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -6594,10 +6657,10 @@
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"/>
+																<m_EntryName text="Orc_Tusk"/>
 																<m_XLPClass text="Unit"/>
 																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -6636,11 +6699,74 @@
 												<Element>
 													<m_Fields>
 														<m_Values>
-															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"/>
+                                                            <Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornBack"/>
 																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Assets003"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornFrontSmall"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Assets"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornIllidan"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Assets001"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="RamHorn"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -9006,7 +9132,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -9621,7 +9747,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -10236,7 +10362,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -11479,7 +11605,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -12623,7 +12749,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -13238,7 +13364,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -13853,7 +13979,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -14468,7 +14594,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -15083,7 +15209,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -15698,7 +15824,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -16313,7 +16439,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -16928,7 +17054,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -17543,7 +17669,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -18158,7 +18284,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -18773,7 +18899,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -19388,7 +19514,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -20003,7 +20129,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -20618,7 +20744,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -21848,7 +21974,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -22889,7 +23015,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -24909,7 +25035,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -26301,7 +26427,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -29761,7 +29887,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -30376,7 +30502,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -30991,7 +31117,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -31606,7 +31732,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -32221,7 +32347,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -32836,7 +32962,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -33451,7 +33577,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -34066,7 +34192,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -34681,7 +34807,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -35296,7 +35422,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -35911,7 +36037,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -36526,7 +36652,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -37141,7 +37267,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -37756,7 +37882,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -38797,7 +38923,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -40202,7 +40328,7 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_SkinColor_Barbarian"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
 													<m_RootCollectionName text="UnitTintTypes"/>
 													<m_ArtDefPath text="Units.artdef"/>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -48388,11 +48514,11 @@
 												<Element>
 													<m_Fields>
 														<m_Values>
-															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_BraidBun"/>
+                                                            <Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornBack"/>
 																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -48403,17 +48529,17 @@
 														</m_Values>
 													</m_Fields>
 													<m_ChildCollections/>
-													<m_Name text="Assets001002"/>
+													<m_Name text="Assets003"/>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_PonyTail"/>
+																<m_EntryName text="DemonHornFrontSmall"/>
 																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -48424,17 +48550,17 @@
 														</m_Values>
 													</m_Fields>
 													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets"/>
+													<m_Name text="Assets"/>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_DoubleBraid"/>
+																<m_EntryName text="DemonHornIllidan"/>
 																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -48445,17 +48571,17 @@
 														</m_Values>
 													</m_Fields>
 													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets001"/>
+													<m_Name text="Assets001"/>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_LongBraid"/>
+																<m_EntryName text="RamHorn"/>
 																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -48466,7 +48592,7 @@
 														</m_Values>
 													</m_Fields>
 													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets002"/>
+													<m_Name text="Assets002"/>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
@@ -49401,11 +49527,11 @@
 												<Element>
 													<m_Fields>
 														<m_Values>
-															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_LongBraid_Hat"/>
+                                                            <Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornBack"/>
 																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -49416,17 +49542,17 @@
 														</m_Values>
 													</m_Fields>
 													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets002"/>
+													<m_Name text="Assets003"/>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_PonyTail_Hat"/>
+																<m_EntryName text="DemonHornFrontSmall"/>
 																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
 																<m_LibraryName text="Unit"/>
 																<m_ParamName text="Asset"/>
 															</Element>
@@ -49437,7 +49563,49 @@
 														</m_Values>
 													</m_Fields>
 													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets004"/>
+													<m_Name text="Assets"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornIllidan"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Assets001"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="RamHorn"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="Units.xlp"/>
+																<m_BLPPackage text="UnitBinAccessories"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Assets002"/>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
