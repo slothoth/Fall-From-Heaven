@@ -140,19 +140,19 @@ INSERT OR REPLACE INTO IconDefinitions(Name, Atlas, 'Index')VALUES
 -- mvoe around. bambur, pitati, others lol
 
 INSERT INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, Filename) VALUES
-('ICON_SLTH_UNITS_ATLAS_0', '256', '8', '1', 'Slth_Units_Atlas_0_256.dds'),
+('ICON_SLTH_UNITS_ATLAS_0', '256','8', '1', 'Slth_Units_Atlas_0_256.dds'),
 ('ICON_SLTH_UNITS_ATLAS_0', '80', '8', '1', 'Slth_Units_Atlas_0_80.dds'),
 ('ICON_SLTH_UNITS_ATLAS_0', '50', '8', '1', 'Slth_Units_Atlas_0_50.dds'),
 ('ICON_SLTH_UNITS_ATLAS_0', '38', '8', '1', 'Slth_Units_Atlas_0_38.dds'),
 ('ICON_SLTH_UNITS_ATLAS_0', '32', '8', '1', 'Slth_Units_Atlas_0_32.dds'),
 ('ICON_SLTH_UNITS_ATLAS_0', '22', '8', '1', 'Slth_Units_Atlas_0_22.dds'),
-('ICON_SLTH_UNITS_ATLAS_1', '256', '8', '1', 'Slth_Units_Atlas_1_256.dds'),
+('ICON_SLTH_UNITS_ATLAS_1', '256','8', '1', 'Slth_Units_Atlas_1_256.dds'),
 ('ICON_SLTH_UNITS_ATLAS_1', '80', '8', '1', 'Slth_Units_Atlas_1_80.dds'),
 ('ICON_SLTH_UNITS_ATLAS_1', '50', '8', '1', 'Slth_Units_Atlas_1_50.dds'),
 ('ICON_SLTH_UNITS_ATLAS_1', '38', '8', '1', 'Slth_Units_Atlas_1_38.dds'),
 ('ICON_SLTH_UNITS_ATLAS_1', '32', '8', '1', 'Slth_Units_Atlas_1_32.dds'),
 ('ICON_SLTH_UNITS_ATLAS_1', '22', '8', '1', 'Slth_Units_Atlas_1_22.dds'),
-('ICON_SLTH_UNITS_ATLAS_2', '256', '8', '1', 'Slth_Units_Atlas_2_256.dds'),
+('ICON_SLTH_UNITS_ATLAS_2', '256','8', '1', 'Slth_Units_Atlas_2_256.dds'),
 ('ICON_SLTH_UNITS_ATLAS_2', '80', '8', '1', 'Slth_Units_Atlas_2_80.dds'),
 ('ICON_SLTH_UNITS_ATLAS_2', '50', '8', '1', 'Slth_Units_Atlas_2_50.dds'),
 ('ICON_SLTH_UNITS_ATLAS_2', '38', '8', '1', 'Slth_Units_Atlas_2_38.dds'),
@@ -290,7 +290,6 @@ INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES
 ('ICON_SLTH_UNIT_MARY', 'ICON_SLTH_UNITS_ATLAS_1', 63),
 ('ICON_SLTH_UNIT_MESHABBER', 'ICON_SLTH_UNITS_ATLAS_2', 0),
 ('ICON_SLTH_UNIT_METEOR', 'ICON_SLTH_UNITS_ATLAS_2', 1),
-('ICON_SLTH_UNIT_MINOTAUR', 'ICON_SLTH_UNITS_ATLAS_2', 2),
 ('ICON_SLTH_UNIT_MISTFORM', 'ICON_SLTH_UNITS_ATLAS_2', 3),
 ('ICON_SLTH_UNIT_MOROI', 'ICON_SLTH_UNITS_ATLAS_2', 4),
 ('ICON_SLTH_UNIT_MUD_GOLEM', 'ICON_SLTH_UNITS_ATLAS_2', 5),
@@ -343,3 +342,5 @@ INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES
 ('ICON_SLTH_UNIT_WOLF', 'ICON_SLTH_UNITS_ATLAS_2', 52),
 ('ICON_SLTH_UNIT_WOLFRIDER', 'ICON_SLTH_UNITS_ATLAS_2', 53),
 ('ICON_SLTH_UNIT_WRAITH', 'ICON_SLTH_UNITS_ATLAS_2', 54);
+
+-- ('ICON_SLTH_UNIT_MINOTAUR', 'ICON_SLTH_UNITS_ATLAS_2', 2),
