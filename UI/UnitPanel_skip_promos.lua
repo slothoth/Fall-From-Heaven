@@ -419,6 +419,7 @@ end
 --	Refresh unit actions
 --	Returns a table of unit actions.
 -- ===========================================================================
+local tDovielloUpgradeParams = {}
 function GetUnitActionsTable( pUnit )
 
 	-- Build action table; holds sub-tables of commands & operations based on UI categories set in DB.
@@ -509,25 +510,31 @@ function GetUnitActionsTable( pUnit )
 			else
 				-- The UI check of an operation is a loose check where it only fails if the unit could never do the command.
 				local bCanStart = UnitManager.CanStartCommand( pUnit, actionHash, true);
+				local upgradeCost
+				local upgradeUnitInfo
 				if (bCanStart) then
 					-- Check again if the operation can occur, this time for real.
 					local bCanStartNow, tResults = UnitManager.CanStartCommand( pUnit, actionHash, false, true);
 					local bDisabled = not bCanStartNow;
 					local toolTipString;
-
+					local bIsDoviello;
+					local bDovielloUpgrade
 					if (actionHash == UnitCommandTypes.UPGRADE) then
 						-- if it's a unit upgrade action, add the unit it will upgrade to in the tooltip as well as the upgrade cost
 						if (tResults ~= nil) then
 							if (tResults[UnitCommandResults.UNIT_TYPE] ~= nil) then
-								local upgradeUnitName = GameInfo.Units[tResults[UnitCommandResults.UNIT_TYPE]].Name;
+								upgradeUnitInfo = GameInfo.Units[tResults[UnitCommandResults.UNIT_TYPE]]
+								local upgradeUnitName = upgradeUnitInfo.Name;
 								toolTipString = Locale.Lookup(upgradeUnitName);
-								local upgradeCost = pUnit:GetUpgradeCost();
+								upgradeCost = pUnit:GetUpgradeCost();
 								if (upgradeCost ~= nil) then
 									toolTipString = Locale.Lookup("LOC_UNITOPERATION_UPGRADE_INFO", upgradeUnitName, upgradeCost);
 								end
 								toolTipString = toolTipString .. AddUpgradeResourceCost(pUnit);
+								print(toolTipString)
 							end
 						end
+						bIsDoviello = PlayerConfigurations[pUnit:GetOwner()]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_DOVIELLO'
 					elseif (actionHash == UnitCommandTypes.FORM_CORPS) then
 						if (GameInfo.Units[unitType].Domain == "DOMAIN_SEA") then
 							toolTipString = Locale.Lookup("LOC_UNITCOMMAND_FORM_FLEET_DESCRIPTION");
@@ -566,16 +573,29 @@ function GetUnitActionsTable( pUnit )
 							if (tResults[UnitOperationResults.FAILURE_REASONS] ~= nil) then
 								-- Add the reason(s) to the tool tip
 								for i,v in ipairs(tResults[UnitOperationResults.FAILURE_REASONS]) do
-									toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup(v) .. "[ENDCOLOR]";
+									if (v == 'Must be in friendly territory.') and (bIsDoviello) then
+										if table.count(tResults[UnitOperationResults.FAILURE_REASONS]) == 1 then
+											bDisabled = false
+											print('enabling doviello upgrade')
+											bDovielloUpgrade = true
+											tDovielloUpgradeParams[pUnit:GetID()] = {cost=upgradeCost, upgradeUnitIndex=upgradeUnitInfo.Index}
+										end
+									else
+										toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup(v) .. "[ENDCOLOR]";
+									end
 								end
 							end
 						end
+					end
+					local eUnitCommandType = UnitCommandTypes.TYPE
+					if bDovielloUpgrade then
+						eUnitCommandType = 80085
 					end
 					isDisabled = bDisabled or isDisabled;	-- Mix in tutorial disabledness
 					local overrideIcon = nil;
 
 					isDisabled, tooltipString, overrideIcon = LateCheckActionBeforeAdd( kActionsTable, actionHash, isDisabled, tooltipString, overrideIcon );
-					AddActionToTable( actionsTable, commandRow, isDisabled, toolTipString, actionHash, OnUnitActionClicked, UnitCommandTypes.TYPE, actionHash, overrideIcon  );
+					AddActionToTable( actionsTable, commandRow, isDisabled, toolTipString, actionHash, OnUnitActionClicked, eUnitCommandType, actionHash, overrideIcon  );
 				end
 			end
 		end
@@ -2736,6 +2756,18 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 						end
 
 					end
+				elseif actionType == 80085 then			-- its the doviello ovveride
+					local tParameters = {}
+					tParameters.OnStart = 'SlthOnConvertUnitType'
+					local iUnit = pSelectedUnit:GetID()
+					local iOwner = pSelectedUnit:GetOwner()
+					tParameters.iUnitID = iUnit
+					tParameters.iUpgradeUnitIndex = tDovielloUpgradeParams[iUnit]['upgradeUnitIndex']
+					tParameters.iCost = tDovielloUpgradeParams[iUnit]['cost']
+					print('doviello custom upgrade')
+					UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
+					UI.DeselectUnit(pSelectedUnit);
+    				UnitManager.RequestCommand( pSelectedUnit, UnitCommandTypes.DELETE )
 				end
 			end
 		end
