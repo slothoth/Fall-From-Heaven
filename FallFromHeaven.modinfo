@@ -46,9 +46,10 @@
       <File>Core/Civilization_Colors.sql</File>
     </UpdateColors>
     <UpdateIcons id="Icons">
-      <!--File>Icons.xml</File-->
-      <File>LeaderIcons.sql</File>
-      <File>UnitIcons.sql</File>
+      <File>Icons/LeaderIcons.sql</File>
+      <File>Icons/UnitIcons.sql</File>
+      <File>Icons/ResourceIcons.sql</File>
+      <File>Icons.xml</File>
     </UpdateIcons>
    </FrontEndActions>
   <InGameActions>
@@ -314,9 +315,11 @@
       <File>MapUtilities.lua</File>
     </ImportFiles-->
   <UpdateIcons id="Icons">
-    <!--File>Icons.xml</File-->
-    <File>LeaderIcons.sql</File>
-    <File>UnitIcons.sql</File>
+    <File>Icons/LeaderIcons.sql</File>
+    <File>Icons/UnitIcons.sql</File>
+    <File>Icons/ResourceIcons.sql</File>
+    <File>Icons/TechIcons.sql</File>
+    <File>Icons/MiscIcons.sql</File>
   </UpdateIcons>
   </InGameActions>
   <Files>
@@ -426,9 +429,12 @@
     <File>Artdefs/Unit_Bins.artdef</File>
     <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
+    <File>Icons/LeaderIcons.sql</File>
+    <File>Icons/UnitIcons.sql</File>
+    <File>Icons/ResourceIcons.sql</File>
+    <File>Icons/TechIcons.sql</File>
+    <File>Icons/MiscIcons.sql</File>
     <File>Icons.xml</File>
-    <File>LeaderIcons.sql</File>
-    <File>UnitIcons.sql</File>
     <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
