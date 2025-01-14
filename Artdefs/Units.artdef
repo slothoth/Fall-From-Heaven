@@ -12813,11 +12813,12 @@
 				<m_Name text="SLTH_UNIT_SCIENTIST"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
+
 			<Element>
 				<m_Fields>
 					<m_Values>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="ScoutCat"/>
+							<m_ElementName text="Scout"/>
 							<m_RootCollectionName text="UnitFormationTypes"/>
 							<m_ArtDefPath text="Units.artdef"/>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -12828,7 +12829,7 @@
 							<m_ElementName text=""/>
 							<m_RootCollectionName text="UnitCombat"/>
 							<m_ArtDefPath text="Units.artdef"/>
-							<m_CollectionIsLocked>true</m_CollectionIsLocked>
+							<m_CollectionIsLocked>false</m_CollectionIsLocked>
 							<m_TemplateName text=""/>
 							<m_ParamName text="UnitCombat"/>
 						</Element>
@@ -12841,7 +12842,7 @@
 							<m_ParamName text="EscortFormation"/>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="UNIT_ANCIENTEMBARK"/>
+							<m_ElementName text="UNIT_ANCIENTEMBARK_SINGLE"/>
 							<m_RootCollectionName text="Units"/>
 							<m_ArtDefPath text="Units.artdef"/>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -12919,7 +12920,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..FloatValue">
-										<m_fValue>1.100000</m_fValue>
+										<m_fValue>1.000000</m_fValue>
 										<m_ParamName text="Scale"/>
 									</Element>
 									<Element class="AssetObjects..IntValue">
@@ -12927,7 +12928,7 @@
 										<m_ParamName text="Count"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="ScoutCat"/>
+										<m_ElementName text="ScoutDog"/>
 										<m_RootCollectionName text="UnitMemberTypes"/>
 										<m_ArtDefPath text="Units.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -12940,56 +12941,6 @@
 							<m_Name text="Members2"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..FloatValue">
-										<m_fValue>1.300000</m_fValue>
-										<m_ParamName text="Scale"/>
-									</Element>
-									<Element class="AssetObjects..IntValue">
-										<m_nValue>1</m_nValue>
-										<m_ParamName text="Count"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="ScoutCat"/>
-										<m_RootCollectionName text="UnitMemberTypes"/>
-										<m_ArtDefPath text="Units.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Units"/>
-										<m_ParamName text="Type"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="ScoutCat_Units_Members"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..FloatValue">
-										<m_fValue>1.000000</m_fValue>
-										<m_ParamName text="Scale"/>
-									</Element>
-									<Element class="AssetObjects..IntValue">
-										<m_nValue>1</m_nValue>
-										<m_ParamName text="Count"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="ScoutCat"/>
-										<m_RootCollectionName text="UnitMemberTypes"/>
-										<m_ArtDefPath text="Units.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Units"/>
-										<m_ParamName text="Type"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="ScoutCat_Units_Members001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="Audio"/>
@@ -12998,13 +12949,26 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="ScoutCat"/>
+										<m_Value text=""/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="ScoutCat"/>
+							<m_Name text=""/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..StringValue">
+										<m_Value text="Scout"/>
+										<m_ParamName text="XrefName"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="SCOUT"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -13013,7 +12977,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SCOUT"/>
+				<m_Name text="UNIT_SCOUT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -77957,8 +77921,8 @@
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
 										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_g>119.000000</m_g>
+										<m_b>0.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
@@ -77986,9 +77950,9 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>255.000000</m_r>
+										<m_g>119.000000</m_g>
+										<m_b>0.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
@@ -78014,45 +77978,75 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>227.000000</m_r>
+										<m_g>246.000000</m_g>
+										<m_b>214.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="EXP1_Units_Colors"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>221.000000</m_r>
+										<m_g>233.000000</m_g>
+										<m_b>198.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="EXP1_Units_Colors001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>238.000000</m_r>
+										<m_g>232.000000</m_g>
+										<m_b>172.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="EXP1_Units_Colors002"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>99.000000</m_r>
+										<m_g>52.000000</m_g>
+										<m_b>4.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="EXP1_Units_Colors003"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>67.000000</m_r>
+										<m_g>40.000000</m_g>
+										<m_b>2.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="EXP1_Units_Colors004"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78072,45 +78066,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
+										<m_r>247.000000</m_r>
+										<m_g>216.000000</m_g>
 										<m_b>1.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="yellow_med"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>148.000000</m_r>
+										<m_g>74.000000</m_g>
+										<m_b>1.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="orange_dark001"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>148.000000</m_r>
+										<m_g>74.000000</m_g>
+										<m_b>1.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="orange_dark002"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78130,45 +78124,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
+										<m_r>247.000000</m_r>
+										<m_g>216.000000</m_g>
 										<m_b>1.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="yellow_med"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>76.000000</m_r>
+										<m_g>188.000000</m_g>
+										<m_b>0.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="Green_med001"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>76.000000</m_r>
+										<m_g>188.000000</m_g>
+										<m_b>0.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="Green_med002"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78188,45 +78182,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>7.000000</m_r>
+										<m_g>110.000000</m_g>
+										<m_b>39.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="Green_Dark"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>239.000000</m_r>
+										<m_g>236.000000</m_g>
+										<m_b>230.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="white_light"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>7.000000</m_r>
+										<m_g>110.000000</m_g>
+										<m_b>39.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="Green_Dark001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78246,36 +78240,6 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
 										<m_r>204.000000</m_r>
 										<m_g>0.000000</m_g>
 										<m_b>1.000000</m_b>
@@ -78284,7 +78248,37 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="EXP2_Units_Colors"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>239.000000</m_r>
+										<m_g>238.000000</m_g>
+										<m_b>233.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="EXP2_Units_Colors002"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>239.000000</m_r>
+										<m_g>238.000000</m_g>
+										<m_b>233.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="EXP2_Units_Colors002001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78304,45 +78298,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>116.000000</m_r>
+										<m_g>163.000000</m_g>
+										<m_b>243.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="blue_light"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>249.000000</m_r>
+										<m_g>249.000000</m_g>
+										<m_b>249.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="white_light001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>116.000000</m_r>
+										<m_g>163.000000</m_g>
+										<m_b>243.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="blue_light002"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78362,45 +78356,30 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>163.000000</m_r>
+										<m_g>165.000000</m_g>
+										<m_b>255.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="DLC4_Units_Colors"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>122.000000</m_r>
+										<m_g>23.000000</m_g>
+										<m_b>23.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="DLC4_Units_Colors001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78478,45 +78457,60 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>116.000000</m_r>
+										<m_g>225.000000</m_g>
+										<m_b>243.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="Blue_light"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>8.000000</m_r>
+										<m_g>67.000000</m_g>
+										<m_b>163.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="blue_dark001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>8.000000</m_r>
+										<m_g>67.000000</m_g>
+										<m_b>163.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="blue_dark002"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>95.000000</m_r>
+										<m_g>190.000000</m_g>
+										<m_b>227.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="EXP1_Units_Colors"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78536,45 +78530,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>9.000000</m_r>
+										<m_g>60.000000</m_g>
+										<m_b>142.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="GranColombia_Maya_Units_Colors"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>197.000000</m_r>
+										<m_g>208.000000</m_g>
+										<m_b>212.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="GranColombia_Maya_Units_Colors001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>197.000000</m_r>
+										<m_g>208.000000</m_g>
+										<m_b>212.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="GranColombia_Maya_Units_Colors001001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78594,45 +78588,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>134.000000</m_r>
+										<m_g>114.000000</m_g>
+										<m_b>2.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="yellow_dark"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>76.000000</m_r>
+										<m_g>188.000000</m_g>
+										<m_b>0.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="green_med"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>160.000000</m_r>
-										<m_g>46.000000</m_g>
-										<m_b>22.000000</m_b>
+										<m_r>134.000000</m_r>
+										<m_g>114.000000</m_g>
+										<m_b>2.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="yellow_dark001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78652,45 +78646,60 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>22.000000</m_r>
-										<m_g>22.000000</m_g>
-										<m_b>22.000000</m_b>
+										<m_r>204.000000</m_r>
+										<m_g>108.000000</m_g>
+										<m_b>108.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="DLC2_Units_Colors"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>22.000000</m_r>
-										<m_g>22.000000</m_g>
-										<m_b>22.000000</m_b>
+										<m_r>218.000000</m_r>
+										<m_g>144.000000</m_g>
+										<m_b>144.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="DLC2_Units_Colors001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>51.000000</m_r>
-										<m_g>7.000000</m_g>
-										<m_b>4.000000</m_b>
+										<m_r>108.000000</m_r>
+										<m_g>0.000000</m_g>
+										<m_b>0.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="DLC2_Units_Colors002"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>117.000000</m_r>
+										<m_g>23.000000</m_g>
+										<m_b>23.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="DLC2_Units_Colors003"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78710,30 +78719,30 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>7.000000</m_r>
+										<m_g>110.000000</m_g>
+										<m_b>39.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="Green_dark"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>7.000000</m_r>
+										<m_g>110.000000</m_g>
+										<m_b>39.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="Green_dark001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -78748,7 +78757,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="Red_med"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78769,14 +78778,29 @@
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
 										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_g>119.000000</m_g>
+										<m_b>0.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="EXP1_Units_Colors"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>0.000000</m_r>
+										<m_g>79.000000</m_g>
+										<m_b>206.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="EXP1_Units_Colors001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -78784,29 +78808,14 @@
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
 										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_g>119.000000</m_g>
+										<m_b>0.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="EXP1_Units_Colors002"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78826,45 +78835,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>68.000000</m_r>
+										<m_g>7.000000</m_g>
+										<m_b>119.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="GranColombia_Maya_Units_Colors001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>250.000000</m_r>
+										<m_g>236.000000</m_g>
+										<m_b>127.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="GranColombia_Maya_Units_Colors002"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>118.000000</m_r>
+										<m_g>7.000000</m_g>
+										<m_b>215.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="GranColombia_Maya_Units_Colors001001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78884,45 +78893,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>34.000000</m_r>
+										<m_g>54.000000</m_g>
+										<m_b>122.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="EXP1_Units_Colors"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>45.000000</m_r>
+										<m_g>121.000000</m_g>
+										<m_b>41.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="EXP1_Units_Colors001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>34.000000</m_r>
+										<m_g>54.000000</m_g>
+										<m_b>122.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="EXP1_Units_Colors002"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -78942,45 +78951,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
+										<m_r>247.000000</m_r>
+										<m_g>216.000000</m_g>
 										<m_b>1.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="yellow_med"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>47.000000</m_r>
+										<m_g>47.000000</m_g>
+										<m_b>47.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="white_dark001001"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>47.000000</m_r>
+										<m_g>47.000000</m_g>
+										<m_b>47.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="white_dark001001001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -79000,45 +79009,45 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>227.000000</m_r>
+										<m_g>222.000000</m_g>
+										<m_b>213.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="white_light"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>47.000000</m_r>
+										<m_g>47.000000</m_g>
+										<m_b>47.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
+							<m_Name text="white_dark001001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
+										<m_r>47.000000</m_r>
+										<m_g>47.000000</m_g>
+										<m_b>47.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="white_dark001001001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -79058,15 +79067,75 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>134.000000</m_r>
+										<m_g>114.000000</m_g>
+										<m_b>2.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="DLC6_Units_Colors"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>229.000000</m_r>
+										<m_g>123.000000</m_g>
+										<m_b>23.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="DLC6_Units_Colors001"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>88.000000</m_r>
+										<m_g>21.000000</m_g>
+										<m_b>119.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="DLC6_Units_Colors002"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>122.000000</m_r>
+										<m_g>50.000000</m_g>
+										<m_b>166.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="DLC6_Units_Colors003"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..RGBValue">
+										<m_r>120.000000</m_r>
+										<m_g>27.000000</m_g>
+										<m_b>126.000000</m_b>
+										<m_ParamName text="Color"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="DLC6_Units_Colors004"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -79074,29 +79143,14 @@
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
 										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_g>135.000000</m_g>
+										<m_b>21.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="DLC6_Units_Colors001001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -79117,44 +79171,29 @@
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
 										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_g>233.000000</m_g>
+										<m_b>0.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors"/>
+							<m_Name text="DLC4_Units_Colors"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..RGBValue">
-										<m_r>255.000000</m_r>
-										<m_g>219.000000</m_g>
-										<m_b>49.000000</m_b>
+										<m_r>171.000000</m_r>
+										<m_g>171.000000</m_g>
+										<m_b>171.000000</m_b>
 										<m_ParamName text="Color"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Colors001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..RGBValue">
-										<m_r>204.000000</m_r>
-										<m_g>0.000000</m_g>
-										<m_b>1.000000</m_b>
-										<m_ParamName text="Color"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="Colors002"/>
+							<m_Name text="DLC4_Units_Colors001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
