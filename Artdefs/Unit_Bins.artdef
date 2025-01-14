@@ -1674,86 +1674,149 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_HairColor_Light"/>
-													<m_RootCollectionName text="UnitTintTypes"/>
-													<m_ArtDefPath text="Units.artdef"/>
+													<m_ElementName text="BaseMale_HairColor_Light"></m_ElementName>
+													<m_RootCollectionName text="UnitTintTypes"></m_RootCollectionName>
+													<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
-													<m_TemplateName text="Units"/>
-													<m_ParamName text="Tint"/>
+													<m_TemplateName text="Units"></m_TemplateName>
+													<m_ParamName text="Tint"></m_ParamName>
 												</Element>
 											</m_Values>
 										</m_Fields>
 										<m_ChildCollections>
 											<Element>
-												<m_CollectionName text="Assets"/>
+												<m_CollectionName text="Assets"></m_CollectionName>
 												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="Units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="Orc_Tusk"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Assets001002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets001002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
 										</m_ChildCollections>
-										<m_Name text="Orcish"/>
+										<m_Name text="Orcish"></m_Name>
 										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 									</Element>
 									<Element>
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_HairColor_Light"/>
-													<m_RootCollectionName text="UnitTintTypes"/>
-													<m_ArtDefPath text="Units.artdef"/>
+													<m_ElementName text="BaseMale_HairColor_Light"></m_ElementName>
+													<m_RootCollectionName text="UnitTintTypes"></m_RootCollectionName>
+													<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
-													<m_TemplateName text="Units"/>
-													<m_ParamName text="Tint"/>
+													<m_TemplateName text="Units"></m_TemplateName>
+													<m_ParamName text="Tint"></m_ParamName>
 												</Element>
 											</m_Values>
 										</m_Fields>
 										<m_ChildCollections>
 											<Element>
-												<m_CollectionName text="Assets"/>
+												<m_CollectionName text="Assets"></m_CollectionName>
 												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 												<Element>
 													<m_Fields>
 														<m_Values>
-															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="Units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+                                                            <Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornBack"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Assets001002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets003"></m_Name>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornFrontSmall"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"></m_ParamName>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets"></m_Name>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornIllidan"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"></m_ParamName>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets001"></m_Name>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="RamHorn"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"></m_ParamName>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
 										</m_ChildCollections>
-										<m_Name text="Demonic"/>
+										<m_Name text="Demonic"></m_Name>
 										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 									</Element>
 								</Element>
@@ -6577,86 +6640,149 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_HairColor_Light"/>
-													<m_RootCollectionName text="UnitTintTypes"/>
-													<m_ArtDefPath text="Units.artdef"/>
+													<m_ElementName text="BaseMale_HairColor_Light"></m_ElementName>
+													<m_RootCollectionName text="UnitTintTypes"></m_RootCollectionName>
+													<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
-													<m_TemplateName text="Units"/>
-													<m_ParamName text="Tint"/>
+													<m_TemplateName text="Units"></m_TemplateName>
+													<m_ParamName text="Tint"></m_ParamName>
 												</Element>
 											</m_Values>
 										</m_Fields>
 										<m_ChildCollections>
 											<Element>
-												<m_CollectionName text="Assets"/>
+												<m_CollectionName text="Assets"></m_CollectionName>
 												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="Orc_Tusk"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Assets001002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets001002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
 										</m_ChildCollections>
-										<m_Name text="Orcish"/>
+										<m_Name text="Orcish"></m_Name>
 										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 									</Element>
 									<Element>
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="BaseMale_HairColor_Light"/>
-													<m_RootCollectionName text="UnitTintTypes"/>
-													<m_ArtDefPath text="Units.artdef"/>
+													<m_ElementName text="BaseMale_HairColor_Light"></m_ElementName>
+													<m_RootCollectionName text="UnitTintTypes"></m_RootCollectionName>
+													<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
-													<m_TemplateName text="Units"/>
-													<m_ParamName text="Tint"/>
+													<m_TemplateName text="Units"></m_TemplateName>
+													<m_ParamName text="Tint"></m_ParamName>
 												</Element>
 											</m_Values>
 										</m_Fields>
 										<m_ChildCollections>
 											<Element>
-												<m_CollectionName text="Assets"/>
+												<m_CollectionName text="Assets"></m_CollectionName>
 												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 												<Element>
 													<m_Fields>
 														<m_Values>
-															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="EmptyUnitAttachment"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+                                                            <Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornBack"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Assets001002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets003"></m_Name>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornFrontSmall"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"></m_ParamName>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets"></m_Name>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornIllidan"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"></m_ParamName>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets001"></m_Name>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="RamHorn"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"></m_ParamName>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
 										</m_ChildCollections>
-										<m_Name text="Demonic"/>
+										<m_Name text="Demonic"></m_Name>
 										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 									</Element>
 								</Element>
@@ -48266,212 +48392,212 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
-													<m_RootCollectionName text="UnitTintTypes"/>
-													<m_ArtDefPath text="Units.artdef"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"></m_ElementName>
+													<m_RootCollectionName text="UnitTintTypes"></m_RootCollectionName>
+													<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
-													<m_TemplateName text="Units"/>
-													<m_ParamName text="Tint"/>
+													<m_TemplateName text="Units"></m_TemplateName>
+													<m_ParamName text="Tint"></m_ParamName>
 												</Element>
 											</m_Values>
 										</m_Fields>
 										<m_ChildCollections>
 											<Element>
-												<m_CollectionName text="Assets"/>
+												<m_CollectionName text="Assets"></m_CollectionName>
 												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_BraidBun"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="BaseFemale_Hair_BraidBun"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="units.xlp"></m_XLPPath>
+																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Assets001002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets001002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_PonyTail"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="BaseFemale_Hair_PonyTail"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="units.xlp"></m_XLPPath>
+																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Civ6_Unit_Bins_Assets"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_DoubleBraid"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="BaseFemale_Hair_DoubleBraid"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="units.xlp"></m_XLPPath>
+																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets001"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Civ6_Unit_Bins_Assets001"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_LongBraid"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="BaseFemale_Hair_LongBraid"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="units.xlp"></m_XLPPath>
+																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Civ6_Unit_Bins_Assets002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
 										</m_ChildCollections>
-										<m_Name text="Orcish"/>
+										<m_Name text="Orcish"></m_Name>
 										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 									</Element>
 									<Element>
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="SlthBaseMale_SkinColor_Demon"/>
-													<m_RootCollectionName text="UnitTintTypes"/>
-													<m_ArtDefPath text="Units.artdef"/>
+													<m_ElementName text="BaseMale_HairColor_Light"></m_ElementName>
+													<m_RootCollectionName text="UnitTintTypes"></m_RootCollectionName>
+													<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
-													<m_TemplateName text="Units"/>
-													<m_ParamName text="Tint"/>
+													<m_TemplateName text="Units"></m_TemplateName>
+													<m_ParamName text="Tint"></m_ParamName>
 												</Element>
 											</m_Values>
 										</m_Fields>
 										<m_ChildCollections>
 											<Element>
-												<m_CollectionName text="Assets"/>
+												<m_CollectionName text="Assets"></m_CollectionName>
 												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 												<Element>
 													<m_Fields>
 														<m_Values>
-															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_BraidBun"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+                                                            <Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornBack"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Assets001002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets003"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_PonyTail"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="DemonHornFrontSmall"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_DoubleBraid"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="DemonHornIllidan"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets001"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets001"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_LongBraid"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="RamHorn"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
 										</m_ChildCollections>
-										<m_Name text="Demonic"/>
+										<m_Name text="Demonic"></m_Name>
 										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 									</Element>
 								</Element>
@@ -49321,128 +49447,170 @@
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="SlthBaseMale_SkinColor_Orc"/>
-													<m_RootCollectionName text="UnitTintTypes"/>
-													<m_ArtDefPath text="Units.artdef"/>
+													<m_ElementName text="SlthBaseMale_SkinColor_Orc"></m_ElementName>
+													<m_RootCollectionName text="UnitTintTypes"></m_RootCollectionName>
+													<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
-													<m_TemplateName text="Units"/>
-													<m_ParamName text="Tint"/>
+													<m_TemplateName text="Units"></m_TemplateName>
+													<m_ParamName text="Tint"></m_ParamName>
 												</Element>
 											</m_Values>
 										</m_Fields>
 										<m_ChildCollections>
 											<Element>
-												<m_CollectionName text="Assets"/>
+												<m_CollectionName text="Assets"></m_CollectionName>
 												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_LongBraid_Hat"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="BaseFemale_Hair_LongBraid_Hat"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="units.xlp"></m_XLPPath>
+																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Civ6_Unit_Bins_Assets002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_PonyTail_Hat"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="BaseFemale_Hair_PonyTail_Hat"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="units.xlp"></m_XLPPath>
+																<m_BLPPackage text="units/units"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets004"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Civ6_Unit_Bins_Assets004"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
 										</m_ChildCollections>
-										<m_Name text="Orcish"/>
+										<m_Name text="Orcish"></m_Name>
 										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 									</Element>
 									<Element>
 										<m_Fields>
 											<m_Values>
 												<Element class="AssetObjects..ArtDefReferenceValue">
-													<m_ElementName text="SlthBaseMale_SkinColor_Demon"/>
-													<m_RootCollectionName text="UnitTintTypes"/>
-													<m_ArtDefPath text="Units.artdef"/>
+													<m_ElementName text="BaseMale_HairColor_Light"></m_ElementName>
+													<m_RootCollectionName text="UnitTintTypes"></m_RootCollectionName>
+													<m_ArtDefPath text="Units.artdef"></m_ArtDefPath>
 													<m_CollectionIsLocked>true</m_CollectionIsLocked>
-													<m_TemplateName text="Units"/>
-													<m_ParamName text="Tint"/>
+													<m_TemplateName text="Units"></m_TemplateName>
+													<m_ParamName text="Tint"></m_ParamName>
 												</Element>
 											</m_Values>
 										</m_Fields>
 										<m_ChildCollections>
 											<Element>
-												<m_CollectionName text="Assets"/>
+												<m_CollectionName text="Assets"></m_CollectionName>
 												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 												<Element>
 													<m_Fields>
 														<m_Values>
-															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_LongBraid_Hat"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+                                                            <Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornBack"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets002"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets003"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 												<Element>
 													<m_Fields>
 														<m_Values>
 															<Element class="AssetObjects..BLPEntryValue">
-																<m_EntryName text="BaseFemale_Hair_PonyTail_Hat"/>
-																<m_XLPClass text="Unit"/>
-																<m_XLPPath text="units.xlp"/>
-																<m_BLPPackage text="units/units"/>
-																<m_LibraryName text="Unit"/>
-																<m_ParamName text="Asset"/>
+																<m_EntryName text="DemonHornFrontSmall"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
 															</Element>
 															<Element class="AssetObjects..FloatValue">
 																<m_fValue>1.000000</m_fValue>
-																<m_ParamName text="Scale"/>
+																<m_ParamName text="Scale"></m_ParamName>
 															</Element>
 														</m_Values>
 													</m_Fields>
-													<m_ChildCollections/>
-													<m_Name text="Civ6_Unit_Bins_Assets004"/>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets"></m_Name>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="DemonHornIllidan"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"></m_ParamName>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets001"></m_Name>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="RamHorn"></m_EntryName>
+																<m_XLPClass text="Unit"></m_XLPClass>
+																<m_XLPPath text="Units.xlp"></m_XLPPath>
+																<m_BLPPackage text="UnitBinAccessories"></m_BLPPackage>
+																<m_LibraryName text="Unit"></m_LibraryName>
+																<m_ParamName text="Asset"></m_ParamName>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"></m_ParamName>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections></m_ChildCollections>
+													<m_Name text="Assets002"></m_Name>
 													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 												</Element>
 											</Element>
 										</m_ChildCollections>
-										<m_Name text="Demonic"/>
+										<m_Name text="Demonic"></m_Name>
 										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 									</Element>
 								</Element>
