@@ -17,7 +17,6 @@ INSERT INTO UnitUpgrades(Unit, UpgradeUnit) VALUES
 ('SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH',    'SLTH_UNIT_PRIEST_OF_KILMORPH'),
 ('SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL',       'SLTH_UNIT_PRIEST_OF_THE_VEIL'),
 ('SLTH_UNIT_DISCIPLE_THE_ORDER',            'SLTH_UNIT_PRIEST_OF_THE_ORDER'),
-('SLTH_UNIT_DISEASED_CORPSE',               'SLTH_UNIT_EIDOLON'),
 ('SLTH_UNIT_DROWN',                         'SLTH_UNIT_STYGIAN_GUARD'),
 ('SLTH_UNIT_DWARVEN_SOLDIER_RUNES',         'SLTH_UNIT_PARAMANDER'),
 ('SLTH_UNIT_ELEPHANT',                      'SLTH_UNIT_WAR_ELEPHANT'),
@@ -27,7 +26,6 @@ INSERT INTO UnitUpgrades(Unit, UpgradeUnit) VALUES
 ('SLTH_UNIT_GALLEY',                        'SLTH_UNIT_CARAVEL'),
 ('SLTH_UNIT_TRIREME',                       'SLTH_UNIT_PRIVATEER'),
 ('SLTH_UNIT_GAELAN',                        'SLTH_UNIT_ARCHMAGE'),
-('SLTH_UNIT_GRIGORI_MEDIC',                 'SLTH_UNIT_DRUID'),
 ('SLTH_UNIT_HORSE_ARCHER',                  'SLTH_UNIT_KNIGHT'),
 ('SLTH_UNIT_HORSEMAN',                      'SLTH_UNIT_HORSE_ARCHER'),
 ('SLTH_UNIT_WOLF_RIDER',                    'SLTH_UNIT_CHARIOT'),
@@ -39,7 +37,6 @@ INSERT INTO UnitUpgrades(Unit, UpgradeUnit) VALUES
 ('SLTH_UNIT_MOBIUS_WITCH',                  'SLTH_UNIT_ARCHMAGE'),
 ('SLTH_UNIT_MONK',                          'SLTH_UNIT_IMMORTAL'),
 ('SLTH_UNIT_NIGHTWATCH',                    'SLTH_UNIT_ASSASSIN'),
-('SLTH_UNIT_PARAMANDER',                    'SLTH_UNIT_PALADIN'),
 ('SLTH_UNIT_PRIEST_OF_KILMORPH',            'SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'),
 ('SLTH_UNIT_PRIEST_OF_LEAVES',              'SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'),
 ('SLTH_UNIT_PRIEST_OF_THE_EMPYREAN',        'SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'),
@@ -54,7 +51,6 @@ INSERT INTO UnitUpgrades(Unit, UpgradeUnit) VALUES
 ('SLTH_UNIT_GOBLIN',                        'SLTH_UNIT_HORSEMAN'),
 ('SLTH_UNIT_SCOUT',                         'SLTH_UNIT_HUNTER'),
 ('SLTH_UNIT_SLAVE',                         'SLTH_UNIT_LUNATIC'),
-('SLTH_UNIT_STYGIAN_GUARD',                 'SLTH_UNIT_EIDOLON'),
 ('UNIT_WARRIOR',                            'SLTH_UNIT_SWORDSMAN'),
 ('SLTH_UNIT_CHAMPION',                      'SLTH_UNIT_PHALANX'),
 ('SLTH_UNIT_TREBUCHET',                     'SLTH_UNIT_CANNON'),
@@ -104,9 +100,11 @@ INSERT INTO UnitUpgradesAlt(Unit, UpgradeUnit) VALUES
 ('SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH',    'SLTH_UNIT_PARAMANDER'),
 ('SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL',       'SLTH_UNIT_MAGE'),                      -- wizard, illusionist
 ('SLTH_UNIT_DISCIPLE_THE_ORDER',            'SLTH_UNIT_CRUSADER'),
+('SLTH_UNIT_DISEASED_CORPSE',               'SLTH_UNIT_EIDOLON'),
 ('SLTH_UNIT_FREAK',                         'SLTH_UNIT_HUNTER'),
 ('SLTH_UNIT_FRIGATE',                       'SLTH_UNIT_QUEEN_OF_THE_LINE'),
 ('SLTH_UNIT_GALLEY',                        'SLTH_UNIT_PRIVATEER'),
+('SLTH_UNIT_GRIGORI_MEDIC',                 'SLTH_UNIT_DRUID'),
 ('SLTH_UNIT_HORSEMAN',                      'SLTH_UNIT_CHARIOT'),
 ('SLTH_UNIT_HUNTER',                        'SLTH_UNIT_ASSASSIN'),                      -- SLTH_UNIT_CHANTER, SLTH_UNIT_TASKMASTER
 ('SLTH_UNIT_LIGHTBRINGER',                  'SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'),
@@ -114,6 +112,7 @@ INSERT INTO UnitUpgradesAlt(Unit, UpgradeUnit) VALUES
 ('SLTH_UNIT_MANES',                         'SLTH_UNIT_SCOUT'),
 ('SLTH_UNIT_MONK',                          'SLTH_UNIT_PALADIN'),
 ('SLTH_UNIT_NIGHTWATCH',                    'SLTH_UNIT_SHADOWRIDER'),
+('SLTH_UNIT_PARAMANDER',                    'SLTH_UNIT_PALADIN'),
 ('SLTH_UNIT_PRIEST_OF_KILMORPH',            'SLTH_UNIT_PALADIN'),
 ('SLTH_UNIT_PRIEST_OF_LEAVES',              'SLTH_UNIT_PALADIN'),
 ('SLTH_UNIT_PRIEST_OF_THE_EMPYREAN',        'SLTH_UNIT_PALADIN'),
@@ -123,6 +122,7 @@ INSERT INTO UnitUpgradesAlt(Unit, UpgradeUnit) VALUES
 ('SLTH_UNIT_RADIANT_GUARD',                 'SLTH_UNIT_RATHA'),
 ('SLTH_UNIT_RANGER',                        'SLTH_UNIT_DRUID'),                     -- dwarven druid, SLTH_UNIT_LUONNOTAR
 ('SLTH_UNIT_SCOUT',                         'SLTH_UNIT_HORSEMAN'),                  -- boar rider
+('SLTH_UNIT_STYGIAN_GUARD',                 'SLTH_UNIT_EIDOLON'),
 ('SLTH_UNIT_TRIREME',                       'SLTH_UNIT_FRIGATE'),
 ('UNIT_WARRIOR',                            'SLTH_UNIT_ARCHER'),                    -- wb slinger/javelin
 ('SLTH_UNIT_JAVELIN_THROWER',               'SLTH_UNIT_CROSSBOWMAN'),

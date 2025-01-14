@@ -99,7 +99,6 @@ local tPolicyUnits = {
 
 
 function myRefresh(iPlayerID, iUnitID, iOldID)
-    local iBuilding
     local pUnit = UnitManager.GetUnit(iPlayerID, iUnitID)
     local pPlayer = Players[iPlayerID]
     if pUnit:GetMovesRemaining() == 0 then
@@ -117,7 +116,7 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
         bUpgradableTerritory = true                 -- also hides upgrade options, instead grey them out?
     end
     if tAltUpgrades then
-        print('Unit does have alt upgrades')
+        -- print('Unit does have alt upgrades')
         local rscOriginalUnitInfo = GameInfo.Units[iUnitIndex]
         local iCurrentGold = pPlayer:GetTreasury():GetGoldBalance()
         for idx, tButtonInfo in pairs(tControlsAdded) do
@@ -132,13 +131,13 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
                 local sPrereqTech = rscUnitInfo.PrereqTech
                 local sPrereqCivic = rscUnitInfo.PrereqCivic
                 if sPrereqTech then
-                    print('checking has tech ' .. tostring(sPrereqTech))
+                    -- print('checking has tech ' .. tostring(sPrereqTech))
                     local iPrereqTech = GameInfo.Technologies[sPrereqTech].Index
                     bCanUpgrade = pPlayer:GetTechs():HasTech(iPrereqTech)
                 end
 
                 if sPrereqCivic then
-                    print('checking has civic ' .. tostring(sPrereqCivic))
+                    -- print('checking has civic ' .. tostring(sPrereqCivic))
                     local iPrereqCivic = GameInfo.Civics[sPrereqCivic].Index
                     bCanUpgrade = pPlayer:GetCulture():HasCivic(iPrereqCivic)
                 end
@@ -171,7 +170,7 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
                 -- end
 
                 if bCanUpgrade then
-                    print('Unit can upgrade, showing button')
+                    -- print('Unit can upgrade, showing button')
                     gridButton:SetHide(false)
                     local name = Locale.Lookup('LOC_' .. tUpgradeInfo['name'] .. '_NAME')
                     local iUpgradeUnitCost = rscUnitInfo.Cost
@@ -192,7 +191,7 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
                         gridButton:SetToolTipString(sUpgradeInfo)
                         tButtonInfo['button']:RegisterCallback(Mouse.eLClick, tButtonInfo['callback'])
                     end
-                    print('setting up upgrade value on table index ' .. tostring(idx) .. ' to unit index ' .. tostring(iUnitUpgradeIndex))
+                    -- print('setting up upgrade value on table index ' .. tostring(idx) .. ' to unit index ' .. tostring(iUnitUpgradeIndex))
                     tUpgradeUnitValues[idx] = iUnitUpgradeIndex
                     tUpgradeUnitCosts[idx] = iUpgradeCost
                     local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas('ICON_' .. tUpgradeInfo['name'],38);
@@ -295,8 +294,8 @@ function OnBespokeUpgradeTwo()
     tParameters.iUpgradeUnitIndex = tUpgradeUnitValues[1]
     tParameters.iCost = tUpgradeUnitCosts[1]
     print('requesting upgrade to unit ' .. GameInfo.Units[tUpgradeUnitValues[1]].UnitType)
-    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	UI.DeselectUnit(pUnit);
+    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
     UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE )
 	return;
 end
