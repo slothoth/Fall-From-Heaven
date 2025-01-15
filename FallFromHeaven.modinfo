@@ -309,12 +309,12 @@
             <LuaReplace>UI/CivicsTree.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
-    <!--ImportFiles id="ImportMapGenOverrideFiles">
+    <ImportFiles id="ImportGameplaySupport">
       <Properties>
         <LoadOrder>901</LoadOrder>
       </Properties>
-      <File>MapUtilities.lua</File>
-    </ImportFiles-->
+          <File>Core/SpawnSupport.sql</File>
+    </ImportFiles>
   <UpdateIcons id="Icons">
     <File>Icons/LeaderIcons.sql</File>
     <File>Icons/UnitIcons.sql</File>
@@ -402,6 +402,7 @@
     <File>Core/AiInfos.sql</File>
     <File>Core/BespokeUpgrades.sql</File>
     <File>Core/WorldSpellSupport.sql</File>
+    <File>Core/SpawnSupport.sql</File>
     <File>Core/Lua_support/Tech_dummies.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
