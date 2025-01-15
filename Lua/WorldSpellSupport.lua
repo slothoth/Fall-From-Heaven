@@ -1,4 +1,12 @@
 local sWorldSpellPropKey = 'WorldSpellReady'
+local iNotifType = NotificationTypes.USER_DEFINED_2;
+function NotifyAllHumans(notificationData, iX, iY)
+    for iPlayer, pPlayer in ipairs(Players) do
+        if pPlayer:IsHuman() then
+            NotificationManager.SendNotification(iPlayer, iNotifType, notificationData, nil, iX, iY)
+        end
+    end
+end
 
 function Sanctuary(iPlayer, tParameters)
 	-- force out of borders ugh. Maybe there is an easy way to do this, since borders close push out exists.
@@ -16,6 +24,10 @@ function Legends(iPlayer, tParameters)
         iCultureToAdd = iCultureToAdd + 300
     end
     pPlayer:GetCulture():ChangeCurrentCulturalProgress(iCultureToAdd)
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_LEGENDS_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_LEGENDS_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -24,6 +36,10 @@ function IntoTheMist(iPlayer, tParameters)
     -- quite easy, just give ability like Camoflage
     local pPlayer = Players[iPlayer]
     pPlayer:AttachModifierByID('MODIFIER_INTO_THE_MIST')
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_INTO_THE_MIST_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_INTO_THE_MIST_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -51,21 +67,27 @@ function RagingSeas(iPlayer, tParameters)
             end
         end
     end
-    local tTable = Map.Plots()
-    for i, iPlotIndex in ipairs(tTable) do
-        local pPlot = Map.GetPlotByIndex(iPlotIndex)
-        if (pPlot ~= nil) then
-            local iImprovementOwner = pPlot:GetOwner()
-            if iImprovementOwner ~= iPlayer then
-                if (pPlot:IsWater() or (pPlot:IsCoastalLand())) then
-                    local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
-                    if pPlot:GetImprovementType() ~= -1 then                -- does this hold
-                        ImprovementBuilder.SetImprovementType(pPlot, -1, iImprovementOwner)     -- todo do chance
+    for iX = 0, iW - 1 do
+        for iY = 0, iH - 1 do
+            local i = iY * iW + iX;
+            local pPlot = Map.GetPlotByIndex(i);
+            if (pPlot ~= nil) then
+                local iImprovementOwner = pPlot:GetOwner()
+                if iImprovementOwner ~= iPlayer then
+                    if (pPlot:IsWater() or (pPlot:IsCoastalLand())) then
+                        local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
+                        if pPlot:GetImprovementType() ~= -1 then                -- does this hold
+                            ImprovementBuilder.SetImprovementType(pPlot, -1, iImprovementOwner)     -- todo do chance
+                        end
                     end
                 end
             end
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_RAGING_SEAS_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_RAGING_SEAS_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -94,6 +116,10 @@ function WarCry(iPlayer, tParameters)
         table.insert(tSpecificBuffState, tUnitInfos)
     end
     Game:SetProperty(sPropbuff_propkey, tSpecificBuffState)
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_WARCRY_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_WARCRY_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -108,6 +134,10 @@ function GiftsOfNantosuelta(iPlayer, tParameters)
         local iY = pPlot:GetY()
         playerUnits:Create(iGOLDEN_HAMMER, iX, iY);
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_GIFTS_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_GIFTS_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -139,6 +169,10 @@ function WorldBreak(iPlayer, tParameters)
             end
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_WORLDBREAK_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_WORLDBREAK_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -176,8 +210,10 @@ function Stasis(iPlayer, tParameters)
     end
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
-    local sDescription = 'Illians have cast Stasis. No Production, Science or Culture for ' .. tostring(iDelay) .. ' turns.'
-    NotificationManager.SendNotification(iPlayer, NotificationTypes.USER_DEFINED_2, 'Stasis Cast', sDescription, iX, iY)
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_STASIS_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_STASIS_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
 end
 
 local tDivineRetribution = {DEMON=true, UNDEAD=true}
@@ -201,6 +237,10 @@ function DivineRetribution(iPlayer, tParameters)
             end
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_DIVINE_RETRIBUTION_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_DIVINE_RETRIBUTION_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -234,6 +274,10 @@ function HyboremsWhisper(iPlayer, tParameters)
     end
     -- transfer city
     CityManager.TransferCity(pVeilBiggestCity, iPlayer, CityTransferTypes.BY_CULTURAL_IDENTITY)
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_HYBOREMS_WHISPER_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_HYBOREMS_WHISPER_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -261,6 +305,10 @@ function RiverOfBlood(iPlayer, tParameters)
             end
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end

@@ -1,4 +1,6 @@
 include('WorldSpellSupport')
+include('SpawnSupport')
+
 local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN = 1, SLTH_UNIT_ARCHMAGE = 2, SLTH_UNIT_EATER_OF_DREAMS = 2,
                       SLTH_UNIT_CORLINDALE = 2, SLTH_UNIT_DISCIPLE_OF_ACHERON = 1, SLTH_UNIT_GAELAN = 1.5, SLTH_UNIT_GIBBON = 2,
                       SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
@@ -170,6 +172,48 @@ function InheritUnitAttributes(iPlayer, iUnit)
     return iUnitHealth, iX, iY, tPromosToGrant, tAbilitiesToGrant
 end
 
+-- nicked from Leugi Wildlife++
+function ViableWildernessPlots(bOnlyTundraOrSnow)
+    local tNewTable = {}
+    local iCount = 1
+    local bViablePlot
+    local iW, iH = Map.GetGridSize();
+    for x = 0, iW - 1 do
+        for y = 0, iH - 1 do
+            local i = y * iW + x;
+            local pPlot = Map.GetPlotByIndex(i);
+            if (pPlot ~= nil) then
+                if (pPlot:IsAdjacentOwned() == false) and (pPlot:IsOwned() == false) and (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
+                    if bOnlyTundraOrSnow then
+                        local iTerrainIndex = pPlot:GetTerrainType()
+                        bViablePlot = tColdTerrain[iTerrainIndex]
+                    else
+                        bViablePlot = true
+                    end
+                    local bPlotHasUnit = false
+                    local unitList = Units.GetUnitsInPlotLayerID(x, y, MapLayers.ANY)
+                    if unitList ~= nil then
+                        for _, pUnit in ipairs(unitList) do
+                            local tUnitDetails = GameInfo.Units[pUnit:GetType()]
+                            if tUnitDetails ~= nil then
+                                if not pUnit:IsDead() and not pUnit:IsDelayedDeath() then
+                                    bPlotHasUnit = true
+                                    break
+                                end
+                            end
+                        end
+                    end
+                    if (bPlotHasUnit == false) then
+                        tNewTable[iCount] = pPlot
+                        iCount = iCount + 1
+                    end
+                end
+            end
+        end
+    end
+    return tNewTable
+end
+
 
 function GetFullUpgradePath(iPlayer, iUnitIndex)
     local bHasTech
@@ -292,13 +336,27 @@ local function SpawnAcheron()
     end
 end
 
-local function SpawnOrthus()
+function NotifyAllHumans(notificationData, iX, iY)
+    for iPlayer, pPlayer in ipairs(Players) do
+        if pPlayer:IsHuman() then
+            NotificationManager.SendNotification(iPlayer, iNotifType, notificationData, nil, iX, iY)
+        end
+    end
+end
+
+function SpawnOrthus()
     local tEligiblePlots = ViableWildernessPlots()
-    local iNumEligiblePlots = table.Count(tEligiblePlots)
+    local iNumEligiblePlots = table.count(tEligiblePlots)
     if iNumEligiblePlots > 0 then
         local iRandomEligiblePlotsPosition = Game.GetRandNum((iNumEligiblePlots + 1) - 1, 'RNG_barb_placement') + 1
         local spawnPlot = tEligiblePlots[iRandomEligiblePlotsPosition]
-        UnitManager.InitUnitValidAdjacentHex(63, GameInfo.Units['SLTH_UNIT_ORTHUS'].Index, spawnPlot:GetX(), spawnPlot:GetY());
+        local iSpawnX = spawnPlot:GetX()
+        local iSpawnY = spawnPlot:GetY()
+        local notificationData = {};
+        notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_ORTHUS_SPAWN_NOTIFICATION_TITLE');
+        notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_ORTHUS_SPAWN_NOTIFICATION_DESCRIPTION');
+        NotifyAllHumans( notificationData, iSpawnX, iSpawnY)
+        UnitManager.InitUnitValidAdjacentHex(63, GameInfo.Units['SLTH_UNIT_ORTHUS'].Index, iSpawnX, iSpawnY);
     end
 end
 
@@ -418,10 +476,11 @@ function onTurnStartGameplay(playerId)
     -- SECTION: BarbarianSpawnEvents
     if playerId == 63 then              -- barbarian proxy
         local iCurrentTurn = Game.GetCurrentGameTurn()
+        local iGameSpeedMult = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier / 100
         if iCurrentTurn == 100 then
             SpawnAcheron()
-        else
-            SpawnOrthus()
+        elseif iCurrentTurn == math.floor(75 * iGameSpeedMult) then
+            SpawnOrthus()            -- Spawns automatically depending on game speed: Quick- 50, Normal- 75, Epic- 113, Marathon- 225
         end
     end
 
@@ -1765,6 +1824,10 @@ local function Rally(iPlayer, tParameters)
             end
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_RALLY_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_RALLY_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 local iESUS_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_ESUS'].Index
@@ -1843,6 +1906,10 @@ local function ReligiousFervor(iPlayer, tParameters)
             pUnitExp:ChangeExperience(iStateReligionCities * 2)
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_RELIGIOUS_FERVOR_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_RELIGIOUS_FERVOR_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -1882,6 +1949,10 @@ local function MarchOfTheTrees(iPlayer, tParameters)
             pUnit:SetProperty('LifespanRemaining', 5)                  -- TODO NOT WORKING
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -1918,6 +1989,10 @@ local function MotherLode(iPlayer, tParameters)
     if iMineCount > 0 then
         pPlayer:GetTreasury():ChangeGoldBalance(iMineCount * 25)
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_MOTHER_LODE_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_MOTHER_LODE_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -1964,6 +2039,10 @@ local function ArcaneLacuna(iPlayer, tParameters)
             end
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -1990,6 +2069,10 @@ function WildHunt(iPlayer, tParameters)
             end
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_WILD_HUNT_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_WILD_HUNT_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -2000,6 +2083,10 @@ function Revelry(iPlayer, tParameters)            -- TODO
     local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
     local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
     GoldenAgeGrant(pPlayer,iGoldenAgeLength)
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_REVELRY_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_REVELRY_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -2031,6 +2118,10 @@ local function ForTheHorde(iPlayer, tParameters)                -- TODO
             iIterCount = iIterCount + 1
         end
     end
+    local notificationData = {}
+    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_FOR_THE_HORDE_NOTIFICATION_TITLE');
+    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_FOR_THE_HORDE_NOTIFICATION_DESCRIPTION');
+    NotifyAllHumans(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
