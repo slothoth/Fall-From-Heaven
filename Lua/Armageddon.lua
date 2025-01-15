@@ -2,6 +2,8 @@
 -- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
  --[ ]  Attach some Projects when armageddon hits 70. To do not unlock, need it to be pPlot:SetProperty() on capital
 
+include('SpawnSupport')
+
 tArmageddonEvents = {[10]=fWarning,[30]=Blight, [40]=ArmaSummonSteph, [50]=ArmaSummonBuboes, [60]=ArmaSummonYersinia,
                      [70]=ArmaSummonArs,  [90]=ArmaSpawnWrath, [100]=ArmaKillHalf}
 -- helper
@@ -224,14 +226,16 @@ local tPlotConversionDeepeningMap = {
 local iPlotProportionChanged = 20
 function Deepening(playerID, cityID, projectID, buildingIndex, x, y)
     local iTerrainType
-    local tMapPlots = Map.Plots()
-    local iCount = 1
-    for _, iPlotIndex in ipairs(tMapPlots) do
-        local pPlot = Map.GetPlotByIndex(iPlotIndex)
-        if (pPlot ~= nil) then
-            iTerrainType = pPlot:GetTerrainType()
-            if tPlotsByTerrainType[iTerrainType] then
-                table.insert(tPlotsByTerrainType[iTerrainType], iPlotIndex)
+    local iW, iH = Map.GetGridSize();
+    for iX = 0, iW - 1 do
+        for iY = 0, iH - 1 do
+            local i = iY * iW + iX;
+            local pPlot = Map.GetPlotByIndex(i);
+            if (pPlot ~= nil) then
+                iTerrainType = pPlot:GetTerrainType()
+                if tPlotsByTerrainType[iTerrainType] then
+                    table.insert(tPlotsByTerrainType[iTerrainType], i)
+                end
             end
         end
     end
@@ -501,13 +505,15 @@ function RitesOghma(playerID, cityID, projectID, buildingIndex, x, y)
     local iMapSize = Map.GetMapSize()                       -- returns an index, need to check they are correct
     local iResourceCount = tMapSizeManaCount[iMapSize]
     local iW, iH = Map.GetGridSize();
-    local tAllPlots = Map.Plots()
     local tValidResourcePlots = {}
-    for _, iPlotIndex in ipairs(tAllPlots) do
-        pPlot = Map.GetPlotByIndex(iPlotIndex)
-        if (pPlot ~= nil) then
-            if (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
-                tValidResourcePlots[iPlotIndex] = true
+    for iX = 0, iW - 1 do
+        for iY = 0, iH - 1 do
+            local i = iY * iW + iX;
+            pPlot = Map.GetPlotByIndex(i);
+            if (pPlot ~= nil) then
+                if (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
+                    tValidResourcePlots[iPlotIndex] = true
+                end
             end
         end
     end
@@ -647,45 +653,49 @@ local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true
                         [GameInfo.Terrains['TERRAIN_SNOW'].Index]         = true,
                         [GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index]   = true
 }
+
 -- nicked from Leugi Wildlife++
 function ViableWildernessPlots(bOnlyTundraOrSnow)
-    local tTable = Map.Plots()
     local tNewTable = {}
     local iCount = 1
     local bViablePlot
-    for _, iPlotIndex in ipairs(tTable) do
-        local pPlot = Map.GetPlotByIndex(iPlotIndex)
-        if (pPlot ~= nil) then
-            local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
-            if (pPlot:IsAdjacentOwned() == false) and (pPlot:IsOwned() == false) and (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
-                if bOnlyTundraOrSnow then
-                    local iTerrainIndex = pPlot:GetTerrainType()
-                    bViablePlot = tColdTerrain[iTerrainIndex]
-                else
-                    bViablePlot = true
-                end
-                local bPlotHasUnit = false
-                local unitList = Units.GetUnitsInPlotLayerID(iPlotX, iPlotY, MapLayers.ANY)
-                if unitList ~= nil then
-                    for _, pUnit in ipairs(unitList) do
-                        local tUnitDetails = GameInfo.Units[pUnit:GetType()]
-                        if tUnitDetails ~= nil then
-                            if not pUnit:IsDead() and not pUnit:IsDelayedDeath() then
-                                bPlotHasUnit = true
-                                break
+    local iW, iH = Map.GetGridSize();
+    for x = 0, iW - 1 do
+        for y = 0, iH - 1 do
+            local i = y * iW + x;
+            local pPlot = Map.GetPlotByIndex(i);
+            if (pPlot ~= nil) then
+                if (pPlot:IsAdjacentOwned() == false) and (pPlot:IsOwned() == false) and (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
+                    if bOnlyTundraOrSnow then
+                        local iTerrainIndex = pPlot:GetTerrainType()
+                        bViablePlot = tColdTerrain[iTerrainIndex]
+                    else
+                        bViablePlot = true
+                    end
+                    local bPlotHasUnit = false
+                    local unitList = Units.GetUnitsInPlotLayerID(x, y, MapLayers.ANY)
+                    if unitList ~= nil then
+                        for _, pUnit in ipairs(unitList) do
+                            local tUnitDetails = GameInfo.Units[pUnit:GetType()]
+                            if tUnitDetails ~= nil then
+                                if not pUnit:IsDead() and not pUnit:IsDelayedDeath() then
+                                    bPlotHasUnit = true
+                                    break
+                                end
                             end
                         end
                     end
-                end
-                if (bPlotHasUnit == false) then
-                    tNewTable[iCount] = pPlot
-                    iCount = iCount + 1
+                    if (bPlotHasUnit == false) then
+                        tNewTable[iCount] = pPlot
+                        iCount = iCount + 1
+                    end
                 end
             end
         end
     end
     return tNewTable
 end
+
 -- nicked from Leugi Wildlife++
 function SpawnUnitInWilderness(iUnitToSpawn, eligiblePlots)
     local iNumEligiblePlots = table.Count(eligiblePlots)
