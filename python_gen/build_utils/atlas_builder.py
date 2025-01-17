@@ -6,7 +6,12 @@ import cairosvg
 import io
 import numpy as np
 import xml.etree.ElementTree as ET
-from PIL.ImageFile import ImageFile
+from PIL.ImageFile import ImageFile#
+
+size_chart = {'CIV': [256, 200, 128, 80, 64, 50, 48, 44, 36, 30, 22],
+              'UNITFLAG': [256, 80, 50, 38, 32, 22],
+              'RESOURCE': [256, 64, 50, 38, 32, 22],
+              'LEADER': [256, 80, 64, 55, 50, 48, 45, 32]}
 
 
 def make_atlas(processed_images: dict, target_sizes: list, output_folder, output_path):
@@ -55,7 +60,7 @@ def process_svg(svg_path: str, target_sizes: list = [256], replace_black=True) -
     with open(svg_path, 'r') as f:
         svg_content = f.read()
     if replace_black:
-        svg_content = svg_content.replace('/>', ' style="fill:#ffffff"/>')
+        svg_content = replace_path_endings(svg_content, ' style="fill:#ffffff"/>')
 
     # Convert to PNG with cairosvg
     png_data = cairosvg.svg2png(
@@ -150,6 +155,33 @@ def check_borders(image: Image.Image, border_size: int = 10) -> bool:
     return top_border or bottom_border or left_border or right_border
 
 
+def replace_path_endings(text: str, replacement: str):
+    result = ""
+    i = 0
+    while i < len(text):
+        path_index = text.find("path", i)
+
+        if path_index == -1:
+            result += text[i:]
+            break
+
+        result += text[i:path_index]
+        end_index = text.find("/>", path_index)
+
+        if end_index == -1:
+            result += text[path_index:]
+            break
+        if 'style' in text[path_index:end_index]:
+            style_index = text.find("fill:", path_index)
+            result += text[path_index:style_index]+'fill:#ffffff' + text[style_index+12:end_index] + "/>"
+        else:
+            result += text[path_index:end_index] + replacement
+
+        i = end_index + 2
+
+    return result
+
+
 def build_sql_def(master_files: list, target_sizes: list, output_path: str, modder: str, iconType: str):
     sql_icons = "INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES\n"
     sql_atlas = "INSERT INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, Filename) VALUES\n"
@@ -171,7 +203,7 @@ def build_sql_def(master_files: list, target_sizes: list, output_path: str, modd
         file.write(sql_icons)
 
 
-def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = "atlas.png", output_folder: str = "Atlas", target_sizes: list = [256]) -> dict:
+def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = "atlas.png", output_folder: str = "Atlas", target_sizes: list = [256], convert_black: bool = True) -> dict:
     """
     Creates an atlas from SVG files after processing them.
 
@@ -193,7 +225,7 @@ def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = 
     for svg_file in svg_files:
         svg_path = os.path.join(svg_folder, svg_file)
         try:
-            processed_images[svg_file] = process_svg(svg_path, target_sizes)
+            processed_images[svg_file] = process_svg(svg_path, target_sizes, convert_black)
         except Exception as e:
             print(f"Error processing {svg_file}: {e}")
             continue
@@ -201,7 +233,8 @@ def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = 
         make_atlas(processed_images, target_sizes, output_folder, output_path)
 
 
-def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atlas", output_folder: str = 'Atlas', target_sizes: list = [256], modder: str= '', iconType: str = '') -> dict:
+def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atlas", output_folder: str = 'Atlas',
+                 target_sizes: list = [256], modder: str= '', iconType: str = '', convert_black: bool =True) -> dict:
     """
     Creates a high-quality atlas from individual icon files with transparency.
     Handles both PNG and SVG files.
@@ -226,7 +259,7 @@ def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atl
             master_files = [svg_files]
         for idx, atlas_files in enumerate(master_files):
             atlas_file_path = f'{output_path}_{idx}'
-            create_atlas_from_svgs(atlas_files, icon_folder, atlas_file_path, output_folder, target_sizes)
+            create_atlas_from_svgs(atlas_files, icon_folder, atlas_file_path, output_folder, target_sizes, convert_black)
 
         build_sql_def(master_files, target_sizes, output_path, modder, iconType)
     else:
@@ -283,14 +316,16 @@ if __name__ == "__main__":
     # OUTPUT_FOLDER = 'Unit_Atlas'
     # ICON_TYPE = 'UNIT'
     # TARGET_SIZES = [256, 80, 50, 38, 32, 22]
+    icon_type = 'Civ'
+    ATLAS_FILENAME = f'Slth_{icon_type}_Atlas'
+    INPUT_FOLDER = 'atlas_svg_civ'
+    icon_type = icon_type.upper()
+    OUTPUT_FOLDER = f'{icon_type}_Atlas_Folder'
 
-    ATLAS_FILENAME = 'Slth_Resource_Atlas'
-    INPUT_FOLDER = 'atlas_wd_rsc'
-    OUTPUT_FOLDER = 'Resource_Atlas_Folder'
-    ICON_TYPE = 'RESOURCE'
-    TARGET_SIZES = [256, 64, 50, 38, 32, 22]
+    TARGET_SIZES = size_chart[icon_type]
+    # TARGET_SIZES = [256, 64, 50, 38, 32, 22]
 
     MODDER_TAG = 'SLTH_'
     if not os.path.exists(OUTPUT_FOLDER):
         os.makedirs(OUTPUT_FOLDER)
-    create_atlas(INPUT_FOLDER, 256, ATLAS_FILENAME, OUTPUT_FOLDER, TARGET_SIZES, MODDER_TAG, ICON_TYPE)
+    create_atlas(INPUT_FOLDER, 256, ATLAS_FILENAME, OUTPUT_FOLDER, TARGET_SIZES, MODDER_TAG, icon_type, convert_black=True)
