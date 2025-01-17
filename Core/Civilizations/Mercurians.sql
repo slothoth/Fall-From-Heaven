@@ -112,7 +112,7 @@ INSERT INTO TypeTags(Type, Tag) VALUES
 
 
 INSERT INTO Buildings(BuildingType, Name, PrereqTech, PrereqCivic, Cost, PrereqDistrict, Description, OuterDefenseHitPoints, Housing, Entertainment, TraitType, CitizenSlots, AdvisorType, RequiresPlacement, IsWonder, MaxWorldInstances) VALUES
-('SLTH_BUILDING_MERCURIAN_GATE', 'LOC_SLTH_BUILDING_MERCURIAN_GATE_NAME', NULL, NULL, '600', NULL, 'LOC_SLTH_BUILDING_MERCURIAN_GATE_DESCRIPTION', '0', '0', '0', NULL, NULL, 'ADVISOR_CONQUEST', '1', '1', '1');           -- CIVIC_FANATICISM
+('SLTH_BUILDING_MERCURIAN_GATE', 'LOC_SLTH_BUILDING_MERCURIAN_GATE_NAME', NULL, 'CIVIC_FANATICISM', '600', NULL, 'LOC_SLTH_BUILDING_MERCURIAN_GATE_DESCRIPTION', '0', '0', '0', NULL, NULL, 'ADVISOR_CONQUEST', '1', '1', '1');           -- CIVIC_FANATICISM
 
 INSERT INTO Building_GreatPersonPoints(BuildingType, GreatPersonClassType, PointsPerTurn) VALUES
 ('SLTH_BUILDING_MERCURIAN_GATE', 'GREAT_PERSON_CLASS_PROPHET', '2');
