@@ -18,6 +18,24 @@ local tArcaneUnits = {
     [GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = true, [GameInfo.Units['SLTH_UNIT_MOBIUS_WITCH'].Index] = true,
     [GameInfo.Units['SLTH_UNIT_MOKKA'].Index] = true, [GameInfo.Units['SLTH_UNIT_SON_OF_THE_INFERNO'].Index] = true
 }
+local tBinaryMap = {
+    ['0']={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
+    ['1']={['8']=0, ['4']=0, ['2']=0, ['1']=1,},
+    ['2']={['8']=0, ['4']=0, ['2']=1, ['1']=0,},
+    ['3']={['8']=0, ['4']=0, ['2']=1, ['1']=1,},
+    ['4']={['8']=0, ['4']=1, ['2']=0, ['1']=0,},
+    ['5']={['8']=0, ['4']=1, ['2']=0, ['1']=1,},
+    ['6']={['8']=0, ['4']=1, ['2']=1, ['1']=0,},
+    ['7']={['8']=0, ['4']=1, ['2']=1, ['1']=1,},
+    ['8']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['9']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['10']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['11']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['12']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['13']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['14']={['8']=1, ['4']=1, ['2']=1, ['1']=1,},
+    ['15']={['8']=1, ['4']=1, ['2']=1, ['1']=1,}
+}
 local iCOTTAGE_INDEX = GameInfo.Improvements['IMPROVEMENT_COTTAGE'].Index
 local iHAMLET_INDEX = GameInfo.Improvements['IMPROVEMENT_HAMLET'].Index
 local iTOWN_INDEX = GameInfo.Improvements['IMPROVEMENT_TOWN'].Index
@@ -435,14 +453,17 @@ function onTurnStartGameplay(playerId)
         end
     end
     -- SECTION: update altars. done so all luonnotars arent granted at once
+    local bLuonnotarApplied
     for _, pCity in pPlayer:GetCities():Members() do
-        local sLuonnotarDummyModifier = pCity:GetProperty('luonnotar_dummy')
-        if sLuonnotarDummyModifier then
-            print('player turn started: and city valid for next altar. attaching:')
-            print(sLuonnotarDummyModifier)
-            pCity:AttachModifierByID(sLuonnotarDummyModifier)
-            print('player turn started: removed blocker')
-            return
+        if not bLuonnotarApplied then
+            local sLuonnotarDummyModifier = pCity:GetProperty('luonnotar_dummy')
+            if sLuonnotarDummyModifier then
+                print('player turn started: and city valid for next altar. attaching:')
+                print(sLuonnotarDummyModifier)
+                pCity:AttachModifierByID(sLuonnotarDummyModifier)
+                bLuonnotarApplied = true
+                print('player turn started: removed blocker')
+            end
         end
     end
     -- SECTION: transient buff cycling
@@ -486,29 +507,29 @@ function onTurnStartGameplay(playerId)
 
     -- SECTION: Cottage/Pirate Port improvement upgrading.
     local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')
-    if not tImprovingImprovements then return end
-    for idx, plot_tuple in pairs(tImprovingImprovements) do
-        print(idx)
-        local iX, iY = plot_tuple['x'], plot_tuple['y']
-        local pPlot = Map.GetPlot(iX, iY)
-        local bIsWorked = pPlot:GetProperty('currently_worked')
-        local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
-        if bIsWorked > 0 and not bIsImprovementPillaged then
-            local iWorkedTurns = pPlot:GetProperty('worked_turns')
-            if iWorkedTurns > 2 then
-                local iImprovementIndex = pPlot:GetImprovementType()
-                print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
-                local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
-                if iImprovementUpgradedIndex then
-                    ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
+    if tImprovingImprovements then
+        for idx, plot_tuple in pairs(tImprovingImprovements) do
+            print(idx)
+            local iX, iY = plot_tuple['x'], plot_tuple['y']
+            local pPlot = Map.GetPlot(iX, iY)
+            local bIsWorked = pPlot:GetProperty('currently_worked')
+            local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
+            if bIsWorked > 0 and not bIsImprovementPillaged then
+                local iWorkedTurns = pPlot:GetProperty('worked_turns')
+                if iWorkedTurns > 2 then
+                    local iImprovementIndex = pPlot:GetImprovementType()
+                    print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
+                    local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
+                    if iImprovementUpgradedIndex then
+                        ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
+                    end
+                else
+                    pPlot:SetProperty('worked_turns', iWorkedTurns+1)
+                    print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
                 end
-            else
-                pPlot:SetProperty('worked_turns', iWorkedTurns+1)
-                print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
             end
         end
     end
-
     -- SECTION: Hall of Mirror. Currently restricted to Balseraphs
     if PlayerConfigurations[playerId]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_BALSERAPHS' then
         for _, pCity in pPlayer:GetCities():Members() do
@@ -563,7 +584,8 @@ function onTurnStartGameplay(playerId)
             if pBuildings:HasBuilding(iPLANAR_GATE_INDEX) then
                 -- do dice roll to see if succeeds
                 local iRoll = math.random(100)
-                if iRoll <= iChance then
+                print('rolling for planar gate: ' .. tostring(iRoll) .. ' comared to threshold' .. tostring(iChance))
+                if iRoll >= iChance then
                     local tUnitsPossible = {}
                     for iBuildingIndex, iUnitIndex in pairs(tPlanarBuildingUnitMap) do
                         if pBuildings:HasBuilding(iBuildingIndex) then
