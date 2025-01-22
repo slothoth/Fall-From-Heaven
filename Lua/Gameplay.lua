@@ -655,7 +655,7 @@ local TRIBE_CLAN_BEAR = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Inde
 local TRIBE_CLAN_LION = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
 
 local tBarbClanUnitMapper = {
-    [GameInfo.Units['SLTH_UNIT_ARCHER_SCORPION_CLAN'].Index] = TRIBE_CLAN_SCORPION,
+    [GameInfo.Units['SLTH_UNIT_ARCHER_'].Index] = TRIBE_CLAN_SCORPION,
     [GameInfo.Units['SLTH_UNIT_SKELETON'].Index] = TRIBE_CLAN_SKELETON,
     [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = TRIBE_CLAN_LIZARDMEN,
     [GameInfo.Units['SLTH_UNIT_LION'].Index] = TRIBE_CLAN_BEAR,

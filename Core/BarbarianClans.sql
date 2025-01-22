@@ -40,7 +40,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_UNIT_GOBLIN', 'CLASS_GOBLIN'),
 ('UNIT_WARRIOR' , 'CLASS_WARRIOR'),
-('SLTH_UNIT_ARCHER_SCORPION_CLAN', 'CLASS_GOBLIN_RANGED');
+('SLTH_UNIT_ARCHER', 'CLASS_GOBLIN_RANGED');
 
 
 INSERT INTO BarbarianTribe_MapConditionSets(MapConditionSetType, TribeType, Test, Priority) VALUES
@@ -281,8 +281,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_LION', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_LION', 'CLASS_LION'),
-('SLTH_UNIT_LION_PRIDE', 'CLASS_LION');
+('SLTH_UNIT_LION', 'CLASS_LION');
 
 
 INSERT INTO BarbarianTribe_MapConditions(MapConditionSetType, TerrainType, FeatureType, ResourceType, Range, Invert) VALUES
