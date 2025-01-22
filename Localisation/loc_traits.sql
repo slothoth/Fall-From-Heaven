@@ -220,6 +220,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_TRAIT_AGGRESSIVE_NAME', 'Aggressive', 'en_US'),
 ('LOC_SLTH_TRAIT_DEFENDER_NAME', 'Defender', 'en_US'),
 ('LOC_SLTH_TRAIT_CHARISMATIC_NAME', 'Charismatic', 'en_US'),
+('LOC_SLTH_TRAIT_CREATIVE_NAME', 'Creative', 'en_US'),
 ('LOC_SLTH_TRAIT_FINANCIAL_NAME', 'Financial', 'en_US'),
 ('LOC_SLTH_TRAIT_INDUSTRIOUS_NAME', 'Industrious', 'en_US'),
 ('LOC_SLTH_TRAIT_RAIDERS_NAME', 'Raiders', 'en_US'),
