@@ -363,7 +363,7 @@ local iLION_INDEX = GameInfo.Units['SLTH_UNIT_LION'].Index
 local iTIGER_INDEX = GameInfo.Units['SLTH_UNIT_TIGER'].Index
 local tBarbarianAnimalMap = {[GameInfo.Units['UNIT_BUILDER'].Index] = iWOLF_INDEX,
                              [GameInfo.Units['SLTH_UNIT_GOBLIN'].Index] = iLION_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_ARCHER_SCORPION_CLAN'].Index] = iLION_INDEX,
+                             [GameInfo.Units['SLTH_UNIT_ARCHER'].Index] = iLION_INDEX,
                              [GameInfo.Units['UNIT_WARRIOR'].Index] = iLION_INDEX,
                              [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = iTIGER_INDEX,
                              [GameInfo.Units['SLTH_UNIT_SWORDSMAN'].Index] = iBEAR_INDEX
@@ -378,11 +378,9 @@ local tAnimals = {
     [GameInfo.Units['SLTH_UNIT_GORILLA'].Index] = true,
     [GameInfo.Units['SLTH_UNIT_GRIFFON'].Index] = true,
     [iLION_INDEX] = true,
-    [GameInfo.Units['SLTH_UNIT_LION_PRIDE'].Index] = true,
     [GameInfo.Units['SLTH_UNIT_SEA_SERPENT'].Index] = true,
     [GameInfo.Units['SLTH_UNIT_SCORPION'].Index] = true,
     [iWOLF_INDEX] = true,
-    [GameInfo.Units['SLTH_UNIT_WOLF_PACK'].Index] = true,
     [iTIGER_INDEX] = true
 }
 
