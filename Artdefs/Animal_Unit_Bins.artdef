@@ -1,0 +1,1926 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..ArtDefSet>
+	<m_Version>
+		<major>4</major>
+		<minor>0</minor>
+		<build>415</build>
+		<revision>990</revision>
+	</m_Version>
+	<m_TemplateName text="Units"/>
+	<m_RootCollections>
+		<Element>
+			<m_CollectionName text="Units"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitMovementTypes"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitFormationTypes"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="MemberCombat"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitCombat"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="CombatAttack"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitFormationLayoutTypes"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="CombatFormation"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitDomainTypes"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitAttachmentBins"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+			<Element>
+				<m_Fields>
+					<m_Values/>
+				</m_Fields>
+				<m_ChildCollections>
+					<Element>
+						<m_CollectionName text="Groups"/>
+						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Lion"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Lion"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Lion"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Lioness"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Lioness"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Lioness"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Jaguar"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Jaguar"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Jaguar"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Puma"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Puma"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Puma"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Tiger"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Tiger"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Tiger"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Cheetah"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Cheetah"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Cheetah"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Leopard"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Leopard"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Leopard"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="SnowLeopard"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="SnowLeopard"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="SnowLeopard"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Panther"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Panther"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Panther"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="WhiteTiger"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wildcats.xlp"/>
+																<m_BLPPackage text="units/wildcats"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="WhiteTiger"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="WhiteTiger"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="GrizzlyBear"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="bears.xlp"/>
+																<m_BLPPackage text="bears"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="GrizzlyBear"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="GrizzlyBear"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="BlackBear"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="bears.xlp"/>
+																<m_BLPPackage text="bears"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="BlackBear"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="BlackBear"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="PolarBear"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="bears.xlp"/>
+																<m_BLPPackage text="bears"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="PolarBear"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="PolarBear"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Gorilla"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Gorilla"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Gorilla"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Hippo"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Hippo"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Hippo"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Rhinoceros"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="rhinoceros.xlp"/>
+																<m_BLPPackage text="rhinoceros"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Rhinoceros"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Rhinoceros"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="ManedWolf"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wolf.xlp"/>
+																<m_BLPPackage text="wolf"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="ManedWolf"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="ManedWolf"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Wolf"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wolf.xlp"/>
+																<m_BLPPackage text="wolf"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Wolf"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Wolf"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="WolfBlack"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wolf.xlp"/>
+																<m_BLPPackage text="wolf"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="WolfBlack"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="WolfBlack"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="WolfGrey"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="wolf.xlp"/>
+																<m_BLPPackage text="wolf"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="WolfGrey"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="WolfGrey"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Jackal"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Jackal"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Jackal"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Dingo"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Dingo"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Dingo"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="TasmanianWolf"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="TasmanianWolf"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="TasmanianWolf"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Hyena"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Hyena"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Hyena"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="HyenaMale"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="HyenaMale"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="HyenaMale"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="TigerShark"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="TigerShark"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="TigerShark"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="BullShark"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="BullShark"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="BullShark"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="WhiteShark"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="WhiteShark"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="WhiteShark"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="Kraken"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="Kraken"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="Kraken"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="AmericanCrocodile"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="AmericanCrocodile"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="AmericanCrocodile"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="BlackCaiman"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="BlackCaiman"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="BlackCaiman"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="FreshwaterCrocodile"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="FreshwaterCrocodile"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="FreshwaterCrocodile"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values/>
+							</m_Fields>
+							<m_ChildCollections>
+								<Element>
+									<m_CollectionName text="Cultures"/>
+									<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+									<Element>
+										<m_Fields>
+											<m_Values>
+												<Element class="AssetObjects..ArtDefReferenceValue">
+													<m_ElementName text=""/>
+													<m_RootCollectionName text="UnitTintTypes"/>
+													<m_ArtDefPath text=""/>
+													<m_CollectionIsLocked>true</m_CollectionIsLocked>
+													<m_TemplateName text=""/>
+													<m_ParamName text="Tint"/>
+												</Element>
+											</m_Values>
+										</m_Fields>
+										<m_ChildCollections>
+											<Element>
+												<m_CollectionName text="Assets"/>
+												<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+												<Element>
+													<m_Fields>
+														<m_Values>
+															<Element class="AssetObjects..BLPEntryValue">
+																<m_EntryName text="NileCrocodile"/>
+																<m_XLPClass text="Unit"/>
+																<m_XLPPath text="animals.xlp"/>
+																<m_BLPPackage text="animals"/>
+																<m_LibraryName text="Unit"/>
+																<m_ParamName text="Asset"/>
+															</Element>
+															<Element class="AssetObjects..FloatValue">
+																<m_fValue>1.000000</m_fValue>
+																<m_ParamName text="Scale"/>
+															</Element>
+														</m_Values>
+													</m_Fields>
+													<m_ChildCollections/>
+													<m_Name text="NileCrocodile"/>
+													<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+												</Element>
+											</Element>
+										</m_ChildCollections>
+										<m_Name text="Any"/>
+										<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+									</Element>
+								</Element>
+							</m_ChildCollections>
+							<m_Name text="NileCrocodile"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+					</Element>
+				</m_ChildCollections>
+				<m_Name text="Unit"/>
+				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+			</Element>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitMemberTypes"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitTintTypes"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+		<Element>
+			<m_CollectionName text="UnitGlobals"/>
+			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+		</Element>
+	</m_RootCollections>
+</AssetObjects..ArtDefSet>
+
