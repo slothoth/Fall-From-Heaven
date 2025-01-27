@@ -27,6 +27,8 @@
 				<Element text="Cultures.artdef"/>
 				<Element text="Animal_Units.artdef"/>
 				<Element text="Animal_Unit_Bins.artdef"/>
+				<Element text="Custom_Units.artdef"/>
+				<Element text="Custom_Unit_Bins.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="Unit"/>
@@ -266,6 +268,8 @@
 				<Element text="Unit_Bins.artdef"/>
 				<Element text="Animal_Units.artdef"/>
 				<Element text="Animal_Unit_Bins.artdef"/>
+				<Element text="Custom_Units.artdef"/>
+				<Element text="Custom_Unit_Bins.artdef"/>
 				<Element text="Civilizations.artdef"/>
 				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
@@ -312,6 +316,7 @@
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
 				<Element text="Animal_Units.artdef"/>
+				<Element text="Custom_Units.artdef"/>
 				<Element text="Resources.artdef"/>
 				<Element text="Cultures.artdef"/>
 				<Element text="Clutter.artdef"/>
@@ -452,6 +457,21 @@
 			<ArtDefPath text="Animal_Unit_Bins.artdef"/>
 			<ArtDefDependencyPaths>
 				<Element text="Animal_Units.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Custom_Units.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Custom_Units.artdef"/>
+				<Element text="Units.artdef"/>
+				<Element text="Custom_Unit_Bins.artdef"/>
+				<Element text="Cultures.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Custom_Unit_Bins.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Custom_Units.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 		<Element>
