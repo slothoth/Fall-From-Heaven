@@ -6,10 +6,6 @@
 	</ID>
 	<RequiredGameArtIDs>
 		<Element>
-			<name text="Civ6"/>
-			<id text="cb2f71b7-843e-4af3-9ca7-992acda9c195"/>
-		</Element>
-		<Element>
 			<name text="Expansion1"/>
 			<id text="7446c8fe-29eb-44f8-801f-098f681cc5c5"/>
 		</Element>
@@ -24,6 +20,7 @@
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
 				<Element text="Unit_Bins.artdef"/>
+				<Element text="Post_Build_Units.artdef"/>
 				<Element text="Cultures.artdef"/>
 				<Element text="Animal_Units.artdef"/>
 				<Element text="Animal_Unit_Bins.artdef"/>
@@ -264,6 +261,7 @@
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
 				<Element text="Unit_Bins.artdef"/>
+				<Element text="Post_Build_Units.artdef"/>
 				<Element text="Animal_Units.artdef"/>
 				<Element text="Animal_Unit_Bins.artdef"/>
 				<Element text="Civilizations.artdef"/>
@@ -311,7 +309,9 @@
 			<ConsumerName text="Audio"/>
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
+				<Element text="Post_Build_Units.artdef"/>
 				<Element text="Animal_Units.artdef"/>
+				<Element text="Animal_Unit_Bins.artdef"/>
 				<Element text="Resources.artdef"/>
 				<Element text="Cultures.artdef"/>
 				<Element text="Clutter.artdef"/>
@@ -452,6 +452,15 @@
 			<ArtDefPath text="Animal_Unit_Bins.artdef"/>
 			<ArtDefDependencyPaths>
 				<Element text="Animal_Units.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Post_Build_Units.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Post_Build_Units.artdef"/>
+				<Element text="Units.artdef"/>
+				<Element text="Unit_Bins.artdef"/>
+				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 		<Element>
