@@ -426,24 +426,10 @@
 	</SystemDependencies>
 	<ArtDefDependencies>
 		<Element>
-			<ArtDefPath text="Units.artdef"/>
-			<ArtDefDependencyPaths>
-				<Element text="Units.artdef"/>
-				<Element text="Unit_Bins.artdef"/>
-				<Element text="Cultures.artdef"/>
-			</ArtDefDependencyPaths>
-		</Element>
-		<Element>
-			<ArtDefPath text="Unit_Bins.artdef"/>
-			<ArtDefDependencyPaths>
-				<Element text="Units.artdef"/>
-			</ArtDefDependencyPaths>
-		</Element>
-		<Element>
 			<ArtDefPath text="Animal_Units.artdef"/>
 			<ArtDefDependencyPaths>
-				<Element text="Animal_Units.artdef"/>
 				<Element text="Units.artdef"/>
+				<Element text="Animal_Units.artdef"/>
 				<Element text="Animal_Unit_Bins.artdef"/>
 				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
@@ -616,13 +602,15 @@
 		<Element>
 			<LibraryName text="UITexture"/>
 			<PackageDependencies>
+				<Element text="IconsAnimal.blp"/>
 				<Element text="UI/Icons.blp"/>
 			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="Unit"/>
 			<PackageDependencies>
-				<Element text="UnitBinAccessories.blp"/>
+				<Element text="animals.blp"/>
+				<Element text="UnitBinParts.blp"/>
 			</PackageDependencies>
 		</Element>
 		<Element>

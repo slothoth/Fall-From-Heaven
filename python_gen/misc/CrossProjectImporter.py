@@ -1,55 +1,33 @@
 import os
 import shutil
 import re
+import xmltodict
+from copy import deepcopy
 
-from System.IO import Path
-from System.IO import File
-from System.IO import Directory
-import System
-import System.Random
-import Sce.Atf as atf
-import Firaxis.AssetEditing
-import clr
-import Sce.Atf.Adaptation
-import Firaxis
-import Firaxis.CivTech
-import Firaxis.Granny
-import DatabaseWrapper
+SOURCE_PATH = "C:/Users/Sam/Documents/Firaxis ModBuddy/Civilization VI/WarfareExpanded/MC_MasterTemplate/WarfareExpanded"
+DESTINATION_PATH = "C:/Users/Sam/Documents/Firaxis ModBuddy/Civilization VI/FallFromHeavenBuilder/FallFromHeavenBuilder"
 
-
-SOURCE_PATH = ""
-DESTINATION_PATH = ""
-
+DESTINATION_XLP = f'{DESTINATION_PATH}/XLPs/UnitBinParts.xlp'
 UNIT = "UNIT_ZWEIHANDER"
+#UNIT = "UNIT_TREBUCHET"
+
+ASSET_PER_BIN_MAX = 2
 
 PATTERN = r'text="([^"]*)"'
 
-randomGenerator = System.Random()
 VARIATION_ATTACHMENT_PREFIX = 'V:'
-def loadUnitsArtdef(projectName):
-    # Need to determine if the landmark file is open. If it is, make sure it's active. If it's not then open it
-    artDefPath = System.IO.Path.Combine(civTech.AllProjectsMap[projectName].Paths.ArtDefRoot, 'Units.artdef')
-    unitsArtDefUri = Uri(artDefPath)
-    return atfDocService.OpenExistingDocument(artDefEditor, unitsArtDefUri)
-
-
-def loadUnitBinsArtdef(projectName):
-    # Need to determine if the landmark file is open. If it is, make sure it's active. If it's not then open it
-    artDefPath = System.IO.Path.Combine(civTech.AllProjectsMap[projectName].Paths.ArtDefRoot, 'Unit_Bins.artdef')
-    unitsBinArtDefUri = Uri(artDefPath)
-    return atfDocService.OpenExistingDocument(artDefEditor, unitsBinArtDefUri)
 
 def extract_animations(filepath):
     anims = []
     with open(filepath, 'r') as file:
         bhv_lines = file.readlines()
     for line in bhv_lines:
-        if 'm_AnimationName' in line:
+        if 'm_ObjectName' in line:
             match = re.search(PATTERN, line)
             if match:
                 anm_name = match.group(1)
-                anm_file_path = SOURCE_PATH + '/Geometries/{anm_name}.anm'
-                fgx_file_path = SOURCE_PATH + '/Geometries/{anm_name}.fgx'
+                anm_file_path = SOURCE_PATH + '/Geometries/' + anm_name + '.anm'
+                fgx_file_path = SOURCE_PATH + '/Geometries/' + anm_name + '.fgx'
                 anims.append(anm_file_path)
                 anims.append(fgx_file_path)
     return anims
@@ -60,193 +38,20 @@ def extract_textures(filepath):
     with open(filepath, 'r') as file:
         mtl_lines = file.readlines()
     for line in mtl_lines:
-        if 'm_AnimationName' in line:
+        if 'm_ObjectName' in line:
             match = re.search(PATTERN, line)
             if match:
                 tex_name = match.group(1)
-                tex_file_path = SOURCE_PATH + '/Geometries/{tex_name}.tex'
-                dds_file_path = SOURCE_PATH + '/Geometries/{tex_name}.dds'
+                tex_file_path = SOURCE_PATH + '/Textures/' + tex_name + '.tex'
+                dds_file_path = SOURCE_PATH + '/Textures/' + tex_name + '.dds'
                 textures.append(tex_file_path)
                 textures.append(dds_file_path)
     return textures
 
-
-def GetAssetFromBinReference(artDefSetAdapter, binReference, cultureReference):
-    # this tries to match the logic used in 'WorldView_UnitSystem.cpp' by the UnitSystem::FindAttachments() function
-    tokenizedBinReference = re.split(r'[;/]', binReference)
-
-    binName = ''
-    group = ''
-    culture = ''
-    assetName = ''
-
-    if (len(tokenizedBinReference) >= 1) and tokenizedBinReference[0]:
-        binName = tokenizedBinReference[0]
-        if (len(tokenizedBinReference) >= 2) and tokenizedBinReference[1]:
-            group = tokenizedBinReference[1]
-            if (len(tokenizedBinReference) >= 3) and tokenizedBinReference[2]:
-                culture = tokenizedBinReference[2]
-                if (len(tokenizedBinReference) >= 4) and tokenizedBinReference[3]:
-                    assetName = tokenizedBinReference[3]
-
-    if ('[empty]' in str.lower(binName)):
-        return None
-
-    if (binName.startswith(VARIATION_ATTACHMENT_PREFIX) or group.startswith(
-            VARIATION_ATTACHMENT_PREFIX) or culture.startswith(VARIATION_ATTACHMENT_PREFIX) or assetName.startswith(
-            VARIATION_ATTACHMENT_PREFIX)):
-        return None
-
-    if ((len(culture) == 0) or ('#' == str.lower(culture)) or ('[culture]' == str.lower(culture))):
-        culture = cultureReference
-
-    UnitAttachmentBinCollections = ArtDefRegistry.GetSuitableCollections('Units', 'UnitAttachmentBins')
-
-    for eachBinCollection in UnitAttachmentBinCollections:
-
-        binAdapter = None
-
-        for eachElement in eachBinCollection.Elements:
-            if str.lower(eachElement.Name) == str.lower(binName):
-                binAdapter = eachElement
-                break
-
-        if (not binAdapter):
-            return None
-
-        groupAdapter = None
-        for eachCollection in binAdapter.Children:
-            if (eachCollection.CollectionName == 'Groups'):
-                for eachElement in eachCollection.Elements:
-                    if str.lower(eachElement.Name) == str.lower(group):
-                        groupAdapter = eachElement
-                        break
-                break
-        if (not groupAdapter):
-            return None
-
-        cultureAdapter = None
-        for eachCollection in groupAdapter.Children:
-            if (eachCollection.CollectionName == 'Cultures'):
-                foundCulture = False
-                anyCultureAdapter = None
-                for eachElement in eachCollection.Elements:
-                    if str.lower(eachElement.Name) == str.lower(culture):
-                        cultureAdapter = eachElement
-                        foundCulture = True
-                        break
-                    if str.lower(eachElement.Name) == str.lower('any'):
-                        anyCultureAdapter = eachElement
-                if (not foundCulture):
-                    if (anyCultureAdapter):
-                        cultureAdapter = anyCultureAdapter
-                    elif len(eachCollection.Elements) >= 1:
-                        cultureAdapter = eachCollection.Elements[0]
-                break
-        if (not cultureAdapter):
-            return None
-
-        assetAdapter = None
-        for eachCollection in cultureAdapter.Children:
-            if (eachCollection.CollectionName == 'Assets'):
-                foundAsset = False
-                for eachElement in eachCollection.Elements:
-                    if str.lower(eachElement.Name) == str.lower(assetName):
-                        assetAdapter = eachElement
-                        foundAsset = True
-                        break
-                if (not foundAsset):
-                    if len(eachCollection.Elements) >= 1:
-                        assetAdapter = eachCollection.Elements[randomGenerator.Next(len(eachCollection.Elements))]
-                break
-
-        if (not assetAdapter):
-            return None
-
-        EntryName = None
-        for eachField in assetAdapter.Fields.Items:
-            if (eachField.ParameterName == "Asset"):
-                EntryName = eachField.EntryName
-
-        if (not EntryName):
-            return None
-
-        assetEntityName = ''
-        XLPEntry = XLPRegistry.FindXLPData(EntryName)
-        if XLPEntry:
-            assetEntityName = XLPEntry.ObjectName
-
-        if (not assetEntityName):
-            return None
-
-        return assetEntityName
-
-def FiraxisAdapter(projectName, unit_name):
-    binArtDefDocument = loadUnitBinsArtdef(projectName)
-    binArtDefAdapter = binArtDefDocument.As[Firaxis.AssetEditing.ArtDefSetAdapter]()
-
-    artDefDocument = loadUnitsArtdef(projectName)
-    artDefSetAdapter = artDefDocument.As[Firaxis.AssetEditing.ArtDefSetAdapter]()
-
-    # Get handle to the ArtDefCollection that we want
-    unitMemberCollectionAdapter = None
-    for eachCollection in artDefSetAdapter.RootCollections:
-        if (eachCollection.Name == 'UnitMemberTypes'):
-            unitMemberCollectionAdapter = eachCollection
-            break
-
-    for eachElement in unitMemberCollectionAdapter.Elements:
-        if (eachElement.Name == unit_name):
-            unitMemberElement = eachElement
-
-    unitMemberCultureAdapter = None
-    for eachCollection in unitMemberElement.Collections:
-        if eachCollection.Name == "Cultures":
-            if not unitMemberCultureAdapter:
-                unitMemberCultureAdapter = eachCollection.Elements[0]
-            break
-
-    unitMemberVariationAdapter = None
-    for eachCollection in unitMemberCultureAdapter.Collections:
-        if eachCollection.Name == "Variations":
-            if not unitMemberVariationAdapter:
-                unitMemberVariationAdapter = eachCollection.Elements[0]
-            break
-
-    unitMemberAttachmentsAdapter = None
-    listOfAttachments = []
-    for eachCollection in unitMemberVariationAdapter.Collections:
-        if eachCollection.Name == "Attachments":
-            for eachElement in eachCollection.Elements:
-                attachment = Attachment()
-                for eachField in eachElement.Fields:
-                    if eachField.Name == "Point":
-                        attachment.AttachmentPoint = eachField.Value.ParameterValue
-                    if eachField.Name == "Tint":
-                        attachment.tintColor = None  # We need to do the Artdef collection reference to color mapping, sigh..
-
-                assetBin = None
-                for eachAttachmentCollection in eachElement.Collections:
-                    if eachAttachmentCollection.Name == "Bins":
-                        if (len(eachAttachmentCollection.Elements) >= 1):
-                            assetBin = eachAttachmentCollection.Elements[
-                                randomGenerator.Next(len(eachAttachmentCollection.Elements))].Name
-                        break
-                assetEntityName = GetAssetFromBinReference(binArtDefAdapter, assetBin,
-                                                           unitMemberCultureAdapter.Name)
-
-                if assetEntityName:
-                    attachment.AssetName = assetEntityName
-
-                if attachment.AssetName:
-                    listOfAttachments.append(attachment)
-            break
-    return listOfAttachments
-
 source_unit_artdef_path = SOURCE_PATH + '/Artdefs/Units.artdef'
-source_unit_bins_artdef_path = SOURCE_PATH + '/Artdefs/Units.artdef'
+source_unit_bins_artdef_path = SOURCE_PATH + '/Artdefs/Unit_Bins.artdef'
 dest_unit_artdef_path = SOURCE_PATH + '/Artdefs/Units.artdef'
-dest_unit_bins_artdef_path = SOURCE_PATH + '/Artdefs/Units.artdef'
+dest_unit_bins_artdef_path = SOURCE_PATH + '/Artdefs/Unit_Bins.artdef'
 # given a source project, and a transporting project
 
 # specify a unit to move acoess
@@ -261,8 +66,175 @@ dest_unit_bins_artdef_path = SOURCE_PATH + '/Artdefs/Units.artdef'
 
 
 def main():
-    cached = []
-    asset_file_path = ''
+    with open('../Gen_ArtDefs/Units.artdef', 'r') as file:
+        artdef_template = xmltodict.parse(file.read())
+    with open('../Gen_ArtDefs/Units.artdef', 'r') as file:
+        artdef_bins_template = xmltodict.parse(file.read())
+    artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][0]['Element'] = []
+    with open(source_unit_artdef_path, 'r') as file:
+        artdef_info = xmltodict.parse(file.read())
+    source_unit_artdef_base = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element']
+    source_units = source_unit_artdef_base[00]['Element']
+    source_unit_members = source_unit_artdef_base[10]
+    chosen_unit = [i for i in source_units if i['m_Name']['@text'] == UNIT][0]
+    artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][0]['Element'].append(chosen_unit)
+    members = chosen_unit['m_ChildCollections']['Element'][0]['Element']
+    unitMemberTypes = []
+    if isinstance(members, dict):
+        members = [members]
+    for i in members:
+        unitMemberTypes.append(i['m_Fields']['m_Values']['Element'][2]['m_ElementName']['@text'])
+
+    unitAttachmentBins = []
+    for i in source_unit_members['Element']:
+        if i['m_Name']['@text'] in unitMemberTypes:
+            cultural_variants = None
+            cultures = i['m_ChildCollections']['Element']['Element']
+            culture_match = None
+            for j in cultures:
+                if culture_match is None:
+                    if j['m_Name']['@text'] == 'Any':
+                        culture_match = True
+                        cult_match = 'Any'
+                    elif j['m_Name']['@text'] == 'European':
+                        culture_match = True
+                        cult_match = 'European'
+                    elif j['m_Name']['@text'] == 'Mediterranean':
+                        culture_match = True
+                        cult_match = 'Mediterranean'
+                    else:
+                        continue
+                if culture_match is not None:
+                    cultural_variants = j['m_ChildCollections']['Element']['Element']
+                    break
+
+            if cultural_variants is not None:
+                new_cultures = []
+                for puk in i['m_ChildCollections']['Element']['Element']:
+                    if puk['m_Name']['@text'] == 'Any':
+                        new_cultures.append(puk)
+                        break
+                if isinstance(cultural_variants, dict):
+                    cultural_variants = [cultural_variants]
+                for k in cultural_variants:
+                    if isinstance(k['m_ChildCollections'], dict):
+                        k['m_ChildCollections'] = [k['m_ChildCollections']]
+                    for v in k['m_ChildCollections']:
+                        for attach in v['Element']['Element']:
+                            if isinstance(attach['m_ChildCollections'], dict):
+                                attach['m_ChildCollections'] = [attach['m_ChildCollections']]
+                            for kujo in attach['m_ChildCollections']:
+                                if isinstance(kujo['Element'], dict):
+                                    kujo['Element'] = [kujo['Element']]
+                                for bujo in kujo['Element']:
+                                    end_attachment = bujo['Element']['m_Name']['@text']
+                                    if 'V:' not in end_attachment:
+                                        unitAttachmentBins.append(end_attachment)
+                artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][1]['Element'] = i
+                artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][1]['Element']['m_ChildCollections']['Element']['Element'] = new_cultures
+
+    artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][2]['Element'] = []
+    xlp_assets = {}
+    with open(source_unit_bins_artdef_path, 'r') as file:
+        artdef_info = xmltodict.parse(file.read())
+    source_unit_bins_artdef = artdef_info['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][9]['Element']
+    for unit_location in unitAttachmentBins:
+        base_bin, specific_asset = unit_location.split('/')
+        for unit_bin in source_unit_bins_artdef:
+            if unit_bin['m_Name']['@text'] == base_bin:
+                copy_bin = deepcopy(unit_bin)
+                copy_bin['m_ChildCollections']['Element']['Element'] = []
+                detailed_bin = unit_bin['m_ChildCollections']['Element']['Element']
+                if isinstance(detailed_bin, dict):
+                    detailed_bin = [detailed_bin]
+                for detail_bin in detailed_bin:
+                    if detail_bin['m_Name']['@text'] == specific_asset:
+                        copy_detail = deepcopy(detail_bin)
+                        copy_detail['m_ChildCollections']['Element']['Element'] = []
+                        asset_cultural = detail_bin['m_ChildCollections']['Element']['Element']         # amend to incluide in artdef
+                        if isinstance(asset_cultural, dict):
+                            asset_cultural = [asset_cultural]
+                        cached_culture = None
+                        for culture_assets in asset_cultural:
+                            if culture_assets['m_Name']['@text'] == 'Any':
+                                cached_culture = culture_assets
+                            if culture_assets['m_Name']['@text'] == 'European' and cached_culture is None:
+                                cached_culture = culture_assets
+                            elif culture_assets['m_Name']['@text'] == 'Mediterranean' and cached_culture is None:
+                                cached_culture = culture_assets
+                        if cached_culture:
+                            copy_detail['m_ChildCollections']['Element']['Element'].append(cached_culture)
+                            possible_bins = cached_culture['m_ChildCollections']['Element']['Element'].copy()
+                            copy_detail['m_ChildCollections']['Element']['Element'][0]['m_ChildCollections'][
+                                'Element']['Element'] = []
+                            if isinstance(possible_bins, dict):
+                                possible_bins = [possible_bins]
+                            for idx, poss_bin in enumerate(possible_bins):
+                                if idx < ASSET_PER_BIN_MAX:
+                                    xlp_info = poss_bin['m_Fields']['m_Values']['Element'][0]
+                                    xlp_path = xlp_info['m_XLPPath']['@text']
+                                    xlp_entry_name = xlp_info['m_EntryName']['@text']
+                                    if xlp_path not in xlp_assets:
+                                        xlp_assets[xlp_path] = []
+                                    xlp_assets[xlp_path].append(xlp_entry_name)
+                                    copy_detail['m_ChildCollections']['Element']['Element'][0]['m_ChildCollections']['Element']['Element'].append(poss_bin)
+                            copy_bin['m_ChildCollections']['Element']['Element'].append(copy_detail)
+                        else:
+                            print('ERROR: Cultures Any not found.')
+
+                artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][2]['Element'].append(copy_bin)
+
+    with open('New_Units.artdef', 'w') as file:
+        xmltodict.unparse(artdef_template, output=file, pretty=True)
+    xlp_set = {}
+    for xlp_path, xlp_entries in xlp_assets.items():
+        xlp_set[xlp_path] = list(set(xlp_entries))
+
+    end_assets = []
+    end_xlp_mapping = {}
+    for xlp_path, xlp_entries in xlp_set.items():
+        combined_xlp_path = f'{SOURCE_PATH}/XLPs/{xlp_path}'
+        with open(combined_xlp_path, 'r') as file:
+            xlp_lines = file.readlines()
+
+        for xlp_entry in xlp_entries:
+            for idx, k in enumerate(xlp_lines):
+                if 'm_EntryID' in k:
+                    if xlp_entry in k:
+                        entity_line = xlp_lines[idx+1]
+                        match = re.search(PATTERN, entity_line)
+                        if match:
+                            entity_name = match.group(1)
+                            end_assets.append(entity_name)
+                            match = re.search(PATTERN, k)
+                            if match:
+                                end_xlp_mapping[entity_name] = match.group(1)
+                        else:
+                            print('ERROR')
+
+    with open(DESTINATION_XLP, 'r') as file:
+        xlp_og = file.readlines()
+
+    end_editable = next(idx for idx, i in enumerate(xlp_og) if '</m_Entries>' in i)
+    xlp_conclusion = xlp_og[end_editable:]
+    xlp_sample = ['\t\t<Element>\n', '\t\t\t<m_EntryID text="$1"/>\n', '\t\t\t<m_ObjectName text="$1"/>\n', '\t\t</Element>\n']
+    new_xlp = xlp_og[:end_editable]
+    for end_asset in end_assets:
+        asset_file_path = f'{SOURCE_PATH}/Assets/{end_asset}.ast'
+        transfer_unit_assets(asset_file_path)
+        matching_xlp_name = end_xlp_mapping[end_asset]
+        new_xlp_entry = xlp_sample.copy()
+        new_xlp_entry[1] = new_xlp_entry[1].replace('$1', matching_xlp_name)
+        new_xlp_entry[2] = new_xlp_entry[2].replace('$1', end_asset)
+        new_xlp = new_xlp + new_xlp_entry
+
+    new_xlp = new_xlp + xlp_conclusion
+    with open(DESTINATION_XLP, 'w') as file:
+        file.writelines(new_xlp)
+
+
+def transfer_unit_assets(asset_file_path):
+    cached = [asset_file_path]
     with open(asset_file_path, 'r') as file:
         asset_lines = file.readlines()
 
@@ -275,7 +247,7 @@ def main():
             match = re.search(PATTERN, asset_line)
             if match:
                 behaviour_name = match.group(1)
-                behaviour_file_path = SOURCE_PATH + '/Behaviours/{behaviour_name}.bhv'
+                behaviour_file_path = SOURCE_PATH + '/Behaviours/' + behaviour_name + '.bhv'
                 if os.path.exists(behaviour_file_path):
                     cached.append(behaviour_file_path)
                     animations = extract_animations(behaviour_file_path)
@@ -294,8 +266,8 @@ def main():
             match = re.search(PATTERN, asset_line)
             if match:
                 geo_name = match.group(1)
-                geo_file_path = SOURCE_PATH + '/Geometries/{geo_name}.geo'
-                fgx_file_path = SOURCE_PATH + '/Geometries/{geo_name}.fgx'
+                geo_file_path = SOURCE_PATH + '/Geometries/' + geo_name + '.geo'
+                fgx_file_path = SOURCE_PATH + '/Geometries/' + geo_name + '.fgx'
                 cached.append(geo_file_path)
                 cached.append(fgx_file_path)
 
@@ -304,25 +276,25 @@ def main():
             match = re.search(PATTERN, asset_line)
             if match:
                 mat_name = match.group(1)
-                mat_file_path = SOURCE_PATH + '/Materials/{mat_name}.mtl'
+                mat_file_path = SOURCE_PATH + '/Materials/' + mat_name + '.mtl'
                 if os.path.exists(mat_file_path):
                     textures = extract_textures(mat_file_path)
                     cached.append(mat_file_path)
                     cached.extend(textures)
 
-    print(cached)
-    # for source_filepath in cached:
-        # dest_filepath = source_filepath.replace(SOURCE_PATH, DESTINATION_PATH)
-        # if os.path.exists(source_filepath):
-            # shutil.copy(source_filepath, dest_filepath)
-        # else:
-        #     print(f'skipping {source_filepath}')
+    for source_filepath in cached:
+        dest_filepath = source_filepath.replace(SOURCE_PATH, DESTINATION_PATH)
+        if os.path.exists(source_filepath):
+            shutil.copy(source_filepath, dest_filepath)
+        else:
+            print(f'skipping {source_filepath}')
     # then open each material, find each entry that looks like <m_eObjectType>TEXTURE</m_eObjectType>, then find the line
     # before it, then extract a string from <m_ObjectName text="$1"/>, and cache the file under Textures with .tex and .dds
 
     # finally we transfer over all the cached files
 
-    # we also transfer the Unit entry to the destination project units.artdef, and the unitBins entry to the destinmation
+    #
+    # we also transfer the Unit entry to the destination project units.artdef, and the unitBins entry to the destination
     # projects unit_bins.artdef
 
 if __name__ == "__main__":
