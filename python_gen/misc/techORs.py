@@ -1,6 +1,6 @@
 import xmltodict
 
-with open('../data/XML/Technologies/CIV4TechInfos.xml', 'r', encoding='latin-1') as file:
+with open('../../data/XML/Technologies/CIV4TechInfos.xml', 'r', encoding='latin-1') as file:
     tech = xmltodict.parse(file.read())
 
 techs = tech['Civ4TechInfos']['TechInfos']['TechInfo']

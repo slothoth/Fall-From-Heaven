@@ -1,7 +1,7 @@
 import glob
 import json
-from xml_handler import dict_to_xml, xml_to_string, pretty_print_xml, save_pretty_xml_to_file, read_xml
-from utils import make_or_add
+from python_gen.misc.xml_handler import read_xml
+from python_gen.misc.utils import make_or_add
 import os
 
 
@@ -57,7 +57,7 @@ def get_colors(folder, config):
             print('aa')
         full_artdef.update(artdef_dict)
 
-    with open("data/asset_map.json", 'r') as json_file:
+    with open("../data/asset_map.json", 'r') as json_file:
         assets = json.load(json_file)['leaders']
     new_color_set = {}
     failed = {'multsearch': [], 'nosearch': []}

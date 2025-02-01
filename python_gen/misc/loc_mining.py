@@ -1,6 +1,6 @@
 import xmltodict
 
-with open('../data/XML/Text/CIV4GameText_FFH2.xml', 'r', encoding='latin-1') as file:
+with open('../../data/XML/Text/CIV4GameText_FFH2.xml', 'r', encoding='latin-1') as file:
     loc = xmltodict.parse(file.read())
 
 text_tags = loc['Civ4GameText']['TEXT']

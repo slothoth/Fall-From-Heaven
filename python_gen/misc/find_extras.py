@@ -28,7 +28,7 @@ def extract_quoted_items(filename):
 
 # Example usage
 if __name__ == "__main__":
-    filename = "../Icons/UnitIcons.sql"  # Replace with your file name
+    filename = "../../Icons/UnitIcons.sql"  # Replace with your file name
     result = extract_quoted_items(filename)
 
     if isinstance(result, dict):
