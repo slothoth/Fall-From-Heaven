@@ -8,7 +8,7 @@ from copy import deepcopy
 class Artdef:
     def __init__(self, asset_map=None):
         if asset_map is not None:
-            with open("plans/asset_map_plan.json", 'r') as json_file:
+            with open("../plans/asset_map_plan.json", 'r') as json_file:
                 self.asset_map = json.load(json_file)
         with open("data/config.json", 'r') as json_file:
             config = json.load(json_file)
@@ -21,7 +21,7 @@ class Artdef:
 
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
-        with open('Gen_ArtDefs/Icons.xml', 'r') as file:
+        with open('../Gen_ArtDefs/Icons.xml', 'r') as file:
             self.icons = xmltodict.parse(file.read())
         self.icons['GameInfo']['IconDefinitions']['Row'] = []
 
@@ -86,10 +86,10 @@ class Artdef:
 
         artdef_total['UNIT_ZOMBIE'] = [i for i in not_uniques if 'WARRIOR' in i['m_Name']['@text']][0]
 
-        with open("plans/asset_map_plan.json", 'r') as json_file:
+        with open("../plans/asset_map_plan.json", 'r') as json_file:
             artdef_map = json.load(json_file)
 
-        with open('Gen_ArtDefs/Units.artdef', 'r') as file:
+        with open('../Gen_ArtDefs/Units.artdef', 'r') as file:
             artdef_template = xmltodict.parse(file.read())
 
         artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element'] = []
@@ -172,10 +172,10 @@ class Artdef:
 
         artdef_total = {i['m_Name']['@text']: i for i in full_artdef['Building']}
 
-        with open("plans/asset_map_plan.json", 'r') as json_file:
+        with open("../plans/asset_map_plan.json", 'r') as json_file:
             artdef_map = json.load(json_file)
 
-        with open('Gen_ArtDefs/Buildings.artdef', 'r') as file:
+        with open('../Gen_ArtDefs/Buildings.artdef', 'r') as file:
             artdef_template = xmltodict.parse(file.read())
 
         artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element'][0]['Element'] = []
@@ -234,10 +234,10 @@ class Artdef:
 
         artdef_total = full_artdef
 
-        with open("plans/asset_map_plan.json", 'r') as json_file:
+        with open("../plans/asset_map_plan.json", 'r') as json_file:
             artdef_map = json.load(json_file)
 
-        with open('Gen_ArtDefs/Features.artdef', 'r') as file:
+        with open('../Gen_ArtDefs/Features.artdef', 'r') as file:
             artdef_template = xmltodict.parse(file.read())
 
         artdef_template['AssetObjects::ArtDefSet']['m_RootCollections']['Element']['Element'] = []
@@ -307,10 +307,10 @@ class Artdef:
 
         artdef_total = full_artdef
 
-        with open("plans/asset_map_plan.json", 'r') as json_file:
+        with open("../plans/asset_map_plan.json", 'r') as json_file:
             artdef_map = json.load(json_file)
 
-        with open('Gen_ArtDefs/Resources.artdef', 'r') as file:
+        with open('../Gen_ArtDefs/Resources.artdef', 'r') as file:
             artdef_template = xmltodict.parse(file.read())
 
         artdef_template['AssetObjects..ArtDefSet']['m_RootCollections']['Element']['Element'] = []
@@ -345,7 +345,7 @@ class Artdef:
             xmltodict.unparse(artdef_template, output=file, pretty=True)
 
     def icon_resource_wrangler(self):
-        with open("data/icons.json", 'r') as json_file:
+        with open("../data/icons.json", 'r') as json_file:
             icon_atlas_map = json.load(json_file)
 
         big_dict = {}

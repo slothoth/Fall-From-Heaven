@@ -1,10 +1,9 @@
 from civilizations import Civilizations
 from units import Units
 from modifiers import Modifiers
-from utils import Sql, setup_tables, make_or_add
-from prebuilt_transfer import main as prebuilt_transfer
-from python_gen.artdef_wrangler import Artdef
-from leader_art import make_colors
+from python_gen.misc.utils import Sql, setup_tables
+from python_gen.misc.artdef_wrangler import Artdef
+from python_gen.misc.leader_art import make_colors
 
 import json
 import logging
