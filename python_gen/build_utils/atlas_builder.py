@@ -316,9 +316,9 @@ if __name__ == "__main__":
     # OUTPUT_FOLDER = 'Unit_Atlas'
     # ICON_TYPE = 'UNIT'
     # TARGET_SIZES = [256, 80, 50, 38, 32, 22]
-    icon_type = 'Civ'
+    icon_type = 'Resource'
     ATLAS_FILENAME = f'Slth_{icon_type}_Atlas'
-    INPUT_FOLDER = 'atlas_svg_civ'
+    INPUT_FOLDER = 'atlas_wd_rsc'
     icon_type = icon_type.upper()
     OUTPUT_FOLDER = f'{icon_type}_Atlas_Folder'
 
