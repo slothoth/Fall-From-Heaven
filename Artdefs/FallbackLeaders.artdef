@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <AssetObjects..ArtDefSet>
 	<m_Version>
 		<major>1</major>
@@ -22,10 +23,10 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_ALEXIS"/>
-										<m_XLPClass text="LeaderFallback"/>
-										<m_XLPPath text="leaderfallbacks.xlp"/>
-										<m_BLPPackage text="LeaderFallbacks"/>
+										<m_EntryName text=""/>
+										<m_XLPClass text=""/>
+										<m_XLPPath text=""/>
+										<m_BLPPackage text=""/>
 										<m_LibraryName text="LeaderFallback"/>
 										<m_ParamName text="BLP Entry"/>
 									</Element>

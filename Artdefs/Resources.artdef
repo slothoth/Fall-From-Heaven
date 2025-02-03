@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <AssetObjects..ArtDefSet>
 	<m_Version>
 		<major>1</major>
@@ -44,7 +44,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -77,7 +77,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="TRUFFLES"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -110,7 +110,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Forest Variant"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -139,7 +139,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Jungle Variant"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -168,7 +168,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -197,7 +197,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra Hills"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -239,7 +239,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -293,7 +293,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -347,7 +347,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -388,7 +388,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Jungle"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -417,7 +417,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -446,7 +446,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra Hills"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -475,7 +475,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Forest"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -517,7 +517,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -571,7 +571,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -625,7 +625,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -666,7 +666,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Jungle Variant"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -695,7 +695,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Forest Variant"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -724,7 +724,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -753,7 +753,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra Hills"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -803,7 +803,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Landmark"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -853,7 +853,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -894,7 +894,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Forest Variant"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -923,7 +923,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Jungle Variant"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -952,7 +952,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -981,7 +981,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra Hills"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1023,7 +1023,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Honey"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1056,7 +1056,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Entry"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1102,7 +1102,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1139,11 +1139,11 @@
 										<m_ParamName text="XrefName"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="CLUTTER_MAIZE"/>
-										<m_RootCollectionName text="ClutterSets"/>
+										<m_ElementName text=""/>
+										<m_RootCollectionName text=""/>
 										<m_ArtDefPath text="Clutter.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Clutter"/>
+										<m_TemplateName text=""/>
 										<m_ParamName text="Xref"/>
 									</Element>
 									<Element class="AssetObjects..StringValue">
@@ -1156,7 +1156,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Maize"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1210,7 +1210,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter1"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1243,7 +1243,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Entry"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1289,7 +1289,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1330,7 +1330,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Jungle Variants "/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1359,7 +1359,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1388,7 +1388,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra Hills"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1417,7 +1417,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Forest Variants"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1459,7 +1459,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1492,7 +1492,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Entry"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1525,7 +1525,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Forest Variant"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1554,7 +1554,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Forest Tundra"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1583,7 +1583,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants Tundra Hills"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1625,7 +1625,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter1"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1658,7 +1658,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Entry"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1712,7 +1712,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Landmark001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1741,7 +1741,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Entry"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1795,7 +1795,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Landmark001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1824,7 +1824,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Entry"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1870,7 +1870,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1911,7 +1911,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="ClutterVariants001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1953,7 +1953,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -1994,7 +1994,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Jungle Variants "/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -2036,7 +2036,7 @@
 									</Element>
 								</m_Values>
 							</m_Fields>
-							<m_ChildCollection/>
+							<m_ChildCollections/>
 							<m_Name text="Clutter001"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
@@ -3561,3 +3561,4 @@
 		</Element>
 	</m_RootCollections>
 </AssetObjects..ArtDefSet>
+
