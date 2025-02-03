@@ -635,3 +635,8 @@ dialogue boxes with a choice that appear randomly, if the conditions satisfy the
 
   ##### Svartalfar
   - [x] Recon units (scout, skirmisher etc.) get a damage buff on attack, but not on defense
+
+# Attributions:
+Many icons used from Game-Icons.net
+Lava and Ice material from https://ambientcg.com
+Deliverator animal and T rex models from Wildlife mod.
