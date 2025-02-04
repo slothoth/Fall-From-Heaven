@@ -1,6 +1,6 @@
 -- compatability
 function MapSize()
-    return 100
+    return {}
 end
 
 --[[include "MapEnums"
@@ -319,6 +319,26 @@ function GetImprovementPreferences()
     return impPreferenceList
 end
 
+function GetIndex(x,y)
+    local xx -- Check X for wrap
+    local yy
+    if WrapX then
+        xx = x % mapSize.MapWidth
+    elseif x < 0 or x >= mapSize.MapWidth then
+        return -1
+    else
+        xx = x
+    end
+    -- Check y for wrap
+    if WrapY then
+        yy = y % mapSize.MapHeight
+    elseif y < 0 or y >= mapSize.MapHeight then
+        return -1
+    else
+        yy = y
+    end
+    return yy * mapSize.MapWidth + xx
+end
 function GetRxIndex(x, y)
     -- Check X for wrap
     local yy
@@ -394,9 +414,8 @@ function RegionMap:createRegions()
             if iterations > 10000 then
                 error("endless loop in region seed placement")
             end
-
-            local seedX = math.random(mapSize.MapWidth + 1, 0)
-            local seedY = math.random(mapSize.MapHeight + 1, 0)
+            local seedX = math.random(0, mapSize.MapWidth + 1)
+            local seedY = math.random(0, mapSize.MapHeight + 1)
 
             if not self:isSeedBlocked(seedX, seedY) then
                 local region = Region.new(i, seedX, seedY)
@@ -454,7 +473,7 @@ function RegionMap:createRegions()
 
             if self:canRegionGrowHere(xx, yy, plot.regionID) then
                 roomLeft = true
-                if math.random(100) < ChanceToGrow then
+                if math.random() < ChanceToGrow then
                     self.regionRxMap[i] = plot.regionID
                     local newPlot = RegionPlot.new(plot.regionID, xx, yy)
                     table.insert(self.regionPlotList, newPlot)
@@ -476,7 +495,7 @@ function RegionMap:createRegions()
             local i = GetRxIndex(x, y)
             local regionID = self.regionRxMap[i]
 
-            if regionID ~= -1 then
+            if regionID  and regionID ~= -1 then
                 local region = self:getRegionByID(regionID)
                 for direction = 5, 8 do
                     local xx, yy = self:plotFromRx(x, y, direction)
@@ -707,7 +726,7 @@ function RegionMap:PrintRegionMap(bShowWater)
         for x = 0, mapSize.MapWidth - 1 do
             local mapLoc = self.regionMap[GetIndex(x, y)]
             local region = self:getRegionByID(mapLoc)
-            if mapLoc == -1 then
+            if mapLoc == -1 or not mapLoc then
                 lineString = lineString .. "X"
             elseif bShowWater and region.isWater then
                 lineString = lineString .. " "
@@ -747,7 +766,20 @@ function RegionMap:PrintRegionList()
     end
 end
 
--- Region class definition
+RegionPlot = {}
+RegionPlot.__index = RegionPlot
+
+function RegionPlot.new(ID, x, y)
+    local self = setmetatable({}, RegionPlot)
+    self.regionID = ID
+    self.x = x
+    self.y = y
+    self.gateRx = -1
+    self.bBorder = false
+    self.bEdge = false
+    return self
+end
+
 Region = {}
 Region.__index = Region
 
@@ -1597,13 +1629,13 @@ function TerrainMap:createTerrainMap()
             if plotMap.plotMap[i] ~= plotMap.OCEAN then
                 local rainFall = GetRainfall(x, y)
                 if rainFall < DesertThreshold then
-                    if rainFall < ((math.random(100) * DesertThreshold) / 2.0) + (DesertThreshold / 2.0) then
+                    if rainFall < ((math.random() * DesertThreshold) / 2.0) + (DesertThreshold / 2.0) then
                         self.terrainMap[i] = self.DESERT
                     else
                         self.terrainMap[i] = self.PLAINS
                     end
                 elseif rainFall < PlainsThreshold then
-                    if rainFall < ((math.random(100) * (PlainsThreshold - DesertThreshold)) / 2.0) +
+                    if rainFall < ((math.random() * (PlainsThreshold - DesertThreshold)) / 2.0) +
                         DesertThreshold + ((PlainsThreshold - DesertThreshold) / 2.0) then
                         self.terrainMap[i] = self.PLAINS
                     else
@@ -2924,13 +2956,13 @@ function addFeatures()
                 plotMap.plotMap[i] ~= plotMap.PEAK then
 
                 local rainfall = GetRainfall(x, y)
-                if rainfall >= math.random(100) then
+                if rainfall >= math.random() then
                     local altitude = GetPlotAltitude(x, y)
                     if altitude < LeafyAltitude then
                         if rainfall >= JungleThreshold then
-                            if plot:isFlatlands() and math.random(100) < ChanceForMarsh then
+                            if plot:isFlatlands() and math.random() < ChanceForMarsh then
                                 plot:setTerrainType(gc:getInfoTypeForString("TERRAIN_MARSH"), true, true)
-                                if math.random(100) >= ChanceForOnlyMarsh then
+                                if math.random() >= ChanceForOnlyMarsh then
                                     plot:setFeatureType(featureJungle, 0)
                                 end
                             else
@@ -2959,7 +2991,7 @@ function addFeatures()
                 plotMap.plotMap[i] ~= plotMap.PEAK and
                 plotMap.plotMap[i] ~= plotMap.HILLS then
                 local rainfall = GetRainfall(x, y)
-                local randValue = math.random(100)
+                local randValue = math.random()
                 if rainfall * 3.0 >= randValue then
                     plot:setFeatureType(featureScrub, 0)
                 end
@@ -2991,7 +3023,7 @@ function addFeatures()
                         end
                     end
                     if not foundNonDesert then
-                        if math.random(100) < OasisChance then
+                        if math.random() < OasisChance then
                             plot:setFeatureType(featureOasis, 0)
                         end
                     end
@@ -3088,16 +3120,27 @@ end
 
 -- Global variables
 mapSize = MapSize()
-print('entering region Map')
+
 regMap = RegionMap.new()
-print('entering River Map')
 riverMap = RiverMap.new()
-print('entering Plot Map')
 plotMap = PlotMap.new()
-print('entering Terrain Map')
 terrainMap = TerrainMap.new()
-print('entering StartingPlotFinder')
 spf = StartingPlotFinder.new()
+
+mapSize.MapWidth = 68
+mapSize.MapHeight = 68
+regMap:createRegions()
+regMap:PrintRegionMap()
+regMap:PrintRegionList()
+regMap:PrintRegionMap(true)
+riverMap:createRiverMap()
+riverMap:PrintFlowMap()
+plotMap:createPlotMap()
+plotMap:PrintPlotMap()
+regMap:PrintRegionRxMap()
+regMap:PrintRegionMap(true)
+
+print('finished')
 
 -- Usage example:
 -- local finder = StartingPlotFinder.new()
