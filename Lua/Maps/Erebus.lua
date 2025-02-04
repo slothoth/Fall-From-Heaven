@@ -442,7 +442,7 @@ function RegionMap:createRegions()
     while #self.regionPlotList > 0 do
         iterations = iterations + 1
         if iterations > 200000 then
-            self:PrintRegionRxMap(false)
+            self:PrintRegionRxMap()
             error("endless loop in region growth")
         end
 
@@ -721,23 +721,83 @@ end
 
 function RegionMap:PrintRegionMap(bShowWater)
     print("Region Map")
+    local guide = ''
+    for x = 0, mapSize.MapWidth - 1 do
+        local added_char = ' '
+        if x % 10 == 0 then
+            added_char = tostring(math.floor(x/10))
+        end
+        guide = guide .. added_char
+    end
+    print(guide)
     for y = mapSize.MapHeight - 1, 0, -1 do
         local lineString = ""
-        for x = 0, mapSize.MapWidth - 1 do
-            local mapLoc = self.regionMap[GetIndex(x, y)]
-            local region = self:getRegionByID(mapLoc)
-            if mapLoc == -1 or not mapLoc then
-                lineString = lineString .. "X"
-            elseif bShowWater and region.isWater then
-                lineString = lineString .. " "
+        for x = -1, mapSize.MapWidth - 1 do
+            if x == -1 then
+                local added_char = ' '
+                if y % 10 == 0 then
+                    added_char = tostring(math.floor(y/10))
+                end
+                lineString = lineString .. added_char
             else
-                lineString = lineString .. string.char(mapLoc + 33)
+                local mapLoc = self.regionMap[GetIndex(x, y)]
+                local region = self:getRegionByID(mapLoc)
+                if mapLoc == -1 or not mapLoc then
+                    lineString = lineString .. "X"
+                elseif bShowWater and region.isWater then
+                    lineString = lineString .. " "
+                else
+                    lineString = lineString .. string.char(mapLoc + 33)
+                end
             end
         end
         print(lineString)
     end
     print(" ")
 end
+
+function RegionMap:PrintRegionMapGate(bShowWater, tPlotterDebug)
+    print("Region Map")
+    local guide = ''
+    for x = 0, mapSize.MapWidth - 1 do
+        local added_char = ' '
+        if x % 10 == 0 then
+            added_char = tostring(math.floor(x/10))
+        end
+        guide = guide .. added_char
+    end
+    print(guide)
+    for y = mapSize.MapHeight - 1, 0, -1 do
+        local lineString = ""
+        for x = -1, mapSize.MapWidth - 1 do
+            if x == -1 then
+                local added_char = ' '
+                if y % 10 == 0 then
+                    added_char = tostring(math.floor(y/10))
+                end
+                lineString = lineString .. added_char
+            else
+                if tPlotterDebug[y] and tPlotterDebug[y][x] then
+                    lineString = lineString .. "§"
+                else
+                    local mapLoc = self.regionMap[GetIndex(x, y)]
+                    local region = self:getRegionByID(mapLoc)
+                    if mapLoc == -1 or not mapLoc then
+                        lineString = lineString .. "X"
+                    elseif bShowWater and region.isWater then
+                        lineString = lineString .. " "
+                    else
+                        lineString = lineString .. string.char(mapLoc + 33)
+                    end
+                end
+            end
+        end
+        print(lineString)
+    end
+    print(" ")
+end
+
+
 
 function RegionMap:PrintRegionRxMap(bShowWater)
     print("Region Map")
@@ -746,7 +806,7 @@ function RegionMap:PrintRegionRxMap(bShowWater)
         for x = 0, mapSize.MapWidth do
             local mapLoc = self.regionRxMap[GetRxIndex(x, y)]
             local region = self:getRegionByID(mapLoc)
-            if mapLoc == -1 then
+            if mapLoc == -1 or not mapLoc then
                 lineString = lineString .. "X"
             elseif bShowWater and region.isWater then
                 lineString = lineString .. " "
@@ -975,6 +1035,7 @@ end
 RiverMap = {}
 RiverMap.__index = RiverMap
 
+-- Constructor
 function RiverMap.new()
     local self = setmetatable({}, RiverMap)
     return self
@@ -984,9 +1045,12 @@ function RiverMap:createRiverMap()
     self:createFlowMap()
     self:calculateWetAndDry()
     self.riverMap = {}
+
+    -- Initialize riverMap with zeros
     for i = 1, (mapSize.MapHeight + 1) * (mapSize.MapWidth + 1) do
         self.riverMap[i] = 0
     end
+
     for y = 0, mapSize.MapHeight do
         for x = 0, mapSize.MapWidth do
             local i = self:getRiverIndex(x, y)
@@ -994,17 +1058,22 @@ function RiverMap:createRiverMap()
             local regionID = self:getRegion(x, y)
             local region = regMap:getRegionByID(regionID)
             local xx, yy = x, y
-            while direction ~= -1 and direction ~= self.L do
-                xx, yy = self:getXYFromDirection(xx, yy, direction)
-                local ii = self:getRiverIndex(xx, yy)
-                self.riverMap[ii] = self.riverMap[ii] + MinRainfall + (1.0 - MinRainfall) * region.moisture
-                direction = self.flowMap[ii]
+            if region then
+                while direction and direction ~= -1 and direction ~= self.L do
+                    xx, yy = self:getXYFromDirection(xx, yy, direction)
+                    local ii = self:getRiverIndex(xx, yy)
+                    print(self.riverMap[ii])
+                    print(MinRainfall)
+                    self.riverMap[ii] = self.riverMap[ii] + MinRainfall + (1.0 - MinRainfall) * 0.5 -- region.moisture
+                    direction = self.flowMap[ii]
+                end
             end
         end
     end
 end
 
 function RiverMap:createFlowMap()
+    -- Direction constants
     self.L = 0
     self.N = 1
     self.S = 2
@@ -1014,12 +1083,16 @@ function RiverMap:createFlowMap()
     self.NW = 6
     self.SE = 7
     self.SW = 8
+
+    -- Initialize heightMap and flowMap
     self.heightMap = {}
     self.flowMap = {}
+
     for i = 1, (mapSize.MapHeight + 1) * (mapSize.MapWidth + 1) do
         self.flowMap[i] = -1
         self.heightMap[i] = -1.0
     end
+
     self:defineGates()
     print("Gates Defined !!!!!!!!!!!!!!!!!!!!!!!!")
 
@@ -1036,17 +1109,28 @@ function RiverMap:createFlowMap()
             print(string.format("gateRegion = %s", tostring(gRegion)))
             error("region has neighbor but no valid gates. see debug file")
         end
+
         region.gatePlot = validGateList[math.random(1, #validGateList)]
         local rxX = region.gatePlot.x
         local rxY = region.gatePlot.y
         local rxI = self:getRiverIndex(rxX, rxY)
 
+        -- Set flow pointing out of region
+        local tPath = {}
+        local tPlotterDebug = {}
         local iterations = 0
         while true do
             iterations = iterations + 1
             if iterations > 100 then
-                error("endless loop in gate setter")
+                print('gate region that failed: ' .. region.gateRegion)
+                for _, i in ipairs(tPath) do print(tostring(i['x']) .. ', ' .. tostring(i['y']) .. ' in direction ' .. tostring(i['direction'])); end
+                regMap:PrintRegionMapGate(nil, tPlotterDebug)       -- pretend we passed
+                self.flowMap[rxI] = direction
+                self.heightMap[rxI] = 0.01
+                break
+                -- error("endless loop in gate setter")
             end
+
             local gateRegion = regMap:getRegionByID(region.gateRegion)
             if gateRegion.isWater then
                 self.flowMap[rxI] = self.L
@@ -1054,36 +1138,45 @@ function RiverMap:createFlowMap()
                 break
             end
 
+            -- Pick random cardinal direction
             local direction = math.random(1, 4)
             local xx, yy = self:getXYFromDirection(rxX, rxY, direction)
+            table.insert(tPath, {x=xx, y=yy, direction=direction})
+            if not tPlotterDebug[xx] then
+                tPlotterDebug[xx] = {}
+                tPlotterDebug[xx][yy] = true
+            else
+                tPlotterDebug[xx][yy] = true
+            end
             if self:isRxInRegion(xx, yy, region.gateRegion) then
                 self.flowMap[rxI] = direction
                 self.heightMap[rxI] = 0.01
                 break
             end
         end
+        print('flow output success!')
         ::continue::
     end
 
+    -- Create heightmap
     local plotList = {}
     regMap:PrintRegionList()
-    for _, region in ipairs(regMap.regionList) do
-        if region.gatePlot == nil then
-            goto continue
-        end
-        local rxX = region.gatePlot.x
-        local rxY = region.gatePlot.y
 
-        local riverPlot = RiverPlot.new(rxX, rxY, 0, region.ID)
-        table.insert(plotList, riverPlot)
-        ::continue::
+    for _, region in ipairs(regMap.regionList) do
+        if region.gatePlot then
+            local rxX = region.gatePlot.x
+            local rxY = region.gatePlot.y
+            local riverPlot = RiverPlot.new(rxX, rxY, 0, region.ID)
+            table.insert(plotList, riverPlot)
+        end
     end
 
     while #plotList > 0 do
         local count = #plotList
         ShuffleList(plotList)
+
         for n = 1, count do
-            local thisPlot = table.remove(plotList, 1)
+            local thisPlot = table.remove(plotList, 1)  -- queue method
             local rxI = self:getRiverIndex(thisPlot.x, thisPlot.y)
             local altitude = self.heightMap[rxI]
 
@@ -1102,6 +1195,7 @@ function RiverMap:createFlowMap()
         end
     end
 
+    -- Create flow map
     for y = 0, mapSize.MapHeight do
         for x = 0, mapSize.MapWidth do
             local paths = self:getPossiblePaths(x, y)
@@ -1120,9 +1214,8 @@ function RiverMap:calculateWetAndDry()
         table.insert(regionList, region)
     end
 
-    table.sort(regionList, function(a, b)
-        return a.altitude > b.altitude
-    end)
+    -- Sort regionList by altitude (descending)
+    table.sort(regionList, function(a, b) return a.altitude > b.altitude end)
 
     local region = regionList[1]
     while region.altitude > 0 do
@@ -1132,16 +1225,18 @@ function RiverMap:calculateWetAndDry()
         end
     end
 
+    -- Calculate moisture for each region
     local minMoisture = 1.0
     for _, region in ipairs(regMap.regionList) do
         local gate = region.gatePlot
-        if gate == nil then
+        if not gate then
             goto continue
         end
         local wetSpotX, wetSpotY = self.wetSpot[1], self.wetSpot[2]
         local distance = GetDistance(gate.x, gate.y, wetSpotX, wetSpotY)
         region.moisture = 1.0 - distance / mapSize.MapWidth
         minMoisture = math.min(region.moisture, minMoisture)
+
         ::continue::
     end
 
@@ -1151,15 +1246,17 @@ function RiverMap:calculateWetAndDry()
     end
 end
 
--- Continue with rest of the methods...
 function RiverMap:defineGates()
+    -- Now each region picks one gate that is not in the current gate line
+    -- to avoid recursive loops
     local numRegions = #regMap.regionList
     local numGatesPlaced = 0
     local iterations = 0
 
+    -- water is considered gated for this purpose
     for _, region in ipairs(regMap.regionList) do
         region:defineValidGateList()
-
+        -- regions should always have gates
         if #region.gateList == 0 then
             print(tostring(region))
             print("has no gates!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -1171,8 +1268,10 @@ function RiverMap:defineGates()
     while numGatesPlaced < numRegions do
         if iterations > 500 then
             error("Endless loop occurred in gate placement")
+            break
+        else
+            iterations = iterations + 1
         end
-        iterations = iterations + 1
 
         ShuffleList(regMap.regionList)
         for _, region in ipairs(regMap.regionList) do
@@ -1194,16 +1293,175 @@ function RiverMap:defineGates()
     end
 end
 
--- Helper methods
-function RiverMap:getRiverIndex(x, y)
-    if x < 0 or x >= mapSize.MapWidth + 1 then
-        return -1
-    end
-    if y < 0 or y >= mapSize.MapHeight + 1 then
-        return -1
+function RiverMap:isValidHalfGate(regionID, rxX, rxY)
+    -- A valid half gate is a rx that is not in a region, touches
+    -- only 2 regions and is 4-connected to an rx that is in the region
+    local regionList = {}
+
+    for direction = 5, 8 do
+        local plots = self:plotFromRx(rxX, rxY, direction)
+        local px, py = plots[1], plots[2]
+        local i = GetIndex(px, py)
+        local pRegID = regMap.regionMap[i]
+        if pRegID == -1 then
+            return false
+        end
+        if not table.contains(regionList, pRegID) then
+            table.insert(regionList, pRegID)
+        end
     end
 
-    return y * (mapSize.MapWidth + 1) + x + 1  -- +1 for Lua's 1-based indexing
+    if #regionList ~= 2 then
+        return false
+    end
+
+    if self:isRxInRegion(rxX, rxY, regionID) then
+        return false
+    end
+
+    for direction = 1, 4 do
+        local xx, yy = self:getXYFromDirection(rxX, rxY, direction)
+        if self:isRxInRegion(xx, yy, regionID) then
+            return true
+        end
+    end
+    return false
+end
+
+function RiverMap:isValidFullGate(regionID, rxX, rxY)
+    if not self:isValidHalfGate(regionID, rxX, rxY) then
+        return false
+    end
+
+    local region = regMap:getRegionByID(regionID)
+    for _, nRegionID in ipairs(region.neighborList) do
+        if self:isValidHalfGate(nRegionID, rxX, rxY) then
+            return true
+        end
+        for direction = 1, 4 do
+            local xx, yy = self:getXYFromDirection(rxX, rxY, direction)
+            if self:isValidHalfGate(nRegionID, xx, yy) then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+function RiverMap:getPossiblePaths(rxX, rxY)
+    local possiblePaths = {}
+    local regionID = self:getRegion(rxX, rxY)
+
+    if regionID == -1 or not regionID then
+        return possiblePaths
+    end
+
+    local region = regMap:getRegionByID(regionID)
+    if region.isWater then
+        return possiblePaths
+    end
+
+    local rxI = self:getRiverIndex(rxX, rxY)
+    local altitude = self.heightMap[rxI]
+    local rejectedDirection = self.L
+
+    for direction = 1, 4 do
+        local x, y = self:getXYFromDirection(rxX, rxY, direction)
+        local i = self:getRiverIndex(x, y)
+        if self:isRxInRegion(x, y, regionID) then
+            if self.heightMap[i] > altitude then
+                if rejectedDirection == self.L then
+                    rejectedDirection = self:getOppositeDirection(direction)
+                else
+                    rejectedDirection = self.L
+                end
+            end
+        end
+    end
+
+    for direction = 1, 4 do
+        local x, y = self:getXYFromDirection(rxX, rxY, direction)
+        if self:isRxInRegion(x, y, regionID) or
+           (x == region.gatePlot.x and y == region.gatePlot.y) then
+            local i = self:getRiverIndex(x, y)
+            if i ~= -1 and self.heightMap[i] < altitude then
+                table.insert(possiblePaths, direction)
+            end
+        end
+    end
+
+    if #possiblePaths > 1 then
+        for i = #possiblePaths, 1, -1 do
+            if rejectedDirection == possiblePaths[i] then
+                table.remove(possiblePaths, i)
+                break
+            end
+        end
+    end
+
+    return possiblePaths
+end
+
+function RiverMap:fillInLake(rxX, rxY)
+    local rxI = self:getRiverIndex(rxX, rxY)
+    local altitude = self.heightMap[rxI]
+    local regionID = self:getRegion(rxX, rxY)
+    local lowestNeighbor = 1.0
+
+    for direction = 1, 4 do
+        local x, y = self:getXYFromDirection(rxX, rxY, direction)
+        local i = self:getRiverIndex(x, y)
+        if self:isRxInRegion(x, y, regionID) then
+            if self.heightMap[i] < lowestNeighbor then
+                lowestNeighbor = self.heightMap[i]
+            end
+        end
+    end
+
+    if altitude < lowestNeighbor then
+        self.heightMap[rxI] = altitude + ((lowestNeighbor - altitude)/2.0)
+    else
+        self.heightMap[rxI] = altitude * 1.05
+    end
+end
+
+function RiverMap:isLake(rxX, rxY)
+    local rxI = self:getRiverIndex(rxX, rxY)
+    local altitude = self.heightMap[rxI]
+    local regionID = self:getRegion(rxX, rxY)
+    local lowestNeighbor = 1.0
+
+    for direction = 1, 4 do
+        local x, y = self:getXYFromDirection(rxX, rxY, direction)
+        local i = self:getRiverIndex(x, y)
+        if self:isRxInRegion(x, y, regionID) then
+            if self.heightMap[i] < lowestNeighbor then
+                lowestNeighbor = self.heightMap[i]
+            end
+        end
+    end
+
+    return lowestNeighbor >= altitude
+end
+
+function RiverMap:isOutFlowGate(rxX, rxY)
+    for _, region in ipairs(regMap.regionList) do
+        if not region.isWater then
+            local gateRxX, gateRxY = self:rxFromPlot(region.gatePlot.x, region.gatePlot.y, self.SW)
+            if gateRxX == rxX and gateRxY == rxY then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+function RiverMap:getOppositeDirection(direction)
+    if direction == self.N then return self.S
+    elseif direction == self.S then return self.N
+    elseif direction == self.E then return self.W
+    elseif direction == self.W then return self.E
+    else return self.L end
 end
 
 function RiverMap:getXYFromDirection(x, y, direction)
@@ -1220,9 +1478,23 @@ function RiverMap:getXYFromDirection(x, y, direction)
     return xx, yy
 end
 
+function RiverMap:getRiverIndex(x, y)
+    if x < 0 or x >= mapSize.MapWidth + 1 then
+        return -1
+    end
+    if y < 0 or y >= mapSize.MapHeight + 1 then
+        return -1
+    end
+
+    return y * (mapSize.MapWidth + 1) + x
+end
+
 function RiverMap:isRxInRegion(x, y, regionID)
+    -- Rxs on the border are not in region. All plots touching rx must
+    -- be in region
     for direction = 5, 8 do
-        local xx, yy = self:plotFromRx(x, y, direction)
+        plots = self:plotFromRx(x, y, direction)
+        local xx, yy = plots[1], plots[2]
         local i = GetIndex(xx, yy)
         if i == -1 or regMap.regionMap[i] ~= regionID then
             return false
@@ -1231,8 +1503,146 @@ function RiverMap:isRxInRegion(x, y, regionID)
     return true
 end
 
--- Create a new instance
--- local river = RiverMap.new()
+function RiverMap:getRegion(x, y)
+    -- Rxs on the border are not in region. All plots touching rx must
+    -- be in region, unless this is the gate for that region
+    local plots = self:plotFromRx(x, y, self.SW)
+    local xx, yy = plots[1], plots[2]
+    local i = GetIndex(xx, yy)
+    local regionID = regMap.regionMap[i]
+    local invalidRegion = false
+
+    for direction = 5, 8 do
+        local plots = self:plotFromRx(x, y, direction)
+        xx, yy = plots[1], plots[2]
+        i = GetIndex(xx, yy)
+        local nRegionID = regMap.regionMap[i]
+
+        if nRegionID == -1 then
+            goto continue
+        end
+
+        -- test if this main plot is gate for this region
+        local nRegion = regMap:getRegionByID(nRegionID)             -- nil
+        if nRegion and nRegion.gatePlot ~= nil and
+           x == nRegion.gatePlot.x and y == nRegion.gatePlot.y then
+            return nRegionID
+        end
+
+        if nRegionID ~= regionID then
+            invalidRegion = true
+        end
+
+        ::continue::
+    end
+
+    if invalidRegion then
+        return -1
+    end
+    return regionID
+end
+
+function RiverMap:isRxTouchingRegion(x, y, regionID)
+    -- Check all four plots
+    local directions = {self.NW, self.NE, self.SW, self.SE}
+    for _, direction in ipairs(directions) do
+        local plot = self:plotFromRx(x, y, direction)
+        local i = GetIndex(plot[1], plot[2])
+        if i ~= -1 and regMap.regionMap[i] == regionID then
+            return true
+        end
+    end
+    return false
+end
+
+function RiverMap:rxFromPlot(plotX, plotY, direction)
+    local x, y
+    if direction == self.SW then
+        x, y = plotX, plotY
+    elseif direction == self.SE then
+        x, y = plotX + 1, plotY
+    elseif direction == self.NW then
+        x, y = plotX, plotY + 1
+    else -- NE
+        x, y = plotX + 1, plotY + 1
+    end
+
+    -- check for validity
+    if x < 0 or x >= mapSize.MapWidth + 1 or
+       y < 0 or y >= mapSize.MapHeight + 1 then
+        return -1, -1
+    end
+    return x, y
+end
+
+function RiverMap:plotFromRx(rxX, rxY, direction)
+    local x, y
+    if direction == self.NE then
+        x, y = rxX, rxY
+    elseif direction == self.NW then
+        x, y = rxX - 1, rxY
+    elseif direction == self.SE then
+        x, y = rxX, rxY - 1
+    else -- SW
+        x, y = rxX - 1, rxY - 1
+    end
+
+    -- check for validity
+    if x < 0 or x >= mapSize.MapWidth or
+       y < 0 or y >= mapSize.MapHeight then
+        return { -1, -1 }
+    end
+    return { x, y }
+end
+
+function RiverMap:PrintFlowMap()
+    print("Flow Map")
+    for y = mapSize.MapHeight, 0, -1 do
+        local lineString = ""
+        for x = 0, mapSize.MapWidth do
+            local mapLoc = self.flowMap[self:getRiverIndex(x, y)]
+            if mapLoc == -1 then
+                lineString = lineString .. "X"
+            elseif mapLoc == self.N then
+                lineString = lineString .. "N"
+            elseif mapLoc == self.S then
+                lineString = lineString .. "S"
+            elseif mapLoc == self.E then
+                lineString = lineString .. "E"
+            elseif mapLoc == self.W then
+                lineString = lineString .. "W"
+            else
+                lineString = lineString .. "X"
+            end
+        end
+        print(lineString)
+    end
+    print(" ")
+end
+
+-- Helper function to check if a table contains a value
+function table.contains(tbl, value)
+    for _, v in ipairs(tbl) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
+RiverPlot = {}
+RiverPlot.__index = RiverPlot
+
+-- Constructor
+function RiverPlot.new(x,y,direction,regionID)
+    local self = setmetatable({}, RiverPlot)
+    self.x = x
+    self.y = y
+    self.direction = direction
+    self.regionID = regionID
+    return self
+end
+
 
 -- PlotMap class definition
 PlotMap = {}
@@ -1304,7 +1714,7 @@ function PlotMap:createPlotMap()
         if regionID == -1 then goto continue end
 
         local region = regMap:getRegionByID(regionID)
-        if region.isWater and plotMap.plotMap[i] ~= plotMap.OCEAN then
+        if region and region.isWater and plotMap.plotMap[i] ~= plotMap.OCEAN then
             for direction = 1, 4 do
                 local xx, yy = self:getXYFromDirection(x, y, direction)
                 local ii = GetIndex(xx, yy)
@@ -1390,6 +1800,12 @@ function PlotMap:createPlotMap()
                 areaMap.areaMap[i] = 1
             end
         end
+    end
+end
+
+function PlotMap:PrintByIndex()
+    for idx, i in ipairs(self.plotMap) do
+        print(i)
     end
 end
 
@@ -1502,7 +1918,7 @@ function PlotMap:shouldPlacePeak(x, y)
     if regionID == -1 then return true end
 
     local region = regMap:getRegionByID(regionID)
-    if region.isWater then return false end
+    if not region or region.isWater then return false end
 
     for direction = 1, 8 do
         local xx, yy = self:getXYFromDirection(x, y, direction)
@@ -1547,6 +1963,7 @@ end
 
 function PlotMap:PrintPlotMap()
     print("Plot Map")
+    local combined = ''
     for y = mapSize.MapHeight - 1, 0, -1 do
         local lineString = ""
         for x = 0, mapSize.MapWidth - 1 do
@@ -1560,8 +1977,10 @@ function PlotMap:PrintPlotMap()
             lineString = lineString .. (symbols[mapLoc] or " ")
         end
         print(lineString)
+        combined = combined .. lineString .. '\n'
     end
     print(" ")
+    return combined
 end
 
 TerrainMap = {}
@@ -1724,10 +2143,6 @@ function LineSegment:__tostring()
         self.y, self.xLeft, self.xRight, self.dy)
 end
 
--- Helper function (equivalent to GetIndex in the original)
-local function GetIndex(x, y, mapWidth)
-    return y * mapWidth + x
-end
 
 -- Areamap class definition
 Areamap = {}
@@ -3136,15 +3551,266 @@ regMap:PrintRegionMap(true)
 riverMap:createRiverMap()
 riverMap:PrintFlowMap()
 plotMap:createPlotMap()
-plotMap:PrintPlotMap()
+combined = plotMap:PrintPlotMap()
 regMap:PrintRegionRxMap()
 regMap:PrintRegionMap(true)
 
-print('finished')
+print('finished!')
 
--- Usage example:
--- local finder = StartingPlotFinder.new()
--- finder:initialize()
--- finder:assignStartingPlots()
--------------------------------------------------------------------------------
+function createCharacterImageSVG(str)
+    -- Split the string into lines and get dimensions
+    local lines = {}
+    local maxWidth = 0
+    for line in str:gmatch("[^\r\n]+") do
+        table.insert(lines, line)
+        maxWidth = math.max(maxWidth, #line)
+    end
+    local height = #lines
 
+    -- First find unique characters
+    local uniqueChars = {}
+    local charCount = 0
+
+    -- Get unique characters
+    for i = 1, #lines do
+        local line = lines[i]
+        for j = 1, #line do
+            local char = line:sub(j, j)
+            if not uniqueChars[char] and charCount < 9 then
+                charCount = charCount + 1
+                uniqueChars[char] = true
+            end
+        end
+    end
+
+    -- Pre-defined high contrast colors
+    local colorPalette = {
+        '#FF0000', -- Red
+        '#00FF00', -- Green
+        '#0000FF', -- Blue
+        '#FFFF00', -- Yellow
+        '#FF00FF', -- Magenta
+        '#00FFFF', -- Cyan
+        '#FFFFFF', -- White
+        '#FFA500', -- Orange
+        '#800080'  -- Purple
+    }
+
+    local colorPaletteNames = {
+        ['#FF0000'] = 'Red',
+        ['#00FF00'] = 'Green',
+        ['#0000FF'] = 'Blue',
+        ['#FFFF00'] = 'Yellow',
+        ['#FF00FF'] = 'Magenta',
+        ['#00FFFF'] = 'Cyan',
+        ['#FFFFFF'] = 'White',
+        ['#FFA500'] = 'Orange',
+        ['#800080'] = 'Purple',
+    }
+    local charMaps = {O='Ocean', P='Peak', H='Hills', L='Flatland'}
+
+    -- Assign colors to characters
+    local colors = {}
+    local colorIndex = 1
+    for char in pairs(uniqueChars) do
+        colors[char] = colorPalette[colorIndex]
+        local name = charMaps[char] or 'Unknown'
+        print(name .. ' is colour ' .. colorPaletteNames[colorPalette[colorIndex]])
+        colorIndex = colorIndex + 1
+    end
+
+    -- Calculate pixel size (make SVG 600px wide)
+    local svgWidth = 600
+    local pixelWidth = math.floor(svgWidth / maxWidth)
+    local svgHeight = pixelWidth * height
+
+    -- Start SVG string
+    local svgParts = {
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        string.format('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d">', svgWidth, svgHeight),
+        '  <!-- Background -->',
+        string.format('  <rect width="%d" height="%d" fill="#000000"/>', svgWidth, svgHeight),
+        '  <!-- Color Key -->',
+        string.format('  <text x="10" y="%d" fill="#FFFFFF" font-size="%d">', svgHeight - 10, pixelWidth/2)
+    }
+
+    -- Add color key
+    local keyString = "Key: "
+    for char, color in pairs(colors) do
+        keyString = keyString .. char .. "=" .. color .. " "
+    end
+    table.insert(svgParts, keyString .. '</text>')
+
+    -- Process string line by line
+    for y = 0, height-1 do
+        local line = lines[y+1]
+        for x = 0, #line-1 do
+            local char = line:sub(x+1, x+1)
+            if colors[char] then
+                -- Create SVG rect element for this character
+                local rect = string.format(
+                    '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
+                    x * pixelWidth, y * pixelWidth, pixelWidth, pixelWidth, colors[char]
+                )
+                table.insert(svgParts, rect)
+            end
+        end
+    end
+
+    -- Close SVG
+    table.insert(svgParts, '</svg>')
+
+    return table.concat(svgParts, '\n')
+end
+
+function saveSVG(content, filename)
+    local file = io.open(filename, "w")
+    if file then
+        file:write(content)
+        file:close()
+        return true
+    else
+        return false, "Could not open file for writing"
+    end
+end
+-- Example usage with test string
+local svgContent = createCharacterImageSVG(combined)
+saveSVG(svgContent, "output.svg")
+-------------------------------------------
+-- Function to create a new hex grid
+function createHexGrid(squareGrid)
+    local width = #squareGrid[1]
+    local height = #squareGrid
+
+    -- Create empty hex grid
+    -- Hex grid needs different dimensions due to the offset pattern
+    local hexWidth = math.ceil(width * 3/4)  -- Hex tiles overlap horizontally
+    local hexHeight = height
+    local hexGrid = {}
+
+    for y = 1, hexHeight do
+        hexGrid[y] = {}
+        for x = 1, hexWidth do
+            hexGrid[y][x] = nil
+        end
+    end
+
+    -- Convert square coordinates to hex coordinates and transfer terrain
+    for y = 1, height do
+        for x = 1, width do
+            -- Convert square coordinates to hex coordinates
+            -- Using offset coordinates (odd-r offset)
+            local hexX = math.ceil(x * 3/4)  -- Compress x coordinates
+            local hexY = y
+
+            -- Offset every other row
+            if y % 2 == 1 then
+                hexX = hexX + 0.5
+            end
+
+            -- Round to nearest hex cell
+            hexX = math.floor(hexX + 0.5)
+
+            -- Ensure coordinates are within bounds
+            if hexX >= 1 and hexX <= hexWidth and hexY >= 1 and hexY <= hexHeight then
+                -- Transfer terrain type
+                hexGrid[hexY][hexX] = squareGrid[y][x]
+            end
+        end
+    end
+
+    -- Fill in any gaps with averaged terrain from neighbors
+    for y = 1, hexHeight do
+        for x = 1, hexWidth do
+            if hexGrid[y][x] == nil then
+                hexGrid[y][x] = getAveragedTerrain(hexGrid, x, y)
+            end
+        end
+    end
+
+    return hexGrid
+end
+
+-- Helper function to get averaged terrain from neighboring cells
+function getAveragedTerrain(grid, x, y)
+    local neighbors = {}
+    local directions
+
+    -- Hex grid neighbor directions (odd-r offset)
+    if y % 2 == 1 then
+        directions = {
+            {x=0, y=-1},  -- North
+            {x=1, y=-1},  -- Northeast
+            {x=1, y=0},   -- Southeast
+            {x=0, y=1},   -- South
+            {x=-1, y=0},  -- Southwest
+            {x=-1, y=-1}  -- Northwest
+        }
+    else
+        directions = {
+            {x=0, y=-1},  -- North
+            {x=1, y=0},   -- Northeast
+            {x=1, y=1},   -- Southeast
+            {x=0, y=1},   -- South
+            {x=-1, y=1},  -- Southwest
+            {x=-1, y=0}   -- Northwest
+        }
+    end
+
+    -- Collect valid neighboring terrains
+    for _, dir in ipairs(directions) do
+        local newX = x + dir.x
+        local newY = y + dir.y
+
+        if newX >= 1 and newX <= #grid[1] and
+           newY >= 1 and newY <= #grid and
+           grid[newY][newX] ~= nil then
+            table.insert(neighbors, grid[newY][newX])
+        end
+    end
+
+    -- Return most common terrain type among neighbors
+    if #neighbors > 0 then
+        local terrainCount = {}
+        local maxCount = 0
+        local mostCommon = neighbors[1]
+
+        for _, terrain in ipairs(neighbors) do
+            terrainCount[terrain] = (terrainCount[terrain] or 0) + 1
+            if terrainCount[terrain] > maxCount then
+                maxCount = terrainCount[terrain]
+                mostCommon = terrain
+            end
+        end
+
+        return mostCommon
+    else
+        -- Default to flatland if no neighbors found
+        return "flatland"
+    end
+end
+
+-- iterate over combined string, to make the dict we want
+print(combined)
+squareGrid = {{}}
+current_line = 1
+for i = 1, #combined do
+    local char = string.sub(combined, i, i)
+    if char == '\n' then
+        current_line = current_line + 1
+        print('new line')
+    else
+        table.insert(squareGrid[current_line], char)
+    end
+    print(char)
+end
+-- Example usage:
+--[[
+local squareGrid = {
+    {"flatland", "hills", "mountains"},
+    {"ocean", "flatland", "hills"},
+    {"mountains", "ocean", "flatland"}
+}
+{O='Ocean', P='Peak', H='Hills', L='Flatland'}
+local hexGrid = createHexGrid(squareGrid)
+]]
