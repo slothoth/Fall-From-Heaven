@@ -730,6 +730,7 @@ function RegionMap:PrintRegionMap(bShowWater)
         guide = guide .. added_char
     end
     print(guide)
+    local output_plots = {}
     for y = mapSize.MapHeight - 1, 0, -1 do
         local lineString = ""
         for x = -1, mapSize.MapWidth - 1 do
@@ -744,16 +745,21 @@ function RegionMap:PrintRegionMap(bShowWater)
                 local region = self:getRegionByID(mapLoc)
                 if mapLoc == -1 or not mapLoc then
                     lineString = lineString .. "X"
+                    output_ = "X"
                 elseif bShowWater and region.isWater then
                     lineString = lineString .. " "
+                    output_ = " "
                 else
                     lineString = lineString .. string.char(mapLoc + 33)
+                    output_ = string.char(mapLoc + 33)
                 end
+                output_plots[GetIndex(x, y)] = output_
             end
         end
         print(lineString)
     end
     print(" ")
+    return output_plots
 end
 
 function RegionMap:PrintRegionMapGate(bShowWater, tPlotterDebug)
@@ -801,22 +807,29 @@ end
 
 function RegionMap:PrintRegionRxMap(bShowWater)
     print("Region Map")
+    local outputPlots = {}
     for y = mapSize.MapHeight, 0, -1 do
         local lineString = ""
+        local output_char
         for x = 0, mapSize.MapWidth do
             local mapLoc = self.regionRxMap[GetRxIndex(x, y)]
             local region = self:getRegionByID(mapLoc)
             if mapLoc == -1 or not mapLoc then
                 lineString = lineString .. "X"
+                output_char = "X"
             elseif bShowWater and region.isWater then
                 lineString = lineString .. " "
+                output_char = " "
             else
                 lineString = lineString .. string.char(mapLoc + 33)
+                output_char = string.char(mapLoc + 33)
             end
+            outputPlots[GetRxIndex(x, y)] = output_char
         end
         print(lineString)
     end
     print(" ")
+    return outputPlots
 end
 
 function RegionMap:PrintRegionList()
@@ -1597,27 +1610,32 @@ end
 
 function RiverMap:PrintFlowMap()
     print("Flow Map")
+    local river_plots = {}
+    local char_add
     for y = mapSize.MapHeight, 0, -1 do
         local lineString = ""
         for x = 0, mapSize.MapWidth do
             local mapLoc = self.flowMap[self:getRiverIndex(x, y)]
             if mapLoc == -1 then
-                lineString = lineString .. "X"
+                char_add =  "X"
             elseif mapLoc == self.N then
-                lineString = lineString .. "N"
+                char_add =  "N"
             elseif mapLoc == self.S then
-                lineString = lineString .. "S"
+                char_add =  "S"
             elseif mapLoc == self.E then
-                lineString = lineString .. "E"
+                char_add =  "E"
             elseif mapLoc == self.W then
-                lineString = lineString .. "W"
+                char_add =  "W"
             else
-                lineString = lineString .. "X"
+                char_add =  "X"
             end
+            lineString = lineString .. char_add
+            river_plots[self:getRiverIndex(x, y)] = char_add
         end
         print(lineString)
     end
     print(" ")
+    return river_plots
 end
 
 -- Helper function to check if a table contains a value
@@ -1964,23 +1982,26 @@ end
 function PlotMap:PrintPlotMap()
     print("Plot Map")
     local combined = ''
-    for y = mapSize.MapHeight - 1, 0, -1 do
-        local lineString = ""
-        for x = 0, mapSize.MapWidth - 1 do
-            local mapLoc = self.plotMap[GetIndex(x, y)]
-            local symbols = {
+    local out_plots = {}
+    local symbols = {
                 [self.OCEAN] = "O",
                 [self.PEAK] = "P",
                 [self.HILLS] = "H",
                 [self.LAND] = "L"
             }
+    for y = mapSize.MapHeight - 1, 0, -1 do
+        local lineString = ""
+        for x = 0, mapSize.MapWidth - 1 do
+            local mapLoc = self.plotMap[GetIndex(x, y)]
+
+            out_plots[GetIndex(x, y)] =  symbols[mapLoc] or " "
             lineString = lineString .. (symbols[mapLoc] or " ")
         end
         print(lineString)
         combined = combined .. lineString .. '\n'
     end
     print(" ")
-    return combined
+    return combined, out_plots
 end
 
 TerrainMap = {}
@@ -3549,34 +3570,35 @@ regMap:PrintRegionMap()
 regMap:PrintRegionList()
 regMap:PrintRegionMap(true)
 riverMap:createRiverMap()
-riverMap:PrintFlowMap()
+river_plots = riverMap:PrintFlowMap()
 plotMap:createPlotMap()
-combined = plotMap:PrintPlotMap()
-regMap:PrintRegionRxMap()
-regMap:PrintRegionMap(true)
+combined, out_plots = plotMap:PrintPlotMap()
+rXPlots = regMap:PrintRegionRxMap()
+region_plots = regMap:PrintRegionMap(true)
 
 print('finished!')
-
-function createCharacterImageSVG(str)
-    -- Split the string into lines and get dimensions
-    local lines = {}
-    local maxWidth = 0
-    for line in str:gmatch("[^\r\n]+") do
-        table.insert(lines, line)
-        maxWidth = math.max(maxWidth, #line)
+----------------------------------------------------------
+function createCharacterImageSVG(grid)
+    local height = #grid
+    local width = 0
+    for i = 1, height do
+        width = math.max(width, #grid[i])
     end
-    local height = #lines
-
     -- First find unique characters
     local uniqueChars = {}
     local charCount = 0
 
+    local symbols = {["O"] = '#0000FF', -- Blue
+                ["P"] = '#FF0000', -- Red
+                ["H"] = '#FFFF00', -- Yellow,
+                ["L"] = '#00FF00' -- Green
+            }
+
     -- Get unique characters
-    for i = 1, #lines do
-        local line = lines[i]
-        for j = 1, #line do
-            local char = line:sub(j, j)
-            if not uniqueChars[char] and charCount < 9 then
+    for y = 1, height do
+        for x = 1, #grid[y] do
+            local char = grid[y][x]
+            if not uniqueChars[char] and charCount < 9 and not symbols[char] then
                 charCount = charCount + 1
                 uniqueChars[char] = true
             end
@@ -3585,10 +3607,6 @@ function createCharacterImageSVG(str)
 
     -- Pre-defined high contrast colors
     local colorPalette = {
-        '#FF0000', -- Red
-        '#00FF00', -- Green
-        '#0000FF', -- Blue
-        '#FFFF00', -- Yellow
         '#FF00FF', -- Magenta
         '#00FFFF', -- Cyan
         '#FFFFFF', -- White
@@ -3614,14 +3632,12 @@ function createCharacterImageSVG(str)
     local colorIndex = 1
     for char in pairs(uniqueChars) do
         colors[char] = colorPalette[colorIndex]
-        local name = charMaps[char] or 'Unknown'
-        print(name .. ' is colour ' .. colorPaletteNames[colorPalette[colorIndex]])
         colorIndex = colorIndex + 1
     end
 
     -- Calculate pixel size (make SVG 600px wide)
     local svgWidth = 600
-    local pixelWidth = math.floor(svgWidth / maxWidth)
+    local pixelWidth = math.floor(svgWidth / width)
     local svgHeight = pixelWidth * height
 
     -- Start SVG string
@@ -3642,15 +3658,15 @@ function createCharacterImageSVG(str)
     table.insert(svgParts, keyString .. '</text>')
 
     -- Process string line by line
-    for y = 0, height-1 do
-        local line = lines[y+1]
-        for x = 0, #line-1 do
-            local char = line:sub(x+1, x+1)
-            if colors[char] then
+    for y = 1, height do
+        for x = 1, #grid[y] do
+            local char = grid[y][x]
+            if colors[char] or symbols[char] then
                 -- Create SVG rect element for this character
+                local colour = symbols[char] or colors[char]
                 local rect = string.format(
                     '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
-                    x * pixelWidth, y * pixelWidth, pixelWidth, pixelWidth, colors[char]
+                    x * pixelWidth, y * pixelWidth, pixelWidth, pixelWidth, colour
                 )
                 table.insert(svgParts, rect)
             end
@@ -3673,21 +3689,38 @@ function saveSVG(content, filename)
         return false, "Could not open file for writing"
     end
 end
--- Example usage with test string
-local svgContent = createCharacterImageSVG(combined)
-saveSVG(svgContent, "output.svg")
+
+function make_grid(tPlots)
+    -- iterate over combined string, to make the dict we want
+    squareGrid = {{}}
+    count = 1
+    row = 1
+    for idx, i in ipairs(tPlots) do
+        if count == 68 then
+            count = 0
+            row = row + 1
+            squareGrid[row] = {}
+        else
+            count = count + 1
+            table.insert(squareGrid[row], i)
+        end
+    end
+    return squareGrid
+end
+
 -------------------------------------------
 -- Function to create a new hex grid
 function createHexGrid(squareGrid)
-    local width = #squareGrid[1]
     local height = #squareGrid
+    local width = #squareGrid[1]
 
+    print('width, height: ' .. tostring(width) .. ', ' .. tostring(height))
     -- Create empty hex grid
     -- Hex grid needs different dimensions due to the offset pattern
-    local hexWidth = math.ceil(width * 3/4)  -- Hex tiles overlap horizontally
-    local hexHeight = height
+    local hexWidth = width-- Hex tiles overlap horizontally
+    local hexHeight = math.ceil(height * 3/4)
     local hexGrid = {}
-
+    print('updated width, height: ' .. tostring(hexWidth) .. ', ' .. tostring(hexHeight))
     for y = 1, hexHeight do
         hexGrid[y] = {}
         for x = 1, hexWidth do
@@ -3700,16 +3733,16 @@ function createHexGrid(squareGrid)
         for x = 1, width do
             -- Convert square coordinates to hex coordinates
             -- Using offset coordinates (odd-r offset)
-            local hexX = math.ceil(x * 3/4)  -- Compress x coordinates
-            local hexY = y
+            local hexX = x  -- Compress x coordinates
+            local hexY =  math.ceil(y * 3/4)
 
             -- Offset every other row
-            if y % 2 == 1 then
-                hexX = hexX + 0.5
+            if x % 2 == 1 then
+                hexY = hexY + 0.5
             end
 
             -- Round to nearest hex cell
-            hexX = math.floor(hexX + 0.5)
+            hexY = math.floor(hexY + 0.5)
 
             -- Ensure coordinates are within bounds
             if hexX >= 1 and hexX <= hexWidth and hexY >= 1 and hexY <= hexHeight then
@@ -3786,31 +3819,175 @@ function getAveragedTerrain(grid, x, y)
         return mostCommon
     else
         -- Default to flatland if no neighbors found
-        return "flatland"
+        return "L"
     end
 end
 
--- iterate over combined string, to make the dict we want
-print(combined)
-squareGrid = {{}}
-current_line = 1
-for i = 1, #combined do
-    local char = string.sub(combined, i, i)
-    if char == '\n' then
-        current_line = current_line + 1
-        print('new line')
-    else
-        table.insert(squareGrid[current_line], char)
+plotMap:PrintPlotMap()
+
+function createHexGridSVG(grid)
+    -- Calculate dimensions
+    local height = #grid
+    local width = 0
+    for i = 1, height do
+        width = math.max(width, #grid[i])
     end
-    print(char)
+
+    local symbols = {["O"] = '#0000FF', -- Blue
+                ["P"] = '#FF0000', -- Red
+                ["H"] = '#FFFF00', -- Yellow,
+                ["L"] = '#00FF00' -- Green
+            }
+
+    -- Find unique characters
+    local uniqueChars = {}
+    local charCount = 0
+
+    for y = 1, height do
+        for x = 1, #grid[y] do
+            local char = grid[y][x]
+            if not uniqueChars[char] and charCount < 9 and not symbols[char] then
+                charCount = charCount + 1
+                uniqueChars[char] = true
+            end
+        end
+    end
+
+    -- Define high contrast colors
+    local colorPalette = {
+        '#FF00FF', -- Magenta
+        '#00FFFF', -- Cyan
+        '#FFFFFF', -- White
+        '#FFA500', -- Orange
+        '#800080'  -- Purple
+    }
+
+    -- Assign colors to characters
+    local colors = {}
+    local colorIndex = 1
+    for char in pairs(uniqueChars) do
+        colors[char] = colorPalette[colorIndex]
+        colorIndex = colorIndex + 1
+    end
+
+    -- Calculate hex dimensions for proper tiling
+    local hexSize = 30  -- Size of hexagon (radius)
+    local hexWidth = hexSize * 2
+    local hexHeight = hexSize * math.sqrt(3)
+    -- For proper tiling:
+    local horizontalSpacing = 3 * hexSize / 2  -- This creates proper horizontal spacing
+    local verticalSpacing = hexHeight          -- Height stays the same
+
+    -- Add padding for border
+    local padding = hexSize * 2
+
+    -- Calculate SVG dimensions with some padding
+    local svgWidth = width * horizontalSpacing + padding * 2
+    local svgHeight = height * verticalSpacing + padding * 2
+
+    -- Function to generate hexagon points
+    local function getHexagonPoints(cx, cy)
+        local points = {}
+        for i = 0, 5 do
+            local angle = math.pi / 3 * i + math.pi / 6  -- Rotate 30 degrees to point up
+            local x = cx + hexSize * math.cos(angle)
+            local y = cy + hexSize * math.sin(angle)
+            table.insert(points, string.format("%.2f,%.2f", x, y))
+        end
+        return table.concat(points, " ")
+    end
+
+    -- Start SVG string
+    local svgParts = {
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        string.format('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %.2f %.2f">', svgWidth, svgHeight),
+        '  <!-- Background -->',
+        string.format('  <rect width="%.2f" height="%.2f" fill="#1a1a1a"/>', svgWidth, svgHeight)
+    }
+
+    -- Add hexagons
+    for y = 1, height do
+        for x = 1, #grid[y] do
+            local char = grid[y][x]
+            if colors[char] or symbols[char] then
+                local colour = symbols[char] or colors[char]
+                -- Calculate hex center position
+                local cx = padding + x * horizontalSpacing + ((y-1) % 2) * (horizontalSpacing / 2)
+                local cy = padding + y * verticalSpacing
+
+                -- Create hexagon
+                local hexPoints = getHexagonPoints(cx, cy)
+                local hex = string.format(
+                    '  <polygon points="%s" fill="%s" stroke="#000000" stroke-width="1"/>',
+                    hexPoints,
+                    colour
+                )
+                table.insert(svgParts, hex)
+                table.insert(svgParts, hex)
+                if x == 1 or y == 1 then
+                    local guide
+                    if x == 1 then guide = y; else guide = x; end
+                    table.insert(svgParts, string.format(
+                            '  <text x="%.2f" y="%.2f" fill="#000000" font-size="%d" text-anchor="middle" dominant-baseline="middle">%s</text>',
+                            cx, cy, hexSize/2, guide
+                    ))
+                end
+            end
+        end
+    end
+
+    -- Add color key
+    local keyY = svgHeight - 20
+    table.insert(svgParts, string.format(
+        '  <text x="10" y="%.2f" fill="#FFFFFF" font-size="14">Key: </text>',
+        keyY
+    ))
+    local keyX = 50
+    for char, color in pairs(colors) do
+        table.insert(svgParts, string.format(
+            '  <rect x="%.2f" y="%.2f" width="20" height="20" fill="%s"/>',
+            keyX, keyY - 15, color
+        ))
+        table.insert(svgParts, string.format(
+            '  <text x="%.2f" y="%.2f" fill="#FFFFFF" font-size="14">%s</text>',
+            keyX + 25, keyY, char
+        ))
+        keyX = keyX + 60
+    end
+
+    -- Close SVG
+    table.insert(svgParts, '</svg>')
+
+    return table.concat(svgParts, '\n')
 end
--- Example usage:
---[[
-local squareGrid = {
-    {"flatland", "hills", "mountains"},
-    {"ocean", "flatland", "hills"},
-    {"mountains", "ocean", "flatland"}
-}
-{O='Ocean', P='Peak', H='Hills', L='Flatland'}
+
+squareGrid = make_grid(out_plots)
+local svgContent = createCharacterImageSVG(squareGrid)
+saveSVG(svgContent, "output.svg")
 local hexGrid = createHexGrid(squareGrid)
-]]
+local svgContent = createHexGridSVG(hexGrid)
+saveSVG(svgContent, "hexgrid.svg")
+
+
+
+
+squareGrid = make_grid(region_plots)
+local svgContent = createCharacterImageSVG(squareGrid)
+saveSVG(svgContent, "output_region.svg")
+local hexGrid = createHexGrid(squareGrid)
+local svgContent = createHexGridSVG(hexGrid)
+saveSVG(svgContent, "hexgrid_region.svg")
+
+squareGrid = make_grid(river_plots)
+local svgContent = createCharacterImageSVG(squareGrid)
+saveSVG(svgContent, "output_river.svg")
+local hexGrid = createHexGrid(squareGrid)
+local svgContent = createHexGridSVG(hexGrid)
+saveSVG(svgContent, "hexgrid_river.svg")
+
+squareGrid = make_grid(rXPlots)
+local svgContent = createCharacterImageSVG(squareGrid)
+saveSVG(svgContent, "output_RX.svg")
+local hexGrid = createHexGrid(squareGrid)
+local svgContent = createHexGridSVG(hexGrid)
+saveSVG(svgContent, "hexgrid_rx.svg")
