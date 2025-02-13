@@ -15,3 +15,7 @@ python_gen/data/foreign_keys.json
 /python_gen/build_utils/FallFromHeaven.Mod.art.xml
 /python_gen/build_utils/correct.xml
 /python_gen/data/
+/data/tables/*
+/data/*
+/python_gen/build_utils/*
+/python_gen/*
