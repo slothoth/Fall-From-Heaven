@@ -7,7 +7,8 @@ categories: Art
 
 Hullo again! its been about three months since i posted, but its been a busy time. I have been deep into making art and assets and all sorts of polish.
 
-I've made icons for all of the mana resources, some of which I had some help using AI image generation, as I am no artist, but there was still a lot of massaging done to fix things. Hopefully they are still high quality, but I would be happy to accept contributions to replace them, as I know some people object to AI generation.
+I've made icons for all of the mana resources, some of which I had some help using AI image generation, as I am no artist,
+but there was still a lot of massaging done to fix things. Hopefully they are still high quality, but I would be happy to accept contributions to replace them, as I know some people object to AI generation.
 ![Mana Resources!](/Fall-From-Heaven//Images/resources_one.png)
 ![Mana Resources!](/Fall-From-Heaven//Images/resources_two.png)
 ![Mana Resources!](/Fall-From-Heaven//Images/resources_three.png)
