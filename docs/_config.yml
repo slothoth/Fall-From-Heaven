@@ -18,12 +18,12 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Fall From Heaven
+title: Fall From Heaven - Civ6 Conversion
 email: smayobiz@gmail.com
 description: >-
-  Documenting the development of the Civilization VI mod Fall From Heaven, a port of
-  the Civilization IV mod Fall From Heaven.
-github_username:  slothoth
+  Documenting the development of the Civilization VI port of Fall From Heaven, a
+  the Civilization IV mod by Kael.
+github_username: slothoth
 
 # Build settings
 theme: minima
