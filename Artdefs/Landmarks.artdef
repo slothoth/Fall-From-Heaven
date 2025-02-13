@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <AssetObjects..ArtDefSet>
 	<m_Version>
 		<major>4</major>
@@ -61,7 +62,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="BUILDING_MAGE_GUILD"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -93,7 +94,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="DIS_CMP_Madrasa"/>
+										<m_EntryName text="TB_ERROR"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -289,7 +290,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="BUILDING_TAVERN"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -346,7 +347,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="BUILDING_GRIGORI_TAVERN"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -403,7 +404,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="SLTH_BUILDING_INN"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -435,7 +436,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="DIS_DIP_Consulate_Bld"/>
+										<m_EntryName text="TB_ERROR"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -460,7 +461,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="BUILDING_CHANCERY"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -492,7 +493,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="DIS_DIP_Chancery_Bld"/>
+										<m_EntryName text="TB_ERROR"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -631,7 +632,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="SLTH_BUILDING_CHANCEL"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -688,7 +689,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="SLTH_BUILDING_HUNTING_LODGE"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -859,7 +860,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="BUILDING_GROVE"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -891,7 +892,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="DIS_Preserve_Grove"/>
+										<m_EntryName text="TB_ERROR"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -933,10 +934,10 @@
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
 										<m_ElementName text="DEFAULT"/>
-										<m_RootCollectionName text="Civilization"/>
-										<m_ArtDefPath text="Civilizations.artdef"/>
+										<m_RootCollectionName text="Culture"/>
+										<m_ArtDefPath text="Cultures.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Civilizations"/>
+										<m_TemplateName text="Cultures"/>
 										<m_ParamName text="Tag_Culture"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
@@ -1144,7 +1145,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="SLTH_BUILDING_AQUEDUCT"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -1176,7 +1177,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="DIS_AQD_Base_Tower"/>
+										<m_EntryName text="TB_ERROR"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -1209,12 +1210,12 @@
 										<m_eValueType>ARTDEF_REF</m_eValueType>
 										<m_Values>
 											<Element class="AssetObjects..ArtDefReferenceValue">
-												<m_ElementName text="BUILDING_MAGE_GUILD"/>
-												<m_RootCollectionName text="Building"/>
-												<m_ArtDefPath text="Buildings.artdef"/>
+												<m_ElementName text=""/>
+												<m_RootCollectionName text=""/>
+												<m_ArtDefPath text=""/>
 												<m_CollectionIsLocked>true</m_CollectionIsLocked>
-												<m_TemplateName text="Buildings"/>
-												<m_ParamName text="Set001"/>
+												<m_TemplateName text=""/>
+												<m_ParamName text="Set"/>
 											</Element>
 										</m_Values>
 										<m_ParamName text="Set"/>
@@ -1233,12 +1234,12 @@
 										<m_eValueType>ARTDEF_REF</m_eValueType>
 										<m_Values>
 											<Element class="AssetObjects..ArtDefReferenceValue">
-												<m_ElementName text="BUILDING_MAGE_GUILD"/>
-												<m_RootCollectionName text="Building"/>
-												<m_ArtDefPath text="Buildings.artdef"/>
+												<m_ElementName text=""/>
+												<m_RootCollectionName text=""/>
+												<m_ArtDefPath text=""/>
 												<m_CollectionIsLocked>true</m_CollectionIsLocked>
-												<m_TemplateName text="Buildings"/>
-												<m_ParamName text="Set001"/>
+												<m_TemplateName text=""/>
+												<m_ParamName text="Set"/>
 											</Element>
 											<Element class="AssetObjects..ArtDefReferenceValue">
 												<m_ElementName text="BUILDING_GRANARY"/>
@@ -1273,12 +1274,12 @@
 												<m_ParamName text="Set001"/>
 											</Element>
 											<Element class="AssetObjects..ArtDefReferenceValue">
-												<m_ElementName text="BUILDING_MAGE_GUILD"/>
-												<m_RootCollectionName text="Building"/>
-												<m_ArtDefPath text="Buildings.artdef"/>
+												<m_ElementName text=""/>
+												<m_RootCollectionName text=""/>
+												<m_ArtDefPath text=""/>
 												<m_CollectionIsLocked>true</m_CollectionIsLocked>
-												<m_TemplateName text="Buildings"/>
-												<m_ParamName text="Set002"/>
+												<m_TemplateName text=""/>
+												<m_ParamName text="Set"/>
 											</Element>
 										</m_Values>
 										<m_ParamName text="Set"/>
@@ -1297,12 +1298,12 @@
 										<m_eValueType>ARTDEF_REF</m_eValueType>
 										<m_Values>
 											<Element class="AssetObjects..ArtDefReferenceValue">
-												<m_ElementName text="BUILDING_MAGE_GUILD"/>
-												<m_RootCollectionName text="Building"/>
-												<m_ArtDefPath text="Buildings.artdef"/>
+												<m_ElementName text=""/>
+												<m_RootCollectionName text=""/>
+												<m_ArtDefPath text=""/>
 												<m_CollectionIsLocked>true</m_CollectionIsLocked>
-												<m_TemplateName text="Buildings"/>
-												<m_ParamName text="Set001"/>
+												<m_TemplateName text=""/>
+												<m_ParamName text="Set"/>
 											</Element>
 											<Element class="AssetObjects..ArtDefReferenceValue">
 												<m_ElementName text="BUILDING_PALACE"/>
@@ -1337,12 +1338,12 @@
 										<m_eValueType>ARTDEF_REF</m_eValueType>
 										<m_Values>
 											<Element class="AssetObjects..ArtDefReferenceValue">
-												<m_ElementName text="BUILDING_MAGE_GUILD"/>
-												<m_RootCollectionName text="Building"/>
-												<m_ArtDefPath text="Buildings.artdef"/>
+												<m_ElementName text=""/>
+												<m_RootCollectionName text=""/>
+												<m_ArtDefPath text=""/>
 												<m_CollectionIsLocked>true</m_CollectionIsLocked>
-												<m_TemplateName text="Buildings"/>
-												<m_ParamName text="Set001"/>
+												<m_TemplateName text=""/>
+												<m_ParamName text="Set"/>
 											</Element>
 											<Element class="AssetObjects..ArtDefReferenceValue">
 												<m_ElementName text="BUILDING_PALACE"/>
@@ -1385,12 +1386,12 @@
 										<m_eValueType>ARTDEF_REF</m_eValueType>
 										<m_Values>
 											<Element class="AssetObjects..ArtDefReferenceValue">
-												<m_ElementName text="BUILDING_MAGE_GUILD"/>
-												<m_RootCollectionName text="Building"/>
-												<m_ArtDefPath text="Buildings.artdef"/>
+												<m_ElementName text=""/>
+												<m_RootCollectionName text=""/>
+												<m_ArtDefPath text=""/>
 												<m_CollectionIsLocked>true</m_CollectionIsLocked>
-												<m_TemplateName text="Buildings"/>
-												<m_ParamName text="Set001"/>
+												<m_TemplateName text=""/>
+												<m_ParamName text="Set"/>
 											</Element>
 											<Element class="AssetObjects..ArtDefReferenceValue">
 												<m_ElementName text="BUILDING_GRANARY"/>
@@ -1425,12 +1426,12 @@
 										<m_eValueType>ARTDEF_REF</m_eValueType>
 										<m_Values>
 											<Element class="AssetObjects..ArtDefReferenceValue">
-												<m_ElementName text="BUILDING_MAGE_GUILD"/>
-												<m_RootCollectionName text="Building"/>
-												<m_ArtDefPath text="Buildings.artdef"/>
+												<m_ElementName text=""/>
+												<m_RootCollectionName text=""/>
+												<m_ArtDefPath text=""/>
 												<m_CollectionIsLocked>true</m_CollectionIsLocked>
-												<m_TemplateName text="Buildings"/>
-												<m_ParamName text="Set001"/>
+												<m_TemplateName text=""/>
+												<m_ParamName text="Set"/>
 											</Element>
 											<Element class="AssetObjects..ArtDefReferenceValue">
 												<m_ElementName text="BUILDING_MONUMENT"/>
@@ -1505,7 +1506,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="BUILDING_MAGE_GUILD"/>
+										<m_ElementName text="DEFAULT"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -1537,7 +1538,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="DIS_AQD_Base_Bath"/>
+										<m_EntryName text="TB_ERROR"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -1558,6 +1559,10 @@
 							<m_Name text="BATH"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
+					</Element>
+					<Element>
+						<m_CollectionName text="BuildingSets"/>
+						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
 				<m_Name text="DISTRICT_ENTERTAINMENT_COMPLEX"/>
@@ -1582,3 +1587,4 @@
 		</Element>
 	</m_RootCollections>
 </AssetObjects..ArtDefSet>
+

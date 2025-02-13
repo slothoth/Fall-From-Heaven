@@ -4,7 +4,6 @@ INSERT INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, File
 ('ICON_SLTH_RESOURCE_ATLAS_0', '50', '5', '1', 'Slth_Resource_Atlas_0_50.dds'),
 ('ICON_SLTH_RESOURCE_ATLAS_0', '38', '5', '1', 'Slth_Resource_Atlas_0_38.dds'),
 ('ICON_SLTH_RESOURCE_ATLAS_0', '32', '5', '1', 'Slth_Resource_Atlas_0_32.dds'),
-('ICON_SLTH_RESOURCE_ATLAS_0', '22', '5', '1', 'Slth_Resource_Atlas_0_22.dds'),
 ('ICON_SLTH_RESOURCE_ATLAS_FOW_0', '256', '5', '1', 'Slth_Resource_Atlas_Fow_0_256.dds'),
 ('ICON_SLTH_RESOURCE_ATLAS_FOW_0', '64', '5', '1', 'Slth_Resource_Atlas_Fow_0_64.dds'),
 ('ICON_SLTH_RESOURCE_ATLAS_FOW_0', '50', '5', '1', 'Slth_Resource_Atlas_Fow_0_50.dds'),
@@ -12,6 +11,9 @@ INSERT INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, File
 ('ICON_SLTH_RESOURCE_ATLAS_FOW_0', '32', '5', '1', 'Slth_Resource_Atlas_Fow_0_32.dds'),
 ('ICON_SLTH_RESOURCE_ATLAS_FOW_0', '22', '5', '1', 'Slth_Resource_Atlas_Fow_0_22.dds'),
 ('ICON_SLTH_RESOURCE_ATLAS_FONT', '22', '5', '1', 'Slth_Resource_Atlas_0_22.dds');
+
+INSERT INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, Baseline, Filename) VALUES
+('ICON_SLTH_RESOURCE_ATLAS_0', '22', '5', '1', '6', 'Slth_Resource_Atlas_0_22.dds');
 
 INSERT INTO IconDefinitions (Name, Atlas, 'Index') VALUES
 ('ICON_RESOURCE_GOLD', 'ICON_SLTH_RESOURCE_ATLAS_0', 0),

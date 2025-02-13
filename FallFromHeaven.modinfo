@@ -50,7 +50,6 @@
       <File>Icons/LeaderIcons.sql</File>
       <File>Icons/UnitIcons.sql</File>
       <File>Icons/ResourceIcons.sql</File>
-      <File>Icons.xml</File>
     </UpdateIcons>
    </FrontEndActions>
   <InGameActions>
@@ -442,7 +441,6 @@
     <File>Icons/ResourceIcons.sql</File>
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
-    <File>Icons.xml</File>
     <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
