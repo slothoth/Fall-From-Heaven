@@ -3,7 +3,8 @@ layout: page
 title: "Progress"
 permalink: /progress
 ---
-
+This is an archive, it would be better to look at the progress tracker I am using online:
+https://lindie.app/share/edabf4c08b6fba3ae6cb0fa4e6c8abb1fa2913a0
 # Mod progress
 Here is where I am keeping track of things to be done, and what has currently been achieved in the mod.
 ## TOP priority:
