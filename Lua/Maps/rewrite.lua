@@ -115,7 +115,7 @@ for key, val in ipairs(RegionCharMap) do
     CharRegionMap[val] = key
 end
 
-function createRegions(self)
+function createRegions()
     --Growing the regions directly according to the map size created
     --unsolvable problems for the river system. Instead, I am growing
     --on a map (regionRxMap) that corresponds to rivers rather than
@@ -260,7 +260,7 @@ function createRegions(self)
                 if ii ~= -1 and regionMap[ii] ~= -1 and regionMap[ii] ~= region.ID then
                     plot.bBorder = true
                     plot.bEdge = true
-                    if check_in_table(region.neighborList, regionMap[ii])  then
+                    if not check_in_table(region.neighborList, regionMap[ii])  then
                         table.insert(region.neighborList, regionMap[ii])
                     end
                 elseif regionMap[ii] == -1 then
@@ -496,7 +496,7 @@ end
 
 
 function Region:__str__()
-    local str_ = string.format("ID=%dd(%ds), size=%dd, altitude=%dd \n", self.ID, RegionCharMap[self.ID],len(self.plotList),self.altitude)
+    local str_ = string.format("ID=%dd(%ds), size=%dd, altitude=%dd \n", self.ID, RegionCharMap[self.ID],#self.plotList ,self.altitude)
     str_ = str_ + string.format("gateRegion=%dd(%ds) \n", self.gateRegion, RegionCharMap[self.gateRegion])
     str_ = str_ + "    " + self.NeighborListString() + "\n"
     return str_
@@ -514,7 +514,7 @@ end
 function Region:getWaterNeighborCount()
     local count = 0
     for i, regionID in ipairs(self.neighborList) do
-        local region = regMap.getRegionByID(regionID)
+        local region = getRegionByID(regionID)
         if region.isWater == true then
             count = count + 1
         end
@@ -523,7 +523,7 @@ function Region:getWaterNeighborCount()
 end
 
 function Region:getBorderPlotList(neighborID)
-    local borderPlotList = list()
+    local borderPlotList = {}
     local borderPlotCount = 0
     for plot in self.plotList do
         if plot.bBorder == true then
@@ -543,14 +543,14 @@ function Region:getBorderPlotList(neighborID)
 end
 
 function Region:getGateListToNeighbor(neighborID)
-    local gateListToNeighbor = list()
+    local gateListToNeighbor = {}
     for rPlot in self.gateList do
-        if riverMap.isRxTouchingRegion(rPlot.x, rPlot.y, neighborID) then
+        if isRxTouchingRegion(rPlot.x, rPlot.y, neighborID) then
             table.insert(gateListToNeighbor, rPlot)
         end
     end
     --        print "%(ng)d gates from %(s)d to %(n)d" % \
-    --        {"ng":len(gateListToNeighbor),"s":self.ID,"n":neighborID}
+    --        {"ng":#gateListToNeighbor,"s":self.ID,"n":neighborID}
     return gateListToNeighbor
 end
 
@@ -559,11 +559,16 @@ function Region:defineValidGateList()
     -- can be called from here. We now complile a list of all possible river
     -- gates
     self.gateList = {}
-    for rxY in range(g_iH + 1) do
-        for rxX in range(g_iW + 1) do
-            if riverMap.isRxTouchingRegion(rxX, rxY, self.ID) then
-                if riverMap.isValidFullGate(self.ID, rxX, rxY) then
-                    local rPlot = RiverPlot(rxX, rxY, -1, self.ID)
+    print('id is')
+    print(self.ID)
+    currentRegion = self.ID
+    for rxY=1, g_iH + 1 do
+        for rxX=1, g_iW + 1 do
+            if isRxTouchingRegion(rxX, rxY, self.ID) then
+                print('RX is touching region')
+                if isValidFullGate(self.ID, rxX, rxY) then
+                    local rPlot = {x=rxX, y=rxY, direction=-1, self.ID}
+                    print(string.format('valid gate for region %d is at: %d, %d', self.ID, rxX, rxY))
                     table.insert(self.gateList, rPlot)
                 end
             end
@@ -588,12 +593,12 @@ function Region:expandWaterRegion()
 end
 
 function Region:getGatedNeighborList()
-    local gatedList = list()
+    local gatedList = {}
     for regionID in self.neighborList do
-        region = regMap.getRegionByID(regionID)
+        region = getRegionByID(regionID)
         if region.isWater or region.gateRegion ~= -1 then
             local validGateList = self.getGateListToNeighbor(regionID)
-            if len(validGateList) > 0 then
+            if #validGateList > 0 then
                 table.insert(gatedList, region.ID)
             end
         end
@@ -739,7 +744,31 @@ function checkRegions()
     end
 end
 
-function createCharacterImageSVG(grid, debug_mode)
+function createCharacterImageSVG(grid, rx_data, debug_mode)
+    local excludedPlots = {}
+    local highlighted_regions = {}
+    print('examining rx')
+    if rx_data then
+        for k, v in pairs(rx_data) do
+            print(k)
+            for part in string.gmatch(k, "[^/]+") do
+                print(part)
+                highlighted_regions[tonumber(part)] = tonumber(part)
+                break
+            end
+            print('---')
+        end
+        print('regions to highlight:')
+        for k,v  in pairs(highlighted_regions) do
+            print(k)
+        end
+
+        for key, val in pairs(rx_data) do
+            for key_, val_ in pairs(val) do
+                excludedPlots[val_['x'] .. '/' .. val_['y']] = true
+            end
+        end
+    end
     local height = #grid
     if debug_mode then
         print('height is ' .. tostring(height))
@@ -768,6 +797,9 @@ function createCharacterImageSVG(grid, debug_mode)
         ["TERRAIN_SNOW"]  = '#FFFFFF',
         [-1] = '#0000FF'
     }
+    for key, val in pairs(highlighted_regions) do
+        symbols[key] = '#FF0000' -- Red
+    end
 
     -- Get unique characters (removed the charCount < 9 limitation)
     for y = 1, height do
@@ -805,51 +837,49 @@ function createCharacterImageSVG(grid, debug_mode)
 
     -- Function to generate optimized colors for small character sets
     local function colorDistance(r1, g1, b1, r2, g2, b2)
-    local dr, dg, db = r1 - r2, g1 - g2, b1 - b2
-    return math.sqrt(dr * dr + dg * dg + db * db)
-end
-
-local function hexToRGB(hex)
-    return tonumber(hex:sub(2, 3), 16),
-           tonumber(hex:sub(4, 5), 16),
-           tonumber(hex:sub(6, 7), 16)
-end
-
-local function generateOptimizedColors(count, excludeList)
-    local colors = {}
-    local excludeRGB = {}
-
-    for _, hex in ipairs(excludeList or {}) do
-        local r, g, b = hexToRGB(hex)
-        table.insert(excludeRGB, {r, g, b})
+        local dr, dg, db = r1 - r2, g1 - g2, b1 - b2
+        return math.sqrt(dr * dr + dg * dg + db * db)
     end
 
-    if count <= 64 then
-        local hueStep = 1.0 / (count * 2)  -- oversample to account for skipped colors
-        local i, generated = 1, 0
-        while generated < count and i <= count * 4 do
-            local s = i % 2 == 0 and 1.0 or 0.8
-            local v = i % 2 == 0 and 0.9 or 1.0
-            local h = (i - 1) * hueStep
-            local r, g, b = HSVtoRGB(h, s, v)
-            local isTooClose = false
-            for _, rgb in ipairs(excludeRGB) do
-                if colorDistance(r, g, b, rgb[1], rgb[2], rgb[3]) < 50 then
-                    isTooClose = true
-                    break
-                end
-            end
-            if not isTooClose then
-                colors[#colors + 1] = string.format('#%02X%02X%02X', r, g, b)
-                generated = generated + 1
-            end
-            i = i + 1
+    local function hexToRGB(hex)
+        return tonumber(hex:sub(2, 3), 16),
+               tonumber(hex:sub(4, 5), 16),
+               tonumber(hex:sub(6, 7), 16)
+    end
+
+    local function generateOptimizedColors(count, excludeList)
+        local colors = {}
+        local excludeRGB = {}
+
+        for _, hex in ipairs(excludeList or {}) do
+            local r, g, b = hexToRGB(hex)
+            table.insert(excludeRGB, {r, g, b})
         end
-        return colors
+
+        if count <= 64 then
+            local hueStep = 1.0 / (count * 2)  -- oversample to account for skipped colors
+            local i, generated = 1, 0
+            while generated < count and i <= count * 4 do
+                local s = i % 2 == 0 and 1.0 or 0.8
+                local v = i % 2 == 0 and 0.9 or 1.0
+                local h = (i - 1) * hueStep
+                local r, g, b = HSVtoRGB(h, s, v)
+                local isTooClose = false
+                for _, rgb in ipairs(excludeRGB) do
+                    if colorDistance(r, g, b, rgb[1], rgb[2], rgb[3]) < 10 then
+                        isTooClose = true
+                        break
+                    end
+                end
+                if not isTooClose then
+                    colors[#colors + 1] = string.format('#%02X%02X%02X', r, g, b)
+                    generated = generated + 1
+                end
+                i = i + 1
+            end
+            return colors
+        end
     end
-end
-
-
 
     -- Generate color palette based on character count
     local colorPalette = generateOptimizedColors(charCount, {'#0000FF'}) or {}
@@ -882,50 +912,228 @@ end
     local svgHeight = pixelWidth * height
 
     -- Start SVG string
-    if debug_mode then
+    if true then
         print('width: ' .. width .. ' | svgWidth: ' .. svgWidth .. ' | svgHeight: ' .. svgHeight .. ' | pixelWidth: ' .. pixelWidth)
     end
-
+    -- local doKey = charCount < 20
+    local doKey = true
+    local KeyOffset = 0
+    if doKey then
+        KeyOffset = 100
+    end
+    local rulerOffset = pixelWidth * 3
     local svgParts = {
         '<?xml version="1.0" encoding="UTF-8"?>',
-        string.format('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d">', svgWidth, svgHeight),
-        '  <!-- Background -->',
-        string.format('  <rect width="%d" height="%d" fill="#000000"/>', svgWidth, svgHeight)
+        string.format('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d">', svgWidth + rulerOffset, svgHeight + KeyOffset + rulerOffset),
     }
 
+    local keyParts = {}
+
     -- Add color key (only if there are less than 20 unique characters to keep it readable)
-    if charCount < 20 then
-        table.insert(svgParts, '  <!-- Color Key -->')
-        table.insert(svgParts, string.format('  <text x="10" y="%d" fill="#FFFFFF" font-size="%d">',
-            svgHeight - 10, math.floor(pixelWidth/2)))
-
-        local keyString = "Key: "
+    if doKey then
+        local varKeyHeight = svgHeight + rulerOffset + (pixelWidth * 4)
+        table.insert(keyParts, '  <!-- Color Key -->')
+        local xPosition = 10
         for char, color in pairs(colors) do
-            keyString = keyString .. char .. "=" .. color .. " "
-        end
-        table.insert(svgParts, keyString .. '</text>')
-    end
-
-    -- Process string line by line
-    for y = 1, height do
-        for x = 1, #grid[y] do
-            local char = grid[y][x]
-            if colors[char] or symbols[char] then
-                -- Create SVG rect element for this character
-                local colour = symbols[char] or colors[char]
-                local rect = string.format(
+            local colour = color
+            if symbols[char] then
+                colour = symbols[char]
+            end
+            local keyString = string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">',
+            xPosition, varKeyHeight, math.floor(pixelWidth)) .. char .. ":"
+            table.insert(keyParts, keyString .. '</text>')
+            local rect = string.format(
                     '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
-                    (x-1) * pixelWidth, (y-1) * pixelWidth, pixelWidth, pixelWidth, colour
+                    xPosition+10, varKeyHeight-5, pixelWidth, pixelWidth, colour
                 )
-                table.insert(svgParts, rect)
+            table.insert(keyParts, rect)
+            if xPosition > svgWidth - 80 then
+                xPosition = 10
+                varKeyHeight = varKeyHeight + 20
+            else
+                xPosition = xPosition + 40
             end
         end
     end
 
-    -- Close SVG
-    table.insert(svgParts, '</svg>')
+    -- Process string line by line
+    local regionsEncountered = {}
+    table.insert(keyParts, '  <!-- first of labelling -->')
+    for y = 1, height do
+        for x = 1, #grid[y] do
+            if not excludedPlots[x .. '/' .. y] then
+                local char = grid[y][x]
+                if colors[char] or symbols[char] then
+                    local colour
+                    if symbols[char] then
+                        colour = symbols[char]
+                    else
+                        colour = colors[char]
+                    end
+                    -- Create SVG rect element for this character
+                    local rect = string.format(
+                        '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
+                            ((x-1) * pixelWidth)+pixelWidth, ((y-1) * pixelWidth)+pixelWidth, pixelWidth, pixelWidth, colour
+                    )
+                    table.insert(svgParts, rect)
+                    if not regionsEncountered[char] then
+                        regionsEncountered[char] = true
+                        table.insert(keyParts, string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">%s</text>',
+                                ((x-1) * pixelWidth)+pixelWidth, (y * pixelWidth)+pixelWidth, math.floor(pixelWidth), char))
+                    end
+                end
+            end
+        end
+    end
 
-    return table.concat(svgParts, '\n')
+    -- centralised region numbers
+
+    local function get_split_centres(char, char_xs, char_ys, char_centres)
+        char_xs[char] = {}
+        char_ys[char] = {}
+        for y = 1, height do
+            for x = 1, #grid[y] do
+                local map_char = grid[y][x]
+                if map_char == char then
+                    table.insert(char_xs[char], x)
+                    table.insert(char_ys[char], y)
+                end
+            end
+        end
+
+        if check_in_table(char_xs[char], 1) and check_in_table(char_xs[char], width) then
+            print('found wrapping region')
+            -- this is a split region, so we want to plot both
+            -- first find all plots that are closer to one side or the other
+            -- so to find left plots, find all plots that are below width/2
+            local left_plots_x = {}
+            local left_plots_y = {}
+            local right_plots_x = {}
+            local right_plots_y = {}
+            for i, x in ipairs(char_xs[char]) do
+                 if x > width/2 then
+                     table.insert(left_plots_x, x)
+                     table.insert(left_plots_y, char_ys[char][i])
+                 else
+                     table.insert(right_plots_x, x)
+                     table.insert(right_plots_y, char_ys[char][i])
+                 end
+            end
+            local left_x_centre = calculateCentre(left_plots_x)
+            local left_y_centre = calculateCentre(left_plots_y)
+            local right_x_centre = calculateCentre(right_plots_x)
+            local right_y_centre = calculateCentre(right_plots_y)
+            char_centres[char] = {left_x=left_x_centre, left_y=left_y_centre, right_x=right_x_centre , right_y=right_y_centre}
+        else
+            local x_centre = calculateCentre(char_xs[char])
+            local y_centre = calculateCentre(char_ys[char])
+            char_centres[char] = {x=x_centre, y=y_centre}
+        end
+        return char_centres
+    end
+    local char_xs = {}
+    local char_ys = {}
+    local char_centres = {}
+    for char, color in pairs(colors) do
+        if char ~= -1 then
+            char_centres = get_split_centres(char, char_xs, char_ys, char_centres)
+        end
+    end
+    for key, val in pairs(highlighted_regions) do
+        char_centres = get_split_centres(key, char_xs, char_ys, char_centres)
+    end
+    -- mark char_centres WORLD WRAP on X is why they are weird!
+    table.insert(keyParts, '  <!-- centroids -->')
+    for char, char_centroid in pairs(char_centres) do
+        local fillcol = ''
+        if highlighted_regions[char] then
+            fillcol = '#000000'
+        else
+            fillcol = '#FFFFFF'
+        end
+        if char_centroid['left_x'] then
+            local left_centre_x = char_centroid['left_x']
+            local left_centre_y = char_centroid['left_y']
+            local svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
+                                left_centre_x * pixelWidth, left_centre_y * pixelWidth, fillcol,  math.floor(pixelWidth)*2, char)
+            table.insert(keyParts, svg_string)
+
+            local right_centre_x = char_centroid['right_x']
+            local right_centre_y = char_centroid['right_y']
+            svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
+                                right_centre_x * pixelWidth, right_centre_y * pixelWidth, fillcol, math.floor(pixelWidth)*2, char)
+            table.insert(keyParts, svg_string)
+        else
+            local centre_x = char_centroid['x']
+            local centre_y = char_centroid['y']
+            local svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
+                                (centre_x) * pixelWidth, centre_y * pixelWidth, fillcol, math.floor(pixelWidth)*2, char)
+            table.insert(keyParts, svg_string)
+        end
+
+    end
+
+    table.insert(keyParts, '  <!-- Ruler label -->')
+    local count = 0
+    for i=0, svgWidth, pixelWidth*5 do
+        table.insert(keyParts, string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">%s</text>',
+                i+pixelWidth, svgHeight+ rulerOffset, math.floor(pixelWidth)*3, count))
+        count = count + 5
+    end
+
+    count = 0
+    for i=0, svgHeight, pixelWidth*5 do
+        table.insert(keyParts, string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">%s</text>',
+                svgWidth, i+pixelWidth, math.floor(pixelWidth)*3, count))
+        count = count + 5
+    end
+
+    -- hightlighted region colour specifics
+    if rx_data then
+        local used_plots = {}
+        for key, val in pairs(rx_data) do
+            for key_, val_ in pairs(val) do
+                print(string.format('for region: %d and plot %s', key, key_))
+                local x = val_['x']
+                local y = val_['y']
+                local reason = val_['failure']
+                local colour = '#000000'
+                if not used_plots[x .. '/' .. y] then
+                    used_plots[x .. '/' .. y] = true
+                    if reason == 'RX not in region, and 2 regions adjacent, but every direction did not have an RX in region' then
+                        print(string.format('highlighted region plot %d/%d is red', x, y))
+                        colour = '#AA0000'                      -- Red
+                    elseif reason == 'not_two_gates' then
+                        colour = '#00FF00'                      -- GREEN
+                        print(string.format('highlighted region plot %d/%d is green', x, y))
+                    elseif reason == 'RX_being_in_region' then
+                        colour = '#FFFF00'                      -- yellow
+                        print(string.format('highlighted region plot %d/%d is yellow', x, y))
+                    elseif reason == 'FULL_GATE' then
+                        colour = '#FFFFFF'                      -- yellow
+                        print(string.format('highlighted region plot %d/%d is White as full gate', x, y))
+                    else        -- success!
+                        colour = '#000000'
+                        print(string.format('highlighted region plot %d/%d is black', x, y))
+                    end
+
+                    local rect = string.format(
+                            '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
+                            ((x-1) * pixelWidth)+pixelWidth, ((y-1) * pixelWidth)+pixelWidth, pixelWidth, pixelWidth, colour
+                    )
+                    table.insert(keyParts, rect)
+                else
+                    print('plot already used!')
+                end
+            end
+        end
+    end
+
+
+    -- Close SVG
+    table.insert(keyParts, '</svg>')
+    local full =  {table.concat(svgParts, '\n'),  table.concat(keyParts, '\n')}
+    return table.concat(full, '\n')
 end
 
 function saveSVG(content, filename)
@@ -971,9 +1179,590 @@ function make_grid(tPlots, use_keys)
     return squareGrid
 end
 
+function calculateCentre(tbl)
+    local sum_total = 0
+    for _, y in ipairs(tbl) do
+        sum_total = sum_total + y
+    end
+    local centre = math.floor(sum_total / #tbl)
+    return centre
+end
+
 ------------------- RIVER ----------
 
 
+function createRiverMap()
+    createFlowMap()
+    calculateWetAndDry()
+    riverMap = {}
+    for i=1, (g_iH + 1) * (g_iW + 1) do
+        -- append(0)
+        table.insert(riverMap, 0)
+    end
+    for y=1, g_iH + 1 do
+        for x=1, g_iW + 1 do
+            local i = getRiverIndex(x, y)
+            local direction = flowMap[i]
+            local regionID = getRegion(x, y)
+            local region = getRegionByID(regionID)
+            local xx = x
+            local yy = y
+            while direction ~= -1 and direction ~= L do
+                xx, yy = getXYFromDirection(xx, yy, direction)
+                local ii = getRiverIndex(xx, yy)
+                riverMap[ii] = riverMap[ii] + MinRainfall + (1.0 - MinRainfall) * region.moisture
+                direction = flowMap[ii]
+            end
+        end
+    end
+end
+
+function createFlowMap()
+    -- Start with an outflow from the region, then randomly decide which neighbors
+    -- will flow into this square by how many choices that neighbor has. If the
+    -- neighbor has only one choice, then the chance is 100 percent. At least
+    -- one neighbor must be chosen unless it is not possible, otherwise the
+    -- process might end before each tile is set. Then put each chosen neighbor
+    -- on the stack to be processed the same way.
+    heightMap = {}
+    flowMap = {}
+    for i=1, (g_iH + 1) * (g_iW + 1) do
+        table.insert(flowMap, -1)
+        table.insert(heightMap, -1.0)
+    end
+    defineGates()
+    print("Gates Defined !!!!!!!!!!!!!!!!!!!!!!!!")
+    local for_continue = true
+    for region in regionList do
+        if for_continue then
+            if region.isWater then
+                for_continue = false
+            end
+            if for_continue then
+                -- randomly choose an outflow gate
+                -- print "region.gateRegion = %(gr)d" % {"gr":region.gateRegion}
+                local validGateList = region.getGateListToNeighbor(region.gateRegion)
+                if #validGateList  == 0 then
+                    print("validGateList == 0!!!!!!!!!!!!!!!!!!!!")
+                    print("region = %s", str(region))
+                    local gRegion = getRegionByID(region.gateRegion)
+                    print("gateRegion = %s", str(gRegion))
+                    error("region has neighbor but no valid gates. see debug file")
+                end
+                region.gatePlot = validGateList[PRand.randint(0, #validGateList - 1)]
+                local rxX = region.gatePlot.x
+                local rxY = region.gatePlot.y
+                local rxI = getRiverIndex(rxX, rxY)
+                -- set flow so that it is pointing out of region
+                local iterations = 0
+                local continuing = true
+                while continuing do
+                    iterations = iterations + 1
+                    if iterations > 100 then
+                        error("endless loop in gate setter")
+                    end
+                    local gateRegion = getRegionByID(region.gateRegion)
+                    if gateRegion.isWater then
+                        flowMap[rxI] = L
+                        heightMap[rxI] = 0.01
+                        continuing = false
+                    end
+                    if continuing then
+                        -- pick random cardinal direction
+                        local direction = math.random(1, 4)
+                        --                print direction
+                        local xx, yy = getXYFromDirection(rxX, rxY, direction)
+                        if isRxInRegion(xx, yy, region.gateRegion) then
+                            flowMap[rxI] = direction
+                            heightMap[rxI] = 0.01
+                            continuing = false
+                        end
+                    end
+                end
+            end
+        end
+    end
+    -- Now create heightmap. Start from each gate and increase altitude of
+    -- neighbors by a random percentage, and then place each neighbor on a
+    -- queue for similar processing. Randomize the queue order for each pass.
+    -- This method should avoid lakes.
+
+    -- Place all gates on queue.
+    plotList = {}
+    PrintRegionList()
+    for_continue = true
+    for region in regionList do
+        if for_continue then
+            if not region.gatePlot then
+            for_continue = false
+            end
+            local rxX = region.gatePlot.x
+            local rxY = region.gatePlot.y
+            -- print "rxX=%(x)d, rxY=%(y)d" % {"x":rxX,"y":rxY}
+            riverPlot = {x=rxX, y=rxY, direction=0,  region.ID}
+            table.insert(plotList, riverPlot)
+        end
+    end
+    while #plotList > 0 do
+        --            print "len plotList = v"
+        --            print #plotList
+        local count = #plotList
+        plotList = ShuffleList(plotList)
+        for n=1, count do
+            thisPlot = plotList.pop(0)  -- queue method, not stack
+            --                print "popping"
+            local rxI = getRiverIndex(thisPlot.x, thisPlot.y)
+            local altitude = heightMap[rxI]
+            for direction=1, 5 do
+                local x, y = getXYFromDirection(thisPlot.x, thisPlot.y, direction)
+                local rxII = getRiverIndex(x, y)
+                --                    print "rxII=%(i)d, x=%(x)d, y=%(y)d, heightMap=%(h)f, isRxInRegion=%(ir)d" % \
+                --                    {"i":rxII,"x":x,"y":y,"h":heightMap[rxII],"ir":isRxInRegion(x,y,thisPlot.regionID)}
+                if rxII ~= -1 and heightMap[rxII] == -1.0 and isRxInRegion(x, y, thisPlot.regionID) then
+                    local randomScaler = 1.0 + float(PRand.randint(1, 20)) / 100.0
+                    heightMap[rxII] = altitude * randomScaler
+                    local newPlot = {x=x, y=y, direction=0, regionID=thisPlot.regionID}
+                    table.insert(plotList, newPlot)
+                end
+            end
+        end
+    end
+    --                        print "newPlot appended"
+    -- Create flow map
+    for y=1, g_iH + 1 do
+        for x=1, g_iW + 1 do
+            local paths = getPossiblePaths(x, y)
+            if #paths > 0 then
+                local i = getRiverIndex(x, y)
+                local pathIndex = PRand.randint(0, #paths - 1)
+                flowMap[i] = paths[pathIndex]
+            end
+        end
+    end
+end
+-- Dryness should be calculated by getting the highest altitude
+-- region and making it's base the wettest region. Then eliminate
+-- those regions from the list. Then get the highest of the remaining
+-- regions and make it's base the dryest region.
+function calculateWetAndDry()
+    local regionList = {}
+    for region in regionList do
+        table.insert(regionList, region)
+    end
+    table.sort(regionList, function(a, b)
+            return a.altitude < b.altitude
+        end)
+    regionList.reverse()
+
+    region = regionList[1]
+    while region.altitude > 0 do
+        region = getRegionByID(region.gateRegion)
+        if region.altitude == 1 then
+            wetSpot = plotFromRx(region.gatePlot.x, region.gatePlot.y, SW)
+        end
+    end
+    -- Now calculate moisture for each region
+    local minMoisture = 1.0
+    for region in regionList do
+        local gate = region.gatePlot
+        if gate then
+            wetSpotX, wetSpotY = wetSpot
+            distance = GetDistance(gate.x, gate.y, wetSpotX, wetSpotY)
+            region.moisture = 1.0 - distance / float(g_iW)
+            minMoisture = min(region.moisture, minMoisture)
+        end
+    end
+    scaler = 1.0 / (1.0 - minMoisture)
+    for _, region in ipairs(regionList) do
+        region.moisture = (region.moisture - minMoisture) * scaler
+    end
+end
+
+function defineGates()
+    -- Now each region picks one gate that is not in the current gate line
+    -- to avoid recursive loops
+    numRegions = #regionList
+    numGatesPlaced = 0
+    iterations = 0
+    -- water is considered gated for this purpose
+    for i, region in ipairs(regionList) do
+        region:defineValidGateList()
+        -- regions should always have gates
+        print(string.format('checking region %d', region.ID))
+        if #(region.gateList) == 0 then
+            print(" has no gates!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            -- print(PrintRegionMap(False))
+            local squareGrid = make_grid(regionMap)
+            local svgContent = createCharacterImageSVG(squareGrid, failedGateAttempts)
+            saveSVG(svgContent, "flow_regions.svg")
+            error(string.format("region has no gates, got to iter %d", i))
+        end
+    end
+    while numGatesPlaced < numRegions do
+        if iterations > 500 then
+            error("Endless loop occured in gate placement")
+        else
+            iterations = iterations + 1
+            regionList = ShuffleList(regionList)
+            for _, region in ipairs(regionList) do
+                if region.gateRegion == -1 then
+                    gatedNeighborList = region.getGatedNeighborList()
+                    if #gatedNeighborList > 0 then
+                        gatedNeighborList = ShuffleList(gatedNeighborList)
+                        region.gateRegion = gatedNeighborList[1]
+                        if region.isWater then
+                            region.altitude = 0
+                        else
+                            gateRegion = getRegionByID(region.gateRegion)
+                            region.altitude = gateRegion.altitude + 1
+                        --                        print "region %(r)d gateRegion is %(g)d" % \
+                        --                        {"r":region.ID,"g":region.gateRegion}
+                        numGatesPlaced = numGatesPlaced + 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function isValidHalfGate(regionID, rxX, rxY)
+    -- A valid half gate is a rx that is not in a region, touches
+    -- only 2 regions and is 4-connected to an rx that is in the region
+    local forGatesRegionList = {}
+    local key = tostring(regionID) .. '/' .. tostring(rxX) .. '/' .. tostring(rxY)
+    if failedGateAttempts[currentRegion] then
+        print('region existed alreaedy')
+    else
+        failedGateAttempts[currentRegion] = {}
+    end
+
+    if failedGateAttempts[currentRegion][key] then
+        print('region plot existed alreaedy')
+    else
+        failedGateAttempts[currentRegion][key] = {x=rxX, y=rxY}
+    end
+    for direction=5, 9 do
+        local px, py = plotFromRx(rxX, rxY, direction)
+        local i = GetIndex(px, py)
+        local pRegID = regionMap[i]
+        if not pRegID or pRegID == -1 then
+            print(string.format('RX is not valid half gate by cant find region ID or id is -1 for index %d and x/y: %d/%d', i, px, py))
+            return false
+        end
+        if not check_in_table(forGatesRegionList, pRegID) then
+            table.insert(forGatesRegionList, pRegID)
+            failedGateAttempts[currentRegion][key][direction] = pRegID
+        end
+    end
+    local table_contents = ''
+    for key, val in ipairs(forGatesRegionList) do table_contents = table_contents .. ' ' .. val; end
+    if #forGatesRegionList ~= 2 then
+        print(string.format('RX %d/%d is not valid half gate by not touching 2 regions, instead touching %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+        failedGateAttempts[currentRegion][key]['failure'] = 'not_two_gates'
+        return false
+    end
+    if isRxInRegion(rxX, rxY, regionID) then
+        print(string.format('RX %d/%d is not valid half gate by RX being in region, but does touch %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+        failedGateAttempts[currentRegion][key]['failure'] = 'RX_being_in_region'
+        return false
+    end
+    for direction=1, 5 do
+        local xx, yy = getXYFromDirection(rxX, rxY, direction)
+        if isRxInRegion(xx, yy, regionID) then
+            print(string.format('RX %d/%d is valid half gate by RX being in region, it is not in region, but it touches %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+            failedGateAttempts[currentRegion][key]['failure'] = 'success!'
+            return true
+        end
+    end
+    print('RX is not valid half gate as RX was not in region in all 4 directions ')
+    failedGateAttempts[currentRegion][key]['failure'] = 'RX not in region, and 2 regions adjacent, but every direction did not have an RX in region'
+    return false
+end
+
+function isValidFullGate(regionID, rxX, rxY)
+    if not isValidHalfGate(regionID, rxX, rxY) then
+        return false
+    end
+    print('passed owner region can have gate check')
+    local region = getRegionByID(regionID)
+    print(#(region.neighborList))          -- !! NEIGHBOURLIST WAS EMPTY
+    local key = tostring(regionID) .. '/' .. tostring(rxX) .. '/' .. tostring(rxY)
+    for nRegionID in ipairs(region.neighborList) do
+        print('checking valid neighbours....')
+        if isValidHalfGate(nRegionID, rxX, rxY) then
+            print('other adjacent region has valid gate')
+            failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
+            return true
+        end
+        for direction=1, 5 do
+            local xx, yy = getXYFromDirection(rxX, rxY, direction)          -- TODO this seems wrong to not use them
+            if isValidHalfGate(nRegionID, rxX, rxY) then
+                print('alternate path valid gate, shouldnt work')
+                failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
+                return true
+            end
+        end
+    end
+end
+
+function getPossiblePaths(rxX, rxY)
+    local possiblePaths = {}
+    local regionID = getRegion(rxX, rxY)
+    if regionID == -1 then
+        return possiblePaths
+    end
+    local region = getRegionByID(regionID)
+    if region.isWater then
+        return possiblePaths
+    end
+    local rxI = getRiverIndex(rxX, rxY)
+    local altitude = heightMap[rxI]
+    local rejectedDirection = L
+    for direction=1, 5 do
+        local x, y = getXYFromDirection(rxX, rxY, direction)
+        local i = getRiverIndex(x, y)
+        if isRxInRegion(x, y, regionID) then
+            if heightMap[i] > altitude then
+                if rejectedDirection == L then
+                    rejectedDirection = getOppositeDirection(direction)
+                else
+                    rejectedDirection = L
+                end
+            end
+        end
+    end
+
+    for direction=1, 5 do
+        local x, y = getXYFromDirection(rxX, rxY, direction)
+        if isRxInRegion(x, y, regionID) or (x == region.gatePlot.x and y == region.gatePlot.y) then
+            local i = getRiverIndex(x, y)
+            if i ~= -1 and heightMap[i] < altitude then
+            table.insert(possiblePaths, direction)
+            end
+        end
+    end
+
+    if #possiblePaths > 1 then
+        for n=1, #possiblePaths do
+            if rejectedDirection == possiblePaths[n] then
+                -- del possiblePaths[n]
+                break
+            end
+        end
+    end
+
+    return possiblePaths
+end
+function fillInLake(rxX, rxY)
+    local rxI = getRiverIndex(rxX, rxY)
+    local altitude = heightMap[rxI]
+    local regionID = getRegion(rxX, rxY)
+    local lowestNeighbor = 1.0
+    for direction=1, 5 do
+        local x, y = getXYFromDirection(rxX, rxY, direction)
+        local i = getRiverIndex(x, y)
+        if isRxInRegion(x, y, regionID) then
+            if heightMap[i] < lowestNeighbor then
+                lowestNeighbor = heightMap[i]
+            end
+        end
+    end
+    if altitude < lowestNeighbor then
+        heightMap[rxI] = altitude + ((lowestNeighbor - altitude) / 2.0)
+    else
+        heightMap[rxI] = altitude * 1.05
+    end
+end
+function isLake(rxX, rxY)
+    local rxI = getRiverIndex(rxX, rxY)
+    local altitude = heightMap[rxI]
+    local regionID = getRegion(rxX, rxY)
+    local lowestNeighbor = 1.0
+    for direction=1, 5 do
+        local x, y = getXYFromDirection(rxX, rxY, direction)
+        local i = getRiverIndex(x, y)
+        if isRxInRegion(x, y, regionID) then
+            if heightMap[i] < lowestNeighbor then
+                lowestNeighbor = heightMap[i]
+            end
+        end
+    end
+    if lowestNeighbor >= altitude then
+        return true
+    end
+end
+
+
+function isOutFlowGate(rxX, rxY)
+    for region in regionList do
+        if not region.isWater then
+            local gateRxX, gateRxY = rxFromPlot(region.gatePlot.x, region.gatePlot.y, SW)
+            if gateRxX == rxX and gateRxY == rxY then
+                return true
+            end
+        end
+    end
+end
+
+function getOppositeDirection(direction)
+    local opposite = L
+    if direction == N then
+        opposite = S
+    elseif direction == S then
+        opposite = N
+    elseif direction == E then
+        opposite = W
+    elseif direction == W then
+        opposite = E
+    end
+    return opposite
+end
+--[[
+function getXYFromDirection(x, y, direction)
+    local xx = x
+    local yy = y
+    if direction == N then
+        yy += 1
+    elseif direction == S then
+        yy -= 1
+    elseif direction == E then
+        xx += 1
+    elseif direction == W then
+        xx -= 1
+    return xx, yy
+]]
+function getRiverIndex(x, y)
+    local xx
+    local yy
+    if x < 0 or x >= g_iW + 1 then
+        return -1
+    else
+        xx = x
+    end
+    if y < 0 or y >= g_iH + 1 then
+        return -1
+    else
+        yy = y
+    end
+    local i = yy * (g_iW + 1) + xx
+    return i
+end
+function isRxInRegion(x, y, regionID)
+    -- Rxs on the border are not in region. All plots touching rx must
+    -- be in region
+    for direction=5, 9 do
+        local xx, yy = plotFromRx(x, y, direction)
+        local i = GetIndex(xx, yy)
+        if i == -1 or regionMap[i] ~= regionID then
+            return false
+        end
+    end
+    return true
+end
+
+function getRegion(x, y)
+    -- Rxs on the border are not in region. All plots touching rx must
+    -- be in region, unless this is the gate for that region
+    local xx, yy = plotFromRx(x, y, SW)
+    local i = GetIndex(xx, yy)
+    local regionID = regionMap[i]
+    local invalidRegion = False
+    for direction=5, 9 do
+        xx, yy = plotFromRx(x, y, direction)
+        i = GetIndex(xx, yy)
+        local nRegionID = regionMap[i]
+        if nRegionID ~= -1 then
+        -- test if this main plot is gate for this region
+            nRegion = getRegionByID(nRegionID)
+            if nRegion.gatePlot ~= None and x == nRegion.gatePlot.x and y == nRegion.gatePlot.y then
+                return nRegionID
+            end
+            if nRegionID ~= regionID then
+                invalidRegion = true
+            end
+        end
+    end
+
+    if invalidRegion then
+        return -1
+    end
+    return regionID
+end
+function isRxTouchingRegion(x, y, regionID)
+    -- Check all four plots
+    local plotX, plotY = plotFromRx(x, y, NW)
+    local i = GetIndex(plotX, plotY)
+    if i and i ~= -1 and regionMap[i] == regionID then
+        return true
+    end
+    plotX, plotY = plotFromRx(x, y, NE)
+    i = GetIndex(plotX, plotY)
+    if i and i ~= -1 and regionMap[i] == regionID then
+        return true
+    end
+    plotX, plotY = plotFromRx(x, y, SW)
+    i = GetIndex(plotX, plotY)
+    if i and i ~= -1 and regionMap[i] == regionID then
+        return true
+    end
+    plotX, plotY = plotFromRx(x, y, SE)
+    i = GetIndex(plotX, plotY)
+    if i and i ~= -1 and regionMap[i] == regionID then
+        return true
+    end
+end
+
+function rxFromPlot(plotX, plotY, direction)
+    if direction == SW then
+        x = plotX
+        y = plotY
+    elseif direction == SE then
+        x = plotX + 1
+        y = plotY
+    elseif direction == NW then
+        x = plotX
+        y = plotY + 1
+    else  -- NE
+        x = plotX + 1
+        y = plotY + 1
+    end
+    -- check for validity
+    if x < 0 or x >= g_iW + 1 then
+        return -1, -1
+    end
+    if y < 0 or y >= g_iH + 1 then
+        return -1, -1
+    end
+    return x, y
+end
+
+function PrintFlowMap()
+    print("Flow Map")
+    local lineString
+    for y=g_iH, -1, -1 do
+        lineString = ""
+        for x=1, g_iW + 1 do
+            mapLoc = flowMap[getRiverIndex(x, y)]
+            if mapLoc == -1 then
+                lineString = lineString  + "X"
+            elseif mapLoc == N then
+                lineString = lineString  + "N"
+            elseif mapLoc == S then
+                lineString = lineString  + "S"
+            elseif mapLoc == E then
+                lineString = lineString  + "E"
+            elseif mapLoc == W then
+                lineString = lineString  + "W"
+            else
+                lineString = lineString  + "X"
+            end
+        end
+        print(lineString)
+    end
+end
+
+currentRegion = -99
 createRegions()
 final_reg_map = PrintRegionMap()
 print('reg map')
@@ -985,9 +1774,12 @@ print('reg map water')
 print(region_plots)
 
 squareGrid = make_grid(regionMap)
-local svgContent = createCharacterImageSVG(squareGrid, true)
+local svgContent = createCharacterImageSVG(squareGrid)
 saveSVG(svgContent, "rewrite_regions.svg")
-riverMap = RiverMap()
+
+failedGateAttempts = {}
+createRiverMap()
+river_plots = PrintFlowMap()
 --[[
 plotMap = PlotMap()
 terrainMap = TerrainMap()
