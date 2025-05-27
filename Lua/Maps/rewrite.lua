@@ -236,8 +236,8 @@ function createRegions()
     end
     --       PrintRegionRxMap(false)
     --Now convert regionRxMap to regionMap
-    for y=1, g_iH + 1 do
-        for x=1, g_iW + 1 do
+    for y=1, g_iH do
+        for x=1, g_iW do
             local i = GetRxIndex(x, y)
             local regionID = regionRxMap[i]
             if regionID and regionID ~= -1 then
@@ -262,7 +262,7 @@ function createRegions()
     for _, region in ipairs(regionList) do
         for _, plot in ipairs(region.plotList) do
             i = GetIndex(plot.x, plot.y)
-            for direction=1, 5 do
+            for direction=1, 4 do
                 local xx, yy = GetDirection(direction, plot)
                 local ii = GetIndex(xx, yy)
                 if ii ~= -1 and regionMap[ii] ~= -1 and regionMap[ii] ~= region.ID then
@@ -294,7 +294,7 @@ function createRegions()
         local region = getRegionByID(regionID)
         region.isWater = true
     end
-    for i=1, numWaterRegions do
+    for i=1, numWaterRegions-1 do
         regionList = ShuffleList(regionList)
         for _, nRegion in ipairs(regionList) do
             nRegion.waterNeighborCount = nRegion:getWaterNeighborCount()
@@ -1802,7 +1802,8 @@ function createPlotMap()
             local region = getRegionByID(regionID)
             if region.isWater and plotMap.plotMap[i] ~= OCEAN then
                 for direction=1,4 do
-                    local xx,yy = getXYFromDirection(x,y,direction)
+                    local xx = x + directionXmap[direction]
+                    local yy = y + directionYmap[direction]
                     local ii = GetIndex(xx,yy)
                     local nRegionID = regionMap[ii]
                     if nRegionID ~= -1 then
@@ -1855,7 +1856,7 @@ function createPlotMap()
                 local maxRiverSize = RiverThreshold * RiverFactorFlattensAll
                 if riverSize > maxRiverSize then
                     plotMap[i] = LAND
-                else:
+                else
                     plotMap[i] = HILLS
                 end
             end
@@ -1891,275 +1892,200 @@ function createPlotMap()
     -- areaMap.PrintAreaMap()
 end
 
-function shouldFlattenRiverPeak(x,y)
-    local direction = NW
-    local rxX,rxY = rxFromPlot(x,y,direction)
-    local rxI = getRiverIndex(rxX,rxY)
-    if riverMap.riverMap[rxI] > RiverThreshold then
-        local pDir = direction
-        local xx,yy = getXYFromDirection(x,y,pDir)
+function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
+    if riverMap[rxI] > RiverThreshold then
+        local xx = x + directionXmap[pDir]
+        local yy = y + directionYmap[pDir]
         local ii = GetIndex(xx,yy)
         if plotMap[ii] == PEAK then
             return true
         end
-        if riverMap.flowMap[rxI] == E then
-            pDir = N
-            xx,yy = getXYFromDirection(x,y,pDir)
+        if flowMap[rxI] == direction_2 then
+            xx = x + directionXmap[direction_2_change]
+            yy = y + directionYmap[direction_2_change]
             ii = GetIndex(xx,yy)
             if plotMap[ii] == PEAK then
                 return true
             end
         end
-        if riverMap.flowMap[rxI] == S then
-            pDir = W
-            xx,yy = getXYFromDirection(x,y,pDir)
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-    end
-
-    direction = NE
-    rxX,rxY = rxFromPlot(x,y,direction)
-    rxI = getRiverIndex(rxX,rxY)
-    if riverMap[rxI] > RiverThreshold then
-        local pDir = direction
-        local xx,yy = getXYFromDirection(x,y,pDir)
-        local ii = GetIndex(xx,yy)
-        if plotMap[ii] == PEAK then
-            return true
-        end
-        if flowMap[rxI] == W then
-            pDir = N
-            xx,yy = getXYFromDirection(x,y,pDir)
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-        if riverMap.flowMap[rxI] == S then
-            pDir = E
-            xx,yy = getXYFromDirection(x,y,pDir)
+        if flowMap[rxI] == direction_3 then
+            xx = x + directionXmap[direction_3_change]
+            yy = y + directionYmap[direction_3_change]
             ii = GetIndex(xx,yy)
             if plotMap[ii] == PEAK then
                 return true
             end
         end
     end
-
-    direction = SE
-    rxX,rxY = rxFromPlot(x,y,direction)
-    rxI = getRiverIndex(rxX,rxY)
-    if riverMap[rxI] > RiverThreshold then
-        local pDir = direction
-        local xx,yy = getXYFromDirection(x,y,pDir)
-        local ii = GetIndex(xx,yy)
-        if plotMap[ii] == PEAK then
-            return true
-        end
-        if flowMap[rxI] == W then
-            pDir = S
-            xx,yy = getXYFromDirection(x,y,pDir)
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-        if flowMap[rxI] == N then
-            pDir = E
-            xx,yy = getXYFromDirection(x,y,pDir)
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-    end
-
-    direction = SW
-    rxX,rxY = rxFromPlot(x,y,direction)
-    rxI = getRiverIndex(rxX,rxY)
-    if riverMap[rxI] > RiverThreshold then
-        pDir = direction
-        xx,yy = getXYFromDirection(x,y,pDir)
-        ii = GetIndex(xx,yy)
-        if plotMap[ii] == PEAK then
-            return true
-        end
-        if flowMap[rxI] == E then
-            pDir = S
-            xx,yy = getXYFromDirection(x,y,pDir)
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-        if flowMap[rxI] == N then
-            pDir = W
-            xx,yy = getXYFromDirection(x,y,pDir)
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-    end
-
-    return false
 end
 
-function placeLandInWater(self,x,y)
-    i = GetIndex(x,y)
-    regionID = regionMap[i]
-    if regionID == -1:
+function shouldFlattenRiverPeak(x,y)
+    local rxX,rxY = rxFromPlot(x,y,NW)
+    local rxI = getRiverIndex(rxX,rxY)
+    if flattenPeakSubFunc(x, y, rxI, NW, E, S, N, W) then
+        return true
+    end
+    rxX,rxY = rxFromPlot(x,y,NE)
+    rxI = getRiverIndex(rxX,rxY)
+    if flattenPeakSubFunc(x, y, rxI, NE, W, S, N, E) then
+        return true
+    end
+    rxX,rxY = rxFromPlot(x,y,SE)
+    rxI = getRiverIndex(rxX,rxY)
+    if flattenPeakSubFunc(x, y, rxI, SE, W, N, S, E) then
+        return true
+    end
+    rxX,rxY = rxFromPlot(x,y,SW)
+    rxI = getRiverIndex(rxX,rxY)
+    if flattenPeakSubFunc(x, y, rxI, SW, E, N, S, W) then
+        return true
+    end
+end
+
+function placeLandInWater(x,y)
+    local i = GetIndex(x,y)
+    local regionID = regionMap[i]
+    if regionID == -1 then
         return false
-    region = getRegionByID(regionID)
-    borderPlotIsLand = false
-    for direction in range(1,5,1):
-        xx,yy = self.getXYFromDirection(x,y,direction)
-        ii = GetIndex(xx,yy)
-        if ii == -1:
-            continue
-        if self.plotMap[ii] != self.OCEAN and \
-        regionMap[ii] != regionID:
-            if IsPlotTouchingRiver(x,y):
-                oceanNeighborTouchingRiver = false
-                for dir2 in range(1,5,1):
-                    xxx,yyy = self.getXYFromDirection(x,y,dir2)
-                    iii = GetIndex(xxx,yyy)
-                    if self.plotMap[iii] == self.OCEAN and \
-                    IsPlotTouchingRiver(xxx,yyy):
-                        oceanNeighborTouchingRiver = true
-                if oceanNeighborTouchingRiver == false:
-                    continue
-            oppDirection = self.getOppositeDirection(direction)
-            xxx,yyy = self.getXYFromDirection(x,y,oppDirection)
-            if not IsPlotSurroundedByOcean(xxx,yyy):
-                continue
-            if PRand.randint(0,1) == 0:
-                nRegion = getRegionByID(regionMap[ii])
-                if nRegion != None:
-                    print "placing land in water"
-                    if nRegion.altitude < 2:
-                        self.plotMap[i] = self.LAND
-                    elif nRegion.altitude < 3 and highestRegionAltitude >= 3:
-                        self.plotMap[i] = self.HILLS
-                    else:
-                        self.plotMap[i] = self.PEAK
+    end
+    local region = getRegionByID(regionID)
+    local borderPlotIsLand = false
+    for direction=1,5 do
+        local xx = x + directionXmap[direction]
+        local yy = y + directionYmap[direction]
+        local ii = GetIndex(xx,yy)
+        if ii ~= -1 then
+            if plotMap[ii] ~= OCEAN and regionMap[ii] ~= regionID then
+                local oceanNeighborTouchingRiver = true
+                if IsPlotTouchingRiver(x,y) then
+                    oceanNeighborTouchingRiver = false
+                    for dir2= 1,5,1 do
+                        local xxx = x + directionXmap[dir2]
+                        local yyy = y + directionYmap[dir2]
+                        local iii = GetIndex(xxx,yyy)
+                        if plotMap[iii] == OCEAN and IsPlotTouchingRiver(xxx,yyy) then
+                            oceanNeighborTouchingRiver = true
+                        end
+                    end
+                end
+                if oceanNeighborTouchingRiver then
+                    local oppDirection = OppositeDirections[direction] or L
+                    local xxx = x + directionXmap[oppDirection]
+                    local yyy = y + directionYmap[oppDirection]
+                    if IsPlotSurroundedByOcean(xxx,yyy) then
+                        if math.random(0,1) == 0 then
+                            local nRegion = getRegionByID(regionMap[ii])
+                            if nRegion ~= None then
+                                print("placing land in water")
+                                if nRegion.altitude < 2 then
+                                    plotMap[i] = LAND
+                                elseif nRegion.altitude < 3 and highestRegionAltitude >= 3 then
+                                    plotMap[i] = HILLS
+                                else
+                                    plotMap[i] = PEAK
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
-    return false
-function getOppositeDirection(self,direction):
-    opposite = self.L
-    if direction == self.N:
-        opposite = self.S
-    elif direction == self.S:
-        opposite = self.N
-    elif direction == self.E:
-        opposite = self.W
-    elif direction == self.W:
-        opposite = self.E
-    elif direction == self.NW:
-        opposite = self.SE
-    elif direction == self.SE:
-        opposite = self.NW
-    elif direction == self.SW:
-        opposite = self.NE
-    elif direction == self.NE:
-        opposite = self.SW
-    return opposite
+OppositeDirections = {[N]=S, [S]=N, [E]=W, [W]=E, [NW]=SE, [SE]=NW, [SW]=NE, [NE]=SW}
 
-function shouldPlacePeak(self,x,y):
-    i = GetIndex(x,y)
-    regionID = regionMap[i]
-    if regionID == -1:
-        return true #Plots without a region are always peaks
-    region = getRegionByID(regionID)
-    if region.isWater:
-        return false #Water regions have no peaks
-    #if neighbor in different region not peak, then return true
-    for direction in range(1,9,1):
-        xx,yy = self.getXYFromDirection(x,y,direction)
-        ii = GetIndex(xx,yy)
-        if ii == -1:
-            return true #Land plots on map edge are peaks, water handled above
-        if self.plotMap[ii] != self.PEAK:
-            nRegionID = regionMap[ii]
-            if nRegionID == -1:
-                continue
-##                if nRegionID == region.gateRegion:
-            nRegion = getRegionByID(nRegionID)
-            if nRegion.isWater and region.altitude < 2:
-                return false
-            elif nRegion.isWater and region.altitude < 3 and \
-            highestRegionAltitude >= 3:
-                self.plotMap[i] = self.HILLS #Cheating sorta
-                return true
-            if nRegionID != regionID:
-                return true
+function shouldPlacePeak(x,y)
+    local i = GetIndex(x,y)
+    local regionID = regionMap[i]
+    print('region, x, y:', regionID, x, y)
+    if regionID == -1 then
+        return true -- Plots without a region are always peaks
+    end
+    local region = getRegionByID(regionID)
+    if region.isWater then
+        return false -- Water regions have no peaks
+    end
+    -- if neighbor in different region not peak, then return true
+    for direction = 1, 8, 1 do
+        local xx = x + directionXmap[direction]
+        local yy = y + directionYmap[direction]
+        local ii = GetIndex(xx,yy)
+        if ii == -1 then
+            return true -- Land plots on map edge are peaks, water handled above
+        end
+        if plotMap[ii] ~= PEAK then
+            local nRegionID = regionMap[ii]
+            if nRegionID ~= -1 then
+                -- if nRegionID == region.gateRegion:
+                local nRegion = getRegionByID(nRegionID)
+                if nRegion.isWater and region.altitude < 2 then
+                    return false
+                elseif nRegion.isWater and region.altitude < 3 and highestRegionAltitude >= 3 then
+                    plotMap[i] = HILLS -- Cheating sorta
+                    return true
+                end
+                if nRegionID ~= regionID then
+                    return true
+                end
+            end
+        end
+    end
+end
 
-    return false
-function getXYFromDirection(self,x,y,direction):
-    xx = x
-    yy = y
-    if direction == self.N:
-        yy += 1
-    elif direction == self.S:
-        yy -= 1
-    elif direction == self.E:
-        xx += 1
-    elif direction == self.W:
-        xx -= 1
-    elif direction == self.NW:
-        yy += 1
-        xx -= 1
-    elif direction == self.NE:
-        yy += 1
-        xx += 1
-    elif direction == self.SW:
-        yy -= 1
-        xx -= 1
-    elif direction == self.SE:
-        yy -= 1
-        xx += 1
-    return xx,yy
-function PrintPlotMap(self):
-    print "Plot Map"
-    for y in range(g_iH - 1,-1,-1):
+function PrintPlotMap()
+    print("Plot Map")
+    local lineString = ""
+    for y=g_iH - 1,-1,-1 do
         lineString = ""
-        for x in range(g_iW):
-            mapLoc = self.plotMap[GetIndex(x,y)]
-            if mapLoc == self.OCEAN:
-                lineString += "O"
-            elif mapLoc == self.PEAK:
-                lineString += "P"
-            elif mapLoc == self.HILLS:
-                lineString += "H"
-            elif mapLoc == self.LAND:
-                lineString += "L"
-
-        print lineString
+        for x=1, g_iW + 1 do
+            mapLoc = plotMap[GetIndex(x,y)]
+            if mapLoc == OCEAN then
+                lineString = lineString .. "O"
+            elseif mapLoc == PEAK then
+                lineString = lineString .. "P"
+            elseif mapLoc == HILLS then
+                lineString = lineString .. "H"
+            elseif mapLoc == LAND then
+                lineString = lineString .. "L"
+            end
+        end
+        print(lineString)
+    end
     lineString = " "
-    print lineString
+    print(lineString)
+end
 
 currentRegion = -99
-createRegions()
-final_reg_map = PrintRegionMap()
-print('reg map')
-print(final_reg_map)
--- PrintRegionList()
+local success = false
+river_map_attempts = 0
+while not success and river_map_attempts < 2 do
+    success, result = pcall(function()
+        createRegions()
+    final_reg_map = PrintRegionMap()
+    print('reg map')
+    print(final_reg_map)
+    -- PrintRegionList()
 
-region_plots = PrintRegionMap(true)
-print('reg map water')
-print(region_plots)
+    region_plots = PrintRegionMap(true)
+    print('reg map water')
+    print(region_plots)
 
-squareGrid = make_grid(regionMap)
-local svgContent = createCharacterImageSVG(squareGrid)
-saveSVG(svgContent, "rewrite_regions.svg")
-
-failedGateAttempts = {}
-createRiverMap()
+    squareGrid = make_grid(regionMap)
+    local svgContent = createCharacterImageSVG(squareGrid)
+    saveSVG(svgContent, "rewrite_regions.svg")
+        failedGateAttempts = {}
+        createRiverMap()
+        river_map_attempts = river_map_attempts + 1
+        print('--------------------------- river attempt finished -----------------------\n\n\n\n\n\n\n\n\n')
+    end)
+end
+if not success then
+    error(result)
+end
 river_plots = PrintFlowMap()
 
-plotMap = PlotMap()
+createPlotMap()
 terrainMap = TerrainMap()
 spf = StartingPlotFinder()
 --[[
