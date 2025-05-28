@@ -691,7 +691,10 @@ function checkRegions()
     end
 end
 
-function createCharacterImageSVG(grid, rx_data, debug_mode)
+function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_mapper)
+    if not key_mapper then
+        key_mapper = {}
+    end
     local excludedPlots = {}
     local highlighted_regions = {}
     print('examining rx')
@@ -748,19 +751,17 @@ function createCharacterImageSVG(grid, rx_data, debug_mode)
         [OCEAN] = "#0000FF",
         [HILLS] = "#FFA500",
         [LAND] = "#00FF00",
-        [-1] = '#0000FF',
-        [' '] = ""
+        [-1] = '#0000FF'
     }
-    --[[
-    for key, val in pairs(highlighted_regions) do
-        symbols[key] = '#FF0000' -- Red
+    if symbol_mapper then
+        symbols = symbol_mapper
     end
-    ]]
+
     -- Get unique characters (removed the charCount < 9 limitation)
     for y = 1, height do
         for x = 1, #grid[y] do
             local char = grid[y][x]
-            if not uniqueChars[char] and not symbols[char] then
+            if not uniqueChars[char] then
                 charCount = charCount + 1
                 uniqueChars[char] = true
             end
@@ -786,7 +787,6 @@ function createCharacterImageSVG(grid, rx_data, debug_mode)
         elseif h_i == 4 then r, g, b = t, p, v
         elseif h_i == 5 then r, g, b = v, p, q
         end
-
         return math.floor(r * 255), math.floor(g * 255), math.floor(b * 255)
     end
 
@@ -889,24 +889,33 @@ function createCharacterImageSVG(grid, rx_data, debug_mode)
         local varKeyHeight = svgHeight + rulerOffset + (pixelWidth * 4)
         table.insert(keyParts, '  <!-- Color Key -->')
         local xPosition = 10
-        for char, color in pairs(colors) do
-            local colour = color
+        local keys = {}
+        for char in pairs(colors) do
+            table.insert(keys, char)
+        end
+        table.sort(keys)
+
+        for _, char in ipairs(keys) do
+            local colour = colors[char]
+            local label = key_mapper[char] or char
             if symbols[char] then
                 colour = symbols[char]
             end
+            print(string.format('label %s for char: %s. Colour: %s', label, char, colour))
+            local labelLength = string.len(label) * 7
             local keyString = string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">',
-            xPosition, varKeyHeight, math.floor(pixelWidth)) .. char .. ":"
+            xPosition, varKeyHeight, math.floor(pixelWidth)) .. label .. ":"
             table.insert(keyParts, keyString .. '</text>')
             local rect = string.format(
                     '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
-                    xPosition+10, varKeyHeight-5, pixelWidth, pixelWidth, colour
+                    xPosition+labelLength-5, varKeyHeight-5, pixelWidth, pixelWidth, colour
                 )
             table.insert(keyParts, rect)
-            if xPosition > svgWidth - 80 then
+            if xPosition > svgWidth - labelLength then
                 xPosition = 10
                 varKeyHeight = varKeyHeight + 20
             else
-                xPosition = xPosition + 40
+                xPosition = xPosition + labelLength + 10
             end
         end
     end
@@ -989,46 +998,49 @@ function createCharacterImageSVG(grid, rx_data, debug_mode)
         end
         return char_centres
     end
-    local char_xs = {}
-    local char_ys = {}
-    local char_centres = {}
-    for char, color in pairs(colors) do
-        if char ~= -1 then
-            char_centres = get_split_centres(char, char_xs, char_ys, char_centres)
+    if true then
+        print('')
+    else
+        local char_xs = {}
+        local char_ys = {}
+        local char_centres = {}
+        for char, color in pairs(colors) do
+            if char ~= -1 then
+                char_centres = get_split_centres(char, char_xs, char_ys, char_centres)
+            end
         end
-    end
-    for key, val in pairs(highlighted_regions) do
-        char_centres = get_split_centres(key, char_xs, char_ys, char_centres)
-    end
-    -- mark char_centres WORLD WRAP on X is why they are weird!
-    table.insert(keyParts, '  <!-- centroids -->')
-    for char, char_centroid in pairs(char_centres) do
-        local fillcol = ''
-        if highlighted_regions[char] then
-            fillcol = '#000000'
-        else
-            fillcol = '#FFFFFF'
+        for key, val in pairs(highlighted_regions) do
+            char_centres = get_split_centres(key, char_xs, char_ys, char_centres)
         end
-        if char_centroid['left_x'] then
-            local left_centre_x = char_centroid['left_x']
-            local left_centre_y = char_centroid['left_y']
-            local svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
-                                left_centre_x * pixelWidth, left_centre_y * pixelWidth, fillcol,  math.floor(pixelWidth)*2, char)
-            table.insert(keyParts, svg_string)
+        -- mark char_centres issues from world wrap on regions? fixed now
+        table.insert(keyParts, '  <!-- centroids -->')
+        for char, char_centroid in pairs(char_centres) do
+            local fillcol = ''
+            if highlighted_regions[char] then
+                fillcol = '#000000'
+            else
+                fillcol = '#FFFFFF'
+            end
+            if char_centroid['left_x'] then
+                local left_centre_x = char_centroid['left_x']
+                local left_centre_y = char_centroid['left_y']
+                local svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
+                        left_centre_x * pixelWidth, left_centre_y * pixelWidth, fillcol,  math.floor(pixelWidth)*2, char)
+                table.insert(keyParts, svg_string)
 
-            local right_centre_x = char_centroid['right_x']
-            local right_centre_y = char_centroid['right_y']
-            svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
-                                right_centre_x * pixelWidth, right_centre_y * pixelWidth, fillcol, math.floor(pixelWidth)*2, char)
-            table.insert(keyParts, svg_string)
-        else
-            local centre_x = char_centroid['x']
-            local centre_y = char_centroid['y']
-            local svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
-                                (centre_x) * pixelWidth, centre_y * pixelWidth, fillcol, math.floor(pixelWidth)*2, char)
-            table.insert(keyParts, svg_string)
+                local right_centre_x = char_centroid['right_x']
+                local right_centre_y = char_centroid['right_y']
+                svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
+                        right_centre_x * pixelWidth, right_centre_y * pixelWidth, fillcol, math.floor(pixelWidth)*2, char)
+                table.insert(keyParts, svg_string)
+            else
+                local centre_x = char_centroid['x']
+                local centre_y = char_centroid['y']
+                local svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
+                        (centre_x) * pixelWidth, centre_y * pixelWidth, fillcol, math.floor(pixelWidth)*2, char)
+                table.insert(keyParts, svg_string)
+            end
         end
-
     end
 
     table.insert(keyParts, '  <!-- Ruler label -->')
@@ -1073,7 +1085,6 @@ function createCharacterImageSVG(grid, rx_data, debug_mode)
             end
         end
     end
-
 
     -- Close SVG
     table.insert(keyParts, '</svg>')
@@ -2124,10 +2135,6 @@ function PrintPlotMap()
         end
         combined = combined .. lineString .. '\n'
     end
-    print("lost symbols ")
-    for i, _ in pairs(lostSymbols) do
-        print(i)
-    end
     return combined, out_plots
 end
 
@@ -2531,7 +2538,47 @@ createTerrainMap()
 combined, out_plots = PrintPlotMap()
 print('--- Plots --- ' .. #out_plots)
 squareGrid = make_grid(out_plots)
-
+print('square grid dimensions:', #squareGrid, #(squareGrid[5]))
 local svgContent = createCharacterImageSVG(squareGrid, nil, nil)
 saveSVG(svgContent, "output.svg")
+terrainMap_out_plots = {}
+for y = g_iH - 1, 0, -1 do
+    local lineString = ""
+    for x = 0, g_iW - 1 do
+        local mapLoc = tostring(terrainMap[GetIndex(x, y)])
+        -- print(mapLoc)
+        terrainMap_out_plots[GetIndex(x, y)] =  mapLoc
+    end
+end
+squareGrid = make_grid(terrainMap_out_plots)
+-- print('square grid dimensions:', #squareGrid, #(squareGrid[5]))
+local terrainColorMapper = {
+     ['0'] = '#FFFF00', -- YELLA
+     ['1'] = '#964B00',                 -- BROWN
+     ['2'] =  '#FFFFFF',                   -- WHITE
+     ['3'] = '#AAAAAA',                 -- GREY
+     ['4'] = '#00FF00',                  -- GREEN, GRASS
+     ['5'] =  '#A020F0',                     -- UHH HILLS PURPLE
+     ['6'] = '#ADD8E6',                     -- LIGHT BLUE
+     ['7'] = '#0000FF',              -- BLUE, OCEAN_TERRAIN
+     ['8'] = '#FF0000',            -- RED
+     ['9'] = '#006400'               -- dark green
+        }
+
+local keyMapper = {
+     ['0'] = 'DESERT',
+     ['1'] = 'PLAINS',                 -- BROWN
+     ['2'] =  'ICE',                   -- WHITE
+     ['3'] = 'TUNDRA',                 -- GREY
+     ['4'] = 'GRASS',                  -- GREEN, GRASS
+     ['5'] =  'HILL',                     -- UHH HILLS PURPLE
+     ['6'] = 'COAST',                     -- LIGHT BLUE
+     ['7'] = 'OCEAN_TERRAIN',              -- BLUE, OCEAN_TERRAIN
+     ['8'] = 'PEAK_TERRAIN',            -- RED
+     ['9'] = 'MARSH'               -- dark green
+}
+
+local svgContent = createCharacterImageSVG(squareGrid, nil, nil, terrainColorMapper, keyMapper)
+saveSVG(svgContent, "output_terrain.svg")
+
 spf = StartingPlotFinder()
