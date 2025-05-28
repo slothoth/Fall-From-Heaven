@@ -98,7 +98,10 @@ directionYmap = {[N]=1,[S]=-1,[E]=0,[W]=0, [NE]=1, [NW]=1, [SE]=-1, [SW]=-1}
 rxXMap = {[NE]= 0, [NW] = -1, [SE] = 0, [SW] = -1}
 rxYMap = {[NE]= 0, [NW] = 0, [SE] = -1, [SW] = -1}
 highestRegionAltitude = 0
-
+OCEAN = 0
+LAND = 1
+HILLS = 2
+PEAK = 3
 -- conversion table for prints
 function mapChar(integer)
     local c
@@ -742,7 +745,11 @@ function createCharacterImageSVG(grid, rx_data, debug_mode)
         ["TERRAIN_DESERT"]  = '#FFFF00',
         ["TERRAIN_TUNDRA"]  = '#800080',
         ["TERRAIN_SNOW"]  = '#FFFFFF',
-        [-1] = '#0000FF'
+        [OCEAN] = "#0000FF",
+        [HILLS] = "#FFA500",
+        [LAND] = "#00FF00",
+        [-1] = '#0000FF',
+        [' '] = ""
     }
     --[[
     for key, val in pairs(highlighted_regions) do
@@ -932,6 +939,9 @@ function createCharacterImageSVG(grid, rx_data, debug_mode)
                 end
             end
         end
+    end
+    for i, j in pairs(regionsEncountered) do
+        print(i)
     end
 
     -- centralised region numbers
@@ -1745,11 +1755,6 @@ end
 
 ---- PLOT MAP -----------
 function createPlotMap()
-    OCEAN = 0
-    LAND = 1
-    HILLS = 2
-    PEAK = 3
-    
     plotMap = {}
     local scrambledPlotList = {}
     loc_regionList = regionList
@@ -2095,26 +2100,35 @@ function GetRiverSize(x, y)
 end
 
 function PrintPlotMap()
-    print("Plot Map")
-    local lineString = ""
-    for y=g_iH - 1,-1,-1 do
-        lineString = ""
-        for x=1, g_iW + 1 do
-            mapLoc = plotMap[GetIndex(x,y)]
-            if mapLoc == OCEAN then
-                lineString = lineString .. "O"
-            elseif mapLoc == PEAK then
-                lineString = lineString .. "P"
-            elseif mapLoc == HILLS then
-                lineString = lineString .. "H"
-            elseif mapLoc == LAND then
-                lineString = lineString .. "L"
+    local combined = ''
+    local out_plots = {}
+    local symbols = {
+                [OCEAN] = "O",
+                [PEAK] = "P",
+                [HILLS] = "H",
+                [LAND] = "L"
+            }
+    local lostSymbols = {}          -- 0, 3, nil
+    for y = g_iH - 1, 0, -1 do
+        local lineString = ""
+        for x = 0, g_iW - 1 do
+            local mapLoc = plotMap[GetIndex(x, y)]
+            if not symbols[mapLoc] and not lostSymbols[mapLoc] and mapLoc then
+                lostSymbols[mapLoc] = true
             end
+            out_plots[GetIndex(x, y)] =  symbols[mapLoc] or " "
+            lineString = lineString .. (symbols[mapLoc] or " ")
         end
-        print(lineString)
+        if bShowMap then
+            print(lineString)
+        end
+        combined = combined .. lineString .. '\n'
     end
-    lineString = " "
-    print(lineString)
+    print("lost symbols ")
+    for i, _ in pairs(lostSymbols) do
+        print(i)
+    end
+    return combined, out_plots
 end
 
 AreaMap = {}
@@ -2355,13 +2369,13 @@ function createTerrainMap()
     GRASS = 4
     HILL = 5
     COAST = 6
-    OCEAN = 7
-    PEAK = 8
+    OCEAN_TERRAIN = 7
+    PEAK_TERRAIN = 8
     MARSH = 9
     terrainMap = {}
     --  initialize terrainMap with OCEAN
     for i=0, g_iH * g_iW do
-        table.insert(terrainMap, OCEAN)
+        table.insert(terrainMap, OCEAN_TERRAIN)
     end
     for y=1, g_iH do
         for x=1, g_iW do
@@ -2370,7 +2384,8 @@ function createTerrainMap()
                 terrainMap[i] = GRASS
             else
                 for direction=1, 8 do
-                    local xx, yy = getXYFromDirection(x, y, direction)
+                    local xx = x + directionXmap[direction]
+                    local yy = y + directionYmap[direction]
                     local ii = GetIndex(xx, yy)
                     if ii ~= -1 and plotMap[ii] ~= OCEAN then
                         terrainMap[i] = COAST
@@ -2421,7 +2436,8 @@ function createTerrainMap()
             if plotMap[i] == PEAK then
                 terrainMap[i] = TUNDRA
                 for direction=1, 8 do
-                    local xx, yy = getXYFromDirection(x, y, direction)
+                    local xx = x + directionXmap[direction]
+                    local yy = y + directionYmap[direction]
                     local ii = GetIndex(xx, yy)
                     if plotMap[ii] ~= PEAK and plotMap[ii] ~= OCEAN then
                         terrainMap[i] = terrainMap[ii]
@@ -2512,4 +2528,10 @@ river_plots = PrintFlowMap()
 
 createPlotMap()
 createTerrainMap()
+combined, out_plots = PrintPlotMap()
+print('--- Plots --- ' .. #out_plots)
+squareGrid = make_grid(out_plots)
+
+local svgContent = createCharacterImageSVG(squareGrid, nil, nil)
+saveSVG(svgContent, "output.svg")
 spf = StartingPlotFinder()
