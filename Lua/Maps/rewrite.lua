@@ -128,7 +128,7 @@ function createRegions()
     --region.
 
     -- globals
-    numTiles = g_iW * g_iH
+    numTiles = (g_iW +1) * (g_iH + 1)
     numRx = (g_iW + 1) * (g_iH + 1)
     regionMap = {}
     regionRxMap = {}
@@ -146,7 +146,7 @@ function createRegions()
         regionRxMap[i] = -1
     end
     local numRegions = math.floor(tonumber(numTiles) * RegionsPerPlot)
-    print('number of regions: ', numRegions)
+    print('number of regions!: ', numRegions)
     for i = 1, numRegions do
         -- first find a random seed point that is not blocked by
         -- previous points
@@ -182,7 +182,6 @@ function createRegions()
     -- PrintRegionRxMap(false)
     --Now cause the seeds to grow into regions
     local iterations = 0
-    print('-- STABLE', #regionPlotList)
     while #regionPlotList > 0 do
         iterations = iterations + 1
         if iterations > 200000 then
@@ -191,10 +190,7 @@ function createRegions()
         end
         local plot = regionPlotList[1]
         if not plot then
-            print('--- TABLE ---')
-            print_table(regionPlotList)
-            print(#regionPlotList)
-            print('-- STABLE')
+            print('-- PLOT NOT FOUND')
         end
         local region = getRegionByID(plot.regionId)
         if region.isGrowing then
@@ -340,9 +336,6 @@ function canRegionGrowHere(x, y, regionID)
     end
     local assume = true
     for direction=1, 8 do
-        print('----')
-        print(direction)
-        print(directionXmap[direction])
         local xx = x + directionXmap[direction]
         local yy = y + directionYmap[direction]
         local ii = GetRxIndex(xx, yy)
@@ -391,6 +384,9 @@ function isSeedBlocked(seedX, seedY)
 end
 
 function getRegionByID(ID)
+    if not ID then
+        error('ID of region was nil')
+    end
     for i, region in ipairs(regionList) do
         if region.ID == ID then
             return region
@@ -499,7 +495,7 @@ function Region:getBorderPlotList(neighborID)
     for plot in self.plotList do
         if plot.bBorder == true then
             borderPlotCount = borderPlotCount + 1
-            for direction=1, 5 do
+            for direction=1, 4 do
                 local xx, yy = GetDirection(direction, plot)
                 local ii = GetIndex(xx, yy)
                 if ii ~= -1 and regionMap[ii] == neighborID then
@@ -544,7 +540,7 @@ end
 function Region:expandWaterRegion()
     local expanded = false
     for _, plot in ipairs(self.plotList) do
-        for direction=1, 5 do
+        for direction=1, 4 do
             local xx, yy = GetDirection(direction, plot)
             local ii = GetIndex(xx,yy)
             if ii ~= -1 and regionMap[ii] == -1 then
@@ -638,7 +634,7 @@ end
 
 -- This function converts x and y to an index. Useful in case of future wrapping.
 function GetIndex(x, y)
-    if x < 0 or x >= g_iW or y < 0 or y >= g_iH then
+    if x < 0 or x > g_iW or y < 0 or y > g_iH then
         return -1
     else
         return  y * g_iW + x
@@ -1134,16 +1130,15 @@ function createRiverMap()
     createFlowMap()
     calculateWetAndDry()
     riverMap = {}
-    for i=1, (g_iH + 1) * (g_iW + 1) do
-        -- append(0)
+    for i=1, ((g_iH + 1) * (g_iW + 1))-1 do                     -- should this be adjusted for python -> lua -1?
         table.insert(riverMap, 0)
     end
-    for y=1, g_iH + 1 do
-        for x=1, g_iW + 1 do
+    for y=1, g_iH do
+        for x=1, g_iW do
             local i = getRiverIndex(x, y)
             local direction = flowMap[i]
             local regionID = getRegion(x, y)
-            print(string.format('region is %d: %d, %d', regionID, x, y))
+            -- print(string.format('region is %d: %d, %d', regionID, x, y))
             if regionID ~= -1 then
                 local region = getRegionByID(regionID)
                 local xx = x
@@ -1169,7 +1164,7 @@ function createFlowMap()
     -- on the stack to be processed the same way.
     heightMap = {}
     flowMap = {}
-    for i=1, (g_iH + 1) * (g_iW + 1) do
+    for i=1, ((g_iH + 1) * (g_iW + 1))-1 do
         table.insert(flowMap, -1)
         table.insert(heightMap, -1.0)
     end
@@ -1262,7 +1257,7 @@ function createFlowMap()
             --                print "popping"
             local rxI = getRiverIndex(thisPlot.x, thisPlot.y)
             local altitude = heightMap[rxI]
-            for direction=1, 5 do
+            for direction=1, 4 do
                 local x = thisPlot.x + directionXmap[direction]
                 local y = thisPlot.y + directionYmap[direction]
                 local rxII = getRiverIndex(x, y)
@@ -1282,8 +1277,8 @@ function createFlowMap()
     saveSVG(svgContent, "complete_regions.svg")
     --                        print "newPlot appended"
     -- Create flow map
-    for y=1, g_iH + 1 do
-        for x=1, g_iW + 1 do
+    for y=1, g_iH do
+        for x=1, g_iW do
             local paths = getPossiblePaths(x, y)
             if #paths > 0 then
                 local i = getRiverIndex(x, y)
@@ -1318,9 +1313,6 @@ function calculateWetAndDry()
     for _, region in ipairs(regionList) do
         local gate = region.gatePlot
         if gate then
-            print('wetspot')
-            print(wetSpotX)
-            print(wetSpotY)
             local distance = math.sqrt(math.abs(((gate.x - wetSpotX) * (gate.x - wetSpotX)) + ((gate.y - wetSpotY) * (gate.y - wetSpotY))))
             region.moisture = 1.0 - distance / g_iW
             minMoisture = math.min(region.moisture, minMoisture)
@@ -1422,7 +1414,7 @@ function isValidHalfGate(regionID, rxX, rxY)
         failedGateAttempts[currentRegion][key]['failure'] = 'RX_being_in_region'
         return false
     end
-    for direction=1, 5 do
+    for direction=1, 4 do
         local xx = rxX + directionXmap[direction]
         local yy = rxY + directionYmap[direction]
         if isRxInRegion(xx, yy, regionID) then
@@ -1452,7 +1444,7 @@ function isValidFullGate(regionID, rxX, rxY)
             failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
             return true
         end
-        for direction=1, 5 do
+        for direction=1, 4 do
             local xx = rxX + directionXmap[direction]
             local yy = rxY + directionYmap[direction]
             -- local xx, yy = getXYFromDirection(rxX, rxY, direction)          -- TODO this seems wrong to not use them
@@ -1478,7 +1470,7 @@ function getPossiblePaths(rxX, rxY)
     local rxI = getRiverIndex(rxX, rxY)
     local altitude = heightMap[rxI]
     local rejectedDirection = L
-    for direction=1, 5 do
+    for direction=1, 4 do
         local x = rxX + directionXmap[direction]
         local y = rxY + directionYmap[direction]
         local i = getRiverIndex(x, y)
@@ -1493,11 +1485,9 @@ function getPossiblePaths(rxX, rxY)
         end
     end
 
-    for direction=1, 5 do
+    for direction=1, 4 do
         local x = rxX + directionXmap[direction]
         local y = rxY + directionYmap[direction]
-        print('-- checking direction ----')
-        print(regionID)
         if isRxInRegion(x, y, regionID) or (x == region.gatePlot.x and y == region.gatePlot.y) then
             local i = getRiverIndex(x, y)
             if i ~= -1 and heightMap[i] < altitude then
@@ -1522,7 +1512,7 @@ function fillInLake(rxX, rxY)
     local altitude = heightMap[rxI]
     local regionID = getRegion(rxX, rxY)
     local lowestNeighbor = 1.0
-    for direction=1, 5 do
+    for direction=1, 4 do
         local x = rxX + directionXmap[direction]
         local y = rxY + directionYmap[direction]
         local i = getRiverIndex(x, y)
@@ -1543,7 +1533,7 @@ function isLake(rxX, rxY)
     local altitude = heightMap[rxI]
     local regionID = getRegion(rxX, rxY)
     local lowestNeighbor = 1.0
-    for direction=1, 5 do
+    for direction=1, 4 do
         local x = rxX + directionXmap[direction]
         local y = rxY + directionYmap[direction]
         local i = getRiverIndex(x, y)
@@ -1588,16 +1578,19 @@ function getRiverIndex(x, y)
     local xx
     local yy
     if x < 0 or x >= g_iW + 1 then
+        print('when getting river index, x too small')
         return -1
     else
         xx = x
     end
     if y < 0 or y >= g_iH + 1 then
+        print('when getting river index, y too small')
         return -1
     else
         yy = y
     end
     local i = yy * (g_iW + 1) + xx
+    print('getting river index: ', i)
     return i
 end
 function isRxInRegion(x, y, regionID)
@@ -1625,7 +1618,7 @@ function getRegion(x, y)
         i = GetIndex(xx, yy)
         local nRegionID = regionMap[i]
         if not nRegionID then
-            print(string.format('couldnt find region for index %d and %d/%d values', i, xx, yy))
+            -- print(string.format('couldnt find region for index %d and %d/%d values', i, xx, yy))
         end
         if nRegionID and nRegionID ~= -1 then                     -- TODO,unsure if checking exists is fine
         -- test if this main plot is gate for this region
@@ -1701,7 +1694,7 @@ function PrintFlowMap()
     local lineString
     for y=g_iH, -1, -1 do
         lineString = ""
-        for x=1, g_iW + 1 do
+        for x=1, g_iW do
             mapLoc = flowMap[getRiverIndex(x, y)]
             if mapLoc == -1 then
                 lineString = lineString .. "X"
@@ -1772,8 +1765,10 @@ function createPlotMap()
         end
     end
     scrambledPlotList = ShuffleList(scrambledPlotList)
-    
+
+    print('scrambled plots: ', #scrambledPlotList)
     for n=1, #scrambledPlotList do
+        print('n at', n)
         local plot = scrambledPlotList[n]
         local x = plot[1]
         local y = plot[2]
@@ -1800,13 +1795,13 @@ function createPlotMap()
         local regionID = regionMap[i]
         if regionID ~= -1 then
             local region = getRegionByID(regionID)
-            if region.isWater and plotMap.plotMap[i] ~= OCEAN then
+            if region.isWater and plotMap[i] ~= OCEAN then
                 for direction=1,4 do
                     local xx = x + directionXmap[direction]
                     local yy = y + directionYmap[direction]
                     local ii = GetIndex(xx,yy)
                     local nRegionID = regionMap[ii]
-                    if nRegionID ~= -1 then
+                    if nRegionID and nRegionID ~= -1 then
                         local nRegion = getRegionByID(nRegionID)
                         if not nRegion.isWater then
                             regionMap[i] = nRegionID
@@ -1840,8 +1835,8 @@ function createPlotMap()
             -- now there's a chance to flatten it again!
             if plotMap[i] ~= LAND then
                 local riverSize = GetRiverSize(x,y)
-                local maxRiverSize = float(RiverThreshold) * RiverFactorFlattensAll
-                riverSize = min(maxRiverSize,riverSize)
+                local maxRiverSize = RiverThreshold * RiverFactorFlattensAll
+                riverSize = math.min(maxRiverSize,riverSize)
                 local flattenChance = riverSize/maxRiverSize
                 -- print flattenChance
                 if math.random() < flattenChance then
@@ -1877,9 +1872,10 @@ function createPlotMap()
 
     -- Now make sure there are no passable areas that are blocked in
     -- PrintPlotMap()
-    areaMap = Areamap(g_iW,g_iH)
-    areaMap.findImpassableAreas()
-    -- areaMap.PrintAreaMap()
+    local areaMap = AreaMap.new(g_iW, g_iH)
+    print(areaMap)
+    areaMap:findImpassableAreas()
+    -- areaMap:PrintAreaMap()
     for i=1, g_iW*g_iH do
         if areaMap.areaMap[i] == 0 then
             if plotMap[i] ~= PEAK then
@@ -1889,11 +1885,11 @@ function createPlotMap()
             end
         end
     end
-    -- areaMap.PrintAreaMap()
+    -- areaMap:PrintAreaMap()
 end
 
 function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
-    if riverMap[rxI] > RiverThreshold then
+    if riverMap[rxI] and riverMap[rxI] > RiverThreshold then            -- again TODO on fail forward with RiverMap finds
         local xx = x + directionXmap[pDir]
         local yy = y + directionYmap[pDir]
         local ii = GetIndex(xx,yy)
@@ -1974,8 +1970,9 @@ function placeLandInWater(x,y)
                     local yyy = y + directionYmap[oppDirection]
                     if IsPlotSurroundedByOcean(xxx,yyy) then
                         if math.random(0,1) == 0 then
-                            local nRegion = getRegionByID(regionMap[ii])
-                            if nRegion ~= None then
+                            local nRegionID = regionMap[ii]
+                            if nRegionID and nRegionID ~= -1 then
+                                local nRegion = getRegionByID(nRegionID)
                                 print("placing land in water")
                                 if nRegion.altitude < 2 then
                                     plotMap[i] = LAND
@@ -2017,7 +2014,7 @@ function shouldPlacePeak(x,y)
         if plotMap[ii] ~= PEAK then
             local nRegionID = regionMap[ii]
             if nRegionID ~= -1 then
-                -- if nRegionID == region.gateRegion:
+                -- if nRegionID == region.gateRegion then
                 local nRegion = getRegionByID(nRegionID)
                 if nRegion.isWater and region.altitude < 2 then
                     return false
@@ -2031,6 +2028,70 @@ function shouldPlacePeak(x,y)
             end
         end
     end
+end
+
+function IsPlotTouchingRiver(x, y)
+    for direction=5, 8 do
+        local rxX, rxY = rxFromPlot(x, y, direction)
+        local rxI = getRiverIndex(rxX, rxY)
+        if riverMap[rxI] and riverMap[rxI] > RiverThreshold then                  -- TODO this may cause fail throughs as rivers should be gettable
+            return true
+        end
+    end
+end
+
+function IsPlotSurroundedByOcean(x, y)
+    for direction=1, 8 do
+        local xx = x + directionXmap[direction]
+        local yy = y + directionYmap[direction]
+        local i = GetIndex(xx, yy)
+        if plotMap[i] ~= OCEAN then
+            return false
+        end
+    end
+    return true
+end
+
+function GetPlotAltitude(x, y)
+    -- calculate highest region altitude if necessary and save it for later
+    local loc_regionList = regionList
+    if highestRegionAltitude == 0 then
+        table.sort(loc_regionList, function(a, b)
+            return a.altitude > b.altitude
+        end)
+        local highestRegionAltitude = loc_regionList[1].altitude
+    end
+    local i = GetIndex(x, y)
+    local regionID = regionMap[i]
+    if regionID == -1 then
+        return -1.0
+    end
+    local region = getRegionByID(regionID)
+    ----    print "GetPlotAltitude"
+    local regionAlt = (region.altitude + 1) / (highestRegionAltitude + 1)
+    ----    print "regionAlt = %(ra)f" % {"ra":regionAlt}
+    local riverAltRange = RiverAltRangeFactor * RiverThreshold
+    local riverSize = GetRiverSize(x, y)
+    if riverSize > riverAltRange then
+        riverSize = riverAltRange
+    end----    print "riverSize = %(r)f" % {"r":riverSize}
+    local riverSubtract = riverSize * ((RiverAltitudeSubtraction / riverAltRange) / (highestRegionAltitude + 1))
+    ----    print "riverSubtract = %(rs)f" % {"rs":riverSubtract}
+    local altitude = regionAlt - riverSubtract
+    ----    print "altitude = %(a)f" % {"a":altitude}
+    ----    print ""
+    return altitude
+end
+
+function GetRiverSize(x, y)
+    local riverAverage = 0.0
+    for direction=5, 8 do
+        local rxX, rxY = rxFromPlot(x, y, direction)
+        local rxI = getRiverIndex(rxX, rxY)
+        riverAverage = riverAverage + riverMap[rxI]             -- sometimes we arent getting these
+    end
+    riverAverage = riverAverage / 4.0
+    return riverAverage
 end
 
 function PrintPlotMap()
@@ -2056,29 +2117,393 @@ function PrintPlotMap()
     print(lineString)
 end
 
+AreaMap = {}
+AreaMap.__index = AreaMap
+function AreaMap.new(width, height)
+    local self = setmetatable({}, AreaMap)
+    self.mapWidth = width
+    self.mapHeight = height
+    self.areaMap ={}
+    for i=0, self.mapHeight * self.mapWidth do              -- 0 seems fine here, as its just inserts indexing
+        table.insert(self.areaMap, 0)                -- initialize map with zeros
+    end
+    return self
+end
+
+function AreaMap:findImpassableAreas()
+    --        self.areaSizes = array('i')
+    ----        starttime = time.clock()
+    -- make sure map is erased in case it is used multiple times
+    for i=0, self.mapHeight * self.mapWidth do
+        self.areaMap[i] = 0
+    end
+    --        for i in range(0,1):
+    for i=0, self.mapHeight * self.mapWidth do
+        if plotMap[i] == OCEAN then  -- not assigned to an area yet
+            areaSize = self:fillArea(i, 1)
+    ----        endtime = time.clock()
+    ----        elapsed = endtime - starttime
+    ----        print "defineAreas time ="
+    ----        print elapsed
+    ----        print()
+        end
+    end
+end
+function AreaMap:findChokePointAreas()
+    -- fill water and peaks with non-zero value
+    for i=0, self.mapHeight * self.mapWidth do
+        gamePlot = gameMap.plotByIndex(i)
+        if gamePlot.isWater() then
+            self.areaMap[i] = -1
+        elseif gamePlot.isImpassable() then
+            self.areaMap[i] = -3
+        end
+    end
+
+    self.areaList = {}
+    table.insert(self.areaList, -1)  -- placeholder to avoid using a zero index
+    local areaID = 0
+    for i=0, self.mapHeight * self.mapWidth do
+        if self.areaMap[i] == 0 then
+            areaID = areaID + 1
+            local areaSize = self:fillArea(i, areaID)
+            --                print "areaID = %(id)d, size = %(s)d" % {"id":areaID,"s":areaSize}
+            table.insert(self.areaList, areaSize)
+        end
+    end
+end
+
+function AreaMap:fillArea(index, areaID)
+    -- first divide index into x and y
+    local y = index / self.mapWidth
+    local x = index % self.mapWidth
+    -- We check 8 neigbors for land,but 4 for water. This is because
+    -- the game connects land squares diagonally across water, but
+    -- water squares are not passable diagonally across land
+    self.segStack = {}
+    self.size = 0
+    -- place seed on stack for both directions
+    local seg = {y=y, xLeft=x, xRight=x, dy=1}
+    table.insert(self.segStack, seg)
+    seg = {y=y + 1, xLeft=x, xRight=x, dy=-1}
+    table.insert(self.segStack, seg)
+    while #self.segStack > 0 do
+        seg = table.remove(self.segStack)
+        self:scanAndFillLine(seg, areaID)
+    end
+    return self.size
+end
+
+function AreaMap:scanAndFillLine(seg, areaID)
+    -- check for y + dy being off map
+    local i = GetIndex(seg['xLeft'], seg['y'] + seg['dy'])
+    if i < 0 then
+        ----            print "scanLine off map ignoring",str(seg)
+        return
+    end
+    local debugReport = false
+    ----        if (seg['y'] < 8 and seg['y'] > 4) or (seg['y'] < 70 and seg['y'] > 64) then
+    ----        if (areaID == 4) then
+    ----            debugReport = true
+    -- landOffset = 1 for 8 connected neighbors, 0 for 4 connected neighbors
+    local landOffset = 1
+    local lineFound = false
+    -- first scan and fill any left overhang
+    if debugReport then
+        print('')
+        print(seg)
+        print("Going left")
+    end
+    local xLeftExtreme
+    for xLeftExtremeLoc=seg['xLeft'] - landOffset, -1, -1 do
+        xLeftExtreme = xLeftExtremeLoc
+        i = GetIndex(xLeftExtreme, seg['y'] + seg['dy'])
+        if debugReport then
+            print("xLeftExtreme = %d", xLeftExtreme)
+        end
+        if self.areaMap[i] == 0 and plotMap[i] ~= PEAK then
+            self.areaMap[i] = areaID
+            self.size = self.size + 1
+            lineFound = true
+        else
+            -- if no line was found, then xLeftExtreme is fine, but if
+            -- a line was found going left, then we need to increment
+            -- xLeftExtreme to represent the inclusive end of the line
+            if lineFound then
+                xLeftExtreme = xLeftExtreme + 1
+            end
+            break
+        end
+    end
+    if debugReport then
+        print("xLeftExtreme finally = %d",xLeftExtreme)
+        print("Going Right")
+    end
+    -- now scan right to find extreme right, place each found segment on stack
+    --        xRightExtreme = seg['xLeft'] - landOffset --needed sometimes? one time it was not initialized before use.
+    local xRightExtreme
+    for xRightExtreme_loc=seg['xLeft'], self.mapWidth, 1 do
+        xRightExtreme = xRightExtreme_loc
+        if debugReport then
+            print("xRightExtreme = %d", xRightExtreme)
+        end
+        i = GetIndex(xRightExtreme, seg['y'] + seg['dy'])
+        if self.areaMap[i] == 0 and plotMap[i] ~= PEAK then
+            self.areaMap[i] = areaID
+            self.size = self.size + 1
+            if lineFound == false then
+                lineFound = true
+                xLeftExtreme = xRightExtreme  -- starting new line
+                if debugReport then
+                    print("starting new line at xLeftExtreme= %d", xLeftExtreme)
+                end
+            end
+        elseif lineFound == true then  -- found the right end of a line segment!
+            lineFound = false
+            -- put same direction on stack
+            newSeg = {y=seg['y'] + seg['dy'], xLeft=xLeftExtreme, xRight=xRightExtreme - 1, dy=seg['dy']}
+            table.insert(self.segStack, newSeg)
+            if debugReport then
+                print("same direction to stack", newSeg)
+            end
+            -- determine if we must put reverse direction on stack
+            if xLeftExtreme < seg['xLeft'] or xRightExtreme >= seg['xRight'] then
+                -- out of shadow so put reverse direction on stack also
+                local newSeg = {y=seg['y'] + seg['dy'], xLeft=xLeftExtreme, xRight=xRightExtreme - 1, dy=-seg['dy']}
+                table.insert(self.segStack, newSeg)
+                if debugReport then
+                    print("opposite direction to stack", newSeg)
+                end
+            end
+            if xRightExtreme >= seg['xRight'] + landOffset then
+                if debugReport then
+                    print("finished with line")
+                end
+                break;  -- past the end of the parent line and this line ends
+            end
+        elseif lineFound == false and xRightExtreme >= seg['xRight'] + landOffset then
+            if debugReport then
+                print("no additional lines found")
+            end
+            break;  -- past the end of the parent line and no line found
+        -- else                                                                 -- this clause does nothing
+        --     continue  -- keep looking for more line segments
+        end
+    end
+    if lineFound == true then  -- still a line needing to be put on stack
+        if debugReport then
+            print("still needing to stack some segs")
+        end
+        lineFound = false
+        -- put same direction on stack
+        local newSeg = {y=seg['y'] + seg['dy'], xLeft=xLeftExtreme, xRight=xRightExtreme - 1, dy=seg['dy']}
+        table.insert(self.segStack, newSeg)
+        if debugReport then
+            print(newSeg)
+        end
+        -- determine if we must put reverse direction on stack
+        if xLeftExtreme < seg['xLeft'] or xRightExtreme - 1 > seg['xRight'] then
+            -- out of shadow so put reverse direction on stack also
+            newSeg = {y=seg['y'] + seg['dy'], xLeft=xLeftExtreme, xRight=xRightExtreme - 1, dy=-seg['dy']}
+            table.insert(self.segStack, newSeg)
+            if debugReport then
+                print(newSeg)
+            end
+        end
+    end
+end
+
+
+-- for debugging
+function AreaMap:PrintAreaMap()
+    print("Area Map")
+    for y=self.mapHeight - 1, -1, -1 do
+        local lineString = ""
+        for x=1, self.mapWidth do
+            local mapLoc = self.areaMap[GetIndex(x, y)]
+            if mapLoc > 0 then
+                if mapLoc + 34 > 127 then
+                    mapLoc = 127 - 34
+                end
+                lineString = lineString + chr(mapLoc + 34)
+            ----                    if self.areaList[mapLoc] > ChokePointAreaSize then
+            ----                        lineString = lineString +"*"
+            ----                    else:
+            ----                        lineString = lineString +"+"
+            elseif mapLoc == 0 then
+                lineString = lineString +"!"
+            elseif mapLoc == -1 then
+                lineString = lineString +"."
+            elseif mapLoc == -2 then
+                lineString = lineString +"X"
+            elseif mapLoc == -3 then
+                lineString = lineString +"^"
+            end
+        end
+        lineString = lineString +"-" + str(y)
+        print(lineString)
+    end
+    print(" ")
+end
+
+-- TERRAIN --
+function createTerrainMap()
+    DESERT = 0
+    PLAINS = 1
+    ICE = 2
+    TUNDRA = 3
+    GRASS = 4
+    HILL = 5
+    COAST = 6
+    OCEAN = 7
+    PEAK = 8
+    MARSH = 9
+    terrainMap = {}
+    --  initialize terrainMap with OCEAN
+    for i=0, g_iH * g_iW do
+        table.insert(terrainMap, OCEAN)
+    end
+    for y=1, g_iH do
+        for x=1, g_iW do
+            local i = GetIndex(x, y)
+            if plotMap[i] ~= OCEAN then
+                terrainMap[i] = GRASS
+            else
+                for direction=1, 8 do
+                    local xx, yy = getXYFromDirection(x, y, direction)
+                    local ii = GetIndex(xx, yy)
+                    if ii ~= -1 and plotMap[ii] ~= OCEAN then
+                        terrainMap[i] = COAST
+                    end
+                end
+            end
+        end
+    end
+
+    for y=1, g_iH-1 do
+        for x=1, g_iW-1 do
+            local i = GetIndex(x, y)
+            if plotMap[i] ~= OCEAN then
+                print('doing x/y', x, y)
+                local rainFall = GetRainfall(x, y)
+                if rainFall < DesertThreshold then
+                    if rainFall < ((math.random() * DesertThreshold) / 2.0) + (DesertThreshold / 2.0) then
+                        terrainMap[i] = DESERT
+                    else
+                        terrainMap[i] = PLAINS
+                    end
+                elseif rainFall < PlainsThreshold then
+                    if rainFall < ((math.random() * (
+                            PlainsThreshold - DesertThreshold)) / 2.0) + DesertThreshold + (
+                            (PlainsThreshold - DesertThreshold) / 2.0) then
+                        terrainMap[i] = PLAINS
+                    else
+                        terrainMap[i] = GRASS
+                    end
+                else
+                    terrainMap[i] = GRASS
+                end
+                local altitude = GetPlotAltitude(x, y)
+                if altitude > IceThreshold then
+                    terrainMap[i] = ICE
+                elseif altitude > TundraThreshold then
+                    terrainMap[i] = TUNDRA
+                elseif altitude > MaxDesertAltitude and terrainMap[i] == DESERT then
+                    terrainMap[i] = PLAINS
+                end
+            end
+        end
+    end
+    -- clean up desert peaks to avoid burning peaks all over the map
+    for y=1,g_iH -1 do
+        for x=1, g_iW-1 do
+            local i = GetIndex(x, y)
+            if plotMap[i] == PEAK then
+                terrainMap[i] = TUNDRA
+                for direction=1, 8 do
+                    local xx, yy = getXYFromDirection(x, y, direction)
+                    local ii = GetIndex(xx, yy)
+                    if plotMap[ii] ~= PEAK and plotMap[ii] ~= OCEAN then
+                        terrainMap[i] = terrainMap[ii]
+                        break
+                    end
+                end
+            end
+        end
+    end
+end
+
+function GetRainfall(x, y)
+    local rainfall = 0
+    local i = GetIndex(x, y)
+    local regionID = regionMap[i]
+    if regionID ~= -1 then
+        local region = getRegionByID(regionID)
+        rainfall = region.moisture
+        print(regionID)
+        local riverSize = GetRiverSize(x, y)
+        local riverSizeMax = RiverThreshold * RiverAddsMoistureMax
+        riverSize = math.min(riverSize, riverSizeMax)
+        rainfall = rainfall + (riverSize / riverSizeMax) * RiverAddsMoistureRange
+    end
+    return rainfall
+end
+
+function check_regions()
+    local missed_region
+    print('---- did regions all exist')
+    for x=1, g_iW do
+        for y=1, g_iH do
+            local i = GetIndex(x,y)
+            local regionID = regionMap[i]
+            if not regionID then
+                print(string.format('%d, %d: no region, index was %d', x, y, i))
+                missed_region = true
+            end
+        end
+    end
+    if missed_region then
+        print('ending check regions, REGIONS DONT EXIST')
+    else
+        print('ending check regions, all accounted for')
+    end
+end
+
+function check_rx()
+    for x=1, g_iW do
+        for y=1, g_iH do
+            local i = GetRxIndex(x, y)
+            local regionID = regionRxMap[i]
+            if not regionID then
+                print(string.format('%d, %d: no region', x, y))
+            end
+        end
+    end
+end
+
 currentRegion = -99
 local success = false
 river_map_attempts = 0
 while not success and river_map_attempts < 2 do
     success, result = pcall(function()
         createRegions()
-    final_reg_map = PrintRegionMap()
-    print('reg map')
-    print(final_reg_map)
-    -- PrintRegionList()
+        final_reg_map = PrintRegionMap()
+        print('reg map')
+        print(final_reg_map)
+        -- PrintRegionList()
 
-    region_plots = PrintRegionMap(true)
-    print('reg map water')
-    print(region_plots)
+        region_plots = PrintRegionMap(true)
+        print('reg map water')
+        print(region_plots)
 
-    squareGrid = make_grid(regionMap)
-    local svgContent = createCharacterImageSVG(squareGrid)
-    saveSVG(svgContent, "rewrite_regions.svg")
+        squareGrid = make_grid(regionMap)
+        local svgContent = createCharacterImageSVG(squareGrid)
+        saveSVG(svgContent, "rewrite_regions.svg")
         failedGateAttempts = {}
         createRiverMap()
-        river_map_attempts = river_map_attempts + 1
-        print('--------------------------- river attempt finished -----------------------\n\n\n\n\n\n\n\n\n')
     end)
+    river_map_attempts = river_map_attempts + 1
+    print('--------------------------- river attempt finished -----------------------\n\n\n\n\n\n\n\n\n')
 end
 if not success then
     error(result)
@@ -2086,10 +2511,5 @@ end
 river_plots = PrintFlowMap()
 
 createPlotMap()
-terrainMap = TerrainMap()
+createTerrainMap()
 spf = StartingPlotFinder()
---[[
-plotMap = PlotMap()
-terrainMap = TerrainMap()
-spf = StartingPlotFinder()
-]]
