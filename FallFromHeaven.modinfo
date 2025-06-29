@@ -322,6 +322,12 @@
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
   </UpdateIcons>
+  <ImportFiles id="ErebusMap">
+	<File>Lua/Maps/Erebus.lua</File>
+	<File>Lua/Maps/ErebusSupport.lua</File>
+	<File>Lua/Maps/assign_starts.lua</File>
+	<File>Lua/Maps/erebus_test.lua</File>
+  </ImportFiles>
   </InGameActions>
   <Files>
     <File>Localisation/loc_abilities.sql</File>
@@ -466,5 +472,6 @@
     <File>UI/TabSupport.lua</File>
     <File>UI/CivicsTree.xml</File>
     <File>UI/CivicsTree.lua</File>
+    <File>Lua/Maps/Erebus.lua</File>
   </Files>
 </Mod>

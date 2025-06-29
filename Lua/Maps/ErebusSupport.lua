@@ -71,8 +71,7 @@ WrapY = false
 
 
 
-g_iW, g_iH = 84, 52
-local temperate = 4
+g_iW, g_iH = Map.GetGridSize();
 
 
 -- new defines:
@@ -105,9 +104,9 @@ function mapChar(integer)
     end
     return c
 end
+
 RegionCharMap = {}
 CharRegionMap = {}
-
 for count=1, 52 do
     table.insert(RegionCharMap, mapChar(count))
 end
@@ -1758,7 +1757,7 @@ function getRiverRegionByID(x,y)
 end
 
 ---- PLOT MAP -----------
-function createPlotMap()
+function createPlotMap(height, width)
     plotMap = {}
     local scrambledPlotList = {}
     loc_regionList = regionList
@@ -1767,8 +1766,8 @@ function createPlotMap()
     end)
     highestRegionAltitude = loc_regionList[1].altitude
 
-    for y=1, g_iH do
-        for x=1, g_iW do
+    for y=1, height do
+        for x=1, width do
             table.insert(plotMap, OCEAN)
             table.insert(scrambledPlotList, {x,y})
         end
@@ -1795,7 +1794,7 @@ function createPlotMap()
             placeLandInWater(x,y)
         end
     end
-
+            
     for n=1, #scrambledPlotList do
         local plot = scrambledPlotList[n]
         local x = plot[1]
@@ -1814,15 +1813,15 @@ function createPlotMap()
                         local nRegion = getRegionByID(nRegionID)
                         if not nRegion.isWater then
                             regionMap[i] = nRegionID
-                            break
+                            break 
                         end
                     end
                 end
             end
         end
     end
-
-
+               
+                    
     for n=1, #scrambledPlotList do
         local plot = scrambledPlotList[n]
         local x = plot[1]
@@ -1868,8 +1867,8 @@ function createPlotMap()
     end
 
     -- Now for SoftenPeakPercent of peaks, make them hills
-    for y=1,g_iH - 1 do
-        for x= 1,g_iW - 1 do
+    for y=1,height - 1 do
+        for x= 1,width - 1 do
             local i = GetIndex(x,y)
             if plotMap[i] == PEAK then
                 if SoftenPeakPercent >= math.random() then
@@ -1881,11 +1880,11 @@ function createPlotMap()
 
     -- Now make sure there are no passable areas that are blocked in
     -- PrintPlotMap()
-    local areaMap = AreaMap.new(g_iW, g_iH)
+    local areaMap = AreaMap.new(width, height)
     print(areaMap)
     areaMap:findImpassableAreas()
     -- areaMap:PrintAreaMap()
-    for i=1, g_iW*g_iH do
+    for i=1, width*height do
         if areaMap.areaMap[i] == 0 then
             if plotMap[i] ~= PEAK then
                 plotMap[i] = PEAK
@@ -1895,6 +1894,7 @@ function createPlotMap()
         end
     end
     -- areaMap:PrintAreaMap()
+    return plotMap
 end
 
 function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
@@ -2113,7 +2113,7 @@ function PrintPlotMap()
                 [LAND] = "L"
             }
     local lostSymbols = {}          -- 0, 3, nil
-    for y = g_iH - 1, 0, -1 do
+    for y = height - 1, 0, -1 do
         local lineString = ""
         for x = 0, g_iW - 1 do
             local mapLoc = plotMap[GetIndex(x, y)]
@@ -2361,7 +2361,7 @@ function AreaMap:PrintAreaMap()
 end
 
 -- TERRAIN --
-function createTerrainMap()
+function createTerrainMap(height, width)
     DESERT = 0
     PLAINS = 1
     ICE = 2
@@ -2374,11 +2374,11 @@ function createTerrainMap()
     MARSH = 9
     terrainMap = {}
     --  initialize terrainMap with OCEAN
-    for i=0, g_iH * g_iW do
+    for i=0, height * width do
         table.insert(terrainMap, OCEAN_TERRAIN)
     end
-    for y=1, g_iH do
-        for x=1, g_iW do
+    for y=1, height do
+        for x=1, width do
             local i = GetIndex(x, y)
             if plotMap[i] ~= OCEAN then
                 terrainMap[i] = GRASS
@@ -2395,8 +2395,8 @@ function createTerrainMap()
         end
     end
 
-    for y=1, g_iH-1 do
-        for x=1, g_iW-1 do
+    for y=1, height-1 do
+        for x=1, width-1 do
             local i = GetIndex(x, y)
             if plotMap[i] ~= OCEAN then
                 print('doing x/y', x, y)
@@ -2430,8 +2430,8 @@ function createTerrainMap()
         end
     end
     -- clean up desert peaks to avoid burning peaks all over the map
-    for y=1,g_iH -1 do
-        for x=1, g_iW-1 do
+    for y=1,height -1 do
+        for x=1, width-1 do
             local i = GetIndex(x, y)
             if plotMap[i] == PEAK then
                 terrainMap[i] = TUNDRA
@@ -2447,6 +2447,7 @@ function createTerrainMap()
             end
         end
     end
+    return terrainMap
 end
 
 function GetRainfall(x, y)
@@ -2497,6 +2498,7 @@ function check_rx()
     end
 end
 
+--[[
 currentRegion = -99
 local success = false
 river_map_attempts = 0
@@ -2527,7 +2529,7 @@ end
 river_plots = PrintFlowMap()
 
 createPlotMap()
-createTerrainMap()
+createTerrainMap(g_iH, g_iW)
 combined, out_plots = PrintPlotMap()
 print('--- Plots --- ' .. #out_plots)
 squareGrid = make_grid(out_plots)
@@ -2573,3 +2575,4 @@ local keyMapper = {
 
 local svgContent = createCharacterImageSVG(squareGrid, nil, nil, terrainColorMapper, keyMapper)
 saveSVG(svgContent, "output_terrain.svg")
+]]
