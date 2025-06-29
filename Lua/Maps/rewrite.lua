@@ -1128,6 +1128,259 @@ function make_grid(tPlots, use_keys)
     return squareGrid
 end
 
+-- Helper function to get averaged terrain from neighboring cells
+function getAveragedTerrain(grid, x, y)
+    local neighbors = {}
+    local directions
+    if y % 2 == 1 then          -- Hex grid neighbor directions (odd-r offset)
+        directions = {
+            {x=0, y=-1},  -- North
+            {x=1, y=-1},  -- Northeast
+            {x=1, y=0},   -- Southeast
+            {x=0, y=1},   -- South
+            {x=-1, y=0},  -- Southwest
+            {x=-1, y=-1}  -- Northwest
+        }
+    else
+        directions = {
+            {x=0, y=-1},  -- North
+            {x=1, y=0},   -- Northeast
+            {x=1, y=1},   -- Southeast
+            {x=0, y=1},   -- South
+            {x=-1, y=1},  -- Southwest
+            {x=-1, y=0}   -- Northwest
+        }
+    end
+    for _, dir in ipairs(directions) do     -- Collect valid neighboring terrains
+        local newX = x + dir.x
+        local newY = y + dir.y
+        if newX >= 1 and newX <= #grid[1] and
+           newY >= 1 and newY <= #grid and
+           grid[newY][newX] ~= nil then
+            table.insert(neighbors, grid[newY][newX])
+        end
+    end
+    if #neighbors > 0 then  -- Return most common terrain type among neighbors
+        local terrainCount = {}
+        local maxCount = 0
+        local mostCommon = neighbors[1]
+        for _, terrain in ipairs(neighbors) do
+            terrainCount[terrain] = (terrainCount[terrain] or 0) + 1
+            if terrainCount[terrain] > maxCount then
+                maxCount = terrainCount[terrain]
+                mostCommon = terrain
+            end
+        end
+        return mostCommon
+    else
+        return "L"      -- Default to flatland if no neighbors found
+    end
+end
+
+-- Function to create a new hex grid
+function createHexGrid(squareGrid)
+    local height = #squareGrid
+    local width = #squareGrid[1]
+    -- Create empty hex grid, Hex grid needs different dimensions due to the offset pattern
+    local hexWidth = width-- Hex tiles overlap horizontally
+    local hexHeight = math.ceil(height * 3/4)
+    local hexGrid = {}
+    for y = 1, hexHeight do
+        hexGrid[y] = {}
+        for x = 1, hexWidth do
+            hexGrid[y][x] = nil
+        end
+    end
+    -- Convert square coordinates to hex coordinates and transfer terrain
+    for y = 1, height do
+        for x = 1, width do
+            -- Convert square coordinates to hex coordinates using offset coordinates (odd-r offset)
+            local hexX = x  -- Compress x coordinates
+            local hexY =  math.ceil(y * 3/4)
+            if x % 2 == 1 then
+                hexY = hexY + 0.5           -- Offset every other row
+            end
+            hexY = math.floor(hexY + 0.5)       -- Round to nearest hex cell
+            if hexX >= 1 and hexX <= hexWidth and hexY >= 1 and hexY <= hexHeight then      -- Ensure coordinates are within bounds
+                -- Transfer terrain type
+                hexGrid[hexY][hexX] = squareGrid[y][x]
+            end
+        end
+    end
+    -- Fill in any gaps with averaged terrain from neighbors
+    for y = 1, hexHeight do
+        for x = 1, hexWidth do
+            if hexGrid[y][x] == nil then
+                hexGrid[y][x] = getAveragedTerrain(hexGrid, x, y)
+            end
+        end
+    end
+    return hexGrid
+end
+
+function createHexGridSVG(grid, debug_mode)
+    -- Calculate dimensions
+    local height = #grid
+    local width = 0
+    for i = 1, height do
+        width = math.max(width, #grid[i])
+    end
+    -- Predefined symbols remain the same
+    local symbols = {
+        ["O"] = '#0000FF', -- Blue
+        ["P"] = '#FF0000', -- Red
+        ["H"] = '#FFFF00', -- Yellow
+        ["L"] = '#00FF00', -- Green
+    }
+    -- Find unique characters (removed char count limitation)
+    local uniqueChars = {}
+    local charCount = 0
+    for y = 1, height do
+        for x = 1, #grid[y] do
+            local char = grid[y][x]
+            if not uniqueChars[char] and not symbols[char] then
+                charCount = charCount + 1
+                uniqueChars[char] = true
+            end
+        end
+    end
+    -- Color generation functions
+    local function HSVtoRGB(h, s, v)
+        local h_i = math.floor(h * 6)
+        local f = h * 6 - h_i
+        local p = v * (1 - s)
+        local q = v * (1 - f * s)
+        local t = v * (1 - (1 - f) * s)
+
+        local r, g, b = 0, 0, 0
+        if h_i == 0 then r, g, b = v, t, p
+        elseif h_i == 1 then r, g, b = q, v, p
+        elseif h_i == 2 then r, g, b = p, v, t
+        elseif h_i == 3 then r, g, b = p, q, v
+        elseif h_i == 4 then r, g, b = t, p, v
+        elseif h_i == 5 then r, g, b = v, p, q
+        end
+
+        return math.floor(r * 255), math.floor(g * 255), math.floor(b * 255)
+    end
+    -- Function to generate optimized colors for small character sets
+    local function generateOptimizedColors(count)
+        local colors = {}
+        if count <= 64 then
+            -- For counts under 64, use distinct hues with optimized saturation and value
+            local hueStep = 1.0 / count
+            for i = 1, count do
+                -- Alternate between high and medium saturation/value for better distinction
+                local s = i % 2 == 0 and 1.0 or 0.8
+                local v = i % 2 == 0 and 0.9 or 1.0
+                local h = (i - 1) * hueStep
+                local r, g, b = HSVtoRGB(h, s, v)
+                colors[i] = string.format('#%02X%02X%02X', r, g, b)
+            end
+            return colors
+        else
+            return nil
+        end
+    end
+    -- Generate color palette based on character count
+    local colorPalette = generateOptimizedColors(charCount) or {}
+    -- If optimized colors weren't generated, create 256-color palette
+    if #colorPalette == 0 then
+        for i = 0, 255 do
+            local h = (i % 16) / 16
+            local s = math.floor(i / 16) % 4 / 3
+            local v = math.floor(i / 64) % 4 / 3
+            local r, g, b = HSVtoRGB(h, 0.5 + s * 0.5, 0.5 + v * 0.5)
+            colorPalette[i + 1] = string.format('#%02X%02X%02X', r, g, b)
+        end
+    end
+    -- Assign colors to characters
+    local colors = {}
+    local colorIndex = 1
+    local colour_string = ""
+    for char in pairs(uniqueChars) do
+        colors[char] = colorPalette[colorIndex]
+        colour_string = colour_string .. string.format('%s = %s |', char, colorPalette[colorIndex])
+        colorIndex = (colorIndex % #colorPalette) + 1
+    end
+    if debug_mode then
+        print(colour_string)
+    end
+    local hexSize = 30  -- Size of hexagon (radius)
+    local hexWidth = hexSize * 2
+    local hexHeight = hexSize * math.sqrt(3)
+    local horizontalSpacing = 3 * hexSize / 2
+    local verticalSpacing = hexHeight
+    local padding = hexSize * 2
+    -- Calculate SVG dimensions with padding
+    local svgWidth = width * horizontalSpacing + padding * 2
+    local svgHeight = height * verticalSpacing + padding * 2
+    local function getHexagonPoints(cx, cy)     -- Function to generate hexagon points
+        local points = {}
+        for i = 0, 5 do
+            local angle = math.pi / 3 * i + math.pi / 6  -- Rotate 30 degrees to point up
+            local x = cx + hexSize * math.cos(angle)
+            local y = cy + hexSize * math.sin(angle)
+            table.insert(points, string.format("%.2f,%.2f", x, y))
+        end
+        return table.concat(points, " ")
+    end
+    local svgParts = {
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        string.format('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %.2f %.2f">', svgWidth, svgHeight),
+        '  <!-- Background -->',
+        string.format('  <rect width="%.2f" height="%.2f" fill="#1a1a1a"/>', svgWidth, svgHeight)
+    }
+    for y = 1, height do            -- Add hexagons
+        for x = 1, #grid[y] do
+            local char = grid[y][x]
+            if colors[char] or symbols[char] then
+                local colour = symbols[char] or colors[char]
+                -- Calculate hex center position
+                local cx = padding + x * horizontalSpacing + ((y-1) % 2) * (horizontalSpacing / 2)
+                local cy = padding + y * verticalSpacing
+                local hexPoints = getHexagonPoints(cx, cy)      -- Create hexagon
+                local hex = string.format(
+                    '  <polygon points="%s" fill="%s" stroke="#000000" stroke-width="1"/>',
+                    hexPoints,
+                    colour
+                )
+                table.insert(svgParts, hex)
+                if x == 1 or y == 1 then        -- Add coordinate guides for first row and column
+                    local guide
+                    if x == 1 then guide = y else guide = x end
+                    table.insert(svgParts, string.format(
+                        '  <text x="%.2f" y="%.2f" fill="#000000" font-size="%d" text-anchor="middle" dominant-baseline="middle">%s</text>',
+                        cx, cy, hexSize/2, guide
+                    ))
+                end
+            end
+        end
+    end
+    -- Add color key (only if there are less than 20 unique characters)
+    if charCount < 20 then
+        local keyY = svgHeight - 20
+        table.insert(svgParts, string.format(
+            '  <text x="10" y="%.2f" fill="#FFFFFF" font-size="14">Key: </text>',
+            keyY
+        ))
+        local keyX = 50
+        for char, color in pairs(colors) do
+            table.insert(svgParts, string.format(
+                '  <rect x="%.2f" y="%.2f" width="20" height="20" fill="%s"/>',
+                keyX, keyY - 15, color
+            ))
+            table.insert(svgParts, string.format(
+                '  <text x="%.2f" y="%.2f" fill="#FFFFFF" font-size="14">%s</text>',
+                keyX + 25, keyY, char
+            ))
+            keyX = keyX + 60
+        end
+    end
+    table.insert(svgParts, '</svg>')
+    return table.concat(svgParts, '\n')
+end
+
 function calculateCentre(tbl)
     local sum_total = 0
     for _, y in ipairs(tbl) do
@@ -2497,54 +2750,62 @@ function check_rx()
     end
 end
 
-currentRegion = -99
-local success = false
-river_map_attempts = 0
-while not success and river_map_attempts < 2 do
-    success, result = pcall(function()
-        createRegions()
-        final_reg_map = PrintRegionMap()
-        print('reg map')
-        print(final_reg_map)
-        -- PrintRegionList()
+function GenerateMap()
+    currentRegion = -99
+    local success = false
+    river_map_attempts = 0
+    while not success and river_map_attempts < 2 do
+        success, result = pcall(function()
+            createRegions()
+            final_reg_map = PrintRegionMap()
+            print('reg map')
+            print(final_reg_map)
+            -- PrintRegionList()
 
-        region_plots = PrintRegionMap(true)
-        print('reg map water')
-        print(region_plots)
+            region_plots = PrintRegionMap(true)
+            print('reg map water')
+            print(region_plots)
 
-        squareGrid = make_grid(regionMap)
-        local svgContent = createCharacterImageSVG(squareGrid)
-        saveSVG(svgContent, "rewrite_regions.svg")
-        failedGateAttempts = {}
-        createRiverMap()
-    end)
-    river_map_attempts = river_map_attempts + 1
-    print('--------------------------- river attempt finished -----------------------\n\n\n\n\n\n\n\n\n')
-end
-if not success then
-    error(result)
-end
-river_plots = PrintFlowMap()
-
-createPlotMap()
-createTerrainMap()
-combined, out_plots = PrintPlotMap()
-print('--- Plots --- ' .. #out_plots)
-squareGrid = make_grid(out_plots)
-print('square grid dimensions:', #squareGrid, #(squareGrid[5]))
-local svgContent = createCharacterImageSVG(squareGrid, nil, nil)
-saveSVG(svgContent, "output.svg")
-terrainMap_out_plots = {}
-for y = g_iH - 1, 0, -1 do
-    local lineString = ""
-    for x = 0, g_iW - 1 do
-        local mapLoc = tostring(terrainMap[GetIndex(x, y)])
-        -- print(mapLoc)
-        terrainMap_out_plots[GetIndex(x, y)] =  mapLoc
+            squareGrid = make_grid(regionMap)
+            local svgContent = createCharacterImageSVG(squareGrid)
+            saveSVG(svgContent, "rewrite_regions.svg")
+            failedGateAttempts = {}
+            createRiverMap()
+        end)
+        river_map_attempts = river_map_attempts + 1
+        print('--------------------------- river attempt finished -----------------------\n\n\n\n\n\n\n\n\n')
     end
+    if not success then
+        error(result)
+    end
+    river_plots = PrintFlowMap()
+
+    createPlotMap()
+    createTerrainMap()
+    combined, out_plots = PrintPlotMap()
+    print('--- Plots --- ' .. #out_plots)
+    squareGrid = make_grid(out_plots)
+    print('square grid dimensions:', #squareGrid, #(squareGrid[5]))
+    local svgContent = createCharacterImageSVG(squareGrid, nil, nil)
+    saveSVG(svgContent, "output.svg")
+    terrainMap_out_plots = {}
+    for y = g_iH - 1, 0, -1 do
+        local lineString = ""
+        for x = 0, g_iW - 1 do
+            local mapLoc = tostring(terrainMap[GetIndex(x, y)])
+            -- print(mapLoc)
+            terrainMap_out_plots[GetIndex(x, y)] =  mapLoc
+        end
+    end
+    squareGrid = make_grid(terrainMap_out_plots)
+    -- print('square grid dimensions:', #squareGrid, #(squareGrid[5]))
+    local hexGrid = createHexGrid(squareGrid)
+    local svgContent = createHexGridSVG(hexGrid)
+    saveSVG(svgContent, "output_hex.svg")
 end
-squareGrid = make_grid(terrainMap_out_plots)
--- print('square grid dimensions:', #squareGrid, #(squareGrid[5]))
+
+GenerateMap()
+
 local terrainColorMapper = {
      ['0'] = '#FFFF00', -- YELLA
      ['1'] = '#964B00',                 -- BROWN
