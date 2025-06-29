@@ -6,8 +6,8 @@ include "FeatureGenerator"
 include "TerrainGenerator"
 include "NaturalWonderGenerator"
 include "ResourceGenerator"
+include "CoastalLowlands"
 include "AssignStartingPlots"
-
 UsePythonRandom = true
 -- This variable turns on things that only make sense with Fall from Heaven 2
 FFHSpecific = true
@@ -2795,7 +2795,24 @@ function GenerateMap()
     -- g_iW, g_iH = 84, 52
     g_iW, g_iH = Map.GetGridSize();
     print('map size', g_iW, g_iH)
-    local temperate = 4
+    g_iFlags = TerrainBuilder.GetFractalFlags();
+	local temperature = MapConfiguration.GetValue("temperature"); -- Default setting is Temperate.
+	if temperature == 4 then
+		temperature  =  1 + TerrainBuilder.GetRandomNumber(3, "Random Temperature- Lua");
+	end
+
+	--	local world_age
+	local world_age = MapConfiguration.GetValue("world_age");
+	if (world_age == 1) then
+		world_age = world_age_new;
+	elseif (world_age == 2) then
+		world_age = world_age_normal;
+	elseif (world_age == 3) then
+		world_age = world_age_old;
+	else
+		world_age = 2 + TerrainBuilder.GetRandomNumber(4, "Random World Age - Lua");
+	end
+
     currentRegion = -99
     local success = false
     river_map_attempts = 0
@@ -2847,14 +2864,23 @@ function GenerateMap()
     local svgContent = createHexGridSVG(squareGrid_Terrain_Types)
     saveSVG(svgContent, "output_hex.svg")
     print('Finished erebus setup')
+    print('doing plot types')
     local plotTypes = ConvertToFiraxisForm(hexGrid_plot_Types, plotErebusFxsMapper)
+    print('doing terrains')
     local terrainTypes = ConvertToFiraxisForm(hexGrid_Terrain_Types, terrainErebusFxsMapper)
     ApplyTerrain(plotTypes, terrainTypes);
 
 	-- Temp
 	AreaBuilder.Recalculate();
+	TerrainBuilder.AnalyzeChokepoints();
+	TerrainBuilder.StampContinents();
+
+	local iContinentBoundaryPlots = GetContinentBoundaryPlotCount(g_iW, g_iH);
 	local biggest_area = Areas.FindBiggestArea(false);
 	print("After Adding Hills: ", biggest_area:GetPlotCount());
+	-- AddTerrainFromContinents(plotTypes, terrainTypes, world_age, g_iW, g_iH, iContinentBoundaryPlots);
+
+	AreaBuilder.Recalculate();
 
 	-- River generation is affected by plot types, originating from highlands and preferring to traverse lowlands.
 	AddRivers();
@@ -2864,6 +2890,7 @@ function GenerateMap()
 	AddLakes(numLargeLakes);
 
 	AddFeatures();
+	TerrainBuilder.AnalyzeChokepoints();
 
 	print("Adding cliffs");
 	AddCliffs(plotTypes, terrainTypes);
@@ -2873,22 +2900,21 @@ function GenerateMap()
 	};
 	local nwGen = NaturalWonderGenerator.Create(args);
 
-	AreaBuilder.Recalculate();
-	TerrainBuilder.AnalyzeChokepoints();
-	TerrainBuilder.StampContinents();
+	AddFeaturesFromContinents();
+	MarkCoastalLowlands();
 
-    resourcesConfig = MapConfiguration.GetValue("resources");
+	resourcesConfig = MapConfiguration.GetValue("resources");
 	local startConfig = MapConfiguration.GetValue("start");-- Get the start config
-	local args_ = {
+	local args = {
 		resources = resourcesConfig,
 		START_CONFIG = startConfig,
 	};
-	local resGen = ResourceGenerator.Create(args_);
+	local resGen = ResourceGenerator.Create(args);
 
 	print("Creating start plot database.");
 
 	-- START_MIN_Y and START_MAX_Y is the percent of the map ignored for major civs' starting positions.
-	local args_start_plots = {
+	local args = {
 		MIN_MAJOR_CIV_FERTILITY = 150,
 		MIN_MINOR_CIV_FERTILITY = 50,
 		MIN_BARBARIAN_FERTILITY = 1,
@@ -2896,7 +2922,7 @@ function GenerateMap()
 		START_MAX_Y = 15,
 		START_CONFIG = startConfig,
 	};
-	local start_plot_database = AssignStartingPlots.Create(args_start_plots)
+	local start_plot_database = AssignStartingPlots.Create(args)
 
 	local GoodyGen = AddGoodies(g_iW, g_iH);
 
@@ -2910,6 +2936,8 @@ function ApplyTerrain(plotTypes, terrainTypes)
 		pPlot = Map.GetPlotByIndex(i);
 		if (plotTypes[i] == g_PLOT_TYPE_HILLS) then
 			terrainTypes[i] = terrainTypes[i] + 1;
+        elseif (plotTypes[i] == g_PLOT_TYPE_MOUNTAIN)  then
+            terrainTypes[i] = terrainTypes[i] + 2;
 		end
         if terrainTypes[i] then
             TerrainBuilder.SetTerrainType(pPlot, terrainTypes[i]);
@@ -2926,10 +2954,13 @@ function ConvertToFiraxisForm(erebus_hex_grid, mapper)
     for y, x_row in pairs(erebus_hex_grid) do
         for x, plot_val in pairs(x_row) do
             local converted_val = mapper[plot_val]
+            if converted_val == g_PLOT_TYPE_MOUNTAIN then
+                print('mountain found')
+            end
             if converted_val then
                 table.insert(plotTypes, converted_val)
             else
-                print('ERRROR: MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_val .. '$ WITH COORDINATES: ' .. x .. ', ' .. y)
+                print('ERROR: MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_val .. '$ WITH COORDINATES: ' .. x .. ', ' .. y)
                 print('inserting grass instead: ' .. g_TERRAIN_TYPE_GRASS)
                 table.insert(plotTypes, g_TERRAIN_TYPE_GRASS)
             end
@@ -2948,9 +2979,12 @@ function AddFeatures()
 	end
 
 	local args = {rainfall = rainfall}
-	local featuregen = FeatureGenerator.Create(args);
+	featuregen = FeatureGenerator.Create(args);
+	featuregen:AddFeatures(true, true);  --second parameter is whether or not rivers start inland);
+end
 
-	featuregen:AddFeatures();
+function AddFeaturesFromContinents()
+	featuregen:AddFeaturesFromContinents();
 end
 
 local terrainColorMapper = {
