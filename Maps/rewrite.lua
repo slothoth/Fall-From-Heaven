@@ -1,3 +1,13 @@
+include "MapEnums"
+include "MapUtilities"
+include "MountainsCliffs"
+include "RiversLakes"
+include "FeatureGenerator"
+include "TerrainGenerator"
+include "NaturalWonderGenerator"
+include "ResourceGenerator"
+include "AssignStartingPlots"
+
 UsePythonRandom = true
 -- This variable turns on things that only make sense with Fall from Heaven 2
 FFHSpecific = true
@@ -24,6 +34,7 @@ RiverAddsMoistureMax = 10.0
 -- These variables control the frequency of hills and peaks at the lowest
 -- and highest altitudes
 HillChanceAtZero = .15
+
 HillChanceAtOne = .90
 PeakChanceAtZero = .0
 PeakChanceAtOne = .20
@@ -69,10 +80,6 @@ ChokePointWalkAroundDistance = 12   -- chokepoint must cause this much extra wal
 WrapX = false                       -- Dont touch these, this map has no wrap
 WrapY = false
 
-
-
-g_iW, g_iH = 84, 52
-local temperate = 4
 
 
 -- new defines:
@@ -235,7 +242,7 @@ function createRegions()
             if regionID and regionID ~= -1 then
                 local region = getRegionByID(regionID)
                 for direction= 5, 8 do
-                    print('direction', direction)
+                    slthLog('direction', direction)
                     local xx, yy = plotFromRx(x, y, direction)
                     if xx == 71 and yy == 71 then
                         print(string.format("x=%d,y=%d,xx=%d,yy=%d", x, y, xx, yy))
@@ -273,9 +280,9 @@ function createRegions()
 
     --Now choose areas to be water
     local numWaterRegions = math.floor(tonumber(numTiles) * WaterRegionsPerPlot)
-    print(string.format("numTiles = %d, numWaterRegions = %d", numTiles, numWaterRegions))
+    slthLog(string.format("numTiles = %d, numWaterRegions = %d", numTiles, numWaterRegions))
     for i, region in ipairs(regionList) do print(i, region.ID); end
-    print('first shuffle')
+    slthLog('first shuffle')
     regionList = ShuffleList(regionList)
     --Try to start with the region in the middle (there is a low chance that there isn't one)
     local middle_region_index = GetIndex(g_iW / 2, g_iH / 2)
@@ -305,7 +312,7 @@ function createRegions()
     end
 
     --       PrintRegionMap(false)
-    print('fill water')
+    slthLog('fill water')
     --Now fill any non-areas adjacent to water with the water area
     for _, region in ipairs(regionList) do
         if region.isWater then
@@ -381,7 +388,7 @@ end
 
 function getRegionByID(ID)
     if not ID then
-        error('ID of region was nil')
+        error('ID of region was nil')           -- TODO this intermittently errors... this time at shouldPlacePeak
     end
     for i, region in ipairs(regionList) do
         if region.ID == ID then
@@ -429,9 +436,9 @@ function PrintRegionRxMap(bShowWater)
 end
 
 function PrintRegionList()
-    print("Number of regions:", #regionList)
+    slthLog("Number of regions:", #regionList)
     for i, region in ipairs(regionList) do
-        print(region.ID)
+        slthLog(region.ID)
     end
 end
 
@@ -512,7 +519,7 @@ function Region:getGateListToNeighbor(neighborID)
             table.insert(gateListToNeighbor, rPlot)
         end
     end
-    print(string.format("%d gates from %d to %d", #gateListToNeighbor, self.ID, neighborID))
+    slthLog(string.format("%d gates from %d to %d", #gateListToNeighbor, self.ID, neighborID))
     return gateListToNeighbor
 end
 
@@ -651,7 +658,7 @@ function print_table(tbl_)
             print('recursive table on ', key)
             print_table(val)
         else
-            print(string.format('key: %s . val: %s', key, val))
+            slthLog(string.format('key: %s . val: %s', key, val))
         end
     end
 end
@@ -680,45 +687,36 @@ function checkRegions()
         end
     end
     if all_found then
-        print('all good')
+        slthLog('all good')
     end
 end
-
+function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_mapper)
+    return
+end
+--[[
 function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_mapper)
     if not key_mapper then
         key_mapper = {}
     end
     local excludedPlots = {}
     local highlighted_regions = {}
-    print('examining rx')
     if rx_data then
         for k, v in pairs(rx_data) do
-            print(k)
             for part in string.gmatch(k, "[^/]+") do
-                print(part)
                 highlighted_regions[tonumber(part)] = tonumber(part)
                 break
             end
-            print('---')
         end
-        print('regions to highlight:')
-        for k,v  in pairs(highlighted_regions) do
-            print(k)
-        end
-
         for key, val in pairs(rx_data) do
             for key_, val_ in pairs(val) do
                 local reason = val_['failure']
                 if reason == 'FULL_GATE' then
-                    excludedPlots[val_['x'] .. '/' .. val_['y']] = true
-                end
+                    excludedPlots[val_['x'] .. '/' .. val_['y']] -- = true
+                --[[end
             end
         end
     end
     local height = #grid
-    if debug_mode then
-        print('height is ' .. tostring(height))
-    end
     local width = 0
     for i = 1, height do
         width = math.max(width, #grid[i])
@@ -860,7 +858,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
     local svgHeight = pixelWidth * height
 
     -- Start SVG string
-    if true then
+    if debug_mode then
         print('width: ' .. width .. ' | svgWidth: ' .. svgWidth .. ' | svgHeight: ' .. svgHeight .. ' | pixelWidth: ' .. pixelWidth)
     end
     -- local doKey = charCount < 20
@@ -894,7 +892,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
             if symbols[char] then
                 colour = symbols[char]
             end
-            print(string.format('label %s for char: %s. Colour: %s', label, char, colour))
+            slthLog(string.format('label %s for char: %s. Colour: %s', label, char, colour))
             local labelLength = string.len(label) * 7
             local keyString = string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">',
             xPosition, varKeyHeight, math.floor(pixelWidth)) .. label .. ":"
@@ -943,7 +941,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
         end
     end
     for i, j in pairs(regionsEncountered) do
-        print(i)
+        slthLog(i)
     end
 
     -- centralised region numbers
@@ -962,7 +960,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
         end
 
         if check_in_table(char_xs[char], 1) and check_in_table(char_xs[char], width) then
-            print('found wrapping region')
+            slthLog('found wrapping region')
             -- this is a split region, so we want to plot both
             -- first find all plots that are closer to one side or the other
             -- so to find left plots, find all plots that are below width/2
@@ -992,7 +990,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
         return char_centres
     end
     if true then
-        print('')
+        slthLog('')
     else
         local char_xs = {}
         local char_ys = {}
@@ -1056,7 +1054,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
         local used_plots = {}
         for key, val in pairs(rx_data) do
             for key_, val_ in pairs(val) do
-                print(string.format('for region: %d and plot %s', key, key_))
+                slthLog(string.format('for region: %d and plot %s', key, key_))
                 local x = val_['x']
                 local y = val_['y']
                 local reason = val_['failure']
@@ -1065,7 +1063,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
                     used_plots[x .. '/' .. y] = true
                     if reason == 'FULL_GATE' then
                         colour = '#FFFFFF'                      -- yellow
-                        print(string.format('highlighted region plot %d/%d is White as full gate', x, y))
+                        slthLog(string.format('highlighted region plot %d/%d is White as full gate', x, y))
                          local rect = string.format(
                             '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
                             ((x-1) * pixelWidth)+pixelWidth, ((y-1) * pixelWidth)+pixelWidth, pixelWidth, pixelWidth, colour
@@ -1073,7 +1071,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
                         table.insert(keyParts, rect)
                     end
                 else
-                    print('plot already used!')
+                    slthLog('plot already used!')
                 end
             end
         end
@@ -1084,7 +1082,8 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
     local full =  {table.concat(svgParts, '\n'),  table.concat(keyParts, '\n')}
     return table.concat(full, '\n')
 end
-
+--]]
+--[[
 function saveSVG(content, filename)
     local file = io.open(filename, "w")
     if file then
@@ -1095,33 +1094,33 @@ function saveSVG(content, filename)
         return false, "Could not open file for writing"
     end
 end
+--]]                    -- io not allowed in game
+
+function saveSVG(content, filename)
+    return
+end
+
+doLog = false
+function slthLog(text)
+    if doLog then
+        print(text)
+    end
+end
 
 function make_grid(tPlots, use_keys)
     -- iterate over combined string, to make the dict we want
-    local squareGrid = {{}}
-    local count = 1
+    local squareGrid = {}
+    local count = 0
     local row = 1
-    if use_keys then
-        for _, i in pairs(tPlots) do
-            if count == g_iW then
-                count = 0
-                row = row + 1
-                squareGrid[row] = {}
-            else
-                count = count + 1
-                table.insert(squareGrid[row], i)
-            end
-        end
-    else
-        for _, i in ipairs(tPlots) do
-            if count == g_iW then
-                count = 0
-                row = row + 1
-                squareGrid[row] = {}
-            else
-                count = count + 1
-                table.insert(squareGrid[row], i)
-            end
+    squareGrid[row] = {}
+
+    for _, i in ipairs(tPlots) do
+        table.insert(squareGrid[row], i)
+        count = count + 1
+        if count == g_iW then
+            count = 0
+            row = row + 1
+            squareGrid[row] = {}
         end
     end
 
@@ -1129,7 +1128,7 @@ function make_grid(tPlots, use_keys)
 end
 
 -- Helper function to get averaged terrain from neighboring cells
-function getAveragedTerrain(grid, x, y)
+function getAveragedTerrain(grid, x, y, default_val)
     local neighbors = {}
     local directions
     if y % 2 == 1 then          -- Hex grid neighbor directions (odd-r offset)
@@ -1178,12 +1177,12 @@ function getAveragedTerrain(grid, x, y)
 end
 
 -- Function to create a new hex grid
-function createHexGrid(squareGrid)
+function createHexGrid(squareGrid, default_filler)
     local height = #squareGrid
     local width = #squareGrid[1]
     -- Create empty hex grid, Hex grid needs different dimensions due to the offset pattern
     local hexWidth = width-- Hex tiles overlap horizontally
-    local hexHeight = math.ceil(height * 3/4)
+    local hexHeight = height                     -- was 3/4 for svg compression afaik, math.ceil(height * 3/4)
     local hexGrid = {}
     for y = 1, hexHeight do
         hexGrid[y] = {}
@@ -1196,7 +1195,7 @@ function createHexGrid(squareGrid)
         for x = 1, width do
             -- Convert square coordinates to hex coordinates using offset coordinates (odd-r offset)
             local hexX = x  -- Compress x coordinates
-            local hexY =  math.ceil(y * 3/4)
+            local hexY = math.ceil(y * 3/4)          -- was less:  math.ceil(y * 3/4)
             if x % 2 == 1 then
                 hexY = hexY + 0.5           -- Offset every other row
             end
@@ -1211,10 +1210,11 @@ function createHexGrid(squareGrid)
     for y = 1, hexHeight do
         for x = 1, hexWidth do
             if hexGrid[y][x] == nil then
-                hexGrid[y][x] = getAveragedTerrain(hexGrid, x, y)
+                hexGrid[y][x] = getAveragedTerrain(hexGrid, x, y, default_filler)
             end
         end
     end
+    table.remove(hexGrid, #hexGrid)             -- TODO bodge fix here... worth looking into if we are doing weird stuff to get hexes, and if theres a simpler method
     return hexGrid
 end
 
@@ -1436,14 +1436,14 @@ function createFlowMap()
         table.insert(heightMap, -1.0)
     end
     defineGates()
-    print("Gates Defined !!!!!!!!!!!!!!!!!!!!!!!!")
+    slthLog("Gates Defined !!!!!!!!!!!!!!!!!!!!!!!!")
     local for_continue = true
     for _, region in ipairs(regionList) do
         if region.isWater then
-            print('skipping checking valid gates as water region')
+            slthLog('skipping checking valid gates as water region')
         else
             -- randomly choose an outflow gate
-            print("region.gateRegion =", region.gateRegion)
+            slthLog("region.gateRegion =", region.gateRegion)
             local validGateList = region:getGateListToNeighbor(region.gateRegion)
             if #validGateList  == 0 then
                 print("validGateList == 0!!!!!!!!!!!!!!!!!!!!")
@@ -1453,12 +1453,12 @@ function createFlowMap()
                 error("region has neighbor but no valid gates. see debug file")
             end
             if #validGateList < 2 then
-                print('length of valid gate list is: ', #validGateList)
+                slthLog('length of valid gate list is: ', #validGateList)
             end
-            print('length of valid gate list is: ', #validGateList)
+            slthLog('length of valid gate list is: ', #validGateList)
             local partGatePlot = validGateList[math.random(1, #validGateList)]
-            print('part gateplot is')
-            print(partGatePlot['x'], partGatePlot['y'])
+            slthLog('part gateplot is')
+            slthLog(partGatePlot['x'], partGatePlot['y'])
             region.gatePlot = partGatePlot
             local rxX = region.gatePlot.x
             local rxY = region.gatePlot.y
@@ -1601,7 +1601,7 @@ function defineGates()
     for i, region in ipairs(regionList) do
         region:defineValidGateList()
         -- regions should always have gates
-        print(string.format('checking region %d', region.ID))
+        slthLog(string.format('checking region %d', region.ID))
         if #(region.gateList) == 0 then
             print(" has no gates!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             -- print(PrintRegionMap(false))
@@ -1628,11 +1628,11 @@ function defineGates()
                         else
                             gateRegion = getRegionByID(region.gateRegion)
                             region.altitude = gateRegion.altitude + 1
-                            print(string.format("region %d gateRegion is %d", region.ID, region.gateRegion))
+                            slthLog(string.format("region %d gateRegion is %d", region.ID, region.gateRegion))
                         end
                         numGatesPlaced = numGatesPlaced + 1
                     else
-                        print(string.format("Region %d has no gated neighbors", region.ID))
+                        slthLog(string.format("Region %d has no gated neighbors", region.ID))
                     end
                 end
             end
@@ -1646,13 +1646,13 @@ function isValidHalfGate(regionID, rxX, rxY)
     local forGatesRegionList = {}
     local key = tostring(regionID) .. '/' .. tostring(rxX) .. '/' .. tostring(rxY)
     if failedGateAttempts[currentRegion] then
-        print('region existed alreaedy')
+        slthLog('region existed alreaedy')
     else
         failedGateAttempts[currentRegion] = {}
     end
 
     if failedGateAttempts[currentRegion][key] then
-        print('region plot existed alreaedy')
+        slthLog('region plot existed alreaedy')
     else
         failedGateAttempts[currentRegion][key] = {x=rxX, y=rxY}
     end
@@ -1661,7 +1661,7 @@ function isValidHalfGate(regionID, rxX, rxY)
         local i = GetIndex(px, py)
         local pRegID = regionMap[i]
         if not pRegID or pRegID == -1 then
-            print(string.format('RX is not valid half gate by cant find region ID or id is -1 for index %d and x/y: %d/%d', i, px, py))
+            slthLog(string.format('RX is not valid half gate by cant find region ID or id is -1 for index %d and x/y: %d/%d', i, px, py))
             return false
         end
         if not check_in_table(forGatesRegionList, pRegID) then
@@ -1670,14 +1670,14 @@ function isValidHalfGate(regionID, rxX, rxY)
         end
     end
     local table_contents = ''
-    for key, val in ipairs(forGatesRegionList) do table_contents = table_contents .. ' ' .. val; end
+    for _, val in ipairs(forGatesRegionList) do table_contents = table_contents .. ' ' .. val; end
     if #forGatesRegionList ~= 2 then
-        print(string.format('RX %d/%d is not valid half gate by not touching 2 regions, instead touching %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+        slthLog(string.format('RX %d/%d is not valid half gate by not touching 2 regions, instead touching %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
         failedGateAttempts[currentRegion][key]['failure'] = 'not_two_gates'
         return false
     end
     if isRxInRegion(rxX, rxY, regionID) then
-        print(string.format('RX %d/%d is not valid half gate by RX being in region, but does touch %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+        slthLog(string.format('RX %d/%d is not valid half gate by RX being in region, but does touch %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
         failedGateAttempts[currentRegion][key]['failure'] = 'RX_being_in_region'
         return false
     end
@@ -1685,12 +1685,12 @@ function isValidHalfGate(regionID, rxX, rxY)
         local xx = rxX + directionXmap[direction]
         local yy = rxY + directionYmap[direction]
         if isRxInRegion(xx, yy, regionID) then
-            print(string.format('RX %d/%d is valid half gate by RX being in region, it is not in region, but it touches %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+            slthLog(string.format('RX %d/%d is valid half gate by RX being in region, it is not in region, but it touches %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
             failedGateAttempts[currentRegion][key]['failure'] = 'success!'
             return true
         end
     end
-    print('RX is not valid half gate as RX was not in region in all 4 directions ')
+    slthLog('RX is not valid half gate as RX was not in region in all 4 directions ')
     failedGateAttempts[currentRegion][key]['failure'] = 'RX not in region, and 2 regions adjacent, but every direction did not have an RX in region'
     return false
 end
@@ -1699,15 +1699,15 @@ function isValidFullGate(regionID, rxX, rxY)
     if not isValidHalfGate(regionID, rxX, rxY) then
         return false
     end
-    print('passed owner region can have gate check')
+    slthLog('passed owner region can have gate check')
     local region = getRegionByID(regionID)
-    print('neighbours of region count:', #(region.neighborList))
-    print(region.neighborList)          -- !! NEIGHBOURLIST WAS EMPTY
+    slthLog('neighbours of region count:', #(region.neighborList))
+    slthLog(region.neighborList)          -- !! NEIGHBOURLIST WAS EMPTY
     local key = tostring(regionID) .. '/' .. tostring(rxX) .. '/' .. tostring(rxY)
     for _, nRegionID in ipairs(region.neighborList) do
-        print('checking valid neighbours....')
+        slthLog('checking valid neighbours....')
         if isValidHalfGate(nRegionID, rxX, rxY) then
-            print('other adjacent region has valid gate')
+            slthLog('other adjacent region has valid gate')
             failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
             return true
         end
@@ -1716,7 +1716,7 @@ function isValidFullGate(regionID, rxX, rxY)
             local yy = rxY + directionYmap[direction]
             -- local xx, yy = getXYFromDirection(rxX, rxY, direction)          -- TODO this seems wrong to not use them
             if isValidHalfGate(nRegionID, rxX, rxY) then
-                print('alternate path valid gate, shouldnt work')
+                slthLog('alternate path valid gate, shouldnt work')
                 failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
                 return true
             end
@@ -1845,19 +1845,19 @@ function getRiverIndex(x, y)
     local xx
     local yy
     if x < 0 or x >= g_iW + 1 then
-        print('when getting river index, x too small')
+        slthLog('when getting river index, x too small')
         return -1
     else
         xx = x
     end
     if y < 0 or y >= g_iH + 1 then
-        print('when getting river index, y too small')
+        slthLog('when getting river index, y too small')
         return -1
     else
         yy = y
     end
     local i = yy * (g_iW + 1) + xx
-    print('getting river index: ', i)
+    slthLog('getting river index: ', i)
     return i
 end
 function isRxInRegion(x, y, regionID)
@@ -1903,7 +1903,7 @@ function getRegion(x, y)
         return -1
     end
     if not regionID then
-        print(string.format('Couldnt find region ID for %d, %d', x, y))
+        slthLog(string.format('Couldnt find region ID for %d, %d', x, y))
         return -1
     end
     return regionID
@@ -1977,7 +1977,7 @@ function PrintFlowMap()
                 lineString = lineString .. "X"
             end
         end
-        print(lineString)
+        slthLog(lineString)
     end
 end
 
@@ -2010,6 +2010,26 @@ function getRiverRegionByID(x,y)
     end
 end
 
+function helper_get_gridsize(table_of_tables)
+    local count = 0
+    local is_nested = true
+    for y, x_row in pairs(table_of_tables) do
+        if type(x_row) == 'table' then
+            for x, val in ipairs(x_row) do
+                count = count + 1
+            end
+
+        else
+            count = count + 1
+            is_nested = false
+        end
+    end
+    print('table size is:', count)
+    if is_nested then
+        print('is nested')
+    end
+end
+
 ---- PLOT MAP -----------
 function createPlotMap()
     plotMap = {}
@@ -2019,18 +2039,20 @@ function createPlotMap()
         return a.altitude > b.altitude
     end)
     highestRegionAltitude = loc_regionList[1].altitude
-
+    local plot_total = 0
     for y=1, g_iH do
         for x=1, g_iW do
             table.insert(plotMap, OCEAN)
             table.insert(scrambledPlotList, {x,y})
+            plot_total = plot_total+1
         end
     end
+    print('plot_total: ', plot_total)
     scrambledPlotList = ShuffleList(scrambledPlotList)
 
-    print('scrambled plots: ', #scrambledPlotList)
+    slthLog('scrambled plots: ', #scrambledPlotList)
     for n=1, #scrambledPlotList do
-        print('n at', n)
+        slthLog('n at', n)
         local plot = scrambledPlotList[n]
         local x = plot[1]
         local y = plot[2]
@@ -2235,7 +2257,7 @@ function placeLandInWater(x,y)
                             local nRegionID = regionMap[ii]
                             if nRegionID and nRegionID ~= -1 then
                                 local nRegion = getRegionByID(nRegionID)
-                                print("placing land in water")
+                                slthLog("placing land in water")
                                 if nRegion.altitude < 2 then
                                     plotMap[i] = LAND
                                 elseif nRegion.altitude < 3 and highestRegionAltitude >= 3 then
@@ -2257,7 +2279,7 @@ OppositeDirections = {[N]=S, [S]=N, [E]=W, [W]=E, [NW]=SE, [SE]=NW, [SW]=NE, [NE
 function shouldPlacePeak(x,y)
     local i = GetIndex(x,y)
     local regionID = regionMap[i]
-    print('region, x, y:', regionID, x, y)
+    slthLog('region, x, y:', regionID, x, y)
     if regionID == -1 then
         return true -- Plots without a region are always peaks
     end
@@ -2350,7 +2372,8 @@ function GetRiverSize(x, y)
     for direction=5, 8 do
         local rxX, rxY = rxFromPlot(x, y, direction)
         local rxI = getRiverIndex(rxX, rxY)
-        riverAverage = riverAverage + riverMap[rxI]             -- sometimes we arent getting these
+        local riverVal = riverMap[rxI] or 0
+        riverAverage = riverAverage + riverVal             -- sometimes we arent getting these
     end
     riverAverage = riverAverage / 4.0
     return riverAverage
@@ -2377,7 +2400,7 @@ function PrintPlotMap()
             lineString = lineString .. (symbols[mapLoc] or " ")
         end
         if bShowMap then
-            print(lineString)
+            slthLog(lineString)
         end
         combined = combined .. lineString .. '\n'
     end
@@ -2652,7 +2675,7 @@ function createTerrainMap()
         for x=1, g_iW-1 do
             local i = GetIndex(x, y)
             if plotMap[i] ~= OCEAN then
-                print('doing x/y', x, y)
+                slthLog('doing x/y', x, y)
                 local rainFall = GetRainfall(x, y)
                 if rainFall < DesertThreshold then
                     if rainFall < ((math.random() * DesertThreshold) / 2.0) + (DesertThreshold / 2.0) then
@@ -2709,7 +2732,7 @@ function GetRainfall(x, y)
     if regionID ~= -1 then
         local region = getRegionByID(regionID)
         rainfall = region.moisture
-        print(regionID)
+        slthLog(regionID)
         local riverSize = GetRiverSize(x, y)
         local riverSizeMax = RiverThreshold * RiverAddsMoistureMax
         riverSize = math.min(riverSize, riverSizeMax)
@@ -2750,7 +2773,29 @@ function check_rx()
     end
 end
 
+local plotErebusFxsMapper = {[OCEAN] = g_PLOT_TYPE_OCEAN, [LAND] = g_PLOT_TYPE_LAND,
+                                [HILLS] = g_PLOT_TYPE_HILLS, [PEAK] = g_PLOT_TYPE_MOUNTAIN,
+                                ["O"] = g_PLOT_TYPE_OCEAN, ["L"] = g_PLOT_TYPE_LAND,
+                                ["H"] = g_PLOT_TYPE_HILLS, ["P"] = g_PLOT_TYPE_MOUNTAIN
+                                }
+local terrainErebusFxsMapper = {
+     ['0'] = g_TERRAIN_TYPE_DESERT,
+     ['1'] = g_TERRAIN_TYPE_PLAINS,
+     ['2'] = g_TERRAIN_TYPE_SNOW,
+     ['3'] = g_TERRAIN_TYPE_TUNDRA,
+     ['4'] = g_TERRAIN_TYPE_GRASS,
+     ['5'] = g_TERRAIN_TYPE_GRASS_HILLS,                     -- TODO need to deal with this just being hills..
+     ['6'] = g_TERRAIN_TYPE_COAST,
+     ['7'] = g_TERRAIN_TYPE_OCEAN,
+     ['8'] = g_TERRAIN_TYPE_GRASS_MOUNTAIN,            -- TODO need a fallback for mountain type
+     ['9'] = g_TERRAIN_TYPE_GRASS               -- was marsh
+}
+-- ENTRY POINT
 function GenerateMap()
+    -- g_iW, g_iH = 84, 52
+    g_iW, g_iH = Map.GetGridSize();
+    print('map size', g_iW, g_iH)
+    local temperate = 4
     currentRegion = -99
     local success = false
     river_map_attempts = 0
@@ -2783,12 +2828,11 @@ function GenerateMap()
     createPlotMap()
     createTerrainMap()
     combined, out_plots = PrintPlotMap()
-    print('--- Plots --- ' .. #out_plots)
-    squareGrid = make_grid(out_plots)
-    print('square grid dimensions:', #squareGrid, #(squareGrid[5]))
-    local svgContent = createCharacterImageSVG(squareGrid, nil, nil)
+    local squareGrid_plot_Types = make_grid(out_plots)
+    local hexGrid_plot_Types = createHexGrid(squareGrid_plot_Types, "L")
+    local svgContent = createCharacterImageSVG(squareGrid_plot_Types, nil, nil)
     saveSVG(svgContent, "output.svg")
-    terrainMap_out_plots = {}
+    local terrainMap_out_plots = {}
     for y = g_iH - 1, 0, -1 do
         local lineString = ""
         for x = 0, g_iW - 1 do
@@ -2797,14 +2841,117 @@ function GenerateMap()
             terrainMap_out_plots[GetIndex(x, y)] =  mapLoc
         end
     end
-    squareGrid = make_grid(terrainMap_out_plots)
-    -- print('square grid dimensions:', #squareGrid, #(squareGrid[5]))
-    local hexGrid = createHexGrid(squareGrid)
-    local svgContent = createHexGridSVG(hexGrid)
+    local squareGrid_Terrain_Types = make_grid(terrainMap_out_plots)
+    -- print('square grid dimensions:', #squareGrid_Terrain_Types, #(squareGrid_Terrain_Types[5]))
+    local hexGrid_Terrain_Types = createHexGrid(squareGrid_Terrain_Types, g_TERRAIN_TYPE_GRASS)
+    local svgContent = createHexGridSVG(squareGrid_Terrain_Types)
     saveSVG(svgContent, "output_hex.svg")
+    print('Finished erebus setup')
+    local plotTypes = ConvertToFiraxisForm(hexGrid_plot_Types, plotErebusFxsMapper)
+    local terrainTypes = ConvertToFiraxisForm(hexGrid_Terrain_Types, terrainErebusFxsMapper)
+    ApplyTerrain(plotTypes, terrainTypes);
+
+	-- Temp
+	AreaBuilder.Recalculate();
+	local biggest_area = Areas.FindBiggestArea(false);
+	print("After Adding Hills: ", biggest_area:GetPlotCount());
+
+	-- River generation is affected by plot types, originating from highlands and preferring to traverse lowlands.
+	AddRivers();
+
+	-- Lakes would interfere with rivers, causing them to stop and not reach the ocean, if placed any sooner.
+	local numLargeLakes = GameInfo.Maps[Map.GetMapSize()].Continents;
+	AddLakes(numLargeLakes);
+
+	AddFeatures();
+
+	print("Adding cliffs");
+	AddCliffs(plotTypes, terrainTypes);
+
+	local args = {
+		numberToPlace = GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders,
+	};
+	local nwGen = NaturalWonderGenerator.Create(args);
+
+	AreaBuilder.Recalculate();
+	TerrainBuilder.AnalyzeChokepoints();
+	TerrainBuilder.StampContinents();
+
+    resourcesConfig = MapConfiguration.GetValue("resources");
+	local startConfig = MapConfiguration.GetValue("start");-- Get the start config
+	local args_ = {
+		resources = resourcesConfig,
+		START_CONFIG = startConfig,
+	};
+	local resGen = ResourceGenerator.Create(args_);
+
+	print("Creating start plot database.");
+
+	-- START_MIN_Y and START_MAX_Y is the percent of the map ignored for major civs' starting positions.
+	local args_start_plots = {
+		MIN_MAJOR_CIV_FERTILITY = 150,
+		MIN_MINOR_CIV_FERTILITY = 50,
+		MIN_BARBARIAN_FERTILITY = 1,
+		START_MIN_Y = 15,
+		START_MAX_Y = 15,
+		START_CONFIG = startConfig,
+	};
+	local start_plot_database = AssignStartingPlots.Create(args_start_plots)
+
+	local GoodyGen = AddGoodies(g_iW, g_iH);
+
 end
 
-GenerateMap()
+-- from firaxis continents
+function ApplyTerrain(plotTypes, terrainTypes)
+    print((g_iW * g_iH) - 1)
+    print(' final number above. length of terrainTypes and plotTypes is: ' .. #terrainTypes .. ', ' .. #plotTypes)
+	for i = 1, (g_iW * g_iH) - 1, 1 do
+		pPlot = Map.GetPlotByIndex(i);
+		if (plotTypes[i] == g_PLOT_TYPE_HILLS) then
+			terrainTypes[i] = terrainTypes[i] + 1;
+		end
+        if terrainTypes[i] then
+            TerrainBuilder.SetTerrainType(pPlot, terrainTypes[i]);
+        else
+            print('TRIED TO GET plot index ' .. i .. ' but did not exist or was NIL')
+        end
+	end
+end
+
+
+function ConvertToFiraxisForm(erebus_hex_grid, mapper)
+    local plotTypes = {}
+    print('printing hex shape')
+    for y, x_row in pairs(erebus_hex_grid) do
+        for x, plot_val in pairs(x_row) do
+            local converted_val = mapper[plot_val]
+            if converted_val then
+                table.insert(plotTypes, converted_val)
+            else
+                print('ERRROR: MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_val .. '$ WITH COORDINATES: ' .. x .. ', ' .. y)
+                print('inserting grass instead: ' .. g_TERRAIN_TYPE_GRASS)
+                table.insert(plotTypes, g_TERRAIN_TYPE_GRASS)
+            end
+        end
+    end
+    return plotTypes
+end
+
+function AddFeatures()
+	print("Adding Features");
+
+	-- Get Rainfall setting input by user.
+	local rainfall = MapConfiguration.GetValue("rainfall");
+	if rainfall == 4 then
+		rainfall = 1 + TerrainBuilder.GetRandomNumber(3, "Random Rainfall - Lua");
+	end
+
+	local args = {rainfall = rainfall}
+	local featuregen = FeatureGenerator.Create(args);
+
+	featuregen:AddFeatures();
+end
 
 local terrainColorMapper = {
      ['0'] = '#FFFF00', -- YELLA

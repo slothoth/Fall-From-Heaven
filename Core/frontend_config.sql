@@ -281,3 +281,5 @@ INSERT INTO Maps(Domain, File, Name, Description, Image, SortIndex) VALUES
 INSERT INTO Parameters(Key1, Key2, ParameterId, Name, Description, Domain, DefaultValue, ConfigurationGroup, ConfigurationId, GroupId, Hash, SortIndex) VALUES
 ('Map', 'rewrite.lua', 'Temperature', 'LOC_MAP_TEMPERATURE_NAME', 'LOC_MAP_TEMPERATURE_DESCRIPTION', 'Temperature', '2', 'Map', 'temperature', 'MapOptions', '0', '240'),
 ('Map', 'rewrite.lua', 'Rainfall', 'LOC_MAP_RAINFALL_NAME', 'LOC_MAP_RAINFALL_DESCRIPTION', 'Rainfall', '2', 'Map', 'rainfall', 'MapOptions', '0', '250');
+
+-- this did nothing lol UPDATE Parameters SET DefaultValue='rewrite.lua' WHERE DefaultValue='Continents.lua';
