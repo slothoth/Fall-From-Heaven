@@ -276,10 +276,11 @@ INSERT INTO PlayerItems (Domain, CivilizationType, LeaderType, Type, Name, Descr
 ('Players:Expansion2_Players', 'SLTH_CIVILIZATION_MALAKIM', 'LEADER_DECIUS_MALAKIM', 'SLTH_BUILDING_CITADEL_OF_LIGHT', 'LOC_SLTH_BUILDING_CITADEL_OF_LIGHT_NAME', 'LOC_SLTH_BUILDING_CITADEL_OF_LIGHT_DESCRIPTION', 'ICON_BUILDING_FILM_STUDIO', '40');
 
 INSERT INTO Maps(Domain, File, Name, Description, Image, SortIndex) VALUES
-('Maps:Expansion2Maps', 'rewrite.lua', 'Erebus_EXP', 'LOC_MAP_HIGHLANDS_DESCRIPTION', 'Map_Highlands', 130);
+('Maps:Expansion2Maps', 'Erebus.lua', 'LOC_MAP_SLTH_EREBUS_NAME', 'LOC_MAP_SLTH_EREBUS_DESCRIPTION', 'Map_Highlands', 130);
 
 INSERT INTO Parameters(Key1, Key2, ParameterId, Name, Description, Domain, DefaultValue, ConfigurationGroup, ConfigurationId, GroupId, Hash, SortIndex) VALUES
-('Map', 'rewrite.lua', 'Temperature', 'LOC_MAP_TEMPERATURE_NAME', 'LOC_MAP_TEMPERATURE_DESCRIPTION', 'Temperature', '2', 'Map', 'temperature', 'MapOptions', '0', '240'),
-('Map', 'rewrite.lua', 'Rainfall', 'LOC_MAP_RAINFALL_NAME', 'LOC_MAP_RAINFALL_DESCRIPTION', 'Rainfall', '2', 'Map', 'rainfall', 'MapOptions', '0', '250');
+('Map', 'Erebus.lua', 'Temperature', 'LOC_MAP_TEMPERATURE_NAME', 'LOC_MAP_TEMPERATURE_DESCRIPTION', 'Temperature', '2', 'Map', 'temperature', 'MapOptions', '0', '240'),
+('Map', 'Erebus.lua', 'Rainfall', 'LOC_MAP_RAINFALL_NAME', 'LOC_MAP_RAINFALL_DESCRIPTION', 'Rainfall', '2', 'Map', 'rainfall', 'MapOptions', '0', '250');
 
--- this did nothing lol UPDATE Parameters SET DefaultValue='rewrite.lua' WHERE DefaultValue='Continents.lua';
+-- UPDATE Parameters SET DefaultValue='Erebus.lua' WHERE DefaultValue='Continents.lua';
+-- this does nothing, but why?

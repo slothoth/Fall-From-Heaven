@@ -1,5 +1,5 @@
 -- partitioned from Erebus.lua as want to test by running without civ, and it needs engine calls
--- also we can maybe get by without it
+-- also we can maybe get by without it. Currently unused.
 availableRegionList = {}
 occupiedRegionList = {}
 maxCivPlayers = 6               -- gc.getMAX_CIV_PLAYERS(), or VI version
