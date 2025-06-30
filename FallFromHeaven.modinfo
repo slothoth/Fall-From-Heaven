@@ -38,6 +38,7 @@
       <File>Localisation/loc_civ_leader.sql</File>
       <File>Localisation/loc_traits.sql</File>
       <File>Localisation/loc_units.sql</File>
+      <File>Localisation/loc_menu.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
@@ -322,6 +323,9 @@
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
   </UpdateIcons>
+  <ImportFiles id="ErebusMap">
+	<File>Maps/Erebus.lua</File>
+  </ImportFiles>
   </InGameActions>
   <Files>
     <File>Localisation/loc_abilities.sql</File>
@@ -342,6 +346,7 @@
     <File>Localisation/loc_playeritems.sql</File>
     <File>Localisation/loc_ui.sql</File>
     <File>Localisation/loc_notifications.sql</File>
+    <File>Localisation/loc_menu.sql</File>
     <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
@@ -466,5 +471,6 @@
     <File>UI/TabSupport.lua</File>
     <File>UI/CivicsTree.xml</File>
     <File>UI/CivicsTree.lua</File>
+    <File>Maps/Erebus.lua</File>
   </Files>
 </Mod>
