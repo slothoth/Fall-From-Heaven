@@ -8,9 +8,8 @@ include "NaturalWonderGenerator"
 include "ResourceGenerator"
 include "CoastalLowlands"
 include "AssignStartingPlots"
-UsePythonRandom = true
--- This variable turns on things that only make sense with Fall from Heaven 2
-FFHSpecific = true
+-- TODO CURRENTLY NOT RANDOM KEEP GETTING SAME MAP SHAPES
+
 
 -- This variable will make a percentage of peaks into hills in order to break
 -- up the worlds valleys. I set this to zero because I feel it diminishes the
@@ -53,11 +52,6 @@ ChanceForOnlyMarsh = 0.33
 TundraThreshold = .74
 IceThreshold = .84
 MaxDesertAltitude = .65
-
--- The type of trees are controlled by altitude. Snowy trees use TundraThreshold.
--- Lower than leafy is Jungle.
-LeafyAltitude = .30
-EvergreenAltitude = .60
 
 -- Chance for an oasis to appear in desert
 OasisChance = .08
@@ -414,6 +408,8 @@ function PrintRegionMap(bShowWater)
                 end
             end
         end
+        print(lineString)
+        lineString = ''
     end
     return lineString
 end
@@ -2050,6 +2046,9 @@ function createPlotMap()
     print('plot_total: ', plot_total)
     scrambledPlotList = ShuffleList(scrambledPlotList)
 
+    -- print('START ; post ocean')
+    -- simpleGridPrint(plotMap)
+    -- print('STOP')
     slthLog('scrambled plots: ', #scrambledPlotList)
     for n=1, #scrambledPlotList do
         slthLog('n at', n)
@@ -2070,6 +2069,10 @@ function createPlotMap()
             placeLandInWater(x,y)
         end
     end
+
+    print('START ; post land water mountain')
+    simpleGridPrint(plotMap)
+    print('STOP')
 
     for n=1, #scrambledPlotList do
         local plot = scrambledPlotList[n]
@@ -2142,6 +2145,10 @@ function createPlotMap()
         end
     end
 
+    print('START ; post river peaks')
+    simpleGridPrint(plotMap)
+    print('STOP')
+
     -- Now for SoftenPeakPercent of peaks, make them hills
     for y=1,g_iH - 1 do
         for x= 1,g_iW - 1 do
@@ -2153,6 +2160,10 @@ function createPlotMap()
             end
         end
     end
+
+    -- print('START ; post soften peaks')
+    -- simpleGridPrint(plotMap)
+    -- print('STOP')
 
     -- Now make sure there are no passable areas that are blocked in
     -- PrintPlotMap()
@@ -2169,7 +2180,10 @@ function createPlotMap()
             end
         end
     end
-    -- areaMap:PrintAreaMap()
+
+    -- print('START ; post fix impassable areas')
+    -- simpleGridPrint(plotMap)
+    -- print('STOP')
 end
 
 function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
@@ -2396,7 +2410,7 @@ function PrintPlotMap()
             if not symbols[mapLoc] and not lostSymbols[mapLoc] and mapLoc then
                 lostSymbols[mapLoc] = true
             end
-            out_plots[GetIndex(x, y)] =  symbols[mapLoc] or " "
+            out_plots[GetIndex(x, y)] =  symbols[mapLoc] or " "             -- this probably causes pain downstream
             lineString = lineString .. (symbols[mapLoc] or " ")
         end
         if bShowMap then
@@ -2670,6 +2684,9 @@ function createTerrainMap()
             end
         end
     end
+    print('START ; post terrain init ocean')
+    simpleGridPrint(terrainMap)
+    print('STOP')
 
     for y=1, g_iH-1 do
         for x=1, g_iW-1 do
@@ -2705,6 +2722,10 @@ function createTerrainMap()
             end
         end
     end
+
+    print('START ; post terrain biome')
+    simpleGridPrint(terrainMap)
+    print('STOP')
     -- clean up desert peaks to avoid burning peaks all over the map
     for y=1,g_iH -1 do
         for x=1, g_iW-1 do
@@ -2723,6 +2744,13 @@ function createTerrainMap()
             end
         end
     end
+    print('START ; post cleanup desert mountains')
+    simpleGridPrint(terrainMap)
+    print('STOP')
+
+    print('START ; post terrain gen PLOTS')
+    simpleGridPrint(plotMap)
+    print('STOP')
 end
 
 function GetRainfall(x, y)
@@ -2819,13 +2847,16 @@ function GenerateMap()
     while not success and river_map_attempts < 2 do
         success, result = pcall(function()
             createRegions()
+            print('START ; final regionmap')
             final_reg_map = PrintRegionMap()
+            print('STOP')
             print('reg map')
             print(final_reg_map)
             -- PrintRegionList()
-
-            region_plots = PrintRegionMap(true)
             print('reg map water')
+             print('START ; final regionmap no water')
+            region_plots = PrintRegionMap(true)
+            print('STOP')
             print(region_plots)
 
             squareGrid = make_grid(regionMap)
@@ -2846,7 +2877,15 @@ function GenerateMap()
     createTerrainMap()
     combined, out_plots = PrintPlotMap()
     local squareGrid_plot_Types = make_grid(out_plots)
-    local hexGrid_plot_Types = createHexGrid(squareGrid_plot_Types, "L")
+    local hexGrid_plot_Types = createHexGrid(squareGrid_plot_Types, "L")                -- DOES AWFU THINGS REDO
+
+    print('START ; square grid plots')
+    list_o_lists_GridPrint(squareGrid_plot_Types)
+    print('STOP')
+
+    print('START ; hex grid plots')
+    list_o_lists_GridPrint(hexGrid_plot_Types)
+    print('STOP')
     local svgContent = createCharacterImageSVG(squareGrid_plot_Types, nil, nil)
     saveSVG(svgContent, "output.svg")
     local terrainMap_out_plots = {}
@@ -2868,6 +2907,13 @@ function GenerateMap()
     local plotTypes = ConvertToFiraxisForm(hexGrid_plot_Types, plotErebusFxsMapper)
     print('doing terrains')
     local terrainTypes = ConvertToFiraxisForm(hexGrid_Terrain_Types, terrainErebusFxsMapper)
+    -- weird shapes appear here already. TODO check firaxis conversion, or check even earlier
+    -- also find out what causes the sawtooth, that is not present in maps like Highlands...
+    -- actually should we just copy highlands?
+    do_ascii(plotTypes, terrainTypes, false, 'POST_TRANSFORM_PRE_APPLY')
+
+    plotTypes = ConvertToFiraxisFormSimple(out_plots, plotErebusFxsMapper)
+    terrainTypes = ConvertToFiraxisFormSimple(terrainMap_out_plots, terrainErebusFxsMapper)
     ApplyTerrain(plotTypes, terrainTypes);
 
 	-- Temp
@@ -2902,6 +2948,8 @@ function GenerateMap()
 
 	AddFeaturesFromContinents();
 	MarkCoastalLowlands();
+
+    do_ascii(plotTypes, terrainTypes, true, 'FINAL RESULT')
 
 	resourcesConfig = MapConfiguration.GetValue("resources");
 	local startConfig = MapConfiguration.GetValue("start");-- Get the start config
@@ -2954,9 +3002,6 @@ function ConvertToFiraxisForm(erebus_hex_grid, mapper)
     for y, x_row in pairs(erebus_hex_grid) do
         for x, plot_val in pairs(x_row) do
             local converted_val = mapper[plot_val]
-            if converted_val == g_PLOT_TYPE_MOUNTAIN then
-                print('mountain found')
-            end
             if converted_val then
                 table.insert(plotTypes, converted_val)
             else
@@ -2967,6 +3012,26 @@ function ConvertToFiraxisForm(erebus_hex_grid, mapper)
         end
     end
     return plotTypes
+end
+
+function ConvertToFiraxisFormSimple(erebus_hex_grid, mapper)
+    local loc_plotTypes = {}
+    print('printing hex shape')
+    for idx, plot_info in pairs(erebus_hex_grid) do
+        local converted_val = mapper[plot_info]
+        if converted_val then
+            table.insert(loc_plotTypes, converted_val)
+        else
+            print('ERROR: MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_info .. '$ WITH index: ' .. idx)
+            print('inserting grass instead: ' .. g_TERRAIN_TYPE_GRASS)
+            table.insert(loc_plotTypes, g_TERRAIN_TYPE_GRASS)
+        end
+    end
+    return loc_plotTypes
+end
+
+function FeatureGenerator:AddIceToMap()
+    return
 end
 
 function AddFeatures()
@@ -2985,6 +3050,94 @@ end
 
 function AddFeaturesFromContinents()
 	featuregen:AddFeaturesFromContinents();
+end
+
+function do_ascii(plot_types, terrain_types,do_feature, text)
+    local tPlotString = {[0] = 'W', [1] = 'L', [2] = 'H', [3] = 'M', ['0'] = 'W', ['1'] = 'L', ['2'] = 'H', ['3'] = 'M'}
+
+    local tTerrainString = {['0'] = 'D',
+     ['1'] = 'P',
+     ['2'] =  'I',
+     ['3'] = 'T',
+     ['4'] = 'G',
+     ['5'] =  'H',
+     ['6'] = 'C',
+     ['7'] = 'W',
+     ['8'] = 'M',
+     ['9'] = 'G'}
+
+    local count = 0
+    local plot_type_ascii = ''
+    local terrain_type_ascii = ''
+    local feature_type_ascii = ''
+    local plot_ascii_list = {}
+    local terrain_ascii_list = {}
+    local feature_ascii_list = {}
+    for i = 1, (g_iW * g_iH) - 1, 1 do
+		pPlot = Map.GetPlotByIndex(i);
+        if count == g_iW then
+            count = 0
+            table.insert(plot_ascii_list, plot_type_ascii)
+            table.insert(terrain_ascii_list, terrain_type_ascii)
+            table.insert(feature_ascii_list, feature_type_ascii)
+            plot_type_ascii = ''
+            terrain_type_ascii = ''
+            feature_type_ascii = ''
+        end
+        count = count + 1
+        local plot_type = tPlotString[tostring(plot_types[i])] or tostring(plot_types[i])
+        local terrain_type = tTerrainString[tostring(terrain_types[i])] or tostring(terrain_types[i])
+        plot_type_ascii = plot_type_ascii .. plot_type .. '|'
+        terrain_type_ascii = terrain_type_ascii .. terrain_type .. '|'
+        if do_feature then
+            feature_type_ascii = feature_type_ascii .. tostring(pPlot:GetFeatureType(i))
+        end
+	end
+
+    print('plot types, length:', #plot_ascii_list)
+    print('START;'.. 'plotTypes' .. text)
+    for _, i in ipairs(plot_ascii_list) do
+        print(i)
+    end
+    print('STOP')
+    print('terrain, length:', #terrain_ascii_list)
+    print('START;'.. 'terrainTypes' .. text)
+    for _, i in ipairs(terrain_ascii_list) do
+        print(i)
+    end
+    print('STOP')
+    print('features')
+    print('START;'.. 'featureTypes' .. text)
+    for _, i in ipairs(feature_ascii_list) do
+        print(i)
+    end
+    print('STOP')
+end
+
+function simpleGridPrint(tbl)
+    local count = 0
+    local x_string = ''
+    for i, val in pairs(tbl) do
+        if count == g_iW then
+            count = 0
+            print(x_string)
+            x_string = ''
+        end
+        count = count + 1
+        x_string = x_string .. val
+	end
+end
+
+function list_o_lists_GridPrint(tbl)
+    local count = 0
+    for y, x_row in pairs(tbl) do
+        local x_string = ''
+        for x, val in pairs(x_row) do
+            x_string = x_string .. val
+        end
+        print(x_string)
+        x_string = ''
+	end
 end
 
 local terrainColorMapper = {
