@@ -283,6 +283,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_UNIT_YERSINIA_NAME', 'Yersinia', 'en_US'),
 ('LOC_SLTH_UNIT_YVAIN_NAME', 'Yvain', 'en_US'),
 ('LOC_UNIT_WARRIOR_NAME', 'Warrior', 'en_US'),
+('LOC_UNIT_GREAT_WRITER_NAME', 'Adventurer', 'en_US'),
 ('LOC_SLTH_UNIT_ABASHI_DESCRIPTION', 'The Sheaim hero is able to breathe fire, and her roar will convert any surrounding cult of the dragon units to her cause. She is also immune to magic and weaker units will often be too afraid to attack her.', 'en_US'),
 ('LOC_SLTH_UNIT_ACHERON_DESCRIPTION', 'Acheron is both immune to magic and able to cast the strong ranged ability meteor.', 'en_US'),
 ('LOC_SLTH_UNIT_ADEPT_DESCRIPTION', 'Adepts have the ability to learn spell spheres when they level up, giving them access to a wide variety of spells.', 'en_US'),

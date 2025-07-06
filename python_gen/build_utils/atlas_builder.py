@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 from PIL.ImageFile import ImageFile#
 
 size_chart = {'CIV': [256, 200, 128, 80, 64, 50, 48, 44, 36, 30, 22],
-              'UNITFLAG': [256, 80, 50, 38, 32, 22],
+              'UNITS': [256, 80, 50, 38, 32, 22],
               'RESOURCE': [256, 64, 50, 38, 32, 22],
               'LEADER': [256, 80, 64, 55, 50, 48, 45, 32]}
 
@@ -316,9 +316,9 @@ if __name__ == "__main__":
     # OUTPUT_FOLDER = 'Unit_Atlas'
     # ICON_TYPE = 'UNIT'
     # TARGET_SIZES = [256, 80, 50, 38, 32, 22]
-    icon_type = 'Resource'
+    icon_type = 'Units'
     ATLAS_FILENAME = f'Slth_{icon_type}_Atlas'
-    INPUT_FOLDER = 'atlas_wd_rsc'
+    INPUT_FOLDER = 'atlas_wd_svg'
     icon_type = icon_type.upper()
     OUTPUT_FOLDER = f'{icon_type}_Atlas_Folder'
 
