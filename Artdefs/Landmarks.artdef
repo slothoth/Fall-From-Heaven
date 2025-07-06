@@ -62,7 +62,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="DEFAULT"/>
+										<m_ElementName text="BUILDING_MAGE_GUILD"/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -94,10 +94,10 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="TB_ERROR"/>
+										<m_EntryName text="DIS_CMP_Madrasa"/>
 										<m_XLPClass text="TileBase"/>
-										<m_XLPPath text="tilebases.xlp"/>
-										<m_BLPPackage text="landmarks/tilebases"/>
+										<m_XLPPath text="hero_buildings.xlp"/>
+										<m_BLPPackage text="landmarks/hero_buildings"/>
 										<m_LibraryName text="TileBase"/>
 										<m_ParamName text="Asset"/>
 									</Element>
@@ -436,7 +436,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="TB_ERROR"/>
+										<m_EntryName text="DIS_DIP_Consulate_Bld"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -493,7 +493,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="TB_ERROR"/>
+										<m_EntryName text="DIS_DIP_Chancery_Bld"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -892,7 +892,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="TB_ERROR"/>
+										<m_EntryName text="DIS_Preserve_Base_01"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -933,11 +933,11 @@
 										<m_ParamName text="Tag_Era"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="DEFAULT"/>
-										<m_RootCollectionName text="Culture"/>
-										<m_ArtDefPath text="Cultures.artdef"/>
+										<m_ElementName text="CIVILIZATION_MONGOLIA"/>
+										<m_RootCollectionName text="Civilization"/>
+										<m_ArtDefPath text="Civilizations.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Cultures"/>
+										<m_TemplateName text="Civilizations"/>
 										<m_ParamName text="Tag_Culture"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
@@ -1177,7 +1177,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="TB_ERROR"/>
+										<m_EntryName text="DIS_AQD_Modern_Base_01"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -1538,7 +1538,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="TB_ERROR"/>
+										<m_EntryName text="DIS_AQD_Modern_Base_01"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
