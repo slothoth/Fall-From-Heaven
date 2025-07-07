@@ -635,7 +635,10 @@
 		</Element>
 		<Element>
 			<LibraryName text="VFX"/>
-			<PackageDependencies/>
+			<PackageDependencies>
+				<Element text="VFX_FireFX.blp"/>
+				<Element text="VFX.blp"/>
+			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="Water"/>

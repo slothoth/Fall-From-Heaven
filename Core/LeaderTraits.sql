@@ -374,3 +374,9 @@ INSERT INTO Types(Type, Kind) VALUES
 
 -- hard: adaptive, insane, cant do property as we only have plot property. Do plot property on capital,
 -- Raiders is hard because road movement is free.
+
+
+-- DuplicateLeaders (Decius)
+INSERT INTO DuplicateLeaders(LeaderType, OtherLeaderType) VALUES
+('LEADER_DECIUS_BANNOR', 'LEADER_DECIUS_CALABIM'),
+('LEADER_DECIUS_CALABIM', 'LEADER_DECIUS_MALAKIM');
