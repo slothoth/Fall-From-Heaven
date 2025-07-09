@@ -355,6 +355,7 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             end
         end
     end
+    -- if we have hyborem and basium disabled, this dont work and causes weirdness.
     if civicIndex == iINFERNAL_PACT_INDEX then
         local iInfernalPlayerId = Game:GetProperty('Infernal')
         local bInfernalSpawned = Game:GetProperty('infernal_spawned')
@@ -566,6 +567,9 @@ function onStart()
     end
     if not Game:GetProperty('ARMAGEDDON') then          -- initalize armageddon
         Game:SetProperty('ARMAGEDDON',  0)
+    end
+    if not Game:GetProperty('Infernal') then          -- initalize armageddon
+        Game:SetProperty('infernal_spawned',  1)            -- stop infernals spawning if no hyborem
     end
 end
 
