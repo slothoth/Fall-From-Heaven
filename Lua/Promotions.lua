@@ -312,7 +312,7 @@ local tReligionAlignment = {
     ['RELIGION_CATHOLICISM']=1,
     ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
-
+-- TODO why is this not in alignment
 function GrantUnitReligion(pUnit, sReligion)
     local pUnitAbilities = pUnit:GetAbility()
     local sReligionAbility = tReligionAbility[sReligion]
@@ -328,7 +328,7 @@ function GrantUnitReligion(pUnit, sReligion)
 end
 
 
-
+-- TODO bug where t2 promos for spellcasters are available at t1 channelling, if they got the first spell for free
 function onSpawnApplyPromotions(playerID, unitID)
     if playerID == nil then return end
     if unitID == nil then return end

@@ -141,6 +141,8 @@
       <File>Core/Affinity.sql</File>
       <File>Core/UnitCommands.sql</File>
       <File>Core/LeaderTraits.sql</File>
+      <File>Core/CombatBuffs.sql</File>
+      <File>Core/Magic.sql</File>
       <File>Core/AiInfos.sql</File>
       <File>Core/BespokeUpgrades.sql</File>
       <File>Core/WorldSpellSupport.sql</File>
@@ -413,6 +415,8 @@
     <File>Core/Absorb_deletes/Porcelain.sql</File>
     <File>Core/frontend_config.sql</File>
     <File>Core/Assets_ingame.sql</File>
+    <File>Core/CombatBuffs.sql</File>
+    <File>Core/Magic.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Gameplay.lua</File>
     <File>Lua/Maintenance.lua</File>

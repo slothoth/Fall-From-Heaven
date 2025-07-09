@@ -55,6 +55,9 @@ UPDATE Districts SET PrereqCivic = 'CIVIC_GAMES_RECREATION' WHERE DistrictType =
 UPDATE Districts SET PrereqTech = 'TECH_SMELTING' WHERE DistrictType = 'DISTRICT_INDUSTRIAL_ZONE';
 UPDATE Districts SET PrereqTech = 'TECH_SANITATION' WHERE DistrictType = 'DISTRICT_AQUEDUCT';
 
+-- fix wonder location requirements, or do it invert and allow on all floodplains? hmmm
+DELETE FROM Building_ValidFeatures;
+
 -- UPDATE Building_YieldChanges SET YieldChange = 100 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
 -- UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
 -- UPDATE Building_YieldChanges SET YieldChange = 50 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_PRODUCTION';

@@ -25,3 +25,4 @@ python_gen/data/foreign_keys.json
 /db_search.py
 /python_gen/build_utils/*atlas*/
 /python_gen/build_utils/*Icons*
+/csv_form/*
