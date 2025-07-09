@@ -624,6 +624,7 @@
 			<PackageDependencies>
 				<Element text="IconsAnimal.blp"/>
 				<Element text="UI/Icons.blp"/>
+				<Element text="UI/Shell_Loading.blp"/>
 			</PackageDependencies>
 		</Element>
 		<Element>

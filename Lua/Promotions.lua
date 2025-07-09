@@ -370,7 +370,7 @@ function onSpawnApplyPromotions(playerID, unitID)
             local tWeaponResources = {
                 ['RESOURCE_COPPER']    =    'ABILITY_BRONZE_WEAPONS',
                 ['RESOURCE_IRON']      =    'ABILITY_IRON_WEAPONS',
-                ['RESOURCE_MITHRIL']   =    'ABILITY_MITHRIL_WEAPONS'
+                ['RESOURCE_SILVER']   =    'ABILITY_MITHRIL_WEAPONS'
             }
 
             for sResourceName, sAbilityToGrant in pairs(tWeaponResources) do

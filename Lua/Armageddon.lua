@@ -730,21 +730,21 @@ local tHellTransforms = { [GameInfo.Terrains['TERRAIN_DESERT'].Index]=GameInfo.T
                     [GameInfo.Terrains['TERRAIN_FIELDS_OF_PERDITION'].Index]=GameInfo.Terrains['TERRAIN_PLAINS'].Index,
                     [GameInfo.Terrains["TERRAIN_FIELDS_OF_PERDITION_HILLS"].Index]=GameInfo.Terrains["TERRAIN_PLAINS_HILLS"].Index}
 
-local tResourceTransform = {  [GameInfo.Resources['RESOURCE_PIG'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
+local tResourceTransform = {  [GameInfo.Resources['RESOURCE_TRUFFLES'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
                         [GameInfo.Resources['RESOURCE_SHEEP'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
-                        [GameInfo.Resources['RESOURCE_COW'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
-                        [GameInfo.Resources['RESOURCE_HORSE'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
-                        [GameInfo.Resources['RESOURCE_MARBLE'].Index]=GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index,
-                        [GameInfo.Resources['RESOURCE_BANANA'].Index]=GameInfo.Resources['RESOURCE_GULAGARM'].Index,
-                        [GameInfo.Resources['RESOURCE_SUGAR'].Index]=GameInfo.Resources['RESOURCE_GULAGARM'].Index,
-                        [GameInfo.Resources['RESOURCE_SILK'].Index]=GameInfo.Resources['RESOURCE_RAZORWEED'].Index,
-                        [GameInfo.Resources['RESOURCE_COTTON'].Index]=GameInfo.Resources['RESOURCE_RAZORWEED'].Index}
+                        [GameInfo.Resources['RESOURCE_CATTLE'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
+                        [GameInfo.Resources['RESOURCE_HORSES'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
+                        [GameInfo.Resources['RESOURCE_MARBLE'].Index]=GameInfo.Resources['RESOURCE_JADE'].Index,
+                        [GameInfo.Resources['RESOURCE_BANANAS'].Index]=GameInfo.Resources['RESOURCE_TOBACCO'].Index,
+                        [GameInfo.Resources['RESOURCE_SUGAR'].Index]=GameInfo.Resources['RESOURCE_TOBACCO'].Index,
+                        [GameInfo.Resources['RESOURCE_SILK'].Index]=GameInfo.Resources['RESOURCE_OLIVES'].Index,
+                        [GameInfo.Resources['RESOURCE_COTTON'].Index]=GameInfo.Resources['RESOURCE_OLIVES'].Index}
 
 local tResourceReverse = {  [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo.Resources['RESOURCE_SHEEP'].Index,
-                        [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index]=GameInfo.Resources['RESOURCE_HORSE'].Index,
-                        [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index]=GameInfo.Resources['RESOURCE_MARBLE'].Index,
-                        [GameInfo.Resources['RESOURCE_GULAGARM'].Index]=GameInfo.Resources['RESOURCE_SUGAR'].Index,
-                        [GameInfo.Resources['RESOURCE_RAZORWEED'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index}
+                        [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index]=GameInfo.Resources['RESOURCE_HORSES'].Index,
+                        [GameInfo.Resources['RESOURCE_JADE'].Index]=GameInfo.Resources['RESOURCE_MARBLE'].Index,
+                        [GameInfo.Resources['RESOURCE_TOBACCO'].Index]=GameInfo.Resources['RESOURCE_SUGAR'].Index,
+                        [GameInfo.Resources['RESOURCE_OLIVES'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index}
 
 local tHellReverse = reverse_table(tHellTransforms)
 function HellSpread()

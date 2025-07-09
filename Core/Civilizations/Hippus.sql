@@ -6,7 +6,7 @@ INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 
 INSERT INTO	StartBiasResources
 		(CivilizationType,			ResourceType,			Tier	)
-VALUES	('SLTH_CIVILIZATION_HIPPUS',	'RESOURCE_HORSE',		5		);
+VALUES	('SLTH_CIVILIZATION_HIPPUS',	'RESOURCE_HORSES',		5		);
 
 -- INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)           -- do we want a river bias?
 -- VALUES	                    ('SLTH_CIVILIZATION_HIPPUS',	5);

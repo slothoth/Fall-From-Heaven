@@ -9,7 +9,7 @@ VALUES	                      ('SLTH_CIVILIZATION_LUCHUIRP',	'TERRAIN_GRASS_HILLS
 INSERT INTO	StartBiasResources
 		(CivilizationType,			ResourceType,			Tier	)
 VALUES	('SLTH_CIVILIZATION_LUCHUIRP',	'RESOURCE_GOLD',		5	),
-        ('SLTH_CIVILIZATION_LUCHUIRP',	'RESOURCE_MITHRIL',		5	),
+        ('SLTH_CIVILIZATION_LUCHUIRP',	'RESOURCE_SILVER',		5	),
         ('SLTH_CIVILIZATION_LUCHUIRP',	'RESOURCE_IRON',		5	);
 
 INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)           -- do we want a river bias?

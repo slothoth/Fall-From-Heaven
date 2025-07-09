@@ -966,9 +966,9 @@ local tLairExtraInfos = {['DISEASED'] = 'DISEASED', ['PLAGUED'] = 'PLAGUED', ['P
                          ['ITEM_ROD_OF_WINDS'] = 'SLTH_EQUIPMENT_ROD_OF_WINDS',
                          ['ITEM_TIMOR_MASK'] = 'SLTH_EQUIPMENT_TIMOR_MASK', ['TREASURE'] = 'SLTH_EQUIPMENT_TREASURE',
 
-                         ['BONUS_CLAM'] = 'RESOURCE_CLAM', ['BONUS_CRAB'] = 'RESOURCE_CRAB',
+                         ['BONUS_CLAM'] = 'RESOURCE_CLAM', ['BONUS_CRAB'] = 'RESOURCE_CRABS',
                          ['BONUS_FISH'] = 'RESOURCE_FISH', ['BONUS_COPPER'] = 'RESOURCE_COPPER',
-                         ['BONUS_GEMS'] = 'RESOURCE_GEMS', ['BONUS_GOLD'] ='RESOURCE_GOLD',
+                         ['BONUS_GEMS'] = 'RESOURCE_DIAMONDS', ['BONUS_GOLD'] ='RESOURCE_GOLD',
                          ['BONUS_IRON'] = 'RESOURCE_IRON'}
 
 function onLairTreasureVault(pUnit, pPlot, sEventInfo)
