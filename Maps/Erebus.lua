@@ -618,6 +618,26 @@ end
 
 function GetRxIndex(x, y)
     local xx, yy
+    if WrapX then
+        xx = x % (mapSize.MapWidth + 1)
+    elseif x < 0 or x >= (g_iW + 1) then
+        return -1
+    else
+        xx = x
+    end
+    -- Check y for wrap
+    if WrapY then
+        yy = y % (mapSize.MapHeight + 1)
+    elseif y < 0 or y >= (g_iH + 1) then
+        return -1
+    else
+        yy = y
+    end
+    return yy * (g_iW + 1) + xx
+end
+
+function GetRxIndex(x, y)
+    local xx, yy
     if x < 0 or x >= (g_iW + 1) then
         return -1
     else
@@ -632,6 +652,23 @@ function GetRxIndex(x, y)
 end
 
 -- This function converts x and y to an index. Useful in case of future wrapping.
+function GetIndex(x, y)
+    local xx = x
+    local yy = y
+    if WrapX then
+        xx = x % g_iW
+    elseif x < 0 or x > g_iW then
+        return -1
+    end
+    if WrapY then
+        yy = y % g_iH
+    elseif y < 0 or y > g_iH then
+        return -1
+    end
+    return  y * g_iW + x
+end
+
+-- overriden as performance, and seemingly does nothing
 function GetIndex(x, y)
     if x < 0 or x > g_iW or y < 0 or y > g_iH then
         return -1
@@ -2070,7 +2107,7 @@ function createPlotMap()
         end
     end
 
-    print('START ; post land water mountain')
+    print('START ; 1_post_land_water_mountain')
     simpleGridPrint(plotMap)
     print('STOP')
 
@@ -2145,7 +2182,7 @@ function createPlotMap()
         end
     end
 
-    print('START ; post river peaks')
+    print('START ; 2_post_river_peaks')
     simpleGridPrint(plotMap)
     print('STOP')
 
@@ -2684,7 +2721,7 @@ function createTerrainMap()
             end
         end
     end
-    print('START ; post terrain init ocean')
+    print('START ; 3_post_terrain_init_ocean')
     simpleGridPrint(terrainMap)
     print('STOP')
 
@@ -2723,7 +2760,7 @@ function createTerrainMap()
         end
     end
 
-    print('START ; post terrain biome')
+    print('START ; 4_post terrain biome')
     simpleGridPrint(terrainMap)
     print('STOP')
     -- clean up desert peaks to avoid burning peaks all over the map
@@ -2744,11 +2781,11 @@ function createTerrainMap()
             end
         end
     end
-    print('START ; post cleanup desert mountains')
+    print('START ; 5_post cleanup desert mountains')
     simpleGridPrint(terrainMap)
     print('STOP')
 
-    print('START ; post terrain gen PLOTS')
+    print('START ; 6_post terrain gen PLOTS')
     simpleGridPrint(plotMap)
     print('STOP')
 end
@@ -2847,14 +2884,14 @@ function GenerateMap()
     while not success and river_map_attempts < 2 do
         success, result = pcall(function()
             createRegions()
-            print('START ; final regionmap')
+            print('START ;reg_map_1_final_regionmap')
             final_reg_map = PrintRegionMap()
             print('STOP')
             print('reg map')
             print(final_reg_map)
             -- PrintRegionList()
             print('reg map water')
-             print('START ; final regionmap no water')
+             print('START ; reg_map_1_final_regionmap_no_water')
             region_plots = PrintRegionMap(true)
             print('STOP')
             print(region_plots)
@@ -2879,13 +2916,10 @@ function GenerateMap()
     local squareGrid_plot_Types = make_grid(out_plots)
     local hexGrid_plot_Types = createHexGrid(squareGrid_plot_Types, "L")                -- DOES AWFU THINGS REDO
 
-    print('START ; square grid plots')
+    print('START ; 7_square grid plots')
     list_o_lists_GridPrint(squareGrid_plot_Types)
     print('STOP')
 
-    print('START ; hex grid plots')
-    list_o_lists_GridPrint(hexGrid_plot_Types)
-    print('STOP')
     local svgContent = createCharacterImageSVG(squareGrid_plot_Types, nil, nil)
     saveSVG(svgContent, "output.svg")
     local terrainMap_out_plots = {}
@@ -2902,16 +2936,6 @@ function GenerateMap()
     local hexGrid_Terrain_Types = createHexGrid(squareGrid_Terrain_Types, g_TERRAIN_TYPE_GRASS)
     local svgContent = createHexGridSVG(squareGrid_Terrain_Types)
     saveSVG(svgContent, "output_hex.svg")
-    print('Finished erebus setup')
-    print('doing plot types')
-    local plotTypes = ConvertToFiraxisForm(hexGrid_plot_Types, plotErebusFxsMapper)
-    print('doing terrains')
-    local terrainTypes = ConvertToFiraxisForm(hexGrid_Terrain_Types, terrainErebusFxsMapper)
-    -- weird shapes appear here already. TODO check firaxis conversion, or check even earlier
-    -- also find out what causes the sawtooth, that is not present in maps like Highlands...
-    -- actually should we just copy highlands?
-    do_ascii(plotTypes, terrainTypes, false, 'POST_TRANSFORM_PRE_APPLY')
-
     plotTypes = ConvertToFiraxisFormSimple(out_plots, plotErebusFxsMapper)
     terrainTypes = ConvertToFiraxisFormSimple(terrainMap_out_plots, terrainErebusFxsMapper)
     ApplyTerrain(plotTypes, terrainTypes);
@@ -2949,7 +2973,7 @@ function GenerateMap()
 	AddFeaturesFromContinents();
 	MarkCoastalLowlands();
 
-    do_ascii(plotTypes, terrainTypes, true, 'FINAL RESULT')
+    do_ascii(plotTypes, terrainTypes, true, 'RESULT')
 
 	resourcesConfig = MapConfiguration.GetValue("resources");
 	local startConfig = MapConfiguration.GetValue("start");-- Get the start config
@@ -2974,6 +2998,24 @@ function GenerateMap()
 
 	local GoodyGen = AddGoodies(g_iW, g_iH);
 
+    do_ascii(plotTypes, terrainTypes, true, 'FINAL RESULT', true)
+
+end
+
+-- copied from inland sea
+function GetMapInitData(MapSize)
+	local MapSizeTypes = {};
+	local Width = 0;
+	local Height = 0;
+
+	for row in GameInfo.Maps() do
+		if(MapSize == row.Hash) then
+			Width = row.GridWidth;
+			Height = row.GridHeight;
+		end
+	end
+
+	return {Width = Width, Height = Height, WrapX = WrapX, WrapY=WrapY}
 end
 
 -- from firaxis continents
@@ -2981,7 +3023,7 @@ function ApplyTerrain(plotTypes, terrainTypes)
     print((g_iW * g_iH) - 1)
     print(' final number above. length of terrainTypes and plotTypes is: ' .. #terrainTypes .. ', ' .. #plotTypes)
 	for i = 1, (g_iW * g_iH) - 1, 1 do
-		pPlot = Map.GetPlotByIndex(i);
+		local pPlot = Map.GetPlotByIndex(i);
 		if (plotTypes[i] == g_PLOT_TYPE_HILLS) then
 			terrainTypes[i] = terrainTypes[i] + 1;
         elseif (plotTypes[i] == g_PLOT_TYPE_MOUNTAIN)  then
@@ -3052,7 +3094,7 @@ function AddFeaturesFromContinents()
 	featuregen:AddFeaturesFromContinents();
 end
 
-function do_ascii(plot_types, terrain_types,do_feature, text)
+function do_ascii(plot_types, terrain_types,do_feature, text, by_actual)
     local tPlotString = {[0] = 'W', [1] = 'L', [2] = 'H', [3] = 'M', ['0'] = 'W', ['1'] = 'L', ['2'] = 'H', ['3'] = 'M'}
 
     local tTerrainString = {['0'] = 'D',
@@ -3074,7 +3116,7 @@ function do_ascii(plot_types, terrain_types,do_feature, text)
     local terrain_ascii_list = {}
     local feature_ascii_list = {}
     for i = 1, (g_iW * g_iH) - 1, 1 do
-		pPlot = Map.GetPlotByIndex(i);
+		local pPlot = Map.GetPlotByIndex(i);
         if count == g_iW then
             count = 0
             table.insert(plot_ascii_list, plot_type_ascii)
@@ -3085,29 +3127,36 @@ function do_ascii(plot_types, terrain_types,do_feature, text)
             feature_type_ascii = ''
         end
         count = count + 1
-        local plot_type = tPlotString[tostring(plot_types[i])] or tostring(plot_types[i])
-        local terrain_type = tTerrainString[tostring(terrain_types[i])] or tostring(terrain_types[i])
+        local plot_type
+        local terrain_type
+        if by_actual then
+            plot_type = tPlotString[tostring(plot_types[i])] or tostring(plot_types[i])
+            terrain_type = tTerrainString[tostring(terrain_types[i])] or tostring(terrain_types[i])
+        else
+            plot_type = pPlot:GetTerrainClassType()
+            terrain_type = pPlot:GetTerrainType()
+        end
         plot_type_ascii = plot_type_ascii .. plot_type .. '|'
         terrain_type_ascii = terrain_type_ascii .. terrain_type .. '|'
         if do_feature then
-            feature_type_ascii = feature_type_ascii .. tostring(pPlot:GetFeatureType(i))
+            feature_type_ascii = feature_type_ascii .. tostring(pPlot:GetFeatureType(i)) .. '|'
         end
 	end
 
     print('plot types, length:', #plot_ascii_list)
-    print('START;'.. 'plotTypes' .. text)
+    print('START; '.. 'plotTypes' .. text)
     for _, i in ipairs(plot_ascii_list) do
         print(i)
     end
     print('STOP')
     print('terrain, length:', #terrain_ascii_list)
-    print('START;'.. 'terrainTypes' .. text)
+    print('START; '.. 'terrainTypes' .. text)
     for _, i in ipairs(terrain_ascii_list) do
         print(i)
     end
     print('STOP')
     print('features')
-    print('START;'.. 'featureTypes' .. text)
+    print('START; '.. 'featureTypes' .. text)
     for _, i in ipairs(feature_ascii_list) do
         print(i)
     end
