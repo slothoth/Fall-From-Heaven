@@ -96,6 +96,10 @@ OCEAN = 0
 LAND = 1
 HILLS = 2
 PEAK = 3
+
+
+LeafyAltitude = 0.3
+doErebusFeatures = true
 -- conversion table for prints
 function mapChar(integer)
     local c
@@ -2208,9 +2212,13 @@ function createPlotMap()
     print(areaMap)
     areaMap:findImpassableAreas()
     -- areaMap:PrintAreaMap()
+    print('START ; 3_Area Map')
+    simpleGridPrint(areaMap.areaMap)
+    print('STOP')
     for i=1, g_iW*g_iH do
         if areaMap.areaMap[i] == 0 then
             if plotMap[i] ~= PEAK then
+                print('changing plot ', i)
                 plotMap[i] = PEAK
             else
                 areaMap.areaMap[i] = 1
@@ -2218,9 +2226,9 @@ function createPlotMap()
         end
     end
 
-    -- print('START ; post fix impassable areas')
-    -- simpleGridPrint(plotMap)
-    -- print('STOP')
+    print('START ; 4_post fix impassable areas')
+    simpleGridPrint(plotMap)
+    print('STOP')
 end
 
 function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
@@ -2564,6 +2572,7 @@ function AreaMap:scanAndFillLine(seg, areaID)
         end
         if self.areaMap[i] == 0 and plotMap[i] ~= PEAK then
             self.areaMap[i] = areaID
+            print('ASSIGNING PLOT:AREA ID, ', i, areaID)
             self.size = self.size + 1
             lineFound = true
         else
@@ -2591,6 +2600,7 @@ function AreaMap:scanAndFillLine(seg, areaID)
         i = GetIndex(xRightExtreme, seg['y'] + seg['dy'])
         if self.areaMap[i] == 0 and plotMap[i] ~= PEAK then
             self.areaMap[i] = areaID
+            print('ASSIGNING PLOT:AREA ID, ', i, areaID)
             self.size = self.size + 1
             if lineFound == false then
                 lineFound = true
@@ -2721,7 +2731,7 @@ function createTerrainMap()
             end
         end
     end
-    print('START ; 3_post_terrain_init_ocean')
+    print('START ; 5_post_terrain_init_ocean')
     simpleGridPrint(terrainMap)
     print('STOP')
 
@@ -2760,7 +2770,7 @@ function createTerrainMap()
         end
     end
 
-    print('START ; 4_post terrain biome')
+    print('START ; 6_post terrain biome')
     simpleGridPrint(terrainMap)
     print('STOP')
     -- clean up desert peaks to avoid burning peaks all over the map
@@ -2781,11 +2791,11 @@ function createTerrainMap()
             end
         end
     end
-    print('START ; 5_post cleanup desert mountains')
+    print('START ; 7_post cleanup desert mountains')
     simpleGridPrint(terrainMap)
     print('STOP')
 
-    print('START ; 6_post terrain gen PLOTS')
+    print('START ; a_post terrain gen PLOTS')
     simpleGridPrint(plotMap)
     print('STOP')
 end
@@ -2914,9 +2924,8 @@ function GenerateMap()
     createTerrainMap()
     combined, out_plots = PrintPlotMap()
     local squareGrid_plot_Types = make_grid(out_plots)
-    local hexGrid_plot_Types = createHexGrid(squareGrid_plot_Types, "L")                -- DOES AWFU THINGS REDO
 
-    print('START ; 7_square grid plots')
+    print('START ; 9_square grid plots')
     list_o_lists_GridPrint(squareGrid_plot_Types)
     print('STOP')
 
@@ -2931,14 +2940,26 @@ function GenerateMap()
             terrainMap_out_plots[GetIndex(x, y)] =  mapLoc
         end
     end
+
+    -- fix silly bottom row.
+    for i = 1, g_iW do
+        terrainMap_out_plots[i] = terrainMap_out_plots[i + g_iW]
+        out_plots[i] = out_plots[i + g_iW]
+    end
+
     local squareGrid_Terrain_Types = make_grid(terrainMap_out_plots)
     -- print('square grid dimensions:', #squareGrid_Terrain_Types, #(squareGrid_Terrain_Types[5]))
     local hexGrid_Terrain_Types = createHexGrid(squareGrid_Terrain_Types, g_TERRAIN_TYPE_GRASS)
     local svgContent = createHexGridSVG(squareGrid_Terrain_Types)
     saveSVG(svgContent, "output_hex.svg")
+
+
+
     plotTypes = ConvertToFiraxisFormSimple(out_plots, plotErebusFxsMapper)
     terrainTypes = ConvertToFiraxisFormSimple(terrainMap_out_plots, terrainErebusFxsMapper)
     ApplyTerrain(plotTypes, terrainTypes);
+
+    -- fix silly bottom row.
 
 	-- Temp
 	AreaBuilder.Recalculate();
@@ -2969,8 +2990,9 @@ function GenerateMap()
 		numberToPlace = GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders,
 	};
 	local nwGen = NaturalWonderGenerator.Create(args);
-
-	AddFeaturesFromContinents();
+    if not doErebusFeatures then
+	    AddFeaturesFromContinents();
+	end
 	MarkCoastalLowlands();
 
     do_ascii(plotTypes, terrainTypes, true, 'RESULT')
@@ -2998,8 +3020,6 @@ function GenerateMap()
 
 	local GoodyGen = AddGoodies(g_iW, g_iH);
 
-    do_ascii(plotTypes, terrainTypes, true, 'FINAL RESULT', true)
-
 end
 
 -- copied from inland sea
@@ -3022,7 +3042,7 @@ end
 function ApplyTerrain(plotTypes, terrainTypes)
     print((g_iW * g_iH) - 1)
     print(' final number above. length of terrainTypes and plotTypes is: ' .. #terrainTypes .. ', ' .. #plotTypes)
-	for i = 1, (g_iW * g_iH) - 1, 1 do
+	for i = 0, (g_iW * g_iH) - 1, 1 do
 		local pPlot = Map.GetPlotByIndex(i);
 		if (plotTypes[i] == g_PLOT_TYPE_HILLS) then
 			terrainTypes[i] = terrainTypes[i] + 1;
@@ -3078,16 +3098,103 @@ end
 
 function AddFeatures()
 	print("Adding Features");
-
 	-- Get Rainfall setting input by user.
 	local rainfall = MapConfiguration.GetValue("rainfall");
 	if rainfall == 4 then
 		rainfall = 1 + TerrainBuilder.GetRandomNumber(3, "Random Rainfall - Lua");
 	end
-
-	local args = {rainfall = rainfall}
-	featuregen = FeatureGenerator.Create(args);
-	featuregen:AddFeatures(true, true);  --second parameter is whether or not rivers start inland);
+    if doErebusFeatures then
+        local featureTypeMap = {featureIce='uhhh', featureJungle=GameInfo.Features['FEATURE_JUNGLE'].Index, featureOasis=GameInfo.Features['FEATURE_OASIS'].Index, featureFloodPlains=GameInfo.Features['FEATURE_FLOODPLAINS'].Index, featureForest=GameInfo.Features['FEATURE_FOREST'].Index, featureMarsh=GameInfo.Features['FEATURE_MARSH'].Index}
+        -- TODO FEATURE_SCRUB
+        -- Now plant forest or jungle and place floodplains and oasis
+        for y = 1, g_iH do
+            for x=1, g_iW do
+                local plotIndex = GetIndex(x,y)
+                local pPlot = Map.GetPlot(x, y)
+                if plotIndex and pPlot then
+                    print(pPlot:IsWater())
+                    print(terrainTypes[plotIndex])
+                    print(plotTypes[plotIndex])
+                    -- forest and jungle
+                    if not pPlot:IsWater() and terrainTypes[plotIndex] ~= g_TERRAIN_TYPE_DESERT and plotTypes[plotIndex] ~= g_PLOT_TYPE_MOUNTAIN then
+                        -- Chance for trees based on rainfall
+                        rainfall = GetRainfall(x,y)
+                        if rainfall >= math.random() then       --Trees are present
+                            local altitude = GetPlotAltitude(x,y)
+                            if altitude < LeafyAltitude then
+                                if rainfall >= JungleThreshold then
+                                    if pPlot:IsFlatlands() and math.random() < ChanceForMarsh then
+                                        TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureMarsh'])
+                                        -- if math.random() >= ChanceForOnlyMarsh then          --AHHH we cant have both marsh and jungle on a plot
+                                            -- plot.setFeatureType(featureJungle,0)
+                                    else
+                                        TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureJungle'])
+                                    end
+                                else
+                                    TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureForest'])
+                                end
+                            else
+                                TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureForest'])
+                            end
+                        end
+                     end
+                    -- scrub
+                    if featureTypeMap['featureScrub'] and terrainTypes[plotIndex] == g_TERRAIN_TYPE_DESERT
+                       and plotTypes[plotIndex] ~= g_PLOT_TYPE_MOUNTAIN
+                       and plotTypes[plotIndex] ~= g_PLOT_TYPE_HILLS then
+                        rainfall = GetRainfall(x,y)
+                        if rainfall * 3.0 >= math.random() then
+                            TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureScrub'])
+                        end
+                    end
+                    -- floodplains and Oasis
+                    if terrainTypes[plotIndex] == g_TERRAIN_TYPE_DESERT and plotTypes[plotIndex] ~= g_PLOT_TYPE_MOUNTAIN and
+                    plotTypes[plotIndex] ~= g_PLOT_TYPE_HILLS and not plotTypes[plotIndex] ~= g_PLOT_TYPE_OCEAN then
+                        print('trying to access river')
+                        print(pPlot)
+                        if pPlot:IsRiverAdjacent() then
+                            TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureFloodPlains'])
+                        else
+                            -- is this square surrounded by desert?
+                            local foundNonDesert = False
+                            -- print "trying to place oasis"
+                            for yy = y - 1, y + 2 do
+                                for xx= x - 1, x + 2 do
+                                    local ii = GetIndex(xx,yy)
+                                    local surPlot = Map.GetPlotByIndex(xx,yy)
+                                    if surPlot then
+                                        if terrainTypes[plotIndex] ~= g_TERRAIN_TYPE_DESERT and plotTypes[plotIndex] ~= g_PLOT_TYPE_MOUNTAIN then
+                                            -- print "non desert neighbor"
+                                            foundNonDesert = True
+                                        elseif surPlot == 0 then
+                                            -- print "neighbor off map"
+                                            foundNonDesert = True
+                                        elseif plotTypes[plotIndex] ~= g_PLOT_TYPE_OCEAN then
+                                            -- print "water neighbor"
+                                            foundNonDesert = True
+                                        elseif surPlot.getFeatureType() == featureTypeMap['featureOasis'] then
+                                            -- print "oasis neighbor"
+                                            foundNonDesert = True
+                                        end
+                                    end
+                                end
+                            end
+                            if not foundNonDesert then
+                                if math.random() < OasisChance then
+                                    -- print "placing oasis"
+                                    TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureOasis'])
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    else
+        local args = {rainfall = rainfall}
+        featuregen = FeatureGenerator.Create(args);
+        featuregen:AddFeatures(true, true);  --second parameter is whether or not rivers start inland);
+    end
 end
 
 function AddFeaturesFromContinents()
