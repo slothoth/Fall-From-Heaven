@@ -136,7 +136,7 @@ function createRegions()
     regionList = {}
     regionPlotList = {}
 
-    --initialize map
+    --initialize map        backslash \
     --The value for unplayable areas will remain -1. playable regions
     --will stop growing when they touch a map edge.
     for i = 1, numTiles do
@@ -208,7 +208,7 @@ function createRegions()
                     end
                     if region.isTouchingNeighbor then
                         region.isGrowing = false
-                        print('cancelled growth')
+                        slthLog('cancelled growth')
                     end
                 else
                     if canRegionGrowHere(xx, yy, plot.regionId) then
@@ -243,7 +243,7 @@ function createRegions()
                     slthLog('direction', direction)
                     local xx, yy = plotFromRx(x, y, direction)
                     if xx == 71 and yy == 71 then
-                        print(string.format("x=%d,y=%d,xx=%d,yy=%d", x, y, xx, yy))
+                        slthLog(string.format("x=%d,y=%d,xx=%d,yy=%d", x, y, xx, yy))
                     end
                     local ii = GetIndex(xx, yy)
                     if ii ~= -1 then
@@ -279,7 +279,7 @@ function createRegions()
     --Now choose areas to be water
     local numWaterRegions = math.floor(tonumber(numTiles) * WaterRegionsPerPlot)
     slthLog(string.format("numTiles = %d, numWaterRegions = %d", numTiles, numWaterRegions))
-    for i, region in ipairs(regionList) do print(i, region.ID); end
+    for i, region in ipairs(regionList) do slthLog(i, region.ID); end
     slthLog('first shuffle')
     regionList = ShuffleList(regionList)
     --Try to start with the region in the middle (there is a low chance that there isn't one)
@@ -412,7 +412,7 @@ function PrintRegionMap(bShowWater)
                 end
             end
         end
-        print(lineString)
+        slthLog(lineString)
         lineString = ''
     end
     return lineString
@@ -508,7 +508,7 @@ function Region:getBorderPlotList(neighborID)
             end
         end
     end
-    print("borderPlotCount=%dd", borderPlotCount)
+    slthLog("borderPlotCount=%dd", borderPlotCount)
     return borderPlotList
 end
 
@@ -1341,7 +1341,7 @@ function createHexGridSVG(grid, debug_mode)
         colorIndex = (colorIndex % #colorPalette) + 1
     end
     if debug_mode then
-        print(colour_string)
+        slthLog(colour_string)
     end
     local hexSize = 30  -- Size of hexagon (radius)
     local hexWidth = hexSize * 2
@@ -2061,15 +2061,16 @@ function helper_get_gridsize(table_of_tables)
             is_nested = false
         end
     end
-    print('table size is:', count)
+    slthLog('table size is:', count)
     if is_nested then
-        print('is nested')
+        slthLog('is nested')
     end
 end
 
 ---- PLOT MAP -----------
 function createPlotMap()
     plotMap = {}
+    print('map dimensions', g_iH, g_iW)
     local scrambledPlotList = {}
     loc_regionList = regionList
     table.sort(loc_regionList, function(a, b)
@@ -2186,13 +2187,19 @@ function createPlotMap()
         end
     end
 
+    -- fix silly bottom row.
+    for i = 1, g_iW do
+        slthLog('From/To: ', plotMap[i], plotMap[i + g_iW])
+        plotMap[i] = plotMap[i + g_iW]
+    end
+
     print('START ; 2_post_river_peaks')
     simpleGridPrint(plotMap)
     print('STOP')
 
     -- Now for SoftenPeakPercent of peaks, make them hills
-    for y=1,g_iH - 1 do
-        for x= 1,g_iW - 1 do
+    for y=1,g_iH do
+        for x= 1,g_iW do
             local i = GetIndex(x,y)
             if plotMap[i] == PEAK then
                 if SoftenPeakPercent >= math.random() then
@@ -2208,6 +2215,8 @@ function createPlotMap()
 
     -- Now make sure there are no passable areas that are blocked in
     -- PrintPlotMap()
+
+    --[[
     local areaMap = AreaMap.new(g_iW, g_iH)
     print(areaMap)
     areaMap:findImpassableAreas()
@@ -2225,10 +2234,25 @@ function createPlotMap()
             end
         end
     end
-
+    ]]--
+    local newArea = newAreaMap.new()
+    local mountain = newArea:get_grid_regions(plotMap, {PEAK})
+    print('START ; 4_post area map new')
+    simpleGridPrint(mountain)
+    print('STOP')
+    local largest_region = newArea:find_largest_region()
+    for i=1, g_iW*g_iH do
+        if mountain[i] and mountain[i] > 1 and mountain[i] ~= largest_region then
+            if plotMap[i] ~= PEAK then
+                slthLog('plot x was region y, changing to peak', i, mountain[i])
+                plotMap[i] = PEAK
+            end
+        end
+    end
     print('START ; 4_post fix impassable areas')
     simpleGridPrint(plotMap)
     print('STOP')
+    print('plot map dim', #plotMap)
 end
 
 function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
@@ -2337,6 +2361,7 @@ OppositeDirections = {[N]=S, [S]=N, [E]=W, [W]=E, [NW]=SE, [SE]=NW, [SW]=NE, [NE
 
 function shouldPlacePeak(x,y)
     local i = GetIndex(x,y)
+    print('trying to find region of index, at plot ', i, ':', x, y)
     local regionID = regionMap[i]
     slthLog('region, x, y:', regionID, x, y)
     if regionID == -1 then
@@ -2356,7 +2381,7 @@ function shouldPlacePeak(x,y)
         end
         if plotMap[ii] ~= PEAK then
             local nRegionID = regionMap[ii]
-            if nRegionID ~= -1 then
+            if nRegionID and nRegionID ~= -1 then
                 -- if nRegionID == region.gateRegion then
                 local nRegion = getRegionByID(nRegionID)
                 if nRegion.isWater and region.altitude < 2 then
@@ -2472,9 +2497,10 @@ function AreaMap.new(width, height)
     local self = setmetatable({}, AreaMap)
     self.mapWidth = width
     self.mapHeight = height
+    self.IDs_issued = 0
     self.areaMap ={}
-    for i=0, self.mapHeight * self.mapWidth do              -- 0 seems fine here, as its just inserts indexing
-        table.insert(self.areaMap, 0)                -- initialize map with zeros
+    for i=1, self.mapHeight * self.mapWidth do
+        self.areaMap[i] = 0
     end
     return self
 end
@@ -2487,16 +2513,17 @@ function AreaMap:findImpassableAreas()
         self.areaMap[i] = 0
     end
     --        for i in range(0,1):
-    for i=0, self.mapHeight * self.mapWidth do
-        if plotMap[i] == OCEAN then  -- not assigned to an area yet
-            areaSize = self:fillArea(i, 1)
-    ----        endtime = time.clock()
-    ----        elapsed = endtime - starttime
-    ----        print "defineAreas time ="
-    ----        print elapsed
-    ----        print()
-        end
-    end
+   for i=1, self.mapHeight * self.mapWidth do -- Using 1-based indexing
+       if self.areaMap[i] == 0 and plotMap[i] == OCEAN then -- Check both conditions
+            local areaID = self:getNextAreaID() -- Use a unique ID for each area
+            local areaSize = self:fillArea(i, areaID)
+       end
+   end
+end
+
+function AreaMap:getNextAreaID()
+    self.IDs_issued = self.IDs_issued + 1
+    return self.IDs_issued
 end
 function AreaMap:findChokePointAreas()
     -- fill water and peaks with non-zero value
@@ -2524,26 +2551,26 @@ end
 
 function AreaMap:fillArea(index, areaID)
     -- first divide index into x and y
-    local y = index / self.mapWidth
-    local x = index % self.mapWidth
+    local y = math.floor((index - 1) / self.mapWidth)
+    local x = math.floor((index - 1) / self.mapWidth)
     -- We check 8 neigbors for land,but 4 for water. This is because
     -- the game connects land squares diagonally across water, but
     -- water squares are not passable diagonally across land
-    self.segStack = {}
-    self.size = 0
+    local segStack = {}
+    local size = 0
     -- place seed on stack for both directions
     local seg = {y=y, xLeft=x, xRight=x, dy=1}
-    table.insert(self.segStack, seg)
+    table.insert(segStack, seg)
     seg = {y=y + 1, xLeft=x, xRight=x, dy=-1}
-    table.insert(self.segStack, seg)
-    while #self.segStack > 0 do
-        seg = table.remove(self.segStack)
-        self:scanAndFillLine(seg, areaID)
+    table.insert(segStack, seg)
+    while #segStack > 0 do
+        seg = table.remove(segStack)
+        self:scanAndFillLine(seg, areaID, segStack, size)
     end
-    return self.size
+    return size
 end
 
-function AreaMap:scanAndFillLine(seg, areaID)
+function AreaMap:scanAndFillLine(seg, areaID, segStack, size)
     -- check for y + dy being off map
     local i = GetIndex(seg['xLeft'], seg['y'] + seg['dy'])
     if i < 0 then
@@ -2559,21 +2586,25 @@ function AreaMap:scanAndFillLine(seg, areaID)
     local lineFound = false
     -- first scan and fill any left overhang
     if debugReport then
-        print('')
-        print(seg)
-        print("Going left")
+        slthLog('')
+        slthLog(seg)
+        slthLog("Going left")
     end
     local xLeftExtreme
-    for xLeftExtremeLoc=seg['xLeft'] - landOffset, -1, -1 do
+    for xLeftExtremeLoc = seg['xLeft'] - landOffset, -1, -1 do
+        if xLeftExtremeLoc < 0 then -- Add this check
+            xLeftExtreme = -1
+            break
+        end
         xLeftExtreme = xLeftExtremeLoc
         i = GetIndex(xLeftExtreme, seg['y'] + seg['dy'])
         if debugReport then
-            print("xLeftExtreme = %d", xLeftExtreme)
+            slthLog("xLeftExtreme = %d", xLeftExtreme)
         end
         if self.areaMap[i] == 0 and plotMap[i] ~= PEAK then
             self.areaMap[i] = areaID
-            print('ASSIGNING PLOT:AREA ID, ', i, areaID)
-            self.size = self.size + 1
+            slthLog('ASSIGNING PLOT:AREA ID, ', i, areaID)
+            size = size + 1
             lineFound = true
         else
             -- if no line was found, then xLeftExtreme is fine, but if
@@ -2586,55 +2617,59 @@ function AreaMap:scanAndFillLine(seg, areaID)
         end
     end
     if debugReport then
-        print("xLeftExtreme finally = %d",xLeftExtreme)
-        print("Going Right")
+        slthLog("xLeftExtreme finally = %d",xLeftExtreme)
+        slthLog("Going Right")
     end
     -- now scan right to find extreme right, place each found segment on stack
     --        xRightExtreme = seg['xLeft'] - landOffset --needed sometimes? one time it was not initialized before use.
     local xRightExtreme
-    for xRightExtreme_loc=seg['xLeft'], self.mapWidth, 1 do
+    for xRightExtreme_loc = seg['xLeft'], self.mapWidth, 1 do
+        if xRightExtreme_loc >= self.mapWidth then -- Add this check
+            xRightExtreme = self.mapWidth
+            break
+        end
         xRightExtreme = xRightExtreme_loc
         if debugReport then
-            print("xRightExtreme = %d", xRightExtreme)
+            slthLog("xRightExtreme = %d", xRightExtreme)
         end
         i = GetIndex(xRightExtreme, seg['y'] + seg['dy'])
         if self.areaMap[i] == 0 and plotMap[i] ~= PEAK then
             self.areaMap[i] = areaID
-            print('ASSIGNING PLOT:AREA ID, ', i, areaID)
-            self.size = self.size + 1
+            slthLog('ASSIGNING PLOT:AREA ID, ', i, areaID)
+            size = size + 1
             if lineFound == false then
                 lineFound = true
                 xLeftExtreme = xRightExtreme  -- starting new line
                 if debugReport then
-                    print("starting new line at xLeftExtreme= %d", xLeftExtreme)
+                    slthLog("starting new line at xLeftExtreme= %d", xLeftExtreme)
                 end
             end
         elseif lineFound == true then  -- found the right end of a line segment!
             lineFound = false
             -- put same direction on stack
             newSeg = {y=seg['y'] + seg['dy'], xLeft=xLeftExtreme, xRight=xRightExtreme - 1, dy=seg['dy']}
-            table.insert(self.segStack, newSeg)
+            table.insert(segStack, newSeg)
             if debugReport then
-                print("same direction to stack", newSeg)
+                slthLog("same direction to stack", newSeg)
             end
             -- determine if we must put reverse direction on stack
             if xLeftExtreme < seg['xLeft'] or xRightExtreme >= seg['xRight'] then
                 -- out of shadow so put reverse direction on stack also
                 local newSeg = {y=seg['y'] + seg['dy'], xLeft=xLeftExtreme, xRight=xRightExtreme - 1, dy=-seg['dy']}
-                table.insert(self.segStack, newSeg)
+                table.insert(segStack, newSeg)
                 if debugReport then
-                    print("opposite direction to stack", newSeg)
+                    slthLog("opposite direction to stack", newSeg)
                 end
             end
             if xRightExtreme >= seg['xRight'] + landOffset then
                 if debugReport then
-                    print("finished with line")
+                    slthLog("finished with line")
                 end
                 break;  -- past the end of the parent line and this line ends
             end
         elseif lineFound == false and xRightExtreme >= seg['xRight'] + landOffset then
             if debugReport then
-                print("no additional lines found")
+                slthLog("no additional lines found")
             end
             break;  -- past the end of the parent line and no line found
         -- else                                                                 -- this clause does nothing
@@ -2643,22 +2678,22 @@ function AreaMap:scanAndFillLine(seg, areaID)
     end
     if lineFound == true then  -- still a line needing to be put on stack
         if debugReport then
-            print("still needing to stack some segs")
+            slthLog("still needing to stack some segs")
         end
         lineFound = false
         -- put same direction on stack
         local newSeg = {y=seg['y'] + seg['dy'], xLeft=xLeftExtreme, xRight=xRightExtreme - 1, dy=seg['dy']}
-        table.insert(self.segStack, newSeg)
+        table.insert(segStack, newSeg)
         if debugReport then
-            print(newSeg)
+            slthLog(newSeg)
         end
         -- determine if we must put reverse direction on stack
         if xLeftExtreme < seg['xLeft'] or xRightExtreme - 1 > seg['xRight'] then
             -- out of shadow so put reverse direction on stack also
             newSeg = {y=seg['y'] + seg['dy'], xLeft=xLeftExtreme, xRight=xRightExtreme - 1, dy=-seg['dy']}
-            table.insert(self.segStack, newSeg)
+            table.insert(segStack, newSeg)
             if debugReport then
-                print(newSeg)
+                slthLog(newSeg)
             end
         end
     end
@@ -2697,6 +2732,227 @@ function AreaMap:PrintAreaMap()
     print(" ")
 end
 
+newAreaMap = {}
+newAreaMap.__index = newAreaMap
+
+---
+-- Constructor to create a new newAreaMap instance.
+function newAreaMap.new()
+    local instance = setmetatable({}, newAreaMap)
+
+    instance.absorbed_into_region = {}
+    instance.num_rows = 0
+    instance.row_lengths = {}
+    instance.current_tiles_in_region = 0
+    instance.region_sizes = {}
+
+    return instance
+end
+
+---
+-- Calculates the 6 neighbor coordinates for a pointy-topped hex grid.
+-- Adjusted for Lua's 1-based indexing.
+-- @param y The 1-based row index.
+-- @param x The 1-based column index.
+-- @return A table of neighbor coordinate pairs, e.g., {{y=1, x=1}, {y=1, x=2}, ...}
+function newAreaMap:get_valid_neighbors(y, x)
+    local candidates = {}
+
+    -- In Python, the check was y % 2 == 0 for even rows (0, 2, 4...).
+    -- In Lua (1-based), the equivalent rows are odd (1, 3, 5...).
+    if y % 2 == 1 then -- Equivalent to Python's "even" rows
+        candidates = {
+            {y = y, x = x - 1}, {y = y, x = x + 1},      -- W, E
+            {y = y - 1, x = x - 1}, {y = y - 1, x = x},  -- NW, NE
+            {y = y + 1, x = x - 1}, {y = y + 1, x = x}   -- SW, SE
+        }
+    else -- Equivalent to Python's "odd" rows
+        candidates = {
+            {y = y, x = x - 1}, {y = y, x = x + 1},      -- W, E
+            {y = y - 1, x = x}, {y = y - 1, x = x + 1},  -- NW, NE
+            {y = y + 1, x = x}, {y = y + 1, x = x + 1}   -- SW, SE
+        }
+    end
+
+    local valid_neighbors = {}
+    for _, coords in ipairs(candidates) do
+        local nr, nc = coords.y, coords.x
+        -- Boundary check using 1-based indexing
+        if nr >= 1 and nr <= self.num_rows and nc >= 1 and nc <= self.row_lengths[nr] then
+            table.insert(valid_neighbors, coords)
+        end
+    end
+
+    return valid_neighbors
+end
+
+
+---
+-- Iteratively builds a region using a stack to avoid recursion limits.
+-- This is a non-recursive flood-fill algorithm.
+-- @param start_x The starting X coordinate.
+-- @param start_y The starting Y coordinate.
+-- @param current_region The integer ID for the new region.
+function newAreaMap:build_region(start_x, start_y, current_region)
+    -- A stack to hold the coordinates of tiles to visit.
+    local stack = {{y = start_y, x = start_x}}
+
+    -- Process tiles as long as there are items in the stack
+    while #stack > 0 do
+        local current_coords = table.remove(stack) -- Pop the last element (LIFO)
+        local x, y = current_coords.x, current_coords.y
+
+        -- Check if the tile has already been assigned. If so, skip.
+        if self.absorbed_into_region[y][x] == -1 then
+            -- Assign the tile to the current region
+            self.absorbed_into_region[y][x] = current_region
+            self.current_tiles_in_region = self.current_tiles_in_region + 1
+
+            -- Get all valid neighbors
+            local adjacent_plots = self:get_valid_neighbors(y, x)
+            for _, neighbor_coords in ipairs(adjacent_plots) do
+                local nx, ny = neighbor_coords.x, neighbor_coords.y
+                -- If a neighbor hasn't been assigned a region yet, add it to the stack
+                if self.absorbed_into_region[ny][nx] == -1 then
+                    table.insert(stack, neighbor_coords)
+                end
+            end
+        end
+    end
+end
+
+
+---
+-- Helper function to check if a list-like table contains a value.
+-- @param list The table to search in.
+-- @param val The value to search for.
+-- @return true if the value is found, false otherwise.
+local function list_contains(list, val)
+    for _, v in ipairs(list) do
+        if v == val then
+            return true
+        end
+    end
+    return false
+end
+
+---
+-- Main function to process a grid and identify all contiguous regions.
+-- @param grid A 2D table representing the map grid.
+-- @param blockers A list-like table of tile values that are not traversable (e.g., {-2, -3}).
+-- @return A new 2D table where each cell has an integer region ID.
+function newAreaMap:get_grid_regions(grid, blockers)
+    -- 1. Create a deep copy of the grid to avoid modifying the original
+    -- first check if grid is 1d or 2d
+    local gridDim = 2
+    if type(grid[1]) == "number" then
+        gridDim = 1
+    end
+    local new_grid = {}
+    if gridDim == 2 then
+        for i = 1, #grid do
+            new_grid[i] = {}
+            for j = 1, #grid[i] do
+                new_grid[i][j] = grid[i][j]
+            end
+        end
+    else
+        local idx = 1
+        for y = 1, g_iH do
+            new_grid[y] = {}
+            for x = 1, g_iW do
+                new_grid[y][x] = grid[idx]
+                idx = idx + 1
+            end
+        end
+    end
+
+    -- 2. Map string values to consistent integer IDs
+    local mountain_mapper = {['6'] = -3, ['1'] = -2, ['W'] = -2, ['M'] = -3}
+    for y = 1, #new_grid do
+        for x = 1, #new_grid[y] do
+            local tile = new_grid[y][x]
+            new_grid[y][x] = mountain_mapper[tile] or tile
+        end
+    end
+
+    -- 3. Initialize instance properties and the results grid
+    self.num_rows = #new_grid
+    self.row_lengths = {}
+    for i = 1, self.num_rows do
+        self.row_lengths[i] = #new_grid[i]
+    end
+
+    self.absorbed_into_region = {}
+    for y = 1, self.num_rows do
+        self.absorbed_into_region[y] = {}
+        for x = 1, self.row_lengths[y] do
+            local tile_val = new_grid[y][x]
+            if list_contains(blockers, tile_val) then
+                self.absorbed_into_region[y][x] = -20
+            else
+                self.absorbed_into_region[y][x] = -1
+            end
+        end
+    end
+
+    -- 4. Iterate through the grid and build regions
+    local current_region = 1
+    for y = 1, self.num_rows do
+        for x = 1, self.row_lengths[y] do
+            if self.absorbed_into_region[y][x] == -1 then
+                self.current_tiles_in_region = 0
+                self:build_region(x, y, current_region)
+                self.region_sizes[current_region]= self.current_tiles_in_region
+                current_region = current_region + 1
+            end
+        end
+    end
+
+    if gridDim == 1 then
+        -- convert back to flat structure for export
+        local final_grid = {}
+        local idx = 1
+        slthLog('length of absorb y', #self.absorbed_into_region)
+        slthLog('length of absorb X', #self.absorbed_into_region[2])
+        slthLog('length of row lengths', self.row_lengths[2])
+        slthLog('length of grid', #grid)
+        slthLog('length of grid',  #new_grid)
+        slthLog('length of new grid lengths', #new_grid[2])
+        slthLog('expected total', #self.absorbed_into_region * #self.absorbed_into_region[2])
+        for y = 1, self.num_rows do
+            for x = 1, self.row_lengths[y] do
+                final_grid[idx] = self.absorbed_into_region[y][x]
+                idx = idx + 1
+            end
+        end
+        slthLog('final idx is', idx)
+        return final_grid
+    else
+        return self.absorbed_into_region
+    end
+end
+
+function newAreaMap:find_largest_region()
+    local largest_size = 0
+    local largest_region = -1
+    for idx, size in pairs(self.region_sizes) do
+        if size > largest_size then
+            largest_size = size
+            largest_region = idx
+        end
+        print('region, size:', idx, size)
+    end
+    print('largest region, with size', largest_region, largest_size)
+    return largest_region
+end
+
+function addTerrain(index, value)
+    if plotMap[index] then
+        terrainMap[index] = value
+    end
+end
+
 -- TERRAIN --
 function createTerrainMap()
     DESERT = 0
@@ -2711,26 +2967,30 @@ function createTerrainMap()
     MARSH = 9
     terrainMap = {}
     --  initialize terrainMap with OCEAN
-    for i=0, g_iH * g_iW do
-        table.insert(terrainMap, OCEAN_TERRAIN)
-    end
     for y=1, g_iH do
         for x=1, g_iW do
+            table.insert(terrainMap, OCEAN_TERRAIN)
+        end
+    end
+    slthLog('terrain_total is:', #terrainMap)
+    for y=0, g_iH do
+        for x=0, g_iW do
             local i = GetIndex(x, y)
-            if plotMap[i] ~= OCEAN then
-                terrainMap[i] = GRASS
+            if plotMap[i] and plotMap[i] ~= OCEAN then
+                addTerrain(i, GRASS)
             else
                 for direction=1, 8 do
                     local xx = x + directionXmap[direction]
                     local yy = y + directionYmap[direction]
                     local ii = GetIndex(xx, yy)
-                    if ii ~= -1 and plotMap[ii] ~= OCEAN then
-                        terrainMap[i] = COAST
+                    if ii ~= -1 and plotMap[i] and plotMap[ii] ~= OCEAN then
+                        addTerrain(i, COAST)
                     end
                 end
             end
         end
     end
+    slthLog('terrain_total is:', #terrainMap)
     print('START ; 5_post_terrain_init_ocean')
     simpleGridPrint(terrainMap)
     print('STOP')
@@ -2743,33 +3003,33 @@ function createTerrainMap()
                 local rainFall = GetRainfall(x, y)
                 if rainFall < DesertThreshold then
                     if rainFall < ((math.random() * DesertThreshold) / 2.0) + (DesertThreshold / 2.0) then
-                        terrainMap[i] = DESERT
+                        addTerrain(i, DESERT)
                     else
-                        terrainMap[i] = PLAINS
+                        addTerrain(i, PLAINS)
                     end
                 elseif rainFall < PlainsThreshold then
                     if rainFall < ((math.random() * (
                             PlainsThreshold - DesertThreshold)) / 2.0) + DesertThreshold + (
                             (PlainsThreshold - DesertThreshold) / 2.0) then
-                        terrainMap[i] = PLAINS
+                        addTerrain(i, PLAINS)
                     else
-                        terrainMap[i] = GRASS
+                        addTerrain(i, GRASS)
                     end
                 else
-                    terrainMap[i] = GRASS
+                    addTerrain(i, GRASS)
                 end
                 local altitude = GetPlotAltitude(x, y)
                 if altitude > IceThreshold then
-                    terrainMap[i] = ICE
+                    addTerrain(i, ICE)
                 elseif altitude > TundraThreshold then
-                    terrainMap[i] = TUNDRA
+                    addTerrain(i, TUNDRA)
                 elseif altitude > MaxDesertAltitude and terrainMap[i] == DESERT then
-                    terrainMap[i] = PLAINS
+                    addTerrain(i, PLAINS)
                 end
             end
         end
     end
-
+    print('terrain_total is:', #terrainMap)
     print('START ; 6_post terrain biome')
     simpleGridPrint(terrainMap)
     print('STOP')
@@ -2778,13 +3038,13 @@ function createTerrainMap()
         for x=1, g_iW-1 do
             local i = GetIndex(x, y)
             if plotMap[i] == PEAK then
-                terrainMap[i] = TUNDRA
+                addTerrain(i, TUNDRA)
                 for direction=1, 8 do
                     local xx = x + directionXmap[direction]
                     local yy = y + directionYmap[direction]
                     local ii = GetIndex(xx, yy)
                     if plotMap[ii] ~= PEAK and plotMap[ii] ~= OCEAN then
-                        terrainMap[i] = terrainMap[ii]
+                        addTerrain(i, terrainMap[ii])
                         break
                     end
                 end
@@ -2798,6 +3058,8 @@ function createTerrainMap()
     print('START ; a_post terrain gen PLOTS')
     simpleGridPrint(plotMap)
     print('STOP')
+
+    print('terrain map dim', #terrainMap)
 end
 
 function GetRainfall(x, y)
@@ -2894,17 +3156,17 @@ function GenerateMap()
     while not success and river_map_attempts < 2 do
         success, result = pcall(function()
             createRegions()
-            print('START ;reg_map_1_final_regionmap')
+            slthLog('START ;reg_map_1_final_regionmap')
             final_reg_map = PrintRegionMap()
-            print('STOP')
-            print('reg map')
-            print(final_reg_map)
+            slthLog('STOP')
+            slthLog('reg map')
+            slthLog(final_reg_map)
             -- PrintRegionList()
-            print('reg map water')
-             print('START ; reg_map_1_final_regionmap_no_water')
+            slthLog('reg map water')
+            slthLog('START ; reg_map_1_final_regionmap_no_water')
             region_plots = PrintRegionMap(true)
-            print('STOP')
-            print(region_plots)
+            slthLog('STOP')
+            slthLog(region_plots)
 
             squareGrid = make_grid(regionMap)
             local svgContent = createCharacterImageSVG(squareGrid)
@@ -2913,7 +3175,7 @@ function GenerateMap()
             createRiverMap()
         end)
         river_map_attempts = river_map_attempts + 1
-        print('--------------------------- river attempt finished -----------------------\n\n\n\n\n\n\n\n\n')
+        slthLog('--------------------------- river attempt finished -----------------------\n\n\n\n\n\n\n\n\n')
     end
     if not success then
         error(result)
@@ -2939,12 +3201,6 @@ function GenerateMap()
             -- print(mapLoc)
             terrainMap_out_plots[GetIndex(x, y)] =  mapLoc
         end
-    end
-
-    -- fix silly bottom row.
-    for i = 1, g_iW do
-        terrainMap_out_plots[i] = terrainMap_out_plots[i + g_iW]
-        out_plots[i] = out_plots[i + g_iW]
     end
 
     local squareGrid_Terrain_Types = make_grid(terrainMap_out_plots)
@@ -3016,9 +3272,263 @@ function GenerateMap()
 		START_MAX_Y = 15,
 		START_CONFIG = startConfig,
 	};
+
+    -- AssignStartingPlots.__InitStartingData = newInitStartingPlotsData
 	local start_plot_database = AssignStartingPlots.Create(args)
 
 	local GoodyGen = AddGoodies(g_iW, g_iH);
+
+    print('hopefully finished')
+
+end
+
+function newInitStartingPlotsData(self)
+    if(self.uiMinMajorCivFertility <= 0) then
+		self.uiMinMajorCivFertility = 5;
+	end
+
+	if(self.uiMinMinorCivFertility <= 0) then
+		self.uiMinMinorCivFertility = 5;
+	end
+
+	--Find Default Number
+	MapSizeTypes = {};
+	for row in GameInfo.Maps() do
+		MapSizeTypes[row.RowId] = row.DefaultPlayers;
+	end
+	local sizekey = Map.GetMapSize() + 1;
+	local iDefaultNumberPlayers = MapSizeTypes[sizekey] or 8;
+	self.iDefaultNumberMajor = iDefaultNumberPlayers ;
+	self.iDefaultNumberMinor = math.floor(iDefaultNumberPlayers * 1.5);
+
+	-- See if there are any civs starting out in the water
+	local tempMajorList = {};
+	self.majorList = {};
+	self.waterMajorList = {};
+	self.iNumMajorCivs = 0;
+	self.iNumWaterMajorCivs = 0;
+
+	tempMajorList = PlayerManager.GetAliveMajorIDs();
+	for i = 1, PlayerManager.GetAliveMajorsCount() do
+		local leaderType = PlayerConfigurations[tempMajorList[i]]:GetLeaderTypeName();
+		if (not self.startAllOnLand and GameInfo.Leaders_XP2[leaderType] ~= nil and GameInfo.Leaders_XP2[leaderType].OceanStart == true) then
+			table.insert(self.waterMajorList, tempMajorList[i]);
+			self.iNumWaterMajorCivs = self.iNumWaterMajorCivs + 1;
+			print ("Found the Maori");
+		else
+			table.insert(self.majorList, tempMajorList[i]);
+			self.iNumMajorCivs = self.iNumMajorCivs + 1;
+		end
+	end
+
+	-- Do we have enough water on this map for the number of water civs specified?
+	local TILES_NEEDED_FOR_WATER_START = 8;
+	if (self.waterMap == true) then
+		TILES_NEEDED_FOR_WATER_START = 1;
+	end
+	local iCandidateWaterTiles = StartPositioner.GetTotalOceanStartCandidates(self.waterMap);
+	if (iCandidateWaterTiles < (TILES_NEEDED_FOR_WATER_START * self.iNumWaterMajorCivs)) then
+
+		-- Not enough so reset so all civs start on land
+		self.iNumMajorCivs = 0;
+		self.majorList = {};
+		for i = 1, PlayerManager.GetAliveMajorsCount() do
+			table.insert(self.majorList, tempMajorList[i]);
+			self.iNumMajorCivs = self.iNumMajorCivs + 1;
+		end
+	end
+
+	self.iNumMinorCivs = PlayerManager.GetAliveMinorsCount();
+	self.minorList = {};
+	self.minorList = PlayerManager.GetAliveMinorIDs();
+	self.iNumRegions = self.iNumMajorCivs + self.iNumMinorCivs;
+	local iMinNumBarbarians = self.iNumMajorCivs / 2;
+
+	StartPositioner.DivideMapIntoMajorRegions(self.iNumMajorCivs, self.uiMinMajorCivFertility, self.uiMinMinorCivFertility, self.startLargestLandmassOnly);
+	local iMajorCivStartLocs = StartPositioner.GetNumMajorCivStarts();
+
+	-- Place the major civ start plots in an array
+	self.majorStartPlots = {};
+	local failed = 0;
+	for i = self.iNumMajorCivs - 1, 0, - 1 do
+		plots = StartPositioner.GetMajorCivStartPlots(i);
+		local startPlot = self:__SetStartMajor(plots, i);
+		if(startPlot ~= nil) then
+			StartPositioner.MarkMajorRegionUsed(i);
+			table.insert(self.majorStartPlots, startPlot);
+			info = StartPositioner.GetMajorCivStartInfo(i);
+--			print ("ContinentType: " .. tostring(info.ContinentType));
+--			print ("LandmassID: " .. tostring(info.LandmassID));
+--			print ("Fertility: " .. tostring(info.Fertility));
+--			print ("TotalPlots: " .. tostring(info.TotalPlots));
+--			print ("WestEdge: " .. tostring(info.WestEdge));
+--			print ("EastEdge: " .. tostring(info.EastEdge));
+--			print ("NorthEdge: " .. tostring(info.NorthEdge));
+--			print ("SouthEdge: " .. tostring(info.SouthEdge));
+		else
+			failed = failed + 1;
+			info = StartPositioner.GetMajorCivStartInfo(i);
+
+			print ("-- START FAILED MAJOR --");
+			if(info) then
+				print ("ContinentType: " .. tostring(info.ContinentType));
+				print ("LandmassID: " .. tostring(info.LandmassID));
+				print ("Fertility: " .. tostring(info.Fertility));
+				print ("TotalPlots: " .. tostring(info.TotalPlots));
+				print ("WestEdge: " .. tostring(info.WestEdge));
+				print ("EastEdge: " .. tostring(info.EastEdge));
+				print ("NorthEdge: " .. tostring(info.NorthEdge));
+				print ("SouthEdge: " .. tostring(info.SouthEdge));
+			end
+			print ("-- END FAILED MAJOR --");
+		end
+	end
+	for k, plot in ipairs(self.majorStartPlots) do
+		table.insert(self.majorCopy, plot);
+	end
+
+	--Begin Start Bias for major
+	if (self.noStartBiases or (GameInfo.StartBiasResources() == nil and GameInfo.StartBiasFeatures() == nil and GameInfo.StartBiasTerrains() == nil and GameInfo.StartBiasRivers() == nil)) then
+		self.playerStarts = {};
+		for i = 1, self.iNumMajorCivs do
+			local playerStart = {}
+			for j, plot in ipairs(self.majorStartPlots) do
+				playerStart[j] = plot;
+			end
+			self.playerStarts[i] = playerStart;
+		end
+
+		for j, playerIndex in ipairs(self.majorList) do
+			local hasPlot = false;
+			local index = playerIndex + 1;
+
+			if(index > 0 and self:__ArraySize(self.playerStarts, index) > 1) then
+				for k, v in pairs(self.playerStarts[index]) do
+					if(v~= nil and hasPlot == false) then
+						hasPlot = true;
+						--Call Removal
+						self:__StartBiasPlotRemoval(v, false, index);
+					end
+				end
+			end
+		end
+	else
+		self:__InitStartBias(false);
+	end
+
+	if(self.uiStartConfig == 1 ) then
+		self:__AddResourcesBalanced();
+	elseif(self.uiStartConfig == 3 ) then
+		self:__AddResourcesLegendary();
+	end
+
+	local aMajorStartPlotIndices = {};
+	for i = 1, self.iNumMajorCivs do
+		local player = Players[self.majorList[i]]
+
+		if(player == nil) then
+			print("THIS PLAYER FAILED");
+		else
+			local hasPlot = false;
+			for k, v in pairs(self.playerStarts[i]) do
+				if(v~= nil and hasPlot == false) then
+					hasPlot = true;
+					self:__AddLeyLine(v);
+					player:SetStartingPlot(v);
+					table.insert(aMajorStartPlotIndices, v:GetIndex());
+					print("Major Start X: ", v:GetX(), "Major Start Y: ", v:GetY());
+				end
+			end
+		end
+	end
+    -- skip placing minors too?
+	StartPositioner.DivideMapIntoMinorRegions(self.iNumMinorCivs);
+
+	local iMinorCivStartLocs = StartPositioner.GetNumMinorCivStarts();
+	local i = 0;
+	local valid = 0;
+	while i <= iMinorCivStartLocs - 1 and valid < self.iNumMinorCivs do
+		plots = StartPositioner.GetMinorCivStartPlots(i);
+		local startPlot = self:__SetStartMinor(plots);
+		info = StartPositioner.GetMinorCivStartInfo(i);
+		if(startPlot ~= nil) then
+			table.insert(self.minorStartPlots, startPlot);
+--			print ("Minor ContinentType: " .. tostring(info.ContinentType));
+--			print ("Minor LandmassID: " .. tostring(info.LandmassID));
+--			print ("Minor Fertility: " .. tostring(info.Fertility));
+--			print ("Minor TotalPlots: " .. tostring(info.TotalPlots));
+--			print ("Minor WestEdge: " .. tostring(info.WestEdge));
+--			print ("Minor EastEdge: " .. tostring(info.EastEdge));
+--			print ("Minor NorthEdge: " .. tostring(info.NorthEdge));
+--			print ("Minor SouthEdge: " .. tostring(info.SouthEdge));
+			valid = valid + 1;
+		else
+			print ("-- START FAILED MINOR --");
+			print ("Minor ContinentType: " .. tostring(info.ContinentType));
+			print ("Minor LandmassID: " .. tostring(info.LandmassID));
+			print ("Minor Fertility: " .. tostring(info.Fertility));
+			print ("Minor TotalPlots: " .. tostring(info.TotalPlots));
+			print ("Minor WestEdge: " .. tostring(info.WestEdge));
+			print ("Minor EastEdge: " .. tostring(info.EastEdge));
+			print ("Minor NorthEdge: " .. tostring(info.NorthEdge));
+			print ("Minor SouthEdge: " .. tostring(info.SouthEdge));
+			print ("-- END FAILED MINOR --");
+		end
+
+		i = i + 1;
+	end
+
+	for k, plot in ipairs(self.minorStartPlots) do
+		table.insert(self.minorCopy, plot);
+	end
+
+	--Begin Start Bias for minor
+	if (self.noStartBiases or (GameInfo.StartBiasResources() == nil and GameInfo.StartBiasFeatures() == nil and GameInfo.StartBiasTerrains() == nil and GameInfo.StartBiasRivers() == nil)) then
+		self.playerStarts = {};
+		for i = 1, self.iNumMinorCivs do
+			local playerStart = {}
+			for j, plot in ipairs(self.minorStartPlots) do
+				playerStart[j] = plot;
+			end
+			self.playerStarts[self.iNumMajorCivs + i] = playerStart
+		end
+
+		for j, playerIndex in ipairs(self.minorList) do
+			local hasPlot = false;
+			local index = playerIndex + 1;
+
+			if(index > 0 and self:__ArraySize(self.playerStarts, index) > 1) then
+				for k, v in pairs(self.playerStarts[index]) do
+					if(v~= nil and hasPlot == false) then
+						hasPlot = true;
+						--Call Removal
+						self:__StartBiasPlotRemoval(v, true, index);
+					end
+				end
+			end
+		end
+	else
+		self:__InitStartBias(true);
+	end
+
+	for i = 1, self.iNumMinorCivs do
+		local player = Players[self.minorList[i]]
+
+		if(player == nil) then
+			print("THIS PLAYER FAILED");
+		else
+			local hasPlot = false;
+			for k, v in pairs(self.playerStarts[i + self.iNumMajorCivs]) do
+				if(v~= nil and hasPlot == false) then
+					hasPlot = true;
+					player:SetStartingPlot(v);
+					print("Minor Start X: ", v:GetX(), "Minor Start Y: ", v:GetY());
+				end
+			end
+		end
+	end
+
+	-- skip placing the ocean civs
 
 end
 
@@ -3042,7 +3552,7 @@ end
 function ApplyTerrain(plotTypes, terrainTypes)
     print((g_iW * g_iH) - 1)
     print(' final number above. length of terrainTypes and plotTypes is: ' .. #terrainTypes .. ', ' .. #plotTypes)
-	for i = 0, (g_iW * g_iH) - 1, 1 do
+	for i = 1, (g_iW * g_iH) - 1, 1 do
 		local pPlot = Map.GetPlotByIndex(i);
 		if (plotTypes[i] == g_PLOT_TYPE_HILLS) then
 			terrainTypes[i] = terrainTypes[i] + 1;
@@ -3057,36 +3567,22 @@ function ApplyTerrain(plotTypes, terrainTypes)
 	end
 end
 
-
-function ConvertToFiraxisForm(erebus_hex_grid, mapper)
-    local plotTypes = {}
-    print('printing hex shape')
-    for y, x_row in pairs(erebus_hex_grid) do
-        for x, plot_val in pairs(x_row) do
-            local converted_val = mapper[plot_val]
-            if converted_val then
-                table.insert(plotTypes, converted_val)
-            else
-                print('ERROR: MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_val .. '$ WITH COORDINATES: ' .. x .. ', ' .. y)
-                print('inserting grass instead: ' .. g_TERRAIN_TYPE_GRASS)
-                table.insert(plotTypes, g_TERRAIN_TYPE_GRASS)
-            end
-        end
-    end
-    return plotTypes
-end
-
 function ConvertToFiraxisFormSimple(erebus_hex_grid, mapper)
     local loc_plotTypes = {}
-    print('printing hex shape')
     for idx, plot_info in pairs(erebus_hex_grid) do
-        local converted_val = mapper[plot_info]
-        if converted_val then
-            table.insert(loc_plotTypes, converted_val)
-        else
-            print('ERROR: MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_info .. '$ WITH index: ' .. idx)
-            print('inserting grass instead: ' .. g_TERRAIN_TYPE_GRASS)
-            table.insert(loc_plotTypes, g_TERRAIN_TYPE_GRASS)
+        if plot_info then
+            local converted_val = mapper[plot_info]
+            if converted_val then
+                table.insert(loc_plotTypes, converted_val)
+            else
+                print('ERROR: MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_info .. '$ WITH index: ' .. idx)
+                if idx == 0 then
+                    print('stopped insert in 0')
+                else
+                    print('would inserting grass instead: ' .. g_TERRAIN_TYPE_GRASS)
+                    table.insert(loc_plotTypes, g_TERRAIN_TYPE_GRASS)
+                end
+            end
         end
     end
     return loc_plotTypes
@@ -3112,9 +3608,6 @@ function AddFeatures()
                 local plotIndex = GetIndex(x,y)
                 local pPlot = Map.GetPlot(x, y)
                 if plotIndex and pPlot then
-                    print(pPlot:IsWater())
-                    print(terrainTypes[plotIndex])
-                    print(plotTypes[plotIndex])
                     -- forest and jungle
                     if not pPlot:IsWater() and terrainTypes[plotIndex] ~= g_TERRAIN_TYPE_DESERT and plotTypes[plotIndex] ~= g_PLOT_TYPE_MOUNTAIN then
                         -- Chance for trees based on rainfall
@@ -3150,8 +3643,6 @@ function AddFeatures()
                     -- floodplains and Oasis
                     if terrainTypes[plotIndex] == g_TERRAIN_TYPE_DESERT and plotTypes[plotIndex] ~= g_PLOT_TYPE_MOUNTAIN and
                     plotTypes[plotIndex] ~= g_PLOT_TYPE_HILLS and not plotTypes[plotIndex] ~= g_PLOT_TYPE_OCEAN then
-                        print('trying to access river')
-                        print(pPlot)
                         if pPlot:IsRiverAdjacent() then
                             TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureFloodPlains'])
                         else
@@ -3253,7 +3744,7 @@ function do_ascii(plot_types, terrain_types,do_feature, text, by_actual)
     print('plot types, length:', #plot_ascii_list)
     print('START; '.. 'plotTypes' .. text)
     for _, i in ipairs(plot_ascii_list) do
-        print(i)
+        slthLog(i)
     end
     print('STOP')
     print('terrain, length:', #terrain_ascii_list)
@@ -3280,7 +3771,7 @@ function simpleGridPrint(tbl)
             x_string = ''
         end
         count = count + 1
-        x_string = x_string .. val
+        x_string = x_string .. val .. '|'
 	end
 end
 
@@ -3291,7 +3782,7 @@ function list_o_lists_GridPrint(tbl)
         for x, val in pairs(x_row) do
             x_string = x_string .. val
         end
-        print(x_string)
+        slthLog(x_string)
         x_string = ''
 	end
 end
