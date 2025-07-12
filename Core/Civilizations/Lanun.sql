@@ -48,7 +48,7 @@ INSERT INTO Modifiers(ModifierId, ModifierType, RunOnce, Permanent, SubjectRequi
 INSERT INTO ModifierArguments(ModifierId, Name, Type, Value) VALUES
 ('MODIFIER_SLTH_LANUN_BONUS_FOOD_COAST', 'YieldType', 'ARGTYPE_IDENTITY', 'YIELD_FOOD'),
 ('MODIFIER_SLTH_LANUN_BONUS_FOOD_COAST', 'Amount', 'ARGTYPE_IDENTITY', '1'),
-('MODIFIER_SLTH_REVEAL_PEARL', 'ResourceType', 'ARGTYPE_IDENTITY', 'RESOURCE_PEARL'),
+('MODIFIER_SLTH_REVEAL_PEARL', 'ResourceType', 'ARGTYPE_IDENTITY', 'RESOURCE_PEARLS'),
 ('MODIFIER_SLTH_BUILDING_HARBOR_LANUN_DOMAIN_SEA_PROD_MULT', 'Domain', 'ARGTYPE_IDENTITY', 'DOMAIN_SEA'),
 ('MODIFIER_SLTH_BUILDING_HARBOR_LANUN_DOMAIN_SEA_PROD_MULT', 'Amount', 'ARGTYPE_IDENTITY', '25');
 
@@ -78,16 +78,16 @@ INSERT INTO Unit_BuildingPrereqs(Unit, PrereqBuilding) VALUES
 ('SLTH_UNIT_WAR_TORTOISE', 'SLTH_BUILDING_SIEGE_WORKSHOP');
 
 INSERT INTO Resource_Conditions (ResourceType, UnlocksFromEffect) VALUES
-('RESOURCE_PEARL', 1);
+('RESOURCE_PEARLS', 1);
 
 INSERT INTO Resources(ResourceType, Name, ResourceClassType, Happiness, LakeEligible, SeaFrequency) VALUES
-('RESOURCE_PEARL', 'LOC_RESOURCE_PEARL', 'RESOURCECLASS_LUXURY', '4', '1', '2');
+('RESOURCE_PEARLS', 'LOC_RESOURCE_PEARL', 'RESOURCECLASS_LUXURY', '4', '1', '2');
 
 INSERT INTO Resource_ValidTerrains(ResourceType, TerrainType) VALUES
-('RESOURCE_PEARL', 'TERRAIN_COAST');
+('RESOURCE_PEARLS', 'TERRAIN_COAST');
 
 INSERT INTO Resource_ValidFeatures (ResourceType, FeatureType) VALUES
-('RESOURCE_PEARL', 'FEATURE_REEF');
+('RESOURCE_PEARLS', 'FEATURE_REEF');
 
 INSERT INTO Improvements(ImprovementType, Name, Buildable, Description, PlunderType, PlunderAmount, Icon, CanBuildOutsideTerritory, DefenseModifier, TraitType, GrantFortification, Coast, Domain, AdjacentToLand, SameAdjacentValid) VALUES
 ('IMPROVEMENT_PIRATE_COVE', 'LOC_IMPROVEMENT_PIRATE_COVE_NAME', '1', 'LOC_IMPROVEMENT_PIRATE_COVE_DESCRIPTION', 'PLUNDER_GOLD', '5', 'ICON_IMPROVEMENT_PIRATE_COVE', '1', '10', 'SLTH_TRAIT_SEAFARING', '2', '1', 'DOMAIN_WATER', '1', '1'),
