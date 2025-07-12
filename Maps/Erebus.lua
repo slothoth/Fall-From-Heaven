@@ -2088,9 +2088,6 @@ function createPlotMap()
     print('plot_total: ', plot_total)
     scrambledPlotList = ShuffleList(scrambledPlotList)
 
-    -- print('START ; post ocean')
-    -- simpleGridPrint(plotMap)
-    -- print('STOP')
     slthLog('scrambled plots: ', #scrambledPlotList)
     for n=1, #scrambledPlotList do
         slthLog('n at', n)
@@ -2112,9 +2109,7 @@ function createPlotMap()
         end
     end
 
-    print('START ; 1_post_land_water_mountain')
-    simpleGridPrint(plotMap)
-    print('STOP')
+    simpleGridPrint(plotMap, '1_post_land_water_mountain')
 
     for n=1, #scrambledPlotList do
         local plot = scrambledPlotList[n]
@@ -2193,9 +2188,7 @@ function createPlotMap()
         plotMap[i] = plotMap[i + g_iW]
     end
 
-    print('START ; 2_post_river_peaks')
-    simpleGridPrint(plotMap)
-    print('STOP')
+    simpleGridPrint(plotMap, '2_post_river_peaks')
 
     -- Now for SoftenPeakPercent of peaks, make them hills
     for y=1,g_iH do
@@ -2208,11 +2201,7 @@ function createPlotMap()
             end
         end
     end
-
-    -- print('START ; post soften peaks')
-    -- simpleGridPrint(plotMap)
-    -- print('STOP')
-
+    -- simpleGridPrint(plotMap, 'post soften peaks')
     -- Now make sure there are no passable areas that are blocked in
     -- PrintPlotMap()
 
@@ -2221,9 +2210,7 @@ function createPlotMap()
     print(areaMap)
     areaMap:findImpassableAreas()
     -- areaMap:PrintAreaMap()
-    print('START ; 3_Area Map')
-    simpleGridPrint(areaMap.areaMap)
-    print('STOP')
+    simpleGridPrint(areaMap.areaMap, '3_Area Map')
     for i=1, g_iW*g_iH do
         if areaMap.areaMap[i] == 0 then
             if plotMap[i] ~= PEAK then
@@ -2235,23 +2222,19 @@ function createPlotMap()
         end
     end
     ]]--
-    local newArea = newAreaMap.new()
-    local mountain = newArea:get_grid_regions(plotMap, {PEAK})
-    print('START ; 4_post area map new')
-    simpleGridPrint(mountain)
-    print('STOP')
-    local largest_region = newArea:find_largest_region()
+    newArea = newAreaMap.new()
+    mountain_blocked = newArea:get_grid_regions(plotMap, {PEAK})
+    simpleGridPrint(mountain_blocked, '4_post area map new')
+    largest_region = newArea:find_largest_region()
     for i=1, g_iW*g_iH do
-        if mountain[i] and mountain[i] > 1 and mountain[i] ~= largest_region then
+        if mountain_blocked[i] and mountain_blocked[i] > 0 and mountain_blocked[i] ~= largest_region then
             if plotMap[i] ~= PEAK then
-                slthLog('plot x was region y, changing to peak', i, mountain[i])
+                slthLog('plot x was region y, changing to peak', i, mountain_blocked[i])
                 plotMap[i] = PEAK
             end
         end
     end
-    print('START ; 4_post fix impassable areas')
-    simpleGridPrint(plotMap)
-    print('STOP')
+    simpleGridPrint(plotMap, '4_post fix impassable areas')
     print('plot map dim', #plotMap)
 end
 
@@ -2361,7 +2344,7 @@ OppositeDirections = {[N]=S, [S]=N, [E]=W, [W]=E, [NW]=SE, [SE]=NW, [SW]=NE, [NE
 
 function shouldPlacePeak(x,y)
     local i = GetIndex(x,y)
-    print('trying to find region of index, at plot ', i, ':', x, y)
+    slthLog('trying to find region of index, at plot ', i, ':', x, y)
     local regionID = regionMap[i]
     slthLog('region, x, y:', regionID, x, y)
     if regionID == -1 then
@@ -2991,9 +2974,7 @@ function createTerrainMap()
         end
     end
     slthLog('terrain_total is:', #terrainMap)
-    print('START ; 5_post_terrain_init_ocean')
-    simpleGridPrint(terrainMap)
-    print('STOP')
+    simpleGridPrint(terrainMap, '5_post_terrain_init_ocean')
 
     for y=1, g_iH-1 do
         for x=1, g_iW-1 do
@@ -3030,9 +3011,7 @@ function createTerrainMap()
         end
     end
     print('terrain_total is:', #terrainMap)
-    print('START ; 6_post terrain biome')
-    simpleGridPrint(terrainMap)
-    print('STOP')
+    simpleGridPrint(terrainMap, '6_post terrain biome')
     -- clean up desert peaks to avoid burning peaks all over the map
     for y=1,g_iH -1 do
         for x=1, g_iW-1 do
@@ -3051,14 +3030,8 @@ function createTerrainMap()
             end
         end
     end
-    print('START ; 7_post cleanup desert mountains')
-    simpleGridPrint(terrainMap)
-    print('STOP')
-
-    print('START ; a_post terrain gen PLOTS')
-    simpleGridPrint(plotMap)
-    print('STOP')
-
+    simpleGridPrint(terrainMap, '7_post cleanup desert mountains')
+    simpleGridPrint(plotMap,'a_post terrain gen PLOTS')
     print('terrain map dim', #terrainMap)
 end
 
@@ -3110,6 +3083,30 @@ function check_rx()
     end
 end
 
+function placeRiversInPlot(x, y)
+    local plot = Map.GetPlot(x, y)
+    tryPlaceRiver(x, y, NE, S, FlowDirectionTypes.FLOWDIRECTION_SOUTH)
+    tryPlaceRiver(x, y, SW, E, FlowDirectionTypes.FLOWDIRECTION_EAST)
+    local xx,yy = rxFromPlot(x,y,SE)
+    local ii = getRiverIndex(xx,yy)
+    if riverMap[ii] and flowMap[ii] then
+        if riverMap[ii] > RiverThreshold and flowMap[ii] == N then
+            TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_NORTH);
+        elseif riverMap[ii] > RiverThreshold and flowMap[ii] == W then
+            TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_WEST);
+        end
+    end
+end
+
+function tryPlaceRiver(x, y, direction1, direction2, flow_direction)
+    local xx,yy = rxFromPlot(x,y,direction1)
+    local ii = getRiverIndex(xx,yy)
+    if riverMap[ii] and flowMap[ii] then
+        if riverMap[ii] > RiverThreshold and flowMap[ii] == direction2 then
+            TryStartRiver(plot, flow_direction);
+        end
+    end
+end
 local plotErebusFxsMapper = {[OCEAN] = g_PLOT_TYPE_OCEAN, [LAND] = g_PLOT_TYPE_LAND,
                                 [HILLS] = g_PLOT_TYPE_HILLS, [PEAK] = g_PLOT_TYPE_MOUNTAIN,
                                 ["O"] = g_PLOT_TYPE_OCEAN, ["L"] = g_PLOT_TYPE_LAND,
@@ -3230,8 +3227,18 @@ function GenerateMap()
 	AreaBuilder.Recalculate();
 
 	-- River generation is affected by plot types, originating from highlands and preferring to traverse lowlands.
-	AddRivers();
-
+	--AddRivers();
+    AddRiversSkipEmpty()
+    -- new rivers
+    simpleGridPrint(riverMap, 'River Map')
+    simpleGridPrint(flowMap, 'Flow Map')
+    --[[
+    for y=1, g_iH do
+        for x=1, g_iW do
+            placeRiversInPlot(x,y)
+        end
+    end
+    ]]
 	-- Lakes would interfere with rivers, causing them to stop and not reach the ocean, if placed any sooner.
 	local numLargeLakes = GameInfo.Maps[Map.GetMapSize()].Continents;
 	AddLakes(numLargeLakes);
@@ -3259,6 +3266,12 @@ function GenerateMap()
 		resources = resourcesConfig,
 		START_CONFIG = startConfig,
 	};
+
+    -- NewPlaceLuxuryResources
+    ResourceGenerator.__PlaceLuxuryResources = NewPlaceLuxuryResources
+    ResourceGenerator.__PlaceStrategicResources = NewPlaceStrategicResources
+    ResourceGenerator.__PlaceOtherResources = NewPlaceOtherResources
+
 	local resGen = ResourceGenerator.Create(args);
 
 	print("Creating start plot database.");
@@ -3273,7 +3286,7 @@ function GenerateMap()
 		START_CONFIG = startConfig,
 	};
 
-    -- AssignStartingPlots.__InitStartingData = newInitStartingPlotsData
+    AssignStartingPlots.__InitStartingData = newInitStartingPlotsData
 	local start_plot_database = AssignStartingPlots.Create(args)
 
 	local GoodyGen = AddGoodies(g_iW, g_iH);
@@ -3441,8 +3454,8 @@ function newInitStartingPlotsData(self)
 			end
 		end
 	end
-    -- skip placing minors too?
-	StartPositioner.DivideMapIntoMinorRegions(self.iNumMinorCivs);
+    -- skip placing minors too
+    StartPositioner.DivideMapIntoMinorRegions(self.iNumMinorCivs);
 
 	local iMinorCivStartLocs = StartPositioner.GetNumMinorCivStarts();
 	local i = 0;
@@ -3532,6 +3545,129 @@ function newInitStartingPlotsData(self)
 
 end
 
+function NewPlaceLuxuryResources(self, eChosenLux, eContinent)
+	-- Go through continent placing the chosen luxuries
+
+	plots = Map.GetContinentPlots(eContinent);
+	--print ("Occurrences per frequency: " .. tostring(self.iOccurencesPerFrequency));
+	--print("Resource: ", eChosenLux);
+
+	local iTotalPlaced = 0;
+
+	-- Compute how many to place
+	local iNumToPlace = 1;
+    local iNumMountains = 0
+    tContinentMountainRatio = {}
+	if(self.iOccurencesPerFrequency > 1) then
+		iNumToPlace = self.iOccurencesPerFrequency;
+        for i, idx in ipairs(plots) do
+            local pPlot = Map.GetPlotByIndex(idx);
+            if pPlot:IsMountain() then
+                iNumMountains = iNumMountains + 1
+            end
+        end
+        if iNumMountains > 1 then
+            tContinentMountainRatio[eContinent] = iNumMountains / #plots
+            iNumToPlace = iNumToPlace * (iNumMountains/ #plots)
+        end
+	end
+
+	-- Score possible locations
+	self:__ScoreLuxuryPlots(eChosenLux, eContinent);
+
+	-- Sort and take best score
+	table.sort (self.aaPossibleLuxLocs[eChosenLux], function(a, b) return a.Score > b.Score; end);
+
+	for iI = 1, iNumToPlace do
+			if (iI <= #self.aaPossibleLuxLocs[eChosenLux]) then
+				local iMapIndex = self.aaPossibleLuxLocs[eChosenLux][iI].MapIndex;
+				local iScore = self.aaPossibleLuxLocs[eChosenLux][iI].Score;
+
+				-- Place at this location
+				local pPlot = Map.GetPlotByIndex(iMapIndex);
+				ResourceBuilder.SetResourceType(pPlot, self.eResourceType[eChosenLux], 1);
+			iTotalPlaced = iTotalPlaced + 1;
+			--print ("   Placed at (" .. tostring(pPlot:GetX()) .. ", " .. tostring(pPlot:GetY()) .. ") with score of " .. tostring(iScore));
+		end
+	end
+end
+
+function NewPlaceStrategicResources(self, eContinent)
+	-- Go through continent placing the chosen strategic
+	for i, row in ipairs(self.aResourcePlacementOrderStrategic) do
+		local eResourceType = self.eResourceType[row.ResourceIndex]
+
+		local iNumToPlace;
+
+		-- Compute how many to place
+		iNumToPlace = self.iOccurencesPerFrequency * (self.iFrequency[row.ResourceIndex] / self.iFrequencyStrategicTotal) * row.Weight;
+
+        if tContinentMountainRatio[eContinent] then
+            iNumToPlace = iNumToPlace * tContinentMountainRatio[eContinent]
+        end
+			-- Score possible locations
+		self:__ScoreStrategicPlots(row.ResourceIndex, eContinent);
+
+		-- Sort and take best score
+		table.sort (self.aaPossibleStratLocs[row.ResourceIndex], function(a, b) return a.Score > b.Score; end);
+
+		if(self.iFrequency[row.ResourceIndex] > 1 and iNumToPlace < 1) then
+			iNumToPlace = 1;
+		end
+
+		for iI = 1, iNumToPlace do
+			if (iI <= #self.aaPossibleStratLocs[row.ResourceIndex]) then
+				local iMapIndex = self.aaPossibleStratLocs[row.ResourceIndex][iI].MapIndex;
+				local iScore = self.aaPossibleStratLocs[row.ResourceIndex][iI].Score;
+
+				-- Place at this location
+				local pPlot = Map.GetPlotByIndex(iMapIndex);
+				ResourceBuilder.SetResourceType(pPlot, eResourceType, 1);
+--				print ("   Placed at (" .. tostring(pPlot:GetX()) .. ", " .. tostring(pPlot:GetY()) .. ") with score of " .. tostring(iScore));
+			end
+		end
+	end
+end
+
+function NewPlaceOtherResources(self)
+    local iContinentMountainRatio = 1
+    for i, ratio in ipairs(tContinentMountainRatio) do
+        iContinentMountainRatio = iContinentMountainRatio + ratio
+    end
+    iContinentMountainRatio = iContinentMountainRatio / #tContinentMountainRatio
+
+
+    for i, row in ipairs(self.aResourcePlacementOrder) do
+
+		local eResourceType = self.eResourceType[row.ResourceIndex]
+
+		local iNumToPlace;
+
+		-- Compute how many to place
+		iNumToPlace = self.iOccurencesPerFrequency * self.iFrequency[row.ResourceIndex];
+
+        iNumToPlace = iNumToPlace * iContinentMountainRatio
+
+		-- Score possible locations
+		self:__ScorePlots(row.ResourceIndex);
+
+		-- Sort and take best score
+		table.sort (self.aaPossibleLocs[row.ResourceIndex], function(a, b) return a.Score > b.Score; end);
+
+		for iI = 1, iNumToPlace do
+			if (iI <= #self.aaPossibleLocs[row.ResourceIndex]) then
+				local iMapIndex = self.aaPossibleLocs[row.ResourceIndex][iI].MapIndex;
+				local iScore = self.aaPossibleLocs[row.ResourceIndex][iI].Score;
+
+					-- Place at this location
+				local pPlot = Map.GetPlotByIndex(iMapIndex);
+				ResourceBuilder.SetResourceType(pPlot, eResourceType, 1);
+--				print ("   Placed at (" .. tostring(pPlot:GetX()) .. ", " .. tostring(pPlot:GetY()) .. ") with score of " .. tostring(iScore));
+			end
+		end
+	end
+end
+
 -- copied from inland sea
 function GetMapInitData(MapSize)
 	local MapSizeTypes = {};
@@ -3552,7 +3688,7 @@ end
 function ApplyTerrain(plotTypes, terrainTypes)
     print((g_iW * g_iH) - 1)
     print(' final number above. length of terrainTypes and plotTypes is: ' .. #terrainTypes .. ', ' .. #plotTypes)
-	for i = 1, (g_iW * g_iH) - 1, 1 do
+	for i = 0, (g_iW * g_iH) - 1, 1 do
 		local pPlot = Map.GetPlotByIndex(i);
 		if (plotTypes[i] == g_PLOT_TYPE_HILLS) then
 			terrainTypes[i] = terrainTypes[i] + 1;
@@ -3565,6 +3701,11 @@ function ApplyTerrain(plotTypes, terrainTypes)
             print('TRIED TO GET plot index ' .. i .. ' but did not exist or was NIL')
         end
 	end
+    -- fix 0, 0 being borked.
+    local pPlot = Map.GetPlotByIndex(0);
+    if pPlot then
+        TerrainBuilder.SetTerrainType(pPlot, g_TERRAIN_TYPE_GRASS_MOUNTAIN);
+    end
 end
 
 function ConvertToFiraxisFormSimple(erebus_hex_grid, mapper)
@@ -3575,7 +3716,7 @@ function ConvertToFiraxisFormSimple(erebus_hex_grid, mapper)
             if converted_val then
                 table.insert(loc_plotTypes, converted_val)
             else
-                print('ERROR: MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_info .. '$ WITH index: ' .. idx)
+                print('MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_info .. '$ WITH index: ' .. idx)
                 if idx == 0 then
                     print('stopped insert in 0')
                 else
@@ -3692,6 +3833,79 @@ function AddFeaturesFromContinents()
 	featuregen:AddFeaturesFromContinents();
 end
 
+function AddRiversSkipEmpty()
+	--GlobalParameters.RIVER_SEA_WATER_RANGE_DEFAULT or
+	local riverSourceRangeDefault = GlobalParameters.RIVER_SOURCE_RANGE_DEFAULT or 4;
+	local seaWaterRangeDefault = 3;
+	local plotsPerRiverEdge = GlobalParameters.RIVER_PLOTS_PER_EDGE or 12;
+
+	print("Map Generation - Adding Rivers, but skipping empty regions");
+
+	local passConditions = {
+		function(plot)
+			return (plot:IsHills() or plot:IsMountain());
+		end,
+
+		function(plot)
+			return (not plot:IsCoastalLand()) and (TerrainBuilder.GetRandomNumber(8, "MapGenerator AddRivers") == 0);
+		end,
+
+		function(plot)
+			local area = plot:GetArea();
+			return (plot:IsHills() or plot:IsMountain()) and (area:GetRiverEdgeCount() <	((area:GetPlotCount() / plotsPerRiverEdge) + 1));
+		end,
+
+		function(plot)
+			local area = plot:GetArea();
+			return (area:GetRiverEdgeCount() < (area:GetPlotCount() / plotsPerRiverEdge) + 1);
+		end
+	}
+
+	for iPass, passCondition in ipairs(passConditions) do
+
+		if (iPass <= 2) then
+			riverSourceRange = riverSourceRangeDefault;
+			seaWaterRange = seaWaterRangeDefault;
+		else
+			riverSourceRange = (riverSourceRangeDefault / 2);
+			seaWaterRange = (seaWaterRangeDefault / 2);
+		end
+
+		local iW, iH = Map.GetGridSize();
+
+		for i = 0, (iW * iH) - 1, 1 do
+			local plot = Map.GetPlotByIndex(i);
+			if(not plot:IsWater()) then
+				if(passCondition(plot) and plot:IsNaturalWonder() == false and AdjacentToNaturalWonder(plot) == false) then
+					if (not Map.FindWater(plot, riverSourceRange, true)) then
+						if (not Map.FindWater(plot, seaWaterRange, false)) then
+							local inlandCorner = TerrainBuilder.GetInlandCorner(plot);
+							if(inlandCorner and plot:IsNaturalWonder() == false and AdjacentToNaturalWonder(plot) == false) then
+                                local x = plot:GetX()
+                                local y = plot:GetY()
+                                local neighbours = newArea:get_valid_neighbors(x, y)
+                                local legal_river
+                                for _, neighbor_coords in ipairs(neighbours) do
+                                    local nx, ny = neighbor_coords.x, neighbor_coords.y
+                                    local nI = nx * ny
+                                    if mountain_blocked[nI] and (mountain_blocked[nI] == largest_region) then
+                                        legal_river = true
+                                        break
+                                    end
+                                end
+                                if legal_river then
+                                    DoRiver(inlandCorner);
+                                    slthLog('making river at plot', x, y)
+                                end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
 function do_ascii(plot_types, terrain_types,do_feature, text, by_actual)
     local tPlotString = {[0] = 'W', [1] = 'L', [2] = 'H', [3] = 'M', ['0'] = 'W', ['1'] = 'L', ['2'] = 'H', ['3'] = 'M'}
 
@@ -3761,7 +3975,8 @@ function do_ascii(plot_types, terrain_types,do_feature, text, by_actual)
     print('STOP')
 end
 
-function simpleGridPrint(tbl)
+function simpleGridPrint(tbl, title)
+    print('START ; ', title)
     local count = 0
     local x_string = ''
     for i, val in pairs(tbl) do
@@ -3773,6 +3988,7 @@ function simpleGridPrint(tbl)
         count = count + 1
         x_string = x_string .. val .. '|'
 	end
+    print('STOP')
 end
 
 function list_o_lists_GridPrint(tbl)
