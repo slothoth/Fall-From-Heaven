@@ -24,7 +24,7 @@ INSERT INTO GameModifiers(ModifierId) VALUES
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_BASE_COST';
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_MINIMUM_COST';
 
-
--- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'GOVERNMENT_ALLOW_EMPTY_POLICY_SLOTS'; could be good
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_WORLD_CONGRESS';
+-- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'GOVERNMENT_ALLOW_EMPTY_POLICY_SLOTS'; -- could be good  THIS DIDNT FIX It
 
 -- UPDATE GlobalParameters SET Value = '5' WHERE Name = 'PLOT_UNIT_LIMIT';      - i dont want this but? does it worK?

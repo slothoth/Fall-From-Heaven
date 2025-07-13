@@ -30,7 +30,9 @@
       <Properties>
         <LoadOrder>500</LoadOrder>
       </Properties>
-      <File>Core/frontend_config.sql</File>
+      <File>Frontend/frontendConfig.sql</File>
+      <File>Frontend/leaderConfig.sql</File>
+      <File>BarbClans/frontend.sql</File>
     </UpdateDatabase>
     <UpdateText id="UpdateText">
       <File>Localisation/loc_playeritems.sql</File>
@@ -131,7 +133,7 @@
       <File>Core/CivPolishing.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
-      <File>Core/BarbarianClans.sql</File>
+      <File>BarbClans/BarbarianClans.sql</File>
       <File>Core/Equipment.sql</File>
       <File>Core/Globals.sql</File>
       <File>Core/Victories.sql</File>
@@ -173,7 +175,7 @@
       <File>Localisation/loc_ui.sql</File>
       <File>Localisation/loc_notifications.sql</File>
     </UpdateText>
-    <AddGameplayScripts id="NewAction">
+    <AddGameplayScripts id="luaGameplayFFH">
       <File>Lua/Maintenance.lua</File>
 	  <File>Lua/ExtraHeroes.lua</File>
       <File>Lua/Gameplay.lua</File>
@@ -185,16 +187,11 @@
       <File>Lua/WorldSpellSupport.lua</File>
       <File>Lua/RequestOperationSupport.lua</File>
     </AddGameplayScripts>
-    <AddUserInterfaces id="NewAction">
+    <AddUserInterfaces id="UIIngameFFH">
 	  <Properties>
         <Context>InGame</Context>
       </Properties>
 	  <File>UI/ExtraHeroesOperation.xml</File>
-    </AddUserInterfaces>
-    <AddUserInterfaces id="AddUserInterfaceWorldSpell">
-      <Properties>
-        <Context>InGame</Context>
-      </Properties>
       <File>UI/WorldSpell.xml</File>
     </AddUserInterfaces>
     <ReplaceUIScript id="ResearchChooserHideFFH">
@@ -204,7 +201,6 @@
           <LuaReplace>UI/ResearchChooser_overrides.lua</LuaReplace>
       </Properties>
     </ReplaceUIScript>
-
     <ReplaceUIScript id="ReplaceUI_TechTree_BaseFFH">
         <Properties>
             <LoadOrder>10950</LoadOrder>
@@ -254,13 +250,20 @@
             <LuaReplace>UI/UnitPanel_skip_promos.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
-    <!--ReplaceUIScript id="ReplaceUI_BarbClanPopup_BaseFFH">
+    <ReplaceUIScript id="XP2WROverride">
+      <Properties>
+        <LoadOrder>1001</LoadOrder>
+        <LuaContext>WorldRankings</LuaContext>
+        <LuaReplace>UI/world_rankings.lua</LuaReplace>
+      </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_CivicsTree_BaseFFH">
         <Properties>
             <LoadOrder>10950</LoadOrder>
-            <LuaContext>TreatWithTribePopup</LuaContext>
-            <LuaReplace>UI/Null.lua</LuaReplace>
+            <LuaContext>CivicsTree</LuaContext>
+            <LuaReplace>UI/CivicsTree.lua</LuaReplace>
         </Properties>
-    </ReplaceUIScript-->
+    </ReplaceUIScript>
     <ImportFiles id="ImportUIFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
@@ -273,49 +276,15 @@
       <File>UI/TechTreeNode.xml</File>
       <File>UI/CivicsTree.xml</File>
       <File>UI/CivicsTree.lua</File>
+       <File>UI/GovernmentScreen.lua</File>
+      <File>UI/GovernmentScreen.xml</File>
+      <File>UI/TabSupport.lua</File>
     </ImportFiles>
-    <!--ReplaceUIScript id="XP2EndGameOverrideLowPriorityTODO">
-      <Properties>
-        <LoadOrder>1001</LoadOrder>
-        <LuaContext>EndGameMenu</LuaContext>
-        <LuaReplace>UI/XP2/honey_victory_menagerie_endgame_override_xp2.lua</LuaReplace>
-      </Properties>
-    </ReplaceUIScript-->
-
-    <ReplaceUIScript id="XP2WROverride">
-      <Properties>
-        <LoadOrder>1001</LoadOrder>
-        <LuaContext>WorldRankings</LuaContext>
-        <LuaReplace>UI/world_rankings.lua</LuaReplace>
-      </Properties>
-    </ReplaceUIScript>
     <ImportFiles id="XP2WRxmlOverride">
       <Properties>
         <LoadOrder>101</LoadOrder>
       </Properties>
       <File>UI/WorldRankings.xml</File>
-    </ImportFiles>
-    <ImportFiles id="ImportUIGovScreen">
-      <Properties>
-        <LoadOrder>901</LoadOrder>
-      </Properties>
-      <File>UI/GovernmentScreen.lua</File>
-      <File>UI/GovernmentScreen.xml</File>
-      <File>UI/TabSupport.lua</File>
-    </ImportFiles>
-
-    <ReplaceUIScript id="ReplaceUI_CivicsTree_BaseFFH">
-        <Properties>
-            <LoadOrder>10950</LoadOrder>
-            <LuaContext>CivicsTree</LuaContext>
-            <LuaReplace>UI/CivicsTree.lua</LuaReplace>
-        </Properties>
-    </ReplaceUIScript>
-    <ImportFiles id="ImportGameplaySupport">
-      <Properties>
-        <LoadOrder>901</LoadOrder>
-      </Properties>
-          <File>Core/SpawnSupport.sql</File>
     </ImportFiles>
   <UpdateIcons id="Icons">
     <File>Icons/LeaderIcons.sql</File>
@@ -395,7 +364,7 @@
     <File>Core/Civilizations/BeastRaces/Clan.sql</File>
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
     <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
-    <File>Core/BarbarianClans.sql</File>
+    <File>BarbClans/BarbarianClans.sql</File>
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
     <File>Core/Victories.sql</File>
@@ -408,12 +377,12 @@
     <File>Core/AiInfos.sql</File>
     <File>Core/BespokeUpgrades.sql</File>
     <File>Core/WorldSpellSupport.sql</File>
-    <File>Core/SpawnSupport.sql</File>
     <File>Core/Lua_support/Tech_dummies.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
-    <File>Core/frontend_config.sql</File>
+    <File>Frontend/frontendConfig.sql</File>
+    <File>Frontend/leaderConfig.sql</File>
     <File>Core/Assets_ingame.sql</File>
     <File>Core/CombatBuffs.sql</File>
     <File>Core/Magic.sql</File>

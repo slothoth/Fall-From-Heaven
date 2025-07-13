@@ -1,6 +1,3 @@
-UPDATE Parameters SET DefaultValue='1', ReadOnly='1' WHERE Key1='Ruleset' AND Key2='RULESET_EXPANSION_2' AND ParameterId='GameMode_BarbarianClans';
--- UPDATE Parameters SET DefaultValue='1', ReadOnly='1' WHERE Key1='Ruleset' AND Key2='RULESET_EXPANSION_2' AND ParameterId='GameMode_BarbarianClans';
-
 DELETE FROM Players;
 DELETE FROM PlayerItems;
 
@@ -44,22 +41,6 @@ INSERT INTO Players(Domain, CivilizationType, LeaderType, LeaderName, LeaderIcon
 ('Players:Expansion2_Players', 'SLTH_CIVILIZATION_MERCURIANS', 'LEADER_BASIUM', 'LOC_LEADER_BASIUM_NAME', 'ICON_LEADER_BASIUM', 'LOC_CIV_MERCURIANS_NAME', 'ICON_SLTH_CIVILIZATION_MERCURIANS', 'LOC_BASIUM_TRAITS_NAME', 'LOC_BASIUM_TRAITS_DESCRIPTION', 'ICON_LEADER_BASIUM', 'LOC_SLTH_TRAIT_CIVILIZATION_MERCURIANS_COOL_NAME', 'LOC_SLTH_TRAIT_CIVILIZATION_MERCURIANS_COOL_DESCRIPTION', 'ICON_SLTH_CIVILIZATION_MERCURIANS', 'LEADER_BASIUM_NEUTRAL','LEADER_AMBIORIX_BACKGROUND'),
 ('Players:Expansion2_Players', 'SLTH_CIVILIZATION_INFERNAL', 'LEADER_HYBOREM', 'LOC_LEADER_HYBOREM_NAME', 'ICON_LEADER_HYBOREM', 'LOC_CIV_INFERNAL_NAME', 'ICON_SLTH_CIVILIZATION_INFERNAL', 'LOC_HYBOREM_TRAITS_NAME', 'LOC_HYBOREM_TRAITS_DESCRIPTION', 'ICON_LEADER_HYBOREM', 'LOC_SLTH_TRAIT_CIVILIZATION_INFERNAL_COOL_NAME', 'LOC_SLTH_TRAIT_CIVILIZATION_INFERNAL_COOL_DESCRIPTION', 'ICON_SLTH_CIVILIZATION_INFERNAL', 'LEADER_HYBOREM_NEUTRAL','LEADER_AMBIORIX_BACKGROUND');
 
-/*INSERT INTO RulesetDomainOverrides (Ruleset, PlayerId, ParameterId, Domain) VALUES
-('RULESET_EXPANSION_2', 1, 'PlayerLocked', 'PlayerLockedAlwaysLocked'),
-('RULESET_EXPANSION_2', 2, 'PlayerLocked', 'PlayerLockedAlwaysLocked');
-
-INSERT INTO RulesetSupportedValues (Ruleset, PlayerId, Domain, Value) VALUES
-('RULESET_EXPANSION_2', 1, 'Players:Expansion2_Players', 'LEADER_BASIUM'),
-('RULESET_EXPANSION_2', 2, 'Players:Expansion2_Players', 'LEADER_HYBOREM');
-
-INSERT INTO RulesetUnsupportedValues(Ruleset, PlayerId, Domain, Value) VALUES
-('RULESET_EXPANSION_2', '0', 'Players:Expansion2_Players', 'LEADER_BASIUM'),
-('RULESET_EXPANSION_2', '0', 'Players:Expansion2_Players', 'LEADER_HYBOREM');
-
-UPDATE MapSizes SET MinPlayers=4 WHERE MinPlayers=2 or MinPlayers=3;
-UPDATE MapSizes SET DefaultPlayers=4 WHERE DefaultPlayers=2 or DefaultPlayers=3;
-UPDATE MapSizes SET MaxPlayers=4 WHERE MaxPlayers=2 or MaxPlayers=3;
-*/
 INSERT INTO DuplicateLeaders (Domain, LeaderType, OtherLeaderType) VALUES
 ('Players:Expansion2_Players', 'LEADER_DECIUS_CALABIM', 'LEADER_DECIUS_BANNOR'),
 ('Players:Expansion2_Players', 'LEADER_DECIUS_CALABIM', 'LEADER_DECIUS_MALAKIM');
@@ -274,25 +255,3 @@ INSERT INTO PlayerItems (Domain, CivilizationType, LeaderType, Type, Name, Descr
 ('Players:Expansion2_Players', 'SLTH_CIVILIZATION_MALAKIM', 'LEADER_DECIUS_MALAKIM', 'SLTH_UNIT_CAMEL_ARCHER', 'LOC_SLTH_UNIT_CAMEL_ARCHER_NAME', 'LOC_SLTH_UNIT_CAMEL_ARCHER_DESCRIPTION', 'ICON_SLTH_UNIT_CAMEL_ARCHER', '20'),
 ('Players:Expansion2_Players', 'SLTH_CIVILIZATION_MALAKIM', 'LEADER_DECIUS_MALAKIM', 'SLTH_BUILDING_DESERT_SHRINE', 'LOC_SLTH_BUILDING_DESERT_SHRINE_NAME', 'LOC_SLTH_BUILDING_DESERT_SHRINE_DESCRIPTION', 'ICON_BUILDING_FILM_STUDIO', '30'),
 ('Players:Expansion2_Players', 'SLTH_CIVILIZATION_MALAKIM', 'LEADER_DECIUS_MALAKIM', 'SLTH_BUILDING_CITADEL_OF_LIGHT', 'LOC_SLTH_BUILDING_CITADEL_OF_LIGHT_NAME', 'LOC_SLTH_BUILDING_CITADEL_OF_LIGHT_DESCRIPTION', 'ICON_BUILDING_FILM_STUDIO', '40');
-
-INSERT INTO Maps(Domain, File, Name, Description, Image, SortIndex) VALUES
-('StandardMaps', 'Erebus.lua', 'LOC_MAP_SLTH_EREBUS_NAME', 'LOC_MAP_SLTH_EREBUS_DESCRIPTION', 'Map_Highlands', 130);
-
-INSERT INTO Parameters(Key1, Key2, ParameterId, Name, Description, Domain, DefaultValue, ConfigurationGroup, ConfigurationId, GroupId, Hash, SortIndex) VALUES
-('Map', 'Erebus.lua', 'Temperature', 'LOC_MAP_TEMPERATURE_NAME', 'LOC_MAP_TEMPERATURE_DESCRIPTION', 'Temperature', '2', 'Map', 'temperature', 'MapOptions', '0', '240'),
-('Map', 'Erebus.lua', 'Rainfall', 'LOC_MAP_RAINFALL_NAME', 'LOC_MAP_RAINFALL_DESCRIPTION', 'Rainfall', '2', 'Map', 'rainfall', 'MapOptions', '0', '250'),
-('Map', 'Erebus.lua', 'WorldAge', 'LOC_MAP_WORLD_AGE_NAME', 'LOC_MAP_WORLD_AGE_DESCRIPTION', 'WorldAge', '2', 'Map', 'world_age', 'MapOptions', '0', '250'),
-('Map', 'Erebus.lua', 'SeaLevel', 'LOC_MAP_SEA_LEVEL_NAME', 'LOC_MAP_SEA_LEVEL_LOW_DESCRIPTION', 'SeaLevel', '2', 'Map', 'sea_level', 'MapOptions', '0', '250');
-
--- for some reason we need to delete continents to have it show
-DELETE FROM Maps where File='Continents.lua';
-DELETE FROM Parameters where Key2 ='Continents.lua';
-
-UPDATE Parameters SET DefaultValue='Erebus.lua' WHERE DefaultValue='Continents.lua';
-UPDATE Parameters SET DefaultValue='Erebus.lua' WHERE DefaultValue='Pangaea.lua';
-UPDATE Parameters SET DefaultValue='Erebus.lua' WHERE ParameterId='Map';
-
-UPDATE Parameters SET DefaultValue=1 WHERE ParameterId='CityStateCount';
-
-UPDATE MapSizes SET DefaultCityStates='1',  MinCityStates= '1', MaxCityStates = '1';
---
