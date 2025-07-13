@@ -360,88 +360,67 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
         local iInfernalPlayerId = Game:GetProperty('Infernal')
         local bInfernalSpawned = Game:GetProperty('infernal_spawned')
         if bInfernalSpawned then return end;
-        -- find strongest city state. what if no cs
-        local tpMinorCivs = PlayerManager.GetAliveMinors()
-        local pCity
-        local iCurrentCityPop
-        local iBestCityPop = 0
-        local pBestCity
-        for idx, pPlayer in ipairs(tpMinorCivs) do
-            pCity = pPlayer:GetCities():GetCapitalCity()
-            if pCity then
-                iCurrentCityPop = pCity:GetPopulation()
-                if iCurrentCityPop > iBestCityPop then
-                    pBestCity = pCity
-                    iBestCityPop = pCity:GetPopulation()
-                end
-            end
-        end
-        if pBestCity then
-            CityManager.TransferCity(pCity, iInfernalPlayerId, -1821839791)     -- enum CityTransferTypes.BY_GIFT
-            GrantTechParity(iInfernalPlayerId, playerID)
-            GrantCultureParity(iInfernalPlayerId, playerID)
-        else
-            print('no city state found. PANIC! place a city at a tribe clan a decent spot far away.')
-            -- iter over plots,
-            local iW, iH = Map.GetGridSize();
-            local tCampTiles = {}
-            local iIMPROVEMENT_BARB_CAMP = GameInfo.Improvements['IMPROVEMENT_BARBARIAN_CAMP'].Index
-            for x = 0, iW - 1 do
-                for y = 0, iH - 1 do
-                    local i = y * iW + x;
-                    local pPlot = Map.GetPlotByIndex(i);
-                    local iPlotImprovement = pPlot:GetImprovementType()
-                    if iPlotImprovement then
-                        if iPlotImprovement == iIMPROVEMENT_BARB_CAMP then
-                            tCampTiles[i] = pPlot
-                        end
+        -- iter over plots,
+        local iW, iH = Map.GetGridSize();
+        local tCampTiles = {}
+        local iIMPROVEMENT_BARB_CAMP = GameInfo.Improvements['IMPROVEMENT_BARBARIAN_CAMP'].Index
+        for x = 0, iW - 1 do
+            for y = 0, iH - 1 do
+                local i = y * iW + x;
+                local pPlot = Map.GetPlotByIndex(i);
+                local iPlotImprovement = pPlot:GetImprovementType()
+                if iPlotImprovement then
+                    if iPlotImprovement == iIMPROVEMENT_BARB_CAMP then
+                        tCampTiles[i] = pPlot
                     end
                 end
             end
-            print(table.count(tCampTiles))
-            -- filter for the best camp
-            --IsValidFoundLocation
-            local aPlayers = PlayerManager.GetAlive();
-            local more_than_four_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4)
-            local iInfernalPlot
-            local iLeastWaterTiles = 20
-            local iCurrentWaterTiles
-            print(table.count(more_than_four_plots))
-            if table.count(more_than_four_plots) > 0 then
-                print('some 5+ plots exist')
-                for idx, pPlot in pairs(more_than_four_plots) do
-                    -- count coast within 3 tiles. choose smallest
+        end
+        print(table.count(tCampTiles))
+        -- filter for the best camp
+        --IsValidFoundLocation
+        local aPlayers = PlayerManager.GetAlive();
+        local more_than_four_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4)
+        local iInfernalPlot
+        local iLeastWaterTiles = 20
+        local iCurrentWaterTiles
+        print(table.count(more_than_four_plots))
+        if table.count(more_than_four_plots) > 0 then
+            print('some 5+ plots exist')
+            for idx, pPlot in pairs(more_than_four_plots) do
+                -- count coast within 3 tiles. choose smallest
+                iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
+                if iCurrentWaterTiles < iLeastWaterTiles then
+                    print('found better')
+                    iInfernalPlot = pPlot
+                    iLeastWaterTiles = iCurrentWaterTiles
+                end
+            end
+        end
+        if not iInfernalPlot then
+            local four_range_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4, true)
+            if table.count(four_range_plots) > 0 then
+                print('some 4 plots exist')
+                for idx, pPlot in pairs(four_range_plots) do
                     iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
                     if iCurrentWaterTiles < iLeastWaterTiles then
-                        print('found better')
                         iInfernalPlot = pPlot
                         iLeastWaterTiles = iCurrentWaterTiles
                     end
                 end
             end
-            if not iInfernalPlot then
-                local four_range_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4, true)
-                if table.count(four_range_plots) > 0 then
-                    print('some 4 plots exist')
-                    for idx, pPlot in pairs(four_range_plots) do
-                        iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
-                        if iCurrentWaterTiles < iLeastWaterTiles then
-                            iInfernalPlot = pPlot
-                            iLeastWaterTiles = iCurrentWaterTiles
-                        end
-                    end
-                end
-            end
-            if iInfernalPlot then
-                local pInfernal = Players[iInfernalPlayerId]
-                local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
-                pInfernal:GetCities():Create(iCityMakeX, iCityMakeY)
-                GrantTechParity(iInfernalPlayerId, playerID)
-                GrantCultureParity(iInfernalPlayerId, playerID)
-                Game:SetProperty('infernal_spawned', 1)
-            else
-                print('not yet implemented random city outside of camps')
-            end
+        end
+        if iInfernalPlot then
+            local pInfernal = Players[iInfernalPlayerId]
+            local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
+            print('creating hyborem at',iCityMakeX ,iCityMakeY)
+            local playerUnits = pInfernal:GetUnits()
+            playerUnits:Create(GameInfo.Units['UNIT_SETTLER'].Index, iCityMakeX, iCityMakeY);
+            GrantTechParity(iInfernalPlayerId, playerID)
+            GrantCultureParity(iInfernalPlayerId, playerID)
+            Game:SetProperty('infernal_spawned', 1)
+        else
+            print('not yet implemented random city outside of camps')
         end
     end
 end

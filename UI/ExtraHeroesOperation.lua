@@ -101,7 +101,7 @@ local tPolicyUnits = {
 function myRefresh(iPlayerID, iUnitID, iOldID)
     local pUnit = UnitManager.GetUnit(iPlayerID, iUnitID)
     local pPlayer = Players[iPlayerID]
-    if pUnit:GetMovesRemaining() == 0 then
+    if pUnit and pUnit:GetMovesRemaining() == 0 then
         FlushButtons()
         return
     end

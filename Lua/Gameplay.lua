@@ -497,6 +497,7 @@ function onTurnStartGameplay(playerId)
     -- SECTION: BarbarianSpawnEvents
     if playerId == 63 then              -- barbarian proxy
         local iCurrentTurn = Game.GetCurrentGameTurn()
+        print('current turn is', iCurrentTurn)
         local iGameSpeedMult = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier / 100
         if iCurrentTurn == 100 then
             SpawnAcheron()
@@ -655,7 +656,7 @@ local TRIBE_CLAN_BEAR = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Inde
 local TRIBE_CLAN_LION = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
 
 local tBarbClanUnitMapper = {
-    [GameInfo.Units['SLTH_UNIT_ARCHER_'].Index] = TRIBE_CLAN_SCORPION,
+    [GameInfo.Units['SLTH_UNIT_ARCHER'].Index] = TRIBE_CLAN_SCORPION,
     [GameInfo.Units['SLTH_UNIT_SKELETON'].Index] = TRIBE_CLAN_SKELETON,
     [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = TRIBE_CLAN_LIZARDMEN,
     [GameInfo.Units['SLTH_UNIT_LION'].Index] = TRIBE_CLAN_BEAR,
@@ -865,7 +866,7 @@ local iSnowTerrain = GameInfo.Terrains['TERRAIN_SNOW'].Index
 local iSnowTerrainHills = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
 
 function BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, iBarbClanType, iFeatureType, bIsWater)
-    local leaderTable, henchTable
+    local leaderTable, henchTable, iPlayer
     local iChosenLeaderIndex, iChosenLeader, iChosenHenchIndex, iChosenHench
     local playerUnits = Players[63]:GetUnits();
     local iX = pPlot:GetX()
@@ -924,10 +925,16 @@ function BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, iBarbClanType, iFeatureTyp
             playerUnits:Create(iChosenHench, iX, iY);
         end
     end
-    local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
-    local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
-    local iPlayer = pUnit:GetOwner()
-    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
+    local sTitle = 'LOC_NOTIFICATION_LAIR_BIGBAD_NAME'
+    local sDescription = 'LOC_NOTIFICATION_LAIR_BIGBAD_DESCRIPTION'
+    if pUnit then
+        iPlayer = pUnit:GetOwner()
+    else
+        iPlayer = pPlot:GetOwner()
+    end
+    if iPlayer then
+        NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
+    end
     -- seems like promo list gives a random promo from the list to the leader, TODO
 end
 
@@ -1155,19 +1162,21 @@ local tLairDestroyChance = {['DEATH'] = 0, ['COLLAPSE']= 100,
 
 function doBad(pPlot, iBarbClanType, pUnit, bIsWater)
     local tPossible = {'COLLAPSE'}
-    local pUnitExp = pUnit:GetExperience()
-    if pUnitExp:GetExperienceForNextLevel() == 15 then
-        table.insert(tPossible, 'DEATH')
-    end
-    local iUnitIndex = pUnit:GetType()
-    local sUnitName = GameInfo.Units[iUnitIndex].UnitType
-    if GameInfo.UnitsNotAlive[sUnitName] then
-        tPossible = SlthAppend(tPossible, {'CRAZED', 'DEMONIC_POSSESSION', 'DISEASED', 'ENRAGED',
-                                           'PLAGUED', 'POISONED', 'WITHERED'})
-    end
-    local sPromoClass = GameInfo.Units[iUnitIndex].PromotionClass
-    if sPromoClass == 'PROMOTION_CLASS_MELEE' then
-        table.insert(tPossible, 'RUSTED')
+    if pUnit then
+        local pUnitExp = pUnit:GetExperience()
+        if pUnitExp:GetExperienceForNextLevel() == 15 then
+            table.insert(tPossible, 'DEATH')
+        end
+        local iUnitIndex = pUnit:GetType()
+        local sUnitName = GameInfo.Units[iUnitIndex].UnitType
+        if GameInfo.UnitsNotAlive[sUnitName] then
+            tPossible = SlthAppend(tPossible, {'CRAZED', 'DEMONIC_POSSESSION', 'DISEASED', 'ENRAGED',
+                                               'PLAGUED', 'POISONED', 'WITHERED'})
+        end
+        local sPromoClass = GameInfo.Units[iUnitIndex].PromotionClass
+        if sPromoClass == 'PROMOTION_CLASS_MELEE' then
+            table.insert(tPossible, 'RUSTED')
+        end
     end
     if bIsWater then
         tPossible = SlthAppend(tPossible, {'SPAWN_DROWN', 'SPAWN_SEA_SERPENT'})
@@ -1192,7 +1201,7 @@ function doBad(pPlot, iBarbClanType, pUnit, bIsWater)
     return iThreshold
 end
 
-function testLairs(pUnit, pPlot)
+function testLairs(pUnit, pPlot)                        -- just for activating in console as debug
     for sEvent, fEvent in pairs(tLairEvents) do
         local sUnitType = tLairExtraInfos[sEvent]
         fEvent(pUnit, pPlot, sUnitType)
@@ -1217,11 +1226,13 @@ function doNeutral(pPlot, iBarbClanType, pUnit, bIsWater)
     else
         table.insert(tPossible, 'SPAWN_DROWN')
     end
-    local iUnitIndex = pUnit:GetType()
-    local sUnitName = GameInfo.Units[iUnitIndex].UnitType
-    if GameInfo.UnitsNotAlive[sUnitName] then
-        if not pUnitAbilities:HasAbility('BUFF_MUTATED') then           -- todo add buff mutated.
-            table.insert(tPossible, 'MUTATED')
+    if pUnit then
+        local iUnitIndex = pUnit:GetType()
+        local sUnitName = GameInfo.Units[iUnitIndex].UnitType
+        if GameInfo.UnitsNotAlive[sUnitName] then
+            if not pUnitAbilities:HasAbility('BUFF_MUTATED') then           -- todo add buff mutated.
+                table.insert(tPossible, 'MUTATED')
+            end
         end
     end
     local iChoice = math.random(#tPossible)
@@ -1233,9 +1244,11 @@ function doNeutral(pPlot, iBarbClanType, pUnit, bIsWater)
     local iThreshold = tLairDestroyChance[sEvent]
     local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
     local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
-    local iX, iY = pUnit:GetX(), pUnit:GetY()
-    local iPlayer = pUnit:GetOwner()
-    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
+    local iX, iY = pPlot:GetX(), pPlot:GetY()
+    if pUnit then
+        local iPlayer = pUnit:GetOwner()
+        NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
+    end
     return iThreshold
 end
 
@@ -1243,62 +1256,72 @@ local iCIVIC_MYSTICISM = GameInfo.Civics['CIVIC_MYSTICISM'].Index
 
 function doGood(pPlot, pUnit, bIsWater)
     local tPossible =  {'HIGH_GOLD', 'TREASURE', 'EXPERIENCE'}
-    local iPlayer = pUnit:GetOwner()
-    local pPlayer = Players[iPlayer]
-    local iUnitIndex = pUnit:GetType()
-    local pUnitAbilities = pUnit:GetAbility()
-    local tUnitInfos = GameInfo.Units[iUnitIndex]
-    local sUnitName = tUnitInfos.UnitType
-    local sUnitPromoClass = tUnitInfos.PromotionClass
-    if GameInfo.UnitsNotAlive[sUnitName] then
-        if not pUnitAbilities:HasAbility('BUFF_SPIRIT_GUIDE') then          -- todo implement
-            table.insert(tPossible, 'SPIRIT_GUIDE')
+    local pPlayer, iPlayer
+    if pUnit then
+        iPlayer = pUnit:GetOwner()
+        pPlayer = Players[iPlayer]
+        local iUnitIndex = pUnit:GetType()
+        local pUnitAbilities = pUnit:GetAbility()
+        local tUnitInfos = GameInfo.Units[iUnitIndex]
+        local sUnitName = tUnitInfos.UnitType
+        local sUnitPromoClass = tUnitInfos.PromotionClass
+        if GameInfo.UnitsNotAlive[sUnitName] then
+            if not pUnitAbilities:HasAbility('BUFF_SPIRIT_GUIDE') then          -- todo implement
+                table.insert(tPossible, 'SPIRIT_GUIDE')
+            end
+        end
+
+        if sUnitPromoClass == 'PROMOTION_CLASS_MELEE' then
+            if not pUnitAbilities:HasAbility('BUFF_ENCHANTED_BLADE') then
+                table.insert(tPossible, 'ENCHANTED_BLADE')
+            end
+        elseif sUnitPromoClass == 'PROMOTION_CLASS_ADEPT' then
+            if not pUnitAbilities:HasAbility('SLTH_EQUIPMENT_SPELL_STAFF_ABILITY') then
+                table.insert(tPossible, 'SPELLSTAFF')
+            end
+        elseif sUnitPromoClass == 'PROMOTION_CLASS_RECON' then
+            if not pUnitAbilities:HasAbility('ABILITY_POISONED_BLADE') then
+                table.insert(tPossible, 'POISONED_BLADE')
+            end
+        elseif sUnitPromoClass == 'PROMOTION_CLASS_RANGED' then
+            if not pUnitAbilities:HasAbility('ABILITY_FLAMING_ARROWS') then
+                table.insert(tPossible, 'FLAMING_ARROWS')
+            end
+        elseif sUnitPromoClass == 'PROMOTION_CLASS_DISCIPLE' then
+            if not pUnitAbilities:HasAbility('BUFF_SHIELD_OF_FAITH') then
+                table.insert(tPossible, 'SHIELD_OF_FAITH')
+            end
+        end
+        if pUnitAbilities:CanHaveAbility('ABILITY_BRONZE_WEAPONS') then
+            if pUnitAbilities:HasAbility('ABILITY_BRONZE_WEAPONS') then
+                local pTechs = pPlayer:GetTechs()
+                if pUnitAbilities:HasAbility('ABILITY_IRON_WEAPONS') then
+                    if not pUnitAbilities:HasAbility('ABILITY_MITHRIL_WEAPONS') then
+                        if pUnitAbilities:CanHaveAbility('ABILITY_MITHRIL_WEAPONS') and pTechs:HasTech('TECH_IRON_WORKING') then
+                            table.insert(tPossible, 'MITHRIL_WEAPONS')
+                        end
+                    end
+                elseif pUnitAbilities:CanHaveAbility('ABILITY_IRON_WEAPONS') and pTechs:HasTech('TECH_BRONZE_WORKING') then
+                    table.insert(tPossible, 'IRON_WEAPONS')
+                end
+            else
+                table.insert(tPossible, 'BRONZE_WEAPONS')
+            end
         end
     end
     if not bIsWater then
         tPossible = SlthAppend(tPossible, {'ITEM_HEALING_SALVE', 'SUPPLIES'})
+        if not pUnit then
+            if pPlot then
+                iPlayer = pPlot:GetOwner()
+                pPlayer = Players[iPlayer]
+            end
+        end
         local pCulture = pPlayer:GetCulture()
-        if pCulture:HasCivic(iCIVIC_MYSTICISM) then
+        if pCulture and pCulture:HasCivic(iCIVIC_MYSTICISM) then
             tPossible = SlthAppend(tPossible, {'PRISONER_DISCIPLE_ASHEN', 'PRISONER_DISCIPLE_EMPYREAN',
                                                'PRISONER_DISCIPLE_LEAVES', 'PRISONER_DISCIPLE_OVERLORDS',
                                                'PRISONER_DISCIPLE_RUNES', 'PRISONER_DISCIPLE_ORDER'})
-        end
-    end
-    if sUnitPromoClass == 'PROMOTION_CLASS_MELEE' then
-        if not pUnitAbilities:HasAbility('BUFF_ENCHANTED_BLADE') then
-            table.insert(tPossible, 'ENCHANTED_BLADE')
-        end
-    elseif sUnitPromoClass == 'PROMOTION_CLASS_ADEPT' then
-        if not pUnitAbilities:HasAbility('SLTH_EQUIPMENT_SPELL_STAFF_ABILITY') then
-            table.insert(tPossible, 'SPELLSTAFF')
-        end
-    elseif sUnitPromoClass == 'PROMOTION_CLASS_RECON' then
-        if not pUnitAbilities:HasAbility('ABILITY_POISONED_BLADE') then
-            table.insert(tPossible, 'POISONED_BLADE')
-        end
-    elseif sUnitPromoClass == 'PROMOTION_CLASS_RANGED' then
-        if not pUnitAbilities:HasAbility('ABILITY_FLAMING_ARROWS') then
-            table.insert(tPossible, 'FLAMING_ARROWS')
-        end
-    elseif sUnitPromoClass == 'PROMOTION_CLASS_DISCIPLE' then
-        if not pUnitAbilities:HasAbility('BUFF_SHIELD_OF_FAITH') then
-            table.insert(tPossible, 'SHIELD_OF_FAITH')
-        end
-    end
-    if pUnitAbilities:CanHaveAbility('ABILITY_BRONZE_WEAPONS') then
-        if pUnitAbilities:HasAbility('ABILITY_BRONZE_WEAPONS') then
-            local pTechs = pPlayer:GetTechs()
-            if pUnitAbilities:HasAbility('ABILITY_IRON_WEAPONS') then
-                if not pUnitAbilities:HasAbility('ABILITY_MITHRIL_WEAPONS') then
-                    if pUnitAbilities:CanHaveAbility('ABILITY_MITHRIL_WEAPONS') and pTechs:HasTech('TECH_IRON_WORKING') then
-                        table.insert(tPossible, 'MITHRIL_WEAPONS')
-                    end
-                end
-            elseif pUnitAbilities:CanHaveAbility('ABILITY_IRON_WEAPONS') and pTechs:HasTech('TECH_BRONZE_WORKING') then
-                table.insert(tPossible, 'IRON_WEAPONS')
-            end
-        else
-            table.insert(tPossible, 'BRONZE_WEAPONS')
         end
     end
     local iChoice = math.random(#tPossible)
@@ -1309,13 +1332,16 @@ function doGood(pPlot, pUnit, bIsWater)
     fEvent(pUnit, pPlot, sUnitType)
     local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
     local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
-    local iX, iY = pUnit:GetX(), pUnit:GetY()
-    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
+    local iX, iY = pPlot:GetX(), pPlot:GetY()
+    if pPlayer then
+        NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
+    end
     local iThreshold = tLairDestroyChance[sEvent]
     return iThreshold
 end
 
 function doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
+    local iPlayer, pPlayer
     local tPossible = {'TREASURE_VAULT', 'GOLDEN_AGE'}
     if false then         -- was pPlayer.canReceiveGoody(pPlot, gc.getInfoTypeForString('GOODY_GRAVE_TECH'), caster) ???
         table.insert(tPossible, 'TECH')
@@ -1329,13 +1355,21 @@ function doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
         tPossible = SlthAppend(tPossible, {'ITEM_JADE_TORC', 'ITEM_ROD_OF_WINDS', 'ITEM_TIMOR_MASK',
                                            'PRISONER_ADVENTURER', 'PRISONER_ARTIST', 'PRISONER_COMMANDER', 'PRISONER_ENGINEER',
                                            'PRISONER_MERCHANT', 'PRISONER_PROPHET', 'PRISONER_SCIENTIST'})
-        local iPlayer = pUnit:GetOwner()
-        local pPlayer = Players[iPlayer]
-        local pTechs = pPlayer:GetTechs()
-        if pTechs:HasTech('TECH_MINING') then
-            tPossible = SlthAppend(tPossible, {'BONUS_COPPER', 'BONUS_GEMS', 'BONUS_GOLD'})
-            if pTechs:HasTech('TECH_SMELTING') then
-                table.insert(tPossible, 'BONUS_IRON')
+
+        if pUnit then
+            iPlayer = pUnit:GetOwner()
+            pPlayer = Players[iPlayer]
+        else
+            iPlayer = pPlot:GetOwner()
+            pPlayer = Players[iPlayer]
+        end
+        if pPlayer then
+            local pTechs = pPlayer:GetTechs()
+            if pTechs:HasTech('TECH_MINING') then
+                tPossible = SlthAppend(tPossible, {'BONUS_COPPER', 'BONUS_GEMS', 'BONUS_GOLD'})
+                if pTechs:HasTech('TECH_SMELTING') then
+                    table.insert(tPossible, 'BONUS_IRON')
+                end
             end
         end
     end
@@ -1352,9 +1386,10 @@ function doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
     fEvent(pUnit, pPlot, sUnitType)
     local sTitle = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
     local sDescription = 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
-    local iX, iY = pUnit:GetX(), pUnit:GetY()
-    local iPlayer = pUnit:GetOwner()
-    NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
+    local iX, iY = pPlot:GetX(), pPlot:GetY()
+    if iPlayer then
+        NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
+    end
 end
 -- local TRIBE_CLAN_NAT_WON = GameInfo.BarbarianTribes[TRIBE_CLAN_CAVALRY_CHARIOT'].Index
 
