@@ -25,6 +25,13 @@ INSERT INTO GameModifiers(ModifierId) VALUES
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_MINIMUM_COST';
 
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_WORLD_CONGRESS';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_TOP_PANEL_ENVOYS';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_CITY_STATES_VIEW';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_DISPLAY_SCORE';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_ERAS';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GOLDEN_AND_DARK_AGES';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_HISTORIC_MOMENTS';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_EMERGENCIES';
 -- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'GOVERNMENT_ALLOW_EMPTY_POLICY_SLOTS'; -- could be good  THIS DIDNT FIX It
 
 -- UPDATE GlobalParameters SET Value = '5' WHERE Name = 'PLOT_UNIT_LIMIT';      - i dont want this but? does it worK?
