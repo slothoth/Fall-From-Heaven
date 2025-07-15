@@ -137,7 +137,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Terrain"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="TerrainStyle.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="TerrainAsset"/>
 				<Element text="TerrainElement"/>
@@ -431,6 +433,10 @@
 		</Element>
 	</SystemDependencies>
 	<ArtDefDependencies>
+		<Element>
+			<ArtDefPath text="TerrainStyle.artdef"/>
+			<ArtDefDependencyPaths/>
+		</Element>
 		<Element>
 			<ArtDefPath text="Animal_Units.artdef"/>
 			<ArtDefDependencyPaths>

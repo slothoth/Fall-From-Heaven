@@ -1145,9 +1145,9 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="DEFAULT"/>
-										<m_RootCollectionName text="Building"/>
-										<m_ArtDefPath text="Buildings.artdef"/>
+										<m_ElementName text="DISTRICT_AQUEDUCT"/>
+										<m_RootCollectionName text="Districts"/>
+										<m_ArtDefPath text="Landmarks.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
 										<m_TemplateName text="Buildings"/>
 										<m_ParamName text="Tag_HeroBuilding"/>
@@ -1177,7 +1177,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="DIS_AQD_Modern_Base_01"/>
+										<m_EntryName text=""/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -1563,9 +1563,9 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="DEFAULT"/>
-										<m_RootCollectionName text="Building"/>
-										<m_ArtDefPath text="Buildings.artdef"/>
+										<m_ElementName text="DISTRICT_AQUEDUCT"/>
+										<m_RootCollectionName text="Districts"/>
+										<m_ArtDefPath text="Landmarks.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
 										<m_TemplateName text="Buildings"/>
 										<m_ParamName text="Tag_HeroBuilding"/>
@@ -1595,7 +1595,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="DIS_AQD_Modern_Base_01"/>
+										<m_EntryName text=""/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
