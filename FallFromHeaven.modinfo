@@ -41,6 +41,7 @@
       <File>Localisation/loc_traits.sql</File>
       <File>Localisation/loc_units.sql</File>
       <File>Localisation/loc_menu.sql</File>
+      <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
@@ -52,6 +53,7 @@
       <File>Icons/LeaderIcons.sql</File>
       <File>Icons/UnitIcons.sql</File>
       <File>Icons/ResourceIcons.sql</File>
+      <File>Icons/BuildingIcons.sql</File>
     </UpdateIcons>
    </FrontEndActions>
   <InGameActions>
@@ -292,6 +294,7 @@
     <File>Icons/ResourceIcons.sql</File>
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
+    <File>Icons/BuildingIcons.sql</File>
   </UpdateIcons>
   <ImportFiles id="ErebusMap">
 	<File>Maps/Erebus.lua</File>
@@ -365,6 +368,7 @@
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
     <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
     <File>BarbClans/BarbarianClans.sql</File>
+    <File>BarbClans/frontend.sql</File>
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
     <File>Core/Victories.sql</File>
@@ -407,6 +411,7 @@
     <File>Artdefs/Resources.artdef</File>
     <File>Artdefs/Units.artdef</File>
     <File>Artdefs/Unit_Bins.artdef</File>
+    <File>Artdefs/TerrainStyle.artdef</File>
     <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons/LeaderIcons.sql</File>
@@ -414,6 +419,7 @@
     <File>Icons/ResourceIcons.sql</File>
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
+    <File>Icons/BuildingIcons.sql</File>
     <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
