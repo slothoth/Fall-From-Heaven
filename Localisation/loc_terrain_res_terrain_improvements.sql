@@ -155,7 +155,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_IMPROVEMENT_MANA_SPIRIT_DESCRIPTION', 'Converts raw mana to Spirit mana, and extracts it.', 'en_US'),
 ('LOC_IMPROVEMENT_MANA_SUN_DESCRIPTION', 'Converts raw mana to Sun mana, and extracts it.', 'en_US'),
 ('LOC_IMPROVEMENT_MANA_WATER_DESCRIPTION', 'Converts raw mana to Water mana, and extracts it.', 'en_US'),
-('LOC_IMPROVEMENT_PIRATE_COVE_DESCRIPTION', 'Becomes a Pirate Harbor in 10 turns. 10% Tile Defense. +2 [ICON_Gold] Gold. Cannot be built within 2 tiles of a Pirate Cove/Pirate Harbor/Pirate Port', 'en_US'),
+('LOC_IMPROVEMENT_PIRATE_COVE_DESCRIPTION', 'Lanun Unique Improvement. Must be placed on Coast adjacent to Land. 10% Tile Defense. +2 [ICON_Gold] Gold. Upgrades into a Pirate Harbor in 10 turns. Cannot be built within 2 tiles of a Pirate Cove/Pirate Harbor/Pirate Port.', 'en_US'),
 ('LOC_IMPROVEMENT_PIRATE_HARBOR_DESCRIPTION', 'Becomes a Pirate Port in 20 turns. 20% Tile Defense. +1 [ICON_Food] Food. +1 [ICON_Production] Production. +3 [ICON_Gold] Gold. Cannot be built within 2 tiles of a Pirate Cove/Pirate Harbor/Pirate Port.', 'en_US'),
 ('LOC_IMPROVEMENT_TOWN_DESCRIPTION', '+4 [ICON_Gold] Gold. Made by upgrading a village.', 'en_US'),
 ('LOC_IMPROVEMENT_VILLAGE_DESCRIPTION', '+3 [ICON_Gold] Gold.Can be worked for 40 turns to convert into Town', 'en_US'),
