@@ -1,6 +1,3 @@
--- STATUS: Granting buildings works. Losing building not implemented in Lua.
--- Currently though the civics dont give buildings to new cities as there is not the relevant district to place building in
--- BuildingConditions is also not a viable option as it stops the grant building
 
 -- Scholarship
 INSERT INTO PolicyModifiers (PolicyType, ModifierId) VALUES
