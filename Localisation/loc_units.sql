@@ -171,7 +171,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_UNIT_MAGE_NAME', 'Mage', 'en_US'),
 ('LOC_SLTH_UNIT_MAGNADINE_NAME', 'Magnadine', 'en_US'),
 ('LOC_SLTH_UNIT_MANES_NAME', 'Manes', 'en_US'),
-('LOC_SLTH_GREAT_MANE', '', 'en_US'),
+('LOC_SLTH_GREAT_MANE', 'Mane', 'en_US'),
 ('LOC_SLTH_UNIT_MANTICORE_NAME', 'Manticore', 'en_US'),
 ('LOC_SLTH_UNIT_MAN_O_WAR_NAME', 'Man O War', 'en_US'),
 ('LOC_SLTH_UNIT_MARDERO_NAME', 'Mardero', 'en_US'),

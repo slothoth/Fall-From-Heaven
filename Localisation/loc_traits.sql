@@ -177,7 +177,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_TRAIT_CIVILIZATION_SHEAIM_COOL_NAME', 'Seekers of Armageddon', 'en_US'),
 ('LOC_SLTH_TRAIT_CIVILIZATION_SIDAR_COOL_NAME', 'Ghostly Spirits', 'en_US'),
 ('LOC_SLTH_TRAIT_CIVILIZATION_SVARTALFAR_COOL_NAME', 'Elven Assassins', 'en_US'),
-('LOC_SLTH_TRAIT_CIVILIZATION_AMURITES_COOL_DESCRIPTION', 'Grants a source of [RESOURCE_MANA_METAMAGIC]Metamagic, [RESOURCE_MANA_FIRE]Fire and [ICON_RESOURCE_MANA_BODY] Body Mana.', 'en_US'),
+('LOC_SLTH_TRAIT_CIVILIZATION_AMURITES_COOL_DESCRIPTION', 'Grants a source of [ICON_RESOURCE_MANA_METAMAGIC]Metamagic, [ICON_RESOURCE_MANA_FIRE]Fire and [ICON_RESOURCE_MANA_BODY] Body Mana.', 'en_US'),
 ('LOC_SLTH_TRAIT_CIVILIZATION_BALSERAPHS_COOL_DESCRIPTION', 'Can enslave the sentient races for extra Amenities, and magic units can summon Puppets, short-lived duplicates that can cast T1 spells. Starts with a source of [ICON_RESOURCE_MANA_AIR]Air, [ICON_RESOURCE_MANA_CHAOS]Chaos and [ICON_RESOURCE_MANA_MIND]Mind Mana.', 'en_US'),
 ('LOC_SLTH_TRAIT_CIVILIZATION_BANNOR_COOL_DESCRIPTION', 'The Bannor can adopt the Crusade Policy when using the Order state religion. Starts with a source of [ICON_RESOURCE_MANA_EARTH]Earth, [ICON_RESOURCE_MANA_LAW]Law and [ICON_RESOURCE_MANA_SPIRIT]Spirit Mana. Accumulate -10% less war weariness than usual.', 'en_US'),
 ('LOC_SLTH_TRAIT_CIVILIZATION_CALABIM_COOL_DESCRIPTION', 'Starts with a source of [ICON_RESOURCE_MANA_BODY]Body, [ICON_RESOURCE_MANA_LAW]Law and [ICON_RESOURCE_MANA_SHADOW]Shadow Mana. Accumulate -10% less war weariness than usual.', 'en_US'),
