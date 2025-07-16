@@ -1535,8 +1535,8 @@ function OnTechnologyGrantFirst(playerID, technologyIndex)
 end
 local iCivicMilTraining = GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index
 local iCivicDrama = GameInfo.Civics['CIVIC_DRAMA_POETRY'].Index
-local iGreatGeneral = GameInfo.Units['UNIT_GREAT_GENERAL'].Index
-local iGreatArtist = GameInfo.Units['UNIT_GREAT_ARTIST'].Index
+local iGreatGeneral = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_GENERAL'].Index
+local iGreatArtist = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_ARTIST'].Index
 local tCivicsGreatPeople = {[iCivicMilTraining] = iGreatGeneral, [iCivicDrama] = iGreatArtist}
 
 function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
@@ -1555,19 +1555,33 @@ function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
     if civicIndex == iCivicMilTraining then
         local bMilTrainingDiscovered = Game:GetProperty('MIL_TRAINING_DISCOVERED')
         if not bMilTrainingDiscovered then
+            local pGreatPeople = Game.GetGreatPeople()
+            local pTimeline = pGreatPeople:GetTimeline();
+            local sGreatPersonType
+            for i,entry in ipairs(pTimeline) do
+                if entry.Class ==  tCivicsGreatPeople[iCivicMilTraining] then
+                    sGreatPersonType = GameInfo.GreatPersonIndividuals[entry.Individual].GreatPersonIndividualType
+                end
+            end
             local pCapital = pPlayer:GetCities():GetCapitalCity()
-            local iUnitType = tCivicsGreatPeople[civicIndex]
-            Game.GetGreatPeople():CreatePerson(playerID, iUnitType, pCapital:GetX(), pCapital:GetY())
+            Game.GetGreatPeople():CreatePerson(playerID, sGreatPersonType, pCapital:GetX(), pCapital:GetY())
             Game:SetProperty('MIL_TRAINING_DISCOVERED', 1)
         end
     end
 
-    if civicIndex == iCivicMilTraining then
+    if civicIndex == iCivicDrama then
         local bDramaDiscovered =  Game:GetProperty('DRAMA_DISCOVERED')
         if not bDramaDiscovered then
             local pCapital = pPlayer:GetCities():GetCapitalCity()
-            local iUnitType = tCivicsGreatPeople[civicIndex]
-            Game.GetGreatPeople():CreatePerson(playerID, iUnitType, pCapital:GetX(), pCapital:GetY())
+            local pGreatPeople = Game.GetGreatPeople()
+            local pTimeline = pGreatPeople:GetTimeline();
+            local sGreatPersonType
+            for i,entry in ipairs(pTimeline) do
+                if entry.Class ==  tCivicsGreatPeople[iCivicDrama] then
+                    sGreatPersonType = GameInfo.GreatPersonIndividuals[entry.Individual].GreatPersonIndividualType
+                end
+            end
+            Game.GetGreatPeople():CreatePerson(playerID, sGreatPersonType, pCapital:GetX(), pCapital:GetY())
             Game:SetProperty('DRAMA_DISCOVERED', 1)
         end
     end
