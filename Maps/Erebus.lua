@@ -412,7 +412,7 @@ function PrintRegionMap(bShowWater)
                 end
             end
         end
-        slthLog(lineString)
+        print(lineString)
         lineString = ''
     end
     return lineString
@@ -2089,6 +2089,7 @@ function createPlotMap()
     scrambledPlotList = ShuffleList(scrambledPlotList)
 
     slthLog('scrambled plots: ', #scrambledPlotList)
+    borderPeaks = {}
     for n=1, #scrambledPlotList do
         slthLog('n at', n)
         local plot = scrambledPlotList[n]
@@ -2096,10 +2097,12 @@ function createPlotMap()
         local y = plot[2]
         local i = GetIndex(x,y)
         if shouldPlacePeak(x,y) then
+            getBorders(x,y)
             if plotMap[i] ~= HILLS then
                 plotMap[i] = PEAK
             end
         else
+            getBorders(x,y)
             local regionID = regionMap[i]
             local region = getRegionByID(regionID)
             if not region.isWater then
@@ -2109,6 +2112,21 @@ function createPlotMap()
         end
     end
 
+    print('border peaks')
+    for i, info in pairs(borderPeaks) do
+        for direction, regions in pairs(info) do
+            print('plot: ' .. i .. ' Dir: ' .. direction .. ' RegionSpan: ' .. regions['region'] .. '/' .. regions['adjacent_region'])
+        end
+    end
+    local borderMap = {}
+    for i, j in ipairs(plotMap) do
+        if borderPeaks[i] then
+            borderMap[i] = '3'
+        else
+            borderMap[i] = '1'
+        end
+    end
+    simpleGridPrint(borderMap, '0_bordermap')
     simpleGridPrint(plotMap, '1_post_land_water_mountain')
 
     for n=1, #scrambledPlotList do
@@ -2226,6 +2244,8 @@ function createPlotMap()
     mountain_blocked = newArea:get_grid_regions(plotMap, {PEAK})
     simpleGridPrint(mountain_blocked, '4_post area map new')
     largest_region = newArea:find_largest_region()
+    -- roll for areas we will unblock.
+
     for i=1, g_iW*g_iH do
         if mountain_blocked[i] and mountain_blocked[i] > 0 and mountain_blocked[i] ~= largest_region then
             if plotMap[i] ~= PEAK then
@@ -2375,6 +2395,35 @@ function shouldPlacePeak(x,y)
                 end
                 if nRegionID ~= regionID then
                     return true
+                end
+            end
+        end
+    end
+end
+
+function getBorders(x, y)
+    local i = GetIndex(x,y)
+    local regionID = regionMap[i]
+    if regionID ~= -1 then
+        local region = getRegionByID(regionID)
+        if not region.isWater then
+            for direction = 1, 8, 1 do
+                local xx = x + directionXmap[direction]
+                local yy = y + directionYmap[direction]
+                local ii = GetIndex(xx,yy)
+                if ii ~= -1 then
+                    if plotMap[ii] ~= PEAK then
+                        local nRegionID = regionMap[ii]
+                        if nRegionID and nRegionID ~= -1 then
+                            if nRegionID ~= regionID then
+                                if borderPeaks[i] then
+                                    borderPeaks[i][direction] = {region=regionID, adjacent_region=nRegionID}
+                                else
+                                    borderPeaks[i] = {[direction]={region=regionID, adjacent_region=nRegionID}}
+                                end
+                            end
+                        end
+                    end
                 end
             end
         end
@@ -2728,6 +2777,7 @@ function newAreaMap.new()
     instance.row_lengths = {}
     instance.current_tiles_in_region = 0
     instance.region_sizes = {}
+    instance.smaller_regions = {}
 
     return instance
 end
@@ -2927,6 +2977,13 @@ function newAreaMap:find_largest_region()
         print('region, size:', idx, size)
     end
     print('largest region, with size', largest_region, largest_size)
+    for idx, size in pairs(self.region_sizes) do
+        if idx == largest_region then
+            print('')
+        else
+            table.insert(self.smaller_regions, idx)
+        end
+    end
     return largest_region
 end
 
@@ -3118,10 +3175,10 @@ local terrainErebusFxsMapper = {
      ['2'] = g_TERRAIN_TYPE_SNOW,
      ['3'] = g_TERRAIN_TYPE_TUNDRA,
      ['4'] = g_TERRAIN_TYPE_GRASS,
-     ['5'] = g_TERRAIN_TYPE_GRASS_HILLS,                     -- TODO need to deal with this just being hills..
+     ['5'] = g_TERRAIN_TYPE_GRASS_HILLS,
      ['6'] = g_TERRAIN_TYPE_COAST,
      ['7'] = g_TERRAIN_TYPE_OCEAN,
-     ['8'] = g_TERRAIN_TYPE_GRASS_MOUNTAIN,            -- TODO need a fallback for mountain type
+     ['8'] = g_TERRAIN_TYPE_GRASS_MOUNTAIN,
      ['9'] = g_TERRAIN_TYPE_GRASS               -- was marsh
 }
 -- ENTRY POINT
@@ -3150,33 +3207,22 @@ function GenerateMap()
     currentRegion = -99
     local success = false
     river_map_attempts = 0
-    while not success and river_map_attempts < 2 do
-        success, result = pcall(function()
-            createRegions()
-            slthLog('START ;reg_map_1_final_regionmap')
-            final_reg_map = PrintRegionMap()
-            slthLog('STOP')
-            slthLog('reg map')
-            slthLog(final_reg_map)
-            -- PrintRegionList()
-            slthLog('reg map water')
-            slthLog('START ; reg_map_1_final_regionmap_no_water')
-            region_plots = PrintRegionMap(true)
-            slthLog('STOP')
-            slthLog(region_plots)
+    createRegions()
+    print('START ;reg_map_1_final_regionmap')
+    final_reg_map = PrintRegionMap()
+    print('STOP')
+    -- PrintRegionList()
+    print('reg map water')
+    print('START ; reg_map_1_final_regionmap_no_water')
+    region_plots = PrintRegionMap(true)
+    print('STOP')
+    slthLog(region_plots)
 
-            squareGrid = make_grid(regionMap)
-            local svgContent = createCharacterImageSVG(squareGrid)
-            saveSVG(svgContent, "rewrite_regions.svg")
-            failedGateAttempts = {}
-            createRiverMap()
-        end)
-        river_map_attempts = river_map_attempts + 1
-        slthLog('--------------------------- river attempt finished -----------------------\n\n\n\n\n\n\n\n\n')
-    end
-    if not success then
-        error(result)
-    end
+    squareGrid = make_grid(regionMap)
+    local svgContent = createCharacterImageSVG(squareGrid)
+    saveSVG(svgContent, "rewrite_regions.svg")
+    failedGateAttempts = {}
+    createRiverMap()
     river_plots = PrintFlowMap()
 
     createPlotMap()
@@ -3252,6 +3298,7 @@ function GenerateMap()
 	local args = {
 		numberToPlace = GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders,
 	};
+    NaturalWonderGenerator.__InitNWData = newInitNWData
 	local nwGen = NaturalWonderGenerator.Create(args);
     if not doErebusFeatures then
 	    AddFeaturesFromContinents();
@@ -3285,14 +3332,9 @@ function GenerateMap()
 		START_MAX_Y = 15,
 		START_CONFIG = startConfig,
 	};
-
-    AssignStartingPlots.__InitStartingData = newInitStartingPlotsData
+    -- AssignStartingPlots.__InitStartingData = newInitStartingPlotsData
 	local start_plot_database = AssignStartingPlots.Create(args)
-
 	local GoodyGen = AddGoodies(g_iW, g_iH);
-
-    print('hopefully finished')
-
 end
 
 function newInitStartingPlotsData(self)
@@ -3540,21 +3582,12 @@ function newInitStartingPlotsData(self)
 			end
 		end
 	end
-
 	-- skip placing the ocean civs
-
 end
 
 function NewPlaceLuxuryResources(self, eChosenLux, eContinent)
-	-- Go through continent placing the chosen luxuries
-
 	plots = Map.GetContinentPlots(eContinent);
-	--print ("Occurrences per frequency: " .. tostring(self.iOccurencesPerFrequency));
-	--print("Resource: ", eChosenLux);
-
 	local iTotalPlaced = 0;
-
-	-- Compute how many to place
 	local iNumToPlace = 1;
     local iNumMountains = 0
     tContinentMountainRatio = {}
@@ -3571,23 +3604,15 @@ function NewPlaceLuxuryResources(self, eChosenLux, eContinent)
             iNumToPlace = iNumToPlace * (iNumMountains/ #plots)
         end
 	end
-
-	-- Score possible locations
 	self:__ScoreLuxuryPlots(eChosenLux, eContinent);
-
-	-- Sort and take best score
 	table.sort (self.aaPossibleLuxLocs[eChosenLux], function(a, b) return a.Score > b.Score; end);
-
 	for iI = 1, iNumToPlace do
 			if (iI <= #self.aaPossibleLuxLocs[eChosenLux]) then
 				local iMapIndex = self.aaPossibleLuxLocs[eChosenLux][iI].MapIndex;
 				local iScore = self.aaPossibleLuxLocs[eChosenLux][iI].Score;
-
-				-- Place at this location
 				local pPlot = Map.GetPlotByIndex(iMapIndex);
 				ResourceBuilder.SetResourceType(pPlot, self.eResourceType[eChosenLux], 1);
 			iTotalPlaced = iTotalPlaced + 1;
-			--print ("   Placed at (" .. tostring(pPlot:GetX()) .. ", " .. tostring(pPlot:GetY()) .. ") with score of " .. tostring(iScore));
 		end
 	end
 end
@@ -3596,19 +3621,12 @@ function NewPlaceStrategicResources(self, eContinent)
 	-- Go through continent placing the chosen strategic
 	for i, row in ipairs(self.aResourcePlacementOrderStrategic) do
 		local eResourceType = self.eResourceType[row.ResourceIndex]
-
 		local iNumToPlace;
-
-		-- Compute how many to place
 		iNumToPlace = self.iOccurencesPerFrequency * (self.iFrequency[row.ResourceIndex] / self.iFrequencyStrategicTotal) * row.Weight;
-
         if tContinentMountainRatio[eContinent] then
             iNumToPlace = iNumToPlace * tContinentMountainRatio[eContinent]
         end
-			-- Score possible locations
 		self:__ScoreStrategicPlots(row.ResourceIndex, eContinent);
-
-		-- Sort and take best score
 		table.sort (self.aaPossibleStratLocs[row.ResourceIndex], function(a, b) return a.Score > b.Score; end);
 
 		if(self.iFrequency[row.ResourceIndex] > 1 and iNumToPlace < 1) then
@@ -3619,11 +3637,8 @@ function NewPlaceStrategicResources(self, eContinent)
 			if (iI <= #self.aaPossibleStratLocs[row.ResourceIndex]) then
 				local iMapIndex = self.aaPossibleStratLocs[row.ResourceIndex][iI].MapIndex;
 				local iScore = self.aaPossibleStratLocs[row.ResourceIndex][iI].Score;
-
-				-- Place at this location
 				local pPlot = Map.GetPlotByIndex(iMapIndex);
 				ResourceBuilder.SetResourceType(pPlot, eResourceType, 1);
---				print ("   Placed at (" .. tostring(pPlot:GetX()) .. ", " .. tostring(pPlot:GetY()) .. ") with score of " .. tostring(iScore));
 			end
 		end
 	end
@@ -3635,35 +3650,59 @@ function NewPlaceOtherResources(self)
         iContinentMountainRatio = iContinentMountainRatio + ratio
     end
     iContinentMountainRatio = iContinentMountainRatio / #tContinentMountainRatio
-
-
     for i, row in ipairs(self.aResourcePlacementOrder) do
-
 		local eResourceType = self.eResourceType[row.ResourceIndex]
-
 		local iNumToPlace;
-
-		-- Compute how many to place
 		iNumToPlace = self.iOccurencesPerFrequency * self.iFrequency[row.ResourceIndex];
-
         iNumToPlace = iNumToPlace * iContinentMountainRatio
-
-		-- Score possible locations
 		self:__ScorePlots(row.ResourceIndex);
-
-		-- Sort and take best score
 		table.sort (self.aaPossibleLocs[row.ResourceIndex], function(a, b) return a.Score > b.Score; end);
-
 		for iI = 1, iNumToPlace do
 			if (iI <= #self.aaPossibleLocs[row.ResourceIndex]) then
 				local iMapIndex = self.aaPossibleLocs[row.ResourceIndex][iI].MapIndex;
 				local iScore = self.aaPossibleLocs[row.ResourceIndex][iI].Score;
-
-					-- Place at this location
 				local pPlot = Map.GetPlotByIndex(iMapIndex);
 				ResourceBuilder.SetResourceType(pPlot, eResourceType, 1);
---				print ("   Placed at (" .. tostring(pPlot:GetX()) .. ", " .. tostring(pPlot:GetY()) .. ") with score of " .. tostring(iScore));
 			end
+		end
+	end
+end
+
+function newInitNWData(self)
+    local iCount = 0;
+	local iNonNW = 0;
+
+	local excludedWonders = {};
+	local excludeWondersConfig = GameConfiguration.GetValue("EXCLUDE_NATURAL_WONDERS");
+	if(excludeWondersConfig and #excludeWondersConfig > 0) then
+		print("The following Natural Wonders have been marked as 'excluded':");
+		for i,v in ipairs(excludeWondersConfig) do
+			print("* " .. v);
+			excludedWonders[v] = true;
+		end
+	end
+
+	for loop in GameInfo.Features() do
+        print(loop.FeatureType, GameInfo.NatWonders[loop.FeatureType])
+		if(GameInfo.NatWonders[loop.FeatureType] and excludedWonders[loop.FeatureType] ~= true) then
+            print('added natWon')
+			self.eFeatureType[iCount] = loop.Index;
+			self.aaPossibleLocs[iCount] = {};
+			iCount = iCount + 1;
+		end
+		iNonNW = iNonNW + 1;
+	end
+
+	self.iNumWondersInDB = iCount;
+	iNonNW = iNonNW - iCount;
+
+	local iJ = 1;
+	for iI = 0, self.iNumWondersInDB - 1 do
+		if(iJ <= #self.aInvalid and iI == self.aInvalid[iJ] - iNonNW) then
+			self.aInvalidNaturalWonders[iI] = false;
+			iJ = iJ + 1;
+		else
+			self.aInvalidNaturalWonders[iI] = true;
 		end
 	end
 end

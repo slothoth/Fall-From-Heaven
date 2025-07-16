@@ -439,29 +439,33 @@ def main(filepath, output_dir='grids_out'):
     grids = parse_log(filepath)
     blockers = [-3, -2, '6', '1', 'W', 'M']
     for file_name, grid in grids.items():
+        if len(file_name) > 3:
+            new_grid = list(reversed(grid))
+        else:
+            new_grid = grid
         if 'RESULT' in file_name:
             if 'plot' in file_name and 'FINAL' not in file_name:
-                _generate_hex_image(grid, file_name, 'output_images')
-                if any(any(k in blockers for k in j) for j in grid):
+                _generate_hex_image(new_grid, file_name, 'output_images')
+                if any(any(k in blockers for k in j) for j in new_grid):
                     AreaMap = RegionMap(hex=True)
-                    mountain_and_sea = AreaMap.get_grid_regions(grid, blockers)
+                    mountain_and_sea = AreaMap.get_grid_regions(new_grid, blockers)
                     mountain_and_sea = [[str(j) for j in i] for i in mountain_and_sea]
                     _generate_hex_image(mountain_and_sea, f"{file_name.strip()}_mountain_and_sea_blockers", 'areas')
-                    if any(any(k in [-2, '1', 'M'] for k in j) for j in grid):
+                    if any(any(k in [-2, '1', 'M'] for k in j) for j in new_grid):
                         areaMap_Two = RegionMap(hex=True)
-                        mountain = areaMap_Two.get_grid_regions(grid, [-2, '1', 'M'])
+                        mountain = areaMap_Two.get_grid_regions(new_grid, [-2, '1', 'M'])
                         mountain = [[str(j) for j in i] for i in mountain]
                         _generate_hex_image(mountain, f"{file_name.strip()}_mountain_blockers", 'areas')
             else:
                 print('')
-                _generate_hex_image(grid, file_name, output_dir)
+                _generate_hex_image(new_grid, file_name, output_dir)
 
         else:
-            save_color_grid(grid, file_name, output_dir)
+            save_color_grid(new_grid, file_name, output_dir)
             if 'square' in file_name:
                 square_blockers = ['P', 'O']
                 grid[0][0] += 'P'                    # TODO REMOVE just adding synthetic data so it works
-                converted_grid = [list(i[0]) for i in grid]
+                converted_grid = [list(i[0]) for i in new_grid]
                 AreaMap = RegionMap(hex=False)
                 mountain_and_sea = AreaMap.get_grid_regions(converted_grid, blockers)
                 regions_old_form = [[chr(97 + j) for j in i] for i in mountain_and_sea]
