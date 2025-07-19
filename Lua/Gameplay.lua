@@ -102,7 +102,7 @@ local tManaNodeMapper = {
 }
 local tBarbNW = {
 	[GameInfo.Features['FEATURE_UBSUNUR_HOLLOW'].Index] = 1,
-	[GameInfo.Features['FEATURE_GOBUSTAN'].Index] = 1,
+	[GameInfo.Features['FEATURE_NWON_BRADELINES_WELL'].Index] = 1,
 	[GameInfo.Features['FEATURE_DELICATE_ARCH'].Index] = 1,
 	[GameInfo.Features['FEATURE_YOSEMITE'].Index] = 1}
 

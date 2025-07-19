@@ -12,7 +12,8 @@ size_chart = {'CIV': [256, 200, 128, 80, 64, 50, 48, 44, 36, 30, 22],
               'UNITS': [256, 80, 50, 38, 32, 22],
               'RESOURCE': [256, 64, 50, 38, 32, 22],
               'LEADER': [256, 80, 64, 55, 50, 48, 45, 32],
-              'BUILDINGS': [256, 128, 80, 50, 38, 32]}
+              'BUILDINGS': [256, 128, 80, 50, 38, 32],
+              'OPERATION': [256, 80, 50, 38]}
 
 
 def make_atlas(processed_images: dict, target_sizes: list, output_folder, output_path):
@@ -45,16 +46,6 @@ def make_atlas(processed_images: dict, target_sizes: list, output_folder, output
             compress_level=0)
 
 def process_svg(svg_path: str, target_sizes: list = [256], replace_black=True) -> dict[Any, ImageFile]:
-    """
-    Process an SVG file with color inversion and border checking.
-
-    Args:
-        svg_path: Path to the SVG file
-        target_size: Desired size of the output image
-
-    Returns:
-        PIL Image object of the processed SVG
-    """
     png_dict = {}
     # First convert SVG to PNG in memory with white fill
     # Replace black with white in the SVG content
@@ -133,16 +124,6 @@ def process_svg(svg_path: str, target_sizes: list = [256], replace_black=True) -
 
 
 def check_borders(image: Image.Image, border_size: int = 10) -> bool:
-    """
-    Check if there are any non-transparent pixels in the border area.
-
-    Args:
-        image: PIL Image to check
-        border_size: Size of border to check in pixels
-
-    Returns:
-        True if there are non-transparent pixels in the border
-    """
     alpha = np.array(image.split()[3])  # Get alpha channel
 
     # Check top and bottom borders
@@ -205,18 +186,6 @@ def build_sql_def(master_files: list, target_sizes: list, output_path: str, modd
 
 
 def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = "atlas.png", output_folder: str = "Atlas", target_sizes: list = [256], convert_black: bool = True) -> dict:
-    """
-    Creates an atlas from SVG files after processing them.
-
-    Args:
-        svg_files: list of svgs to process in folder
-        svg_folder: Path to the folder containing SVG files
-        output_path: Path where the atlas will be saved
-        output_folder: folder where atlas saved
-        target_sizes = specifications of each atlas and the size of an element icon
-    Returns:
-        Dictionary mapping icon filenames to their positions in the atlas
-    """
     num_icons = len(svg_files)
 
     if num_icons == 0:
@@ -236,20 +205,6 @@ def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = 
 
 def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atlas", output_folder: str = 'Atlas',
                  target_sizes: list = [256], modder: str= '', iconType: str = '', convert_black: bool =True) -> dict:
-    """
-    Creates a high-quality atlas from individual icon files with transparency.
-    Handles both PNG and SVG files.
-
-    Args:
-        icon_folder: Path to the folder containing icon files
-        icon_size: Size of each icon (assumes square icons)
-        output_path: base Path where the atlas will be saved
-        output_folder: Folder where atlases are deposited
-        target_sizes: specifications of each atlas and the size of an element icon
-
-    Returns:
-        Dictionary mapping icon filenames to their positions in the atlas as (x, y) coordinates
-    """
     # Check if we're dealing with SVGs
     MAX_ATLAS_COUNT = 64
     svg_files = [f for f in os.listdir(icon_folder) if f.endswith('.svg')]
@@ -288,23 +243,13 @@ def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atl
 
         build_sql_def(master_files, target_sizes, output_path, modder, iconType)
 
+
 def get_icon_coordinates(position: tuple, icon_size: int = 256) -> tuple:
-    """
-    Converts atlas position to pixel coordinates.
-
-    Args:
-        position: (column, row) position in the atlas
-        icon_size: Size of each icon
-
-    Returns:
-        Tuple of ((x1, x2), (y1, y2)) coordinates for the icon in the atlas
-    """
     col, row = position
     x1 = col * icon_size
     y1 = row * icon_size
     x2 = x1 + icon_size
     y2 = y1 + icon_size
-
     return ((x1, x2), (y1, y2))
 
 
@@ -317,9 +262,9 @@ if __name__ == "__main__":
     # OUTPUT_FOLDER = 'Unit_Atlas'
     # ICON_TYPE = 'UNIT'
     # TARGET_SIZES = [256, 80, 50, 38, 32, 22]
-    icon_type = 'Buildings'
+    icon_type = 'Operation'
     ATLAS_FILENAME = f'Slth_{icon_type}_Atlas'
-    INPUT_FOLDER = 'atlas_svg_building'
+    INPUT_FOLDER = 'atlas_svg_operation'
     icon_type = icon_type.upper()
     OUTPUT_FOLDER = f'{icon_type}_Atlas_Folder'
 

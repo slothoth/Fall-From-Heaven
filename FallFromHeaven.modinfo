@@ -54,6 +54,10 @@
       <File>Icons/UnitIcons.sql</File>
       <File>Icons/ResourceIcons.sql</File>
       <File>Icons/BuildingIcons.sql</File>
+      <File>Icons/ImprovementIcons.sql</File>
+      <File>Icons/ProjectIcons.sql</File>
+      <File>Icons/CommandIcons.sql</File>
+      <File>Icons/ModeIcons.xml</File>
     </UpdateIcons>
    </FrontEndActions>
   <InGameActions>
@@ -176,6 +180,8 @@
       <File>Localisation/loc_barbs.sql</File>
       <File>Localisation/loc_ui.sql</File>
       <File>Localisation/loc_notifications.sql</File>
+      <File>Localisation/loc_projects.sql</File>
+      <File>Localisation/loc_commands.sql</File>
     </UpdateText>
     <AddGameplayScripts id="luaGameplayFFH">
       <File>Lua/Maintenance.lua</File>
@@ -295,6 +301,10 @@
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
     <File>Icons/BuildingIcons.sql</File>
+    <File>Icons/ImprovementIcons.sql</File>
+    <File>Icons/ProjectIcons.sql</File>
+    <File>Icons/CommandIcons.sql</File>
+    <File>Icons/ModeIcons.xml</File>
   </UpdateIcons>
   <ImportFiles id="ErebusMap">
 	<File>Maps/Erebus.lua</File>
@@ -319,7 +329,9 @@
     <File>Localisation/loc_playeritems.sql</File>
     <File>Localisation/loc_ui.sql</File>
     <File>Localisation/loc_notifications.sql</File>
+    <File>Localisation/loc_projects.sql</File>
     <File>Localisation/loc_menu.sql</File>
+    <File>Localisation/loc_commands.sql</File>
     <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
@@ -412,6 +424,9 @@
     <File>Artdefs/Units.artdef</File>
     <File>Artdefs/Unit_Bins.artdef</File>
     <File>Artdefs/TerrainStyle.artdef</File>
+    <File>Artdefs/WonderMovie.artdef</File>
+    <File>Artdefs/Features.artdef</File>
+    <File>Artdefs/Improvements.artdef</File>
     <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons/LeaderIcons.sql</File>
@@ -420,6 +435,10 @@
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
     <File>Icons/BuildingIcons.sql</File>
+    <File>Icons/ImprovementIcons.sql</File>
+    <File>Icons/ProjectIcons.sql</File>
+    <File>Icons/CommandIcons.sql</File>
+    <File>Icons/ModeIcons.xml</File>
     <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>

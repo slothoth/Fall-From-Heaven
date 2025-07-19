@@ -52,6 +52,7 @@
 				<Element text="Cultures.artdef"/>
 				<Element text="Clutter.artdef"/>
 				<Element text="Buildings.artdef"/>
+				<Element text="Features.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="CityBuildings"/>
@@ -176,7 +177,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="WonderMovie"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="WonderMovie.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="WonderMovie"/>
 				<Element text="TileBase"/>
@@ -250,7 +253,14 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Features"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Features.artdef"/>
+				<Element text="Clutter.artdef"/>
+				<Element text="Landmarks.artdef"/>
+				<Element text="Buildings.artdef"/>
+				<Element text="Cultures.artdef"/>
+				<Element text="Civilizations.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
@@ -281,6 +291,7 @@
 			<ArtDefDependencyPaths>
 				<Element text="Resources.artdef"/>
 				<Element text="Clutter.artdef"/>
+				<Element text="Features.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
@@ -288,10 +299,13 @@
 		<Element>
 			<ConsumerName text="Improvements"/>
 			<ArtDefDependencyPaths>
+				<Element text="Improvements.artdef"/>
 				<Element text="Cultures.artdef"/>
+				<Element text="Landmarks.artdef"/>
+				<Element text="Buildings.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
-			<LoadsLibraries>false</LoadsLibraries>
+			<LoadsLibraries>true</LoadsLibraries>
 		</Element>
 		<Element>
 			<ConsumerName text="WorldView_Translate"/>
@@ -323,6 +337,7 @@
 				<Element text="Resources.artdef"/>
 				<Element text="Cultures.artdef"/>
 				<Element text="Clutter.artdef"/>
+				<Element text="Features.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
@@ -434,6 +449,13 @@
 	</SystemDependencies>
 	<ArtDefDependencies>
 		<Element>
+			<ArtDefPath text="Features.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Clutter.artdef"/>
+				<Element text="Landmarks.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
 			<ArtDefPath text="TerrainStyle.artdef"/>
 			<ArtDefDependencyPaths/>
 		</Element>
@@ -509,11 +531,21 @@
 			<ArtDefDependencyPaths>
 				<Element text="Landmarks.artdef"/>
 				<Element text="Buildings.artdef"/>
+				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 		<Element>
 			<ArtDefPath text="FallbackLeaders.artdef"/>
 			<ArtDefDependencyPaths/>
+		</Element>
+		<Element>
+			<ArtDefPath text="Improvements.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Improvements.artdef"/>
+				<Element text="Landmarks.artdef"/>
+				<Element text="Cultures.artdef"/>
+				<Element text="Buildings.artdef"/>
+			</ArtDefDependencyPaths>
 		</Element>
 	</ArtDefDependencies>
 	<LibraryDependencies>

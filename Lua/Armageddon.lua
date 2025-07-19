@@ -134,7 +134,7 @@ function ArmageddonUnitDied(killedPlayerID, killedUnitID, playerID, unitID)
     end
 end
 -- building tracker, create increase armageddon, delete decrease
-local tArmageddonBuildings = {[GameInfo.Buildings['PILLAR_OF_CHAINS'].Index]=4,
+local tArmageddonBuildings = {[GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index]=4,
                         [GameInfo.Buildings['STIGMATA_FROM_UNBORN'].Index]=5}
 
 function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)

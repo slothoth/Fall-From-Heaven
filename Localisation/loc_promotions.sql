@@ -230,7 +230,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_PROMOTION_POISON_RESISTANCE_DESCRIPTION', '50% Resistance to Poison damage*.', 'en_US'),
 ('LOC_PROMOTION_LIGHTNING_RESISTANCE_DESCRIPTION', '50% Resistance to Lightning damage*.', 'en_US'),
 ('LOC_PROMOTION_BOUNTY_HUNTER_DESCRIPTION', 'Gain Gold on Combat Victory.', 'en_US'),
-('LOC_PROMOTION_EXTENSION_DESCRIPTION', 'Summoned Units have +1[ICON_Movement] Movement.', 'en_US'),
+('LOC_PROMOTION_EXTENSION1_DESCRIPTION', 'Summoned Units have +1[ICON_Movement] Movement.', 'en_US'),
 ('LOC_PROMOTION_EXTENSION2_DESCRIPTION', 'Summoned Units have +1[ICON_Movement] Movement.', 'en_US'),
 ('LOC_PROMOTION_SUMMONER_DESCRIPTION', 'Summoned Units last an additional turn.', 'en_US'),
 ('LOC_PROMOTION_TWINCAST_DESCRIPTION', 'Summoning Spells produce double the number of units.', 'en_US'),

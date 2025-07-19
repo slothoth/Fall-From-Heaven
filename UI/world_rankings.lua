@@ -65,16 +65,16 @@ local TOWER_DIVINATION = { GameInfo.Buildings["BUILDING_ORACLE"],
 	GameInfo.Resources["RESOURCE_MANA_LAW"], GameInfo.Resources["RESOURCE_MANA_MIND"],
 	GameInfo.Resources["RESOURCE_MANA_SPIRIT"], GameInfo.Resources["RESOURCE_MANA_SUN"],
 	 };
-local TOWER_ELEMENTS = { GameInfo.Buildings["BUILDING_PORCELAIN_TOWER"],
+local TOWER_ELEMENTS = { GameInfo.Buildings["BUILDING_MEENAKSHI_TEMPLE"],
 	GameInfo.Resources["RESOURCE_MANA_AIR"], GameInfo.Resources["RESOURCE_MANA_EARTH"],
 	GameInfo.Resources["RESOURCE_MANA_FIRE"], GameInfo.Resources["RESOURCE_MANA_WATER"],
 						 };
-local TOWER_NECROMANCY = { GameInfo.Buildings["BUILDING_LEANING_TOWER"],
+local TOWER_NECROMANCY = { GameInfo.Buildings["BUILDING_HUEY_TEOCALLI"],
 	GameInfo.Resources["RESOURCE_MANA_CHAOS"], GameInfo.Resources["RESOURCE_MANA_DEATH"],
 	GameInfo.Resources["RESOURCE_MANA_ENTROPY"], GameInfo.Resources["RESOURCE_MANA_SHADOW"],
 	};
 local TOWER_MASTERY = { GameInfo.Buildings["BUILDING_MAHABODHI_TEMPLE"], GameInfo.Buildings["BUILDING_ORACLE"],
-						GameInfo.Buildings["BUILDING_PORCELAIN_TOWER"], GameInfo.Buildings["BUILDING_LEANING_TOWER"],
+						GameInfo.Buildings["BUILDING_MEENAKSHI_TEMPLE"], GameInfo.Buildings["BUILDING_HUEY_TEOCALLI"],
 						GameInfo.Buildings["BUILDING_EIFFEL_TOWER"], };
 local TOWERS = { TOWER_ALTERATION, TOWER_DIVINATION, TOWER_ELEMENTS, TOWER_NECROMANCY,
 				 TOWER_MASTERY };

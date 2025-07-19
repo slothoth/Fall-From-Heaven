@@ -63,7 +63,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_POLICY_STATE_OCTOPUS_NAME', 'Octopus Overlords', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_EMPYREAN_NAME', 'The Empyrean', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_ESUS_NAME', 'Council of Esus', 'en_US'),
-
 ('LOC_SLTH_POLICY_NO_STATE_RELIGION_DESCRIPTION', '', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_VEIL_DESCRIPTION', 'Allows: Diseased Corpses, Beast of Agares, Ritualist, Profane, Rosier, Mardero, Meshabber of Dis.', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_LEAVES_DESCRIPTION', 'Allows: Fawn, Priest of the Leaves, High Priest of the Leaves, Kithra Kyriel, Yvain. ', 'en_US'),
@@ -71,4 +70,9 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_POLICY_STATE_ORDER_DESCRIPTION', 'Allows: Crusader, Basilica, Confessor, Prior, Valin Phanuel, Sphener', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_OCTOPUS_DESCRIPTION', 'Allows:Drown, Stygian Guard, Asylum, Cultist, Speaker, Saverous, Hemah', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_EMPYREAN_DESCRIPTION', 'Allows: Ratha, Radiant Guard, Vicar, Luridus, Chalid', 'en_US'),
-('LOC_SLTH_POLICY_STATE_ESUS_DESCRIPTION', 'Allows: Nightwatch, Shadowrider, Shadow, Gibbon Goetia', 'en_US');
+('LOC_SLTH_POLICY_STATE_ESUS_DESCRIPTION', 'Allows: Nightwatch, Shadowrider, Shadow, Gibbon Goetia', 'en_US'),
+('LOC_SLOT_SLTHREL_NAME', 'State Religion', 'en_US'),
+('LOC_SLOT_SLTHCUL_NAME', 'Economic', 'en_US'),
+('LOC_SLOT_DIPLOMATIC_NAME', 'Government', 'en_US'),
+('LOC_SLOT_ECONOMIC_NAME', 'Cultural Values', 'en_US'),
+('LOC_SLOT_MILITARY_NAME', 'Labor', 'en_US');

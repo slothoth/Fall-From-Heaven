@@ -1,8 +1,8 @@
 INSERT INTO Resources(ResourceType, Name, ResourceClassType, Happiness, Frequency, PrereqTech) VALUES
-('RESOURCE_NITER', 'LOC_RESOURCE_NITER', 'RESOURCECLASS_STRATEGIC', '0', '6', 'TECH_BLASTING_POWDER'),
-('RESOURCE_HORSES', 'LOC_RESOURCE_HORSES', 'RESOURCECLASS_STRATEGIC', '0', '6', 'TECH_ANIMAL_HUSBANDRY'),
-('RESOURCE_SILVER', 'LOC_RESOURCE_MITHRIL', 'RESOURCECLASS_STRATEGIC', '0', '6', 'TECH_MITHRIL_WORKING'),
-('RESOURCE_SPICES', 'LOC_RESOURCE_REAGENTS', 'RESOURCECLASS_STRATEGIC', '0', '6', NULL),
+('RESOURCE_NITER', 'LOC_RESOURCE_NITER', 'RESOURCECLASS_STRATEGIC', '0', '4', 'TECH_BLASTING_POWDER'),
+('RESOURCE_HORSES', 'LOC_RESOURCE_HORSES', 'RESOURCECLASS_STRATEGIC', '0', '4', 'TECH_ANIMAL_HUSBANDRY'),
+('RESOURCE_SILVER', 'LOC_RESOURCE_MITHRIL', 'RESOURCECLASS_STRATEGIC', '0', '2', 'TECH_MITHRIL_WORKING'),
+('RESOURCE_SPICES', 'LOC_RESOURCE_REAGENTS', 'RESOURCECLASS_STRATEGIC', '0', '4', NULL),
 ('RESOURCE_BANANAS', 'LOC_RESOURCE_BANANA', 'RESOURCECLASS_BONUS', '0', '6', NULL),
 ('RESOURCE_MAIZE', 'LOC_RESOURCE_CORN', 'RESOURCECLASS_BONUS', '0', '6', NULL),
 ('RESOURCE_CATTLE', 'LOC_RESOURCE_COW', 'RESOURCECLASS_BONUS', '0', '6', NULL),
@@ -45,8 +45,8 @@ INSERT INTO Resources(ResourceType, Name, ResourceClassType, Happiness, LakeElig
 ('RESOURCE_CRABS', 'LOC_RESOURCE_CRABS', 'RESOURCECLASS_BONUS', '0', '0', '5'),
 ('RESOURCE_WHALES', 'LOC_RESOURCE_WHALE', 'RESOURCECLASS_LUXURY', '4', '0', '3');
 
-UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_STRATEGIC', PrereqTech = 'TECH_MINING', Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_COPPER';
-UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_STRATEGIC', PrereqTech = 'TECH_SMELTING', Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_IRON';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_STRATEGIC', PrereqTech = 'TECH_MINING', Happiness = '0', Frequency = '5', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_COPPER';
+UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_STRATEGIC', PrereqTech = 'TECH_SMELTING', Happiness = '0', Frequency = '5', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_IRON';
 UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_MARBLE';
 UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_DEER';
 UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_BONUS', PrereqTech = NULL, Happiness = '0', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_FISH';
@@ -313,19 +313,26 @@ INSERT INTO Resource_ValidTerrains(ResourceType, TerrainType) VALUES
 INSERT INTO Resource_YieldChanges(ResourceType, YieldType, YieldChange) VALUES
 ('RESOURCE_NITER', 'YIELD_PRODUCTION', '1'),
 ('RESOURCE_COPPER', 'YIELD_PRODUCTION', '1'),
+('RESOURCE_IVORY', 'YIELD_PRODUCTION', '1'),
 ('RESOURCE_HORSES', 'YIELD_PRODUCTION', '1'),
 ('RESOURCE_IRON', 'YIELD_PRODUCTION', '1'),
 ('RESOURCE_MARBLE', 'YIELD_PRODUCTION', '1'),
 ('RESOURCE_NIGHTMARE', 'YIELD_PRODUCTION', '1'),
 ('RESOURCE_BANANAS', 'YIELD_FOOD', '1'),
 ('RESOURCE_CLAM', 'YIELD_FOOD', '1'),
+('RESOURCE_FISH', 'YIELD_FOOD', '1'),
 ('RESOURCE_MAIZE', 'YIELD_FOOD', '1'),
+('RESOURCE_RICE', 'YIELD_FOOD', '1'),
+('RESOURCE_SHEEP', 'YIELD_FOOD', '1'),
+('RESOURCE_WHEAT', 'YIELD_FOOD', '1'),
+('RESOURCE_SUGAR', 'YIELD_FOOD', '1'),
 ('RESOURCE_CATTLE', 'YIELD_FOOD', '1'),
 ('RESOURCE_CRABS', 'YIELD_FOOD', '1'),
 ('RESOURCE_DEER', 'YIELD_FOOD', '1'),
 ('RESOURCE_TRUFFLES', 'YIELD_FOOD', '1'),
 ('RESOURCE_DYES', 'YIELD_GOLD', '1'),
 ('RESOURCE_FURS', 'YIELD_GOLD', '1'),
+('RESOURCE_COTTON', 'YIELD_GOLD', '1'),
 ('RESOURCE_DIAMONDS', 'YIELD_GOLD', '1'),
 ('RESOURCE_GOLD', 'YIELD_GOLD', '2'),
 ('RESOURCE_INCENSE', 'YIELD_GOLD', '1'),
@@ -333,20 +340,18 @@ INSERT INTO Resource_YieldChanges(ResourceType, YieldType, YieldChange) VALUES
 ('RESOURCE_SILVER', 'YIELD_PRODUCTION', '2'),
 ('RESOURCE_SPICES', 'YIELD_GOLD', '1'),
 ('RESOURCE_WHALES', 'YIELD_FOOD', '1'),
+('RESOURCE_WINE', 'YIELD_GOLD', '1'),
 ('RESOURCE_TOAD', 'YIELD_FOOD', '1'),
 ('RESOURCE_PEARLS', 'YIELD_GOLD', '2'),
 ('RESOURCE_TOBACCO', 'YIELD_FOOD', '1'),
 ('RESOURCE_OLIVES', 'YIELD_GOLD', '1');
 
-UPDATE Resource_YieldChanges SET YieldChange = '1' WHERE ResourceType = 'RESOURCE_FISH' AND YieldType = 'YIELD_FOOD';
-UPDATE Resource_YieldChanges SET YieldChange = '1' WHERE ResourceType = 'RESOURCE_RICE' AND YieldType = 'YIELD_FOOD';
-UPDATE Resource_YieldChanges SET YieldChange = '1' WHERE ResourceType = 'RESOURCE_SHEEP' AND YieldType = 'YIELD_FOOD';
-UPDATE Resource_YieldChanges SET YieldChange = '1' WHERE ResourceType = 'RESOURCE_WHEAT' AND YieldType = 'YIELD_FOOD';
-UPDATE Resource_YieldChanges SET YieldChange = '1' WHERE ResourceType = 'RESOURCE_IVORY' AND YieldType = 'YIELD_PRODUCTION';
-UPDATE Resource_YieldChanges SET YieldChange = '1' WHERE ResourceType = 'RESOURCE_SUGAR' AND YieldType = 'YIELD_FOOD';
-UPDATE Resource_YieldChanges SET YieldChange = '1' WHERE ResourceType = 'RESOURCE_WINE' AND YieldType = 'YIELD_GOLD';
-UPDATE Resource_YieldChanges SET YieldChange = '1' WHERE ResourceType = 'RESOURCE_COTTON' AND YieldType = 'YIELD_GOLD';
+-- Olives, Pearls, Wine, Spices, Silk, Gold, Diamonds, Cotton, Furs, Dyes, river Adjacent,
+-- Gold, Pearls,        guarenteed
+--
 
+-- for golden age
+-- Niter, Copper, Ivory, Horses, Iron, Marble, Nightmare
 
 INSERT INTO GameModifiers(ModifierId) VALUES
 ('MODIFIER_DEER_YIELD_FOOD_TAG_CITY_ATTACH'),

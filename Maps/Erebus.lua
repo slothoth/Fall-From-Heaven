@@ -3187,22 +3187,22 @@ function GenerateMap()
     g_iW, g_iH = Map.GetGridSize();
     print('map size', g_iW, g_iH)
     g_iFlags = TerrainBuilder.GetFractalFlags();
-	local temperature = MapConfiguration.GetValue("temperature"); -- Default setting is Temperate.
-	if temperature == 4 then
-		temperature  =  1 + TerrainBuilder.GetRandomNumber(3, "Random Temperature- Lua");
-	end
+    local temperature = MapConfiguration.GetValue("temperature"); -- Default setting is Temperate.
+    if temperature == 4 then
+        temperature  =  1 + TerrainBuilder.GetRandomNumber(3, "Random Temperature- Lua");
+    end
 
-	--	local world_age
-	local world_age = MapConfiguration.GetValue("world_age");
-	if (world_age == 1) then
-		world_age = world_age_new;
-	elseif (world_age == 2) then
-		world_age = world_age_normal;
-	elseif (world_age == 3) then
-		world_age = world_age_old;
-	else
-		world_age = 2 + TerrainBuilder.GetRandomNumber(4, "Random World Age - Lua");
-	end
+    --	local world_age
+    local world_age = MapConfiguration.GetValue("world_age");
+    if (world_age == 1) then
+        world_age = world_age_new;
+    elseif (world_age == 2) then
+        world_age = world_age_normal;
+    elseif (world_age == 3) then
+        world_age = world_age_old;
+    else
+        world_age = 2 + TerrainBuilder.GetRandomNumber(4, "Random World Age - Lua");
+    end
 
     currentRegion = -99
     local success = false
@@ -3260,20 +3260,20 @@ function GenerateMap()
 
     -- fix silly bottom row.
 
-	-- Temp
-	AreaBuilder.Recalculate();
-	TerrainBuilder.AnalyzeChokepoints();
-	TerrainBuilder.StampContinents();
+    -- Temp
+    AreaBuilder.Recalculate();
+    TerrainBuilder.AnalyzeChokepoints();
+    TerrainBuilder.StampContinents();
 
-	local iContinentBoundaryPlots = GetContinentBoundaryPlotCount(g_iW, g_iH);
-	local biggest_area = Areas.FindBiggestArea(false);
-	print("After Adding Hills: ", biggest_area:GetPlotCount());
-	-- AddTerrainFromContinents(plotTypes, terrainTypes, world_age, g_iW, g_iH, iContinentBoundaryPlots);
+    local iContinentBoundaryPlots = GetContinentBoundaryPlotCount(g_iW, g_iH);
+    local biggest_area = Areas.FindBiggestArea(false);
+    print("After Adding Hills: ", biggest_area:GetPlotCount());
+    -- AddTerrainFromContinents(plotTypes, terrainTypes, world_age, g_iW, g_iH, iContinentBoundaryPlots);
 
-	AreaBuilder.Recalculate();
+    AreaBuilder.Recalculate();
 
-	-- River generation is affected by plot types, originating from highlands and preferring to traverse lowlands.
-	--AddRivers();
+    -- River generation is affected by plot types, originating from highlands and preferring to traverse lowlands.
+    --AddRivers();
     AddRiversSkipEmpty()
     -- new rivers
     simpleGridPrint(riverMap, 'River Map')
@@ -3285,36 +3285,65 @@ function GenerateMap()
         end
     end
     ]]
-	-- Lakes would interfere with rivers, causing them to stop and not reach the ocean, if placed any sooner.
-	local numLargeLakes = GameInfo.Maps[Map.GetMapSize()].Continents;
-	AddLakes(numLargeLakes);
+    -- Lakes would interfere with rivers, causing them to stop and not reach the ocean, if placed any sooner.
+    local numLargeLakes = GameInfo.Maps[Map.GetMapSize()].Continents;
+    AddLakes(numLargeLakes);
 
-	AddFeatures();
-	TerrainBuilder.AnalyzeChokepoints();
+    AddFeatures();
+    TerrainBuilder.AnalyzeChokepoints();
 
-	print("Adding cliffs");
-	AddCliffs(plotTypes, terrainTypes);
+    print("Adding cliffs");
+    AddCliffs(plotTypes, terrainTypes);
 
-	local args = {
-		numberToPlace = GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders,
-	};
+    local args = {
+        numberToPlace = GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders,
+    };
     NaturalWonderGenerator.__InitNWData = newInitNWData
-	local nwGen = NaturalWonderGenerator.Create(args);
+    local nwGen = NaturalWonderGenerator.Create(args);
     if not doErebusFeatures then
-	    AddFeaturesFromContinents();
-	end
-	MarkCoastalLowlands();
+        AddFeaturesFromContinents();
+    end
+    MarkCoastalLowlands();
 
     do_ascii(plotTypes, terrainTypes, true, 'RESULT')
 
-	resourcesConfig = MapConfiguration.GetValue("resources");
-	local startConfig = MapConfiguration.GetValue("start");-- Get the start config
-	local args = {
-		resources = resourcesConfig,
-		START_CONFIG = startConfig,
-	};
+    local resourcesConfig = MapConfiguration.GetValue("resources");
+    local startConfig = MapConfiguration.GetValue("start");-- Get the start config
+    local args = {
+        resources = resourcesConfig,
+        START_CONFIG = startConfig,
+    };
 
     -- NewPlaceLuxuryResources
+    tContinentMountainRatio = {}
+    tContinentNonMountainPlots = {}
+    local totalPlaceable = 0
+    local continentsInUse = Map.GetContinentsInUse();
+    for _, eContinent in ipairs(continentsInUse) do
+        local plots = Map.GetContinentPlots(eContinent);
+        local iNumMountains = 0
+        local iNumNonMountains = 0
+        for i, idx in ipairs(plots) do
+            local pPlot = Map.GetPlotByIndex(idx);
+            if pPlot:IsMountain() then
+                iNumMountains = iNumMountains + 1
+            else
+                iNumNonMountains = iNumNonMountains + 1
+            end
+        end
+        tContinentNonMountainPlots[eContinent] = iNumNonMountains
+        totalPlaceable = totalPlaceable + iNumNonMountains
+        tContinentMountainRatio[eContinent] = iNumMountains / #plots
+    end
+    tContinentPlotPortions = {}
+    for eContinent, iNumNonMountains in pairs(tContinentNonMountainPlots) do
+        print('continent', eContinent)
+        print('has this many non-mountain plots', iNumNonMountains)
+        print('and the total placeable plot count is', totalPlaceable)
+        print('and so its ratio of plots is', iNumNonMountains / totalPlaceable)
+        tContinentPlotPortions[eContinent] = iNumNonMountains / totalPlaceable
+    end
+
     ResourceGenerator.__PlaceLuxuryResources = NewPlaceLuxuryResources
     ResourceGenerator.__PlaceStrategicResources = NewPlaceStrategicResources
     ResourceGenerator.__PlaceOtherResources = NewPlaceOtherResources
@@ -3586,24 +3615,20 @@ function newInitStartingPlotsData(self)
 end
 
 function NewPlaceLuxuryResources(self, eChosenLux, eContinent)
-	plots = Map.GetContinentPlots(eContinent);
 	local iTotalPlaced = 0;
 	local iNumToPlace = 1;
-    local iNumMountains = 0
-    tContinentMountainRatio = {}
+    print('trying to place luxuries for continent. Inital occurence', eContinent, self.iOccurencesPerFrequency)
 	if(self.iOccurencesPerFrequency > 1) then
 		iNumToPlace = self.iOccurencesPerFrequency;
-        for i, idx in ipairs(plots) do
-            local pPlot = Map.GetPlotByIndex(idx);
-            if pPlot:IsMountain() then
-                iNumMountains = iNumMountains + 1
-            end
-        end
-        if iNumMountains > 1 then
-            tContinentMountainRatio[eContinent] = iNumMountains / #plots
-            iNumToPlace = iNumToPlace * (iNumMountains/ #plots)
+        if tContinentMountainRatio[eContinent] then
+            iNumToPlace = iNumToPlace * tContinentMountainRatio[eContinent]
         end
 	end
+    print('trying to place luxuries for continent. Post Mountain Ratio', eContinent, iNumToPlace)
+    if tContinentPlotPortions[eContinent] then
+        iNumToPlace = iNumToPlace * tContinentPlotPortions[eContinent]
+    end
+    print('trying to place luxuries for continent. Post Continent Plot Portioning', eContinent, iNumToPlace)
 	self:__ScoreLuxuryPlots(eChosenLux, eContinent);
 	table.sort (self.aaPossibleLuxLocs[eChosenLux], function(a, b) return a.Score > b.Score; end);
 	for iI = 1, iNumToPlace do
@@ -3623,9 +3648,15 @@ function NewPlaceStrategicResources(self, eContinent)
 		local eResourceType = self.eResourceType[row.ResourceIndex]
 		local iNumToPlace;
 		iNumToPlace = self.iOccurencesPerFrequency * (self.iFrequency[row.ResourceIndex] / self.iFrequencyStrategicTotal) * row.Weight;
+        print('trying to place strategics for continent/num', eContinent, iNumToPlace)
         if tContinentMountainRatio[eContinent] then
             iNumToPlace = iNumToPlace * tContinentMountainRatio[eContinent]
+            print('new num to place is mountainRatio * iNumToPlace = ',tContinentMountainRatio[eContinent], iNumToPlace)
         end
+        if tContinentPlotPortions[eContinent] then
+            iNumToPlace = iNumToPlace * tContinentPlotPortions[eContinent]
+        end
+        print('trying to place strategics for continent. Post Plot Portions', eContinent, iNumToPlace)
 		self:__ScoreStrategicPlots(row.ResourceIndex, eContinent);
 		table.sort (self.aaPossibleStratLocs[row.ResourceIndex], function(a, b) return a.Score > b.Score; end);
 
@@ -3645,16 +3676,27 @@ function NewPlaceStrategicResources(self, eContinent)
 end
 
 function NewPlaceOtherResources(self)
-    local iContinentMountainRatio = 1
-    for i, ratio in ipairs(tContinentMountainRatio) do
+    local iContinentMountainRatio = 0
+    local iContinentCount = 0
+    for i, ratio in pairs(tContinentMountainRatio) do
         iContinentMountainRatio = iContinentMountainRatio + ratio
+        print('mountain total ratio:', iContinentMountainRatio)
+        iContinentCount = iContinentCount + 1
     end
-    iContinentMountainRatio = iContinentMountainRatio / #tContinentMountainRatio
+    if iContinentCount > 1 then
+        iContinentMountainRatio = iContinentMountainRatio / iContinentCount
+        print('dividing mountain total by number of entries:', iContinentCount)
+    else
+        iContinentMountainRatio = 1
+    end
+    print('starting other resourec placement with ratio', iContinentMountainRatio)
     for i, row in ipairs(self.aResourcePlacementOrder) do
 		local eResourceType = self.eResourceType[row.ResourceIndex]
 		local iNumToPlace;
 		iNumToPlace = self.iOccurencesPerFrequency * self.iFrequency[row.ResourceIndex];
+        print('trying to place bonuses', iNumToPlace)
         iNumToPlace = iNumToPlace * iContinentMountainRatio
+        print('adjusted for continents', iNumToPlace)
 		self:__ScorePlots(row.ResourceIndex);
 		table.sort (self.aaPossibleLocs[row.ResourceIndex], function(a, b) return a.Score > b.Score; end);
 		for iI = 1, iNumToPlace do
