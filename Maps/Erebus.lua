@@ -96,7 +96,9 @@ OCEAN = 0
 LAND = 1
 HILLS = 2
 PEAK = 3
-
+local g_riverStartPlots = {};
+local g_riverPlots = {};
+local g_iRiverID = 0;
 
 LeafyAltitude = 0.3
 doErebusFeatures = true
@@ -675,6 +677,17 @@ end
 -- overriden as performance, and seemingly does nothing
 function GetIndex(x, y)
     if x < 0 or x > g_iW or y < 0 or y > g_iH then
+        return -1
+    else
+        return  y * g_iW + x
+    end
+end
+-- Overriden again, because of lua 1 based indexing means it isnt right
+-- like assume we have a grid of 74 * 46. Because our indices are starting at one,
+-- it means they go y=1, 74, inclusive.
+function GetIndex(x, y)
+    if x < 0 or x > g_iW or y < 0 or y > g_iH then
+        print('x or y out of bounds. x, XMax, y, YMax', x, g_iW, y, g_iH)
         return -1
     else
         return  y * g_iW + x
@@ -2126,8 +2139,8 @@ function createPlotMap()
             borderMap[i] = '1'
         end
     end
-    simpleGridPrint(borderMap, '0_bordermap')
-    simpleGridPrint(plotMap, '1_post_land_water_mountain')
+    simpleGridPrint(borderMap, 'bordermap')
+    simpleGridPrint(plotMap, 'post_land_water_mountain')
 
     for n=1, #scrambledPlotList do
         local plot = scrambledPlotList[n]
@@ -2219,6 +2232,7 @@ function createPlotMap()
             end
         end
     end
+    simpleGridPrint(plotMap, 'post_river_peaks')
     -- simpleGridPrint(plotMap, 'post soften peaks')
     -- Now make sure there are no passable areas that are blocked in
     -- PrintPlotMap()
@@ -2242,7 +2256,7 @@ function createPlotMap()
     ]]--
     newArea = newAreaMap.new()
     mountain_blocked = newArea:get_grid_regions(plotMap, {PEAK})
-    simpleGridPrint(mountain_blocked, '4_post area map new')
+    simpleGridPrint(mountain_blocked, 'post area map new')
     largest_region = newArea:find_largest_region()
     -- roll for areas we will unblock.
 
@@ -2254,7 +2268,7 @@ function createPlotMap()
             end
         end
     end
-    simpleGridPrint(plotMap, '4_post fix impassable areas')
+    simpleGridPrint(plotMap, 'post fix impassable areas')
     print('plot map dim', #plotMap)
 end
 
@@ -2829,19 +2843,13 @@ end
 function newAreaMap:build_region(start_x, start_y, current_region)
     -- A stack to hold the coordinates of tiles to visit.
     local stack = {{y = start_y, x = start_x}}
-
-    -- Process tiles as long as there are items in the stack
     while #stack > 0 do
         local current_coords = table.remove(stack) -- Pop the last element (LIFO)
         local x, y = current_coords.x, current_coords.y
-
         -- Check if the tile has already been assigned. If so, skip.
         if self.absorbed_into_region[y][x] == -1 then
-            -- Assign the tile to the current region
             self.absorbed_into_region[y][x] = current_region
             self.current_tiles_in_region = self.current_tiles_in_region + 1
-
-            -- Get all valid neighbors
             local adjacent_plots = self:get_valid_neighbors(y, x)
             for _, neighbor_coords in ipairs(adjacent_plots) do
                 local nx, ny = neighbor_coords.x, neighbor_coords.y
@@ -2854,12 +2862,6 @@ function newAreaMap:build_region(start_x, start_y, current_region)
     end
 end
 
-
----
--- Helper function to check if a list-like table contains a value.
--- @param list The table to search in.
--- @param val The value to search for.
--- @return true if the value is found, false otherwise.
 local function list_contains(list, val)
     for _, v in ipairs(list) do
         if v == val then
@@ -2877,9 +2879,12 @@ end
 function newAreaMap:get_grid_regions(grid, blockers)
     -- 1. Create a deep copy of the grid to avoid modifying the original
     -- first check if grid is 1d or 2d
+    local mountain_mapper = {['6'] = -3, ['1'] = -2, ['W'] = -2, ['M'] = -3}
     local gridDim = 2
     if type(grid[1]) == "number" then
         gridDim = 1
+        print('grid dim is 1')
+        print('grid size is', #grid)
     end
     local new_grid = {}
     if gridDim == 2 then
@@ -3031,7 +3036,7 @@ function createTerrainMap()
         end
     end
     slthLog('terrain_total is:', #terrainMap)
-    simpleGridPrint(terrainMap, '5_post_terrain_init_ocean')
+    simpleGridPrint(terrainMap, 'post_terrain_init_ocean')
 
     for y=1, g_iH-1 do
         for x=1, g_iW-1 do
@@ -3068,7 +3073,7 @@ function createTerrainMap()
         end
     end
     print('terrain_total is:', #terrainMap)
-    simpleGridPrint(terrainMap, '6_post terrain biome')
+    simpleGridPrint(terrainMap, 'post terrain biome')
     -- clean up desert peaks to avoid burning peaks all over the map
     for y=1,g_iH -1 do
         for x=1, g_iW-1 do
@@ -3087,8 +3092,8 @@ function createTerrainMap()
             end
         end
     end
-    simpleGridPrint(terrainMap, '7_post cleanup desert mountains')
-    simpleGridPrint(plotMap,'a_post terrain gen PLOTS')
+    simpleGridPrint(terrainMap, 'post cleanup desert mountains')
+    simpleGridPrint(plotMap,'post terrain gen PLOTS')
     print('terrain map dim', #terrainMap)
 end
 
@@ -3181,6 +3186,25 @@ local terrainErebusFxsMapper = {
      ['8'] = g_TERRAIN_TYPE_GRASS_MOUNTAIN,
      ['9'] = g_TERRAIN_TYPE_GRASS               -- was marsh
 }
+local TerrainTextMapper = {
+    [g_TERRAIN_TYPE_DESERT] = 'DESERT',
+    [g_TERRAIN_TYPE_DESERT_HILLS] = 'DESERT HILLS',
+    [g_TERRAIN_TYPE_DESERT_MOUNTAIN] = 'DESERT MOUNTAINS',
+    [g_TERRAIN_TYPE_PLAINS] = 'PLAINS',
+    [g_TERRAIN_TYPE_PLAINS_HILLS] = 'PLAINS HILLS',
+    [g_TERRAIN_TYPE_PLAINS_MOUNTAIN] = 'PLAINS MOUNTAINS',
+    [g_TERRAIN_TYPE_SNOW] = 'SNOW',
+    [g_TERRAIN_TYPE_SNOW_HILLS] = 'SNOW HILLS',
+    [g_TERRAIN_TYPE_SNOW_MOUNTAIN] = 'SNOW MOUNTAINS',
+    [g_TERRAIN_TYPE_TUNDRA] = 'TUNDRA',
+    [g_TERRAIN_TYPE_TUNDRA_HILLS] = 'TUNDRA HILLS',
+    [g_TERRAIN_TYPE_TUNDRA_MOUNTAIN] = 'TUNDRA MOUNTAINS',
+    [g_TERRAIN_TYPE_GRASS] = 'GRASS ',
+    [g_TERRAIN_TYPE_GRASS_HILLS] = 'GRASS HILLS',
+    [g_TERRAIN_TYPE_GRASS_MOUNTAIN] = 'GRASS MOUNTAIN',
+    [g_TERRAIN_TYPE_COAST] = 'COAST',
+    [g_TERRAIN_TYPE_OCEAN] = 'OCEAN',
+}
 -- ENTRY POINT
 function GenerateMap()
     -- g_iW, g_iH = 84, 52
@@ -3218,9 +3242,6 @@ function GenerateMap()
     print('STOP')
     slthLog(region_plots)
 
-    squareGrid = make_grid(regionMap)
-    local svgContent = createCharacterImageSVG(squareGrid)
-    saveSVG(svgContent, "rewrite_regions.svg")
     failedGateAttempts = {}
     createRiverMap()
     river_plots = PrintFlowMap()
@@ -3228,37 +3249,21 @@ function GenerateMap()
     createPlotMap()
     createTerrainMap()
     combined, out_plots = PrintPlotMap()
-    local squareGrid_plot_Types = make_grid(out_plots)
 
-    print('START ; 9_square grid plots')
-    list_o_lists_GridPrint(squareGrid_plot_Types)
-    print('STOP')
-
-    local svgContent = createCharacterImageSVG(squareGrid_plot_Types, nil, nil)
-    saveSVG(svgContent, "output.svg")
     local terrainMap_out_plots = {}
     for y = g_iH - 1, 0, -1 do
-        local lineString = ""
         for x = 0, g_iW - 1 do
             local mapLoc = tostring(terrainMap[GetIndex(x, y)])
-            -- print(mapLoc)
             terrainMap_out_plots[GetIndex(x, y)] =  mapLoc
         end
     end
 
-    local squareGrid_Terrain_Types = make_grid(terrainMap_out_plots)
-    -- print('square grid dimensions:', #squareGrid_Terrain_Types, #(squareGrid_Terrain_Types[5]))
-    local hexGrid_Terrain_Types = createHexGrid(squareGrid_Terrain_Types, g_TERRAIN_TYPE_GRASS)
-    local svgContent = createHexGridSVG(squareGrid_Terrain_Types)
-    saveSVG(svgContent, "output_hex.svg")
-
-
-
+    out_plots = plotMap
     plotTypes = ConvertToFiraxisFormSimple(out_plots, plotErebusFxsMapper)
     terrainTypes = ConvertToFiraxisFormSimple(terrainMap_out_plots, terrainErebusFxsMapper)
+    simpleGridPrint(plotTypes, 'final plots')
+    simpleGridPrint(terrainTypes, 'final terrains')
     ApplyTerrain(plotTypes, terrainTypes);
-
-    -- fix silly bottom row.
 
     -- Temp
     AreaBuilder.Recalculate();
@@ -3274,7 +3279,15 @@ function GenerateMap()
 
     -- River generation is affected by plot types, originating from highlands and preferring to traverse lowlands.
     --AddRivers();
-    AddRiversSkipEmpty()
+    -- AddRiversSkipEmpty()
+    for x = 0, g_iW - 1 do
+		for y = 0, g_iH - 1 do
+			local i = y * g_iW + x; -- C++ Plot indices, starting at 0.
+            print('defining riverPlot at', i)
+			g_riverPlots[i] = 0;
+		end
+	end
+    AddRiversInlandLake()
     -- new rivers
     simpleGridPrint(riverMap, 'River Map')
     simpleGridPrint(flowMap, 'Flow Map')
@@ -3287,7 +3300,7 @@ function GenerateMap()
     ]]
     -- Lakes would interfere with rivers, causing them to stop and not reach the ocean, if placed any sooner.
     local numLargeLakes = GameInfo.Maps[Map.GetMapSize()].Continents;
-    AddLakes(numLargeLakes);
+    AddLakesToPresentAreas(numLargeLakes);
 
     AddFeatures();
     TerrainBuilder.AnalyzeChokepoints();
@@ -3310,11 +3323,16 @@ function GenerateMap()
     local resourcesConfig = MapConfiguration.GetValue("resources");
     local startConfig = MapConfiguration.GetValue("start");-- Get the start config
     local args = {
+        iWaterLux = 1,
+		iWaterBonus = 1.0,
         resources = resourcesConfig,
         START_CONFIG = startConfig,
     };
 
     -- NewPlaceLuxuryResources
+    iLuxAdjuster = 0.8
+    iStratAdjuster = 0.8
+    iBonusAdjuster = 0.5
     tContinentMountainRatio = {}
     tContinentNonMountainPlots = {}
     local totalPlaceable = 0
@@ -3341,7 +3359,7 @@ function GenerateMap()
         print('has this many non-mountain plots', iNumNonMountains)
         print('and the total placeable plot count is', totalPlaceable)
         print('and so its ratio of plots is', iNumNonMountains / totalPlaceable)
-        tContinentPlotPortions[eContinent] = iNumNonMountains / totalPlaceable
+        tContinentPlotPortions[eContinent] = (iNumNonMountains / totalPlaceable)
     end
 
     ResourceGenerator.__PlaceLuxuryResources = NewPlaceLuxuryResources
@@ -3626,7 +3644,7 @@ function NewPlaceLuxuryResources(self, eChosenLux, eContinent)
 	end
     print('trying to place luxuries for continent. Post Mountain Ratio', eContinent, iNumToPlace)
     if tContinentPlotPortions[eContinent] then
-        iNumToPlace = iNumToPlace * tContinentPlotPortions[eContinent]
+        iNumToPlace = iNumToPlace * tContinentPlotPortions[eContinent] * iLuxAdjuster
     end
     print('trying to place luxuries for continent. Post Continent Plot Portioning', eContinent, iNumToPlace)
 	self:__ScoreLuxuryPlots(eChosenLux, eContinent);
@@ -3654,7 +3672,7 @@ function NewPlaceStrategicResources(self, eContinent)
             print('new num to place is mountainRatio * iNumToPlace = ',tContinentMountainRatio[eContinent], iNumToPlace)
         end
         if tContinentPlotPortions[eContinent] then
-            iNumToPlace = iNumToPlace * tContinentPlotPortions[eContinent]
+            iNumToPlace = iNumToPlace * tContinentPlotPortions[eContinent]  * iStratAdjuster
         end
         print('trying to place strategics for continent. Post Plot Portions', eContinent, iNumToPlace)
 		self:__ScoreStrategicPlots(row.ResourceIndex, eContinent);
@@ -3749,6 +3767,52 @@ function newInitNWData(self)
 	end
 end
 
+function AddLakesToPresentAreas(largeLakes)
+
+	print("Map Generation - Adding Lakes to correct areas");
+	largeLakes = largeLakes or 0;
+
+	local numLakesAdded = 0;
+	local numLargeLakesAdded = 0;
+
+	local lakePlotRand = GlobalParameters.LAKE_PLOT_RANDOM or 25;
+	local iW, iH = Map.GetGridSize();
+
+	for i = 0, (iW * iH) - 1, 1 do
+		plot = Map.GetPlotByIndex(i);
+		if(plot) then
+			if (plot:IsWater() == false) then
+				if (plot:IsCoastalLand() == false) then
+                    if mountain_blocked[i] == largest_region then
+                        if (plot:IsRiver() == false and plot:IsRiverAdjacent() == false) then
+                            if (AdjacentToNaturalWonder(plot) == false) then
+                                local r = TerrainBuilder.GetRandomNumber(lakePlotRand, "MapGenerator AddLakes");
+                                if r == 0 then
+                                    numLakesAdded = numLakesAdded + 1;
+                                    if(largeLakes > numLargeLakesAdded) then
+                                        local bLakes = AddMoreLake(plot);
+                                        if(bLakes == true) then
+                                            numLargeLakesAdded = numLargeLakesAdded + 1;
+                                        end
+                                    end
+
+                                    TerrainBuilder.SetTerrainType(plot, g_TERRAIN_TYPE_COAST);
+                                end
+                            end
+                        end
+                    end
+				end
+			end
+		end
+	end
+
+	-- this is a minimalist update because lakes have been added
+	if numLakesAdded > 0 then
+		print(tostring(numLakesAdded).." lakes added")
+		AreaBuilder.Recalculate();
+	end
+end
+
 -- copied from inland sea
 function GetMapInitData(MapSize)
 	local MapSizeTypes = {};
@@ -3839,7 +3903,8 @@ function AddFeatures()
                             if altitude < LeafyAltitude then
                                 if rainfall >= JungleThreshold then
                                     if pPlot:IsFlatlands() and math.random() < ChanceForMarsh then
-                                        TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureMarsh'])
+                                        TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureJungle'])
+                                        --TerrainBuilder.SetFeatureType(pPlot, featureTypeMap['featureMarsh'])
                                         -- if math.random() >= ChanceForOnlyMarsh then          --AHHH we cant have both marsh and jungle on a plot
                                             -- plot.setFeatureType(featureJungle,0)
                                     else
@@ -3885,7 +3950,7 @@ function AddFeatures()
                                         elseif plotTypes[plotIndex] ~= g_PLOT_TYPE_OCEAN then
                                             -- print "water neighbor"
                                             foundNonDesert = True
-                                        elseif surPlot.getFeatureType() == featureTypeMap['featureOasis'] then
+                                        elseif surPlot.getFeatureType and surPlot.getFeatureType() == featureTypeMap['featureOasis'] then
                                             -- print "oasis neighbor"
                                             foundNonDesert = True
                                         end
@@ -3987,6 +4052,389 @@ function AddRiversSkipEmpty()
 	end
 end
 
+function AddRiversInlandLake()
+
+	print("Map Generation - Adding Rivers");
+
+	local iW, iH = Map.GetGridSize();
+	local orig_direction, current_direction, pStartPlot;
+
+	for i = 0, (iW * iH) - 1, 1 do
+		plot = Map.GetPlotByIndex(i);
+		if (plot:IsCoastalLand()) then
+			if (plot:IsNaturalWonder() == false and AdjacentToNaturalWonder(plot) == false) then
+				local pNWPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_NORTHWEST);
+				local pNEPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_NORTHEAST);
+				local pEPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_EAST);
+				local pSEPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_SOUTHEAST);
+				local pSWPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_SOUTHWEST);
+				local pWPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_WEST);
+
+				-- Don't start any rivers really near the map edge
+				if (pNWPlot ~= nil and pNEPlot ~= nil and pEPlot ~= nil and pSEPlot ~= nil and pSWPlot ~= nil and pWPlot ~= nil) then
+
+				    -- ... or near another river
+					if (not pNWPlot:IsRiver() and not pNEPlot:IsRiver() and not pEPlot:IsRiver() and not pSEPlot:IsRiver() and not pSWPlot:IsRiver() and not pWPlot:IsRiver()) then
+
+						if     (pEPlot:IsWater()  and not pSEPlot:IsWater() and not pSWPlot:IsWater() and not pWPlot:IsWater())  then
+							TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_NORTHEAST);
+						elseif (pSEPlot:IsWater() and not pSWPlot:IsWater() and not pWPlot:IsWater()  and not pNWPlot:IsWater()) then
+							TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST);
+						elseif (pSWPlot:IsWater() and not pWPlot:IsWater()  and not pNWPlot:IsWater() and not pNEPlot:IsWater()) then
+							TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_SOUTH);
+						elseif (pWPlot:IsWater()  and not pNWPlot:IsWater() and not pNEPlot:IsWater() and not pEPlot:IsWater())  then
+							TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST);
+						elseif (pNWPlot:IsWater() and not pNEPlot:IsWater() and not pEPlot:IsWater()  and not pSEPlot:IsWater()) then
+							TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_NORTHWEST);
+						elseif (pNEPlot:IsWater() and not pEPlot:IsWater()  and not pSEPlot:IsWater() and not pSWPlot:IsWater()) then
+							TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_NORTH);
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+function TryStartRiver(pStartPlot, directionIntoSea)
+	local iW, iH = Map.GetGridSize();
+	-- Check N/S flow direction for match
+	if (pStartPlot:GetX() < iW / 2) then
+		-- Should flow south
+		if (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_NORTHEAST or directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_NORTH or directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST) then
+			return;
+		end
+	else
+		-- Should flow north
+		if (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST or directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_SOUTH or directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST) then
+			return;
+		end
+	end
+	if (pStartPlot:GetY() < iH / 2) then
+		-- Should flow west
+		if (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_NORTHEAST or directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST) then
+			return;
+		end
+	else
+		-- Should flow east
+		if (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST or directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST) then
+			return;
+		end
+	end
+	if NotCloseToAnotherRiver(pStartPlot) and not IsAdjacentMountain(pStartPlot) and not IsAdjacentRiver(pStartPlot, -1) then
+		table.insert(g_riverStartPlots, pStartPlot:GetIndex());
+		local current_direction;
+		local iRand = TerrainBuilder.GetRandomNumber (2, "River First Turn Rand");
+		if     (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_NORTHEAST) then
+			TerrainBuilder.SetNWOfRiver(pStartPlot, true, directionIntoSea);
+			current_direction = FlowDirectionTypes.FLOWDIRECTION_NORTH;
+			if (iRand == 1) then
+				current_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST;
+			end
+		elseif (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST) then
+			TerrainBuilder.SetNEOfRiver(pStartPlot, true, directionIntoSea);
+			local pWPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_WEST);
+			pStartPlot = pWPlot;
+			current_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTH;
+			if (iRand == 1) then
+				current_direction = FlowDirectionTypes.FLOWDIRECTION_NORTHEAST;
+			end
+		elseif (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_SOUTH) then
+			local pWPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_WEST);
+			TerrainBuilder.SetWOfRiver(pWPlot, true, directionIntoSea);
+			local pNWPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_NORTHWEST);
+			pStartPlot = pNWPlot;
+			current_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST;
+			if (iRand == 1) then
+				current_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST;
+			end
+		elseif (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST) then
+			local pNWPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_NORTHWEST);
+			TerrainBuilder.SetNWOfRiver(pNWPlot, true, directionIntoSea);
+			pStartPlot = pNWPlot;
+			current_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTH;
+			if (iRand == 1) then
+				current_direction = FlowDirectionTypes.FLOWDIRECTION_NORTHWEST;
+			end
+		elseif (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST) then
+			local pNEPlot = Map.GetAdjacentPlot(plot:GetX(), plot:GetY(), DirectionTypes.DIRECTION_NORTHEAST);
+			TerrainBuilder.SetNEOfRiver(pNEPlot, true, directionIntoSea);
+			pStartPlot = pNEPlot;
+			current_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST;
+			if (iRand == 1) then
+				current_direction = FlowDirectionTypes.FLOWDIRECTION_NORTH;
+			end
+
+		elseif (directionIntoSea == FlowDirectionTypes.FLOWDIRECTION_NORTH) then
+			TerrainBuilder.SetWOfRiver(pStartPlot, true, directionIntoSea);
+			current_direction = FlowDirectionTypes.FLOWDIRECTION_NORTHWEST;
+			if (iRand == 1) then
+				current_direction = FlowDirectionTypes.FLOWDIRECTION_NORTHEAST;
+			end
+		end
+		DoRiverReverse(pStartPlot, current_direction, directionIntoSea, 8 + (Map.GetMapSize() * 3), 1, g_iRiverID);
+		g_iRiverID = g_iRiverID + 1;
+	end
+end
+
+function NotCloseToAnotherRiver(pStartPlot)
+	local iNotAllowedAsCloseAs = 4;
+	local iPlotIndex = pStartPlot:GetIndex();
+	for i, riverPlotIndex in ipairs(g_riverStartPlots) do
+		if (Map.GetPlotDistance(iPlotIndex, riverPlotIndex) <= iNotAllowedAsCloseAs) then
+		    return false;
+		end
+	end
+	return true;
+end
+
+function IsAdjacentMountain(pPlot)
+	local adjacentPlot;
+	local numDirections = DirectionTypes.NUM_DIRECTION_TYPES;
+	for direction = 0, numDirections - 1, 1 do
+		adjacentPlot = Map.GetAdjacentPlot(pPlot:GetX(), pPlot:GetY(), direction);
+		if (adjacentPlot ~= nil) then
+	   		local i = adjacentPlot:GetY() * g_iW + adjacentPlot:GetX();
+			if (plotTypes[i] == g_PLOT_TYPE_MOUNTAIN) then
+				return true;
+			end
+		end
+	end
+	return false;
+end
+
+function IsAdjacentRiver(pPlot, iRiverID)
+	local adjacentPlot;
+	local numDirections = DirectionTypes.NUM_DIRECTION_TYPES;
+	for direction = 0, numDirections - 1, 1 do
+		adjacentPlot = Map.GetAdjacentPlot(pPlot:GetX(), pPlot:GetY(), direction);
+		if (adjacentPlot ~= nil) then
+	   		local i = adjacentPlot:GetY() * g_iW + adjacentPlot:GetX();
+            print('river plot is' ,i, g_riverPlots[i])
+			if (g_riverPlots[i] > 0 and iRiverID ~= g_riverPlots[i]) then
+				return true;
+			end
+		end
+	end
+	return false;
+end
+
+function DoRiverReverse(startPlot, thisFlowDirection, originalFlowDirection, minLength, curLength, iRiverID)
+
+	print ("Creating River at: " .. tostring(startPlot:GetX()) .. ", ".. tostring(startPlot:GetY()));
+
+	thisFlowDirection = thisFlowDirection or FlowDirectionTypes.NO_FLOWDIRECTION;
+	originalFlowDirection = originalFlowDirection or FlowDirectionTypes.NO_FLOWDIRECTION;
+
+	print ("thisFlowDirection: " .. tostring(thisFlowDirection));
+	print ("originalFlowDirection: " .. tostring(originalFlowDirection));
+	print ("minLength: " .. tostring(minLength));
+	print ("curLength: " .. tostring(curLength));
+	print ("iRiverID: " .. tostring(iRiverID));
+
+	-- pStartPlot = the plot at whose SE corner the river is starting
+	local riverPlot;
+
+	local bestFlowDirection = FlowDirectionTypes.NO_FLOWDIRECTION;
+	if (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTH) then
+
+		riverPlot = Map.GetAdjacentPlot(startPlot:GetX(), startPlot:GetY(), DirectionTypes.DIRECTION_SOUTHWEST);
+		if (riverPlot == nil) then
+			return;
+		end
+
+		local adjacentPlot = Map.GetAdjacentPlot(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_EAST);
+		if (adjacentPlot == nil or riverPlot:IsWOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater()) then
+			if (riverPlot:IsWater()) then
+				TerrainBuilder.SetWOfRiver(riverPlot, true, thisFlowDirection);
+			end
+			return;
+		end
+
+		TerrainBuilder.SetWOfRiver(riverPlot, true, thisFlowDirection);
+		-- riverPlot does not change
+		print ("At (x,y) SetWOfRiver, flowDirection = ", riverPlot:GetX(), riverPlot:GetY(), thisFlowDirection);
+
+	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHEAST) then
+
+		riverPlot = startPlot;
+		local adjacentPlot = Map.GetAdjacentPlot(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_SOUTHEAST);
+		if (adjacentPlot == nil or riverPlot:IsNWOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater()) then
+			if (riverPlot:IsWater()) then
+				TerrainBuilder.SetNWOfRiver(riverPlot, true, thisFlowDirection);
+			end
+			return;
+		end
+
+		TerrainBuilder.SetNWOfRiver(riverPlot, true, thisFlowDirection);
+		-- riverPlot does not change
+		print ("At (x,y) SetNWOfRiver, flowDirection = ", riverPlot:GetX(), riverPlot:GetY(), thisFlowDirection);
+
+	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST) then
+
+		riverPlot = startPlot;
+		local adjacentPlot = Map.GetAdjacentPlot(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_SOUTHWEST);
+		if (adjacentPlot == nil or riverPlot:IsNEOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater()) then
+			if (riverPlot:IsWater()) then
+					TerrainBuilder.SetNEOfRiver(riverPlot, true, thisFlowDirection);
+			end
+			return;
+		end
+
+		TerrainBuilder.SetNEOfRiver(riverPlot, true, thisFlowDirection);
+		riverPlot = Map.GetAdjacentPlot(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_WEST);
+		print ("At (x,y) SetNEOfRiver, flowDirection = ", riverPlot:GetX(), riverPlot:GetY(), thisFlowDirection);
+
+	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTH) then
+
+		riverPlot = startPlot;
+		local adjacentPlot = Map.GetAdjacentPlot(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_EAST);
+		if (adjacentPlot == nil or riverPlot:IsWOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater() ) then
+			if (riverPlot:IsWater()) then
+				TerrainBuilder.SetWOfRiver(riverPlot, true, thisFlowDirection);
+			end
+			return;
+		end
+
+		TerrainBuilder.SetWOfRiver(riverPlot, true, thisFlowDirection);
+        local riverX = riverPlot:GetX()
+        local riverY = riverPlot:GetY()
+		riverPlot = Map.GetAdjacentPlot(riverX, riverY, DirectionTypes.DIRECTION_NORTHEAST);
+		print ("At (x,y) SetWOfRiver, flowDirection = ", riverX, riverY, thisFlowDirection);
+
+	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST) then
+
+		riverPlot = startPlot;
+		local adjacentPlot = Map.GetAdjacentPlot(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_SOUTHEAST);
+		if (adjacentPlot == nil or riverPlot:IsNWOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater() ) then
+			if (riverPlot:IsWater()) then
+				TerrainBuilder.SetNWOfRiver(riverPlot, true, thisFlowDirection);
+			end
+				return;
+		end
+
+		TerrainBuilder.SetNWOfRiver(riverPlot, true, thisFlowDirection);
+		-- riverPlot does not change
+		print ("At (x,y) SetNWOfRiver, flowDirection = ", riverPlot:GetX(), riverPlot:GetY(), thisFlowDirection);
+
+	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST) then
+
+		riverPlot = Map.GetAdjacentPlot(startPlot:GetX(), startPlot:GetY(), DirectionTypes.DIRECTION_EAST);
+		if (riverPlot == nil) then
+			return;
+		end
+
+		local adjacentPlot = Map.GetAdjacentPlot(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_SOUTHWEST);
+		if (adjacentPlot == nil or riverPlot:IsNEOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater()) then
+			if (riverPlot:IsWater()) then
+				TerrainBuilder.SetNEOfRiver(riverPlot, true, thisFlowDirection);
+			end
+			return;
+		end
+
+		TerrainBuilder.SetNEOfRiver(riverPlot, true, thisFlowDirection);
+		-- riverPlot does not change
+		print ("At (x,y) SetNEOfRiver, flowDirection = ", riverPlot:GetX(), riverPlot:GetY(), thisFlowDirection);
+
+	else
+		-- River is starting here, set the direction in the next step
+		riverPlot = startPlot;
+	end
+
+	if riverPlot and (IsAdjacentRiver(riverPlot, iRiverID)
+		    or (IsAdjacentMountain(riverPlot) and curLength > minLength)
+		    or (curLength > minLength * 1.5)) then
+
+		-- The river has flowed off into a lake or another river, next to a mountain (having met minimum distance), or equalled min length +50%.  We are done.
+		print ("DoRiverReverse() success");
+		return;
+	end
+
+	-- Storing X,Y positions as locals to prevent redundant function calls.
+	local riverPlotX = riverPlot:GetX();
+	local riverPlotY = riverPlot:GetY();
+
+	print ("River Plot now (x, y): ", riverPlotX, riverPlotY);
+
+	-- Mark this plot as having a river so we don't come here again
+	local iMapIndex = riverPlotY * g_iW + riverPlotX;
+	g_riverPlots[iMapIndex] = iRiverID;
+    print('setting river plot', iMapIndex, iRiverID)
+
+	-- Table of methods used to determine the adjacent plot.
+	local adjacentPlotFunctions = {
+		[FlowDirectionTypes.FLOWDIRECTION_NORTH] = function()
+			return Map.GetAdjacentPlot(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_NORTHWEST);
+		end,
+
+		[FlowDirectionTypes.FLOWDIRECTION_NORTHEAST] = function()
+			return Map.GetAdjacentPlot(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_NORTHEAST);
+		end,
+
+		[FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST] = function()
+			return Map.GetAdjacentPlot(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_EAST);
+		end,
+
+		[FlowDirectionTypes.FLOWDIRECTION_SOUTH] = function()
+			return Map.GetAdjacentPlot(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_SOUTHWEST);
+		end,
+
+		[FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST] = function()
+			return Map.GetAdjacentPlot(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_WEST);
+		end,
+
+		[FlowDirectionTypes.FLOWDIRECTION_NORTHWEST] = function()
+			return Map.GetAdjacentPlot(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_NORTHWEST);
+		end
+	}
+
+	if(bestFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
+
+		-- Attempt to calculate the best flow direction.
+		local bestValue = math.huge;
+		for flowDirection, getAdjacentPlot in pairs(adjacentPlotFunctions) do
+
+			if (GetOppositeFlowDirection(flowDirection) ~= originalFlowDirection) then
+
+				if (thisFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION or
+					flowDirection == TurnRightFlowDirections[thisFlowDirection] or
+					flowDirection == TurnLeftFlowDirections[thisFlowDirection]) then
+
+					local adjacentPlot = getAdjacentPlot();
+
+					if (adjacentPlot ~= nil) then
+
+						local value = GetRiverValueAtPlot(adjacentPlot);
+						if (flowDirection == originalFlowDirection) then
+							value = value / 4;
+						end
+
+						if (value < bestValue) then
+							bestValue = value;
+							bestFlowDirection = flowDirection;
+						end
+					end
+				end
+			end
+		end
+
+		if(bestFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
+
+			-- Patch river to north edge of map if can't flow off their normally
+			if (originalFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHEAST) then
+				TerrainBuilder.SetNWOfRiver(riverPlot, true, FlowDirectionTypes.FLOWDIRECTION_NORTHEAST, riverID);
+				TerrainBuilder.SetWOfRiver(riverPlot, true, FlowDirectionTypes.FLOWDIRECTION_NORTH, riverID);
+				print ("*** NORTH EDGE OF MAP RIVER REPAIR ***");
+			end
+		end
+	end
+
+		--Recursively generate river.
+	if (bestFlowDirection ~= FlowDirectionTypes.NO_FLOWDIRECTION) then
+		DoRiverReverse(riverPlot, bestFlowDirection, originalFlowDirection, minLength, curLength +1, iRiverID);
+	end
+end
+
 function do_ascii(plot_types, terrain_types,do_feature, text, by_actual)
     local tPlotString = {[0] = 'W', [1] = 'L', [2] = 'H', [3] = 'M', ['0'] = 'W', ['1'] = 'L', ['2'] = 'H', ['3'] = 'M'}
 
@@ -4055,33 +4503,51 @@ function do_ascii(plot_types, terrain_types,do_feature, text, by_actual)
     end
     print('STOP')
 end
-
+print_counter = 0
 function simpleGridPrint(tbl, title)
-    print('START ; ', title)
+    startPrinter(title)
     local count = 0
     local x_string = ''
     for i, val in pairs(tbl) do
-        if count == g_iW then
-            count = 0
-            print(x_string)
-            x_string = ''
-        end
-        count = count + 1
-        x_string = x_string .. val .. '|'
-	end
+    if count == g_iW then
+    count = 0
+    print(x_string)
+    x_string = ''
+    end
+    count = count + 1
+    x_string = x_string .. val .. '|'
+    end
     print('STOP')
+    print_counter = print_counter + 1
 end
 
-function list_o_lists_GridPrint(tbl)
+function startPrinter(title)
+    local index_string
+    if print_counter > 29 then
+        index_string = 'c' .. print_counter
+    elseif print_counter > 19 then
+        index_string = 'b' .. print_counter
+    elseif print_counter > 9 then
+        index_string = 'a' .. print_counter
+    else
+        index_string = print_counter
+    end
+    print('START ; ', index_string .. title)
+end
+
+function list_o_lists_GridPrint(tbl, title)
+    startPrinter(title)
     local count = 0
     for y, x_row in pairs(tbl) do
         local x_string = ''
         for x, val in pairs(x_row) do
             x_string = x_string .. val
         end
-        slthLog(x_string)
+        print(x_string)
         x_string = ''
 	end
+    print('STOP')
+    print_counter = print_counter + 1
 end
 
 local terrainColorMapper = {
