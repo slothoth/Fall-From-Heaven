@@ -36,7 +36,12 @@ INSERT INTO Improvements(ImprovementType, Name, Buildable, Description, PlunderT
 UPDATE Improvements SET PrereqTech='TECH_CONSTRUCTION' WHERE ImprovementType='IMPROVEMENT_FORT';
 UPDATE Improvements SET PrereqTech='TECH_AGRICULTURE' WHERE ImprovementType='IMPROVEMENT_FARM';
 UPDATE Improvements SET PrereqTech='TECH_MINING' WHERE ImprovementType='IMPROVEMENT_MINE';
+UPDATE Improvements SET PrereqTech='TECH_CALENDAR' WHERE ImprovementType='IMPROVEMENT_PLANTATION';
+UPDATE Improvements SET PrereqTech='TECH_HUNTING' WHERE ImprovementType='IMPROVEMENT_CAMP';
+UPDATE Improvements SET PrereqTech='TECH_ANIMAL_HUSBANDRY' WHERE ImprovementType='IMPROVEMENT_PASTURE';
 UPDATE Improvements SET PrereqTech='SLTH_TECH_SAILING' WHERE ImprovementType='IMPROVEMENT_FISHING_BOATS';
+
+DELETE FROM Improvement_ValidResources WHERE ImprovementType = 'IMPROVEMENT_PLANTATION' AND ResourceType = 'RESOURCE_WINE';
 
 INSERT INTO Improvement_ValidBuildUnits(ImprovementType, UnitType, ConsumesCharge) VALUES
 ('IMPROVEMENT_MANA_AIR', 'SLTH_UNIT_ADEPT', '0'),
