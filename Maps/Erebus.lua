@@ -131,8 +131,10 @@ function createRegions()
     --region.
 
     -- globals
-    numTiles = (g_iW +1) * (g_iH + 1)
-    numRx = (g_iW + 1) * (g_iH + 1)
+    g_IV_iW = g_iW + 2
+    g_IV_iH = g_iH + 2
+    numTiles = (g_IV_iW ) * (g_IV_iH )
+    numRx = (g_IV_iW) * (g_IV_iH)
     regionMap = {}
     regionRxMap = {}
     regionList = {}
@@ -2148,7 +2150,7 @@ function createPlotMap()
         local y = plot[2]
         local i = GetIndex(x,y)
         local regionID = regionMap[i]
-        if regionID ~= -1 then
+        if regionID and regionID ~= -1 then
             local region = getRegionByID(regionID)
             if region.isWater and plotMap[i] ~= OCEAN then
                 for direction=1,4 do
@@ -2378,10 +2380,10 @@ OppositeDirections = {[N]=S, [S]=N, [E]=W, [W]=E, [NW]=SE, [SE]=NW, [SW]=NE, [NE
 
 function shouldPlacePeak(x,y)
     local i = GetIndex(x,y)
-    slthLog('trying to find region of index, at plot ', i, ':', x, y)
+    print('trying to find region of index, at plot ', i, ':', x, y)
     local regionID = regionMap[i]
-    slthLog('region, x, y:', regionID, x, y)
-    if regionID == -1 then
+    print('region, x, y:', regionID, x, y)
+    if regionID == -1 or not regionID then
         return true -- Plots without a region are always peaks
     end
     local region = getRegionByID(regionID)
@@ -2418,7 +2420,7 @@ end
 function getBorders(x, y)
     local i = GetIndex(x,y)
     local regionID = regionMap[i]
-    if regionID ~= -1 then
+    if regionID and regionID ~= -1 then
         local region = getRegionByID(regionID)
         if not region.isWater then
             for direction = 1, 8, 1 do
