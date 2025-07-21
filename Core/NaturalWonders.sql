@@ -171,7 +171,7 @@ INSERT INTO Feature_YieldChanges(FeatureType, YieldType, YieldChange) VALUES
 ('FEATURE_IKKIL', 'YIELD_PRODUCTION', '3'),
 ('FEATURE_NWON_REMNANTS_OF_PATRIA', 'YIELD_PRODUCTION', '3'),
 ('FEATURE_NWON_YGGDRASIL', 'YIELD_FOOD', '3'),
-('FEATURE_EYE_OF_THE_SAHARA', 'YIELD_GOLD', '3');
+('FEATURE_EYE_OF_THE_SAHARA', 'YIELD_FAITH', '3');
 -- FEATURE_NWON_YGGDRASIL (3,,) -- also (2,,) after way of forests, (2,,) after commune with nature
 -- FEATURE_EYE_OF_THE_SAHARA (,,3) -- also (,,2) after trade, (,,2) after construction
 --

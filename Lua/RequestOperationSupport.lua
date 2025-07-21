@@ -276,20 +276,26 @@ local function GrantGoldenAge(iPlayer, tParameters)
         UnitManager.Kill(pUnit);
     end
     local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
-    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
-    local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
-    GoldenAgeGrant(pPlayer, iGoldenAgeLength)                                                             -- should scale by speed
+    -- local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
+    -- local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
+    GoldenAgeGrant(pPlayer, 10)                                                             -- should scale by speed
     pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
 end
 
-local function GoldenAgeGrant(pPlayer, iGoldenDuration)
+function GoldenAgeGrant(pPlayer, iGoldenDuration)
     for _, pCity in pPlayer:GetCities():Members() do
         local pPlot = pCity:GetPlot();
         if pPlot then
             pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instead of nil?
         end
     end
-    pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + iGoldenDuration)
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    local pCapitalPlot = pCapitalCity:GetPlot()
+    local iPropertyGoldenAge = pCapitalPlot:GetProperty('GoldenAgeDuration') or 0
+    iPropertyGoldenAge = iPropertyGoldenAge + iGoldenDuration
+    print('setting golden age duration to', iPropertyGoldenAge)
+    pCapitalPlot:SetProperty('GoldenAgeDuration', iPropertyGoldenAge)
+    print('confirm golden age exists on capital', pCapitalPlot:GetProperty('GoldenAgeDuration'))
 end
 
 

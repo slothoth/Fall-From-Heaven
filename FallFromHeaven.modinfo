@@ -152,6 +152,7 @@
       <File>Core/CombatBuffs.sql</File>
       <File>Core/Magic.sql</File>
       <File>Core/AiInfos.sql</File>
+      <File>Core/Experimental/Commerce.sql</File>
       <File>Core/BespokeUpgrades.sql</File>
       <File>Core/WorldSpellSupport.sql</File>
       <File>Core/Lua_support/Tech_dummies.sql</File>
@@ -284,7 +285,7 @@
       <File>UI/TechTreeNode.xml</File>
       <File>UI/CivicsTree.xml</File>
       <File>UI/CivicsTree.lua</File>
-       <File>UI/GovernmentScreen.lua</File>
+      <File>UI/GovernmentScreen.lua</File>
       <File>UI/GovernmentScreen.xml</File>
       <File>UI/TabSupport.lua</File>
     </ImportFiles>
@@ -391,6 +392,7 @@
     <File>Core/UnitCommands.sql</File>
     <File>Core/LeaderTraits.sql</File>
     <File>Core/AiInfos.sql</File>
+    <File>Core/Experimental/Commerce.sql</File>
     <File>Core/BespokeUpgrades.sql</File>
     <File>Core/WorldSpellSupport.sql</File>
     <File>Core/Lua_support/Tech_dummies.sql</File>

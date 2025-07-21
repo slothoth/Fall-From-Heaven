@@ -32,7 +32,9 @@ DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_ERAS';
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GOLDEN_AND_DARK_AGES';
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_HISTORIC_MOMENTS';
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_EMERGENCIES';
-
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_FAITH_PURCHASE';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GREAT_PEOPLE_RECRUIT_WITH_FAITH';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GREAT_PEOPLE_RECRUIT_WITH_GOLD';
 -- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'GOVERNMENT_ALLOW_EMPTY_POLICY_SLOTS'; -- could be good
 
 -- UPDATE GlobalParameters SET Value = '5' WHERE Name = 'PLOT_UNIT_LIMIT';      - i dont want this but? does it worK?
@@ -44,7 +46,7 @@ INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
 ('SLTH_RIVER_GOLD', 'MODIFIER_GAME_ADJUST_PLOT_YIELD', 'RIVER_ADJACENT_AND_NOT_FORESTED_REQS');
 
 INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
-('SLTH_RIVER_GOLD', 'YieldType', 'YIELD_GOLD'),
+('SLTH_RIVER_GOLD', 'YieldType', 'YIELD_FAITH'),
 ('SLTH_RIVER_GOLD', 'Amount', '1');
 
 INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES

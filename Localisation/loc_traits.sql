@@ -204,7 +204,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_TRAIT_CREATIVE_DESCRIPTION', '+2[ICON_Culture] Culture in all Cities, Double Production[ICON_Production] towards Monuments and Carnivals.', 'en_US'),
 ('LOC_SLTH_TRAIT_DEFENDER_DESCRIPTION', 'Combat Units have the Homeland ability, making them stronger in friendly territory. Double Production[ICON_Production] towards Archery Ranges, Palisades and Walls', 'en_US'),
 ('LOC_SLTH_TRAIT_EXPANSIVE_DESCRIPTION', 'Double Production[ICON_Production] towards Settlers, Granaries and Harbors, +3 Housing in all cities.', 'en_US'),
-('LOC_SLTH_TRAIT_FINANCIAL_DESCRIPTION', 'Plots with more than 1 Gold[ICON_Gold] get an additional Gold[ICON_Gold]*. Double Production[ICON_Production] towards Markets and Moneychangers.', 'en_US'),
+('LOC_SLTH_TRAIT_FINANCIAL_DESCRIPTION', 'Plots with more than 1 Commerce [ICON_Faith] get an additional Commerce[ICON_Faith]. Double Production[ICON_Production] towards Markets and Moneychangers.', 'en_US'),
 ('LOC_SLTH_TRAIT_INDUSTRIOUS_DESCRIPTION', '50% increased Production[ICON_Production] towards Wonders, Double Production[ICON_Production] speed of Forges.', 'en_US'),
 ('LOC_SLTH_TRAIT_INGENUITY_DESCRIPTION', 'Starts with 100 Gold, 50% discount on all unit upgrades.', 'en_US'),
 ('LOC_SLTH_TRAIT_ORGANIZED_DESCRIPTION', 'Half cost Policy Upkeep, Can build Command Posts, Double Production[ICON_Production] towards Lighthouse and Courthouses.', 'en_US'),

@@ -378,6 +378,49 @@ function SpawnOrthus()
     end
 end
 
+function CountdownReduceGame(countdown_propKey, plotPropKey)
+    local countDownDelay = Game:GetProperty(countdown_propKey)
+    if countDownDelay then
+        if countDownDelay > 1 then
+            Game:SetProperty(countdown_propKey, countDownDelay - 1)
+        elseif countDownDelay == 1 then
+            Game:SetProperty(countdown_propKey, countDownDelay - 1)              -- turn off stasis
+            for iPlayerID, pCountdownPlayer in ipairs(Players) do
+                local pCapitalCity = pCountdownPlayer:GetCities():GetCapitalCity()
+                if pCapitalCity then
+                    local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+                    local iCurrentPlotAmount = pCapitalPlot:GetProperty(plotPropKey)
+                    if iCurrentPlotAmount then
+                        pCapitalPlot:SetProperty(plotPropKey, 0)
+                    end
+                end
+            end
+        end
+    end
+end
+
+function CountdownReducePlayer(pPlayer, countdown_propKey, plotPropKey)
+    if pPlayer:GetCities() then
+        local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+        if pCapitalCity then
+            local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+            local countDownDelay = pCapitalPlot:GetProperty(countdown_propKey)
+            if countDownDelay and countDownDelay > 1 then
+                pCapitalPlot:SetProperty(countdown_propKey, countDownDelay - 1)
+            elseif countDownDelay and countDownDelay == 1 then
+                pCapitalPlot:SetProperty(countdown_propKey, countDownDelay - 1)
+                -- turn off property in all city centre plots
+                 for _, pCity in pPlayer:GetCities():Members() do
+                    local pPlot = pCity:GetPlot();
+                    if pPlot then
+                        pPlot:SetProperty(plotPropKey, 0);
+                    end
+                end
+            end
+        end
+    end
+end
+
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
     local iArcaneLacuna = Game:GetProperty('ARCANE_LACUNA_COUNTDOWN') or 0
@@ -393,24 +436,9 @@ function onTurnStartGameplay(playerId)
         bAllowSpells = true
     end
     -- SECTION: count down Timer effects like Stasis and Arcane Lacuna worldspell
-    local iStasisDelay = Game:GetProperty('STASIS_COUNTDOWN')
-    if iStasisDelay then
-        if iStasisDelay > 1 then
-            Game:SetProperty('STASIS_COUNTDOWN', iStasisDelay - 1)
-        elseif iStasisDelay == 1 then
-            Game:SetProperty('STASIS_COUNTDOWN', iStasisDelay - 1)              -- turn off stasis
-            for iPlayerID, pStasisPlayer in ipairs(Players) do
-                local pCapitalCity = pStasisPlayer:GetCities():GetCapitalCity()
-                if pCapitalCity then
-                    local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
-                    local iCurrentStasis = pCapitalPlot:GetProperty('InStasis')
-                    if iCurrentStasis then
-                        pCapitalPlot:SetProperty('InStasis', 0)
-                    end
-                end
-            end
-        end
-    end
+    CountdownReduceGame('STASIS_COUNTDOWN', 'InStasis')
+    CountdownReducePlayer(pPlayer,'GoldenAgeDuration', 'InGoldenAge')
+
     for _, unit in pPlayer:GetUnits():Members() do              -- SECTION: do reset castable
         if unit:GetProperty('HasCast') and bAllowSpells then
             print('setting HasCast to 0')
@@ -1456,7 +1484,9 @@ local tLuonnotar = {
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_ANOINTED'].Index]= {civic=GameInfo.Civics['CIVIC_POLITICAL_PHILOSOPHY'].Index},
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_BLESSED'].Index]= {civic=GameInfo.Civics['CIVIC_PRIESTHOOD'].Index},
     [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_CONSECRATED'].Index]= {civic=GameInfo.Civics['CIVIC_FANATICISM'].Index},
-    [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE'].Index]= {civic=GameInfo.Civics['CIVIC_RIGHTEOUSNESS'].Index}}
+    [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE'].Index]= {civic=GameInfo.Civics['CIVIC_RIGHTEOUSNESS'].Index},
+    [GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_EXALTED'].Index]= {tech=GameInfo.Technologies['TECH_OMNISCIENCE'].Index}
+}
 
 local iLunnotarBlocker = GameInfo.Buildings['BUILDING_BLOCK_ALTAR'].Index
 local iAltarBase = GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR'].Index
@@ -1466,7 +1496,8 @@ local tLuonnotarCivics = {
     [GameInfo.Civics['CIVIC_POLITICAL_PHILOSOPHY'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_ANOINTED'].Index,
     [GameInfo.Civics['CIVIC_PRIESTHOOD'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_BLESSED'].Index,
     [GameInfo.Civics['CIVIC_FANATICISM'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_CONSECRATED'].Index,
-    [GameInfo.Civics['CIVIC_RIGHTEOUSNESS'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE'].Index
+    [GameInfo.Civics['CIVIC_RIGHTEOUSNESS'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE'].Index,
+    [GameInfo.Technologies['TECH_OMNISCIENCE'].Index] = GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_EXALTED'].Index
 }
 
 function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruction)
@@ -1478,16 +1509,31 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
             pPlot:SetProperty('altar_level', 0)
         end
         local iCivicForNext = tLuonnotarInfo['civic']
+        local failedCheck
         if iCivicForNext then
             -- check if has culture
             local pPlayer = Players[playerID]
             if not pPlayer then return; end
             local pCulture = pPlayer:GetCulture()
             if not pCulture then return; end
-            local pCity = CityManager.GetCity(pPlayer, cityID)
             if not pCulture:HasCivic(iCivicForNext) then
-                pCity:AttachModifierByID('MODIFIER_FREE_SLTH_BUILDING_NO_ALTAR_ALWAYS')
+                failedCheck = true
             end
+        end
+        local iTechForNext = tLuonnotarInfo['tech']
+        if iTechForNext then
+            local pPlayer = Players[playerID]
+            if not pPlayer then return; end
+            local pPlayerTechs = pPlayer:GetTechs()
+            if not pPlayerTechs then return; end
+            if not pPlayerTechs:HasTech(iTechForNext) then
+                failedCheck = true
+            end
+        end
+        if failedCheck then
+            local pCity = CityManager.GetCity(Players[playerID], cityID)
+            print('player didnt have tech or civic for next lunnotar, blocking with building.')
+            pCity:AttachModifierByID('MODIFIER_FREE_SLTH_BUILDING_NO_ALTAR_ALWAYS')         -- makes a building to block the altar, iLunnotarBlocker, BUILDING_BLOCK_ALTAR
         end
     end
 end
@@ -1510,7 +1556,7 @@ end
 
 -- Great general on Mil Strategy
 -- Great Bard on Drama
--- there are others im pretty sure
+-- there are others im pretty sure one on engineering
 
 local tORTechs = {
     [GameInfo.Technologies['SLTH_TECH_ARCHERY'].Index] = GameInfo.Technologies['TECH_ARCHERY_SKIP'].Index,
@@ -1520,10 +1566,20 @@ local tORTechs = {
     [GameInfo.Technologies['TECH_TRADE'].Index] = GameInfo.Technologies['TECH_TRADE_SKIP'].Index
 }
 function OnTechnologyGrantFirst(playerID, technologyIndex)
+    local pPlayer = Players[playerID]
+    local iCurrentLuonnotar = tLuonnotarCivics[technologyIndex]
+    if iCurrentLuonnotar then
+        print('unlocking altar after tech unlock')
+        for _, pCity in pPlayer:GetCities():Members() do
+            if pCity:GetBuildings():HasBuilding(iCurrentLuonnotar) then
+                pCity:GetBuildings():RemoveBuilding(iLunnotarBlocker)           -- removes the building that blocks next altar
+                return
+            end
+        end
+    end
     local iOrTechReqIndex = tORTechs[technologyIndex]
     if iOrTechReqIndex then
         -- check player has tech
-        local pPlayer = Players[playerID]
         local pPlayerTechs = pPlayer:GetTechs()
         if pPlayerTechs then
             local hasTech = pPlayerTechs:HasTech(iOrTechReqIndex)
@@ -1546,7 +1602,7 @@ function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
         print('unlocking altar after civic unlock')
         for _, pCity in pPlayer:GetCities():Members() do
             if pCity:GetBuildings():HasBuilding(iCurrentLuonnotar) then
-                pCity:GetBuildings():RemoveBuilding(iLunnotarBlocker)           -- dont think i need to add back dummy_prereq
+                pCity:GetBuildings():RemoveBuilding(iLunnotarBlocker)           -- removes the building that blocks next altar
                 return
             end
         end
