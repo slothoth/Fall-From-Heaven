@@ -910,28 +910,29 @@ function PopulateNode(uiNode, playerTechData)
 				if prereq ~= nil then
 					local previousRow	:number = prereq.UITreeRow;
 					local previousColumn:number = g_kEras[prereq.EraType].PriorColumns;
-
-					for lineNum,line in pairs(g_uiConnectorSets[item.Type..","..prereqId]) do
-						if(lineNum == 1 or lineNum == 5) then
-							line:SetTexture("Controls_TreePathEW");
-						end
-						if( lineNum == 3) then
-							line:SetTexture("Controls_TreePathNS");
-						end
-
-						if(lineNum==2)then
-							if previousRow < item.UITreeRow  then
-								line:SetTexture("Controls_TreePathSE");
-							else
-								line:SetTexture("Controls_TreePathNE");
+					if g_uiConnectorSets[item.Type..","..prereqId] then
+						for lineNum,line in pairs(g_uiConnectorSets[item.Type..","..prereqId]) do
+							if(lineNum == 1 or lineNum == 5) then
+								line:SetTexture("Controls_TreePathEW");
 							end
-						end
+							if( lineNum == 3) then
+								line:SetTexture("Controls_TreePathNS");
+							end
 
-						if(lineNum==4)then
-							if previousRow < item.UITreeRow  then
-								line:SetTexture("Controls_TreePathES");
-							else
-								line:SetTexture("Controls_TreePathEN");
+							if(lineNum==2)then
+								if previousRow < item.UITreeRow  then
+									line:SetTexture("Controls_TreePathSE");
+								else
+									line:SetTexture("Controls_TreePathNE");
+								end
+							end
+
+							if(lineNum==4)then
+								if previousRow < item.UITreeRow  then
+									line:SetTexture("Controls_TreePathES");
+								else
+									line:SetTexture("Controls_TreePathEN");
+								end
 							end
 						end
 					end
