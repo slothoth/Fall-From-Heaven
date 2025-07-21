@@ -1558,6 +1558,39 @@ end
 -- Great Bard on Drama
 -- there are others im pretty sure one on engineering
 
+local iTechArcaneLore = GameInfo.Technologies['TECH_ARCANE_LORE'].Index
+local iTechEngineering = GameInfo.Technologies['TECH_MACHINERY'].Index
+local iCivicMilTraining = GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index
+local iCivicDrama = GameInfo.Civics['CIVIC_DRAMA_POETRY'].Index
+local iCivicMercantilism = GameInfo.Civics['CIVIC_MERCANTILISM'].Index
+
+local iGreatGeneral = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_GENERAL'].Index
+local iGreatArtist = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_ARTIST'].Index
+local iGreatSage = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_SCIENTIST'].Index
+local iGreatEngineer = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_ENGINEER'].Index
+local iGreatMerchant = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_MERCHANT'].Index
+local tCivicsGreatPeople = {[iCivicMilTraining] = iGreatGeneral, [iCivicDrama] = iGreatArtist,
+                            [iTechArcaneLore] = iGreatSage, [iTechEngineering] = iGreatEngineer,
+                            [iCivicMercantilism] = iGreatMerchant
+                        }          -- also techs
+
+function grantGreatPersonFirstToTechCivic(civicIndex, gamePropKey, pPlayer, playerID)
+    local bMilTrainingDiscovered = Game:GetProperty(gamePropKey)
+    if not bMilTrainingDiscovered then
+        local pGreatPeople = Game.GetGreatPeople()
+        local pTimeline = pGreatPeople:GetTimeline();
+        local sGreatPersonType
+        for i,entry in ipairs(pTimeline) do
+            if entry.Class ==  tCivicsGreatPeople[civicIndex] then
+                sGreatPersonType = GameInfo.GreatPersonIndividuals[entry.Individual].GreatPersonIndividualType
+            end
+        end
+        local pCapital = pPlayer:GetCities():GetCapitalCity()
+        Game.GetGreatPeople():CreatePerson(playerID, sGreatPersonType, pCapital:GetX(), pCapital:GetY())
+        Game:SetProperty(gamePropKey, 1)
+    end
+end
+
 local tORTechs = {
     [GameInfo.Technologies['SLTH_TECH_ARCHERY'].Index] = GameInfo.Technologies['TECH_ARCHERY_SKIP'].Index,
     [GameInfo.Technologies['TECH_OMNISCIENCE'].Index] = GameInfo.Technologies['TECH_OMNISCIENCE_SKIP'].Index,
@@ -1565,7 +1598,7 @@ local tORTechs = {
     [GameInfo.Technologies['TECH_SORCERY'].Index] = GameInfo.Technologies['TECH_SORCERY_SKIP'].Index,
     [GameInfo.Technologies['TECH_TRADE'].Index] = GameInfo.Technologies['TECH_TRADE_SKIP'].Index
 }
-function OnTechnologyGrantFirst(playerID, technologyIndex)
+function OnTechnologyResearch(playerID, technologyIndex)
     local pPlayer = Players[playerID]
     local iCurrentLuonnotar = tLuonnotarCivics[technologyIndex]
     if iCurrentLuonnotar then
@@ -1584,16 +1617,16 @@ function OnTechnologyGrantFirst(playerID, technologyIndex)
         if pPlayerTechs then
             local hasTech = pPlayerTechs:HasTech(iOrTechReqIndex)
             if hasTech then
-                pPlayerTechs:SetResearchProgress(50)            -- no clue what this does
+                pPlayerTechs:SetResearchProgress(50)            -- no clue what this does, and i wrote it
             end
         end
     end
+    if technologyIndex == iTechArcaneLore then
+        grantGreatPersonFirstToTechCivic(technologyIndex, 'ARCANE_LORE_DISCOVERED', pPlayer, playerID)
+    elseif technologyIndex == iTechEngineering then
+        grantGreatPersonFirstToTechCivic(technologyIndex, 'MACHINERY_DISCOVERED', pPlayer, playerID)
+    end
 end
-local iCivicMilTraining = GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index
-local iCivicDrama = GameInfo.Civics['CIVIC_DRAMA_POETRY'].Index
-local iGreatGeneral = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_GENERAL'].Index
-local iGreatArtist = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_ARTIST'].Index
-local tCivicsGreatPeople = {[iCivicMilTraining] = iGreatGeneral, [iCivicDrama] = iGreatArtist}
 
 function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
     local pPlayer = Players[playerID]
@@ -1607,39 +1640,12 @@ function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
             end
         end
     end
-    -- do check for first to civic?
     if civicIndex == iCivicMilTraining then
-        local bMilTrainingDiscovered = Game:GetProperty('MIL_TRAINING_DISCOVERED')
-        if not bMilTrainingDiscovered then
-            local pGreatPeople = Game.GetGreatPeople()
-            local pTimeline = pGreatPeople:GetTimeline();
-            local sGreatPersonType
-            for i,entry in ipairs(pTimeline) do
-                if entry.Class ==  tCivicsGreatPeople[iCivicMilTraining] then
-                    sGreatPersonType = GameInfo.GreatPersonIndividuals[entry.Individual].GreatPersonIndividualType
-                end
-            end
-            local pCapital = pPlayer:GetCities():GetCapitalCity()
-            Game.GetGreatPeople():CreatePerson(playerID, sGreatPersonType, pCapital:GetX(), pCapital:GetY())
-            Game:SetProperty('MIL_TRAINING_DISCOVERED', 1)
-        end
-    end
-
-    if civicIndex == iCivicDrama then
-        local bDramaDiscovered =  Game:GetProperty('DRAMA_DISCOVERED')
-        if not bDramaDiscovered then
-            local pCapital = pPlayer:GetCities():GetCapitalCity()
-            local pGreatPeople = Game.GetGreatPeople()
-            local pTimeline = pGreatPeople:GetTimeline();
-            local sGreatPersonType
-            for i,entry in ipairs(pTimeline) do
-                if entry.Class ==  tCivicsGreatPeople[iCivicDrama] then
-                    sGreatPersonType = GameInfo.GreatPersonIndividuals[entry.Individual].GreatPersonIndividualType
-                end
-            end
-            Game.GetGreatPeople():CreatePerson(playerID, sGreatPersonType, pCapital:GetX(), pCapital:GetY())
-            Game:SetProperty('DRAMA_DISCOVERED', 1)
-        end
+        grantGreatPersonFirstToTechCivic(civicIndex,'MIL_TRAINING_DISCOVERED', pPlayer, playerID)
+    elseif civicIndex == iCivicDrama then
+        grantGreatPersonFirstToTechCivic(civicIndex,'DRAMA_DISCOVERED', pPlayer, playerID)
+    elseif civicIndex == iCivicMercantilism then
+        grantGreatPersonFirstToTechCivic(civicIndex,'MERCANTILISM_DISCOVERED', pPlayer, playerID)
     end
 end
 
@@ -1907,7 +1913,7 @@ function onStart()
     GameEvents.PlayerTurnStarted.Add(IncrementCottages);
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
-    Events.ResearchCompleted.Add(OnTechnologyGrantFirst)
+    Events.ResearchCompleted.Add(OnTechnologyResearch)
     Events.ImprovementRemovedFromMap.Add(RemovedBarbCamp)
     GameEvents.BuildingConstructed.Add(BuildingBuilt)
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
