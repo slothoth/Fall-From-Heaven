@@ -1,3 +1,7 @@
+INSERT INTO PseudoYields(PseudoYieldType, DefaultValue) VALUES
+('PSEUDOYIELD_UNIT_MAGIC', '1'),                                    -- increased by certain leader biases
+('PSEUDOYIELD_UNIT_HERO', '20');
+
 INSERT INTO UnitAiInfos(UnitType, AiType) VALUES
 ('SLTH_UNIT_LOSHA', 'UNITAI_COMBAT'),
 ('SLTH_UNIT_LOSHA', 'UNITAI_EXPLORE'),

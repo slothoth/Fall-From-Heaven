@@ -89,7 +89,7 @@ INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, Domain, For
 ('SLTH_UNIT_SERAPH', 'LOC_SLTH_UNIT_SERAPH_NAME', '2', '1', '39', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '3', '0', 'LOC_SLTH_UNIT_SERAPH_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_SERAPH', '0', 'PROMOTION_CLASS_MELEE', NULL, 'CIVIC_RAGE', '1', '1', '0', '0', 'ADVISOR_CONQUEST', '0');
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion, PurchaseYield, MustPurchase) VALUES
-('SLTH_UNIT_BASIUM', 'LOC_SLTH_UNIT_BASIUM_NAME', '2', '2', '34', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '240', '0', 'LOC_SLTH_UNIT_BASIUM_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_BASIUM', '0', 'PROMOTION_CLASS_MELEE', 'TECH_IRON_WORKING', NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', NULL, '1');
+('SLTH_UNIT_BASIUM', 'LOC_SLTH_UNIT_BASIUM_NAME', '2', '2', '34', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '240', '0', 'LOC_SLTH_UNIT_BASIUM_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_BASIUM', '0', 'PROMOTION_CLASS_MELEE', 'TECH_IRON_WORKING', NULL, '1', '1', '0', '0', '0', 'PSEUDOYIELD_UNIT_HERO', '0', 'ADVISOR_CONQUEST', '0', NULL, '1');
 
 
 INSERT INTO TypeTags(Type, Tag) VALUES
