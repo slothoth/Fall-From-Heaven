@@ -52,7 +52,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_TECH_ARCANE_LORE_DESCRIPTION', 'Unlocks the Spell Extension Promotion option for eligible units. First to unlock granted a Great Scientist. (NOT_FUNCTIONAL)', 'en_US'),
 ('LOC_TECH_ARCHERY_DESCRIPTION', 'Chopping Woods now grants +50% more production. (NOT_FUNCTIONAL)', 'en_US'),
 ('LOC_TECH_CARTOGRAPHY_DESCRIPTION', 'Unlocks the ability to enforce borders, and grant Open Borders to other civilizations. Also allows map trading between civilizations. (NOT_FUNCTIONAL)', 'en_US'),
-('LOC_TECH_CONSTRUCTION_DESCRIPTION', 'Can build bridges across rivers. Allows Farms to spread Irrigation. (NOT_FUNCTIONAL)', 'en_US'),
+('LOC_TECH_CONSTRUCTION_DESCRIPTION', 'Can build bridges across rivers*. Allows Farms to spread Irrigation*', 'en_US'),
 ('LOC_TECH_ENGINEERING_DESCRIPTION', '+1 Movement on Roads (NOT_FUNCTIONAL)', 'en_US'),
 ('LOC_TECH_FUTURE_TECH_DESCRIPTION', 'Adds +1 [ICON_Amenities]Amenity and [ICON_Housing]Housing per city.', 'en_US'),
 ('LOC_TECH_MACHINERY_DESCRIPTION', 'First to unlock granted a Great Engineer. (NOT_FUNCTIONAL)', 'en_US'),
