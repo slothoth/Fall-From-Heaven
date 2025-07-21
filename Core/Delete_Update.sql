@@ -1,12 +1,15 @@
 DELETE FROM Route_ValidBuildUnits;
 UPDATE Building_BuildChargeProductions SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';
 UPDATE District_BuildChargeProductions SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';
-DELETE FROM Routes WHERE RouteType == 'ROUTE_RAILROAD' OR RouteType == 'ROUTE_MODERN_ROAD' OR RouteType == 'ROUTE_INDUSTRIAL_ROAD';
-UPDATE Routes SET MovementCost = 0.5 WHERE RouteType == 'ROUTE_ANCIENT_ROAD';
-UPDATE Routes SET MovementCost = 0.5 WHERE RouteType == 'ROUTE_MEDIEVAL_ROAD';          -- how to absorb engineering buffing roads?
+DELETE FROM Routes WHERE RouteType == 'ROUTE_RAILROAD' OR RouteType == 'ROUTE_MODERN_ROAD';
+UPDATE Routes SET MovementCost = 0.75 WHERE RouteType == 'ROUTE_ANCIENT_ROAD';
+UPDATE Routes SET MovementCost = 0.75 WHERE RouteType == 'ROUTE_MEDIEVAL_ROAD';          -- how to absorb engineering buffing roads?
 
+UPDATE Routes SET MovementCost = 0.5, PrereqEra='ERA_MODERN' WHERE RouteType == 'ROUTE_INDUSTRIAL_ROAD';
 
 UPDATE Eras SET TechTreeLayoutMethod='Prereq';
+-- UPDATE DiplomaticActions SET TargetPrereqCivic = 'CIVIC_HONOR', InitiatorPrereqCivic = 'CIVIC_HONOR' WHERE DiplomaticActionType = 'DIPLOACTION_DEFENSIVE_PACT';
+-- deleted already in R n F i Believe
 DELETE FROM Technologies;
 DELETE FROM TechnologyPrereqs;
 DELETE FROM Technologies_XP2;
@@ -35,7 +38,7 @@ DELETE FROM Resource_YieldChanges;
 DELETE FROM Improvement_YieldChanges;
 DELETE FROM Governments WHERE GovernmentType NOT IN ('GOVERNMENT_CHIEFDOM');
 UPDATE GreatPersonClasses SET DistrictType= 'DISTRICT_CITY_CENTER' WHERE GreatPersonClassType='GREAT_PERSON_CLASS_GENERAL';
-DELETE FROM Districts WHERE DistrictType NOT IN ('DISTRICT_CITY_CENTER', 'DISTRICT_HOLY_SITE', 'DISTRICT_CAMPUS', 'DISTRICT_COMMERCIAL_HUB', 'DISTRICT_THEATER', 'DISTRICT_INDUSTRIAL_ZONE', 'DISTRICT_AQUEDUCT', 'DISTRICT_WONDER');
+DELETE FROM Districts WHERE DistrictType NOT IN ('DISTRICT_CITY_CENTER', 'DISTRICT_HOLY_SITE', 'DISTRICT_CAMPUS', 'DISTRICT_COMMERCIAL_HUB', 'DISTRICT_THEATER', 'DISTRICT_INDUSTRIAL_ZONE', 'DISTRICT_WONDER');
 DELETE FROM District_Adjacencies;
 DELETE FROM District_GreatPersonPoints;
 UPDATE Districts SET Cost=1, PlunderAmount=0, PlunderType='NO_PLUNDER', CostProgressionModel='NO_COST_PROGRESSION', CostProgressionParam1=0, CitystrengthModifier=0 WHERE RequiresPopulation=1;
@@ -45,7 +48,8 @@ UPDATE District_TradeRouteYields SET YieldChangeAsDomesticDestination = 0.0 WHER
 DELETE FROM GreatPersonIndividuals;
 
 DELETE FROM Features WHERE NaturalWonder = 1 AND FeatureType NOT IN ('FEATURE_BERMUDA_TRIANGLE', 'FEATURE_FOUNTAIN_OF_YOUTH', 'FEATURE_IKKIL', 'FEATURE_MATTERHORN', 'FEATURE_TSINGY', 'FEATURE_HA_LONG_BAY', 'FEATURE_PANTANAL', 'FEATURE_PAITITI', 'FEATURE_UBSUNUR_HOLLOW', 'FEATURE_EYE_OF_THE_SAHARA', 'FEATURE_GOBUSTAN', 'FEATURE_DELICATE_ARCH', 'FEATURE_YOSEMITE', 'FEATURE_DEVILSTOWER', 'FEATURE_CHOCOLATEHILLS', 'FEATURE_TORRES_DEL_PAINE');
-DELETE FROM Eras WHERE EraType IN ('ERA_MODERN', 'ERA_ATOMIC', 'ERA_INFORMATION', 'ERA_FUTURE');
+-- DELETE FROM Eras WHERE EraType IN ('ERA_MODERN', 'ERA_ATOMIC', 'ERA_INFORMATION', 'ERA_FUTURE');
+DELETE FROM Eras WHERE EraType IN ('ERA_ATOMIC', 'ERA_INFORMATION', 'ERA_FUTURE');          -- keeping modern for modern roads.. this gonna go bad
 
 
 UPDATE Districts SET PrereqCivic = 'CIVIC_MYSTICISM' WHERE DistrictType = 'DISTRICT_HOLY_SITE';
