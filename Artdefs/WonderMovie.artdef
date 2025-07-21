@@ -533,6 +533,93 @@
 				<m_Name text="BUILDING_GRAND_BAZAAR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
+			<Element>
+				<m_Fields>
+					<m_Values>
+						<Element class="AssetObjects..BLPEntryValue">
+							<m_EntryName text="BUILDING_TORRE_DE_BELEM"/>
+							<m_XLPClass text="WonderMovie"/>
+							<m_XLPPath text="wondermovie.xlp"/>
+							<m_BLPPackage text="WonderMovie"/>
+							<m_LibraryName text="WonderMovie"/>
+							<m_ParamName text="Asset"/>
+						</Element>
+						<Element class="AssetObjects..RGBValue">
+							<m_r>255.000000</m_r>
+							<m_g>255.000000</m_g>
+							<m_b>255.000000</m_b>
+							<m_ParamName text="TintColor"/>
+						</Element>
+						<Element class="AssetObjects..ArtDefReferenceValue">
+							<m_ElementName text=""/>
+							<m_RootCollectionName text="FOVCurves"/>
+							<m_ArtDefPath text=""/>
+							<m_CollectionIsLocked>false</m_CollectionIsLocked>
+							<m_TemplateName text=""/>
+							<m_ParamName text="FOVCurve"/>
+						</Element>
+						<Element class="AssetObjects..ArtDefReferenceValue">
+							<m_ElementName text="DEFAULT"/>
+							<m_RootCollectionName text="TimeOfDayCurves"/>
+							<m_ArtDefPath text="WonderMovie.artdef"/>
+							<m_CollectionIsLocked>false</m_CollectionIsLocked>
+							<m_TemplateName text="WonderMovie"/>
+							<m_ParamName text="TimeOfDayCurve"/>
+						</Element>
+						<Element class="AssetObjects..ArtDefReferenceValue">
+							<m_ElementName text="WONDER_TOD"/>
+							<m_RootCollectionName text="TimeOfDay"/>
+							<m_ArtDefPath text="GameLighting.artdef"/>
+							<m_CollectionIsLocked>true</m_CollectionIsLocked>
+							<m_TemplateName text="TimeOfDay"/>
+							<m_ParamName text="TimeOfDayLighting"/>
+						</Element>
+						<Element class="AssetObjects..BoolValue">
+							<m_bValue>true</m_bValue>
+							<m_ParamName text="FlattensTerrain"/>
+						</Element>
+						<Element class="AssetObjects..BoolValue">
+							<m_bValue>false</m_bValue>
+							<m_ParamName text="bAlignWithCoast"/>
+						</Element>
+						<Element class="AssetObjects..BoolValue">
+							<m_bValue>false</m_bValue>
+							<m_ParamName text="bAlignWithRiver"/>
+						</Element>
+						<Element class="AssetObjects..IntValue">
+							<m_nValue>5</m_nValue>
+							<m_ParamName text="MinVisualProgress"/>
+						</Element>
+						<Element class="AssetObjects..IntValue">
+							<m_nValue>90</m_nValue>
+							<m_ParamName text="MaxVisualProgress"/>
+						</Element>
+						<Element class="AssetObjects..IntValue">
+							<m_nValue>5</m_nValue>
+							<m_ParamName text="UnitHiddenThreshold"/>
+						</Element>
+						<Element class="AssetObjects..ArtDefReferenceValue">
+							<m_ElementName text="DEFAULT"/>
+							<m_RootCollectionName text="TimeLapse"/>
+							<m_ArtDefPath text="WonderMovie.artdef"/>
+							<m_CollectionIsLocked>false</m_CollectionIsLocked>
+							<m_TemplateName text="WonderMovie"/>
+							<m_ParamName text="TimeLapse"/>
+						</Element>
+						<Element class="AssetObjects..StringValue">
+							<m_Value text="COAST"/>
+							<m_ParamName text="Alignment"/>
+						</Element>
+						<Element class="AssetObjects..BoolValue">
+							<m_bValue>true</m_bValue>
+							<m_ParamName text="FollowTerrainHeight"/>
+						</Element>
+					</m_Values>
+				</m_Fields>
+				<m_ChildCollections/>
+				<m_Name text="SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_FINAL"/>
+				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+			</Element>
 		</Element>
 		<Element>
 			<m_CollectionName text="FOVCurves"/>

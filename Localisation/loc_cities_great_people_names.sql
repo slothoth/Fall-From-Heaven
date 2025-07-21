@@ -585,4 +585,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_GREAT_GENERAL_6', 'Haerlond Gosam', 'en_US'),
 ('LOC_SLTH_GREAT_GENERAL_7', 'Hyksos', 'en_US'),
 ('LOC_SLTH_GREAT_GENERAL_8', 'K''thun', 'en_US'),
-('LOC_SLTH_GREAT_GENERAL_9', 'Morsuelis', 'en_US');
+('LOC_SLTH_GREAT_GENERAL_9', 'Morsuelis', 'en_US'),
+('LOC_GRANT_ALTAR', 'Grant the next tier of the Altar of Luonnotar', 'en_US'),
+('LOC_BUILDING_BLOCK_ALTAR_NAME', 'Blocked from next Altar tier by Civic.', 'en_US');
