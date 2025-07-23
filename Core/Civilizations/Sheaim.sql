@@ -6,8 +6,8 @@ INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 
 INSERT INTO	StartBiasTerrains
 		(CivilizationType,			TerrainType,			Tier	)
-VALUES	('SLTH_CIVILIZATION_SHEAIM',	'TERRAIN_PLAINS',		5		);
-
+VALUES	('SLTH_CIVILIZATION_SHEAIM',	'TERRAIN_PLAINS',		5		);          -- uhh is this right? did i just do this cu\
+                                                                                    -- jungle is on plains in VI, but isnt now
 INSERT INTO	StartBiasFeatures
 		(CivilizationType,			FeatureType,			Tier	)
 VALUES	('SLTH_CIVILIZATION_SHEAIM',	'FEATURE_JUNGLE',	5		);          -- feels bad but is accurate
@@ -104,6 +104,8 @@ INSERT INTO TypeTags(Type, Tag) VALUES
 ('SLTH_UNIT_SUCCUBUS', 'RACE_DEMON'),
 ('SLTH_UNIT_TAR_DEMON', 'RACE_DEMON');
 
+INSERT INTO Buildings(BuildingType, Name, PrereqTech, PrereqCivic, Cost, PrereqDistrict, Description, OuterDefenseHitPoints, Housing, Entertainment, TraitType, CitizenSlots, AdvisorType) VALUES
+('SLTH_BUILDING_PLANAR_GATE', 'LOC_SLTH_BUILDING_PLANAR_GATE_NAME', 'TECH_KNOWLEDGE_OF_THE_ETHER', NULL, '300', 'DISTRICT_CITY_CENTER', 'LOC_SLTH_BUILDING_PLANAR_GATE_DESCRIPTION', '0', '0', '0', 'SLTH_TRAIT_CIVILIZATION_BUILDING_PLANAR_GATE', NULL, 'ADVISOR_CONQUEST');
 
 INSERT INTO Projects(ProjectType, Name, ShortName, Description, Cost, PrereqTech, PrereqCivic, UnlocksFromEffect) VALUES
 ('PROJECT_ELEGY_OF_THE_SHEAIM', 'LOC_PROJECT_ELEGY_OF_THE_SHEAIM_NAME', 'LOC_PROJECT_ELEGY_OF_THE_SHEAIM_SHORT', 'LOC_PROJECT_ELEGY_OF_THE_SHEAIM_DESCRIPTION', '600', NULL, 'CIVIC_WAY_OF_THE_WICKED', '1');
@@ -133,6 +135,7 @@ INSERT INTO Types(Type, Kind) VALUES
 ('SLTH_UNIT_ABASHI', 'KIND_UNIT'),
 ('SLTH_UNIT_EATER_OF_DREAMS', 'KIND_UNIT'),
 ('SLTH_BUILDING_NULL_CIVILIZATION_SHEAIM_TRAINING_YARD', 'KIND_BUILDING'),
+('SLTH_BUILDING_PLANAR_GATE', 'KIND_BUILDING'),
 -- ('SLTH_UNIT_MINOTAUR', 'KIND_UNIT'),
 ('SLTH_UNIT_MOBIUS_WITCH', 'KIND_UNIT'),
 ('SLTH_UNIT_REVELERS', 'KIND_UNIT'),

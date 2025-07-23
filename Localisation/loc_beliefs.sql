@@ -15,7 +15,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_ESUS_BELIEFS', 'The Nightwatch to spread religion for a Gold cost, comparable to the Longbowman, and the ShadowRider, a National mounted unit that ignores fortifications.', 'en_US'),
 ('LOC_VEIL_BELIEFS', 'The Savant, and Temple of the Veil', 'en_US'),
 ('LOC_BELIEF_BUILDINGS_WITH_STATE_SLTH_NAME', 'As State Religion, Buildings:', 'en_US'),
-('LOC_THE_ORDER_STATE_BUILDINGS', 'Basilicas acts as a second courthouse.', 'en_US'),
+('LOC_THE_ORDER_STATE_BUILDINGS', 'Basilicas act as a second courthouse.', 'en_US'),
 ('LOC_EMPYREAN_STATE_BUILDINGS', 'Holy Wonder Dies Diei grants Sun Mana, along with the Perfect Sight ability for units', 'en_US'),
 ('LOC_KILMORPH_STATE_BUILDINGS', 'Mines of Gal-Dur Wonder provides a source of Iron', 'en_US'),
 ('LOC_LEAVES_STATE_BUILDINGS', 'Holy Wonder Song of Autumn provides nature mana', 'en_US'),

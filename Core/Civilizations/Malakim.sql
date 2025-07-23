@@ -106,7 +106,7 @@ INSERT INTO Buildings(BuildingType, Name, PrereqTech, PrereqCivic, Cost, PrereqD
 INSERT INTO BuildingModifiers(BuildingType, ModifierId) VALUES
 ('SLTH_BUILDING_DESERT_SHRINE', 'MODIFIER_SLTH_BUILDING_DESERT_SHRINE_ADD_CULTUREYIELD'),
 ('SLTH_BUILDING_DESERT_SHRINE', 'GRANT_EXPERIENCE_ABILITY_SMALL_DESERT_SHRINE_DISCIPLE');
-
+-- wait why do lightbringers not have a prereq?
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
 ('SLTH_UNIT_TEUTORIX', 'LOC_SLTH_UNIT_TEUTORIX_NAME', '2', '2', '58', '63', '2', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '180', '0', 'LOC_SLTH_UNIT_TEUTORIX_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_TEUTORIX', '0', 'PROMOTION_CLASS_RANGED', 'TECH_BLASTING_POWDER', NULL, '1', '1', '0', '0', '0', 'PSEUDOYIELD_UNIT_HERO', '0', 'ADVISOR_CONQUEST', '0'),
 ('SLTH_UNIT_LIGHTBRINGER', 'LOC_SLTH_UNIT_LIGHTBRINGER_NAME', '2', '1', '10', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '60', '0', 'LOC_SLTH_UNIT_LIGHTBRINGER_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_LIGHTBRINGER', '0', 'PROMOTION_CLASS_DISCIPLE', NULL, NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_RELIGIOUS', '0'),

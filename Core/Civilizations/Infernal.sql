@@ -6,7 +6,7 @@ INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUE
 ('LEADER_HYBOREM', 'SLTH_CIVILIZATION_INFERNAL', 'LOC_CITY_INFERNAL_1_NAME');
 
 INSERT INTO Leaders_XP2 (LeaderType, OceanStart) VALUES ('LEADER_HYBOREM', 1);
-
+-- TODO i have him listed as EXNPANSIVE NOT SPIRITUAL, LIKE WIKI says?
 INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES
 ('SLTH_CIVILIZATION_INFERNAL', 'SLTH_TRAIT_CIVILIZATION_INFERNAL_COOL'),
 ('SLTH_CIVILIZATION_INFERNAL', 'SLTH_TRAIT_CIVILIZATION_UNIT_IMP'),
@@ -14,6 +14,25 @@ INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES
 ('SLTH_CIVILIZATION_INFERNAL', 'SLTH_TRAIT_CIVILIZATION_UNIT_DEATH_KNIGHT'),
 ('SLTH_CIVILIZATION_INFERNAL', 'SLTH_TRAIT_CIVILIZATION_UNIT_BALOR'),
 ('SLTH_CIVILIZATION_INFERNAL', 'SLTH_TRAIT_CIVILIZATION_UNIT_HYBOREM');
+
+/* supposed wiki script for hybo spawn
+   Each plot is assigned a random number 0-499 + 2 * the number of tiles in the area + 10* the number of unowned tiles
+   in the area +500 if the tile is unowned, +200 if the tile is owned by the researching player. The highest numbered
+   plot is chosen (the first one is chosen on a tie). Note that if there is no plot chosen, this player is not created.
+
+   Supposedly a bunch of units created.
+    Hyborem with Immortal
+    Longbowman (Infernal) with Mobility I
+    Longbowman (Infernal) with Mobility I
+    Sect of Flies with Mobility I and Iron Weapons
+    Sect of Flies with Mobility I and Iron Weapons
+    Worker (Infernal) with Demon
+    Imp with Mobility I
+    Manes
+    Manes
+    Manes
+    Settler (Infernal) with Demon, Mobility I, Sentry, and Sentry II
+ */
 
 INSERT INTO Traits(TraitType, Name, Description) VALUES
 ('SLTH_TRAIT_CIVILIZATION_INFERNAL_COOL', 'LOC_SLTH_TRAIT_CIVILIZATION_INFERNAL_COOL_NAME', 'LOC_SLTH_TRAIT_CIVILIZATION_INFERNAL_COOL_DESCRIPTION'),
