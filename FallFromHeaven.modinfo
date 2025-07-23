@@ -52,10 +52,10 @@
     <UpdateIcons id="Icons">
       <File>Icons/LeaderIcons.sql</File>
       <File>Icons/UnitIcons.sql</File>
-      <File>Icons/ResourceIcons.sql</File>
-      <File>Icons/BuildingIcons.sql</File>
-      <File>Icons/ImprovementIcons.sql</File>
-      <File>Icons/ProjectIcons.sql</File>
+      <File>Icons/FrontEndResourceIcons.sql</File>
+      <File>Icons/FrontEndBuildingIcons.sql</File>
+      <File>Icons/FrontEndImprovementIcons.sql</File>
+      <File>Icons/FrontEndProjectIcons.sql</File>
       <File>Icons/CommandIcons.sql</File>
       <File>Icons/ModeIcons.xml</File>
     </UpdateIcons>
@@ -178,7 +178,6 @@
       <File>Localisation/loc_techs_civics.sql</File>
       <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
       <File>Localisation/loc_traits.sql</File>
-      <File>Localisation/loc_nulls.sql</File>
       <File>Localisation/loc_units.sql</File>
       <File>Localisation/loc_beliefs.sql</File>
       <File>Localisation/loc_barbs.sql</File>
@@ -322,7 +321,6 @@
     <File>Localisation/loc_cities_great_people_names.sql</File>
     <File>Localisation/loc_civ_leader.sql</File>
     <File>Localisation/loc_equipment.sql</File>
-    <File>Localisation/loc_nulls.sql</File>
     <File>Localisation/loc_pedia.sql</File>
     <File>Localisation/loc_policies.sql</File>
     <File>Localisation/loc_promotions.sql</File>
@@ -446,6 +444,10 @@
     <File>Icons/ImprovementIcons.sql</File>
     <File>Icons/ProjectIcons.sql</File>
     <File>Icons/CommandIcons.sql</File>
+    <File>Icons/FrontEndBuildingIcons.sql</File>
+    <File>Icons/FrontEndResourceIcons.sql</File>
+    <File>Icons/FrontEndImprovementIcons.sql</File>
+    <File>Icons/FrontEndProjectIcons.sql</File>
     <File>Icons/ModeIcons.xml</File>
     <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>

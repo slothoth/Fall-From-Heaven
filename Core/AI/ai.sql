@@ -52,14 +52,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_MASTERS_OF_SORCERY', 'TRAIT_AGENDA_MASTERS_OF_SORCERY');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_SLAVER_CARNIVALS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
-
 INSERT INTO AiListTypes(ListType) VALUES
 ('MasterOfSorceryYields'),
 ('MasterOfSorceryUnits'),
@@ -106,14 +98,6 @@ INSERT INTO Types(Type, Kind) VALUES
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_SLAVER_CARNIVALS', 'TRAIT_AGENDA_SLAVER_CARNIVALS');
-
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_SLAVER_CARNIVALS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('SlaverCarnivalsYields'),
@@ -174,14 +158,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_HOLY_CRUSADERS', 'TRAIT_AGENDA_HOLY_CRUSADERS');
 
--- section for agenda relationship. Bannor: hates other civs with veil or any evil civ?
-/*
-INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
-('TRAIT_AGENDA_SLAVER_CARNIVALS', NULL);
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
-
 -- HERES WHERE COTTAGE ECONOMY WOULD GO, IF I HAD ONE WAY TO DO AN IMPROVEMENTS SYSTEM
 INSERT INTO AiListTypes(ListType) VALUES
 ('HolyCrusadersCivics');
@@ -217,14 +193,6 @@ INSERT INTO Types(Type, Kind) VALUES
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_VAMPIRIC_ARISTOCRACY', 'TRAIT_AGENDA_VAMPIRIC_ARISTOCRACY');
-
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_SLAVER_CARNIVALS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('VampiricAristocracyYields'),
@@ -323,14 +291,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_WOLVES_OF_WINTER', 'TRAIT_AGENDA_WOLVES_OF_WINTER'),
 ('AGENDA_WOLVES_OF_WINTER', 'TRAIT_AGENDA_BARBARIAN_LOVER');                  -- barb lovers
-
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_SLAVER_CARNIVALS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('WolvesOfWinterUnits'),
@@ -453,13 +413,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_HORSELORDS', 'TRAIT_AGENDA_HORSELORDS');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_HORSELORDS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('HorseLordsYields'),
@@ -504,13 +457,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_WINTER_REZ', 'TRAIT_AGENDA_WINTER_REZ');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_WINTER_REZ', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 -- kinda screwed if we cant do project pseudo yields
 INSERT INTO AiListTypes(ListType) VALUES
 ('WinterRezBuildings'),
@@ -576,13 +522,6 @@ INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_FALLOW', 'TRAIT_AGENDA_FALLOW'),
 ('AGENDA_FALLOW', 'TRAIT_AGENDA_BARBARIAN_LOVER');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_FALLOW', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('FallowYields'),
@@ -590,7 +529,7 @@ INSERT INTO AiListTypes(ListType) VALUES
 ('FallowBuildings'),
 ('FallowCivics'),
 ('FallowTechs'),
-('FallowTechs');
+('FallowPlotEval');
 INSERT INTO AiLists(ListType, AgendaType, System) VALUES
 ('FallowYields', 'TRAIT_AGENDA_FALLOW', 'Yields'),
 ('FallowBuildings', 'TRAIT_AGENDA_FALLOW', 'Buildings'),
@@ -681,14 +620,6 @@ INSERT INTO Types(Type, Kind) VALUES
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_SPRAWLING', 'TRAIT_AGENDA_SPRAWLING');
-
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_SPRAWLING', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('SprawlingYields'),
@@ -855,14 +786,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_GOLEM_CRAFTERS', 'TRAIT_AGENDA_GOLEM_CRAFTERS');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_GOLEM_CRAFTERS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
-
 INSERT INTO AiListTypes(ListType) VALUES
 ('GolemCraftersYields'),
 ('GolemCraftersBuildings'),
@@ -909,14 +832,6 @@ INSERT INTO Types(Type, Kind) VALUES
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_DESERT_NOMADS', 'TRAIT_AGENDA_DESERT_NOMADS');
-
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_DESERT_NOMADS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('DesertNomadsUnits'),
@@ -978,13 +893,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_ANGELIC_WARRIORS', 'TRAIT_AGENDA_ANGELIC_WARRIORS');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_ANGELIC_WARRIORS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 INSERT INTO AiListTypes(ListType) VALUES
 ('AngelicWarriorsCivics');
 INSERT INTO AiLists(ListType, AgendaType, System) VALUES
@@ -1021,13 +929,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_ARMAGEDDON_SEEKERS', 'TRAIT_AGENDA_ARMAGEDDON_SEEKERS');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_ARMAGEDDON_SEEKERS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('ArmageddonSeekersBuildings'),
@@ -1073,13 +974,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_GHOSTLY_SPIRITS', 'TRAIT_AGENDA_GHOSTLY_SPIRITS');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_GHOSTLY_SPIRITS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('GhostlySpiritsUnits'),
@@ -1130,14 +1024,6 @@ INSERT INTO Types(Type, Kind) VALUES
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_ELVEN_ASSASSINS', 'TRAIT_AGENDA_ELVEN_ASSASSINS');
-
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_AGENDA_ELVEN_ASSASSINS', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('ElvenAssassinsUnits'),
