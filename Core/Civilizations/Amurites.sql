@@ -1,3 +1,6 @@
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_AMURITES',	5);
+
 INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, RandomCityNameDepth, StartingCivilizationLevelType, Ethnicity) VALUES
 ('SLTH_CIVILIZATION_AMURITES', 'LOC_CIV_AMURITES_NAME', 'LOC_CIV_AMURITES_DESCRIPTION', 'LOC_SLTH_CIV_AMURITES_ADJECTIVE', '10', 'CIVILIZATION_LEVEL_FULL_CIV', 'ETHNICITY_MEDIT');
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES

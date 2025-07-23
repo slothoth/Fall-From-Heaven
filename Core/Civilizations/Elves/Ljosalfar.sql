@@ -15,6 +15,10 @@ INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
 VALUES	                      ('SLTH_CIVILIZATION_LJOSALFAR',	'FEATURE_FOREST',	        5	),
                               ('SLTH_CIVILIZATION_LJOSALFAR',	'FEATURE_FOREST_ANCIENT',	5	);
 
+-- everyone needs to by a river really
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_LJOSALFAR',	5);
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('LEADER_AMELANCHIER', 'SLTH_CIVILIZATION_LJOSALFAR', 'LOC_CITY_LJOSALFAR_1_NAME'),
 ('LEADER_ARENDEL', 'SLTH_CIVILIZATION_LJOSALFAR', 'LOC_CITY_LJOSALFAR_1_NAME'),

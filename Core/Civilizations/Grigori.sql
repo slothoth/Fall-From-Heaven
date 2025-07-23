@@ -1,3 +1,6 @@
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_GRIGORI',	5);
+
 INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, RandomCityNameDepth, StartingCivilizationLevelType, Ethnicity) VALUES
 ('SLTH_CIVILIZATION_GRIGORI', 'LOC_CIV_GRIGORI_NAME', 'LOC_CIV_GRIGORI_DESCRIPTION', 'LOC_SLTH_CIV_GRIGORI_ADJECTIVE', '10', 'CIVILIZATION_LEVEL_FULL_CIV', 'ETHNICITY_MEDIT');
 

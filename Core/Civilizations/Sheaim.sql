@@ -12,6 +12,9 @@ INSERT INTO	StartBiasFeatures
 		(CivilizationType,			FeatureType,			Tier	)
 VALUES	('SLTH_CIVILIZATION_SHEAIM',	'FEATURE_JUNGLE',	5		);          -- feels bad but is accurate
 
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_SHEAIM',	5);
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('LEADER_TEBRYN', 'SLTH_CIVILIZATION_SHEAIM', 'LOC_CITY_SHEAIM_1_NAME'),
 ('LEADER_OSGABELLA', 'SLTH_CIVILIZATION_SHEAIM', 'LOC_CITY_SHEAIM_1_NAME');

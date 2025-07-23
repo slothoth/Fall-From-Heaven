@@ -11,6 +11,9 @@ VALUES	                      ('SLTH_CIVILIZATION_DOVIELLO',	'TERRAIN_TUNDRA',		 
 INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
 VALUES	                      ('SLTH_CIVILIZATION_DOVIELLO',	'FEATURE_FOREST',	    3		);
 
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_DOVIELLO',	5);
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('LEADER_CHARADON', 'SLTH_CIVILIZATION_DOVIELLO', 'LOC_CITY_DOVIELLO_1_NAME'),
 ('LEADER_MAHALA', 'SLTH_CIVILIZATION_DOVIELLO', 'LOC_CITY_DOVIELLO_1_NAME');

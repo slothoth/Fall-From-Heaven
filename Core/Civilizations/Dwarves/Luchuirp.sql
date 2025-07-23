@@ -12,7 +12,7 @@ VALUES	('SLTH_CIVILIZATION_LUCHUIRP',	'RESOURCE_GOLD',		5	),
         ('SLTH_CIVILIZATION_LUCHUIRP',	'RESOURCE_SILVER',		5	),
         ('SLTH_CIVILIZATION_LUCHUIRP',	'RESOURCE_IRON',		5	);
 
-INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)           -- do we want a river bias?
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
 VALUES	                   ('SLTH_CIVILIZATION_LUCHUIRP',	5);
 
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES

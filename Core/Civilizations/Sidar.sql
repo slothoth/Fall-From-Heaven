@@ -1,3 +1,6 @@
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_SIDAR',	5);
+
 INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, RandomCityNameDepth, StartingCivilizationLevelType, Ethnicity) VALUES
 ('SLTH_CIVILIZATION_SIDAR', 'LOC_CIV_SIDAR_NAME', 'LOC_CIV_SIDAR_DESCRIPTION', 'LOC_SLTH_CIV_SIDAR_ADJECTIVE', '10', 'CIVILIZATION_LEVEL_FULL_CIV', 'ETHNICITY_EURO');
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES

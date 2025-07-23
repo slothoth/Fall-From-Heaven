@@ -4,6 +4,10 @@ INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, Random
 INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
 VALUES	                      ('SLTH_CIVILIZATION_CLAN_OF_EMBERS',	'FEATURE_JUNGLE',	        3	);
 
+-- everyone needs to by a river really
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_CLAN_OF_EMBERS',	5);
+
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
 ('LEADER_JONAS', 'LOC_LEADER_JONAS_NAME', 'LEADER_DEFAULT'),
 ('LEADER_SHEELBA', 'LOC_LEADER_SHEELBA_NAME', 'LEADER_DEFAULT');

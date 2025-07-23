@@ -15,6 +15,8 @@ INSERT INTO	StartBiasFeatures
 		(CivilizationType,			FeatureType,			Tier	)
 VALUES	('SLTH_CIVILIZATION_LANUN',	'FEATURE_FOREST',	    2		);
 
+-- one civ that doesnt need river bias
+
 INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES
 ('SLTH_CIVILIZATION_LANUN', 'SLTH_TRAIT_SEAFARING'),
 ('SLTH_CIVILIZATION_LANUN', 'SLTH_TRAIT_CIVILIZATION_BUILDING_HARBOR_LANUN'),

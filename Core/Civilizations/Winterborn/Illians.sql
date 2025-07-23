@@ -15,6 +15,10 @@ INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
 VALUES	                      ('SLTH_CIVILIZATION_ILLIANS',	'FEATURE_FOREST',	        3		);
 
 
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_ILLIANS',	5);
+
+
 INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES
 ('SLTH_CIVILIZATION_ILLIANS', 'SLTH_TRAIT_CIVILIZATION_BUILDING_TEMPLE_OF_THE_HAND'),
 ('SLTH_CIVILIZATION_ILLIANS', 'SLTH_TRAIT_CIVILIZATION_UNIT_HIGH_PRIEST_OF_WINTER'),

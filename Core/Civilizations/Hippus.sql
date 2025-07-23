@@ -8,8 +8,8 @@ INSERT INTO	StartBiasResources
 		(CivilizationType,			ResourceType,			Tier	)
 VALUES	('SLTH_CIVILIZATION_HIPPUS',	'RESOURCE_HORSES',		5		);
 
--- INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)           -- do we want a river bias?
--- VALUES	                    ('SLTH_CIVILIZATION_HIPPUS',	5);
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                    ('SLTH_CIVILIZATION_HIPPUS',	5);
 
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('LEADER_TASUNKE', 'SLTH_CIVILIZATION_HIPPUS', 'LOC_CITY_HIPPUS_1_NAME'),

@@ -13,6 +13,9 @@ INSERT INTO	StartBiasFeatures (CivilizationType,			    FeatureType,			Tier	)
 VALUES	                      ('SLTH_CIVILIZATION_SVARTALFAR',	'FEATURE_FOREST',	        5	),
                               ('SLTH_CIVILIZATION_SVARTALFAR',	'FEATURE_FOREST_ANCIENT',	5	);
 
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_SVARTALFAR',	5);
+
 INSERT INTO CivilizationLeaders(LeaderType, CivilizationType, CapitalName) VALUES
 ('LEADER_FAERYL', 'SLTH_CIVILIZATION_SVARTALFAR', 'LOC_CITY_SVARTALFAR_1_NAME');
 INSERT INTO CivilizationTraits(CivilizationType, TraitType) VALUES

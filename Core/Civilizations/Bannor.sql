@@ -1,3 +1,6 @@
+INSERT INTO	StartBiasRivers(CivilizationType,	        Tier)
+VALUES	                   ('SLTH_CIVILIZATION_BANNOR',	5);
+
 INSERT INTO Civilizations(CivilizationType, Name, Description, Adjective, RandomCityNameDepth, StartingCivilizationLevelType, Ethnicity) VALUES
 ('SLTH_CIVILIZATION_BANNOR', 'LOC_CIV_BANNOR_NAME', 'LOC_CIV_BANNOR_DESCRIPTION', 'LOC_SLTH_CIV_BANNOR_ADJECTIVE', '10', 'CIVILIZATION_LEVEL_FULL_CIV', 'ETHNICITY_AFRICAN');
 INSERT INTO Leaders(LeaderType, Name, InheritFrom) VALUES
