@@ -153,6 +153,7 @@
       <File>Core/Magic.sql</File>
       <File>Core/AiInfos.sql</File>
       <File>Core/AI/ai.sql</File>
+      <File>Core/AI/ai_trait.sql</File>
       <File>Core/Experimental/Commerce.sql</File>
       <File>Core/Experimental/GPP_FromSpecialists.sql</File>
       <File>Core/BespokeUpgrades.sql</File>
@@ -395,6 +396,7 @@
     <File>Core/LeaderTraits.sql</File>
     <File>Core/AiInfos.sql</File>
     <File>Core/AI/ai.sql</File>
+    <File>Core/AI/ai_trait.sql</File>
     <File>Core/Experimental/Commerce.sql</File>
     <File>Core/Experimental/GPP_FromSpecialists.sql</File>
     <File>Core/BespokeUpgrades.sql</File>

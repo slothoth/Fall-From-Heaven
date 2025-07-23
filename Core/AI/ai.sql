@@ -1,37 +1,14 @@
 -- elohim Backstab Averse, Tomyris. OR. Gandhi peaceful
-
-
-
 -- Basium, Bolivar? Highly promoted units.
-
--- Amurite. Science focus like Korea? because mages need science.
-
--- Nzinga just a hater of people on her continent?
-
 -- Philipp for Grigori? Or do they even care about other religions coming in. not really.
 -- I suppose for Grigori, its get Great Prophets. Pedro?
-
--- Khazad. Get lots of money like Mansa Musa? And Ethiopia settle on hills stuff.
--- Kandros, Mansa musa or Kublai. Arturus, Wonders and I guess go wide?
-
 -- Hippus. Genghis Khan
-
 -- Ljosalfar: Kupe try plant woods and keep features.
-
 -- Lanun: Harald Hadrada Last Viking King. OR Dido, settle coastal cities.
-
--- Chandra: Generic Warmonger?
-
--- Trajan: Generic Go Wide?
-
-
 
 -- Qin Wonder: Generic Wonder builder (Industrious)
 
 -- Qin Unifier: Generic Barb lover (Doviello, Clan, Infernal)
-
--- Fun Loving, for Balseraphs?
-
 -- agendas to cut.
 DELETE FROM RandomAgendas WHERE AgendaType IN ('AGENDA_AIRPOWER', 'AGENDA_CITY_STATE_ALLY', 'AGENDA_CITY_STATE_PROTECTOR',
 'AGENDA_DEMAGOGUE', 'AGENDA_DESTINATION_CIV', 'AGENDA_FLAT_EARTHER', 'AGENDA_LIBERTARIAN',
@@ -53,7 +30,6 @@ DELETE FROM AiLists WHERE ListType='DefaultTechBoostSupportList';
 -- Ideologue. Can we adjust this to be on religon policy
 
 -- Populous, but instead hate high pop civs.
--- oh god could we make state religion a government.
 
 -- bring back Curmudgeon and Flirtatious
 --
@@ -305,7 +281,7 @@ INSERT INTO Types(Type, Kind) VALUES
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_BESTIAL_TRIBES', 'TRAIT_AGENDA_BESTIAL_TRIBES'),
-('AGENDA_BESTIAL_TRIBES', 'AGENDA_BARBARIAN_LOVER');
+('AGENDA_BESTIAL_TRIBES', 'TRAIT_AGENDA_BARBARIAN_LOVER');
 
 INSERT INTO AiListTypes(ListType) VALUES
 ('BestialTribesBuildings'),
@@ -346,7 +322,7 @@ INSERT INTO Types(Type, Kind) VALUES
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
 ('AGENDA_WOLVES_OF_WINTER', 'TRAIT_AGENDA_WOLVES_OF_WINTER'),
-('AGENDA_WOLVES_OF_WINTER', 'AGENDA_BARBARIAN_LOVER');                  -- barb lovers
+('AGENDA_WOLVES_OF_WINTER', 'TRAIT_AGENDA_BARBARIAN_LOVER');                  -- barb lovers
 
 -- section for agenda relationship
 -- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
@@ -370,251 +346,275 @@ INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
 ('WolvesOfWinterTechs', 'TECH_BRONZE_WORKING', '1');
 
 -- Elohim       Tolerant
+-- Chancel, Monk. -- Dont think its in FFH. Spirit Mana for Monk strength?
+-- Priesthood, Way of Wise,
+-- FoL, RoK, Order, and Empyrean.
 
-INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
-('', 'TRAIT_LEADER_AGGRESSIVE_MILITARY'),
-('', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
-
-INSERT INTO Agendas(AgendaType, Name, Description) VALUES
-('$1', 'LOC_$1_NAME', 'LOC_$1_DESCRIPTION');
 
 INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
-('',	'$1'),
-('',	'$1');
-
-INSERT INTO Traits(TraitType)  VALUES
-('TRAIT_$1');
-
-INSERT INTO Types(Type, Kind) VALUES
-('TRAIT_$1', 'KIND_TRAIT');
-
-INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
-('$1', 'TRAIT_$1');
-
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_$1', NULL);         -- dont like other hilly civs
-/*
-INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
+('LEADER_ETHNE',	'AGENDA_PEACEKEEPER'),                          -- nicked from Gandhi
+('LEADER_EINION',	'AGENDA_PEACEKEEPER');
 
 INSERT INTO AiListTypes(ListType) VALUES
-('$2Yields'),
-('$2Units'),
-('$2Buildings'),
-('$2Civics'),
-('$2Techs');
+('TolerantUnits'),
+('TolerantBuildings'),
+('TolerantCivics');
+
 INSERT INTO AiLists(ListType, AgendaType, System) VALUES
-('$2Yields', 'TRAIT_$1', 'Yields'),
-('$2Units', 'TRAIT_$1', 'UnitPromotionClasses'),
-('$2Buildings', 'TRAIT_$1', 'Buildings'),
-('$2Civics', 'TRAIT_$1', 'Civics'),
-('$2Techs', 'TRAIT_$1', 'Technologies');
+('TolerantUnits', 'TRAIT_AGENDA_PEACEKEEPER', 'UnitPromotionClasses'),
+('TolerantBuildings', 'TRAIT_AGENDA_PEACEKEEPER', 'Buildings'),
+('TolerantCivics', 'TRAIT_AGENDA_PEACEKEEPER', 'Civics');
 
-INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
-('$2Yields', 'YIELD_CULTURE', '25'),                   -- not sure if want to bias culture
-('$2Units', 'PROMOTION_CLASS_RECON', '1');
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
-('$2Buildings', '', '1'),
-('$2Buildings', '', '1');
+('TolerantUnits', 'PROMOTION_CLASS_DISCIPLE', '1'),
+('TolerantBuildings', 'SLTH_BUILDING_CHANCEL', '1');
 
 
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
-('$2Civics', 'CIVIC_CORRUPTION_OF_SPIRIT', '1'),           -- religions
-('$2Civics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '1'),
-('$2Civics', 'CIVIC_DRAMA_POETRY', '1'),
-('$2Civics', 'CIVIC_DRAMA_POETRY', '1'),
-('$2Civics', 'CIVIC_WAY_OF_THE_WICKED', '1'),              -- for slavery
-('$2Civics', 'TECH_CALENDAR', '1'),                        -- for carnivals
-('$2Civics', 'TECH_HUNTING', '1'),                         -- recon line
-('$2Civics', 'TECH_POISONS', '1');
+('TolerantCivics', 'CIVIC_PRIESTHOOD', '1'),                -- for monks
+('TolerantCivics', 'CIVIC_FANATICISM', '1');              -- for corlinedale
 
 -- Grigori      Agnostic Heroes
-
-INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
-('', 'TRAIT_LEADER_AGGRESSIVE_MILITARY'),
-('', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+-- anti bias towards religion civics.
+-- bias towards all great people (because we cant do per city great people)
 
 INSERT INTO Agendas(AgendaType, Name, Description) VALUES
-('$1', 'LOC_$1_NAME', 'LOC_$1_DESCRIPTION');
+('AGENDA_GODLESS_HEROES', 'LOC_AGENDA_GODLESS_HEROES_NAME', 'LOC_AGENDA_GODLESS_HEROES_DESCRIPTION');
 
 INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
-('',	'$1'),
-('',	'$1');
+('LEADER_CASSIEL',	'AGENDA_GODLESS_HEROES');
 
 INSERT INTO Traits(TraitType)  VALUES
-('TRAIT_$1');
+('TRAIT_AGENDA_GODLESS_HEROES');
 
 INSERT INTO Types(Type, Kind) VALUES
-('TRAIT_$1', 'KIND_TRAIT');
+('TRAIT_AGENDA_GODLESS_HEROES', 'KIND_TRAIT');
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
-('$1', 'TRAIT_$1');
+('AGENDA_GODLESS_HEROES', 'TRAIT_AGENDA_GODLESS_HEROES');
 
--- section for agenda relationship
--- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_$1', NULL);         -- dont like other hilly civs
-/*
+-- doesnt like competitiors for great people
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_AGENDA_GODLESS_HEROES', 'AGENDA_MODIFIER_LAGS_GREAT_PEOPLE'),
+('TRAIT_AGENDA_GODLESS_HEROES', 'AGENDA_MODIFIER_LEADS_GREAT_PEOPLE');
 INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
-('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
- */
+('AGENDA_GODLESS_HEROES', 'AGENDA_GREAT_PERSON_ADVOCATE');
 
 INSERT INTO AiListTypes(ListType) VALUES
-('$2Yields'),
-('$2Units'),
-('$2Buildings'),
-('$2Civics'),
-('$2Techs');
+('GodlessHeroesBuildings'),
+('GodlessHeroesCivics');
 INSERT INTO AiLists(ListType, AgendaType, System) VALUES
-('$2Yields', 'TRAIT_$1', 'Yields'),
-('$2Units', 'TRAIT_$1', 'UnitPromotionClasses'),
-('$2Buildings', 'TRAIT_$1', 'Buildings'),
-('$2Civics', 'TRAIT_$1', 'Civics'),
-('$2Techs', 'TRAIT_$1', 'Technologies');
+('GreatPersonObsessedGreatPeople', 'TRAIT_AGENDA_GODLESS_HEROES', 'PseudoYields'),
+('GodlessHeroesBuildings', 'TRAIT_AGENDA_GODLESS_HEROES', 'Buildings'),
+('GodlessHeroesCivics', 'TRAIT_AGENDA_GODLESS_HEROES', 'Civics');
 
-INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
-('$2Yields', 'YIELD_CULTURE', '25'),                   -- not sure if want to bias culture
-('$2Units', 'PROMOTION_CLASS_RECON', '1');
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
-('$2Buildings', '', '1'),
-('$2Buildings', '', '1');
---
+('GodlessHeroesBuildings', 'SLTH_BUILDING_NATIONAL_EPIC', '1'),                            -- national epic
+('GodlessHeroesBuildings', 'BUILDING_GUILDHALL', '1');                            -- adventurers guild
+-- ('GodlessHeroesBuildings', '', '1');                            -- mage guild           (arcane line maybe strong?)
 
 
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
-('$2Civics', 'CIVIC_CORRUPTION_OF_SPIRIT', '1'),           -- religions
-('$2Civics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '1'),
-('$2Civics', 'CIVIC_DRAMA_POETRY', '1'),
-('$2Civics', 'CIVIC_DRAMA_POETRY', '1'),
-('$2Civics', 'CIVIC_WAY_OF_THE_WICKED', '1'),              -- for slavery
-('$2Civics', 'TECH_CALENDAR', '1'),                        -- for carnivals
-('$2Civics', 'TECH_HUNTING', '1'),                         -- recon line
-('$2Civics', 'TECH_POISONS', '1');
+('GodlessHeroesCivics', 'CIVIC_CORRUPTION_OF_SPIRIT', '0'),           -- religions unfavoured
+('GodlessHeroesCivics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '0'),
+('GodlessHeroesCivics', 'CIVIC_WAY_OF_THE_EARTHMOTHER', '0'),
+('GodlessHeroesCivics', 'CIVIC_WAY_OF_THE_FORESTS', '0'),
+('GodlessHeroesCivics', 'CIVIC_DECEPTION', '0'),
+('GodlessHeroesCivics', 'CIVIC_HONOR', '0'),
+('GodlessHeroesCivics', 'CIVIC_ORDERS_FROM_HEAVEN', '0'),
+('GodlessHeroesCivics', 'CIVIC_MIND_STAPLING', '0'),
+('GodlessHeroesCivics', 'CIVIC_INFERNAL_PACT', '0'),
+('GodlessHeroesCivics', 'CIVIC_ARETE', '0'),
+('GodlessHeroesCivics', 'CIVIC_HIDDEN_PATHS', '0'),
+('GodlessHeroesCivics', 'CIVIC_MALEVOLENT_DESIGNS', '0');
+
+DELETE FROM AiFavoredItems WHERE Item == 'PSEUDOYIELD_GPP_ADMIRAL';
+DELETE FROM AiFavoredItems WHERE Item == 'PSEUDOYIELD_GPP_MUSICIAN';
 
 -- Hippus       Horselords
 
 INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
-('', 'TRAIT_LEADER_AGGRESSIVE_MILITARY'),
-('', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+('LEADER_TASUNKE', 'TRAIT_LEADER_AGGRESSIVE_MILITARY'),
+('LEADER_RHOANNA', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');          -- unsure if she should.. she doesnt rush
 
 INSERT INTO Agendas(AgendaType, Name, Description) VALUES
-('$1', 'LOC_$1_NAME', 'LOC_$1_DESCRIPTION');
+('AGENDA_HORSELORDS', 'LOC_AGENDA_HORSELORDS_NAME', 'LOC_AGENDA_HORSELORDS_DESCRIPTION');
 
 INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
-('',	'$1'),
-('',	'$1');
+('LEADER_TASUNKE',	'AGENDA_HORSELORDS'),
+('LEADER_RHOANNA',	'AGENDA_HORSELORDS');
 
 INSERT INTO Traits(TraitType)  VALUES
-('TRAIT_$1');
+('TRAIT_AGENDA_HORSELORDS');
 
 INSERT INTO Types(Type, Kind) VALUES
-('TRAIT_$1', 'KIND_TRAIT');
+('TRAIT_AGENDA_HORSELORDS', 'KIND_TRAIT');
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
-('$1', 'TRAIT_$1');
+('AGENDA_HORSELORDS', 'TRAIT_AGENDA_HORSELORDS');
 
 -- section for agenda relationship
 -- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_$1', NULL);         -- dont like other hilly civs
+-- ('TRAIT_AGENDA_HORSELORDS', NULL);         -- dont like other hilly civs
 /*
 INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
 ('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
  */
 
 INSERT INTO AiListTypes(ListType) VALUES
-('$2Yields'),
-('$2Units'),
-('$2Buildings'),
-('$2Civics'),
-('$2Techs');
+('HorseLordsYields'),
+('HorseLordsUnits'),
+('HorseLordsBuildings'),
+('HorseLordsCivics'),
+('HorseLordsTechs');
 INSERT INTO AiLists(ListType, AgendaType, System) VALUES
-('$2Yields', 'TRAIT_$1', 'Yields'),
-('$2Units', 'TRAIT_$1', 'UnitPromotionClasses'),
-('$2Buildings', 'TRAIT_$1', 'Buildings'),
-('$2Civics', 'TRAIT_$1', 'Civics'),
-('$2Techs', 'TRAIT_$1', 'Technologies');
+('HorseLordsUnits', 'TRAIT_AGENDA_HORSELORDS', 'UnitPromotionClasses'),
+('HorseLordsBuildings', 'TRAIT_AGENDA_HORSELORDS', 'Buildings'),
+('HorseLordsCivics', 'TRAIT_AGENDA_HORSELORDS', 'Civics'),
+('HorseLordsTechs', 'TRAIT_AGENDA_HORSELORDS', 'Technologies');
 
 INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
-('$2Yields', 'YIELD_CULTURE', '25'),                   -- not sure if want to bias culture
-('$2Units', 'PROMOTION_CLASS_RECON', '1');
+('HorseLordsUnits', 'PROMOTION_CLASS_LIGHT_CAVALRY', '1');
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
-('$2Buildings', '', '1'),
-('$2Buildings', '', '1');
-
+('HorseLordsBuildings', 'BUILDING_STABLE', '1'),
+('HorseLordsBuildings', 'SLTH_BUILDING_RIDE_OF_THE_NINE_KINGS', '1'),
+('HorseLordsBuildings', 'BUILDING_UNIVERSITY_SANKORE', '1');            -- guild of the nine for mounted mercs
 
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
-('$2Civics', 'CIVIC_CORRUPTION_OF_SPIRIT', '1'),           -- religions
-('$2Civics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '1'),
-('$2Civics', 'CIVIC_DRAMA_POETRY', '1'),
-('$2Civics', 'CIVIC_DRAMA_POETRY', '1'),
-('$2Civics', 'CIVIC_WAY_OF_THE_WICKED', '1'),              -- for slavery
-('$2Civics', 'TECH_CALENDAR', '1'),                        -- for carnivals
-('$2Civics', 'TECH_HUNTING', '1'),                         -- recon line
-('$2Civics', 'TECH_POISONS', '1');
+('HorseLordsTechs', 'TECH_WARHORSES', '1'),
+('HorseLordsTechs', 'TECH_STIRRUPS', '1'),
+('HorseLordsTechs', 'TECH_HORSEBACK_RIDING', '1');
 
 -- Illians      Resurrectors of Fallen Winter
-
-INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
-('', 'TRAIT_LEADER_AGGRESSIVE_MILITARY'),
-('', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+-- bias for tundra and snow (no ice in mapgen issuess....) It seems you caannot bias for terrains
+-- ok so bias for the civic unlocks for the different projects...
 
 INSERT INTO Agendas(AgendaType, Name, Description) VALUES
-('$1', 'LOC_$1_NAME', 'LOC_$1_DESCRIPTION');
+('AGENDA_WINTER_REZ', 'LOC_AGENDA_WINTER_REZ_NAME', 'LOC_AGENDA_WINTER_REZ_DESCRIPTION');
 
 INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
-('',	'$1'),
-('',	'$1');
+('LEADER_AURIC',	'AGENDA_WINTER_REZ');
 
 INSERT INTO Traits(TraitType)  VALUES
-('TRAIT_$1');
+('TRAIT_AGENDA_WINTER_REZ');
 
 INSERT INTO Types(Type, Kind) VALUES
-('TRAIT_$1', 'KIND_TRAIT');
+('TRAIT_AGENDA_WINTER_REZ', 'KIND_TRAIT');
 
 INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
-('$1', 'TRAIT_$1');
+('AGENDA_WINTER_REZ', 'TRAIT_AGENDA_WINTER_REZ');
 
 -- section for agenda relationship
 -- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
--- ('TRAIT_$1', NULL);         -- dont like other hilly civs
+-- ('TRAIT_AGENDA_WINTER_REZ', NULL);         -- dont like other hilly civs
+/*
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
+ */
+-- kinda screwed if we cant do project pseudo yields
+INSERT INTO AiListTypes(ListType) VALUES
+('WinterRezBuildings'),
+('WinterRezCivics'),
+('WinterRezTechs'),
+('WinterRezProjects');
+
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('WinterRezBuildings', 'TRAIT_AGENDA_WINTER_REZ', 'Buildings'),
+('WinterRezCivics', 'TRAIT_AGENDA_WINTER_REZ', 'Civics'),
+('WinterRezTechs', 'TRAIT_AGENDA_WINTER_REZ', 'Technologies'),
+('WinterRezProjects', 'TRAIT_AGENDA_WINTER_REZ', 'Projects');
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('WinterRezBuildings', 'SLTH_BUILDING_TEMPLE_OF_THE_HAND', '1'),
+('WinterRezBuildings', 'SLTH_BUILDING_CELESTIAL_COMPASS', '1');             -- for faster rituals... idk
+
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('WinterRezCivics', 'CIVIC_CORRUPTION_OF_SPIRIT', '0'),           -- religions unfavoured
+('WinterRezCivics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '0'),
+('WinterRezCivics', 'CIVIC_DECEPTION', '0'),
+('WinterRezCivics', 'CIVIC_MIND_STAPLING', '0'),
+('WinterRezCivics', 'CIVIC_INFERNAL_PACT', '0'),
+('WinterRezCivics', 'CIVIC_WAY_OF_THE_EARTHMOTHER', '0'),
+('WinterRezCivics', 'CIVIC_WAY_OF_THE_FORESTS', '0'),
+('WinterRezCivics', 'CIVIC_HONOR', '0'),
+('WinterRezCivics', 'CIVIC_ORDERS_FROM_HEAVEN', '0'),
+('WinterRezCivics', 'CIVIC_ARETE', '0'),
+('WinterRezCivics', 'CIVIC_HIDDEN_PATHS', '0'),
+('WinterRezCivics', 'CIVIC_POLITICAL_PHILOSOPHY', '1'),
+('WinterRezCivics', 'CIVIC_PRIESTHOOD', '1'),
+('WinterRezTechs', 'TECH_STRENGTH_OF_WILL', '1'),               -- ideally we want a Strategy to switch to these tech stuff later
+('WinterRezTechs', 'TECH_OMNISCIENCE', '1'),
+('WinterRezProjects', 'PROJECT_STIR_FROM_SLUMBER', '1'),
+('WinterRezProjects', 'PROJECT_SAMHAIN', '1'),
+('WinterRezProjects', 'PROJECT_WHITE_HAND', '1'),
+('WinterRezProjects', 'PROJECT_DEEPENING', '1'),
+('WinterRezProjects', 'PROJECT_THE_DRAW', '1'),
+('WinterRezProjects', 'PROJECT_ASCENSION', '1');
+
+-- Infernal     Fallow
+-- zero out value for food. Super aggro.
+-- to zero out food needs work because of different era yield strategis
+-- if it goed negative does that go the other way, todo ASK ROMAN
+-- something to make him even more aggro than AGGRESSIVE_MILITARY?
+INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
+('LEADER_HYBOREM', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_FALLOW', 'LOC_AGENDA_FALLOW_NAME', 'LOC_AGENDA_FALLOW_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_HYBOREM',	'AGENDA_FALLOW');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_FALLOW');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_FALLOW', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_FALLOW', 'TRAIT_AGENDA_FALLOW'),
+('AGENDA_FALLOW', 'TRAIT_AGENDA_BARBARIAN_LOVER');
+
+-- section for agenda relationship
+-- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+-- ('TRAIT_AGENDA_FALLOW', NULL);         -- dont like other hilly civs
 /*
 INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
 ('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
  */
 
 INSERT INTO AiListTypes(ListType) VALUES
-('$2Yields'),
-('$2Units'),
-('$2Buildings'),
-('$2Civics'),
-('$2Techs');
+('FallowYields'),
+('FallowUnits'),
+('FallowBuildings'),
+('FallowCivics'),
+('FallowTechs'),
+('FallowTechs');
 INSERT INTO AiLists(ListType, AgendaType, System) VALUES
-('$2Yields', 'TRAIT_$1', 'Yields'),
-('$2Units', 'TRAIT_$1', 'UnitPromotionClasses'),
-('$2Buildings', 'TRAIT_$1', 'Buildings'),
-('$2Civics', 'TRAIT_$1', 'Civics'),
-('$2Techs', 'TRAIT_$1', 'Technologies');
+('FallowYields', 'TRAIT_AGENDA_FALLOW', 'Yields'),
+('FallowBuildings', 'TRAIT_AGENDA_FALLOW', 'Buildings'),
+('FallowCivics', 'TRAIT_AGENDA_FALLOW', 'Civics'),
+('FallowTechs', 'TRAIT_AGENDA_FALLOW', 'Technologies'),
+('FallowPlotEval', 'TRAIT_AGENDA_FALLOW', 'PlotEvaluations');
 
 INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
-('$2Yields', 'YIELD_CULTURE', '25'),                   -- not sure if want to bias culture
-('$2Units', 'PROMOTION_CLASS_RECON', '1');
-INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
-('$2Buildings', '', '1'),
-('$2Buildings', '', '1');
-
+('FallowYields', 'YIELD_FOOD', '-25');                   -- does this overflow into avoiding food in certain ages. +25 strongest point
 
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
-('$2Civics', 'CIVIC_CORRUPTION_OF_SPIRIT', '1'),           -- religions
-('$2Civics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '1'),
-('$2Civics', 'CIVIC_DRAMA_POETRY', '1'),
-('$2Civics', 'CIVIC_DRAMA_POETRY', '1'),
-('$2Civics', 'CIVIC_WAY_OF_THE_WICKED', '1'),              -- for slavery
-('$2Civics', 'TECH_CALENDAR', '1'),                        -- for carnivals
-('$2Civics', 'TECH_HUNTING', '1'),                         -- recon line
-('$2Civics', 'TECH_POISONS', '1');
+('FallowBuildings', 'BUILDING_BARRACKS', '1'),
+('FallowBuildings', 'BUILDING_STABLE', '1');
 
--- Infernal     Fallow
+INSERT INTO AiFavoredItems(ListType, Item, Value, StringVal) VALUES
+('FallowPlotEval', 'Total Yield', '-1', 'YIELD_FOOD'),
+('FallowPlotEval', 'Inner Ring Yield', '-2', 'YIELD_FOOD');
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('FallowCivics', 'CIVIC_CORRUPTION_OF_SPIRIT', '1'),           -- should be impossible not to have these two but...
+('FallowCivics', 'CIVIC_INFERNAL_PACT', '1'),
+('FallowCivics', 'CIVIC_WAY_OF_THE_WICKED', '1'),
+('FallowCivics', 'CIVIC_MALEVOLENT_DESIGNS', '1'),              -- mardero i guess?
+('FallowTechs', 'TECH_IRON_WORKING', '1');                  -- free iron makes this vaue
 
 -- khazad attempt. Likes gold. Doesnt like people with lots of hills.
 INSERT INTO Agendas(AgendaType, Name, Description) VALUES
@@ -640,150 +640,558 @@ INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
 INSERT INTO AiListTypes(ListType) VALUES
 ('DwarvenGoldPseudoYields'),
 ('DwarvenGoldYields'),
-('DwarvenGoldSavings');
+('DwarvenGoldSavings'),
+('DwarvenGoldCivics');
 
 INSERT INTO AiLists(ListType, AgendaType, System) VALUES
 ('DwarvenGoldPseudoYields', 'TRAIT_AGENDA_DWARVEN_GOLD', 'PseudoYields'),
 ('DwarvenGoldYields', 'TRAIT_AGENDA_DWARVEN_GOLD', 'Yields'),
-('DwarvenGoldSavings', 'TRAIT_AGENDA_DWARVEN_GOLD', 'SavingTypes');
+('DwarvenGoldSavings', 'TRAIT_AGENDA_DWARVEN_GOLD', 'SavingTypes'),
+('DwarvenGoldCivics', 'TRAIT_AGENDA_DWARVEN_GOLD', 'Civics');
 
 UPDATE AiLists SET AgendaType = 'TRAIT_AGENDA_DWARVEN_GOLD' WHERE ListType='PreferHills' AND System='PlotEvaluations';          -- give ethiopia highlands stuff. But unsure if its just city centre.
 
 INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
 ('DwarvenGoldPseudoYields', 'PSEUDOYIELD_UNIT_TRADE', '50'),            -- do we want em to trade? ehhhhh
 ('DwarvenGoldYields', 'YIELD_GOLD', '25'),
-('SAVING_SLUSH_FUND', 'YIELD_GOLD', '7');                               -- vault gold
+('DwarvenGoldSavings', 'SAVING_SLUSH_FUND', '7');                               -- vault gold
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('DwarvenGoldCivics', 'CIVIC_WAY_OF_THE_EARTHMOTHER', '1');
 
 -- Strategies AiLists ('FavorCulturalVictory', FavorReligiousVictory, ForbidReligiousVictory, FavorScienceVictory);
 -- AlexanderPreferWar?
 
---
-
 -- Kuriotates       Sprawling
+-- remove plot eval for Horses (centaur means no need)
+-- technically need totally new plot eval when 4 ring, but we dont have that
+-- enclave means cottage economy, so education bias
+--
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_SPRAWLING', 'LOC_AGENDA_SPRAWLING_NAME', 'LOC_AGENDA_SPRAWLING_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_CARDITH',	'AGENDA_SPRAWLING');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_SPRAWLING');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_SPRAWLING', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_SPRAWLING', 'TRAIT_AGENDA_SPRAWLING');
+
+-- section for agenda relationship
+-- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+-- ('TRAIT_AGENDA_SPRAWLING', NULL);         -- dont like other hilly civs
+/*
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
+ */
+
+INSERT INTO AiListTypes(ListType) VALUES
+('SprawlingYields'),
+('SprawlingBuildings'),
+('SprawlingCivics'),
+('SprawlingTechs'),
+('SprawlingSettlementPreferences');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('SprawlingYields', 'TRAIT_AGENDA_SPRAWLING', 'Yields'),
+('SprawlingBuildings', 'TRAIT_AGENDA_SPRAWLING', 'Buildings'),
+('SprawlingCivics', 'TRAIT_AGENDA_SPRAWLING', 'Civics'),
+('SprawlingTechs', 'TRAIT_AGENDA_SPRAWLING', 'Technologies'),
+('SprawlingSettlementPreferences', 'TRAIT_AGENDA_SPRAWLING', 'PlotEvaluations');
+
+INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
+('SprawlingYields', 'YIELD_CULTURE', '10');                   -- should they bias culture? Legends did promote culture win
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('SprawlingBuildings', 'BUILDING_GRAND_BAZAAR', '1');                   -- bazaar of mammon
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('SprawlingCivics', 'CIVIC_EDUCATION', '1'),           -- cottage into enclaves
+('SprawlingCivics', 'CIVIC_MYSTICISM', '1'),            -- god king very important
+('SprawlingTechs', 'TECH_HORSEBACK_RIDING', '1');           -- centaurs
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored, Value, StringVal) VALUES
+('SprawlingSettlementPreferences', 'Specific Resource', '1', '1', 'RESOURCE_DYES'),            -- Resource bias for Tailor
+('SprawlingSettlementPreferences', 'Specific Resource', '1', '1', 'RESOURCE_SILK'),
+('SprawlingSettlementPreferences', 'Specific Resource', '1', '1', 'RESOURCE_COTTON'),
+('SprawlingSettlementPreferences', 'Specific Resource', '1', '1', 'RESOURCE_DIAMONDS'),            -- Resource bias for Jeweler
+('SprawlingSettlementPreferences', 'Specific Resource', '1', '1', 'RESOURCE_GOLD'),
+--('SprawlingSettlementPreferences', 'Specific Resource', '1', '1', 'RESOURCE_PEARLS'),   -- no bias for Pearls, as cannot see them
+('SprawlingSettlementPreferences', 'Specific Resource', '1', '-3', 'RESOURCE_HORSES');            -- no desire for horses
 
 -- Lanun            Seafaring
+-- coastal settles like Dido, similar on the agenda
+-- weirdly cant find bias for coastal...
+INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
+('LEADER_FALAMAR', 'TRAIT_LEADER_AGGRESSIVE_MILITARY'),
+('LEADER_HANNAH', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_SEAFARING', 'LOC_AGENDA_SEAFARING_NAME', 'LOC_AGENDA_SICILIAN_WARS_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_FALAMAR',	'AGENDA_SEAFARING'),
+('LEADER_HANNAH',	'AGENDA_SEAFARING');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_SEAFARING');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_SEAFARING', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_SEAFARING', 'TRAIT_AGENDA_SEAFARING');
+
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_AGENDA_SEAFARING', 'AGENDA_SICILIAN_WARS_LOW_COASTAL_CITES'),
+('TRAIT_AGENDA_SEAFARING', 'AGENDA_SICILIAN_WARS_HIGH_COASTAL_CITIES');
+
+INSERT INTO AiListTypes(ListType) VALUES
+('SeafaringYields'),
+('SeafaringUnits'),
+('SeafaringBuildings'),
+('SeafaringCivics'),
+('SeafaringTechs');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('SeafaringUnits', 'TRAIT_AGENDA_SEAFARING', 'UnitPromotionClasses'),
+('SeafaringBuildings', 'TRAIT_AGENDA_SEAFARING', 'Buildings'),
+('SeafaringCivics', 'TRAIT_AGENDA_SEAFARING', 'Civics'),
+('SeafaringTechs', 'TRAIT_AGENDA_SEAFARING', 'Technologies'),
+('LastVikingKingCoastSettlement', 'TRAIT_AGENDA_SEAFARING', 'PlotEvaluations');         -- coastal bias
+
+INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
+('SeafaringUnits', 'PROMOTION_CLASS_NAVAL_MELEE', '1');                 -- this might be too much
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('SeafaringBuildings', 'BUILDING_LIGHTHOUSE', '1'),
+('SeafaringBuildings', 'SLTH_BUILDING_HARBOR_LANUN', '1'),              -- bias towards big trade
+('SeafaringBuildings', 'BUILDING_GREAT_LIGHTHOUSE', '1');              -- bias towards big trade
+
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('SeafaringCivics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '1'),            -- OO bias
+('SeafaringCivics', 'CIVIC_MIND_STAPLING', '1'),            -- OO bias
+('SeafaringCivics', 'CIVIC_WAY_OF_THE_WICKED', '1'),              -- for slavery
+('SeafaringTechs', 'SLTH_TECH_SAILING', '1'),                   -- naval techs
+('SeafaringTechs', 'TECH_FISHING', '1'),
+('SeafaringTechs', 'TECH_TRADE', '1');              -- bias towards big trade
 
 -- Ljosalfar        Elven Forest Defenders
 
+INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
+('LEADER_AMELANCHIER', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_FOREST_DEFENDERS', 'LOC_AGENDA_FOREST_DEFENDERS_NAME', 'LOC_AGENDA_FOREST_DEFENDERS_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_AMELANCHIER',	'AGENDA_FOREST_DEFENDERS'),
+('LEADER_ARENDEL',	'AGENDA_FOREST_DEFENDERS'),
+('LEADER_THESSA',	'AGENDA_FOREST_DEFENDERS');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_FOREST_DEFENDERS');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_FOREST_DEFENDERS', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_FOREST_DEFENDERS', 'TRAIT_AGENDA_FOREST_DEFENDERS');
+
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_AGENDA_FOREST_DEFENDERS', 'AGENDA_ENVIRONMENT');         -- dont like those who tear down forests/resources
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_FOREST_DEFENDERS', 'AGENDA_ENVIRONMENTALIST'),
+('AGENDA_FOREST_DEFENDERS', 'AGENDA_EXPLOITATIVE'),
+('AGENDA_FOREST_DEFENDERS', 'AGENDA_INDUSTRIALIST');
+
+INSERT INTO AiListTypes(ListType) VALUES
+('ForestDefendersUnits'),
+('ForestDefendersCivics'),
+('ForestDefendersTechs');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('ForestDefendersUnits', 'TRAIT_AGENDA_FOREST_DEFENDERS', 'UnitPromotionClasses'),
+('ForestDefendersCivics', 'TRAIT_AGENDA_FOREST_DEFENDERS', 'Civics'),
+('ForestDefendersTechs', 'TRAIT_AGENDA_FOREST_DEFENDERS', 'Technologies');
+
+INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
+('ForestDefendersUnits', 'PROMOTION_CLASS_RANGED', '1');
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('ForestDefendersCivics', 'CIVIC_WAY_OF_THE_FORESTS', '1'),           -- Fellowship of Leaves strong pref
+('ForestDefendersCivics', 'CIVIC_HIDDEN_PATHS', '1'),
+('ForestDefendersCivics', 'CIVIC_DRAMA_POETRY', '1'),                   -- good for bard to build Fellowship
+('ForestDefendersCivics', 'CIVIC_EDUCATION', '1'),              -- apprenticeship and cottage
+('ForestDefendersCivics', 'CIVIC_FERAL_BOND', '1'),              -- kitha. But need to check it wont try make it instantly.
+('ForestDefendersTechs', 'TECH_CALENDAR', '1'),                        -- agri?
+('ForestDefendersTechs', 'TECH_ARCHERY', '1'),                         -- Ranged line
+('ForestDefendersTechs', 'TECH_CONSTRUCTION', '0');                         -- cant make siege
+
 -- Luichuirp        Golem Crafters
+-- sculptor studios! Tech_Construction. Science bias as golems behind em?
+-- negative bias towards swordsmen (bronze working), recon line, cavalry line
+-- the ai would also need help to makke blasting workshops, pallens and adularia. But the AI wont use the promos.
+
+INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
+('LEADER_GARRIM', 'TRAIT_LEADER_AGGRESSIVE_MILITARY'),          -- they do kinda aggro well
+('LEADER_BEERI', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_GOLEM_CRAFTERS', 'LOC_AGENDA_GOLEM_CRAFTERS_NAME', 'LOC_AGENDA_GOLEM_CRAFTERS_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_GARRIM',	'AGENDA_GOLEM_CRAFTERS'),
+('LEADER_BEERI',	'AGENDA_GOLEM_CRAFTERS');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_GOLEM_CRAFTERS');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_GOLEM_CRAFTERS', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_GOLEM_CRAFTERS', 'TRAIT_AGENDA_GOLEM_CRAFTERS');
+
+-- section for agenda relationship
+-- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+-- ('TRAIT_AGENDA_GOLEM_CRAFTERS', NULL);         -- dont like other hilly civs
+/*
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
+ */
+
+INSERT INTO AiListTypes(ListType) VALUES
+('GolemCraftersYields'),
+('GolemCraftersBuildings'),
+('GolemCraftersCivics'),
+('GolemCraftersTechs');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('GolemCraftersYields', 'TRAIT_AGENDA_GOLEM_CRAFTERS', 'Yields'),
+('GolemCraftersBuildings', 'TRAIT_AGENDA_GOLEM_CRAFTERS', 'Buildings'),
+('GolemCraftersCivics', 'TRAIT_AGENDA_GOLEM_CRAFTERS', 'Civics'),
+('GolemCraftersTechs', 'TRAIT_AGENDA_GOLEM_CRAFTERS', 'Technologies');
+
+INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
+('GolemCraftersYields', 'YIELD_SCIENCE', '10');                   -- not sure if want to bias science
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('GolemCraftersBuildings', 'SLTH_BUILDING_SCULPTORS_STUDIO', '1'),
+('GolemCraftersBuildings', 'SLTH_BUILDING_GUILD_OF_HAMMERS', '1'),
+('GolemCraftersBuildings', 'SLTH_BUILDING_RIDE_OF_THE_NINE_KINGS', '0'),            -- experience wonders unfavored
+('GolemCraftersBuildings', 'BUILDING_COLOSSUS', '0');
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('GolemCraftersCivics', 'CIVIC_WAY_OF_THE_EARTHMOTHER', '1'),           -- religion runes
+('GolemCraftersCivics', 'CIVIC_ARETE', '1'),           -- r
+('GolemCraftersCivics', 'TECH_CONSTRUCTION', '1'),                    -- for wood golems
+-- ('GolemCraftersCivics', 'TECH_IRON_WORKING', '1'),                     -- iron golems?
+('GolemCraftersCivics', 'TECH_BRONZE_WORKING', '0');                    -- dont care about swordsman
 
 -- Malakim          Desert Nomads
 
+INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
+('LEADER_DECIUS_MALAKIM', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');          -- varn is not aggro
+
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_DESERT_NOMADS', 'LOC_AGENDA_DESERT_NOMADS_NAME', 'LOC_AGENDA_DESERT_NOMADS_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_VARN',	'AGENDA_DESERT_NOMADS'),
+('LEADER_DECIUS_MALAKIM',	'AGENDA_DESERT_NOMADS');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_DESERT_NOMADS');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_DESERT_NOMADS', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_DESERT_NOMADS', 'TRAIT_AGENDA_DESERT_NOMADS');
+
+-- section for agenda relationship
+-- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+-- ('TRAIT_AGENDA_DESERT_NOMADS', NULL);         -- dont like other hilly civs
+/*
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
+ */
+
+INSERT INTO AiListTypes(ListType) VALUES
+('DesertNomadsUnits'),
+('DesertNomadsBuildings'),
+('DesertNomadsCivics'),
+('DesertNomadsTechs'),
+('DesertNomadsUnitBuilds'),
+('DesertNomadsPlotEval');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('DesertNomadsUnits', 'TRAIT_AGENDA_DESERT_NOMADS', 'UnitPromotionClasses'),
+('DesertNomadsBuildings', 'TRAIT_AGENDA_DESERT_NOMADS', 'Buildings'),
+('DesertNomadsCivics', 'TRAIT_AGENDA_DESERT_NOMADS', 'Civics'),
+('DesertNomadsTechs', 'TRAIT_AGENDA_DESERT_NOMADS', 'Technologies'),
+('DesertNomadsUnitBuilds', 'TRAIT_AGENDA_DESERT_NOMADS', 'Units'),
+('DesertNomadsPlotEval', 'TRAIT_AGENDA_DESERT_NOMADS', 'PlotEvaluations');
+
+INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
+('DesertNomadsUnits', 'PROMOTION_CLASS_DISCIPLE', '1'),
+('DesertNomadsUnitBuilds', 'SLTH_UNIT_LIGHTBRINGER', '1');
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('DesertNomadsBuildings', 'SLTH_BUILDING_DESERT_SHRINE', '1');
+-- ('DesertNomadsBuildings', 'SLTH_BUILDING_CITADEL_OF_LIGHT', '1');            -- would need bias to build it, but it sucks
+
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('DesertNomadsCivics', 'CIVIC_PRIESTHOOD', '1'),
+('DesertNomadsCivics', 'CIVIC_HONOR', '1'),                 -- religions
+('DesertNomadsCivics', 'CIVIC_CORRUPTION_OF_SPIRIT', '0'),           -- religions unfavoured
+('DesertNomadsCivics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '0'),
+('DesertNomadsCivics', 'CIVIC_DECEPTION', '0'),
+('DesertNomadsCivics', 'CIVIC_MIND_STAPLING', '0'),
+('DesertNomadsCivics', 'CIVIC_INFERNAL_PACT', '0'),
+('DesertNomadsCivics', 'CIVIC_MYSTICISM', '1'),             -- desert shrine
+('DesertNomadsTechs', 'TECH_TRADE', '1');                        -- for Honor, when we stitch trees.
+
+INSERT INTO AiFavoredItems(ListType, Item, Value, StringVal) VALUES
+('DesertNomadsPlotEval', 'Total Yield', '1', 'YIELD_FAITH'),
+('DesertNomadsPlotEval', 'Inner Ring Yield', '2', 'YIELD_FAITH');
+
 -- Mercurian        Angelic Warriors
+-- At the start of each turn, all your cities will be purged of the  Ashen Veil and the Mercurians automatically
+-- declare war on any Civilization following the Ashen Veil if they have been at peace for more than 20 turns.
+INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
+('LEADER_BASIUM', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_ANGELIC_WARRIORS', 'LOC_AGENDA_ANGELIC_WARRIORS_NAME', 'LOC_AGENDA_ANGELIC_WARRIORS_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_BASIUM',	'AGENDA_ANGELIC_WARRIORS');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_ANGELIC_WARRIORS');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_ANGELIC_WARRIORS', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_ANGELIC_WARRIORS', 'TRAIT_AGENDA_ANGELIC_WARRIORS');
+
+-- section for agenda relationship
+-- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+-- ('TRAIT_AGENDA_ANGELIC_WARRIORS', NULL);         -- dont like other hilly civs
+/*
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
+ */
+INSERT INTO AiListTypes(ListType) VALUES
+('AngelicWarriorsCivics');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('AngelicWarriorsCivics', 'TRAIT_AGENDA_ANGELIC_WARRIORS', 'Civics');
+
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('AngelicWarriorsCivics', 'CIVIC_CORRUPTION_OF_SPIRIT', '0'),           -- religions
+('AngelicWarriorsCivics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '0'),
+('AngelicWarriorsCivics', 'CIVIC_DECEPTION', '0'),
+('AngelicWarriorsCivics', 'CIVIC_MIND_STAPLING', '0'),
+('AngelicWarriorsCivics', 'CIVIC_INFERNAL_PACT', '0'),
+('AngelicWarriorsCivics', 'CIVIC_WAY_OF_THE_WICKED', '0');
 
 -- Sheaim           Seekers of Armageddon
 
+INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
+('LEADER_TEBRYN', 'TRAIT_LEADER_AGGRESSIVE_MILITARY'),
+('LEADER_OSGABELLA', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
+-- certainly aggro, because of ye olde Pyre Zombie
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_ARMAGEDDON_SEEKERS', 'LOC_AGENDA_ARMAGEDDON_SEEKERS_NAME', 'LOC_AGENDA_ARMAGEDDON_SEEKERS_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_TEBRYN',	'AGENDA_ARMAGEDDON_SEEKERS'),
+('LEADER_OSGABELLA',	'AGENDA_ARMAGEDDON_SEEKERS');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_ARMAGEDDON_SEEKERS');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_ARMAGEDDON_SEEKERS', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_ARMAGEDDON_SEEKERS', 'TRAIT_AGENDA_ARMAGEDDON_SEEKERS');
+
+-- section for agenda relationship
+-- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+-- ('TRAIT_AGENDA_ARMAGEDDON_SEEKERS', NULL);         -- dont like other hilly civs
+/*
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
+ */
+
+INSERT INTO AiListTypes(ListType) VALUES
+('ArmageddonSeekersBuildings'),
+('ArmageddonSeekersCivics'),
+('ArmageddonSeekersTechs'),
+('ArmageddonSeekersUnitBuilds');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('ArmageddonSeekersBuildings', 'TRAIT_AGENDA_ARMAGEDDON_SEEKERS', 'Buildings'),
+('ArmageddonSeekersCivics', 'TRAIT_AGENDA_ARMAGEDDON_SEEKERS', 'Civics'),
+('ArmageddonSeekersTechs', 'TRAIT_AGENDA_ARMAGEDDON_SEEKERS', 'Technologies'),
+('ArmageddonSeekersUnitBuilds', 'TRAIT_AGENDA_ARMAGEDDON_SEEKERS', 'Units');
+
+INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
+('ArmageddonSeekersUnitBuilds', 'SLTH_UNIT_PYRE_ZOMBIE', '1');
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('ArmageddonSeekersBuildings', 'SLTH_BUILDING_PLANAR_GATE', '1'),               -- as doesnt give yields, they wont build
+('ArmageddonSeekersBuildings', 'BUILDING_MAGE_GUILD', '1');
+
+
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('ArmageddonSeekersCivics', 'CIVIC_CORRUPTION_OF_SPIRIT', '1'),           -- religions
+('ArmageddonSeekersCivics', 'CIVIC_INFERNAL_PACT', '1'),           -- religions
+-- ('ArmageddonSeekersCivics', 'CIVIC_MESSAGE_FROM_THE_DEEP', '1'),         -- do they want this as stopgap
+('ArmageddonSeekersTechs', 'TECH_BRONZE_WORKING', '1'),                        -- for pyre zombies
+('ArmageddonSeekersTechs', 'TECH_KNOWLEDGE_OF_THE_ETHER', '1');             -- mage guilds for planar
+
 -- Sidar            Ghostly Spirits
+-- Want to go Great People. Also want to get as much experience as possible
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_GHOSTLY_SPIRITS', 'LOC_AGENDA_GHOSTLY_SPIRITS_NAME', 'LOC_AGENDA_GHOSTLY_SPIRITS_DESCRIPTION');
+
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_SANDALPHON',	'AGENDA_GHOSTLY_SPIRITS');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_GHOSTLY_SPIRITS');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_GHOSTLY_SPIRITS', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_GHOSTLY_SPIRITS', 'TRAIT_AGENDA_GHOSTLY_SPIRITS');
+
+-- section for agenda relationship
+-- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+-- ('TRAIT_AGENDA_GHOSTLY_SPIRITS', NULL);         -- dont like other hilly civs
+/*
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
+ */
+
+INSERT INTO AiListTypes(ListType) VALUES
+('GhostlySpiritsUnits'),
+('GhostlySpiritsBuildings'),
+('GhostlySpiritsCivics'),
+('GhostlySpiritsPseudoYields');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('GhostlySpiritsBuildings', 'TRAIT_AGENDA_GHOSTLY_SPIRITS', 'Buildings'),
+('GhostlySpiritsCivics', 'TRAIT_AGENDA_GHOSTLY_SPIRITS', 'Civics'),
+('GhostlySpiritsPseudoYields', 'TRAIT_AGENDA_GHOSTLY_SPIRITS', 'PseudoYields');
+
+INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
+('GhostlySpiritsPseudoYields', 'PSEUDOYIELD_GPP_PROPHET', '75');
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_RIDE_OF_THE_NINE_KINGS', '1'),           -- experience buildings for shades
+('GhostlySpiritsBuildings', 'BUILDING_COLOSSUS', '1'),
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_HEROIC_EPIC', '1'),
+('GhostlySpiritsBuildings', 'BUILDING_KOTOKU_IN', '1'),
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_NATIONAL_EPIC', '1'),
+('GhostlySpiritsBuildings', 'BUILDING_PAGODA', '1'),
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR', '1'),
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_ANOINTED', '1'),
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_BLESSED', '1'),
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_CONSECRATED', '1'),
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE', '1'),
+('GhostlySpiritsBuildings', 'SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_EXALTED', '1');          -- dont favour the final one?
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('GhostlySpiritsCivics', 'CIVIC_MILITARY_STRATEGY', '1');
 
 -- Svartalfar       Elven Assassins
 
+INSERT INTO LeaderTraits(LeaderType, TraitType) VALUES
+('LEADER_FAERYL', 'TRAIT_LEADER_AGGRESSIVE_MILITARY');
 
--- TRAIT_LEADER_AGGRESSIVE_MILITARY
--- <Row LeaderType="LEADER_MONTEZUMA" TraitType="TRAIT_LEADER_AGGRESSIVE_MILITARY"/>
+INSERT INTO Agendas(AgendaType, Name, Description) VALUES
+('AGENDA_ELVEN_ASSASSINS', 'LOC_AGENDA_ELVEN_ASSASSINS_NAME', 'LOC_AGENDA_ELVEN_ASSASSINS_DESCRIPTION');
 
--- <Row ListType="TrajanTechs" LeaderType="TRAJANS_COLUMN_TRAIT" System="Technologies"/>
---		<Row ListType="TomyrisiUnitBuilds" LeaderType="TRAIT_LEADER_KILLER_OF_CYRUS" System="UnitPromotionClasses"/>
--- 		<Row ListType="SaladinWonders" LeaderType="TRAIT_LEADER_RIGHTEOUSNESS_OF_FAITH" System="Buildings"/>
--- update DefaultYieldBias list pseudo yields to favor faith
--- update DefaultCitySettlement to deal with new settlement positions
+INSERT INTO HistoricalAgendas(LeaderType,	AgendaType) VALUES
+('LEADER_FAERYL',	'AGENDA_ELVEN_ASSASSINS');
+
+INSERT INTO Traits(TraitType)  VALUES
+('TRAIT_AGENDA_ELVEN_ASSASSINS');
+
+INSERT INTO Types(Type, Kind) VALUES
+('TRAIT_AGENDA_ELVEN_ASSASSINS', 'KIND_TRAIT');
+
+INSERT INTO AgendaTraits(AgendaType, TraitType) VALUES
+('AGENDA_ELVEN_ASSASSINS', 'TRAIT_AGENDA_ELVEN_ASSASSINS');
+
+-- section for agenda relationship
+-- INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+-- ('TRAIT_AGENDA_ELVEN_ASSASSINS', NULL);         -- dont like other hilly civs
 /*
-<Row ListType="GreatPersonObsessedGreatPeople" Item="PSEUDOYIELD_GPP_WRITER" Value="50"/>  -- grigori/cassiel
-<Row ListType="LowReligiousPreferencePseudoYields" Item="PSEUDOYIELD_GPP_PROPHET" Value="-75"/>
-		<Row ListType="LowReligiousPreferenceYields" Item="YIELD_FAITH" Value="-50"/>           -- inverse this, everyoneeee wants faith
-
-<Row ListType="MoneyGrubberGoldPreference" Item="YIELD_GOLD" Value="20"/>
-
-<Row ListType="PeacekeeperWarLimits" Item="DIPLOACTION_DECLARE_SURPRISE_WAR" Favored="false"/>
-		<Row ListType="PeacekeeperWarLimits" Item="DIPLOACTION_DECLARE_FORMAL_WAR" Favored="false"/>
-		<Row ListType="PeacekeeperWarLimits" Item="DIPLOACTION_DECLARE_WAR_MINOR_CIV" Favored="false"/>
-
-
-<Row ListType="ScienceLoverSciencePreference" Item="YIELD_SCIENCE" Value="20"/>
-
-<Row ListType="ExploitationLoverExploitationPreference" Item="PSEUDOYIELD_IMPROVEMENT" Value="5"/> eveyone
-
-<Row ListType="WithShieldDiplomacy" Item="DIPLOACTION_MAKE_PEACE" Favored="false"/>
-
-		<Row AgendaType="AGENDA_BARBARIAN_LOVER" Name="LOC_AGENDA_BARBARIAN_LOVER_NAME" Description="LOC_AGENDA_BARBARIAN_LOVER_DESCRIPTION"/>
-
-<RandomAgendas>
-		<Row AgendaType="AGENDA_AIRPOWER"/>
-		<Row AgendaType="AGENDA_CITY_STATE_ALLY"/>
-		<Row AgendaType="AGENDA_CITY_STATE_PROTECTOR"/>
-<Row AgendaType="AGENDA_NUKE_LOVER" GameLimit="2"/>
-
-<ExclusiveAgendas>
-		<Row AgendaOne="AGENDA_DELIAN_LEAGUE" AgendaTwo="AGENDA_CITY_STATE_ALLY"/>
-		<Row AgendaOne="AGENDA_QUEEN_OF_NILE" AgendaTwo="AGENDA_STANDING_ARMY"/>
-
-<AiFavoredItems>
-		<Row ListType="GreeceCivics" Item="CIVIC_DRAMA_POETRY" Favored="true"/>
-		<Row ListType="GreeceYields" Item="YIELD_CULTURE" Value="20"/>
-	</AiFavoredItems>
-
-<AiFavoredItems>
-		<Row ListType="TomyrisDiplomacy" Item="DIPLOACTION_DECLARE_SURPRISE_WAR" Favored="false"/>
-		<Row ListType="GilgameshDiplomacy" Item="DIPLOACTION_DECLARE_FRIENDSHIP" Favored="true"/>
-
-<Row ListType="GilgameshSciencePreference" Item="YIELD_SCIENCE" Value="10"/>
-		<Row ListType="FavorCulturalVictory" Item="VICTORY_STRATEGY_CULTURAL_VICTORY" Value="-1"/>
-		<Row ListType="FavorReligiousVictory" Item="VICTORY_STRATEGY_RELIGIOUS_VICTORY" Value="-1"/>
-		<Row ListType="ForbidReligiousVictory" Item="VICTORY_STRATEGY_RELIGIOUS_VICTORY" Value="5"/>
-		<Row ListType="FavorScienceVictory" Item="VICTORY_STRATEGY_SCIENCE_VICTORY" Value="-1"/>
-
-<Row ListType="MinorCivScienceDistrict" Item="DISTRICT_CAMPUS" Favored="true"/>
-		<Row ListType="CavalryLoverCitySettlement" Item="Specific Resource" Favored="true" Value="12" StringVal="RESOURCE_HORSES"/>
-
-<AiFavoredItems>
-		<Row ListType="BaseListTest" Item="CIVIC_IMPERIALISM"/>
-		<Row ListType="BarbarossaWonders" Item="BUILDING_RUHR_VALLEY" Favored="true"/>
-		<Row ListType="PericlesEnvoys" Item="PSEUDOYIELD_INFLUENCE" Value="30"/>
-<Row ListType="BarbarossaCivics" Item="CIVIC_CRAFTSMANSHIP" Favored="true"/>
-		<Row ListType="BarbarossaCivics" Item="CIVIC_FOREIGN_TRADE" Favored="true"/>
-
-<Row ListType="GandhiUnitBuilds" Item="PROMOTION_CLASS_INQUISITOR" Value="-1"/>
-		<Row ListType="TomyrisiUnitBuilds" Item="PROMOTION_CLASS_LIGHT_CAVALRY" Value="1"/>
-
-<Row ListType="CavalryLoverCitySettlement" Item="Specific Resource" Favored="true" Value="12" StringVal="RESOURCE_HORSES"/>
-
-<Row ListType="DefaultSavings" Item="SAVING_SLUSH_FUND" Value="3"/>  For khazad
-
-<Row ListType="AggressivePseudoYields" Item="PSEUDOYIELD_UNIT_COMBAT" Value="25"/>
-		<Row ListType="AggressivePseudoYields" Item="PSEUDOYIELD_UNIT_NAVAL_COMBAT" Value="25"/>
-		<Row ListType="AggressivePseudoYields" Item="PSEUDOYIELD_UNIT_AIR_COMBAT" Value="25"/>
-
-kill eureka boosts logic?
-
-    <Row ListType="BaseOperationsLimits" Item="NAVAL_SUPERIORITY" Value="1" /> <!-- OG COMMENT Don't use this early game, it must be increased by a strategy to be used -->
--- is this why they love ships
-
-<Row ListType="NavalPreferredTechs" Item="TECH_SAILING" Favored="true"/>
-		<Row ListType="NavalPreferredTechs" Item="TECH_CELESTIAL_NAVIGATION" Favored="true"/>
-		<Row ListType="NavalPreferredTechs" Item="TECH_SHIPBUILDING" Favored="true"/>
-		<Row ListType="NavalPreferredTechs" Item="TECH_CARTOGRAPHY" Favored="true"/>
-
--- victories
-<Row ListType="ScienceVictoryDistricts" Item="DISTRICT_SPACEPORT" Favored="true"/>
-		<Row ListType="ScienceVictoryProjects" Item="PROJECT_LAUNCH_EARTH_SATELLITE" Favored="true"/>
-		<Row ListType="ScienceVictoryProjects" Item="PROJECT_LAUNCH_MOON_LANDING" Favored="true"/>
-		<Row ListType="ScienceVictoryProjects" Item="PROJECT_LAUNCH_MARS_REACTOR" Favored="true"/>
-		<Row ListType="ScienceVictoryProjects" Item="PROJECT_LAUNCH_MARS_HABITATION" Favored="true"/>
-		<Row ListType="ScienceVictoryProjects" Item="PROJECT_LAUNCH_MARS_HYDROPONICS" Favored="true"/>
-		<Row ListType="ScienceVictoryPseudoYields" Item="PSEUDOYIELD_SPACE_RACE" Value="100"/>
-		<Row ListType="ScienceVictoryPseudoYields" Item="PSEUDOYIELD_TECHNOLOGY" Value="25"/>
-		<Row ListType="ScienceVictoryPseudoYields" Item="PSEUDOYIELD_GPP_SCIENTIST" Value="25"/>
-		<Row ListType="ScienceVictoryTechs" Item="TECH_ROCKETRY" Favored="true"/>
-		<Row ListType="ScienceVictoryTechs" Item="TECH_SATELLITES" Favored="true"/>
-		<Row ListType="ScienceVictoryTechs" Item="TECH_ROBOTICS" Favored="true"/>
-		<Row ListType="ScienceVictoryTechs" Item="TECH_NUCLEAR_FUSION" Favored="true"/>
-		<Row ListType="ScienceVictoryTechs" Item="TECH_NANOTECHNOLOGY" Favored="true"/>
-		<Row ListType="ScienceVictoryYields" Item="YIELD_SCIENCE" Value="50"/>
-
--- Civ specific
--- Amurite: War favored. Mana favored. Mage Guild/Adept favored(likely wont work tho), maybe put mages as support in AI
-
-
--- Elohim: Peace favored. Religion favored? No clue honestly
--- Grigori: Peace favored. No Religion favored. Econ favored/National Unit favored.
-
+INSERT INTO ExclusiveAgendas(AgendaOne, AgendaTwo) VALUES
+('AGENDA_DWARVEN_GOLD', 'AGENDA_MONEY_GRUBBER');
  */
+
+INSERT INTO AiListTypes(ListType) VALUES
+('ElvenAssassinsUnits'),
+('ElvenAssassinsCivics'),
+('ElvenAssassinsTechs'),
+('ElvenAssassinsDiplomacy');
+INSERT INTO AiLists(ListType, AgendaType, System) VALUES
+('ElvenAssassinsUnits', 'TRAIT_AGENDA_ELVEN_ASSASSINS', 'UnitPromotionClasses'),
+('ElvenAssassinsCivics', 'TRAIT_AGENDA_ELVEN_ASSASSINS', 'Civics'),
+('ElvenAssassinsTechs', 'TRAIT_AGENDA_ELVEN_ASSASSINS', 'Technologies'),
+('ElvenAssassinsDiplomacy', 'TRAIT_AGENDA_ELVEN_ASSASSINS', 'DiplomaticActions');
+
+INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
+('ElvenAssassinsUnits', 'PROMOTION_CLASS_RECON', '1');                  -- recon line bias
+
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('ElvenAssassinsCivics', 'CIVIC_DECEPTION', '1'),           -- religions
+('ElvenAssassinsCivics', 'TECH_POISONS', '1'),               -- recon line
+('ElvenAssassinsCivics', 'TECH_HUNTING', '1'),
+('ElvenAssassinsCivics', 'TECH_CONSTRUCTION', '0'),         -- no siege
+('ElvenAssassinsDiplomacy', 'DIPLOACTION_DECLARE_SURPRISE_WAR', '1'),         -- declare suprise war
+('ElvenAssassinsDiplomacy', 'DIPLOACTION_DECLARE_FORMAL_WAR', '1');         -- declare war
+
+-- Victory Strategies
+DELETE FROM Strategy_Priorities WHERE StrategyType = 'VICTORY_STRATEGY_SCIENCE_VICTORY' AND ListType='ScienceVictoryDistricts';
+DELETE FROM Strategy_Priorities WHERE StrategyType = 'VICTORY_STRATEGY_SCIENCE_VICTORY' AND ListType='ScienceVictoryProjects';
+DELETE FROM Strategy_Priorities WHERE StrategyType = 'VICTORY_STRATEGY_SCIENCE_VICTORY' AND ListType='ScienceVictoryDistricts';
+
+DELETE FROM AiFavoredItems WHERE ListType = 'ScienceVictoryPseudoYields' AND Item = 'PSEUDOYIELD_SPACE_RACE';
+DELETE FROM AiFavoredItems WHERE ListType = 'ScienceVictoryPseudoYields' AND Item = 'PSEUDOYIELD_GPP_SCIENTIST';
+
+-- DELETE FROM StrategyConditions WHERE StrategyType ='VICTORY_STRATEGY_SCIENCE_VICTORY' AND ConditionFunction = 'Is Renaissance';
+
+-- science techs
+UPDATE AiFavoredItems SET Item = 'TECH_ALTERATION' WHERE Item = 'TECH_ROCKETRY' ;
+UPDATE AiFavoredItems SET Item = 'TECH_DIVINATION' WHERE Item = 'TECH_SATELLITES' ;
+UPDATE AiFavoredItems SET Item = 'TECH_ELEMENTALISM' WHERE Item = 'TECH_ROBOTICS' ;
+UPDATE AiFavoredItems SET Item = 'TECH_NECROMANCY' WHERE Item = 'TECH_NUCLEAR_FUSION' ;
+UPDATE AiFavoredItems SET Item = 'TECH_STRENGTH_OF_WILL' WHERE Item = 'TECH_NANOTECHNOLOGY' ;
+
+-- RESOURCE_ALUMINIUM
+DELETE FROM Strategy_Priorities WHERE ListType = 'ReligiousVictoryBehaviors';
+DELETE FROM Strategy_Priorities WHERE ListType = 'ReligiousVictoryDiplomacy';
+DELETE FROM Strategy_Priorities WHERE ListType = 'ReligiousVictoryYields';
+
+DELETE FROM AiFavoredItems WHERE ListType = 'ReligiousVictoryPseudoYields' AND Item = 'PSEUDOYIELD_UNIT_RELIGIOUS';
+DELETE FROM AiFavoredItems WHERE ListType = 'ReligiousVictoryPseudoYields' AND Item = 'PSEUDOYIELD_RELIGIOUS_CONVERT_EMPIRE';
+UPDATE AiFavoredItems SET Value = 75 WHERE ListType = 'ReligiousVictoryPseudoYields' AND Item = 'PSEUDOYIELD_GPP_PROPHET';
+
+DELETE FROM StrategyConditions WHERE StrategyType ='VICTORY_STRATEGY_RELIGIOUS_VICTORY' AND ConditionFunction = 'Founded Religion';
+DELETE FROM StrategyConditions WHERE StrategyType ='VICTORY_STRATEGY_RELIGIOUS_VICTORY' AND ConditionFunction = 'Cannot Found Religion';
+DELETE FROM StrategyConditions WHERE StrategyType ='VICTORY_STRATEGY_RELIGIOUS_VICTORY' AND ConditionFunction = 'Religion Destroyed';
+
+-- no diplo victory
+DELETE FROM Strategy_Priorities WHERE StrategyType = 'VICTORY_STRATEGY_DIPLOMATIC_VICTORY';
+DELETE FROM Strategies WHERE StrategyType = 'VICTORY_STRATEGY_DIPLOMATIC_VICTORY';
+
