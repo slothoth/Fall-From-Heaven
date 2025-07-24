@@ -298,7 +298,7 @@ local function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
     return tNewUnits
 end
 
-local function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
+function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
     local iX =  pCasterUnit:GetX()
     local iY =  pCasterUnit:GetY()
     local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
@@ -633,7 +633,7 @@ function onTurnStartGameplay(playerId)
             end
         end
     end
-    -- SECTION: Governor Manor Amenity PlotProperty BinaryMagic state management
+    -- SECTION: Governor Manor Amenity PlotProperty BinaryMagic state management. TODO, apply this also with Pillar of chains.
     if PlayerConfigurations[playerId]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_CALABIM' then
         for _, pCity in pPlayer:GetCities():Members() do
             if pCity:GetBuildings():HasBuilding(iGOVERNORS_MANOR_INDEX) then
@@ -1905,6 +1905,23 @@ function InitializeClans()
     end
 end
 
+local iCIVIC_ANCIENT_CHANTS = GameInfo.Civics['CIVIC_ANCIENT_CHANTS'].Index
+local tFreeAncientChants = {SLTH_CIVILIZATION_AMURITES=iCIVIC_ANCIENT_CHANTS, SLTH_CIVILIZATION_ELOHIM=iCIVIC_ANCIENT_CHANTS,
+                            SLTH_CIVILIZATION_MALAKIM=iCIVIC_ANCIENT_CHANTS, SLTH_CIVILIZATION_SHEAIM=iCIVIC_ANCIENT_CHANTS,
+                            SLTH_CIVILIZATION_SIDAR = iCIVIC_ANCIENT_CHANTS
+}
+function InitializeFreeCivics()
+    if Game.GetCurrentGameTurn() == 1 then
+        for playerId, pPlayer in ipairs(Players) do
+            local civName = PlayerConfigurations[playerId]:GetCivilizationTypeName()
+            if tFreeAncientChants[civName] then
+                local pCivics = pPlayer:GetCulture()
+                pCivics:SetCivic(tFreeAncientChants[civName], true)
+            end
+        end
+    end
+end
+
 -- Hook in events
 function onStart()
     GameEvents.PlayerTurnStarted.Add(onTurnStartGameplay);
@@ -1919,8 +1936,10 @@ function onStart()
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
     Events.UnitAbilityGained.Add(onAbilityGained)
     GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
+    Events.DistrictAddedToMap.Add(onDistrictPlace)
     -- initialize clans
     InitializeClans()
+    InitializeFreeCivics()
     print('-----------------Gameplay loaded')
 end
 
@@ -2343,6 +2362,20 @@ local function UpdateResourcePromotion(iPlayer, tParameters)
 end
 local function OnBespokeSpell(iPlayer, tParameters)
     print('bespoke spell not implemented')
+end
+
+function onDistrictPlace(playerID, districtID, cityID, x, y, districtIndex, percentComplete)
+    if districtIndex ~= 0 and districtIndex ~= 6 then                   -- not wonder, not city centre
+        local pCity = CityManager.GetCity(playerID, cityID)
+        local pDistricts = pCity:GetDistricts()
+        local madeDistrict = pDistricts:GetDistrict(districtIndex)
+        if madeDistrict then
+            local buildQueue = pCity:GetBuildQueue()
+            buildQueue:FinishProgress()
+        else
+            print('couldnt find district id when trying to finish it for free', districtID, districtIndex)
+        end
+    end
 end
 
 

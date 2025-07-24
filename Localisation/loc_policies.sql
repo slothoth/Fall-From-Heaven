@@ -33,7 +33,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_POLICY_ARISTOCRACY_DESCRIPTION', '-1 [ICON_Food] Food and  +4 [ICON_Gold] Gold for each Farm. Allows the Royal Guard cavalry unit with Feudalism.', 'en_US'),
 ('LOC_SLTH_POLICY_CASTE_SYSTEM_DESCRIPTION', 'Builders start with +2 charges.', 'en_US'),
 ('LOC_SLTH_POLICY_CITY_STATES_DESCRIPTION', '80% reduced city Maintenance distance. -20% [ICON_Culture] Culture in all Cities. Accumulate 25% less war weariness than usual.', 'en_US'),
-('LOC_SLTH_POLICY_CONQUEST_DESCRIPTION', '+2 experience to trained Units. All military units cost food [UNIMPLEMENTED]', 'en_US'),
+('LOC_SLTH_POLICY_CONQUEST_DESCRIPTION', '+2 experience to trained Units. All military units cost food*', 'en_US'),
 ('LOC_SLTH_POLICY_CONSUMPTION_DESCRIPTION', '20% [ICON_Gold] Gold in all Cities.  Markets, Taverns and Theatres all give +1 [ICON_Amenities] Amenity.', 'en_US'),
 ('LOC_SLTH_POLICY_CRUSADE_DESCRIPTION', 'Accumulate -75% less war weariness than usual.', 'en_US'),
 ('LOC_SLTH_POLICY_DECENTRALIZATION_DESCRIPTION', 'Does nothing', 'en_US'),

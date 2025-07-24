@@ -294,7 +294,7 @@ INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrer
 ('UNITOPERATION_GRANT_LOYALTY_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_LOYALTY', 'LAW_ONE', 'AdjacentAllyEligibleAbility'),
 ('UNITOPERATION_GRANT_VALOR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_VALOR', 'LAW_THREE', 'AdjacentAllyEligibleAbility'),
 ('UNITOPERATION_GRANT_POISONED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_POISONED_BLADE', 'NATURE_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_TREETOP_DEFENSE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_TREETOP', 'NATURE_TWO', 'AdjacentAllyEligibleAbility'),         -- also needs feature ahh
+('UNITOPERATION_GRANT_TREETOP_DEFENSE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_TREETOP_DEFENSE', 'NATURE_TWO', 'AdjacentAllyEligibleAbility'),         -- also needs feature ahh
 ('UNITOPERATION_GRANT_BLUR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_BLUR', 'SHADOW_ONE', 'AdjacentAllyEligibleAbility'),
 ('UNITOPERATION_GRANT_SHADOWWALK_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHADOWWALK', 'SHADOW_TWO', 'AdjacentAllyEligibleAbility'),
 ('UNITOPERATION_GRANT_COURAGE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_COURAGE', 'SPIRIT_ONE', 'AdjacentAllyEligibleAbility'),

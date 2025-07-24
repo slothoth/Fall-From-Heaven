@@ -1012,4 +1012,16 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_ABILITY_WATER_ADJUST_DAMAGE_8_DESCRIPTION', '+8 [ICON_STRENGTH] Combat Strength from owned [ICON_RESOURCE_MANA_WATER] Water Mana', 'en_US'),
 ('LOC_ABILITY_WATER_ADJUST_DAMAGE_16_DESCRIPTION', '+16 [ICON_STRENGTH] Combat Strength from owned [ICON_RESOURCE_MANA_WATER] Water Mana', 'en_US'),
 ('LOC_ABILITY_WATER_ADJUST_DAMAGE_32_DESCRIPTION', '+32 [ICON_STRENGTH] Combat Strength from owned [ICON_RESOURCE_MANA_WATER] Water Mana', 'en_US'),
-('LOC_ABILITY_WATER_ADJUST_DAMAGE_64_DESCRIPTION', '+64 [ICON_STRENGTH] Combat Strength from owned [ICON_RESOURCE_MANA_WATER] Water Mana', 'en_US');
+('LOC_ABILITY_WATER_ADJUST_DAMAGE_64_DESCRIPTION', '+64 [ICON_STRENGTH] Combat Strength from owned [ICON_RESOURCE_MANA_WATER] Water Mana', 'en_US'),
+('LOC_PROMOTION_ENCHANTED_BLADE_DESCRIPTION', '+{1_Amount}[ICON_Strength]Combat Strength from Enchanted Blade', 'en_US'),
+('LOC_ENCHANTED_BLADE_DESCRIPTION', '+4 [ICON_Strength]Combat Strength from Enchanted Blade', 'en_US'),
+('LOC_BLUR_DESCRIPTION', '+4 [ICON_Strength]Combat Strength from Blur. 50% chance of wearing off next turn.', 'en_US'),
+('LOC_BUFF_BLUR_DESCRIPTION', '+4 [ICON_Strength]Combat Strength from Blur', 'en_US'),
+('LOC_DANCE_OF_BLADES_DESCRIPTION', '+4[ICON_Strength] Combat Strength from Dancing Blades. Wears off next turn.', 'en_US'),
+('LOC_BUFF_DANCE_OF_BLADES_DESCRIPTION', '+4[ICON_Strength] Combat Strength from Dancing Blades.', 'en_US'),
+('LOC_SHIELD_OF_FAITH_DESCRIPTION', '+2[ICON_Strength] Combat Strength from Shield of Faith. Wears off after combat', 'en_US'),
+('LOC_BUFF_MORALE_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength from Morale.', 'en_US'),
+('LOC_MORALE_DESCRIPTION', '+2[ICON_Strength] Combat Strength, doubled when attacking a city. 10% chance of wearing off each turn.', 'en_US'),
+('LOC_BUFF_MORALE_CITY_ATTACK_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength from Morale City Attack.', 'en_US'),
+('LOC_PROMOTION_RUSTED_DESCRIPTION', '-2[ICON_STRENGTH] Combat Strength from Rusted.', 'en_US'),
+('LOC_DISEASED_COMBAT_WEAKNESS_DESCRIPTION', '{1_Amount}[ICON_Strength] Combat Strength from Diseased. Spreads Disease to melee Combatants.', 'en_US');

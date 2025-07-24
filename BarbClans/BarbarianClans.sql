@@ -9,7 +9,7 @@ DELETE FROM BarbarianTribeNames;
 DELETE FROM UnitCommands WHERE CommandType='UNITCOMMAND_TREAT_WITH_CLAN_RAID';
 UPDATE TypeProperties SET Value=0 WHERE Type = 'UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE' and Name='XP_EARNED';
 -- spawn into game. keeping same as goody huts for now
-UPDATE Improvements SET Goody = 1, TilesPerGoody = 64, GoodyRange = 3 WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';          -- TODO PUT BACK IN, WASNT PROBLEM, REMOVED FOR TESTING
+-- UPDATE Improvements SET Goody = 1, TilesPerGoody = 64, GoodyRange = 3 WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';          -- TODO PUT BACK IN, WASNT PROBLEM, REMOVED FOR TESTING
 
 -- UPDATE TypeProperties SET Value='100' WHERE Name='BRIBE_CONVERSION_POINTS_CHANGE';          -- just for testing
 UPDATE TypeProperties SET Value='200' WHERE Name='BRIBE_INTERVAL_STANDARD';                 -- closest thing to peace with barbs
@@ -25,6 +25,25 @@ UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_MAX_BARB_LEVEL
 -- no new camps
 UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING';
 
+-- delete the single minor civ needed to spawn in
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('MINOR_CIV_DEFAULT_TRAIT', 'KILL_MINORS_TURN_1');
+
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
+('KILL_MINORS_TURN_1', 'MODIFIER_PLAYER_UNITS_ADJUST_DAMAGE', 'SLTH_TURN_IS_1_REQS');
+
+INSERT INTO ModifierArguments(ModifierId, Name, Type, Value) VALUES
+('KILL_MINORS_TURN_1', 'Amount', 'ARGTYPE_IDENTITY', '100');
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('REQUIRES_GAME_IS_TURN_1', 'REQUIREMENT_GAME_TURN_ATLEAST', '1');
+
+INSERT INTO RequirementArguments(RequirementId, Name, Type, "Value") VALUES
+('REQUIRES_GAME_IS_TURN_1', 'MinGameTurn', 'ARGTYPE_IDENTITY', '1'),
+('REQUIRES_GAME_IS_TURN_1', 'AdjustForGameSpeed', 'ARGTYPE_IDENTITY', '0');
+
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('SLTH_TURN_IS_1_REQS', 'REQUIREMENTSET_TEST_ALL');
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('SLTH_TURN_IS_1_REQS', 'REQUIRES_GAME_IS_TURN_1');
 -- does nothing
 -- UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CLANS_CIV_CONVERSION_INCREMENT_CHANCE';
 -- UPDATE GlobalParameters SET Value='999' WHERE Name= 'BARBARIAN_CLANS_CIV_CONVERSION_POINTS_STANDARD';               -- TODO REMOVED FOR TESTING< REMOVE IT

@@ -1,3 +1,10 @@
+local transientBuffKeys = {
+        BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
+        BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
+        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
+    }
+
+
 local function SetCapitalProperty(iPlayer, tParameters)
     local sPropKey = tParameters.sPropKey;
     local iPropValue = tParameters.iPropValue;
@@ -159,6 +166,10 @@ local function OnGrantDebuffAoe(iPlayer, tParameters)
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+    if transientBuffKeys[OperationInfo.SimpleText] then
+        sPropbuff_propkey = OperationInfo.SimpleText .. ('_UNITS')
+        tSpecificBuffState = Game:GetProperty(sPropbuff_propkey) or {}
+    end
     for _, plot in ipairs(tNeighborPlots) do
         for _, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
             if pNearUnit then
@@ -298,6 +309,37 @@ function GoldenAgeGrant(pPlayer, iGoldenDuration)
     print('confirm golden age exists on capital', pCapitalPlot:GetProperty('GoldenAgeDuration'))
 end
 
+-- copy of summon from Gameplay
+function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
+    local iX =  pCasterUnit:GetX()
+    local iY =  pCasterUnit:GetY()
+    local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
+    return tNewUnits
+end
+
+function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
+    local playerReal = Players[iPlayer];
+    local playerUnits = playerReal:GetUnits();
+    local pPlot = Map.GetPlot(iX, iY)
+    local tBeforeSummonUnits = {}
+    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+        if pOnTileUnit then
+            tBeforeSummonUnits[pOnTileUnit:GetID()] = true
+        end
+    end
+    playerUnits:Create(iUnitIndex, iX, iY);
+    local tNewUnits = {}
+    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+        if pOnTileUnit then
+            local iUnitID = pOnTileUnit:GetID()
+            if not tBeforeSummonUnits[iUnitID] then
+                tNewUnits[iUnitID] = pOnTileUnit
+            end
+        end
+    end
+    return tNewUnits
+end
+
 
 
 local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
@@ -427,6 +469,7 @@ local function UnitCityInteract(iPlayer, tParameters)
         local iX =  pUnit:GetX()
         local iY =  pUnit:GetY()
         local pCity = Cities.GetCityInPlot(iX, iY)
+        print('attaching modifier to city', OperationInfo.SimpleText)
         pCity:AttachModifierByID(OperationInfo.SimpleText);
         local pUnitAbilityManager = pUnit:GetAbility()
         pUnitAbilityManager:RemoveAbilityCount(tEquipmentOps[sOperationAbility]);
@@ -641,7 +684,6 @@ local function HealTileUnits( iPlayer, tParameters)
     local iCurrentHealth = pUnitToHeal:GetDamage() * -1
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
-
 
 -- UnitOperation Works
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);

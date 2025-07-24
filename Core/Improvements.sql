@@ -31,17 +31,18 @@ INSERT INTO Improvements(ImprovementType, Name, Buildable, Description, PlunderT
 
 INSERT INTO Improvements(ImprovementType, Name, Buildable, Description, PlunderType, PlunderAmount, Icon, CanBuildOutsideTerritory, DefenseModifier, GrantFortification, Coast, Domain, PrereqCivic) VALUES
 ('IMPROVEMENT_COTTAGE', 'LOC_IMPROVEMENT_COTTAGE_NAME', '1', 'LOC_IMPROVEMENT_COTTAGE_DESCRIPTION', 'PLUNDER_GOLD', '10', 'ICON_IMPROVEMENT_MEKEWAP', '0', '0', '0', '0', 'DOMAIN_LAND', 'CIVIC_EDUCATION'),
-('IMPROVEMENT_HAMLET', 'LOC_IMPROVEMENT_HAMLET_NAME', '1', 'LOC_IMPROVEMENT_HAMLET_DESCRIPTION', 'PLUNDER_GOLD', '15', 'ICON_IMPROVEMENT_OUTBACK_STATION', '0', '0', '0', '0', 'DOMAIN_LAND', 'CIVIC_EDUCATION');
+('IMPROVEMENT_HAMLET', 'LOC_IMPROVEMENT_HAMLET_NAME', '1', 'LOC_IMPROVEMENT_HAMLET_DESCRIPTION', 'PLUNDER_GOLD', '15', 'ICON_IMPROVEMENT_OUTBACK_STATION', '0', '0', '0', '0', 'DOMAIN_LAND', NULL);
 
 UPDATE Improvements SET PrereqTech='TECH_CONSTRUCTION' WHERE ImprovementType='IMPROVEMENT_FORT';
 UPDATE Improvements SET PrereqTech='TECH_AGRICULTURE' WHERE ImprovementType='IMPROVEMENT_FARM';
 UPDATE Improvements SET PrereqTech='TECH_MINING' WHERE ImprovementType='IMPROVEMENT_MINE';
 UPDATE Improvements SET PrereqTech='TECH_CALENDAR' WHERE ImprovementType='IMPROVEMENT_PLANTATION';
 UPDATE Improvements SET PrereqTech='TECH_HUNTING' WHERE ImprovementType='IMPROVEMENT_CAMP';
-UPDATE Improvements SET PrereqTech='TECH_ARCHERY' WHERE ImprovementType='IMPROVEMENT_LUMBERMILL';
+UPDATE Improvements SET PrereqTech='SLTH_TECH_ARCHERY' WHERE ImprovementType='IMPROVEMENT_LUMBERMILL';
 UPDATE Improvements SET PrereqTech='TECH_ANIMAL_HUSBANDRY' WHERE ImprovementType='IMPROVEMENT_PASTURE';
 UPDATE Improvements SET PrereqTech='SLTH_TECH_SAILING' WHERE ImprovementType='IMPROVEMENT_FISHING_BOATS';
-
+UPDATE Improvements SET PrereqTech = 'TECH_MASONRY' WHERE ImprovementType='IMPROVEMENT_QUARRY';
+-- still cant get plant trees to go away...
 DELETE FROM Improvement_ValidResources WHERE ImprovementType = 'IMPROVEMENT_PLANTATION' AND ResourceType = 'RESOURCE_WINE';
 
 INSERT INTO Improvement_ValidBuildUnits(ImprovementType, UnitType, ConsumesCharge) VALUES

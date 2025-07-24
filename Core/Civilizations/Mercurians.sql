@@ -124,6 +124,9 @@ INSERT INTO BuildingModifiers(BuildingType, ModifierId) VALUES
 INSERT INTO MutuallyExclusiveBuildings(Building, MutuallyExclusiveBuilding) VALUES
 ('SLTH_BUILDING_MERCURIAN_GATE', 'BUILDING_PALACE');
 
+INSERT INTO Building_YieldChanges(BuildingType, YieldType, YieldChange) VALUES
+('SLTH_BUILDING_MERCURIAN_GATE', 'YIELD_CULTURE', '4');
+
 INSERT INTO Types(Type, Kind) VALUES
 ('SLTH_TRAIT_CIVILIZATION_UNIT_ANGEL_OF_DEATH', 'KIND_TRAIT'),
 ('SLTH_TRAIT_CIVILIZATION_UNIT_BASIUM', 'KIND_TRAIT'),

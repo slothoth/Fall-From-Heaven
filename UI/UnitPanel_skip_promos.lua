@@ -805,7 +805,7 @@ function GetUnitActionsTable( pUnit )
 					if (bCanStart) then
 						-- Check again if the operation can occur, this time for real.
 						if CustomOperationInfo then
-							local iHasCast = pUnit:GetProperty('HasCast') or 0
+							local iHasCast = 0					--  TODO free casting for testing pUnit:GetProperty('HasCast') or 0
 							if iHasCast == 0 then
 								if CustomOperationInfo.ActivationPrereq then
 									bCanStart = CustomCheck(CustomOperationInfo, pUnit)
@@ -4550,6 +4550,8 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 			bCanStart = pPlot:GetProperty('HellConversion') or 0 > 9
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff' then
+		local iPlotID = pUnit:GetPlotId()
+		local pPlot = Map.GetPlotByIndex(iPlotID)
 		local ResourceInfo = GameInfo.Resources[pPlot:GetResourceType()]
 		bCanStart = ResourceInfo and ResourceInfo.ResourceClassType == 'RESOURCECLASS_MANA'
 		-- if not bCanStart then
@@ -4730,6 +4732,11 @@ function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, CustomOpInfo)
 end
 
 function CheckAdjacentUnitsHasntAbility(pUnit, iPlayer, CustomOpInfo, bIsAlly)
+	local abilityToCheckInfo = GameInfo.UnitAbilities[CustomOpInfo.SimpleText]
+	if not abilityToCheckInfo then
+		print('Error in checking adjacent units for Ability for use in CustomOP, couldnt find ability:', CustomOpInfo.SimpleText, CustomOpInfo.OperationType)
+		return false;
+	end
 	local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
