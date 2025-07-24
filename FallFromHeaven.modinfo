@@ -24,6 +24,9 @@
     <Criteria id="LeaningTowerNotOn">
 	  <ModInUse inverse="1">d1c3ef16-00ed-4d72-a468-1e584fdb85ad</ModInUse>
 	</Criteria>
+    <Criteria id="ValkranaOn">
+	  <ModInUse>2eebb34e-b4cb-440f-a4ea-2057cee8093f</ModInUse>
+	</Criteria>
   </ActionCriteria>
   <FrontEndActions>
     <UpdateDatabase id="config">
@@ -60,6 +63,12 @@
       <File>Icons/CommandIcons.sql</File>
       <File>Icons/ModeIcons.xml</File>
     </UpdateIcons>
+    <UpdateDatabase id="mod_compatValkSkeletonFrontend" criteria="ValkranaOn">
+      <Properties>
+        <LoadOrder>2000</LoadOrder>
+      </Properties>
+      <File>Core/Absorb_deletes/Valkrana_Skeleton_Config.sql</File>
+    </UpdateDatabase>
    </FrontEndActions>
   <InGameActions>
     <UpdateArt id="Art">
@@ -86,6 +95,18 @@
         <LoadOrder>98</LoadOrder>
       </Properties>
       <File>Core/Absorb_deletes/Leaning.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="mod_compatValkSkeletonPre" criteria="ValkranaOn">
+      <Properties>
+        <LoadOrder>1000</LoadOrder>
+      </Properties>
+      <File>Core/Absorb_deletes/Valkrana_Skeleton_Additions_preDelete.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="mod_compatValkSkeletonPostDelete" criteria="ValkranaOn">
+      <Properties>
+        <LoadOrder>2000</LoadOrder>
+      </Properties>
+      <File>Core/Absorb_deletes/Valkrana_Skeleton.sql</File>
     </UpdateDatabase>
     <UpdateDatabase id="Gameplay_first">
       <Properties>
