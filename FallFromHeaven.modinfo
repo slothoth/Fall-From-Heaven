@@ -6,7 +6,7 @@
     <Created>1714825549</Created>
     <Teaser>Ports Kael's excellent Fall From Heaven mod to Civ VI</Teaser>
     <Authors>Slothoth</Authors>
-    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi, SeelingCat and Sukritact, Honey for their great reference mods for Lua. Game-Icons.net for the vast quantity of icons used in UnitFlags. This mod would not have been possible without them.</SpecialThanks>
+    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi, SeelingCat and Sukritact, Honey for their great reference mods for Lua. Game-Icons.net for the vast quantity of icons used in UnitFlags. This mod would not have been possible without them. Low poly Chest pack from https://www.fab.com/sellers/AnderArts</SpecialThanks>
     <Homepage>https://github.com/slothoth/civvitests</Homepage>
     <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>

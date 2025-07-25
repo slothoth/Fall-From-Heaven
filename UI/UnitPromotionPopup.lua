@@ -302,9 +302,9 @@ function OnPromoteUnitPopup()
 				promotionInstance.PromotionName:SetOffsetX(44)
 			end
 			if (promotionDefinition ~= nil) then
-				print('-----------')
-				print(promotionDefinition.Name)
-				print(Locale.ToUpper(promotionDefinition.Name))
+				-- print('-----------')
+				-- print(promotionDefinition.Name)
+				-- print(Locale.ToUpper(promotionDefinition.Name))
 				promotionInstance.PromotionName:SetText(Locale.ToUpper(promotionDefinition.Name));
 				promotionInstance.PromotionDescription:SetText(Locale.Lookup(promotionDefinition.Description));
 				if bIsSmallNode then

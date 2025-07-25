@@ -106,28 +106,6 @@ local tBarbNW = {
 	[GameInfo.Features['FEATURE_DELICATE_ARCH'].Index] = 1,
 	[GameInfo.Features['FEATURE_YOSEMITE'].Index] = 1}
 
-local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
-	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
-	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
-	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
-	[GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]={
-	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_SCIENCE', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION',
-	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_SIDAR', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_GUILD_OF_HAMMERS'},
-	[GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]={
-		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_PROD', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE',
-		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_SIDAR', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_GREAT_LIB'},
-	[GameInfo.Units['UNIT_GREAT_ARTIST'].Index]={
-		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_GOLD',
-		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_SIDAR', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_THEATRE_OF_DREAMS'},
-	[GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]={
-		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
-		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
-}
-
-local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_HALL_OF_KINGS',
-									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_CASTE_SYSTEM',
-									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
-									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
 
 local transientBuffKeys = {
         BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
@@ -2278,91 +2256,7 @@ local function ForTheHorde(iPlayer, tParameters)                -- TODO
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
-local tAllowSphereOne = {
-    [iMANA_AIR_INDEX]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED'].Index,
-    [iMANA_BODY_INDEX]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED'].Index,
-    [iMANA_CHAOS_INDEX]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED'].Index,
-    [iMANA_DEATH_INDEX]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED'].Index,
-    [iMANA_EARTH_INDEX]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED'].Index,
-    [iMANA_ENCHANTMENT_INDEX]        =    GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED'].Index,
-    [iMANA_ENTROPY_INDEX]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED'].Index,
-    [iMANA_FIRE_INDEX]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED'].Index,
-    [iMANA_LAW_INDEX]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED'].Index,
-    [iMANA_LIFE_INDEX]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED'].Index,
-    [iMANA_METAMAGIC_INDEX]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED'].Index,
-    [iMANA_MIND_INDEX]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED'].Index,
-    [iMANA_NATURE_INDEX]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED'].Index,
-    [iMANA_SHADOW_INDEX]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED'].Index,
-    [iMANA_SPIRIT_INDEX]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED'].Index,
-    [iMANA_SUN_INDEX]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED'].Index,
-    [iMANA_WATER_INDEX]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED'].Index
-}
-local tAllowSphereTwo = {
-    [iMANA_AIR_INDEX]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index,
-    [iMANA_BODY_INDEX]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_2'].Index,
-    [iMANA_CHAOS_INDEX]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_2'].Index,
-    [iMANA_DEATH_INDEX]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
-    [iMANA_EARTH_INDEX]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_2'].Index,
-    [iMANA_ENCHANTMENT_INDEX]=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index,
-    [iMANA_ENTROPY_INDEX]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_2'].Index,
-    [iMANA_FIRE_INDEX]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_2'].Index,
-    [iMANA_LAW_INDEX]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_2'].Index,
-    [iMANA_LIFE_INDEX]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_2'].Index,
-    [iMANA_METAMAGIC_INDEX]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_2'].Index,
-    [iMANA_MIND_INDEX]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_2'].Index,
-    [iMANA_NATURE_INDEX]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_2'].Index,
-    [iMANA_SHADOW_INDEX]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_2'].Index,
-    [iMANA_SPIRIT_INDEX]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_2'].Index,
-    [iMANA_SUN_INDEX]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_2'].Index,
-    [iMANA_WATER_INDEX]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_2'].Index
-}
 
-local tAllowSphereThree = {
-    [iMANA_AIR_INDEX]        =    GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index,
-    [iMANA_BODY_INDEX]        =    GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_3'].Index,
-    [iMANA_CHAOS_INDEX]        =    GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_3'].Index,
-    [iMANA_DEATH_INDEX]        =    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
-    [iMANA_EARTH_INDEX]        =    GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_3'].Index,
-    [iMANA_ENCHANTMENT_INDEX]=    GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index,
-    [iMANA_ENTROPY_INDEX]        =    GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_3'].Index,
-    [iMANA_FIRE_INDEX]        =    GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_3'].Index,
-    [iMANA_LAW_INDEX]        =    GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_3'].Index,
-    [iMANA_LIFE_INDEX]        =    GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_3'].Index,
-    [iMANA_METAMAGIC_INDEX]        =    GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_3'].Index,
-    [iMANA_MIND_INDEX]        =    GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_3'].Index,
-    [iMANA_NATURE_INDEX]        =    GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_3'].Index,
-    [iMANA_SHADOW_INDEX]        =    GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_3'].Index,
-    [iMANA_SPIRIT_INDEX]        =    GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_3'].Index,
-    [iMANA_SUN_INDEX]        =    GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_3'].Index,
-    [iMANA_WATER_INDEX]        =    GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_3'].Index
-}
-local function UpdateResourcePromotion(iPlayer, tParameters)
-    local iResource = tParameters.ResourceID
-    local pPlayer = Players[iPlayer]
-    local iChanOneGrant = tAllowSphereOne[iResource]
-    local iChanTwoGrant = tAllowSphereTwo[iResource]
-    local iChanThreeGrant = tAllowSphereTwo[iResource]
-    for _, unit in pPlayer:GetUnits():Members() do
-        local pUnitAbilities = unit:GetAbility()
-        local pUnitExp = unit:GetExperience()
-        if pUnitAbilities:HasAbility('ABILITY_CHANNELING1') then
-            pUnitExp:SetPromotion(iChanOneGrant)
-            print('allow tier 1 of type' .. tostring(iChantGrant))
-        end
-        if pUnitAbilities:HasAbility('ABILITY_CHANNELING2') then
-            pUnitExp:SetPromotion(iChanTwoGrant)
-            print('allow tier 2 of type' .. tostring(iChanTwoGrant))
-        end
-        if pUnitAbilities:HasAbility('ABILITY_CHANNELING3') then
-            pUnitExp:SetPromotion(iChanThreeGrant)
-            print('allow tier 3 of type' .. tostring(iChanThreeGrant))
-        end
-        -- iterate over player units, grant prereq promo
-    end
-end
-local function OnBespokeSpell(iPlayer, tParameters)
-    print('bespoke spell not implemented')
-end
 
 function onDistrictPlace(playerID, districtID, cityID, x, y, districtIndex, percentComplete)
     if districtIndex ~= 0 and districtIndex ~= 6 then                   -- not wonder, not city centre

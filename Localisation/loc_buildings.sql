@@ -285,7 +285,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_BUILDING_ACHERONS_LAIR_NAME', 'Acheron''s lair', 'en_US'),
 ('LOC_BUILDING_ACHERONS_LAIR_DESCRIPTION', 'The city Acheron has designated to rest upon. Contains valuable jewels.', 'en_US'),
 ('LOC_SLTH_BUILDING_SHRINE_OF_THE_CHAMPION_NAME', 'Shrine of the Champion', 'en_US'),
-('LOC_BUILDING_BREEDING_PIT_DESCRIPTION', '20% Growth Rate in this city. -1 Housing.', 'en_US'),
+('LOC_BUILDING_BREEDING_PIT_DESCRIPTION', '20% Growth Rate in this city.', 'en_US'),
 ('LOC_SLTH_BUILDING_WARRENS_DESCRIPTION', 'Built Units spawn a second copy. Excludes Siege, Naval, Hero and National Units.', 'en_US'),
 ('LOC_BUILDING_ARENA_DESCRIPTION', 'Balseraph Training Yard replacement. Units may cast Arena battle, gaining experience, Gold, and +2 [ICON_Amenities]Amenities briefly*, if they win. They die otherwise.', 'en_US'),
 ('LOC_PLACEHOLDER_QUOTE', '“Placeholder.”[NEWLINE]– A Wise Man', 'en_US'),

@@ -4,6 +4,30 @@ local transientBuffKeys = {
         BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
     }
 
+local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
+	[GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]={
+	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_SCIENCE', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION',
+	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_SIDAR', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_GUILD_OF_HAMMERS'},
+	[GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]={
+		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_PROD', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE',
+		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_SIDAR', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_GREAT_LIB'},
+	[GameInfo.Units['UNIT_GREAT_ARTIST'].Index]={
+		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_GOLD',
+		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_SIDAR', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_THEATRE_OF_DREAMS'},
+	[GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]={
+		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
+		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
+}
+
+local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_HALL_OF_KINGS',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_CASTE_SYSTEM',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
+
+
 
 local function SetCapitalProperty(iPlayer, tParameters)
     local sPropKey = tParameters.sPropKey;
@@ -23,12 +47,14 @@ local function SetPlayerProperty(iPlayer, tParameters)
 end
 
 local function OnSummon(iPlayer, tParameters)
+    print('trying summon')
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local pUnitExp = pUnit:GetExperience()
     local pUnitAbility = pUnit:GetAbility()
+    print('trying summon of ', OperationInfo.SimpleText)
     local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
     for iUnitID, pNewUnit in pairs(tNewUnits) do
         print(OperationInfo.SimpleText)
@@ -281,7 +307,17 @@ local function GrantGoldenAge(iPlayer, tParameters)
     local pPlayer = Players[iPlayer]
     local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
     local t_iUnits = {}
-    t_iUnits[1] = tParameters.iCastingUnit                      -- set to just the owner for now
+    -- t_iUnits[1] = tParameters.iCastingUnit                      -- set to just the owner for now
+    local iBar = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
+    local iGpAmount = 0
+	for iUnitID, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
+        if iGpAmount < iBar then
+            if pPlayerUnit:GetGreatPerson():IsGreatPerson() then
+                iGpAmount = iGpAmount + 1
+                table.insert(t_iUnits, iUnitID)
+            end
+        end
+	end
     for iUnitType, iUnitID in pairs(t_iUnits) do
         local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
         UnitManager.Kill(pUnit);
@@ -367,8 +403,22 @@ local tBuildingGrantModiferMap = {
     ['SLTH_BUILDING_SONG_OF_AUTUMN'] = 'SLTH_MODIFIER_GRANT_SONG_OF_AUTUMN',
     ['SLTH_BUILDING_THE_NECRONOMICON'] = 'SLTH_MODIFIER_GRANT_THE_NECRONOMICON',
     ['SLTH_BUILDING_NOX_NOCTIS'] = 'SLTH_MODIFIER_GRANT_NOX_NOCTIS',
-    ['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'] = 'SLTH_MODIFIER_GRANT_STIGMATA_ON_THE_UNBORN'
+    ['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'] = 'SLTH_MODIFIER_GRANT_STIGMATA_ON_THE_UNBORN',
+
+    ['BUILDING_ALCHEMICAL_SOCIETY'] = 'SLTH_MODIFIER_GRANT_ACADEMY',
+    ['SLTH_BUILDING_DANCING_BEAR'] = 'SLTH_MODIFIER_GRANT_DANCING_BEAR',
+    ['SLTH_BUILDING_GORILLA_CAGE'] = 'SLTH_MODIFIER_GRANT_GORILLA_CAGE',
+    ['SLTH_BUILDING_LION_CAGE'] = 'SLTH_MODIFIER_GRANT_LION_CAGE',
+    ['SLTH_BUILDING_SPIDER_PEN'] = 'SLTH_MODIFIER_GRANT_SPIDER_PEN',
+    ['SLTH_BUILDING_TIGER_CAGE'] = 'SLTH_MODIFIER_GRANT_TIGER_CAGE',
+    ['SLTH_BUILDING_WOLF_PEN'] = 'SLTH_MODIFIER_GRANT_WOLF_PEN',
+    ['SLTH_BUILDING_FREAK_SHOW'] = 'SLTH_MODIFIER_GRANT_FREAK_SHOW',
+    ['SLTH_BUILDING_DWARF_CAGE'] = 'SLTH_MODIFIER_GRANT_DWARF_CAGE',
+    ['SLTH_BUILDING_ELF_CAGE'] = 'SLTH_MODIFIER_GRANT_ELF_CAGE',
+    ['SLTH_BUILDING_HUMAN_CAGE'] = 'SLTH_MODIFIER_GRANT_HUMAN_CAGE',
+    ['SLTH_BUILDING_ORC_CAGE'] = 'SLTH_MODIFIER_GRANT_ORC_CAGE'
 }
+
 
 local function GrantBuildingFunction(iPlayer, tParameters)
     local iUnit = tParameters.iCastingUnit
@@ -688,7 +738,6 @@ end
 -- UnitOperation Works
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
-GameEvents.SlthSetResourcePromotions.Add(UpdateResourcePromotion);
 GameEvents.SlthOnSummon.Add(OnSummon);
 GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);
 GameEvents.SlthOnGrantBuffSelf.Add(OnGrantBuffSelf);

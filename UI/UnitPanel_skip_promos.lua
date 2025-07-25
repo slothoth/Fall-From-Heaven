@@ -770,6 +770,7 @@ function GetUnitActionsTable( pUnit )
 						end
 						reqAbility = CustomOperationInfo.AbilityPrereq			-- need to iterate over abilities here
 						if reqAbility and not failedReq then
+							-- print('looking for', reqAbility)
 							local iAbilityToCheck = GameInfo.UnitAbilities[reqAbility].Index
 							if CustomOperationInfo.AlternateAbilityPrereq then
 								local iAbilityAltToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlternateAbilityPrereq].Index;
@@ -2702,7 +2703,6 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 				end
 			else
 				if (actionType == UnitOperationTypes.TYPE) then
-
 					local eInterfaceMode = InterfaceModeTypes.NONE;
 					local interfaceMode = GameInfo.UnitOperations[actionHash].InterfaceMode;
 					if (interfaceMode) then
@@ -4566,14 +4566,22 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 		bCanStart = CheckAdjacentUnitsHasntAbility(pUnit, iOwner, CustomOperationInfo, true)
 	elseif CustomOperationInfo.ActivationPrereq == 'HasntAbility' then
 		local pAbilities = pUnit:GetAbility():GetAbilities()
-		local bAllyUnitFound
 		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOperationInfo.SimpleText].Index
+		local hasAbility
+		print('checking if can grant ability to self:', CustomOperationInfo.SimpleText)
+		print('do we have abilities', pAbilities)
 		if (pAbilities and table.count(pAbilities) > 0) then
 			for i,ability in ipairs (pAbilities) do
-				if not bAllyUnitFound then
-					bAllyUnitFound = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
+				if not hasAbility then
+					print('checking if ability 1 == ability 2',ability,  iAbilityToCheck)
+					hasAbility = not (ability == iAbilityToCheck)							-- GameInfo.UnitAbilities[ability]
 				end
 			end
+			if hasAbility then
+				bCanStart = false
+			end
+		else
+			bCanStart = true
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnCityPopTwoPlus' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
@@ -4603,7 +4611,7 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'EnoughGreatPeople' then
 		local pPlayer = Players[iOwner]
-		local iBar = pPlayer:GetProperty('GOLDEN_AGE_GP') or 1
+		local iBar = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
 		local bCanStart = GPChecker(pPlayer, iBar)
 	elseif CustomOperationInfo.ActivationPrereq == 'OnHolyCity' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
