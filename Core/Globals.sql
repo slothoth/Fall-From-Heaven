@@ -123,3 +123,9 @@ INSERT INTO Types(Type, Kind) VALUES
 ('MODIFIER_GRANT_YIELD_BASED_ON_CURRENT_YIELD_RATE_CITIES', 'KIND_MODIFIER');
 
  */
+
+ -- hiding civilopedia
+
+INSERT INTO CivilopediaSectionExcludes(SectionId) VALUES
+('MOMENTS'),
+('GOVERNORS');

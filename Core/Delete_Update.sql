@@ -64,8 +64,11 @@ UPDATE Districts SET PrereqTech = 'TECH_SANITATION' WHERE DistrictType = 'DISTRI
 -- fix wonder location requirements, or do it invert and allow on all floodplains? hmmm
 DELETE FROM Building_ValidFeatures;
 
--- fix building woods
-UPDATE Features SET AddCivic=NULL WHERE FeatureType='FEATURE_FOREST';
+DELETE FROM Civilizations WHERE StartingCivilizationLevelType= 'CIVILIZATION_LEVEL_FULL_CIV';
+DELETE FROM Leaders WHERE InheritFrom= 'LEADER_DEFAULT';
+
+-- fix building woods. If set to null its free, which isnt right.
+UPDATE Features SET AddCivic='CIVIC_DIVINE_ESSENCE' WHERE FeatureType='FEATURE_FOREST';
 
 -- UPDATE Building_YieldChanges SET YieldChange = 100 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
 -- UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';
@@ -75,6 +78,7 @@ UPDATE Features SET AddCivic=NULL WHERE FeatureType='FEATURE_FOREST';
 -- INSERT INTO BuildingModifiers (BuildingType, ModifierId) VALUES('BUILDING_PALACE', 'CONTRATACION_GOVERNOR_POINTS')
 
 -- for debug
+/*
 INSERT INTO BuildingModifiers(BuildingType, ModifierId) VALUES
 ('BUILDING_PALACE', 'MODIFIER_SLTH_GRANT_MANA_AIR'),
 ('BUILDING_PALACE', 'MODIFIER_SLTH_GRANT_MANA_BODY'),
@@ -94,3 +98,4 @@ INSERT INTO BuildingModifiers(BuildingType, ModifierId) VALUES
 ('BUILDING_PALACE', 'MODIFIER_SLTH_GRANT_MANA_SPIRIT'),
 ('BUILDING_PALACE', 'MODIFIER_SLTH_GRANT_MANA_SUN'),
 ('BUILDING_PALACE', 'MODIFIER_SLTH_GRANT_MANA_WATER');
+ */

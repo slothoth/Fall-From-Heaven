@@ -599,4 +599,82 @@ INSERT INTO CivilopediaPageChapterParagraphs(SectionId, PageId, ChapterId, Parag
 ('CONCEPTS', 'A_NOTE_FROM_SLOTH', 'UNITS', 'LOC_PEDIA_CONCEPTS_PAGE_PROGRESS_INCOMPLETE_CHAPTER_CONTENT_PARA_11', '39'),
 ('CONCEPTS', 'A_NOTE_FROM_SLOTH', 'UNITS', 'LOC_PEDIA_CONCEPTS_PAGE_PROGRESS_INCOMPLETE_CHAPTER_CONTENT_PARA_12', '40'),
 ('CONCEPTS', 'A_NOTE_FROM_SLOTH', 'UNITS', 'LOC_PEDIA_CONCEPTS_PAGE_PROGRESS_INCOMPLETE_CHAPTER_CONTENT_PARA_13', '41'),
-('CONCEPTS', 'A_NOTE_FROM_SLOTH', 'UNITS', 'LOC_PEDIA_CONCEPTS_PAGE_PROGRESS_INCOMPLETE_CHAPTER_CONTENT_PARA_14', '42'),
+('CONCEPTS', 'A_NOTE_FROM_SLOTH', 'UNITS', 'LOC_PEDIA_CONCEPTS_PAGE_PROGRESS_INCOMPLETE_CHAPTER_CONTENT_PARA_14', '42');
+
+-- delete Barbarian Clans, Flatland clan, Woodland Clan, Hills Clan, Rover Clan, Jungle Clan, Chariot Clan, Seafaring Clan
+DELETE FROM CivilopediaPages WHERE PageLayoutID='BarbarianClans';
+DELETE FROM CivilopediaPages WHERE PageLayoutID='BarbarianClanType';
+
+-- Delete Gathering Storm: Consumable Resources, Power, Global Temperature, World Congress, Diplomatic Victory
+DELETE FROM CivilopediaPages WHERE PageID='CONSUMEABLE_RESOURCES';
+DELETE FROM CivilopediaPages WHERE PageID='POWER';
+DELETE FROM CivilopediaPages WHERE PageID='GLOBAL_TEMPERATURE';
+DELETE FROM CivilopediaPages WHERE PageID='WORLD_CONGRESS';
+DELETE FROM CivilopediaPages WHERE PageID='DIPLOMATIC_VICTORY';
+
+-- Rise And Fall: Historic Moments, Golden and Dark Ages, Dedications, Governors
+DELETE FROM CivilopediaPages WHERE PageID='PRIDE_MOMENTS_1';
+DELETE FROM CivilopediaPages WHERE PageID='GOLDEN_AGES_1';
+DELETE FROM CivilopediaPages WHERE PageID='DEDICATIONS';
+DELETE FROM CivilopediaPages WHERE PageID='GOVERNORS_1';
+
+-- Cities: Neighborhoods and Appeal,
+DELETE FROM CivilopediaPages WHERE PageID='CITIES_11';
+-- Cities: Updated Specialists
+
+-- Air Combat: DELETE Air Strikes, Interception, Introduction
+DELETE FROM CivilopediaPages WHERE PageID='AIRCOMBAT_1';
+DELETE FROM CivilopediaPages WHERE PageID='AIRCOMBAT_4';
+DELETE FROM CivilopediaPages WHERE PageID='AIRCOMBAT_5';
+
+-- Inspiriation Moments. Eureka Moments
+DELETE FROM CivilopediaPages WHERE PageID='CULTURE_3';
+DELETE FROM CivilopediaPages WHERE PageID='SCIENCE_3';
+
+-- Add a section on COMMERCE
+
+-- DELETE: Earning Faith, Pantheons, Great Prophets, Founding your Religion, Theological Combat
+DELETE FROM CivilopediaPages WHERE PageID='FAITH_2';
+DELETE FROM CivilopediaPages WHERE PageID='FAITH_3';
+-- LOC_PEDIA_CONCEPTS_PAGE_FAITH_4_CHAPTER_CONTENT_PARA_1    Updates Great Porphets about getting holy Wonder
+DELETE FROM CivilopediaPages WHERE PageID='FAITH_5';
+DELETE FROM CivilopediaPages WHERE PageID='FAITH_7';
+
+-- DELETE City States: Introduction, City-State Types, Communicating with City-States, Envoys, Suzerain
+DELETE FROM CivilopediaPages WHERE PageID='CITYSTATES_1';
+DELETE FROM CivilopediaPages WHERE PageID='CITYSTATES_2';
+DELETE FROM CivilopediaPages WHERE PageID='CITYSTATES_3';
+DELETE FROM CivilopediaPages WHERE PageID='CITYSTATES_4';
+DELETE FROM CivilopediaPages WHERE PageID='CITYSTATES_5';
+
+-- Policty Types: DELETE GOVERNMENTS.
+DELETE FROM CivilopediaPages WHERE PageID='GOVT_1';
+
+-- Policty Types: UPDATE Policies, Policy Types
+-- LOC_PEDIA_CONCEPTS_PAGE_GOVT_4_CHAPTER_CONTENT_PARA_5 Update this to be Cultural Values?
+
+-- GREAT PEOPLE: UPDATE Using Great People, to be specific on each Great Person type.
+-- UPDATE LOC TEXT: LOC_PEDIA_CONCEPTS_PAGE_GREATPEOPLE_3_CHAPTER_CONTENT_PARA_1 to be each type
+-- DELETE NUKES:
+DELETE FROM CivilopediaPageGroups WHERE PageGroupId='NUKES';
+DELETE FROM CivilopediaPages WHERE PageID='NUKES_1';
+DELETE FROM CivilopediaPages WHERE PageID='NUKES_2';
+DELETE FROM CivilopediaPages WHERE PageID='NUKES_3';
+
+-- Tourism: Seaside Resorts. National Parks. Themes and Theming.
+DELETE FROM CivilopediaPages WHERE PageID='TOURISM_3';
+DELETE FROM CivilopediaPages WHERE PageID='TOURISM_4';
+DELETE FROM CivilopediaPages WHERE PageID='TOURISM_5';
+
+-- VICTORY AND DEFEAT: Delete Science Victory. UPDATE Religious Victory to be luonnotar.
+DELETE FROM CivilopediaPages WHERE PageID='VICTORY_3';
+DELETE FROM CivilopediaPages WHERE PageID='VICTORY_5';
+
+-- commerce explanation
+INSERT INTO CivilopediaPages(SectionId, PageId, PageGroupId, PageLayoutId, Name) VALUES
+('CONCEPTS', 'COMMERCE',       'FALLFROMHEAVEN', 'Simple', 'LOC_PEDIA_CONCEPTS_PAGE_COMMERCE_CHAPTER_CONTENT_TITLE');
+
+
+INSERT INTO CivilopediaPageChapterParagraphs(SectionId, PageId, ChapterId, Paragraph, SortIndex) VALUES
+('CONCEPTS', 'COMMERCE', 'UNITS', 'LOC_PEDIA_CONCEPTS_PAGE_COMMERCE_CHAPTER_CONTENT_PARA_1', '0'),
+('CONCEPTS', 'COMMERCE', 'UNITS', 'LOC_PEDIA_CONCEPTS_PAGE_COMMERCE_CHAPTER_CONTENT_PARA_2', '10');
