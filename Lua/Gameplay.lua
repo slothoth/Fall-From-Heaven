@@ -658,15 +658,15 @@ end
 local TRIBE_CLAN_SCORPION = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_OPEN'].Index
 local TRIBE_CLAN_SKELETON = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_HILLS'].Index
 local TRIBE_CLAN_LIZARDMEN = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_FOREST'].Index
-local TRIBE_CLAN_BEAR = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Index
-local TRIBE_CLAN_LION = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
+-- local TRIBE_CLAN_BEAR = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_OPEN'].Index
+-- local TRIBE_CLAN_LION = GameInfo.BarbarianTribes['TRIBE_CLAN_CAVALRY_CHARIOT'].Index
 
 local tBarbClanUnitMapper = {
     [GameInfo.Units['SLTH_UNIT_ARCHER'].Index] = TRIBE_CLAN_SCORPION,
     [GameInfo.Units['SLTH_UNIT_SKELETON'].Index] = TRIBE_CLAN_SKELETON,
     [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = TRIBE_CLAN_LIZARDMEN,
-    [GameInfo.Units['SLTH_UNIT_LION'].Index] = TRIBE_CLAN_BEAR,
-    [GameInfo.Units['SLTH_UNIT_BEAR'].Index] = TRIBE_CLAN_LION
+    -- [GameInfo.Units['SLTH_UNIT_LION'].Index] = TRIBE_CLAN_BEAR,
+    -- [GameInfo.Units['SLTH_UNIT_BEAR'].Index] = TRIBE_CLAN_LION
 }
 
 local MANA_INDEX = GameInfo.Resources['RESOURCE_MANA'].Index
@@ -955,7 +955,7 @@ local tLairExtraInfos = {['DISEASED'] = 'DISEASED', ['PLAGUED'] = 'PLAGUED', ['P
                          ['SPAWN_DROWN']= 'SLTH_UNIT_DROWN', ['SPAWN_SEA_SERPENT']='SLTH_UNIT_SEA_SERPENT',
                          ['SPAWN_SPIDER']= 'SLTH_UNIT_GIANT_SPIDER', ['SPAWN_SPECTRE']='SLTH_UNIT_SPECTRE',
                          ['SPAWN_SKELETON'] = 'SLTH_UNIT_SKELETON', ['SPAWN_LIZARDMAN']= 'SLTH_UNIT_LIZARDMAN',
-                         ['SPAWN_FROSTLING']='TODO', ['SPAWN_SCORPION']= 'SLTH_UNIT_SCORPION',
+                         ['SPAWN_FROSTLING']='SLTH_UNIT_FROSTLING', ['SPAWN_SCORPION']= 'SLTH_UNIT_SCORPION',
 
                          ['PRISONER_DISCIPLE_ASHEN'] = 'SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL',
                          ['PRISONER_DISCIPLE_EMPYREAN'] = 'SLTH_UNIT_DISCIPLE_EMPYREAN',
@@ -983,7 +983,7 @@ local tLairExtraInfos = {['DISEASED'] = 'DISEASED', ['PLAGUED'] = 'PLAGUED', ['P
                          ['BONUS_FISH'] = 'RESOURCE_FISH', ['BONUS_COPPER'] = 'RESOURCE_COPPER',
                          ['BONUS_GEMS'] = 'RESOURCE_DIAMONDS', ['BONUS_GOLD'] ='RESOURCE_GOLD',
                          ['BONUS_IRON'] = 'RESOURCE_IRON'}
-
+-- TODO somehow stop barb camps dying in friendly territory
 function onLairTreasureVault(pUnit, pPlot, sEventInfo)
     local iPlayer = pUnit:GetOwner()
     local pPlayer = Players[iPlayer]
@@ -1403,12 +1403,16 @@ function RemovedBarbCamp(x, y, owningPlayerID)
     local pPlot = Map.GetPlot(x, y)
     print(x)
     print(y)
-    local owner = pPlot:GetOwner()
+    local iPlotOwner = pPlot:GetOwner()
     print('destroying')     -- need to change something to allow barb camps to not be removed on owning territory.
-    if owningPlayerID == 63 or owner == -1 then
+    local tribeIndex = pPlot:GetProperty('barbclantype')
+    if tribeIndex and iPlotOwner > -1 then          -- todo add unit of player on it, implying it was not destroyed with action... relaly i want it impart some property of clearing it
+        local iPlotID = pPlot:GetIndex()            -- TODO can we just not place tribe in owned territory? Check in firetuner
+        Game.GetBarbarianManager():CreateTribeOfType(tribeIndex, iPlotID)       -- recreate camp
+    elseif owningPlayerID == 63 or iPlotOwner == -1 then
         local iFeatureType = pPlot:GetFeatureType()
         local bIsWater = pPlot:IsWater()
-        local tribeIndex = pPlot:GetProperty('barbclantype') or 1
+        tribeIndex = pPlot:GetProperty('barbclantype') or 1             -- or logic, unsure why
         local iDiceRoll = math.random(100)
         local iThreshold
         local bGraceFailed
@@ -1423,10 +1427,10 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         local iGameSpeed = 3
         local iGrace = 20 * (iGameSpeed + 1)
         local iPlayerDifficulty = 3
-		local iDiff =  4 - iPlayerDifficulty        -- converted from python gc.getNumHandicapInfos() + 1 - int(gc.getGame().getHandicapType())
+        local iDiff =  4 - iPlayerDifficulty        -- converted from python gc.getNumHandicapInfos() + 1 - int(gc.getGame().getHandicapType())
         iGrace = iGrace * iDiff                     -- just using 4 as difference difficulty
         print(iGrace)
-		iGrace = math.random(iGrace) + iGrace
+        iGrace = math.random(iGrace) + iGrace
         bGraceFailed = iGrace > Game.GetCurrentGameTurn()
         if tBarbNW[iFeatureType] then
             if iDiceRoll < 54 then
@@ -1863,7 +1867,7 @@ end
 
 function InitializeClans()
     if not Game.GetProperty('NW_Clans_Set') then
-        local iW, iH = Map.GetGridSize()
+        local iW, iH = Map.GetGridSize()                    -- create natural wonder Barb big bad lairs
         for x = 0, iW - 1 do
             for y = 0, iH - 1 do
                 local i = y * iW + x;
@@ -1879,7 +1883,8 @@ function InitializeClans()
     end
     -- iterate over units
     for _, pUnit in Players[63]:GetUnits():Members() do
-        UnitManager.Kill(pUnit);
+        -- UnitManager.Kill(pUnit);                             -- TODO Bring back.
+        print('')
     end
 end
 
