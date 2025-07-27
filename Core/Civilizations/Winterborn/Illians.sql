@@ -58,7 +58,7 @@ INSERT INTO Modifiers(ModifierId, ModifierType, RunOnce, Permanent, OwnerRequire
 ('GRANT_THREE_PRIESTS_OF_WINTER', 'MODIFIER_PLAYER_GRANT_UNIT_IN_CAPITAL', '1', '1', 'SLTH_PLAYER_HAS_CAPITAL'),
 ('GRANT_DRIFA', 'MODIFIER_PLAYER_GRANT_UNIT_IN_CAPITAL', '1', '1', 'SLTH_PLAYER_HAS_CAPITAL');
 
---TODO, make river fatih not work on snow
+--TODO, make river faith not work on snow
 INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 ('MODIFIER_SLTH_ILIAN_BONUS_FOOD_SNOW', 'YieldType', 'YIELD_FOOD'),
 ('MODIFIER_SLTH_ILIAN_BONUS_FOOD_SNOW', 'Amount', '2'),
