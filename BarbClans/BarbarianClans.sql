@@ -9,7 +9,8 @@ DELETE FROM BarbarianTribeNames;
 DELETE FROM UnitCommands WHERE CommandType='UNITCOMMAND_TREAT_WITH_CLAN_RAID';
 UPDATE TypeProperties SET Value=0 WHERE Type = 'UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE' and Name='XP_EARNED';
 -- spawn into game. keeping same as goody huts for now
-UPDATE Improvements SET Goody = 1, TilesPerGoody = 64, GoodyRange = 3 WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';          -- TODO PUT BACK IN, WASNT PROBLEM, REMOVED FOR TESTING
+-- trying to make not deleted on settle city. Setting Goody=0 didnt do it, neither did setting TraitType=NULL, or Removable=0. Removing Barbarian does.. but that ruins it
+UPDATE Improvements SET Goody =1, TilesPerGoody = 64, GoodyRange = 3, TraitType=NULL WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';          -- TODO PUT BACK IN, WASNT PROBLEM, REMOVED FOR TESTING
 
 UPDATE TypeProperties SET Value='100' WHERE Name='BRIBE_CONVERSION_POINTS_CHANGE';          -- just for testing
 UPDATE TypeProperties SET Value='200' WHERE Name='BRIBE_INTERVAL_STANDARD';                 -- closest thing to peace with barbs
@@ -54,9 +55,9 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES (
 -- barrow, grass, plains, desert, tundra, snow
 
 -- scorpion clan kept separate for template of any new tribe
-UPDATE BarbarianTribes SET Name='LOC_BARBARIAN_CLAN_TYPE_SCORPION', ScoutTag='CLASS_GOBLIN_RANGED', MeleeTag='CLASS_GOBLIN_RANGED',
-                           RangedTag='CLASS_GOBLIN_RANGED', SiegeTag='CLASS_GOBLIN_RANGED', DefenderTag='CLASS_GOBLIN_RANGED',
-                           SupportTag='CLASS_GOBLIN_RANGED', PercentRangedUnits='15', TurnsToWarriorSpawn='15'
+UPDATE BarbarianTribes SET Name='LOC_BARBARIAN_CLAN_TYPE_SCORPION', ScoutTag='CLASS_GOBLIN', MeleeTag='CLASS_GOBLIN',
+                           RangedTag='CLASS_GOBLIN', SiegeTag='CLASS_GOBLIN', DefenderTag='CLASS_GOBLIN',
+                           SupportTag='CLASS_GOBLIN', PercentRangedUnits='80', TurnsToWarriorSpawn='3'
                        WHERE TribeType='TRIBE_CLAN_MELEE_OPEN';
 
 INSERT INTO Tags(Tag, Vocabulary) VALUES
@@ -78,7 +79,7 @@ INSERT INTO BarbarianTribe_MapConditionSets(MapConditionSetType, TribeType, Test
 ('TRIBE_CONDITION_SET_SCORPION_CLAN_PLAINS_HILLS', 'TRIBE_CLAN_MELEE_OPEN', 'ANY', '1'),
 ('TRIBE_CONDITION_SET_SCORPION_CLAN_TUNDRA_HILLS', 'TRIBE_CLAN_MELEE_OPEN', 'ANY', '1');
 
-
+-- barbs are spawning their first unit turn 16, feels way too late
 --INSERT INTO BarbarianTribe_ExtraUnits(TribeType, UnitType) VALUES this seems to be an extra unit spawned with camp, not what we want
 -- ('TRIBE_CLAN_SCORPION', );
 

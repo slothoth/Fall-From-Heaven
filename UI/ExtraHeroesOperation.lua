@@ -7,31 +7,32 @@ g_selectedPlayerId = -1;
 g_selectedUnitId = -1;
 
 local tMonitoredResources = {
-    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype='MANA', name='RESOURCE_MANA_DEATH'},
-    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype='MANA', name='RESOURCE_MANA_FIRE'},
-    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index] = { rtype='MANA', name='RESOURCE_MANA_AIR'},
-    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index] = { rtype='MANA', name='RESOURCE_MANA_BODY'},
-    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index] = { rtype='MANA', name='RESOURCE_MANA_CHAOS'},
-    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index] = { rtype='MANA', name='RESOURCE_MANA_EARTH'},
-    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index] = { rtype='MANA', name='RESOURCE_MANA_ENCHANTMENT'},
-    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index] = { rtype='MANA', name='RESOURCE_MANA_ENTROPY'},
-    [GameInfo.Resources['RESOURCE_MANA_ICE'].Index] = { rtype='MANA', name='RESOURCE_MANA_ICE'},
-    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index] = { rtype='MANA', name='RESOURCE_MANA_LAW'},
-    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index] = { rtype='MANA', name='RESOURCE_MANA_LIFE'},
-    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index] = { rtype='MANA', name='RESOURCE_MANA_METAMAGIC'},
-    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index] = { rtype='MANA', name='RESOURCE_MANA_MIND'},
-    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index] = { rtype='MANA', name='RESOURCE_MANA_NATURE'},
-    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index] = { rtype='MANA', name='RESOURCE_MANA_SPIRIT'},
-    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype='MANA', name='RESOURCE_MANA_WATER'},
-    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype='MANA', name='RESOURCE_MANA_SUN'},
-    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype='MANA', name='RESOURCE_MANA_SHADOW'},
-    [GameInfo.Resources['RESOURCE_BANANAS'].Index] = { rtype='AFFINITY', name='RESOURCE_BANANAS'}}
-    -- [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype='AFFINITY', name='RESOURCE_COPPER'},
+    [GameInfo.Resources['RESOURCE_MANA_DEATH'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_DEATH' },
+    [GameInfo.Resources['RESOURCE_MANA_FIRE'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_FIRE' },
+    [GameInfo.Resources['RESOURCE_MANA_AIR'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_AIR' },
+    [GameInfo.Resources['RESOURCE_MANA_BODY'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_BODY' },
+    [GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_CHAOS' },
+    [GameInfo.Resources['RESOURCE_MANA_EARTH'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_EARTH' },
+    [GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_ENCHANTMENT' },
+    [GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_ENTROPY' },
+    [GameInfo.Resources['RESOURCE_MANA_ICE'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_ICE' },
+    [GameInfo.Resources['RESOURCE_MANA_LAW'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_LAW' },
+    [GameInfo.Resources['RESOURCE_MANA_LIFE'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_LIFE' },
+    [GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_METAMAGIC' },
+    [GameInfo.Resources['RESOURCE_MANA_MIND'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_MIND' },
+    [GameInfo.Resources['RESOURCE_MANA_NATURE'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_NATURE' },
+    [GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_SPIRIT' },
+    [GameInfo.Resources['RESOURCE_MANA_WATER'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_WATER' },
+    [GameInfo.Resources['RESOURCE_MANA_SUN'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_SUN' },
+    [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_SHADOW' },
+    [GameInfo.Resources['RESOURCE_BANANAS'].Index] = { rtype = 'AFFINITY', name = 'RESOURCE_BANANAS' },
+    [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_COPPER' },
     -- [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='RESOURCE_IRON'},
     -- [GameInfo.Resources['RESOURCE_SILVER'].Index] = { rtype='AFFINITY', name='RESOURCE_SILVER'},
     -- [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='RESOURCE_SHEUT_STONE'},
-    -- [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype='AFFINITY', name='RESOURCE_NIGHTMARE'}}
-
+    -- [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype='AFFINITY', name='RESOURCE_NIGHTMARE'}
+    [GameInfo.Resources['RESOURCE_MARBLE'].Index] = { rtype='ONOFF', name='RESOURCE_MARBLE'}
+}
 local tBinaryMap = {
     ['0']={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
     ['1']={['8']=0, ['4']=0, ['2']=0, ['1']=1,},
@@ -458,20 +459,22 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
             tParameters.iPropValue = iResourceCount;
             tParameters.OnStart = "SlthSetCapitalProperty";
             UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-            local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
-            local sPropKey =  sPropKeyCount .. '_BINARY_'
-            local sFullPropKey
-            for key, val in pairs(tBinariesToSet) do
-                sFullPropKey = sPropKey .. key
-                tParameters.sPropKey = sFullPropKey;
-                tParameters.iPropValue = val;
-                UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-                print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
-            end
-            if iPastResource == 0 then
-                tParameters.OnStart= 'SlthSetResourcePromotions'
-                tParameters.ResourceID = resourceTypeID
-                UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+            if iResourceInfo['rtype'] == 'BINARYMAP' then
+                local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
+                local sPropKey =  sPropKeyCount .. '_BINARY_'
+                local sFullPropKey
+                for key, val in pairs(tBinariesToSet) do
+                    sFullPropKey = sPropKey .. key
+                    tParameters.sPropKey = sFullPropKey;
+                    tParameters.iPropValue = val;
+                    UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+                    print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
+                end
+                if iPastResource == 0 then
+                    tParameters.OnStart= 'SlthSetResourcePromotions'
+                    tParameters.ResourceID = resourceTypeID
+                    UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+                end
             end
         end
     end
