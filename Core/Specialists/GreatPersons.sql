@@ -1,15 +1,5 @@
 -- Todo: Change to unit Adventurer and implement features of it
--- Find existing framework used for new Great People (see Limes mod for in use)
--- Implement Religious Wonders, once religious framework established
--- Find a way to do the Luonnotar altars as GreatPerson actions instead of superSpecialists so the AI does it,
--- In a way that lets them do the Luonnotar in order. without completing them all
-
--- Great Engineer, set completing wonder to default. Tablets
-
--- Great Merchant, Trade Mission, Nox Noctis, Bulb List
-
--- Golden Age stuff: should be pretty simple to implement as modifier, issue will be consuming multiple great people.
--- Any tile with gold gets +1 gold, any tile with prod gets +1 prod, uhh hard
+-- Great Merchant, Trade Mission,  Bulb List
 -- doubled GPP, No anarchy Easy
 -- also different lengths based on game speed
 
