@@ -129,3 +129,6 @@ INSERT INTO Types(Type, Kind) VALUES
 INSERT INTO CivilopediaSectionExcludes(SectionId) VALUES
 ('MOMENTS'),
 ('GOVERNORS');
+
+DELETE FROM GoodyHuts WHERE GoodyHutType = 'GOODYHUT_DIPLOMACY';            -- no envoys, favour, or governors
+DELETE FROM GoodyHutSubTypes WHERE GoodyHut = 'GOODYHUT_MILITARY' AND GoodyHutSubTypes.SubTypeGoodyHut= 'GOODYHUT_RESOURCES';       -- no accumulating resources

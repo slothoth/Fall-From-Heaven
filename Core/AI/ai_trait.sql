@@ -1,4 +1,4 @@
--- TODO do each Trait biases: Like Arcane bias for Mage Guild, Industrious for Wonders
+-- do each Trait biases: Like Arcane bias for Mage Guild, Industrious for Wonders
 -- 'SLTH_TRAIT_AGGRESSIVE'
 -- 'SLTH_TRAIT_ARCANE'
 -- 'SLTH_TRAIT_CHARISMATIC'

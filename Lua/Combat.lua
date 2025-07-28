@@ -11,7 +11,7 @@ local iExplosionDamage = 40
 -- So it could work with Withered Touch, at least outside of Athame, as Ars and Wraiths have it
 
 -- could work with DISEASED_INHERENT, which is Diseased Corpses
--- could work with Plague Carrier. TODO plague carrier isnt bound to mary...
+-- Plague Carrier (Mary) covered in CombatBuffs.sql
 
 -- could it work with pyre zombie?
 -- events.  Combat, Enter City

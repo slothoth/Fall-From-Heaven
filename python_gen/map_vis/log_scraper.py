@@ -464,7 +464,7 @@ def main(filepath, output_dir='grids_out'):
             save_color_grid(new_grid, file_name, output_dir)
             if 'square' in file_name:
                 square_blockers = ['P', 'O']
-                grid[0][0] += 'P'                    # TODO REMOVE just adding synthetic data so it works
+                # grid[0][0] += 'P'                    #  REMOVE just adding synthetic data so it works
                 converted_grid = [list(i[0]) for i in new_grid]
                 AreaMap = RegionMap(hex=False)
                 mountain_and_sea = AreaMap.get_grid_regions(converted_grid, blockers)

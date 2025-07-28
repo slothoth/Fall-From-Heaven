@@ -142,7 +142,7 @@ local m_width				:number= SIZE_MIN_SPEC_X;	-- Screen Width (default / min spec)
 local m_height				:number= SIZE_MIN_SPEC_Y;	-- Screen Height (default / min spec)
 local m_previousHeight		:number= SIZE_MIN_SPEC_Y;	-- Screen Height (default / min spec)
 local m_scrollWidth			:number= SIZE_MIN_SPEC_X;	-- Width of the scroll bar
-local m_kEraCounter			:table = {};				-- counter to determine which eras have techs --TODO Tronster: refactor, is this still necessary?
+local m_kEraCounter			:table = {};				-- counter to determine which eras have techs
 local m_maxColumns			:number= 0;					-- # of columns (highest column #)
 local m_ePlayer				:number= -1;
 local m_kAllPlayersTechData	:table = {};				-- All data for local players.
@@ -434,7 +434,7 @@ end
 function LayoutNodeGrid()
 
 	local kNodeGrid :table = {};
-	local kPaths	:table = {};	-- TODO: unused currently
+	local kPaths	:table = {};
 
 	-- Loop items, first put into era columns.
 	for _,item in pairs(g_kItemDefaults) do
@@ -586,7 +586,7 @@ end
 --	Create UI controls based on the a node grid and connecting paths.
 --
 --	kNodeGrid,	A 2D table array of [row][columns]=itemType
---	kPaths,		A table describing paths.  TODO: Describe this format. ??TRON
+--	kPaths,		A table describing paths.
 --
 --	No state specific data (e.g., selected node) should be set here in order
 --	to reuse the nodes across viewing other players' trees for single seat
@@ -720,7 +720,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 	if Controls.TreeStart ~= nil then
 		local h,v = ColumnRowToPixelXY( TREE_START_COLUMN, TREE_START_ROW );
-		Controls.TreeStart:SetOffsetVal( h+SIZE_NODE_X-42,v-71 );		-- TODO: Science-out the magic (numbers).
+		Controls.TreeStart:SetOffsetVal( h+SIZE_NODE_X-42,v-71 );
 	end
 
 	-- Determine the lines between nodes.
@@ -1712,11 +1712,6 @@ function PopulateFilterData()
 	-- Hard coded/special filters:
 
 	-- Load entried into filter table from TechFilters XML data
-	--[[ TODO: Only add filters based on what is in the game database. ??TRON
-	for row in GameInfo.TechFilters() do
-		table.insert( m_kFilters, { row.IconString, row.Description, g_TechFilters[row.Type] });
-	end
-	]]
 	m_kFilters = {};
 	table.insert( m_kFilters, { Func=nil,										Description="LOC_TECH_FILTER_NONE",			Icon=nil } );
 	--table.insert( m_kFilters, { Func=g_TechFilters["TECHFILTER_RECOMMENDED"],	Description="LOC_TECH_FILTER_RECOMMENDED",	Icon="[ICON_Recommended]" });
@@ -1741,15 +1736,7 @@ function PopulateFilterData()
 		Controls.FilterPulldown:BuildEntry( "FilterItemInstance", controlTable );
 
 		-- If a text icon exists, use it and bump the label in the button over.
-		--[[ TODO: Uncomment if icons are added.
-		if filterIconText ~= nil and filterIconText ~= "" then
-			controlTable.IconText:SetText( Locale.Lookup(filterIconText) );
-			controlTable.DescriptionText:SetOffsetX(24);
-		else
-			controlTable.IconText:SetText( "" );
-			controlTable.DescriptionText:SetOffsetX(4);
-		end
-		]]
+
 		controlTable.DescriptionText:SetOffsetX(8);
 		controlTable.DescriptionText:SetText( filterLabel );
 

@@ -114,4 +114,5 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_CIVIC_WAY_OF_THE_EARTHMOTHER_DESCRIPTION', 'Adds the Runes of Kilmorph religion to a city.', 'en_US'),
 ('LOC_CIVIC_WAY_OF_THE_FORESTS_DESCRIPTION', 'Adds the Fellowship of Leaves religion to a city.', 'en_US'),
 ('LOC_CIVIC_WAY_OF_THE_WICKED_DESCRIPTION', 'Unlocks the Scourge Promotion option for eligible units.', 'en_US'),
-('LOC_CIVIC_WAY_OF_THE_WISE_DESCRIPTION', 'Unlocks the Demon Slaying and Undead Slaying Promotions option for eligible units.', 'en_US');
+('LOC_CIVIC_WAY_OF_THE_WISE_DESCRIPTION', 'Unlocks the Demon Slaying and Undead Slaying Promotions option for eligible units.', 'en_US'),
+('LOC_TECH_SAILING_DESCRIPTION', 'Allows all units to embark.', 'en_US');

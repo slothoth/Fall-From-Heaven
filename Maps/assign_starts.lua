@@ -14,7 +14,7 @@ function assignStartingPlots()
     playerList = ShuffleList(playerList)
     for region in regionList do
         if not region.isWater then
-            startRegion = StartRegion(region)                   -- TODO we dont have this function
+            startRegion = StartRegion(region)
             table.insert(availableRegionList, startRegion)
         end
     end
@@ -87,7 +87,7 @@ function getBestStartRegion(availableRegionList,occupiedRegionList,civPref)
         startRegion.differenceFromIdeal = weightedAverageDiff
     end
 
-    table.sort(bestRegionList, function(a, b)                   -- TODO confirm its right way around
+    table.sort(bestRegionList, function(a, b)
             return a.differenceFromIdeal > b.differenceFromIdeal
         end)
     startRegion = bestRegionList[1]
@@ -221,7 +221,7 @@ function getBestImprovementRegion(availableRegionList,occupiedRegionList,impPref
         startRegion.differenceFromIdeal = weightedAverageDiff
     end
 
-    table.sort(bestRegionList, function(a, b)                   -- TODO confirm its right way around
+    table.sort(bestRegionList, function(a, b)
             return a.differenceFromIdeal > b.differenceFromIdeal
         end)
     startRegion = bestRegionList[1]

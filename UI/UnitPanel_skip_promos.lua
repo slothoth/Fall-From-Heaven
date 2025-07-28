@@ -663,7 +663,7 @@ function GetUnitActionsTable( pUnit )
 								improvement["IsBestImprovement"] = false;
 							end
 
-							improvement["CategoryInUI"] = "BUILD";	-- TODO: Force improvement to be a type of "BUILD", this can be removed if CategoryInUI is added to "Improvements" in the database schema. ??TRON
+							improvement["CategoryInUI"] = "BUILD";
 							local callbackFn, isDisabled = GetBuildImprovementCallback( actionHash, isDisabled );
 							AddActionToTable( actionsTable, improvement, isDisabled, toolTipString, actionHash, callbackFn, improvement.Hash );
 						end
@@ -974,7 +974,7 @@ end
 -- ===========================================================================
 function View(data)
 
-	m_buildActionsIM:DestroyInstances();		-- TODO: Explore what (if anything) could be done with prior values so Reset can be utilized instead of destory; this would gain LUA side pooling
+	m_buildActionsIM:DestroyInstances();
     m_standardActionsIM:ResetInstances();
     m_secondaryActionsIM:ResetInstances();
 	m_groupArtIM:ResetInstances();
@@ -2991,7 +2991,7 @@ function OnDeleteUnit(unitID : table)
 		UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE );
 	end
 
-	--	TODO: Re-eval if below is needed, SelectedUnit may now handle this even with kUnit==nil there:
+
 	if UILens.IsLayerOn( m_HexColoringWaterAvail) then
 		UILens.ToggleLayerOff( m_HexColoringWaterAvail );
 	elseif UILens.IsLayerOn( m_HexColoringGreatPeople ) then
@@ -3203,7 +3203,7 @@ end
 -- ===========================================================================
 function ShowCombatAssessment()
 
-	-- TODO: Is there a case this would be called when m_combatResults NIL?
+
 	if (m_combatResults == nil) then
 		return;
 	end

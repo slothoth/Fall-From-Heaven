@@ -8,9 +8,11 @@ DELETE FROM BarbarianTribeNames;
 -- CAN_MOVE_AFTER_PURCHASE TypeProperties, CAN_EVER_TRAIN_CITY_STATE (seems unneeded), CAN_EVER_TRAIN_FREE_CITY (maybe useful to limit barb cities?)
 DELETE FROM UnitCommands WHERE CommandType='UNITCOMMAND_TREAT_WITH_CLAN_RAID';
 UPDATE TypeProperties SET Value=0 WHERE Type = 'UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE' and Name='XP_EARNED';
+
 -- spawn into game. keeping same as goody huts for now
 -- trying to make not deleted on settle city. Setting Goody=0 didnt do it, neither did setting TraitType=NULL, or Removable=0. Removing Barbarian does.. but that ruins it
-UPDATE Improvements SET Goody =1, TilesPerGoody = 64, GoodyRange = 3, TraitType=NULL WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';          -- TODO PUT BACK IN, WASNT PROBLEM, REMOVED FOR TESTING
+-- ended up just respawning it with Lua
+UPDATE Improvements SET TilesPerGoody = 64, GoodyRange = 3, TraitType=NULL WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';
 
 UPDATE TypeProperties SET Value='100' WHERE Name='BRIBE_CONVERSION_POINTS_CHANGE';          -- just for testing
 UPDATE TypeProperties SET Value='200' WHERE Name='BRIBE_INTERVAL_STANDARD';                 -- closest thing to peace with barbs
@@ -45,19 +47,15 @@ INSERT INTO RequirementArguments(RequirementId, Name, Type, "Value") VALUES
 
 INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('SLTH_TURN_IS_1_REQS', 'REQUIREMENTSET_TEST_ALL');
 INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('SLTH_TURN_IS_1_REQS', 'REQUIRES_GAME_IS_TURN_1');
--- does nothing
--- UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CLANS_CIV_CONVERSION_INCREMENT_CHANCE';
--- UPDATE GlobalParameters SET Value='999' WHERE Name= 'BARBARIAN_CLANS_CIV_CONVERSION_POINTS_STANDARD';               -- TODO REMOVED FOR TESTING< REMOVE IT
-
 
 -- scorpion, grass, plain, tundra, no features
 -- ruins, grass, plains, tundra, needs jungle though
 -- barrow, grass, plains, desert, tundra, snow
 
 -- scorpion clan kept separate for template of any new tribe
-UPDATE BarbarianTribes SET Name='LOC_BARBARIAN_CLAN_TYPE_SCORPION', ScoutTag='CLASS_GOBLIN', MeleeTag='CLASS_GOBLIN',
+UPDATE BarbarianTribes SET Name='LOC_BARBARIAN_CLAN_TYPE_SCORPION', ScoutTag='CLASS_NULL', MeleeTag='CLASS_GOBLIN',
                            RangedTag='CLASS_GOBLIN', SiegeTag='CLASS_GOBLIN', DefenderTag='CLASS_GOBLIN',
-                           SupportTag='CLASS_GOBLIN', PercentRangedUnits='80', TurnsToWarriorSpawn='3'
+                           SupportTag='CLASS_GOBLIN', PercentRangedUnits='50', TurnsToWarriorSpawn='3'
                        WHERE TribeType='TRIBE_CLAN_MELEE_OPEN';
 
 INSERT INTO Tags(Tag, Vocabulary) VALUES

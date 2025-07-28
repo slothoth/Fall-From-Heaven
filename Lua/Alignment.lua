@@ -162,7 +162,6 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
     if not pUnit then return; end
     local pUnitAbilities = pUnit:GetAbility()
-    -- or pUnit:GetExperience():HasPromotion() -- todo once we have magic do entropy and death promos.
     if pUnitAbilities:HasAbility('ALIGNMENT_EVIL') then
         iGrantPlayer = Game:GetProperty('Infernal')
         -- check player is alive

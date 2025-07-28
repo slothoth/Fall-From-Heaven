@@ -8,7 +8,7 @@ include "NaturalWonderGenerator"
 include "ResourceGenerator"
 include "CoastalLowlands"
 include "AssignStartingPlots"
--- TODO CURRENTLY NOT RANDOM KEEP GETTING SAME MAP SHAPES
+-- TODO CURRENTLY NOT RANDOM KEEP GETTING SAME MAP SHAPES. Strangely only on windows, not mac!!!!
 
 
 -- This variable will make a percentage of peaks into hills in order to break
@@ -390,7 +390,7 @@ end
 
 function getRegionByID(ID)
     if not ID then
-        error('ID of region was nil')           -- TODO this intermittently errors... this time at shouldPlacePeak
+        error('ID of region was nil')
     end
     for i, region in ipairs(regionList) do
         if region.ID == ID then
@@ -1764,9 +1764,9 @@ function isValidFullGate(regionID, rxX, rxY)
             return true
         end
         for direction=1, 4 do
-            local xx = rxX + directionXmap[direction]
-            local yy = rxY + directionYmap[direction]
-            -- local xx, yy = getXYFromDirection(rxX, rxY, direction)          -- TODO this seems wrong to not use them
+            -- local xx = rxX + directionXmap[direction]
+            -- local yy = rxY + directionYmap[direction]
+            -- local xx, yy = getXYFromDirection(rxX, rxY, direction)          -- TODO this seems wrong to not use them, but was the original logic
             if isValidHalfGate(nRegionID, rxX, rxY) then
                 slthLog('alternate path valid gate, shouldnt work')
                 failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
@@ -1939,7 +1939,7 @@ function getRegion(x, y)
         if not nRegionID then
             -- slthLog(string.format('couldnt find region for index %d and %d/%d values', i, xx, yy))
         end
-        if nRegionID and nRegionID ~= -1 then                     -- TODO,unsure if checking exists is fine
+        if nRegionID and nRegionID ~= -1 then
         -- test if this main plot is gate for this region
             local nRegion = getRegionByID(nRegionID)
             if nRegion.gatePlot and x == nRegion.gatePlot.x and y == nRegion.gatePlot.y then
@@ -3889,7 +3889,6 @@ function AddFeatures()
 	end
     if doErebusFeatures then
         local featureTypeMap = {featureIce='uhhh', featureJungle=GameInfo.Features['FEATURE_JUNGLE'].Index, featureOasis=GameInfo.Features['FEATURE_OASIS'].Index, featureFloodPlains=GameInfo.Features['FEATURE_FLOODPLAINS'].Index, featureForest=GameInfo.Features['FEATURE_FOREST'].Index, featureMarsh=GameInfo.Features['FEATURE_MARSH'].Index}
-        -- TODO FEATURE_SCRUB
         -- Now plant forest or jungle and place floodplains and oasis
         for y = 1, g_iH do
             for x=1, g_iW do

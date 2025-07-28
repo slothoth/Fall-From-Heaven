@@ -540,7 +540,7 @@ end
 --	Create UI controls based on the a node grid and connecting paths.
 --
 --	kNodeGrid,	A 2D table array of [row][columns]=itemType
---	kPaths,		A table describing paths.  TODO: Describe this format. ??TRON
+--	kPaths,		A table describing paths.
 --
 --	No state specific data (e.g., selected node) should be set here in order
 --	to reuse the nodes across viewing other players' trees for single seat
@@ -1151,7 +1151,7 @@ function View( playerTechData:table )
 				instance.Num:SetHide( true );
 				local playerNum		:number = markerStat.PlayerNums[1];
 				local pPlayerConfig :table = PlayerConfigurations[playerNum];
-				tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetPlayerName());	-- TODO: Temporary using player name until leaderame is fixed
+				tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetPlayerName());
 
 				if not markerStat.IsPlayerHere then
 					local iconName:string = "ICON_"..pPlayerConfig:GetLeaderTypeName();
@@ -1164,16 +1164,8 @@ function View( playerTechData:table )
 				instance.Num:SetText(tostring(numOfPlayersAtThisColumn));
 				for i,playerNum in ipairs(markerStat.PlayerNums) do
 					local pPlayerConfig :table = PlayerConfigurations[playerNum];
-					--[[ TODO: The human player, player 0, has whack values! No leader name coming from engine!
-						local name = pPlayerConfig:GetPlayerName();
-						local nick = pPlayerConfig:GetNickName();
-						local leader = pPlayerConfig:GetLeaderName();
-						local civ = pPlayerConfig:GetCivilizationTypeName();
-						local isHuman = pPlayerConfig:IsHuman();
-						print("debug info:",name,nick,leader,civ,isHuman);
-					]]
 					--tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetLeaderName());
-					tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetPlayerName());	-- TODO:: Temporary using player name until leaderame is fixed
+					tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetPlayerName());
 					if i < numOfPlayersAtThisColumn then
 						tooltipString = tooltipString.."[NEWLINE]";
 					end
@@ -1758,15 +1750,6 @@ function PopulateFilterData()
 		local controlTable	 = {};
 		Controls.FilterPulldown:BuildEntry( "FilterItemInstance", controlTable );
 		-- If a text icon exists, use it and bump the label in the button over.
-		--[[ TODO: Uncomment if icons are added.
-		if filterIconText ~= nil and filterIconText ~= "" then
-			controlTable.IconText:SetText( Locale.Lookup(filterIconText) );
-			controlTable.DescriptionText:SetOffsetX(24);
-		else
-			controlTable.IconText:SetText( "" );
-			controlTable.DescriptionText:SetOffsetX(4);
-		end
-		]]
 		controlTable.DescriptionText:SetOffsetX(8);
 		controlTable.DescriptionText:SetText( filterLabel );
 
