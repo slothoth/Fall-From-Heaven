@@ -27,6 +27,9 @@ local tMonitoredResources = {
     [GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index] = { rtype = 'BINARYMAP', name = 'RESOURCE_MANA_SHADOW' },
     [GameInfo.Resources['RESOURCE_BANANAS'].Index] = { rtype = 'AFFINITY', name = 'RESOURCE_BANANAS' },
     [GameInfo.Resources['RESOURCE_COPPER'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_COPPER' },
+    [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_IRON' },
+    [GameInfo.Resources['RESOURCE_SILVER'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_MITHRIL' },
+    [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_NIGHTMARE' },
     -- [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='RESOURCE_IRON'},
     -- [GameInfo.Resources['RESOURCE_SILVER'].Index] = { rtype='AFFINITY', name='RESOURCE_SILVER'},
     -- [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='RESOURCE_SHEUT_STONE'},
@@ -440,8 +443,11 @@ end
 -- gameplay esque
 function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
     local iResourceInfo = tMonitoredResources[resourceTypeID]
+    local resourceName = GameInfo.Resources[resourceTypeID].ResourceType
+    print('trying to find if resource is monitored', resourceTypeID, resourceName)
     if iResourceInfo then
-        print('trying to update resources on player and resourec', ownerPlayerID, resourceTypeID)
+        print('it is monitored!')
+        print('trying to update resources on player and resource', ownerPlayerID, resourceTypeID)
         local pPlayer = Players[ownerPlayerID];
         local resources = pPlayer:GetResources()
         local iResourceCount = resources:GetResourceAmount(resourceTypeID);

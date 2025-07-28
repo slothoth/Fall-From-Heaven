@@ -60,12 +60,9 @@ UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NU
 UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_WINE';
 UPDATE Resources SET ResourceClassType = 'RESOURCECLASS_LUXURY', PrereqTech = NULL, Happiness = '4', Frequency = '6', PrereqCivic = NULL WHERE ResourceType = 'RESOURCE_COTTON';
 
-INSERT INTO Resource_Consumption(ResourceType, Accumulate, StockpileCap) VALUES
-('RESOURCE_COPPER', '1', '50'),
-('RESOURCE_SILVER', '1', '50'),
-('RESOURCE_NIGHTMARE', '1', '50'),
-('RESOURCE_JADE', '1', '50');
-
+DELETE FROM Resource_Consumption;
+DELETE FROM Resource_Harvests WHERE ResourceType='RESOURCE_COPPER';
+-- remove harvests copper at least.
 INSERT INTO Features(FeatureType, Name, SightThroughModifier, NoCoast, NoRiver, RequiresRiver) VALUES
 ('FEATURE_FOREST_ANCIENT', 'LOC_SLTH_FEATURE_FOREST_ANCIENT_NAME', '1', '1', '1', '0'),
 ('FEATURE_OBSIDIAN_PLAINS', 'LOC_SLTH_FEATURE_OBSIDIAN_PLAINS_NAME', '0', '0', '0', '1'),

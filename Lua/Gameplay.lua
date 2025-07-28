@@ -398,7 +398,7 @@ function CountdownReducePlayer(pPlayer, countdown_propKey, plotPropKey)
         end
     end
 end
-
+local iGameSpeedMult = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier / 100
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
     local iArcaneLacuna = Game:GetProperty('ARCANE_LACUNA_COUNTDOWN') or 0
@@ -504,7 +504,6 @@ function onTurnStartGameplay(playerId)
     if playerId == 63 then              -- barbarian proxy
         local iCurrentTurn = Game.GetCurrentGameTurn()
         print('current turn is', iCurrentTurn)
-        local iGameSpeedMult = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier / 100
         if iCurrentTurn == 100 then
             SpawnAcheron()
         elseif iCurrentTurn == math.floor(75 * iGameSpeedMult) then
@@ -611,19 +610,32 @@ function onTurnStartGameplay(playerId)
             end
         end
     end
-    -- SECTION: Governor Manor Amenity PlotProperty BinaryMagic state management. TODO, apply this also with Pillar of chains.
+    -- SECTION: Governor Manor Amenity PlotProperty BinaryMagic state management.
     if PlayerConfigurations[playerId]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_CALABIM' then
         for _, pCity in pPlayer:GetCities():Members() do
             if pCity:GetBuildings():HasBuilding(iGOVERNORS_MANOR_INDEX) then
-                -- local iNeededAmenities = pCity:GetGrowth():GetAmenitiesNeeded()                  -- ui only function :(
-                local iNeededAmenities = math.floor(pCity:GetPopulation() / 2)
-                local pPlot =  pCity:GetPlot()
-                local tPlotPropertyChanges = tBinaryMap[tostring(iNeededAmenities)]
-                for idx, bin_val in pairs(tPlotPropertyChanges) do
-                    pPlot:SetProperty('CITY_AMENITIES_REQUIRED_'.. idx, bin_val)
-                end
+                updatePlotPropertyAmenities(pCity)
             end
         end
+    end
+    local iPillarOfChainsPlayer = Game:GetProperty('PILLAR_OF_CHAINS_OWNER') or -1
+    if playerId == iPillarOfChainsPlayer then
+        local iPillarCityId = Game:GetProperty('PILLAR_OF_CHAINS_CITY')
+        if iPillarCityId then
+            local pCity = CityManager.GetCity(playerId, iPillarCityId)
+            if pCity then
+                updatePlotPropertyAmenities(pCity)
+            end
+        end
+    end
+end
+
+function updatePlotPropertyAmenities(pCity)
+    local iNeededAmenities = math.floor(pCity:GetPopulation() / 2)
+    local pPlot =  pCity:GetPlot()
+    local tPlotPropertyChanges = tBinaryMap[tostring(iNeededAmenities)]
+    for idx, bin_val in pairs(tPlotPropertyChanges) do
+        pPlot:SetProperty('CITY_AMENITIES_REQUIRED_'.. idx, bin_val)
     end
 end
 ------------ Cottage / Pirate Cove improvement upgrading over turns  ---------
@@ -663,6 +675,7 @@ local TRIBE_CLAN_LIZARDMEN = GameInfo.BarbarianTribes['TRIBE_CLAN_MELEE_FOREST']
 
 local tBarbClanUnitMapper = {
     [GameInfo.Units['SLTH_UNIT_ARCHER'].Index] = TRIBE_CLAN_SCORPION,
+    [GameInfo.Units['SLTH_UNIT_GOBLIN'].Index] = TRIBE_CLAN_SCORPION,
     [GameInfo.Units['SLTH_UNIT_SKELETON'].Index] = TRIBE_CLAN_SKELETON,
     [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = TRIBE_CLAN_LIZARDMEN,
     -- [GameInfo.Units['SLTH_UNIT_LION'].Index] = TRIBE_CLAN_BEAR,
@@ -715,6 +728,10 @@ function InitCottage(x, y, improvementIndex, playerID)
             local iClanIndex = tBarbClanUnitMapper[iUnitIndex]
             if iClanIndex then
                 pPlot:SetProperty('barbclantype', iClanIndex)
+            end
+            if Game.GetCurrentGameTurn() == 1 then
+                print('killing barb unit')
+                UnitManager.Kill(pUnit);
             end
         end
     end
@@ -983,7 +1000,6 @@ local tLairExtraInfos = {['DISEASED'] = 'DISEASED', ['PLAGUED'] = 'PLAGUED', ['P
                          ['BONUS_FISH'] = 'RESOURCE_FISH', ['BONUS_COPPER'] = 'RESOURCE_COPPER',
                          ['BONUS_GEMS'] = 'RESOURCE_DIAMONDS', ['BONUS_GOLD'] ='RESOURCE_GOLD',
                          ['BONUS_IRON'] = 'RESOURCE_IRON'}
--- TODO somehow stop barb camps dying in friendly territory
 function onLairTreasureVault(pUnit, pPlot, sEventInfo)
     local iPlayer = pUnit:GetOwner()
     local pPlayer = Players[iPlayer]
@@ -1397,18 +1413,49 @@ function doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
         NotificationManager.SendNotification(iPlayer, iNotifType, sTitle, sDescription, iX, iY)
     end
 end
--- local TRIBE_CLAN_NAT_WON = GameInfo.BarbarianTribes[TRIBE_CLAN_CAVALRY_CHARIOT'].Index
 
+local tGameSpeedScalings = {GAMESPEED_ONLINE= 1,
+                            GAMESPEED_QUICK= 2,
+                            GAMESPEED_STANDARD= 3,
+                            GAMESPEED_EPIC= 4,
+                            GAMESPEED_MARATHON= 5
+}
+
+local hash_GameSpeed = GameConfiguration.GetGameSpeedType()
+local name_GameSpeed = GameInfo.GameSpeeds[hash_GameSpeed].GameSpeedType
+local iGameSpeed = tGameSpeedScalings[name_GameSpeed]
+
+-- this shit is just super unstable, it triggers twice during the formation of a city, which is really not good.
 function RemovedBarbCamp(x, y, owningPlayerID)
     local pPlot = Map.GetPlot(x, y)
-    print(x)
-    print(y)
+    print('improvement removed at plot x,y', x, y)
     local iPlotOwner = pPlot:GetOwner()
-    print('destroying')     -- need to change something to allow barb camps to not be removed on owning territory.
     local tribeIndex = pPlot:GetProperty('barbclantype')
-    if tribeIndex and iPlotOwner > -1 then          -- todo add unit of player on it, implying it was not destroyed with action... relaly i want it impart some property of clearing it
-        local iPlotID = pPlot:GetIndex()            -- TODO can we just not place tribe in owned territory? Check in firetuner
+    local pUnit
+    local bIsBarbOccupied = true
+    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
+        print('units in plot :', pOnTileUnit)
+        if (pOnTileUnit) and (not pUnit) then
+            local iUnitOwner = pOnTileUnit:GetOwner()
+            print('unit owner is:', iUnitOwner)
+            if iUnitOwner > -1 and iUnitOwner ~= 63 then
+                bIsBarbOccupied = false
+            end
+            pUnit = pOnTileUnit
+        end
+    end
+    print('plotowner/tribeIndex/isBarbOcuppied on destroying improvement...', iPlotOwner, tribeIndex, bIsBarbOccupied)
+    if tribeIndex and iPlotOwner > -1 and bIsBarbOccupied then          -- todo still not perfect, barb camps will be destroyed on settle if a non-barb unit is occupying it
+        local iPlotID = pPlot:GetIndex()
         Game.GetBarbarianManager():CreateTribeOfType(tribeIndex, iPlotID)       -- recreate camp
+        for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do            -- but kill new spawned unit. This also kills any unit you have on there too...
+            if pOnTileUnit then
+                local iUnitOwner = pOnTileUnit:GetOwner()
+                if  iUnitOwner == 63 then
+                    UnitManager.Kill(pOnTileUnit)
+                end
+            end
+        end
     elseif owningPlayerID == 63 or iPlotOwner == -1 then
         local iFeatureType = pPlot:GetFeatureType()
         local bIsWater = pPlot:IsWater()
@@ -1416,22 +1463,16 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         local iDiceRoll = math.random(100)
         local iThreshold
         local bGraceFailed
-        local pUnit
-        for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
-            if (pOnTileUnit) and (not pUnit) then
-                pUnit = pOnTileUnit
-            end
-        end
-        local uhh = GameConfiguration.GetGameSpeedType()         -- TODO convert hash to number.
-        print(uhh)
-        local iGameSpeed = 3
-        local iGrace = 20 * (iGameSpeed + 1)
-        local iPlayerDifficulty = 3
-        local iDiff =  4 - iPlayerDifficulty        -- converted from python gc.getNumHandicapInfos() + 1 - int(gc.getGame().getHandicapType())
-        iGrace = iGrace * iDiff                     -- just using 4 as difference difficulty
-        print(iGrace)
+        local iGrace = 20 * iGameSpeed
+        local iUnitOwner = pUnit:GetOwner()                 -- assume causer is pUnit owner
+        local iDifficultyHash = PlayerConfigurations[iUnitOwner]:GetHandicapTypeID()
+        local iPlayerDifficulty = GameInfo.Difficulties[iDifficultyHash].Index
+        print('difficulty and amount', GameInfo.Difficulties[iDifficultyHash].DifficultyType, iPlayerDifficulty)
+        local iDiff =  7 - iPlayerDifficulty        -- converted from python gc.getNumHandicapInfos() + 1 - int(gc.getGame().getHandicapType())
+        iGrace = iGrace * iDiff
+        print('grace is..', iGrace)
         iGrace = math.random(iGrace) + iGrace
-        bGraceFailed = iGrace > Game.GetCurrentGameTurn()
+        bGraceFailed = iGrace > Game.GetCurrentGameTurn()     -- if grace fails, we can get baaaad outcomes
         if tBarbNW[iFeatureType] then
             if iDiceRoll < 54 then
                 BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, tribeIndex, iFeatureType, bIsWater)
@@ -1481,7 +1522,8 @@ local tLuonnotarCivics = {
     [GameInfo.Civics['CIVIC_RIGHTEOUSNESS'].Index]= GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_DIVINE'].Index,
     [GameInfo.Technologies['TECH_OMNISCIENCE'].Index] = GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_EXALTED'].Index
 }
-
+local iPillarOfChains = GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index
+-- luonnotar checking, also marking plot prop for pillar of chains, for amenity updates
 function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     local tLuonnotarInfo = tLuonnotar[buildingID]
     if tLuonnotarInfo then
@@ -1513,10 +1555,14 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
             end
         end
         if failedCheck then
-            local pCity = CityManager.GetCity(Players[playerID], cityID)
+            local pCity = CityManager.GetCity(playerID, cityID)                                         -- this was using Players[playerID], why?
             print('player didnt have tech or civic for next lunnotar, blocking with building.')
             pCity:AttachModifierByID('MODIFIER_FREE_SLTH_BUILDING_NO_ALTAR_ALWAYS')         -- makes a building to block the altar, iLunnotarBlocker, BUILDING_BLOCK_ALTAR
         end
+    end
+    if buildingID == iPillarOfChains then
+        Game:SetProperty('PILLAR_OF_CHAINS_OWNER', playerID)
+        Game:SetProperty('PILLAR_OF_CHAINS_CITY', cityID)
     end
 end
 
@@ -1880,12 +1926,13 @@ function InitializeClans()
             end
         end
         Game.SetProperty('NW_Clans_Set', 1)
+            -- iterate over units
+        for _, pUnit in Players[63]:GetUnits():Members() do
+            -- UnitManager.Kill(pUnit);
+            print('')
+        end
     end
-    -- iterate over units
-    for _, pUnit in Players[63]:GetUnits():Members() do
-        -- UnitManager.Kill(pUnit);                             -- TODO Bring back.
-        print('')
-    end
+
 end
 
 local iCIVIC_ANCIENT_CHANTS = GameInfo.Civics['CIVIC_ANCIENT_CHANTS'].Index
@@ -1926,6 +1973,7 @@ function onStart()
     print('-----------------Gameplay loaded')
 end
 
+-- WORLDSPELLS
 local sWorldSpellPropKey = 'WorldSpellReady'
 
 local iDEMAGOG_INDEX = GameInfo.Units['SLTH_UNIT_DEMAGOG'].Index
