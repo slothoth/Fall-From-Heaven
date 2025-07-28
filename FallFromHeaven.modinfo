@@ -312,6 +312,7 @@
   </UpdateIcons>
   <ImportFiles id="ErebusMap">
 	<File>Maps/Erebus.lua</File>
+	<File>Maps/MapUtilities.lua</File>
   </ImportFiles>
   </InGameActions>
   <Files>
@@ -480,5 +481,6 @@
     <File>UI/CivicsTree.xml</File>
     <File>UI/CivicsTree.lua</File>
     <File>Maps/Erebus.lua</File>
+	<File>Maps/MapUtilities.lua</File>
   </Files>
 </Mod>

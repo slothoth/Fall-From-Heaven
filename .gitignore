@@ -26,3 +26,11 @@ python_gen/data/foreign_keys.json
 /python_gen/build_utils/*atlas*/
 /python_gen/build_utils/*Icons*
 /csv_form/*
+/python_gen/map_vis/grids_out/*
+/python_gen/map_vis/areas/*
+/GamecoreTests/debugger_tut/*
+/python_gen/build_utils/MinionPro-Bold.otf
+/python_gen/ModArt_Generator.py
+/python_gen/misc/ModbuddyValidation.py
+/python_gen/run.sh
+/Maps/Erebus.py
