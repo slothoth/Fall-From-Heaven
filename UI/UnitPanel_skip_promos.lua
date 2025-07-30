@@ -54,6 +54,16 @@ local tManaNodeBuilder = {
 	[GameInfo.Units['SLTH_UNIT_ILLUSIONIST'].Index] = 1,
 	[GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = 1 }
 
+local tExperienceUpgrades = {}
+for row in GameInfo.PromotionGatedUpgrades() do
+    tExperienceUpgrades[row.UnitType] = row.UnitLevel
+end
+
+local tNationalUpgrades = {}
+for row in GameInfo.NationalUnits() do
+    tNationalUpgrades[row.UnitType] = row.Amount
+end
+
 
 -- ===========================================================================
 --	CONSTANTS
@@ -518,9 +528,14 @@ function GetUnitActionsTable( pUnit )
 					local bDisabled = not bCanStartNow;
 					local toolTipString;
 					local bIsDoviello;
+					local iPrereqExperience
+					local iPrereqNationalMax
+					local bDisabledExperience
+					local bDisabledNational
 					local bDovielloUpgrade
 					if (actionHash == UnitCommandTypes.UPGRADE) then
 						-- if it's a unit upgrade action, add the unit it will upgrade to in the tooltip as well as the upgrade cost
+						print('its upgrade', tResults)
 						if (tResults ~= nil) then
 							if (tResults[UnitCommandResults.UNIT_TYPE] ~= nil) then
 								upgradeUnitInfo = GameInfo.Units[tResults[UnitCommandResults.UNIT_TYPE]]
@@ -532,6 +547,28 @@ function GetUnitActionsTable( pUnit )
 								end
 								toolTipString = toolTipString .. AddUpgradeResourceCost(pUnit);
 								print(toolTipString)
+								iPrereqExperience = tExperienceUpgrades[upgradeUnitInfo.UnitType]						-- experience and national unit gating, human only sadly
+								iPrereqNationalMax = tNationalUpgrades[upgradeUnitInfo.UnitType]
+								print('checking if have experience, is prereq/actual', iPrereqExperience, pUnit:GetExperience():GetLevel())
+								if iPrereqExperience and pUnit:GetExperience():GetLevel() < iPrereqExperience then
+									bDisabled = true
+									bDisabledExperience = true
+								end
+								if iPrereqNationalMax then
+									local pUnits = Players[Game.GetLocalPlayer()]:GetUnits()
+									local iAmountOfThisUnit = 0
+									for _, pOtherUnit in pUnits:Members() do
+										if iAmountOfThisUnit < iPrereqNationalMax then
+											if pOtherUnit:GetUnitType() == upgradeUnitInfo.Index then
+												iAmountOfThisUnit = iAmountOfThisUnit + 1
+											end
+										end
+									end
+									if iAmountOfThisUnit >= iPrereqNationalMax then
+										bDisabled = true
+										bDisabledNational = true
+									end
+								end
 							end
 						end
 						bIsDoviello = PlayerConfigurations[pUnit:GetOwner()]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_DOVIELLO'
@@ -584,6 +621,12 @@ function GetUnitActionsTable( pUnit )
 										toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup(v) .. "[ENDCOLOR]";
 									end
 								end
+							end
+							if bDisabledExperience then
+									toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup("LOC_UPGRADE_LEVEL_FAILED", iPrereqExperience) .. "[ENDCOLOR]";
+							end
+							if bDisabledNational then
+								toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup("LOC_UPGRADE_NATIONAL_FAILED", iPrereqNationalMax) .. "[ENDCOLOR]";
 							end
 						end
 					end
@@ -2752,6 +2795,7 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 							UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
 							UI.DeselectUnit(pSelectedUnit);
 						else
+							print('doing operation normally')
 							UnitManager.RequestOperation( pSelectedUnit, actionHash );		-- No mode needed, just do the operation
 						end
 
@@ -2779,6 +2823,26 @@ end
 -- ===========================================================================
 -- UnitAction<BuildImprovement> was clicked.
 -- ===========================================================================
+local MANA_INDEX = GameInfo.Resources['RESOURCE_MANA'].Index
+local tManaNodeMapper = {
+    [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Hash]         = GameInfo.Resources['RESOURCE_MANA_AIR'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Hash]        = GameInfo.Resources['RESOURCE_MANA_BODY'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Hash]       = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Hash]       = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Hash]       = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Hash] = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Hash]     = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Hash]        = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Hash]         = GameInfo.Resources['RESOURCE_MANA_LAW'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Hash]        = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Hash]   = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Hash]        = GameInfo.Resources['RESOURCE_MANA_MIND'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Hash]      = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Hash]      = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Hash]      = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Hash]         = GameInfo.Resources['RESOURCE_MANA_SUN'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Hash]       = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
+}
 function OnUnitActionClicked_BuildImprovement( improvementHash, unused )
 	if (g_isOkayToProcess) then
 		local pSelectedUnit = UI.GetHeadSelectedUnit();
@@ -2787,7 +2851,22 @@ function OnUnitActionClicked_BuildImprovement( improvementHash, unused )
 			tParameters[UnitOperationTypes.PARAM_X] = pSelectedUnit:GetX();
 			tParameters[UnitOperationTypes.PARAM_Y] = pSelectedUnit:GetY();
 			tParameters[UnitOperationTypes.PARAM_IMPROVEMENT_TYPE] = improvementHash;
-
+			print('doing improvement build operation normally')
+			-- first cheap check to get unit
+			local pPlot = Map.GetPlot(pSelectedUnit:GetX(), pSelectedUnit:GetY())
+			local iResource = pPlot:GetResourceType()
+			if iResource == MANA_INDEX then
+				local iNewResourceIndex = tManaNodeMapper[improvementHash]
+				if iNewResourceIndex then
+					local iOwner = pSelectedUnit:GetOwner()
+					local tFirstParameters = {}
+					tFirstParameters.iPlotIndex = pPlot:GetIndex()
+					tFirstParameters.iResourceType = iNewResourceIndex
+					tFirstParameters.OnStart = 'SlthOnSetResource';
+					print('seding off change resource')
+					UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tFirstParameters)
+				end
+			end
 			UnitManager.RequestOperation( pSelectedUnit, UnitOperationTypes.BUILD_IMPROVEMENT, tParameters );
 		end
 		ContextPtr:RequestRefresh();
@@ -2856,7 +2935,7 @@ function OnUnitActionClicked_FoundCity(kResults:table)
 	if (g_isOkayToProcess) then
 		local pSelectedUnit = UI.GetHeadSelectedUnit();
 		if ( pSelectedUnit ~= nil ) then
-			if kResults ~= nil and table.count(kResults) ~= 0 then
+			if kResults ~= nil and table.count(kResults) ~= 0 and bDummyAlwaysFound then									-- i hate this popup
 				local popupString:string = Locale.Lookup("LOC_FOUND_CITY_CONFIRM_POPUP");
 				if (kResults[UnitOperationResults.FEATURE_TYPE] ~= nil) then
 					local featureName = GameInfo.Features[kResults[UnitOperationResults.FEATURE_TYPE]].Name;
@@ -4565,21 +4644,31 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentAllyEligibleAbility' then
 		bCanStart = CheckAdjacentUnitsHasntAbility(pUnit, iOwner, CustomOperationInfo, true)
 	elseif CustomOperationInfo.ActivationPrereq == 'HasntAbility' then
+		local iAbilityToCheck
 		local pAbilities = pUnit:GetAbility():GetAbilities()
-		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOperationInfo.SimpleText].Index
+		local pAbilityInfo = GameInfo.UnitAbilities[CustomOperationInfo.SimpleText]
+		if pAbilityInfo then
+			iAbilityToCheck = pAbilityInfo.Index
+			print('checking if can grant ability to self:', CustomOperationInfo.SimpleText)
+		elseif CustomOperationInfo.SecondText then
+			pAbilityInfo = GameInfo.UnitAbilities[CustomOperationInfo.SecondText]
+			if pAbilityInfo then
+				iAbilityToCheck = pAbilityInfo.Index
+				print('checking if can grant ability to self:', CustomOperationInfo.SecondText)
+			end
+		end
 		local hasAbility
-		print('checking if can grant ability to self:', CustomOperationInfo.SimpleText)
 		print('do we have abilities', pAbilities)
-		if (pAbilities and table.count(pAbilities) > 0) then
+		if (pAbilities and table.count(pAbilities) > 0 and iAbilityToCheck) then
+			print('pre ability start, ensure false', hasAbility)
 			for i,ability in ipairs (pAbilities) do
 				if not hasAbility then
 					print('checking if ability 1 == ability 2',ability,  iAbilityToCheck)
-					hasAbility = not (ability == iAbilityToCheck)							-- GameInfo.UnitAbilities[ability]
+					hasAbility = ability == iAbilityToCheck
 				end
 			end
-			if hasAbility then
-				bCanStart = false
-			end
+			print('do we have the ability', hasAbility)
+			bCanStart = not hasAbility
 		else
 			bCanStart = true
 		end
@@ -4612,7 +4701,7 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 	elseif CustomOperationInfo.ActivationPrereq == 'EnoughGreatPeople' then
 		local pPlayer = Players[iOwner]
 		local iBar = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
-		local bCanStart = GPChecker(pPlayer, iBar)
+		bCanStart = GPChecker(pPlayer, iBar)
 	elseif CustomOperationInfo.ActivationPrereq == 'OnHolyCity' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
 		if pCity then

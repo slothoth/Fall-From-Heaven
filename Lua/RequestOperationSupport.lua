@@ -1,3 +1,4 @@
+include "SpawnSupport"
 local transientBuffKeys = {
         BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
         BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
@@ -44,6 +45,14 @@ local function SetPlayerProperty(iPlayer, tParameters)
     local pPlayer = Players[iPlayer];
     pPlayer:SetProperty(sPropKey, iPropValue)
     print('set '.. sPropKey .. 'to ' .. iPropValue)
+end
+
+local function SlthSetResource(iPlayer, tParameters)
+    local iResourceType = tParameters.iResourceType;
+    local iPlotIndex = tParameters.iPlotIndex;
+    local pPlot = Map.GetPlotByIndex(iPlotIndex)
+    ResourceBuilder.SetResourceType(pPlot, iResourceType, 1)
+    print('set terrain plot '.. iPlotIndex .. 'to have resource ' .. iResourceType)
 end
 
 local function OnSummon(iPlayer, tParameters)
@@ -312,15 +321,19 @@ local function GrantGoldenAge(iPlayer, tParameters)
     local iGpAmount = 0
 	for iUnitID, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
         if iGpAmount < iBar then
-            if pPlayerUnit:GetGreatPerson():IsGreatPerson() then
+            if pPlayerUnit:GetGreatPerson():GetClass() > -1 then
                 iGpAmount = iGpAmount + 1
-                table.insert(t_iUnits, iUnitID)
+                table.insert(t_iUnits, pPlayerUnit)
             end
         end
 	end
-    for iUnitType, iUnitID in pairs(t_iUnits) do
-        local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
-        UnitManager.Kill(pUnit);
+    for iUnitType, pUnit in pairs(t_iUnits) do
+        if pUnit then
+            print('killing unit...')
+            UnitManager.Kill(pUnit);
+        else
+            print('somehow not a unit...')
+        end
     end
     local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
     -- local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
@@ -329,69 +342,29 @@ local function GrantGoldenAge(iPlayer, tParameters)
     pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
 end
 
-function GoldenAgeGrant(pPlayer, iGoldenDuration)
-    for _, pCity in pPlayer:GetCities():Members() do
-        local pPlot = pCity:GetPlot();
-        if pPlot then
-            pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instead of nil?
-        end
-    end
-    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-    local pCapitalPlot = pCapitalCity:GetPlot()
-    local iPropertyGoldenAge = pCapitalPlot:GetProperty('GoldenAgeDuration') or 0
-    iPropertyGoldenAge = iPropertyGoldenAge + iGoldenDuration
-    print('setting golden age duration to', iPropertyGoldenAge)
-    pCapitalPlot:SetProperty('GoldenAgeDuration', iPropertyGoldenAge)
-    print('confirm golden age exists on capital', pCapitalPlot:GetProperty('GoldenAgeDuration'))
-end
-
--- copy of summon from Gameplay
-function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
-    local iX =  pCasterUnit:GetX()
-    local iY =  pCasterUnit:GetY()
-    local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
-    return tNewUnits
-end
-
-function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
-    local playerReal = Players[iPlayer];
-    local playerUnits = playerReal:GetUnits();
-    local pPlot = Map.GetPlot(iX, iY)
-    local tBeforeSummonUnits = {}
-    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
-        if pOnTileUnit then
-            tBeforeSummonUnits[pOnTileUnit:GetID()] = true
-        end
-    end
-    playerUnits:Create(iUnitIndex, iX, iY);
-    local tNewUnits = {}
-    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
-        if pOnTileUnit then
-            local iUnitID = pOnTileUnit:GetID()
-            if not tBeforeSummonUnits[iUnitID] then
-                tNewUnits[iUnitID] = pOnTileUnit
-            end
-        end
-    end
-    return tNewUnits
-end
-
-
 
 local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
+    print('applying attributes')
     for _, pNewUnit in pairs(tNewUnits) do
+        print('new unit!')
         pNewUnit:SetDamage(iHealth)
         local pUnitExp = pNewUnit:GetExperience()
         local pUnitAbilities = pNewUnit:GetAbility()
+        print('granting promos')
         for _, iUnitPromotionIndex in ipairs(tPromos) do
             if not pUnitExp:HasPromotion(iUnitPromotionIndex) then
                 pUnitExp:SetPromotion(iUnitPromotionIndex)
+                print('grant promo', GameInfo.UnitPromotions[iUnitPromotionIndex].UnitPromotionType)
             end
+            print('iter promo')
         end
+        print('granting abilitiees')
         for _, sAbility in ipairs(tAbilities) do
             if not pUnitAbilities:HasAbility(sAbility) then
                 pUnitAbilities:AddAbilityCount(sAbility)
+                print('grant ability', sAbility)
             end
+            print('iter ability')
         end
     end
 end
@@ -533,7 +506,9 @@ local function ConvertSelfUnit(iPlayer, tParameters)
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
-    BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, tParameters.iCastingUnit)
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     UnitManager.Kill(pUnit);
 end
 
@@ -738,6 +713,9 @@ end
 -- UnitOperation Works
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
+GameEvents.SlthOnSetResource.Add(SlthSetResource);
+
+
 GameEvents.SlthOnSummon.Add(OnSummon);
 GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);
 GameEvents.SlthOnGrantBuffSelf.Add(OnGrantBuffSelf);

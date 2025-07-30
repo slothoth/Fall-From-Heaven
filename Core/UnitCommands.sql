@@ -1,3 +1,374 @@
+-- UnitOperations at the bottom, since they are always the same
+CREATE TABLE IF NOT EXISTS CustomOperations(OperationType text primary key, Callback text, SimpleText text, SecondText text, PromotionPrereq text,
+                                            UnitPrereq text, ActivationPrereq text, AbilityPrereq text, AlternateAbilityPrereq text,
+                                            AlsoAbilityPrereq text, AlsoTwoAbilityPrereq text, BuildingPrereq text, DomainPrereq text, FormationPrereq text,
+                                            SimpleAmount integer default 0, SecondAmount integer default 0,
+                                            ThirdAmount integer default 0, DontShowOnDisabled default '0');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq) VALUES
+('UNITOPERATION_SUMMON_AIR_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_AIR_ELEMENTAL', 'AIR_THREE'),
+('UNITOPERATION_SUMMON_DJINN', 'SlthOnSummon', 'SLTH_UNIT_DJINN', 'METAMAGIC_THREE'),
+('UNITOPERATION_SUMMON_EYE', 'SlthOnSummon', 'SLTH_UNIT_EYE', 'METAMAGIC_ONE'),
+('UNITOPERATION_SUMMON_EARTH_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_EARTH_ELEMENTAL', 'EARTH_THREE'),
+('UNITOPERATION_SUMMON_FIRE_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_FIRE_ELEMENTAL', 'FIRE_THREE'),
+('UNITOPERATION_SUMMON_FIREBALL', 'SlthOnSummon', 'SLTH_UNIT_FIREBALL', 'FIRE_TWO'),
+('UNITOPERATION_SUMMON_ICE_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_ICE_ELEMENTAL', 'ICE_TWO'),
+('UNITOPERATION_SUMMON_EINHERJAR', 'SlthOnSummon', 'SLTH_UNIT_EINHERJAR', 'LAW_TWO'),
+('UNITOPERATION_SUMMON_AUREALIS', 'SlthOnSummon', 'SLTH_UNIT_AUREALIS', 'SUN_THREE'),
+('UNITOPERATION_SUMMON_PIT_BEAST', 'SlthOnSummon', 'SLTH_UNIT_PIT_BEAST', 'ENTROPY_TWO'),
+('UNITOPERATION_SUMMON_MISTFORM', 'SlthOnSummon', 'SLTH_UNIT_MISTFORM', 'SHADOW_THREE'),
+('UNITOPERATION_SUMMON_SPECTRE', 'SlthOnSummon', 'SLTH_UNIT_SPECTRE', 'DEATH_TWO'),
+('UNITOPERATION_SUMMON_WATER_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_WATER_ELEMENTAL', 'WATER_THREE'),
+('UNITOPERATION_SUMMON_WRAITH', 'SlthOnSummon', 'SLTH_UNIT_WRAITH', 'DEATH_THREE');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_GRANT_STONESKIN_SELF', 'SlthOnGrantBuffSelf', 'BUFF_STONESKIN', 'EARTH_TWO', 'HasntAbility', '1'),
+('UNITOPERATION_GRANT_WATERWALKING_SELF', 'SlthOnGrantBuffSelf', 'BUFF_WATERWALKING', 'WATER_TWO', 'HasntAbility', '1'),
+('UNITOPERATION_GRANT_SPELL_STAFF_SELF', 'SlthOnGrantBuffSelf', 'SLTH_EQUIPMENT_SPELL_STAFF_ABILITY', 'ENCHANTMENT_THREE', 'HasntAbility', '1');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_SUMMON_FLESH_GOLEM', 'SlthOnSummonPerm', 'SLTH_UNIT_FLESH_GOLEM', 'BODY_THREE', 'SingleSummon'),
+('UNITOPERATION_SUMMON_SKELETON', 'SlthOnSummonPerm', 'SLTH_UNIT_SKELETON', 'DEATH_ONE', 'SingleSummon'),
+('UNITOPERATION_GRANT_ENCHANTED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_ENCHANTED_BLADE', 'ENCHANTMENT_ONE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_FAIR_WINDS', 'SlthOnGrantBuffAoEAlly', 'BUFF_FAIR_WINDS', 'AIR_ONE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_HASTE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_HASTE', 'BODY_ONE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_REGENERATION_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_REGENERATION', 'BODY_TWO', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_DANCE_OF_BLADES_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_DANCE_OF_BLADES', 'CHAOS_ONE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_FLAMING_ARROWS_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_FLAMING_ARROWS', 'ENCHANTMENT_TWO', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_LOYALTY_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_LOYALTY', 'LAW_ONE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_VALOR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_VALOR', 'LAW_THREE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_POISONED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_POISONED_BLADE', 'NATURE_ONE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_TREETOP_DEFENSE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_TREETOP_DEFENSE', 'NATURE_TWO', 'AdjacentAllyEligibleAbility'),         -- also needs feature ahh
+('UNITOPERATION_GRANT_BLUR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_BLUR', 'SHADOW_ONE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_SHADOWWALK_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHADOWWALK', 'SHADOW_TWO', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_COURAGE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_COURAGE', 'SPIRIT_ONE', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_GRANT_MUTATION_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_MUTATION', 'CHAOS_TWO', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_DEBUFF_CHARMED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_CHARMED', 'MIND_TWO', 'AdjacentEnemyEligibleAbility'),
+('UNITOPERATION_DEBUFF_RUSTED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_RUSTED', 'ENTROPY_ONE', 'AdjacentEnemyEligibleAbility'),
+('UNITOPERATION_DEBUFF_BLINDED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_HELD', 'SUN_TWO', 'AdjacentEnemyEligibleAbility'),
+('UNITOPERATION_DEBUFF_SLOW_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_SLOW', 'ICE_ONE', 'AdjacentEnemyEligibleAbility'),
+('UNITOPERATION_TERRAIN_CHANGE_SPRING', 'SlthOnChangeTerrain', 'SpringTo', 'WATER_ONE', 'DesertOrFlamesAdjacent'),
+('UNITOPERATION_TERRAIN_CHANGE_SCORCH', 'SlthOnChangeTerrain', 'ScorchTo', 'SUN_ONE', 'OnSnowOrPlains'),
+('UNITOPERATION_TERRAIN_CHANGE_VITALIZE', 'SlthOnChangeTerrain', 'VitalizeTo', 'NATURE_THREE', 'OnLandNotWoodedGrass'),
+('UNITOPERATION_WONDER', 'SlthOnBespokeSpell', NULL, 'CHAOS_THREE', NULL),
+('UNITOPERATION_BLAZE', 'SlthOnBespokeSpell', NULL, 'FIRE_ONE', 'OnForestOrJungle'),
+('UNITOPERATION_RESURRECTION', 'SlthOnBespokeSpell', NULL, 'LIFE_THREE', 'PlayerHeroDead'),
+('UNITOPERATION_DOMINATION', 'SlthOnBespokeSpell', NULL, 'MIND_THREE', 'AdjacentEnemyUnit'),             -- this needs targetting
+('UNITOPERATION_TRUST', 'SlthOnBespokeSpell', NULL, 'SPIRIT_THREE', NULL),
+('UNITOPERATION_SANCTIFY', 'SlthOnBespokeSpell', NULL, 'LIFE_ONE', 'OnCityRuinsOrGraveyardOrHellTerrain'),
+('UNITOPERATION_DISPELL_MAGIC', 'SlthOnBespokeSpell', NULL, 'METAMAGIC_TWO', 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, ActivationPrereq, SimpleAmount, SecondAmount, ThirdAmount) VALUES
+('UNITOPERATION_AOE_DAMAGE_MAELSTROM', 'SlthOnAoeDamage', NULL, 'AIR_TWO', 'AdjacentEnemyUnit', 10, 40, 60),                    -- placeholder amounts for now
+('UNITOPERATION_AOE_DAMAGE_DESTROY_UNDEAD', 'SlthOnAoeDamage', NULL, 'LIFE_TWO', 'AdjacentEnemyUnitIsUndead', 10, 40, 60),
+('UNITOPERATION_AOE_DAMAGE_WITHER', 'SlthOnAoeDamage', NULL, 'ENTROPY_THREE', 'AdjacentEnemyUnit', 10, 40, 60),
+('UNITOPERATION_AOE_DAMAGE_SNOWFALL', 'SlthOnAoeDamage', 'TERRAIN_SNOW', 'ICE_THREE', 'AdjacentEnemyUnit', 30, 50, 90);
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_SUMMON_IRA', 'SlthOnSummonPerm', 'SLTH_UNIT_IRA', NULL, 'SLTH_UNIT_WRATH', NULL);
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, BuildingPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_LION_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_LION_CAGE', 'SLTH_UNIT_LION', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
+('UNITOPERATION_GRANT_WOLF_PEN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_WOLF_PEN', 'SLTH_UNIT_WOLF', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
+('UNITOPERATION_GRANT_DANCING_BEAR', 'SlthOnGrantBuilding', 'SLTH_BUILDING_DANCING_BEAR', 'SLTH_UNIT_BEAR', NULL, 'OnCityGrantBuilding'),
+('UNITOPERATION_GRANT_GORILLA_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_GORILLA_CAGE', 'SLTH_UNIT_GORILLA', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
+('UNITOPERATION_GRANT_SPIDER_PEN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_SPIDER_PEN', 'SLTH_UNIT_GIANT_SPIDER', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
+('UNITOPERATION_GRANT_TIGER_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_TIGER_CAGE', 'SLTH_UNIT_TIGER', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
+('UNITOPERATION_GRANT_FREAK_SHOW', 'SlthOnGrantBuilding', 'SLTH_BUILDING_FREAK_SHOW', 'SLTH_UNIT_FREAK', NULL, 'OnCityGrantBuilding');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_GRANT_BURNING_BLOOD', 'SlthOnGrantBuffSelf', 'BUFF_BURNING_BLOOD', 'SLTH_UNIT_MOROI', 'HasntAbility', '1');
+
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_FEED_ON_CITY', 'SlthVampireConsumePop', NULL, 'ABILITY_VAMPIRISM', 'OnCityPopTwoPlus', '1');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_CONSUME_BLOODPET', 'SlthOnConsumeAlly', 'UNIT_WARRIOR', 'ABILITY_VAMPIRISM', 'AdjacentSingleAllyUnitMatches');
+
+-- ('UNITOPERATION_KIDNAP_GREAT_PERSON', 'LOC_KIDNAP_GREAT_PERSON_DESCRIPTION', 'ICON_UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE', 1, 1, 'BUILD',  'INTERFACEMODE_WB_SELECT_PLOT'),  todo hard plot property matches. but need to update superspecialist code
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_REPAIR_GOLEM', 'SlthOnHealTargeted', 'GOLEM_RACE_LOW_HEALING_ABILITY', 'ENCHANTMENT_ONE', 'AdjacentSingleAllyIsDamagedAndGolem', '1');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_CONSUME_SOULS', 'SlthOnRefreshCasting', NULL, 'SLTH_UNIT_EATER_OF_DREAMS', 'OnCityPopTwoPlus');                               -- also need to ensure hasnt cast spells yet
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SecondText, AbilityPrereq, AlternateAbilityPrereq, BuildingPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_ELF_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_ELF_CAGE', 'SLTH_BUILDING_FREAK_SHOW', 'ELF_MOVEMENT_ON_FORESTED', 'ELF_RACIAL_MOVEMENT_ON_FOREST', 'SLTH_BUILDING_FREAK_SHOW', 'OnCityGrantBuildingPrereqBuilding'),        -- only capture inherent elves not racial. for that need two abilitiyies
+('UNITOPERATION_GRANT_HUMAN_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_HUMAN_CAGE', 'SLTH_BUILDING_FREAK_SHOW', 'ABILITY_INHERENT_HUMAN', 'ABILITY_RACIAL_HUMAN','SLTH_BUILDING_FREAK_SHOW',  'OnCityGrantBuildingPrereqBuilding'),
+('UNITOPERATION_GRANT_ORC_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_ORC_CAGE', 'SLTH_BUILDING_FREAK_SHOW', 'INHERENT_ORC_ABILITY_JUNGLE_ATTACKS', 'ORC_ABILITY_JUNGLE_ATTACKS','SLTH_BUILDING_FREAK_SHOW',  'OnCityGrantBuildingPrereqBuilding'),
+('UNITOPERATION_GRANT_DWARF_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_DWARF_CAGE', 'SLTH_BUILDING_FREAK_SHOW', 'INHERENT_DWARF_ABILITY_HILLS_DOUBLE_MOVE', 'DWARF_ABILITY_HILLS_DOUBLE_MOVE','SLTH_BUILDING_FREAK_SHOW',  'OnCityGrantBuildingPrereqBuilding');
+
+INSERT INTO CustomOperations (OperationType, Callback, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_SUPER_SPECIALIST', 'SlthOnGrantSuperSpecialist', 'ABILITY_IS_GREAT_PERSON_NOT_COMMANDER', 'OnCityGeneric'),
+('UNITOPERATION_GRANT_GOLDEN_AGE', 'SlthOnGrantGoldenAge', 'ABILITY_IS_GREAT_PERSON', 'EnoughGreatPeople');
+-- EnoughGreatPeople
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SecondText, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_CODE_OF_JUNIL', 'SlthOnGrantBuilding', 'SLTH_BUILDING_CODE_OF_JUNIL', 'RELIGION_PROTESTANTISM_HOLY_CITY', 'ABILITY_CAN_CODE_OF_JUNIL', 'OnHolyCity'),
+('UNITOPERATION_GRANT_DIES_DEI', 'SlthOnGrantBuilding', 'BUILDING_ANGKOR_WAT', 'RELIGION_JUDAISM_HOLY_CITY', 'ABILITY_CAN_DIES_DEI', 'OnHolyCity'),
+('UNITOPERATION_GRANT_TABLETS_OF_BAMBUR', 'SlthOnGrantBuilding', 'SLTH_BUILDING_TABLETS_OF_BAMBUR', 'RELIGION_CONFUCIANISM_HOLY_CITY', 'ABILITY_CAN_TABLETS', 'OnHolyCity'),
+('UNITOPERATION_GRANT_SONG_OF_AUTUMN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_SONG_OF_AUTUMN', 'RELIGION_CATHOLICISM_HOLY_CITY', 'ABILITY_CAN_SONG_OF_AUTUMN', 'OnHolyCity'),
+('UNITOPERATION_GRANT_THE_NECRONOMICON', 'SlthOnGrantBuilding', 'SLTH_BUILDING_THE_NECRONOMICON', 'RELIGION_HINDUISM_HOLY_CITY', 'ABILITY_CAN_NECRONOMICON', 'OnHolyCity'),
+('UNITOPERATION_GRANT_NOX_NOCTIS', 'SlthOnGrantBuilding', 'SLTH_BUILDING_NOX_NOCTIS', 'RELIGION_ISLAM_HOLY_CITY', 'ABILITY_CAN_NOX_NOCTIS', 'OnHolyCity'),
+('UNITOPERATION_GRANT_STIGMATA_ON_THE_UNBORN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_STIGMATA_ON_THE_UNBORN', 'RELIGION_BUDDHISM_HOLY_CITY', 'ABILITY_CAN_STIGMATA_ON_UNBORN', 'OnHolyCity');
+
+
+INSERT INTO UnitAbilities(UnitAbilityType, Name, Description, Inactive, Permanent) VALUES
+('ABILITY_IS_GREAT_PERSON', 'LOC_ABILITY_GREAT_PERSON_NAME', 'LOC_ABILITY_GREAT_PERSON_DESCRIPTION', '0', '1'),
+('ABILITY_IS_GREAT_PERSON_NOT_COMMANDER', 'LOC_ABILITY_IS_GREAT_PERSON_NOT_COMMANDER_NAME', 'LOC_ABILITY_IS_GREAT_PERSON_NOT_COMMANDER_DESCRIPTION', '0', '1'),
+('ABILITY_CAN_CODE_OF_JUNIL', 'LOC_CAN_CODE_OF_JUNIL_NAME', 'LOC_CAN_CODE_OF_JUNIL_DESCRIPTION', '0', '1'),
+('ABILITY_CAN_DIES_DEI', 'LOC_CAN_DIES_DEI_NAME', 'LOC_CAN_DIES_DEI_DESCRIPTION', '0', '1'),
+('ABILITY_CAN_TABLETS', 'LOC_CAN_TABLETS_NAME', 'LOC_CAN_TABLETS_DESCRIPTION', '0', '1'),
+('ABILITY_CAN_NECRONOMICON', 'LOC_CAN_NECRONOMICON_NAME', 'LOC_CAN_NECRONOMICON_DESCRIPTION', '0', '1'),
+('ABILITY_CAN_SONG_OF_AUTUMN', 'LOC_CAN_SONG_OF_AUTUMN_NAME', 'LOC_CAN_SONG_OF_AUTUMN_DESCRIPTION', '0', '1'),
+('ABILITY_CAN_NOX_NOCTIS', 'LOC_CAN_NOX_NOCTIS_NAME', 'LOC_CAN_NOX_NOCTIS_DESCRIPTION', '0', '1'),
+('ABILITY_CAN_STIGMATA_ON_UNBORN', 'LOC_CAN_STIGMATA_ON_UNBORN_NAME', 'LOC_CAN_STIGMATA_ON_UNBORN_DESCRIPTION', '0', '1'),
+('ABILITY_MESMERISE_ANIMAL', 'LOC_MESMERISE_ANIMAL_NAME', 'LOC_MESMERISE_ANIMAL_DESCRIPTION', '0', '1'),
+('ABILITY_MEDIC_3', 'LOC_MEDIC_3_NAME', 'LOC_MEDIC_3_DESCRIPTION', '0', '1');
+
+INSERT INTO Tags(Tag, Vocabulary) VALUES
+('CLASS_GREAT_PERSON', 'ABILITY_CLASS'),
+('CLASS_GREAT_PERSON_NOT_COMMANDER', 'ABILITY_CLASS'),
+('CLASS_CAN_JUNIL', 'ABILITY_CLASS'),
+('CLASS_CAN_DIES_DEI', 'ABILITY_CLASS'),
+('CLASS_CAN_TABLETS', 'ABILITY_CLASS'),
+('CLASS_CAN_AUTUMN', 'ABILITY_CLASS'),
+('CLASS_CAN_NOX', 'ABILITY_CLASS'),
+('CLASS_CAN_STIGMATA_UNBORN', 'ABILITY_CLASS'),
+('CLASS_CAN_NECRONOMICON', 'ABILITY_CLASS'),
+('CLASS_FAWN', 'ABILITY_CLASS'),
+('CLASS_MEDIC_3', 'ABILITY_CLASS');
+
+
+INSERT INTO TypeTags(Type, Tag) VALUES
+('ABILITY_IS_GREAT_PERSON', 'CLASS_GREAT_PERSON'),
+('UNIT_GREAT_PROPHET', 'CLASS_GREAT_PERSON'),
+('UNIT_GREAT_ENGINEER', 'CLASS_GREAT_PERSON'),
+('UNIT_GREAT_SCIENTIST', 'CLASS_GREAT_PERSON'),
+('UNIT_GREAT_ARTIST', 'CLASS_GREAT_PERSON'),
+('UNIT_GREAT_MERCHANT', 'CLASS_GREAT_PERSON'),
+('UNIT_GREAT_GENERAL', 'CLASS_GREAT_PERSON'),
+('ABILITY_IS_GREAT_PERSON_NOT_COMMANDER', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
+('UNIT_GREAT_PROPHET', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
+('UNIT_GREAT_ENGINEER', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
+('UNIT_GREAT_SCIENTIST', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
+('UNIT_GREAT_ARTIST', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
+('UNIT_GREAT_MERCHANT', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
+('UNIT_GREAT_PROPHET', 'CLASS_CAN_JUNIL'),
+('UNIT_GREAT_GENERAL', 'CLASS_CAN_JUNIL'),
+('ABILITY_CAN_CODE_OF_JUNIL', 'CLASS_CAN_JUNIL'),
+('UNIT_GREAT_PROPHET', 'CLASS_CAN_DIES_DEI'),
+('UNIT_GREAT_SCIENTIST', 'CLASS_CAN_DIES_DEI'),
+('ABILITY_CAN_DIES_DEI', 'CLASS_CAN_DIES_DEI'),
+('UNIT_GREAT_PROPHET', 'CLASS_CAN_TABLETS'),
+('UNIT_GREAT_ENGINEER', 'CLASS_CAN_TABLETS'),
+('ABILITY_CAN_TABLETS', 'CLASS_CAN_TABLETS'),
+('UNIT_GREAT_PROPHET', 'CLASS_CAN_AUTUMN'),
+('UNIT_GREAT_ARTIST', 'CLASS_CAN_AUTUMN'),
+('ABILITY_CAN_SONG_OF_AUTUMN', 'CLASS_CAN_AUTUMN'),
+('UNIT_GREAT_PROPHET', 'CLASS_CAN_NOX'),
+('UNIT_GREAT_MERCHANT', 'CLASS_CAN_NOX'),
+('ABILITY_CAN_NOX_NOCTIS', 'CLASS_CAN_NOX'),
+('UNIT_GREAT_PROPHET', 'CLASS_CAN_STIGMATA_UNBORN'),
+('UNIT_GREAT_SCIENTIST', 'CLASS_CAN_STIGMATA_UNBORN'),
+('ABILITY_CAN_STIGMATA_ON_UNBORN', 'CLASS_CAN_STIGMATA_UNBORN'),
+('ABILITY_CAN_NECRONOMICON', 'CLASS_CAN_NECRONOMICON'),
+('UNIT_GREAT_PROPHET', 'CLASS_CAN_NECRONOMICON'),
+('ABILITY_MEDIC_3', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_SPHENER', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_YVAIN', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_GRIGORI_MEDIC', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL', 'CLASS_MEDIC_3'),
+('SLTH_UNIT_HIGH_PRIEST_OF_LEAVES', 'CLASS_MEDIC_3'),
+('ABILITY_MESMERISE_ANIMAL', 'CLASS_FAWN'),
+('SLTH_UNIT_FAWN', 'CLASS_FAWN'),
+('SLTH_UNIT_SATYR', 'CLASS_FAWN');
+
+INSERT INTO Types(Type, Kind) VALUES
+('ABILITY_IS_GREAT_PERSON', 'KIND_ABILITY'),
+('ABILITY_IS_GREAT_PERSON_NOT_COMMANDER', 'KIND_ABILITY'),
+('ABILITY_CAN_CODE_OF_JUNIL', 'KIND_ABILITY'),
+('ABILITY_CAN_DIES_DEI', 'KIND_ABILITY'),
+('ABILITY_CAN_TABLETS', 'KIND_ABILITY'),
+('ABILITY_CAN_SONG_OF_AUTUMN', 'KIND_ABILITY'),
+('ABILITY_CAN_NOX_NOCTIS', 'KIND_ABILITY'),
+('ABILITY_CAN_STIGMATA_ON_UNBORN', 'KIND_ABILITY'),
+('ABILITY_CAN_NECRONOMICON', 'KIND_ABILITY'),
+('ABILITY_MESMERISE_ANIMAL', 'KIND_ABILITY'),
+('ABILITY_MEDIC_3', 'KIND_ABILITY');
+
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_CAST_MIRROR', 'SlthOnCastMirror', NULL, 'SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY', NULL),
+('UNITOPERATION_READ_GRIMOIRE', 'SlthOnBespokeSpell', NULL, 'SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY', NULL),
+('UNITOPERATION_BREAK_STAFF', 'SlthOnBreakStaff', NULL, 'SLTH_EQUIPMENT_SPELL_STAFF_ABILITY', NULL),
+('UNITOPERATION_SPREAD_ESUS', 'SlthOnSpreadEsus', NULL, 'ABILITY_WORSHIPS_ESUS', 'OnAdjacentCity');                -- todo make adjacent so can do enemy cities
+
+INSERT INTO CustomOperations (OperationType, Callback, UnitPrereq) VALUES
+('UNITOPERATION_ESCAPE', 'SlthOnTeleportToCapital', 'SLTH_UNIT_CHANTER');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_SEVER_SOUL', 'SlthOnSummonPerm', 'SLTH_UNIT_SEVERED_SOUL', 'SLTH_UNIT_DIVIDED_SOUL', 'SingleSummon'),                --TODO implement severed soul unit
+('UNITOPERATION_CALL_FORM', 'SlthOnTeleportToSummon', 'SLTH_UNIT_SEVERED_SOUL', 'SLTH_UNIT_DIVIDED_SOUL', 'HasSummon');
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq) VALUES
+('UNITOPERATION_SUMMON_PUPPET', 'SlthOnSummon', 'SLTH_UNIT_PUPPET', 'ABILITY_CAN_PUPPET');
+
+       -- Hope, Inspiration, Wall of Stone. just do REQUIREMENT_PLOT_ADJACENT_TO_OWNER? and ability on unit? PLAYER_CITIES Modifier?
+    -- 	['LOC_UNITOPERATION_BUILDING_DESCRIPTION'] = {OnStart=OnRemoveBuff, iAmount=50},  FEATURE_BURNING_FOREST
+    -- Special: Resurrection, Domination, Trust
+-- }
+
+-- ADJACENT UNITType MATCHES: Consume Bloodpet, Repair Golem
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_HERALDS_CALL', 'SlthOnGrantAbilityTargeted', 'BUFF_HERALDS_CALL', 'SLTH_UNIT_HERALD', 'AdjacentAllyEligibleAbility');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_MORALE', 'SlthOnGrantBuffAoEAlly', 'BUFF_MORALE', 'SLTH_UNIT_FLAGBEARER', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_TEACH_SPELLS', 'SlthOnGrantPromotionAoEAlly', NULL, 'SLTH_UNIT_GOVANNON', 'AdjacentUnitCanHavePromoGovannonHas'),     -- grants promotions based on govannon.
+('UNITOPERATION_ENTANGLE', 'SlthOnGrantAbilityTargetedEnemy', 'BUFF_HELD', 'SLTH_UNIT_DRUID', 'AdjacentEnemyEligibleAbility'),              -- placeholder abilities
+('UNITOPERATION_SPORES', 'SlthOnGrantAbilityAoeEnemy', 'ABILITY_SLEPT', 'SLTH_UNIT_MYCONID', 'AdjacentEnemyEligibleAbility'),
+('UNITOPERATION_TAUNT', 'SlthOnGrantAbilityTargetedEnemy', 'BUFF_TAUNT', 'SLTH_UNIT_HARLEQUIN', 'AdjacentEnemyEligibleAbility');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleAmount, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_CRUSH', 'SlthOnDamageTargeted',   80, 'SLTH_UNIT_DWARVEN_DRUID', 'AdjacentEnemyUnit'),
+('UNITOPERATION_HASTURS_RAZOR', 'SlthOnAoeDamage', 90, 'SLTH_UNIT_HEMAH', 'AdjacentEnemyUnit'),
+('UNITOPERATION_PILLAR_OF_FIRE', 'SlthOnDamageTargeted', 90, 'SLTH_UNIT_CHALID', 'AdjacentEnemyUnit');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_MESMERISE_ANIMAL', 'SlthOnConvertUnit', 'PROMOTION_CLASS_ANIMAL', 'ABILITY_MESMERISE_ANIMAL', 'AdjacentEnemyEligiblePromoClass'),
+('UNITOPERATION_HEAL_FULL_ALLY', 'SlthOnHealTargeted', NULL, 'ABILITY_MEDIC_3', 'AdjacentSingleAllyIsDamaged');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, SimpleAmount, ActivationPrereq) VALUES
+('UNITOPERATION_GRANT_VAMPIRISM', 'SlthOnGrantAbilityTargeted', 'ABILITY_VAMPIRISM', 'ABILITY_VAMPIRISM', 6, 'AdjacentSingleAllyIsLevelMinimum');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SimpleAmount, AbilityPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_BECOME_SHADE', 'SlthOnConvertSelf', 'SLTH_UNIT_SHADE', 6, 'ABILITY_SIDAR_GRAY', 'UnitIsLevel', '1');
+
+INSERT INTO CustomOperations (OperationType, Callback, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_ABSORB_UNIT', 'SlthOnConsumeAlly', 'SLTH_UNIT_FLESH_GOLEM', 'AdjacentSingleAlly');         -- hard to do
+
+INSERT INTO CustomOperations (OperationType, Callback, BuildingPrereq, FormationPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_ARENA_FIGHT', 'SlthOnUnitCityInteract', 'BUILDING_ARENA', 'FORMATION_CLASS_LAND_COMBAT', 'AdjacentCityHasBuilding', '1'),
+('UNITOPERATION_SACRIFICE_ALTAR', 'SlthOnUnitCityInteract', 'SLTH_BUILDING_DEMONS_ALTAR', 'FORMATION_CLASS_LAND_COMBAT', 'AdjacentCityHasBuilding', '1');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, BuildingPrereq, UnitPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_DROWN_WARRIOR', 'SlthOnConvertSelf', 'SLTH_UNIT_DROWN', 'BUILDING_MOSQUE', 'UNIT_WARRIOR', 'AdjacentCityHasBuilding', '1');
+
+INSERT INTO CustomOperations (OperationType, Callback, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_KIDNAP_GREAT_PERSON', 'SlthOnBespokeSpell', 'SLTH_ABILITY_SINISTER', 'AdjacentCityHasPlotPropertyAndWarPossible');       -- todo need to do more to catch all the GPP type PlotProperties and also rework that work
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_SUMMON_SAND_LION', 'SlthOnSummon', 'SLTH_UNIT_SAND_LION', 'ABILITY_SAND_LION_SUMMONER', 'OnDesertTerrain');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_LOKI_DISRUPT_CITY', 'SlthOnUnitCityInteract', NULL, 'SLTH_UNIT_LOKI', 'OnAdjacentEnemyCity'),
+('UNITOPERATION_LOKI_ENTERTAIN_CITY', 'SlthOnUnitCityInteract', NULL, 'SLTH_UNIT_LOKI', 'OnAdjacentCity'),
+('UNITOPERATION_CORLINDALE_PEACE', 'SlthOnForcePeace', NULL, 'SLTH_UNIT_CORLINDALE', 'AtWar');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_PLACE_BARNAXUS_PIECES', 'SlthOnUnitCityInteract', '', 'SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY', 'OnCityGeneric'),             -- this seems painful
+('UNITOPERATION_PLACE_GRIMOIRE', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_INFERNAL_GRIMOIRE_BUILDING', 'SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY', 'OnCityGeneric'),
+('UNITOPERATION_PLACE_CROWN', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_CROWN_OF_AKHARIEN_BUILDING', 'SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY', 'OnCityGeneric'),
+('UNITOPERATION_PLACE_LYRE', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_SYLIVENS_PERFECT_LYRE_BUILDING', 'SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY', 'OnCityGeneric'),
+('UNITOPERATION_PLACE_HORDE', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_THE_DRAGONS_HORDE_BUILDING', 'SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY', 'OnCityGeneric'),
+('UNITOPERATION_PLACE_CAULDRON', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_MOKKAS_CAULDRON_BUILDING', 'SLTH_EQUIPMENT_MOKKA_CAULDRON_ABILITY', 'OnCityGeneric');
+
+INSERT INTO CustomOperations (OperationType, Callback, DomainPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_TAKE_EQUIPMENT', 'SlthOnTakeEquipment', 'DOMAIN_LAND', 'AdjacentSingleAllyHasEquipmentOrIsEquipment', '1');
+
+INSERT INTO CustomOperations (OperationType, Callback, BuildingPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_HEAL_SIRONA', 'SlthOnHealSelf', 'BUILDING_CRISTO_REDENTOR', 'IsDamaged');                   -- needs condition of once per turn
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SecondText, PromotionPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
+('UNITOPERATION_BECOME_LICH', 'SlthOnConvertSelf', 'SLTH_UNIT_LICH', 'ABILITY_UNDEAD', 'DEATH_THREE', 'HasntAbility', '1');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq) VALUES
+('UNITOPERATION_SUMMON_BALOR', 'SlthOnSummon', 'SLTH_UNIT_BALOR',  'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_VEIL');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_SUMMON_KRAKEN', 'SlthOnSummonPerm', 'SLTH_UNIT_KRAKEN', 'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_OCTOPUS', 'SingleSummonAtSea'),
+('UNITOPERATION_SUMMON_TREANT', 'SlthOnSummonPerm', 'SLTH_UNIT_TREANT', 'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_LEAVES', 'SingleSummonOnForest'),
+('UNITOPERATION_EARTHQUAKE', 'SlthOnAoeDamage', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_KILMORPH', 'AdjacentEnemyUnit');
+
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_SUMMON_TIGER', 'SlthOnSummonPerm', 'SLTH_UNIT_TIGER', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_LEAVES', 'SingleSummon'),
+('UNITOPERATION_BLOOM', 'SlthOnMakeFeature', 'FEATURE_FOREST_ANCIENT', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_LEAVES', 'HasntFeature'),
+('UNITOPERATION_REVELATION', 'SlthOnBespokeSpell', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_EMPYREAN', NULL),
+('UNITOPERATION_GRANT_SHIELD_OF_FAITH', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHIELD_OF_FAITH', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_EMPYREAN', 'AdjacentAllyEligibleAbility'),
+('UNITOPERATION_TSUNAMI', 'SlthOnAoeDamageCoast', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_OCTOPUS', 'AdjacentEnemyUnitAtSea'),
+('UNITOPERATION_RING_OF_FLAMES', 'SlthOnAoeDamage', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_VEIL', 'AdjacentEnemyUnit');
+
+
+-- Divine spells (Has abilityPrereq, AlternateAbilityPrereq): CoE steal equipment,
+
+
+-- crown of brilliance not done as unitcommand, its more like a passive.
+-- Create Hellfire, not done as no feature currently, from Profane.
+
+-- Open Chest(just extend equipment pickup), Sprint(Centaur units), healing salve
+-- low prio: Khazad create Battering Ram (it sucks lol), Impersonate Leader
+-- Impersonate Leader. Completely impossible lmao.
+
+-- AI only: Call of the Grave (ars), Rage (Buboes)
+-- cant remember, how it works Doviello Duels
+-- Ships change Crews. Only one crew does something not involving embarked units. Shelve this
+-- Magnadine (hire, made obselete by vi). Hide (grant unit camoflauge, why would i remove.),
+
+CREATE TABLE IF NOT EXISTS TerrainTransforms(
+    TerrainType text primary key,
+    VitalizeTo text,
+    ScorchTo text,
+    SpringTo text,
+    HellTerrainVariant text,
+    IsHellTerrain boolean);
+
+INSERT INTO TerrainTransforms (TerrainType, VitalizeTo, ScorchTo, SpringTo, HellTerrainVariant, IsHellTerrain) VALUES
+('TERRAIN_BURNING_SANDS', 'TERRAIN_BROKEN_LANDS', NULL, 'TERRAIN_BROKEN_LANDS', 'TERRAIN_DESERT', 1),
+('TERRAIN_BURNING_SANDS_HILLS', 'TERRAIN_BROKEN_LANDS_HILLS', NULL,'TERRAIN_BROKEN_LANDS_HILLS', 'TERRAIN_DESERT_HILLS', 1),
+('TERRAIN_FIELDS_OF_PERDITION', 'TERRAIN_BROKEN_LANDS', 'TERRAIN_BURNING_SANDS', NULL, 'TERRAIN_PLAINS', 1),
+('TERRAIN_FIELDS_OF_PERDITION_HILLS', 'TERRAIN_BROKEN_LANDS_HILLS', 'TERRAIN_BURNING_SANDS_HILLS', NULL, 'TERRAIN_PLAINS_HILLS', 1),
+('TERRAIN_BROKEN_LANDS', NULL, NULL, NULL, 'TERRAIN_GRASS', 1),
+('TERRAIN_BROKEN_LANDS_HILLS', NULL, NULL,  NULL, 'TERRAIN_GRASS_HILLS', 1),
+('TERRAIN_DESERT', 'TERRAIN_PLAINS', NULL, 'TERRAIN_PLAINS','TERRAIN_BURNING_SANDS', 0),
+('TERRAIN_DESERT_HILLS', 'TERRAIN_PLAINS_HILLS', NULL, 'TERRAIN_PLAINS_HILLS', 'TERRAIN_BURNING_SANDS_HILLS', 0),
+('TERRAIN_PLAINS', 'TERRAIN_GRASS', 'TERRAIN_DESERT', NULL, 'TERRAIN_FIELDS_OF_PERDITION', 0),
+('TERRAIN_PLAINS_HILLS', 'TERRAIN_GRASS_HILLS', 'TERRAIN_DESERT_HILLS',NULL, 'TERRAIN_FIELDS_OF_PERDITION_HILLS', 0),
+('TERRAIN_GRASS', NULL, NULL, NULL, 'TERRAIN_BROKEN_LANDS', 0),
+('TERRAIN_GRASS_HILLS', NULL, NULL, NULL, 'TERRAIN_BROKEN_LANDS_HILLS', 0),
+('TERRAIN_TUNDRA', 'TERRAIN_PLAINS', 'TERRAIN_PLAINS', NULL, NULL, 0),
+('TERRAIN_TUNDRA_HILLS', 'TERRAIN_PLAINS_HILLS', 'TERRAIN_PLAINS_HILLS', NULL, NULL, 0),
+('TERRAIN_SNOW', 'TERRAIN_TUNDRA', 'TERRAIN_TUNDRA', NULL, NULL, 0),
+('TERRAIN_SNOW_HILLS', 'TERRAIN_TUNDRA_HILLS',  'TERRAIN_TUNDRA_HILLS', NULL, NULL, 0);
+
+CREATE TABLE IF NOT EXISTS ResourceTransforms(
+    ResourceType text primary key ,
+    ConvertedResource text,
+    ConvertedResourceVariant text,
+    IsHellResource boolean);
+
+INSERT INTO ResourceTransforms (ResourceType, ConvertedResource, ConvertedResourceVariant, IsHellResource) VALUES
+('RESOURCE_TRUFFLES', 'RESOURCE_TOAD', NULL, 0),
+('RESOURCE_SHEEP', 'RESOURCE_TOAD', NULL, 0),
+('RESOURCE_TOAD', 'RESOURCE_TRUFFLES', 'RESOURCE_SHEEP', 1),
+('RESOURCE_CATTLE', 'RESOURCE_NIGHTMARE', NULL, 0),
+('RESOURCE_HORSES', 'RESOURCE_NIGHTMARE', NULL, 0),
+('RESOURCE_NIGHTMARE', 'RESOURCE_CATTLE', 'RESOURCE_HORSES', 1),
+('RESOURCE_MARBLE', 'RESOURCE_JADE', NULL, 0),
+('RESOURCE_JADE', 'RESOURCE_MARBLE', NULL, 1),
+('RESOURCE_BANANAS', 'RESOURCE_TOBACCO', NULL, 0),
+('RESOURCE_SUGAR', 'RESOURCE_TOBACCO', NULL, 0),
+('RESOURCE_TOBACCO', 'RESOURCE_BANANAS', 'RESOURCE_SUGAR', 1),
+('RESOURCE_SILK', 'RESOURCE_OLIVES', NULL, 0),
+('RESOURCE_COTTON', 'RESOURCE_OLIVES', NULL, 0),
+('RESOURCE_OLIVES', 'RESOURCE_SILK', 'RESOURCE_COTTON', 1);
+
+
 INSERT INTO UnitOperations (OperationType, Description, Icon, VisibleInUI, HoldCycling, CategoryInUI) VALUES
 ('UNITOPERATION_SUMMON_AIR_ELEMENTAL', 'LOC_SUMMON_AIR_ELEMENTAL_DESCRIPTION', 'ICON_SLTH_UNITOPERATION_SUMMON_AIR_ELEMENTAL', 1, 1, 'BUILD'),
 ('UNITOPERATION_SUMMON_DJINN', 'LOC_SUMMON_DJINN_DESCRIPTION', 'ICON_SLTH_UNITOPERATION_SUMMON_DJINN', 1, 1, 'BUILD'),
@@ -257,367 +628,3 @@ INSERT INTO Types(Type, Kind) VALUES
 ('UNITOPERATION_PLACE_CAULDRON', 'KIND_UNITOPERATION'),
 ('UNITOPERATION_TAKE_EQUIPMENT', 'KIND_UNITOPERATION');
 
-
-CREATE TABLE IF NOT EXISTS CustomOperations(OperationType text primary key, Callback text, SimpleText text, SecondText text, PromotionPrereq text,
-                                            UnitPrereq text, ActivationPrereq text, AbilityPrereq text, AlternateAbilityPrereq text,
-                                            AlsoAbilityPrereq text, AlsoTwoAbilityPrereq text, BuildingPrereq text, DomainPrereq text, FormationPrereq text,
-                                            SimpleAmount integer default 0, SecondAmount integer default 0,
-                                            ThirdAmount integer default 0, DontShowOnDisabled default '0');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq) VALUES
-('UNITOPERATION_SUMMON_AIR_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_AIR_ELEMENTAL', 'AIR_THREE'),
-('UNITOPERATION_SUMMON_DJINN', 'SlthOnSummon', 'SLTH_UNIT_DJINN', 'METAMAGIC_THREE'),
-('UNITOPERATION_SUMMON_EYE', 'SlthOnSummon', 'SLTH_UNIT_EYE', 'METAMAGIC_ONE'),
-('UNITOPERATION_SUMMON_EARTH_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_EARTH_ELEMENTAL', 'EARTH_THREE'),
-('UNITOPERATION_SUMMON_FIRE_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_FIRE_ELEMENTAL', 'FIRE_THREE'),
-('UNITOPERATION_SUMMON_FIREBALL', 'SlthOnSummon', 'SLTH_UNIT_FIREBALL', 'FIRE_TWO'),
-('UNITOPERATION_SUMMON_ICE_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_ICE_ELEMENTAL', 'ICE_TWO'),
-('UNITOPERATION_SUMMON_EINHERJAR', 'SlthOnSummon', 'SLTH_UNIT_EINHERJAR', 'LAW_TWO'),
-('UNITOPERATION_SUMMON_AUREALIS', 'SlthOnSummon', 'SLTH_UNIT_AUREALIS', 'SUN_THREE'),
-('UNITOPERATION_SUMMON_PIT_BEAST', 'SlthOnSummon', 'SLTH_UNIT_PIT_BEAST', 'ENTROPY_TWO'),
-('UNITOPERATION_SUMMON_MISTFORM', 'SlthOnSummon', 'SLTH_UNIT_MISTFORM', 'SHADOW_THREE'),
-('UNITOPERATION_SUMMON_SPECTRE', 'SlthOnSummon', 'SLTH_UNIT_SPECTRE', 'DEATH_TWO'),
-('UNITOPERATION_SUMMON_WATER_ELEMENTAL', 'SlthOnSummon', 'SLTH_UNIT_WATER_ELEMENTAL', 'WATER_THREE'),
-('UNITOPERATION_SUMMON_WRAITH', 'SlthOnSummon', 'SLTH_UNIT_WRAITH', 'DEATH_THREE');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_SUMMON_FLESH_GOLEM', 'SlthOnSummonPerm', 'SLTH_UNIT_FLESH_GOLEM', 'BODY_THREE', 'SingleSummon'),
-('UNITOPERATION_SUMMON_SKELETON', 'SlthOnSummonPerm', 'SLTH_UNIT_SKELETON', 'DEATH_ONE', 'SingleSummon'),
-('UNITOPERATION_GRANT_STONESKIN_SELF', 'SlthOnGrantBuffSelf', 'BUFF_STONESKIN', 'EARTH_TWO', 'HasntAbility'),
-('UNITOPERATION_GRANT_WATERWALKING_SELF', 'SlthOnGrantBuffSelf', 'BUFF_WATERWALKING', 'WATER_TWO', 'HasntAbility'),
-('UNITOPERATION_GRANT_SPELL_STAFF_SELF', 'SlthOnGrantBuffSelf', 'SLTH_EQUIPMENT_SPELL_STAFF_ABILITY', 'ENCHANTMENT_THREE', 'HasntAbility'),
-('UNITOPERATION_GRANT_ENCHANTED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_ENCHANTED_BLADE', 'ENCHANTMENT_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_FAIR_WINDS', 'SlthOnGrantBuffAoEAlly', 'BUFF_FAIR_WINDS', 'AIR_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_HASTE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_HASTE', 'BODY_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_REGENERATION_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_REGENERATION', 'BODY_TWO', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_DANCE_OF_BLADES_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_DANCE_OF_BLADES', 'CHAOS_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_FLAMING_ARROWS_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_FLAMING_ARROWS', 'ENCHANTMENT_TWO', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_LOYALTY_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_LOYALTY', 'LAW_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_VALOR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_VALOR', 'LAW_THREE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_POISONED_BLADE_AOE', 'SlthOnGrantBuffAoEAlly', 'ABILITY_POISONED_BLADE', 'NATURE_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_TREETOP_DEFENSE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_TREETOP_DEFENSE', 'NATURE_TWO', 'AdjacentAllyEligibleAbility'),         -- also needs feature ahh
-('UNITOPERATION_GRANT_BLUR_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_BLUR', 'SHADOW_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_SHADOWWALK_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHADOWWALK', 'SHADOW_TWO', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_COURAGE_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_COURAGE', 'SPIRIT_ONE', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_GRANT_MUTATION_AOE', 'SlthOnGrantBuffAoEAlly', 'BUFF_MUTATION', 'CHAOS_TWO', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_DEBUFF_CHARMED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_CHARMED', 'MIND_TWO', 'AdjacentEnemyEligibleAbility'),
-('UNITOPERATION_DEBUFF_RUSTED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_RUSTED', 'ENTROPY_ONE', 'AdjacentEnemyEligibleAbility'),
-('UNITOPERATION_DEBUFF_BLINDED_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_HELD', 'SUN_TWO', 'AdjacentEnemyEligibleAbility'),
-('UNITOPERATION_DEBUFF_SLOW_AOE', 'SlthOnGrantAbilityAoeEnemy', 'BUFF_SLOW', 'ICE_ONE', 'AdjacentEnemyEligibleAbility'),
-('UNITOPERATION_TERRAIN_CHANGE_SPRING', 'SlthOnChangeTerrain', 'SpringTo', 'WATER_ONE', 'DesertOrFlamesAdjacent'),
-('UNITOPERATION_TERRAIN_CHANGE_SCORCH', 'SlthOnChangeTerrain', 'ScorchTo', 'SUN_ONE', 'OnSnowOrPlains'),
-('UNITOPERATION_TERRAIN_CHANGE_VITALIZE', 'SlthOnChangeTerrain', 'VitalizeTo', 'NATURE_THREE', 'OnLandNotWoodedGrass'),
-('UNITOPERATION_WONDER', 'SlthOnBespokeSpell', NULL, 'CHAOS_THREE', NULL),
-('UNITOPERATION_BLAZE', 'SlthOnBespokeSpell', NULL, 'FIRE_ONE', 'OnForestOrJungle'),
-('UNITOPERATION_RESURRECTION', 'SlthOnBespokeSpell', NULL, 'LIFE_THREE', 'PlayerHeroDead'),
-('UNITOPERATION_DOMINATION', 'SlthOnBespokeSpell', NULL, 'MIND_THREE', 'AdjacentEnemyUnit'),             -- this needs targetting
-('UNITOPERATION_TRUST', 'SlthOnBespokeSpell', NULL, 'SPIRIT_THREE', NULL),
-('UNITOPERATION_SANCTIFY', 'SlthOnBespokeSpell', NULL, 'LIFE_ONE', 'OnCityRuinsOrGraveyardOrHellTerrain'),
-('UNITOPERATION_DISPELL_MAGIC', 'SlthOnBespokeSpell', NULL, 'METAMAGIC_TWO', 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, ActivationPrereq, SimpleAmount, SecondAmount, ThirdAmount) VALUES
-('UNITOPERATION_AOE_DAMAGE_MAELSTROM', 'SlthOnAoeDamage', NULL, 'AIR_TWO', 'AdjacentEnemyUnit', 10, 40, 60),                    -- placeholder amounts for now
-('UNITOPERATION_AOE_DAMAGE_DESTROY_UNDEAD', 'SlthOnAoeDamage', NULL, 'LIFE_TWO', 'AdjacentEnemyUnitIsUndead', 10, 40, 60),
-('UNITOPERATION_AOE_DAMAGE_WITHER', 'SlthOnAoeDamage', NULL, 'ENTROPY_THREE', 'AdjacentEnemyUnit', 10, 40, 60),
-('UNITOPERATION_AOE_DAMAGE_SNOWFALL', 'SlthOnAoeDamage', 'TERRAIN_SNOW', 'ICE_THREE', 'AdjacentEnemyUnit', 30, 50, 90);
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, UnitPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_SUMMON_IRA', 'SlthOnSummonPerm', 'SLTH_UNIT_IRA', NULL, 'SLTH_UNIT_WRATH', NULL);
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, BuildingPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_GRANT_LION_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_LION_CAGE', 'SLTH_UNIT_LION', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
-('UNITOPERATION_GRANT_WOLF_PEN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_WOLF_PEN', 'SLTH_UNIT_WOLF', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
-('UNITOPERATION_GRANT_DANCING_BEAR', 'SlthOnGrantBuilding', 'SLTH_BUILDING_DANCING_BEAR', 'SLTH_UNIT_BEAR', NULL, 'OnCityGrantBuilding'),
-('UNITOPERATION_GRANT_GORILLA_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_GORILLA_CAGE', 'SLTH_UNIT_GORILLA', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
-('UNITOPERATION_GRANT_SPIDER_PEN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_SPIDER_PEN', 'SLTH_UNIT_GIANT_SPIDER', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
-('UNITOPERATION_GRANT_TIGER_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_TIGER_CAGE', 'SLTH_UNIT_TIGER', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
-('UNITOPERATION_GRANT_FREAK_SHOW', 'SlthOnGrantBuilding', 'SLTH_BUILDING_FREAK_SHOW', 'SLTH_UNIT_FREAK', NULL, 'OnCityGrantBuilding'),
-('UNITOPERATION_GRANT_BURNING_BLOOD', 'SlthOnGrantBuffSelf', 'BUFF_BURNING_BLOOD', 'SLTH_UNIT_MOROI', NULL, 'HasntAbility');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_FEED_ON_CITY', 'SlthVampireConsumePop', NULL, 'ABILITY_VAMPIRISM', 'OnCityPopTwoPlus');        -- need to implement these abilities first
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_CONSUME_BLOODPET', 'SlthOnConsumeAlly', 'UNIT_WARRIOR', 'ABILITY_VAMPIRISM', 'AdjacentSingleAllyUnitMatches');
-
--- ('UNITOPERATION_KIDNAP_GREAT_PERSON', 'LOC_KIDNAP_GREAT_PERSON_DESCRIPTION', 'ICON_UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE', 1, 1, 'BUILD',  'INTERFACEMODE_WB_SELECT_PLOT'),  todo hard plot property matches. but need to update superspecialist code
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_REPAIR_GOLEM', 'SlthOnHealTargeted', 'GOLEM_RACE_LOW_HEALING_ABILITY', 'ENCHANTMENT_ONE', 'AdjacentSingleAllyIsDamagedAndGolem');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_CONSUME_SOULS', 'SlthOnRefreshCasting', NULL, 'SLTH_UNIT_EATER_OF_DREAMS', 'OnCityPopTwoPlus');                               -- also need to ensure hasnt cast spells yet
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SecondText, AbilityPrereq, AlternateAbilityPrereq, BuildingPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_GRANT_ELF_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_ELF_CAGE', 'SLTH_BUILDING_FREAK_SHOW', 'ELF_MOVEMENT_ON_FORESTED', 'ELF_RACIAL_MOVEMENT_ON_FOREST', 'SLTH_BUILDING_FREAK_SHOW', 'OnCityGrantBuildingPrereqBuilding'),        -- only capture inherent elves not racial. for that need two abilitiyies
-('UNITOPERATION_GRANT_HUMAN_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_HUMAN_CAGE', 'SLTH_BUILDING_FREAK_SHOW', 'ABILITY_INHERENT_HUMAN', 'ABILITY_RACIAL_HUMAN','SLTH_BUILDING_FREAK_SHOW',  'OnCityGrantBuildingPrereqBuilding'),
-('UNITOPERATION_GRANT_ORC_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_ORC_CAGE', 'SLTH_BUILDING_FREAK_SHOW', 'INHERENT_ORC_ABILITY_JUNGLE_ATTACKS', 'ORC_ABILITY_JUNGLE_ATTACKS','SLTH_BUILDING_FREAK_SHOW',  'OnCityGrantBuildingPrereqBuilding'),
-('UNITOPERATION_GRANT_DWARF_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_DWARF_CAGE', 'SLTH_BUILDING_FREAK_SHOW', 'INHERENT_DWARF_ABILITY_HILLS_DOUBLE_MOVE', 'DWARF_ABILITY_HILLS_DOUBLE_MOVE','SLTH_BUILDING_FREAK_SHOW',  'OnCityGrantBuildingPrereqBuilding');
-
-INSERT INTO CustomOperations (OperationType, Callback, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_GRANT_SUPER_SPECIALIST', 'SlthOnGrantSuperSpecialist', 'ABILITY_IS_GREAT_PERSON_NOT_COMMANDER', 'OnCityGeneric'),
-('UNITOPERATION_GRANT_GOLDEN_AGE', 'SlthOnGrantGoldenAge', 'ABILITY_IS_GREAT_PERSON', 'EnoughGreatPeople');
--- EnoughGreatPeople
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SecondText, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_GRANT_CODE_OF_JUNIL', 'SlthOnGrantBuilding', 'SLTH_BUILDING_CODE_OF_JUNIL', 'RELIGION_PROTESTANTISM_HOLY_CITY', 'ABILITY_CAN_CODE_OF_JUNIL', 'OnHolyCity'),
-('UNITOPERATION_GRANT_DIES_DEI', 'SlthOnGrantBuilding', 'BUILDING_ANGKOR_WAT', 'RELIGION_JUDAISM_HOLY_CITY', 'ABILITY_CAN_DIES_DEI', 'OnHolyCity'),
-('UNITOPERATION_GRANT_TABLETS_OF_BAMBUR', 'SlthOnGrantBuilding', 'SLTH_BUILDING_TABLETS_OF_BAMBUR', 'RELIGION_CONFUCIANISM_HOLY_CITY', 'ABILITY_CAN_TABLETS', 'OnHolyCity'),
-('UNITOPERATION_GRANT_SONG_OF_AUTUMN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_SONG_OF_AUTUMN', 'RELIGION_CATHOLICISM_HOLY_CITY', 'ABILITY_CAN_SONG_OF_AUTUMN', 'OnHolyCity'),
-('UNITOPERATION_GRANT_THE_NECRONOMICON', 'SlthOnGrantBuilding', 'SLTH_BUILDING_THE_NECRONOMICON', 'RELIGION_HINDUISM_HOLY_CITY', 'ABILITY_CAN_NECRONOMICON', 'OnHolyCity'),
-('UNITOPERATION_GRANT_NOX_NOCTIS', 'SlthOnGrantBuilding', 'SLTH_BUILDING_NOX_NOCTIS', 'RELIGION_ISLAM_HOLY_CITY', 'ABILITY_CAN_NOX_NOCTIS', 'OnHolyCity'),
-('UNITOPERATION_GRANT_STIGMATA_ON_THE_UNBORN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_STIGMATA_ON_THE_UNBORN', 'RELIGION_BUDDHISM_HOLY_CITY', 'ABILITY_CAN_STIGMATA_ON_UNBORN', 'OnHolyCity');
-
-
-INSERT INTO UnitAbilities(UnitAbilityType, Name, Description, Inactive, Permanent) VALUES
-('ABILITY_IS_GREAT_PERSON', 'LOC_ABILITY_GREAT_PERSON_NAME', 'LOC_ABILITY_GREAT_PERSON_DESCRIPTION', '0', '1'),
-('ABILITY_IS_GREAT_PERSON_NOT_COMMANDER', 'LOC_ABILITY_IS_GREAT_PERSON_NOT_COMMANDER_NAME', 'LOC_ABILITY_IS_GREAT_PERSON_NOT_COMMANDER_DESCRIPTION', '0', '1'),
-('ABILITY_CAN_CODE_OF_JUNIL', 'LOC_CAN_CODE_OF_JUNIL_NAME', 'LOC_CAN_CODE_OF_JUNIL_DESCRIPTION', '0', '1'),
-('ABILITY_CAN_DIES_DEI', 'LOC_CAN_DIES_DEI_NAME', 'LOC_CAN_DIES_DEI_DESCRIPTION', '0', '1'),
-('ABILITY_CAN_TABLETS', 'LOC_CAN_TABLETS_NAME', 'LOC_CAN_TABLETS_DESCRIPTION', '0', '1'),
-('ABILITY_CAN_NECRONOMICON', 'LOC_CAN_NECRONOMICON_NAME', 'LOC_CAN_NECRONOMICON_DESCRIPTION', '0', '1'),
-('ABILITY_CAN_SONG_OF_AUTUMN', 'LOC_CAN_SONG_OF_AUTUMN_NAME', 'LOC_CAN_SONG_OF_AUTUMN_DESCRIPTION', '0', '1'),
-('ABILITY_CAN_NOX_NOCTIS', 'LOC_CAN_NOX_NOCTIS_NAME', 'LOC_CAN_NOX_NOCTIS_DESCRIPTION', '0', '1'),
-('ABILITY_CAN_STIGMATA_ON_UNBORN', 'LOC_CAN_STIGMATA_ON_UNBORN_NAME', 'LOC_CAN_STIGMATA_ON_UNBORN_DESCRIPTION', '0', '1'),
-('ABILITY_MESMERISE_ANIMAL', 'LOC_MESMERISE_ANIMAL_NAME', 'LOC_MESMERISE_ANIMAL_DESCRIPTION', '0', '1'),
-('ABILITY_MEDIC_3', 'LOC_MEDIC_3_NAME', 'LOC_MEDIC_3_DESCRIPTION', '0', '1');
-
-INSERT INTO Tags(Tag, Vocabulary) VALUES
-('CLASS_GREAT_PERSON', 'ABILITY_CLASS'),
-('CLASS_GREAT_PERSON_NOT_COMMANDER', 'ABILITY_CLASS'),
-('CLASS_CAN_JUNIL', 'ABILITY_CLASS'),
-('CLASS_CAN_DIES_DEI', 'ABILITY_CLASS'),
-('CLASS_CAN_TABLETS', 'ABILITY_CLASS'),
-('CLASS_CAN_AUTUMN', 'ABILITY_CLASS'),
-('CLASS_CAN_NOX', 'ABILITY_CLASS'),
-('CLASS_CAN_STIGMATA_UNBORN', 'ABILITY_CLASS'),
-('CLASS_CAN_NECRONOMICON', 'ABILITY_CLASS'),
-('CLASS_FAWN', 'ABILITY_CLASS'),
-('CLASS_MEDIC_3', 'ABILITY_CLASS');
-
-
-INSERT INTO TypeTags(Type, Tag) VALUES
-('ABILITY_IS_GREAT_PERSON', 'CLASS_GREAT_PERSON'),
-('UNIT_GREAT_PROPHET', 'CLASS_GREAT_PERSON'),
-('UNIT_GREAT_ENGINEER', 'CLASS_GREAT_PERSON'),
-('UNIT_GREAT_SCIENTIST', 'CLASS_GREAT_PERSON'),
-('UNIT_GREAT_ARTIST', 'CLASS_GREAT_PERSON'),
-('UNIT_GREAT_MERCHANT', 'CLASS_GREAT_PERSON'),
-('UNIT_GREAT_GENERAL', 'CLASS_GREAT_PERSON'),
-('ABILITY_IS_GREAT_PERSON_NOT_COMMANDER', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
-('UNIT_GREAT_PROPHET', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
-('UNIT_GREAT_ENGINEER', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
-('UNIT_GREAT_SCIENTIST', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
-('UNIT_GREAT_ARTIST', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
-('UNIT_GREAT_MERCHANT', 'CLASS_GREAT_PERSON_NOT_COMMANDER'),
-('UNIT_GREAT_PROPHET', 'CLASS_CAN_JUNIL'),
-('UNIT_GREAT_GENERAL', 'CLASS_CAN_JUNIL'),
-('ABILITY_CAN_CODE_OF_JUNIL', 'CLASS_CAN_JUNIL'),
-('UNIT_GREAT_PROPHET', 'CLASS_CAN_DIES_DEI'),
-('UNIT_GREAT_SCIENTIST', 'CLASS_CAN_DIES_DEI'),
-('ABILITY_CAN_DIES_DEI', 'CLASS_CAN_DIES_DEI'),
-('UNIT_GREAT_PROPHET', 'CLASS_CAN_TABLETS'),
-('UNIT_GREAT_ENGINEER', 'CLASS_CAN_TABLETS'),
-('ABILITY_CAN_TABLETS', 'CLASS_CAN_TABLETS'),
-('UNIT_GREAT_PROPHET', 'CLASS_CAN_AUTUMN'),
-('UNIT_GREAT_ARTIST', 'CLASS_CAN_AUTUMN'),
-('ABILITY_CAN_SONG_OF_AUTUMN', 'CLASS_CAN_AUTUMN'),
-('UNIT_GREAT_PROPHET', 'CLASS_CAN_NOX'),
-('UNIT_GREAT_MERCHANT', 'CLASS_CAN_NOX'),
-('ABILITY_CAN_NOX_NOCTIS', 'CLASS_CAN_NOX'),
-('UNIT_GREAT_PROPHET', 'CLASS_CAN_STIGMATA_UNBORN'),
-('UNIT_GREAT_SCIENTIST', 'CLASS_CAN_STIGMATA_UNBORN'),
-('ABILITY_CAN_STIGMATA_ON_UNBORN', 'CLASS_CAN_STIGMATA_UNBORN'),
-('ABILITY_CAN_NECRONOMICON', 'CLASS_CAN_NECRONOMICON'),
-('UNIT_GREAT_PROPHET', 'CLASS_CAN_NECRONOMICON'),
-('ABILITY_MEDIC_3', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_SPHENER', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_YVAIN', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_GRIGORI_MEDIC', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL', 'CLASS_MEDIC_3'),
-('SLTH_UNIT_HIGH_PRIEST_OF_LEAVES', 'CLASS_MEDIC_3'),
-('ABILITY_MESMERISE_ANIMAL', 'CLASS_FAWN'),
-('SLTH_UNIT_FAWN', 'CLASS_FAWN'),
-('SLTH_UNIT_SATYR', 'CLASS_FAWN');
-
-INSERT INTO Types(Type, Kind) VALUES
-('ABILITY_IS_GREAT_PERSON', 'KIND_ABILITY'),
-('ABILITY_IS_GREAT_PERSON_NOT_COMMANDER', 'KIND_ABILITY'),
-('ABILITY_CAN_CODE_OF_JUNIL', 'KIND_ABILITY'),
-('ABILITY_CAN_DIES_DEI', 'KIND_ABILITY'),
-('ABILITY_CAN_TABLETS', 'KIND_ABILITY'),
-('ABILITY_CAN_SONG_OF_AUTUMN', 'KIND_ABILITY'),
-('ABILITY_CAN_NOX_NOCTIS', 'KIND_ABILITY'),
-('ABILITY_CAN_STIGMATA_ON_UNBORN', 'KIND_ABILITY'),
-('ABILITY_CAN_NECRONOMICON', 'KIND_ABILITY'),
-('ABILITY_MESMERISE_ANIMAL', 'KIND_ABILITY'),
-('ABILITY_MEDIC_3', 'KIND_ABILITY');
-
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_CAST_MIRROR', 'SlthOnCastMirror', NULL, 'SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY', NULL),
-('UNITOPERATION_READ_GRIMOIRE', 'SlthOnBespokeSpell', NULL, 'SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY', NULL),
-('UNITOPERATION_BREAK_STAFF', 'SlthOnBreakStaff', NULL, 'SLTH_EQUIPMENT_SPELL_STAFF_ABILITY', NULL),
-('UNITOPERATION_SPREAD_ESUS', 'SlthOnSpreadEsus', NULL, 'ABILITY_WORSHIPS_ESUS', 'OnAdjacentCity');                -- todo make adjacent so can do enemy cities
-
-INSERT INTO CustomOperations (OperationType, Callback, UnitPrereq) VALUES
-('UNITOPERATION_ESCAPE', 'SlthOnTeleportToCapital', 'SLTH_UNIT_CHANTER');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_SEVER_SOUL', 'SlthOnSummonPerm', 'SLTH_UNIT_SEVERED_SOUL', 'SLTH_UNIT_DIVIDED_SOUL', 'SingleSummon'),                --TODO implement severed soul unit
-('UNITOPERATION_CALL_FORM', 'SlthOnTeleportToSummon', 'SLTH_UNIT_SEVERED_SOUL', 'SLTH_UNIT_DIVIDED_SOUL', 'HasSummon');
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq) VALUES
-('UNITOPERATION_SUMMON_PUPPET', 'SlthOnSummon', 'SLTH_UNIT_PUPPET', 'ABILITY_CAN_PUPPET');
-
-       -- Hope, Inspiration, Wall of Stone. just do REQUIREMENT_PLOT_ADJACENT_TO_OWNER? and ability on unit? PLAYER_CITIES Modifier?
-    -- 	['LOC_UNITOPERATION_BUILDING_DESCRIPTION'] = {OnStart=OnRemoveBuff, iAmount=50},  FEATURE_BURNING_FOREST
-    -- Special: Resurrection, Domination, Trust
--- }
-
--- ADJACENT UNITType MATCHES: Consume Bloodpet, Repair Golem
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_GRANT_HERALDS_CALL', 'SlthOnGrantAbilityTargeted', 'BUFF_HERALDS_CALL', 'SLTH_UNIT_HERALD', 'AdjacentAllyEligibleAbility');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_GRANT_MORALE', 'SlthOnGrantBuffAoEAlly', 'BUFF_MORALE', 'SLTH_UNIT_FLAGBEARER', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_TEACH_SPELLS', 'SlthOnGrantPromotionAoEAlly', NULL, 'SLTH_UNIT_GOVANNON', 'AdjacentUnitCanHavePromoGovannonHas'),     -- grants promotions based on govannon.
-('UNITOPERATION_ENTANGLE', 'SlthOnGrantAbilityTargetedEnemy', 'BUFF_HELD', 'SLTH_UNIT_DRUID', 'AdjacentEnemyEligibleAbility'),              -- placeholder abilities
-('UNITOPERATION_SPORES', 'SlthOnGrantAbilityAoeEnemy', 'ABILITY_SLEPT', 'SLTH_UNIT_MYCONID', 'AdjacentEnemyEligibleAbility'),
-('UNITOPERATION_TAUNT', 'SlthOnGrantAbilityTargetedEnemy', 'BUFF_TAUNT', 'SLTH_UNIT_HARLEQUIN', 'AdjacentEnemyEligibleAbility');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleAmount, UnitPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_CRUSH', 'SlthOnDamageTargeted',   80, 'SLTH_UNIT_DWARVEN_DRUID', 'AdjacentEnemyUnit'),
-('UNITOPERATION_HASTURS_RAZOR', 'SlthOnAoeDamage', 90, 'SLTH_UNIT_HEMAH', 'AdjacentEnemyUnit'),
-('UNITOPERATION_PILLAR_OF_FIRE', 'SlthOnDamageTargeted', 90, 'SLTH_UNIT_CHALID', 'AdjacentEnemyUnit');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_MESMERISE_ANIMAL', 'SlthOnConvertUnit', 'PROMOTION_CLASS_ANIMAL', 'ABILITY_MESMERISE_ANIMAL', 'AdjacentEnemyEligiblePromoClass'),
-('UNITOPERATION_HEAL_FULL_ALLY', 'SlthOnHealTargeted', NULL, 'ABILITY_MEDIC_3', 'AdjacentSingleAllyIsDamaged');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, SimpleAmount, ActivationPrereq) VALUES
-('UNITOPERATION_GRANT_VAMPIRISM', 'SlthOnGrantAbilityTargeted', 'ABILITY_VAMPIRISM', 'ABILITY_VAMPIRISM', 6, 'AdjacentSingleAllyIsLevelMinimum');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SimpleAmount, AbilityPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
-('UNITOPERATION_BECOME_SHADE', 'SlthOnConvertSelf', 'SLTH_UNIT_SHADE', 6, 'ABILITY_SIDAR_GRAY', 'UnitIsLevel', '1');
-
-INSERT INTO CustomOperations (OperationType, Callback, UnitPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_ABSORB_UNIT', 'SlthOnConsumeAlly', 'SLTH_UNIT_FLESH_GOLEM', 'AdjacentSingleAlly');         -- hard to do
-
-INSERT INTO CustomOperations (OperationType, Callback, BuildingPrereq, FormationPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
-('UNITOPERATION_ARENA_FIGHT', 'SlthOnUnitCityInteract', 'BUILDING_ARENA', 'FORMATION_CLASS_LAND_COMBAT', 'AdjacentCityHasBuilding', '1'),
-('UNITOPERATION_SACRIFICE_ALTAR', 'SlthOnUnitCityInteract', 'SLTH_BUILDING_DEMONS_ALTAR', 'FORMATION_CLASS_LAND_COMBAT', 'AdjacentCityHasBuilding', '1');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, BuildingPrereq, UnitPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
-('UNITOPERATION_DROWN_WARRIOR', 'SlthOnConvertSelf', 'SLTH_UNIT_DROWN', 'BUILDING_MOSQUE', 'UNIT_WARRIOR', 'AdjacentCityHasBuilding', '1');
-
-INSERT INTO CustomOperations (OperationType, Callback, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_KIDNAP_GREAT_PERSON', 'SlthOnBespokeSpell', 'SLTH_ABILITY_SINISTER', 'AdjacentCityHasPlotPropertyAndWarPossible');       -- todo need to do more to catch all the GPP type PlotProperties and also rework that work
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_SUMMON_SAND_LION', 'SlthOnSummon', 'SLTH_UNIT_SAND_LION', 'ABILITY_SAND_LION_SUMMONER', 'OnDesertTerrain');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_LOKI_DISRUPT_CITY', 'SlthOnUnitCityInteract', NULL, 'SLTH_UNIT_LOKI', 'OnAdjacentEnemyCity'),
-('UNITOPERATION_LOKI_ENTERTAIN_CITY', 'SlthOnUnitCityInteract', NULL, 'SLTH_UNIT_LOKI', 'OnAdjacentCity'),
-('UNITOPERATION_CORLINDALE_PEACE', 'SlthOnForcePeace', NULL, 'SLTH_UNIT_CORLINDALE', 'AtWar');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_PLACE_BARNAXUS_PIECES', 'SlthOnUnitCityInteract', '', 'SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY', 'OnCityGeneric'),             -- this seems painful
-('UNITOPERATION_PLACE_GRIMOIRE', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_INFERNAL_GRIMOIRE_BUILDING', 'SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY', 'OnCityGeneric'),
-('UNITOPERATION_PLACE_CROWN', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_CROWN_OF_AKHARIEN_BUILDING', 'SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY', 'OnCityGeneric'),
-('UNITOPERATION_PLACE_LYRE', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_SYLIVENS_PERFECT_LYRE_BUILDING', 'SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY', 'OnCityGeneric'),
-('UNITOPERATION_PLACE_HORDE', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_THE_DRAGONS_HORDE_BUILDING', 'SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY', 'OnCityGeneric'),
-('UNITOPERATION_PLACE_CAULDRON', 'SlthOnUnitCityInteract', 'MODIFIER_GRANT_MOKKAS_CAULDRON_BUILDING', 'SLTH_EQUIPMENT_MOKKA_CAULDRON_ABILITY', 'OnCityGeneric');
-
-INSERT INTO CustomOperations (OperationType, Callback, DomainPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
-('UNITOPERATION_TAKE_EQUIPMENT', 'SlthOnTakeEquipment', 'DOMAIN_LAND', 'AdjacentSingleAllyHasEquipmentOrIsEquipment', '1');
-
-INSERT INTO CustomOperations (OperationType, Callback, BuildingPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_HEAL_SIRONA', 'SlthOnHealSelf', 'BUILDING_CRISTO_REDENTOR', 'IsDamaged');                   -- needs condition of once per turn
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, PromotionPrereq) VALUES
-('UNITOPERATION_BECOME_LICH', 'SlthOnConvertSelf', 'SLTH_UNIT_LICH', 'DEATH_THREE');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq) VALUES
-('UNITOPERATION_SUMMON_BALOR', 'SlthOnSummon', 'SLTH_UNIT_BALOR',  'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_VEIL');
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_SUMMON_KRAKEN', 'SlthOnSummonPerm', 'SLTH_UNIT_KRAKEN', 'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_OCTOPUS', 'SingleSummonAtSea'),
-('UNITOPERATION_SUMMON_TREANT', 'SlthOnSummonPerm', 'SLTH_UNIT_TREANT', 'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_LEAVES', 'SingleSummonOnForest'),
-('UNITOPERATION_EARTHQUAKE', 'SlthOnAoeDamage', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_KILMORPH', 'AdjacentEnemyUnit');
-
-
-INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq, ActivationPrereq) VALUES
-('UNITOPERATION_SUMMON_TIGER', 'SlthOnSummonPerm', 'SLTH_UNIT_TIGER', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_LEAVES', 'SingleSummon'),
-('UNITOPERATION_BLOOM', 'SlthOnMakeFeature', 'FEATURE_FOREST_ANCIENT', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_LEAVES', 'HasntFeature'),
-('UNITOPERATION_REVELATION', 'SlthOnBespokeSpell', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_EMPYREAN', NULL),
-('UNITOPERATION_GRANT_SHIELD_OF_FAITH', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHIELD_OF_FAITH', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_EMPYREAN', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_TSUNAMI', 'SlthOnAoeDamageCoast', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_OCTOPUS', 'AdjacentEnemyUnitAtSea'),
-('UNITOPERATION_RING_OF_FLAMES', 'SlthOnAoeDamage', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_VEIL', 'AdjacentEnemyUnit');
-
-
--- Divine spells (Has abilityPrereq, AlternateAbilityPrereq): CoE steal equipment,
-
-
--- crown of brilliance not done as unitcommand, its more like a passive.
--- Create Hellfire, not done as no feature currently, from Profane.
-
--- Open Chest(just extend equipment pickup), Sprint(Centaur units), healing salve
--- low prio: Khazad create Battering Ram (it sucks lol), Impersonate Leader
--- Impersonate Leader. Completely impossible lmao.
-
--- AI only: Call of the Grave (ars), Rage (Buboes)
--- cant remember, how it works Doviello Duels
--- Ships change Crews. Only one crew does something not involving embarked units. Shelve this
--- Magnadine (hire, made obselete by vi). Hide (grant unit camoflauge, why would i remove.),
-
-CREATE TABLE IF NOT EXISTS TerrainTransforms(
-    TerrainType text primary key,
-    VitalizeTo text,
-    ScorchTo text,
-    SpringTo text,
-    HellTerrainVariant text,
-    IsHellTerrain boolean);
-
-INSERT INTO TerrainTransforms (TerrainType, VitalizeTo, ScorchTo, SpringTo, HellTerrainVariant, IsHellTerrain) VALUES
-('TERRAIN_BURNING_SANDS', 'TERRAIN_BROKEN_LANDS', NULL, 'TERRAIN_BROKEN_LANDS', 'TERRAIN_DESERT', 1),
-('TERRAIN_BURNING_SANDS_HILLS', 'TERRAIN_BROKEN_LANDS_HILLS', NULL,'TERRAIN_BROKEN_LANDS_HILLS', 'TERRAIN_DESERT_HILLS', 1),
-('TERRAIN_FIELDS_OF_PERDITION', 'TERRAIN_BROKEN_LANDS', 'TERRAIN_BURNING_SANDS', NULL, 'TERRAIN_PLAINS', 1),
-('TERRAIN_FIELDS_OF_PERDITION_HILLS', 'TERRAIN_BROKEN_LANDS_HILLS', 'TERRAIN_BURNING_SANDS_HILLS', NULL, 'TERRAIN_PLAINS_HILLS', 1),
-('TERRAIN_BROKEN_LANDS', NULL, NULL, NULL, 'TERRAIN_GRASS', 1),
-('TERRAIN_BROKEN_LANDS_HILLS', NULL, NULL,  NULL, 'TERRAIN_GRASS_HILLS', 1),
-('TERRAIN_DESERT', 'TERRAIN_PLAINS', NULL, 'TERRAIN_PLAINS','TERRAIN_BURNING_SANDS', 0),
-('TERRAIN_DESERT_HILLS', 'TERRAIN_PLAINS_HILLS', NULL, 'TERRAIN_PLAINS_HILLS', 'TERRAIN_BURNING_SANDS_HILLS', 0),
-('TERRAIN_PLAINS', 'TERRAIN_GRASS', 'TERRAIN_DESERT', NULL, 'TERRAIN_FIELDS_OF_PERDITION', 0),
-('TERRAIN_PLAINS_HILLS', 'TERRAIN_GRASS_HILLS', 'TERRAIN_DESERT_HILLS',NULL, 'TERRAIN_FIELDS_OF_PERDITION_HILLS', 0),
-('TERRAIN_GRASS', NULL, NULL, NULL, 'TERRAIN_BROKEN_LANDS', 0),
-('TERRAIN_GRASS_HILLS', NULL, NULL, NULL, 'TERRAIN_BROKEN_LANDS_HILLS', 0),
-('TERRAIN_TUNDRA', 'TERRAIN_PLAINS', 'TERRAIN_PLAINS', NULL, NULL, 0),
-('TERRAIN_TUNDRA_HILLS', 'TERRAIN_PLAINS_HILLS', 'TERRAIN_PLAINS_HILLS', NULL, NULL, 0),
-('TERRAIN_SNOW', 'TERRAIN_TUNDRA', 'TERRAIN_TUNDRA', NULL, NULL, 0),
-('TERRAIN_SNOW_HILLS', 'TERRAIN_TUNDRA_HILLS',  'TERRAIN_TUNDRA_HILLS', NULL, NULL, 0);
-
-CREATE TABLE IF NOT EXISTS ResourceTransforms(
-    ResourceType text primary key ,
-    ConvertedResource text,
-    ConvertedResourceVariant text,
-    IsHellResource boolean);
-
-INSERT INTO ResourceTransforms (ResourceType, ConvertedResource, ConvertedResourceVariant, IsHellResource) VALUES
-('RESOURCE_TRUFFLES', 'RESOURCE_TOAD', NULL, 0),
-('RESOURCE_SHEEP', 'RESOURCE_TOAD', NULL, 0),
-('RESOURCE_TOAD', 'RESOURCE_TRUFFLES', 'RESOURCE_SHEEP', 1),
-('RESOURCE_CATTLE', 'RESOURCE_NIGHTMARE', NULL, 0),
-('RESOURCE_HORSES', 'RESOURCE_NIGHTMARE', NULL, 0),
-('RESOURCE_NIGHTMARE', 'RESOURCE_CATTLE', 'RESOURCE_HORSES', 1),
-('RESOURCE_MARBLE', 'RESOURCE_JADE', NULL, 0),
-('RESOURCE_JADE', 'RESOURCE_MARBLE', NULL, 1),
-('RESOURCE_BANANAS', 'RESOURCE_TOBACCO', NULL, 0),
-('RESOURCE_SUGAR', 'RESOURCE_TOBACCO', NULL, 0),
-('RESOURCE_TOBACCO', 'RESOURCE_BANANAS', 'RESOURCE_SUGAR', 1),
-('RESOURCE_SILK', 'RESOURCE_OLIVES', NULL, 0),
-('RESOURCE_COTTON', 'RESOURCE_OLIVES', NULL, 0),
-('RESOURCE_OLIVES', 'RESOURCE_SILK', 'RESOURCE_COTTON', 1);

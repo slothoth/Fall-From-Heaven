@@ -84,18 +84,21 @@ function onReligionSwitch(playerID, policyID, wasEnacted)
             iNewAlignment = tReligionFromEvil[sReligion]
         end
     end
-    local pPlot = pPlayer:GetCities():GetCapitalCity():GetPlot()
-    if iNewAlignment then
-        pPlayer:SetProperty('alignment', iNewAlignment)
-        pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
-        pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
-        print('Setting alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]))
-    end
-    for idx, sReligionPropKey in ipairs(tReligionNames) do
-        if sReligionPropKey == sReligion then
-            pPlot:SetProperty(sReligionPropKey, 1)
-        else
-            pPlot:SetProperty(sReligionPropKey, 0)
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    if pCapitalCity then
+        local pPlot = pCapitalCity:GetPlot()
+        if iNewAlignment then
+            pPlayer:SetProperty('alignment', iNewAlignment)
+            pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
+            pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
+            print('Setting alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]))
+        end
+        for idx, sReligionPropKey in ipairs(tReligionNames) do
+            if sReligionPropKey == sReligion then
+                pPlot:SetProperty(sReligionPropKey, 1)
+            else
+                pPlot:SetProperty(sReligionPropKey, 0)
+            end
         end
     end
 end

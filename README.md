@@ -35,6 +35,7 @@ Here is a list of the features that are implemented:
 - Spell Buildings like Inspiration, Hope. Implemented as passives, and work when within the cities borders, to accomodate 1 unit per turn. Does not stack.
 - Natural Wonders. Still have some art to do, so some appear to occupy more than one tile, or look like a geothermal vent, for now.
 - Racial abilities. Khazad built units will be Dwarven, with bonuses on hills. Ljosalfar Elven etc. With exceptions on units where ethnicity is specified or not relevant (like say, Hill Giants).
+- Unit and City Maintenance. Unit and City maintenance behaves as it does in civ IV. Cities require more maintenance the more distant they are from the capital, and for the number of cities. Units have a free amount of support, alongside a quarter of your civs population. Exceed that amount of units, and you will pay 1 gold per turn for each. Varies based on difficulty. Units also cost some more if they are in foreign territory.
 ## Partly Implemented
 - Magic Combat Strength. Units have magic combat strength bonuses as they should. However resistance or vulnerability to that combat strength is limited to a unit level. I.e. a Wood Golem is Vulnerable to Fire, so takes more damage from Fire Combat Strength. But there is no way currently to make the Fire Resistance promotion reduce Fire Combat Strength.
 - Commerce and Sliders: Commerce is implemented as the Faith yield. Which is converted in cities to Science, Culture and Gold. Currently its split into thirds, but once I''ve built the UI for it, you can adjust the conversion with sliders.
@@ -46,7 +47,7 @@ Here is a list of the features that are implemented:
 - Alignment. Civs change alignment on changing State Religions, and start with a default alignment. Druids, Eidolons and Paladins are limited by alignment. Howver, there is no diplomatic relation loss from differing alignments.
 - Armageddon Counter. Contributions and reductions to the Armageddon Counter all works. However, there is no UI to display it currently. Events from the Armageddon counter should work, however Hell terrain is not yet implemented.
 - Acheron city spawning. Acheron will spawn, but is not held and will go roam about!
-- 
+- Promotion gated upgrades. So for example, Adepts only upgrading to Mages once they are level 4. This is implemented for human players, but the AI bypasses it, otherwise they couldnt ever get it. This would require serious DLL work to fix.
 ## Not currently Implemented:
 - First strikes. As a Stop-gap, units get Combat Strength instead.
 - Great People recruitment per city. Currently it is done as a global amount, as in VI.
@@ -59,12 +60,19 @@ Here is a list of the features that are implemented:
 - Events system (like the governor assassinated event)
 - Tolerant Trait of Elohim. While there are some examples of this done like the Civ Conquer mod, that is on a player level, not per city.
 - Doviello scavenging prod for nearby city on killing unit. I thought I needed to do this, but I think this is from a Modmod.
+- Health/Sickness/Happiness. Currently we are using the VI system of Housing/Amenities. Anything that gave Health grants Housing, Sickness now grants negative Housing, and Happiness is Amenities. This isnt perfect. In addition, currently the Health/Sickness from features, i.e Jungle/Floodplains Sickness and Forest health is not implemented.
+- Tech Bulbing. Should be possible, but can't seem to find the full lists of the logic of which techs to grant, and how much.
 ## Makes no Sense in VI
 - Marksman attacking the weakest unit in the stack. Stacks don''t exist anymore, so makes no sense. With that goes Guardsman.
 - Withdrawal chance. As units automatically withdraw in VI, this cannot be implemented. I do hope to build a solution for Loki though.'
 
 ## Little Quirks
 - [ ] We use hidden promotions to allow different spell sphere promotions, or promotions unlocked by techs like Scourge. As a result, the number of promotions your unit has will look a lot higher than it is.
+- [ ] You win a Domination Victory the same way as in VI, by controlling all original capitals. This does raise a problem when Hyborem and Basium have not spawned, as you will need to summon, then conquer Hyborems capital. If you summon Basium, your permanent ally status means you will not need to conquer him.
+## Larger Issues
+- [ ] Building Prereqs, like Swordsman requiring the Training yard, mean when you get Swordsmen, the previous unit, Warriors, are no longer trainable. And if you dont have a training yard, you couldn't train any melee class unit. This is a big problem, and will require DLL level work to fix.
+## Known Bugs
+- Sometimes doesn't release instance correctly on clearing barb camp, so the barb banner stays.
 
 ## Some things on the Todo List:
 ### Armageddon Counter:
