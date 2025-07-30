@@ -147,9 +147,7 @@ function CastWorldSpell()
 	print(sEventFunction)
 	UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
 	print('request sent')
-	-- oh dear, the requestPlayerOperation sets the property after we have reran OnLoaded. Multithreaded!!!
-	OnShutdown()
-	OnLoaded()
+	g_.tButton.LaunchItemButton:SetDisabled(true)				-- force it to disable, this should happen anyways
 end
 
 function OnLoaded()
@@ -163,22 +161,20 @@ function OnLoaded()
 	pLaunchBarPinIM					= 	Suk_InstanceManager:new("LaunchBarPinInstance", "Pin", g_.ButtonStack, g_.LaunchBar)
 
 	g_.tButton						=	pLaunchBarItemIM:GetInstance()
-										pLaunchBarPinIM:GetInstance()
+										pLaunchBarPinIM:GetInstance()						-- what is .... uh going on here
 
 	----------------------------------------
 	g_.tButton.LaunchItemButton:SetTexture("LaunchBar_Hook_GreatWorksButton")
-	g_.tButton.LaunchItemButton:SetToolTipString(Locale.Lookup("LOC_SUK_GLOBAL_RELATIONS_SCREEN"))
+	g_.tButton.LaunchItemButton:SetToolTipString(Locale.Lookup("LOC_WORLDSPELL_BUTTON"))
 	g_.tButton.LaunchItemIcon:SetTexture(0, 0, "LaunchBar_Hook_TechTree")
 	g_.tButton.LaunchItemButton:RegisterCallback(Mouse.eLClick, OnOpen)
 	----------------------------------------
 
-	-- this needs changed as doesnt refresh state.
 	local pPlayer = Players[Game.GetLocalPlayer()]
 	if pPlayer then
-		local HasCastWorldSpell = pPlayer:GetProperty('WorldSpellReady') or 0
-		if HasCastWorldSpell > 0 then
-			g_.tButton.LaunchItemButton:SetDisabled(true)
-		end
+		local HasCastWorldSpell = pPlayer:GetProperty('WorldSpellReady') or 1
+		print('On Load. has cast world spell. Nil implies default 1, so not disabled', pPlayer:GetProperty('WorldSpellReady'), HasCastWorldSpell, HasCastWorldSpell == 0)
+		g_.tButton.LaunchItemButton:SetDisabled(HasCastWorldSpell == 0)
 	end
 
 	RealizeBacking()
