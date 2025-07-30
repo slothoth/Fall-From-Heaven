@@ -166,6 +166,7 @@
         <LoadOrder>110</LoadOrder>
       </Properties>
       <File>Core/ResourceBuffs.sql</File>
+      <File>Core/PostEdits.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
       <File>Localisation/loc_abilities.sql</File>
@@ -291,6 +292,7 @@
       <File>UI/GovernmentScreen.lua</File>
       <File>UI/GovernmentScreen.xml</File>
       <File>UI/TabSupport.lua</File>
+      <File>UI/ToolTipHelper_PlayerYields.lua</File>
     </ImportFiles>
     <ImportFiles id="XP2WRxmlOverride">
       <Properties>
@@ -313,6 +315,12 @@
   <ImportFiles id="ErebusMap">
 	<File>Maps/Erebus.lua</File>
 	<File>Maps/MapUtilities.lua</File>
+  </ImportFiles>
+  <ImportFiles id="ImportIncludeScripts">
+      <Properties>
+        <LoadOrder>902</LoadOrder>
+      </Properties>
+      <File>Lua/SpawnSupport.lua</File>
   </ImportFiles>
   </InGameActions>
   <Files>
@@ -346,6 +354,7 @@
     <File>Core/Promotion.sql</File>
     <File>Core/Resources.sql</File>
     <File>Core/ResourceBuffs.sql</File>
+    <File>Core/PostEdits.sql</File>
     <File>Core/Improvements.sql</File>
     <File>Core/Technologies.sql</File>
     <File>Core/Units.sql</File>
@@ -421,6 +430,7 @@
     <File>Lua/RequestOperationSupport.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
+    <File>Lua/SpawnSupport.lua</File>
     <!--File>MapUtilities.lua</File-->
     <File>ArtDefs/Buildings.artdef</File>
     <File>ArtDefs/Civilizations.artdef</File>

@@ -62,44 +62,15 @@ local tImprovementsRegression = {
 local tImprovementsCivProgression = {
     [iTOWN_INDEX]           = iENCLAVE_INDEX}
 
-local iMANA_AIR_INDEX = GameInfo.Resources['RESOURCE_MANA_AIR'].Index
-local iMANA_BODY_INDEX = GameInfo.Resources['RESOURCE_MANA_BODY'].Index
-local iMANA_CHAOS_INDEX = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index
-local iMANA_DEATH_INDEX = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index
-local iMANA_EARTH_INDEX = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index
-local iMANA_ENCHANTMENT_INDEX = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index
-local iMANA_ENTROPY_INDEX = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index
-local iMANA_FIRE_INDEX = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index
-local iMANA_LAW_INDEX = GameInfo.Resources['RESOURCE_MANA_LAW'].Index
-local iMANA_LIFE_INDEX = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index
-local iMANA_METAMAGIC_INDEX = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index
-local iMANA_MIND_INDEX = GameInfo.Resources['RESOURCE_MANA_MIND'].Index
-local iMANA_NATURE_INDEX = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index
-local iMANA_SHADOW_INDEX = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index
-local iMANA_SPIRIT_INDEX = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index
-local iMANA_SUN_INDEX = GameInfo.Resources['RESOURCE_MANA_SUN'].Index
-local iMANA_WATER_INDEX = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
-
-
-local tManaNodeMapper = {
-    [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Index]         = iMANA_AIR_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Index]        = iMANA_BODY_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Index]       = iMANA_CHAOS_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Index]       = iMANA_DEATH_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Index]       = iMANA_EARTH_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Index] = iMANA_ENCHANTMENT_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Index]     = iMANA_ENTROPY_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Index]        = iMANA_FIRE_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Index]         = iMANA_LAW_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Index]        = iMANA_LIFE_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Index]   = iMANA_METAMAGIC_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Index]        = iMANA_MIND_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Index]      = iMANA_NATURE_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Index]      = iMANA_SHADOW_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Index]      = iMANA_SPIRIT_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Index]         = iMANA_SUN_INDEX,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Index]       = iMANA_WATER_INDEX
+local tImprovementsTurnAmount = {
+        [iCOTTAGE_INDEX]        = 6,                        -- extra duration on gamespeed, but unsure is actually. Wiki and civpedia conflict /10/15/30
+        [iHAMLET_INDEX]         = 13,                       -- /20/30/60
+        [iVILLAGE_INDEX]        = 26,                       -- 40/60/120
+        [iTOWN_INDEX]           = 40,                       -- /60/120/160 no wiki details...
+        [iPIRATE_COVE_INDEX]    = 6,
+        [iPIRATE_HARBOR_INDEX]  = 13
 }
+
 local tBarbNW = {
 	[GameInfo.Features['FEATURE_UBSUNUR_HOLLOW'].Index] = 1,
 	[GameInfo.Features['FEATURE_NWON_BRADELINES_WELL'].Index] = 1,
@@ -133,39 +104,6 @@ function SlthLog(sMessage)
     if SLTH_DEBUG_ON then
         print(sMessage)
     end
-end
-
-local tAllPromotions = {}
-for row in GameInfo.UnitPromotions() do
-    table.insert(tAllPromotions, row.Index)
-end
-
-local tAllAbilities = {}
-for row in GameInfo.UnitAbilities() do
-    table.insert(tAllAbilities, row.UnitAbilityType)
-end
-
-function InheritUnitAttributes(iPlayer, iUnit)
-    local pUnit = UnitManager.GetUnit(iPlayer, iUnit)
-    local pUnitExp = pUnit:GetExperience()
-    local pUnitAbilities = pUnit:GetAbility()
-    local iUnitHealth = pUnit:GetDamage()
-    local iX = pUnit:GetX()
-    local iY = pUnit:GetY()
-    local tPromosToGrant = {}
-    for _, iUnitPromotionIndex in ipairs(tAllPromotions) do
-        if pUnitExp:HasPromotion(iUnitPromotionIndex) then
-            table.insert(tPromosToGrant, iUnitPromotionIndex)            -- need to watch out for dummy promos being granted twice
-        end
-    end
-
-    local tAbilitiesToGrant = {}
-    for _, sUnitAbilityType in ipairs(tAllAbilities) do
-        if pUnitAbilities:HasAbility(sUnitAbilityType) then
-            table.insert(tAbilitiesToGrant, sUnitAbilityType)
-        end
-    end
-    return iUnitHealth, iX, iY, tPromosToGrant, tAbilitiesToGrant
 end
 
 -- nicked from Leugi Wildlife++
@@ -253,36 +191,6 @@ function GetFullUpgradePath(iPlayer, iUnitIndex)
     return iUnitUpgradeIndex, iUpgradeCost                                                   -- mixing.
 end
 
-local function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
-    local playerReal = Players[iPlayer];
-    local playerUnits = playerReal:GetUnits();
-    local pPlot = Map.GetPlot(iX, iY)
-    local tBeforeSummonUnits = {}
-    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
-        if pOnTileUnit then
-            tBeforeSummonUnits[pOnTileUnit:GetID()] = true
-        end
-    end
-    playerUnits:Create(iUnitIndex, iX, iY);
-    local tNewUnits = {}
-    for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
-        if pOnTileUnit then
-            local iUnitID = pOnTileUnit:GetID()
-            if not tBeforeSummonUnits[iUnitID] then
-                tNewUnits[iUnitID] = pOnTileUnit
-            end
-        end
-    end
-    return tNewUnits
-end
-
-function BaseSummon(pCasterUnit, iPlayer, iUnitIndex)
-    local iX =  pCasterUnit:GetX()
-    local iY =  pCasterUnit:GetY()
-    local tNewUnits = SimpleSummon(iX, iY, iPlayer, iUnitIndex)
-    return tNewUnits
-end
-
 local function ConvertUnitType( iPlayer, tParameters)
     print('converting unit on Gameplay side')
     local iUnitID = tParameters.iUnitID
@@ -332,14 +240,6 @@ local function SpawnAcheron()
     end
 end
 
-function NotifyAllHumans(notificationData, iX, iY)
-    for iPlayer, pPlayer in ipairs(Players) do
-        if pPlayer:IsHuman() then
-            NotificationManager.SendNotification(iPlayer, iNotifType, notificationData, nil, iX, iY)
-        end
-    end
-end
-
 function SpawnOrthus()
     local tEligiblePlots = ViableWildernessPlots()
     local iNumEligiblePlots = table.count(tEligiblePlots)
@@ -348,10 +248,7 @@ function SpawnOrthus()
         local spawnPlot = tEligiblePlots[iRandomEligiblePlotsPosition]
         local iSpawnX = spawnPlot:GetX()
         local iSpawnY = spawnPlot:GetY()
-        local notificationData = {};
-        notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_ORTHUS_SPAWN_NOTIFICATION_TITLE');
-        notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_ORTHUS_SPAWN_NOTIFICATION_DESCRIPTION');
-        NotifyAllHumans( notificationData, iSpawnX, iSpawnY)
+        NotifyAllHumans(Locale.Lookup('LOC_ORTHUS_SPAWN_NOTIFICATION_TITLE'), Locale.Lookup('LOC_ORTHUS_SPAWN_NOTIFICATION_DESCRIPTION'), iSpawnX, iSpawnY)
         UnitManager.InitUnitValidAdjacentHex(63, GameInfo.Units['SLTH_UNIT_ORTHUS'].Index, iSpawnX, iSpawnY);
     end
 end
@@ -393,6 +290,10 @@ function CountdownReducePlayer(pPlayer, countdown_propKey, plotPropKey)
                     if pPlot then
                         pPlot:SetProperty(plotPropKey, 0);
                     end
+                end
+                if countdown_propKey == 'GoldenAgeDuration' then
+                    NotifyMetHumans()
+                    print("(Leader name)'s Golden Age has ended")
                 end
             end
         end
@@ -511,31 +412,8 @@ function onTurnStartGameplay(playerId)
         end
     end
 
-    -- SECTION: Cottage/Pirate Port improvement upgrading.
-    local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')
-    if tImprovingImprovements then
-        for idx, plot_tuple in pairs(tImprovingImprovements) do
-            print(idx)
-            local iX, iY = plot_tuple['x'], plot_tuple['y']
-            local pPlot = Map.GetPlot(iX, iY)
-            local bIsWorked = pPlot:GetProperty('currently_worked')
-            local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
-            if bIsWorked > 0 and not bIsImprovementPillaged then
-                local iWorkedTurns = pPlot:GetProperty('worked_turns')
-                if iWorkedTurns > 2 then
-                    local iImprovementIndex = pPlot:GetImprovementType()
-                    print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
-                    local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
-                    if iImprovementUpgradedIndex then
-                        ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
-                    end
-                else
-                    pPlot:SetProperty('worked_turns', iWorkedTurns+1)
-                    print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
-                end
-            end
-        end
-    end
+    IncrementCottages(playerId, pPlayer)
+
     -- SECTION: Hall of Mirror. Currently restricted to Balseraphs
     if PlayerConfigurations[playerId]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_BALSERAPHS' then
         for _, pCity in pPlayer:GetCities():Members() do
@@ -682,7 +560,6 @@ local tBarbClanUnitMapper = {
     -- [GameInfo.Units['SLTH_UNIT_BEAR'].Index] = TRIBE_CLAN_LION
 }
 
-local MANA_INDEX = GameInfo.Resources['RESOURCE_MANA'].Index
 function InitCottage(x, y, improvementIndex, playerID)
     local iImprovementUpgradeIndex = tImprovementsProgression[improvementIndex]
     if iImprovementUpgradeIndex then
@@ -710,17 +587,6 @@ function InitCottage(x, y, improvementIndex, playerID)
         pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
     end
     local pPlot = Map.GetPlot(x,y);
-    local resourceIndex = pPlot:GetResourceType()
-    --print('Resource Index: ' .. tostring(resourceIndex))
-    --print('Mana Resource Index: ' .. tostring(MANA_INDEX))
-	if resourceIndex == MANA_INDEX then
-        local iResourceToChangeTo = tManaNodeMapper[improvementIndex]
-        if iResourceToChangeTo then
-            print('changing resource to ' .. tostring(iResourceToChangeTo))
-            ResourceBuilder.SetResourceType(pPlot, iResourceToChangeTo, 1);         -- error with getting raw mana, remove improvement and place again>
-            -- ImprovementBuilder.SetImprovementType(pPlot, improvementIndex, playerId)
-        end
-    end
     if improvementIndex then                        -- also check its a barb camp? or has it not spawned yet
         local tUnits = Map.GetUnitsAt(pPlot)
         for pUnit in tUnits:Units() do
@@ -728,18 +594,18 @@ function InitCottage(x, y, improvementIndex, playerID)
             local iClanIndex = tBarbClanUnitMapper[iUnitIndex]
             if iClanIndex then
                 pPlot:SetProperty('barbclantype', iClanIndex)
+                if Game.GetCurrentGameTurn() == 1 then
+                    print('killing barb unit')
+                    UnitManager.Kill(pUnit);
+                end
             end
-            if Game.GetCurrentGameTurn() == 1 then
-                print('killing barb unit')
-                UnitManager.Kill(pUnit);
-            end
+
         end
     end
 end
 
-function IncrementCottages(playerId)
-    local pPlayer = Players[playerId]
-    local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')     -- could we instead use pPlayer:GetImprovements:GetImprovementPlots()?
+function IncrementCottages(playerId, pPlayer)
+    local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')
     if not tImprovingImprovements then return end
     for idx, plot_tuple in pairs(tImprovingImprovements) do
         print(idx)
@@ -749,8 +615,9 @@ function IncrementCottages(playerId)
         local bIsImprovementPillaged = pPlot:IsImprovementPillaged()
         if bIsWorked > 0 and not bIsImprovementPillaged then
             local iWorkedTurns = pPlot:GetProperty('worked_turns')
-            if iWorkedTurns > 2 then
-                local iImprovementIndex = pPlot:GetImprovementType()
+            local iImprovementIndex = pPlot:GetImprovementType()
+            local iUpgradeTurns = tImprovementsTurnAmount[iImprovementIndex] or 2               -- fallback, shouldnt happen
+            if iWorkedTurns > iUpgradeTurns then
                 print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
                 local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
                 if iImprovementUpgradedIndex then
@@ -1206,7 +1073,7 @@ function doBad(pPlot, iBarbClanType, pUnit, bIsWater)
         tPossible = SlthAppend(tPossible, {'SPAWN_SPIDER', 'SPAWN_SPECTRE'})
     end
     if iBarbClanType == TRIBE_CLAN_SCORPION then
-        tPossible = tPossible + {'SPAWN_SCORPION_BAD', 'SPAWN_SCORPION_BAD', 'SPAWN_SCORPION_BAD'}
+        tPossible = SlthAppend(tPossible, {'SPAWN_SCORPION_BAD', 'SPAWN_SCORPION_BAD', 'SPAWN_SCORPION_BAD'})
     end
     local iChoice = math.random(#tPossible)
     local sEvent = tPossible[iChoice]
@@ -1472,13 +1339,14 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         iGrace = iGrace * iDiff
         print('grace is..', iGrace)
         iGrace = math.random(iGrace) + iGrace
-        bGraceFailed = iGrace > Game.GetCurrentGameTurn()     -- if grace fails, we can get baaaad outcomes
+        bGraceFailed = iGrace < Game.GetCurrentGameTurn()     -- if grace fails, we can get baaaad outcomes
         if tBarbNW[iFeatureType] then
             if iDiceRoll < 54 then
                 BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, tribeIndex, iFeatureType, bIsWater)
             else
                 doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
             end
+            Game.GetBarbarianManager():CreateTribeOfType(tribeIndex, pPlot:GetIndex())       -- recreate camp
         else
             if iDiceRoll < 14 then
                 BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, tribeIndex, iFeatureType, bIsWater)
@@ -1523,6 +1391,8 @@ local tLuonnotarCivics = {
     [GameInfo.Technologies['TECH_OMNISCIENCE'].Index] = GameInfo.Buildings['SLTH_BUILDING_ALTAR_OF_THE_LUONNOTAR_EXALTED'].Index
 }
 local iPillarOfChains = GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index
+local iBonePalace = GameInfo.Buildings['BUILDING_TAJ_MAHAL'].Index
+
 -- luonnotar checking, also marking plot prop for pillar of chains, for amenity updates
 function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     local tLuonnotarInfo = tLuonnotar[buildingID]
@@ -1563,6 +1433,9 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
     if buildingID == iPillarOfChains then
         Game:SetProperty('PILLAR_OF_CHAINS_OWNER', playerID)
         Game:SetProperty('PILLAR_OF_CHAINS_CITY', cityID)
+    end
+    if buildingID == iBonePalace then
+        GoldenAgeGrant(Players[playerID],10)
     end
 end
 
@@ -1957,7 +1830,6 @@ function onStart()
     GameEvents.PlayerTurnStarted.Add(onTurnStartGameplay);
     Events.ImprovementChanged.Add(ImprovementsWorkOrPillageChange)
     Events.ImprovementAddedToMap.Add(InitCottage)
-    GameEvents.PlayerTurnStarted.Add(IncrementCottages);
 
     Events.CivicCompleted.Add(OnCivicGrantFirst)
     Events.ResearchCompleted.Add(OnTechnologyResearch)
@@ -1967,6 +1839,7 @@ function onStart()
     Events.UnitAbilityGained.Add(onAbilityGained)
     GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
     Events.DistrictAddedToMap.Add(onDistrictPlace)
+
     -- initialize clans
     InitializeClans()
     InitializeFreeCivics()
@@ -2007,10 +1880,7 @@ local function Rally(iPlayer, tParameters)
             end
         end
     end
-    local notificationData = {}
-    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_RALLY_NOTIFICATION_TITLE');
-    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_RALLY_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_RALLY_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_RALLY_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 local iESUS_INDEX = GameInfo.Policies['SLTH_POLICY_STATE_ESUS'].Index
@@ -2089,10 +1959,7 @@ local function ReligiousFervor(iPlayer, tParameters)
             pUnitExp:ChangeExperience(iStateReligionCities * 2)
         end
     end
-    local notificationData = {}
-    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_RELIGIOUS_FERVOR_NOTIFICATION_TITLE');
-    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_RELIGIOUS_FERVOR_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_RELIGIOUS_FERVOR_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_RELIGIOUS_FERVOR_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -2132,10 +1999,7 @@ local function MarchOfTheTrees(iPlayer, tParameters)
             pUnit:SetProperty('LifespanRemaining', 5)                  -- TODO NOT WORKING
         end
     end
-    local notificationData = {}
-    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_TITLE');
-    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -2172,10 +2036,7 @@ local function MotherLode(iPlayer, tParameters)
     if iMineCount > 0 then
         pPlayer:GetTreasury():ChangeGoldBalance(iMineCount * 25)
     end
-    local notificationData = {}
-    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_MOTHER_LODE_NOTIFICATION_TITLE');
-    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_MOTHER_LODE_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_MOTHER_LODE_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_MOTHER_LODE_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -2222,10 +2083,7 @@ local function ArcaneLacuna(iPlayer, tParameters)
             end
         end
     end
-    local notificationData = {}
-    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_TITLE');
-    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -2252,24 +2110,15 @@ function WildHunt(iPlayer, tParameters)
             end
         end
     end
-    local notificationData = {}
-    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_WILD_HUNT_NOTIFICATION_TITLE');
-    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_WILD_HUNT_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_WILD_HUNT_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_WILD_HUNT_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
 function Revelry(iPlayer, tParameters)            -- TODO
 	-- Double length Golden age. Needs to check gamespeed for golden age speed. then fix golden age granting.
     local pPlayer = Players[iPlayer]
-    local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
-    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
-    local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
-    GoldenAgeGrant(pPlayer,iGoldenAgeLength)
-    local notificationData = {}
-    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_REVELRY_NOTIFICATION_TITLE');
-    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_REVELRY_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    GoldenAgeGrant(pPlayer,20)
+    NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_REVELRY_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_REVELRY_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -2301,10 +2150,7 @@ local function ForTheHorde(iPlayer, tParameters)                -- TODO
             iIterCount = iIterCount + 1
         end
     end
-    local notificationData = {}
-    notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_FOR_THE_HORDE_NOTIFICATION_TITLE');
-    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_FOR_THE_HORDE_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_FOR_THE_HORDE_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_FOR_THE_HORDE_NOTIFICATION_DESCRIPTION'))
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end

@@ -10,10 +10,12 @@ INSERT INTO RulesetUnsupportedValues(Ruleset, PlayerId, Domain, Value) VALUES
 ('RULESET_EXPANSION_2', '0', 'Players:Expansion2_Players', 'LEADER_BASIUM'),
 ('RULESET_EXPANSION_2', '0', 'Players:Expansion2_Players', 'LEADER_HYBOREM');
 
-UPDATE MapSizes SET MinPlayers=4 WHERE MinPlayers=2 or MinPlayers=3;
-UPDATE MapSizes SET DefaultPlayers=4 WHERE DefaultPlayers=2 or DefaultPlayers=3;
-UPDATE MapSizes SET MaxPlayers=4 WHERE MaxPlayers=2 or MaxPlayers=3;
-
+-- UPDATE MapSizes SET MinPlayers=4 WHERE MinPlayers=2 or MinPlayers=3;
+-- UPDATE MapSizes SET DefaultPlayers=4 WHERE DefaultPlayers=2 or DefaultPlayers=3;
+-- UPDATE MapSizes SET MaxPlayers=4 WHERE MaxPlayers=2 or MaxPlayers=3;
+UPDATE MapSizes SET MinPlayers=MinPlayers+2;
+UPDATE MapSizes SET DefaultPlayers=DefaultPlayers+2;
+UPDATE MapSizes SET MaxPlayers=MaxPlayers+2;
 
 INSERT INTO Maps(Domain, File, Name, Description, Image, SortIndex) VALUES
 ('StandardMaps', 'Erebus.lua', 'LOC_MAP_SLTH_EREBUS_NAME', 'LOC_MAP_SLTH_EREBUS_DESCRIPTION', 'Map_Highlands', 130);
@@ -35,6 +37,9 @@ UPDATE Parameters SET DefaultValue='Erebus.lua' WHERE ParameterId='Map';
 UPDATE Parameters SET DefaultValue=1 WHERE ParameterId='CityStateCount';
 
 UPDATE MapSizes SET DefaultCityStates='1',  MinCityStates= '1', MaxCityStates = '1';
+
+
+DELETE FROM Parameters WHERE GroupId='GameModes' AND ParameterId!='GameMode_BarbarianClans';
 
 DELETE FROM NaturalWonders WHERE FeatureType NOT IN ('FEATURE_BERMUDA_TRIANGLE', 'FEATURE_FOUNTAIN_OF_YOUTH', 'FEATURE_IKKIL',
                                                         'FEATURE_MATTERHORN', 'FEATURE_TSINGY', 'FEATURE_HA_LONG_BAY',

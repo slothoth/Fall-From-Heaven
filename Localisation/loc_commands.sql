@@ -65,7 +65,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_GRANT_ORC_CAGE_DESCRIPTION', 'Converts this unit into a Orc Cage Building in a city with a Freak Show. Grants +1 [ICON_Amenities]Amenity, +1 [ICON_GreatPerson]Great Bard point and +1 [ICON_Culture]Culture.', 'en_US'),
 ('LOC_GRANT_DWARF_CAGE_DESCRIPTION', 'Converts this unit into a Dwarf Cage Building in a city with a Freak Show. Grants +1 [ICON_Amenities]Amenity, +1 [ICON_GreatPerson]Great Bard point and +1 [ICON_Culture]Culture.', 'en_US'),
 ('LOC_GRANT_SUPER_SPECIALIST_DESCRIPTION', 'Converts this Great Person into a Super Specialist in this city, according to their Class. Super Specialists grant yields to the city.', 'en_US'),
-('LOC_GRANT_GOLDEN_AGE_DESCRIPTION', 'Consumes this Great Person to instantly enter a Golden Age for 10 turns. Will require 1 additional Great Person per Golden Age granted this way.*', 'en_US'),
+('LOC_GRANT_GOLDEN_AGE_DESCRIPTION', 'Consumes this Great Person to instantly enter a Golden Age for 10 turns. Will require 1 additional Great Person per Golden Age granted this way.', 'en_US'),
 ('LOC_GRANT_CODE_OF_JUNIL_DESCRIPTION', 'Consumes this Great Person to build the Code of Junil Wonder in The Order''s Holy City.', 'en_US'),
 ('LOC_GRANT_DIES_DEI_DESCRIPTION', 'Consumes this Great Person to build Dies Dei Wonder in The Empyrean''s Holy City.', 'en_US'),
 ('LOC_GRANT_TABLETS_OF_BAMBUR_DESCRIPTION', 'Consumes this Great Person to build the Tablets of Bambur Wonder in the Rune of Kilmorph''s Holy City.', 'en_US'),

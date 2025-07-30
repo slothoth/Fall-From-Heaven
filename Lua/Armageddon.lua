@@ -40,7 +40,7 @@ function AdjustArmageddonCount(iAmount)
             local iHasHitSeventy = pFirstPlayer:GetProperty('ArmageddonAboveSeventy')
             if not iHasHitSeventy then
                 for _, pPlayer in ipairs(PlayerManager.GetAliveMajors()) do
-                    pPlayer:SetProperty('ArmageddonAboveSeventy', 1)
+                    pPlayer:SetProperty('ArmageddonAboveSeventy', 1)        -- this needs to be on a plotprop at capital.
                 end
             end
         end
@@ -518,7 +518,8 @@ function RitesOghma(playerID, cityID, projectID, buildingIndex, x, y)
     local tPlotsToPlaceMana = selectEquidistantPoints(tValidResourcePlots, iW, iH, iResourceCount)
     for _, iPlotIndex in ipairs(tPlotsToPlaceMana) do
         pPlot = Map.GetPlotByIndex(iPlotIndex)
-        TerrainBuilder.SetResourceType(pPlot, iRAW_MANA_INDEX, 1)       -- what is ResourceAmount
+        ResourceBuilder.SetResourceType(pPlot, iRAW_MANA_INDEX, 1)
+        -- TerrainBuilder.SetResourceType(pPlot, iRAW_MANA_INDEX, 1)       -- what is ResourceAmount
         TerrainBuilder.CanHaveResource(pPlot, iRAW_MANA_INDEX)
     end
     -- get map size MapConfiguration.GetValue(""), need to find what value. cant use MapConfiguration.GetMapSize() as its UI onlu
@@ -852,7 +853,8 @@ function ConvertTerrain(pPlot, tTerrainConverter, tResourceConverter)
         if iCurrentResource then
             iNewResource =  tResourceConverter[iCurrentResource]
             if iNewResource then
-                TerrainBuilder.SetResourceType(pPlot, iNewResource, 1)       -- what does amount do
+                ResourceBuilder.SetResourceType(pPlot, iNewResource, 1)
+                -- TerrainBuilder.SetResourceType(pPlot, iNewResource, 1)       -- what does amount do
             end
         end
     end
@@ -881,7 +883,7 @@ function OnStart()
     end
 end
 
-Events.CityReligionFollowersChanged.Add(religionLostCity)
+-- Events.CityReligionFollowersChanged.Add(religionLostCity)            -- or CityReligionChanged? We would use this to track religions present in a civ with plotProps, so we can do a collection_PLAYER_CITIES and COLLECTIONCOUNT_ANY to allow that religion.
 Events.DistrictRemovedFromMap.Add(OnCityRaze)
 Events.UnitAddedToMap.Add(ArmageddonUnitSpawning)
 Events.UnitKilledInCombat.Add(ArmageddonUnitDied)

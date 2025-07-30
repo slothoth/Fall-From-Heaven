@@ -105,7 +105,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_CIVIC_DECEPTION_DESCRIPTION', 'Adds the Council of Esus religion to a city', 'en_US'),
 ('LOC_CIVIC_DRAMA_POETRY_DESCRIPTION', 'First to unlock granted a Great Bard.', 'en_US'),
 ('LOC_CIVIC_HONOR_DESCRIPTION', 'Unlocks the ability to form Defensive Pacts.* Adds the Empyrean religion to a city.', 'en_US'),
-('LOC_CIVIC_INFERNAL_PACT_DESCRIPTION', 'First to unlock this technology summons the Infernal Civilization into the game. Gives the player the option to switch to play them*.', 'en_US'),
+('LOC_CIVIC_INFERNAL_PACT_DESCRIPTION', 'First to unlock this technology summons the Infernal Civilization into the game. Gives the player the option to switch to play them*. Allows building Meshabber of Dis, if you control the Veil Holy City, and have it as your State Religion, and the Armageddon counter is above 70*. For all that, its pretty darn strong.', 'en_US'),
 ('LOC_CIVIC_MERCANTILISM_DESCRIPTION', 'First to unlock granted a Great Merchant.', 'en_US'),
 ('LOC_CIVIC_MESSAGE_FROM_THE_DEEP_DESCRIPTION', 'Adds the Octopus Overlords religion to a city.', 'en_US'),
 ('LOC_CIVIC_MILITARY_TRADITION_DESCRIPTION', 'Unlocks the City Raider and Garrison Promotions option for eligible units.', 'en_US'),
@@ -115,4 +115,5 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_CIVIC_WAY_OF_THE_FORESTS_DESCRIPTION', 'Adds the Fellowship of Leaves religion to a city.', 'en_US'),
 ('LOC_CIVIC_WAY_OF_THE_WICKED_DESCRIPTION', 'Unlocks the Scourge Promotion option for eligible units.', 'en_US'),
 ('LOC_CIVIC_WAY_OF_THE_WISE_DESCRIPTION', 'Unlocks the Demon Slaying and Undead Slaying Promotions option for eligible units.', 'en_US'),
-('LOC_TECH_SAILING_DESCRIPTION', 'Allows all units to embark.', 'en_US');
+('LOC_TECH_SAILING_DESCRIPTION', 'Allows all units to embark.', 'en_US'),
+('LOC_TECH_MITHRIL_WORKING_DESCRIPTION', 'Allows building the Mithril Golem, if you control the Runes of Kilmorph Holy City, and have it as your State Religion, and the Armageddon counter is above 70*. For all that, its pretty darn strong.', 'en_US');
