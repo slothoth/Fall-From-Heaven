@@ -473,4 +473,13 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_PEDIA_CONCEPTS_PAGE_COMMERCE_CHAPTER_CONTENT_PARA_1', 'In Civilization IV, [ICON_Science]Science, [ICON_Culture]Culture and [ICON_Gold]Gold were earned most oftenly from [ICON_Faith]Commerce. [ICON_Faith]Commerce was a yield that could be adjusted in the proportions of [ICON_Science]Science, and later [ICON_Culture]Culture, that could be converted from this [ICON_Faith]Commerce, the rest going to [ICON_Gold]Gold.', 'en_US'),
 ('LOC_PEDIA_CONCEPTS_PAGE_COMMERCE_CHAPTER_CONTENT_PARA_2', 'In VI, this has been approximated by using the unused [ICON_Faith]Faith yield, as Commerce. By default, your cities will convert this yield into a third [ICON_Science]Science, a third [ICON_Culture]Culture, and a third [ICON_Gold]Gold. In future, this will be adjustable with sliders in the UI, like Soren Johnson intended all those years ago.', 'en_US'),
 ('LOC_TOP_PANEL_FAITH_YIELD', 'Commerce per [ICON_Turn] Turn', 'en_US'),
-('LOC_YIELD_FAITH_NAME', 'Commerce', 'en_US');
+('LOC_YIELD_FAITH_NAME', 'Commerce', 'en_US'),
+('LOC_WORLDSPELL_BUTTON', 'Cast World Spell', 'en_US'),
+('LOC_UPGRADE_LEVEL_FAILED', 'Requires level {1_Amount}.', 'en_US'),
+('LOC_UPGRADE_NATIONAL_FAILED', 'You can only have {1_Amount} of this Unit Type.', 'en_US'),
+('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_CITY_MAINTENANCE', '{1_LostGoldRate} from number of Cities', 'en_US'),
+('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_CITY_DISTANCE_MAINTENANCE', '{1_LostGoldRate} from City Distance from Palaces', 'en_US'),
+('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_UNIT_SUPPORT', '-{1_LostGoldRate} from Units. (Unit Count = {2_Unit_Count}. Offset = {2_Unit_Count} - ({3_Pop}(Pop) / 4) + {5_Handicap}(Handicap) = {7_UnMultiplied}. {7_UnMultiplied} / {6_HandiMult} = {1_LostGoldRate}.', 'en_US'),
+('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_UNIT_AWAY_SUPPORT', '-{1_LostGoldRate} from Units in Foreign Territory. ({2_Unit_Count} Units away - 4) / 2 = {1_LostGoldRate}', 'en_US');
+-- Expense: Units -12. (Unit count = 30 Pop= 24. 24/4 = 6. Handicap = 12. 30 - 6 - 12 = 12
+		--			Away Units: -3.5 (11 -4 free, /2)

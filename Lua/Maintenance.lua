@@ -191,3 +191,135 @@ GameEvents.CityBuilt.Add(InitCityTax);
 GameEvents.BuildingConstructed.Add(BuildingTaxReductionMade);
 GameEvents.BuildingPillageStateChanged.Add(BuildingTaxPillageStateChange);
 GameEvents.CapitalCityChanged.Add(CapitalCityRecalc);
+
+-- also do unitSupport here.
+--[[
+However, the free support in the unit cost section is dependent on the total size of your population (the sum of all of your city sizes) and the difficulty level. If we name the size of your population N and the difficulty level bonus D then the free support for units is [0.24 * N] + D. This difficulty level bonus is 5 at Deity, 6 at Immortal, 7 at Emperor, 8 at Monarch, 10 at Prince, 12 at Noble, 16 at Warlord, 22 at Chieftain and finally 28 at Settler level.
+The vassalage civic provides you with an additional free unit support which is again dependent on your population size: [0.1 * N] + 5.
+The free support in the military unit section is also dependent on the size of your population: [0.12 * N] + 2.
+All of these numbers are rounded down.
+The handicap cost is a percentage of the total unit cost (unit cost + military unit cost) which is dependent on the difficulty level. The percentage is 0 at Deity, 10 at Immortal, 20 at Emperor, 30 at Monarch, 40 at Prince, 50 at Noble, 60 at Warlord, 70 at Chieftain and finally 80 at Settler level. This number is rounded up.
+
+An example:
+
+10: Unit cost for 10 units (free support for 14)
+15: Military unit cost for 15 units (free support for 3)
+-13: handicap cost
+
+These are the unit costs from an empire with a size 5, 3 and 2 city. So the total population size is 10. It is a game at Noble
+difficulty level, so the difficulty level bonus is 12. In this game the vassalage civic that grants additional free support is not used.
+ So the free support is 0.24 * 10 + 12 = 14 (rounded down).
+In this game, the pacifism civic is used and we thus have to pay military unit costs. The free support is 0.12 * 10 + 2 = 3 (rounded down).
+As this is a game at Noble difficulty level, the handicap costs are 50% of 25 = 13 (rounded up).
+]]--
+
+-- no vassalage afaik. Or pacifism. But rhere are some sources of free unit support.else
+
+function UnitSupportCheck(playerId)
+    local pPlayer = Players[playerId];
+    if not pPlayer:IsMajor() then return; end;
+    local iDifficultySupport = pPlayer:GetProperty('FreeUnitSupport') or 12       -- we may alter this with the Military State one...
+    local pUnits = pPlayer:GetUnits()
+    local iUnitTotal = pUnits:GetCount()
+    local iUnitMaintenance = 0
+    local iPopSupport
+    local iFreeSupport
+    local iPlayerPop = 0
+    if iUnitTotal > iDifficultySupport then                 -- be smarter and cache in future, using pop change callbacks.
+        for _, pCity in pPlayer:GetCities():Members() do          -- but worried about drift and missing something, like
+            local iCityPop = pCity:GetPopulation() or 0             -- pop change on city conquer
+            iPlayerPop = iPlayerPop + iCityPop
+        end
+        iPopSupport = math.floor(iPlayerPop *0.25)
+        iFreeSupport = iPopSupport + iDifficultySupport
+        print('unit total/Support:', iUnitTotal, iFreeSupport)
+        if iUnitTotal > iFreeSupport then
+            local iDifficultyPaymentReducer = pPlayer:GetProperty('UnitSupportMult') or 0.5
+            iUnitMaintenance = iUnitTotal - iFreeSupport
+            iUnitMaintenance = math.floor(iUnitMaintenance * iDifficultyPaymentReducer)
+        end
+    end
+    local iDifficultyPaymentReducer = pPlayer:GetProperty('UnitSupportMult') or 0.5
+
+
+    local iAwaySupportCost = getUnitCountForeign(playerId, pUnits)
+    print('Player/Maintenance/Allowance:', playerId, -iUnitMaintenance, iFreeSupport);
+    print('Pop Allowance/Multiplier/Away Support cost', iPopSupport, iDifficultyPaymentReducer, iAwaySupportCost)
+    pPlayer:SetProperty('UnitMaintenance', iUnitMaintenance);
+    pPlayer:SetProperty('TotalPopulation', iPlayerPop);
+    pPlayer:SetProperty('AwayUnitSupport', iAwaySupportCost);
+    pPlayer:SetProperty('UnitCount', iUnitTotal)
+
+    pPlayer:GrantYield(2, -iUnitMaintenance);
+    pPlayer:GrantYield(2, -iAwaySupportCost);
+end
+
+function getUnitCountForeign(playerId, pUnits)
+    local iForeignTerritoryUnitCount = 0
+    for _, pUnit in pUnits:Members() do
+        local iX, iY = pUnit:GetX(), pUnit:GetY()
+        local pPlot = Map.GetPlot(iX, iY)
+        if pPlot then
+            local iPlotOwner = pPlot:GetOwner()
+            print('Away unit check, plot owner is ', iPlotOwner)
+            if iPlotOwner and iPlotOwner ~= playerId then
+                iForeignTerritoryUnitCount = iForeignTerritoryUnitCount + 1
+            end
+        end
+    end
+    Players[playerId]:SetProperty('AwayUnitCount', iForeignTerritoryUnitCount)
+    if iForeignTerritoryUnitCount > 4 then
+        return math.floor((iForeignTerritoryUnitCount-4) * 0.5)
+    else
+        return 0
+    end
+
+end
+
+
+-- settler 24, 70. chief 18, 80, Warlord, 12, 90.Noble, 8 ,100. Prince, 6, 105.Monarch,4, 110. Emp,3 115. Imm, 2,120. Dei 1,125
+-- but article said , 28, 22, 16, 12, 10, 8, 7, 6, 5
+local iSettlerDiffIndex = GameInfo.Difficulties['DIFFICULTY_SETTLER'].Index
+local iChiefDiffIndex = GameInfo.Difficulties['DIFFICULTY_CHIEFTAIN'].Index
+local iWarlordDiffIndex = GameInfo.Difficulties['DIFFICULTY_WARLORD'].Index
+local iPrinceDiffIndex = GameInfo.Difficulties['DIFFICULTY_PRINCE'].Index
+local iKingDiffIndex = GameInfo.Difficulties['DIFFICULTY_KING'].Index
+local iEmperorDiffIndex = GameInfo.Difficulties['DIFFICULTY_EMPEROR'].Index
+local iImmortalDiffIndex = GameInfo.Difficulties['DIFFICULTY_IMMORTAL'].Index
+local iDeityDiffIndex = GameInfo.Difficulties['DIFFICULTY_DEITY'].Index
+tDifficultySupportMapper = {
+    [iSettlerDiffIndex] =       28,
+    [iChiefDiffIndex] =         22,
+    [iWarlordDiffIndex] =       16,
+    [iPrinceDiffIndex] =        12,
+    [iKingDiffIndex] =          10,
+    [iEmperorDiffIndex] =       8,
+    [iImmortalDiffIndex] =      7,
+    [iDeityDiffIndex] =         6
+}           --  dei = 5
+
+tDifficultyMaintenanceReducerMapper = {
+    [iSettlerDiffIndex] =       0.2,
+    [iChiefDiffIndex] =         0.3,
+    [iWarlordDiffIndex] =       0.4,
+    [iPrinceDiffIndex] =        0.5,
+    [iKingDiffIndex] =          0.6,
+    [iEmperorDiffIndex] =       0.7,
+    [iImmortalDiffIndex] =      0.8,
+    [iDeityDiffIndex] =         0.9
+}
+
+for _, iPlayer in ipairs(PlayerManager.GetAliveMajorIDs()) do
+    local iDifficultyHash = PlayerConfigurations[iPlayer]:GetHandicapTypeID()
+    local iPlayerDifficulty = GameInfo.Difficulties[iDifficultyHash].Index
+    local iDifficultySupport = tDifficultySupportMapper[iPlayerDifficulty]
+    local iDifficultySupportMult = tDifficultyMaintenanceReducerMapper[iPlayerDifficulty]
+    local pPlayer = Players[iPlayer]
+    pPlayer:SetProperty('FreeUnitSupport', iDifficultySupport)
+    pPlayer:SetProperty('UnitSupportMult', iDifficultySupportMult)
+end
+
+--- BLEH also outside borders units
+
+GameEvents.PlayerTurnStarted.Add(UnitSupportCheck);
+

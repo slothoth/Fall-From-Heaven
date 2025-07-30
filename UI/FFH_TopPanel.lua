@@ -7,7 +7,7 @@ function SlthLog(sMessage)
     end
 end
 
-
+-- THIS IS BARELY USED SINCE THERES AN XP2 VERSION
 -- ===========================================================================
 --	Refresh Data and View
 -- ===========================================================================
@@ -55,7 +55,7 @@ function RefreshYields()
 		local playerReligion		:table	= localPlayer:GetReligion();
 		local faithYield			:number = playerReligion:GetFaithYield();
 		local faithBalance			:number = playerReligion:GetFaithBalance();
-		m_FaithYieldButton.YieldBalance:SetText( Locale.ToNumber(faithBalance, "#,###.#") );
+		m_FaithYieldButton.YieldBalance:SetText( Locale.ToNumber(0, "#,###.#") );
 		m_FaithYieldButton.YieldPerTurn:SetText( FormatValuePerTurn(faithYield) );
 		m_FaithYieldButton.YieldBacking:SetToolTipString( GetFaithTooltip() );
 		m_FaithYieldButton.YieldIconString:SetText("[ICON_FaithLarge]");
@@ -66,13 +66,11 @@ function RefreshYields()
 	if GameCapabilities.HasCapability("CAPABILITY_GOLD") and GameCapabilities.HasCapability("CAPABILITY_DISPLAY_TOP_PANEL_YIELDS") then
 		m_GoldYieldButton = m_GoldYieldButton or m_YieldButtonDoubleManager:GetInstance();
 		local playerTreasury:table	= localPlayer:GetTreasury()
-		local dist_maintenance = localPlayer:GetProperty('city_distance_maintenance');
-		local num_maintenance = localPlayer:GetProperty('city_num_maintenance');
-		if not dist_maintenance then dist_maintenance = 0; end
-		if not num_maintenance then num_maintenance = 0; end
-		SlthLog(dist_maintenance);
-		SlthLog(num_maintenance);
-		local goldYield		:number = playerTreasury:GetGoldYield() - playerTreasury:GetTotalMaintenance() - num_maintenance - dist_maintenance;
+		local dist_maintenance = localPlayer:GetProperty('city_distance_maintenance') or 0;
+		local num_maintenance = localPlayer:GetProperty('city_num_maintenance') or 0;
+		local unit_maintenance = localPlayer:GetProperty('UnitMaintenance') or 0;
+		local away_unit_maintenance = localPlayer:GetProperty('AwayUnitSupport') or 0;
+		local goldYield		:number = playerTreasury:GetGoldYield() - playerTreasury:GetTotalMaintenance() - num_maintenance - dist_maintenance - unit_maintenance - away_unit_maintenance;
 		local goldBalance	:number = math.floor(playerTreasury:GetGoldBalance());
 		m_GoldYieldButton.YieldBalance:SetText( Locale.ToNumber(goldBalance, "#,###.#") );
 		m_GoldYieldButton.YieldBalance:SetColorByName("ResGoldLabelCS");
