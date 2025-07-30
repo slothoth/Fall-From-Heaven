@@ -30,6 +30,7 @@ local tMonitoredResources = {
     [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_IRON' },
     [GameInfo.Resources['RESOURCE_SILVER'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_MITHRIL' },
     [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_NIGHTMARE' },
+    [GameInfo.Resources['RESOURCE_MANA'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_MANA', improvement_bug=true},
     -- [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='RESOURCE_IRON'},
     -- [GameInfo.Resources['RESOURCE_SILVER'].Index] = { rtype='AFFINITY', name='RESOURCE_SILVER'},
     -- [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='RESOURCE_SHEUT_STONE'},
@@ -57,36 +58,32 @@ local tBinaryMap = {
 
 local tAltChoiceTables
 tAltUpgradeChoices = {}
-local tControlsAdded
 
 local tUpgradeUnitValues = {}
 local tUpgradeUnitCosts = {}
 
-local tExperienceUpgrades = {['SLTH_UNIT_MAGE'] = 4, ['SLTH_UNIT_ARCHMAGE'] = 6, ['SLTH_UNIT_ILLUSIONIST'] = 4, ['SLTH_UNIT_WIZARD'] = 4,
-                             ['SLTH_UNIT_EATER_OF_DREAMS'] = 6, ['SLTH_UNIT_IMMORTAL'] = 6, ['SLTH_UNIT_ANGEL_OF_DEATH'] = 4,
-                             ['SLTH_UNIT_VALKYRIE'] = 4, ['SLTH_UNIT_HERALD'] = 4, ['SLTH_UNIT_REPENTANT_ANGEL'] = 3,
-                             ['SLTH_UNIT_SERAPH'] = 4, ['SLTH_UNIT_OPHANIM'] = 4, ['SLTH_UNIT_VAMPIRE_LORD'] = 12, ['SLTH_UNIT_SATYR'] = 4
-}
+local tExperienceUpgrades = {}
+for row in GameInfo.PromotionGatedUpgrades() do
+    tExperienceUpgrades[row.UnitType] = row.UnitLevel
+end
 
-local tNationalUpgrades = {['SLTH_UNIT_PHALANX']= true, ['SLTH_UNIT_NULLSTONE_GOLEM']= true, ['SLTH_UNIT_STONESKIN_OGRE']= true,
-                           ['SLTH_UNIT_BERSERKER'] = true, ['SLTH_UNIT_BRUJAH'] = true, ['SLTH_UNIT_CLOCKWORK_GOLEM'] = true, ['SLTH_UNIT_BALOR'] = true,
-                           ['SLTH_UNIT_BEASTMASTER'] = true, ['SLTH_UNIT_MYCONID'] = true,
-                           ['SLTH_UNIT_KNIGHT'] = true,  ['SLTH_UNIT_DEATH_KNIGHT'] = true, ['SLTH_UNIT_BISON_RIDER'] = true,  ['SLTH_UNIT_CENTAUR_LANCER'] = true, ['SLTH_UNIT_HORNGUARD'] = true,  ['SLTH_UNIT_WAR_TORTOISE'] = true,
-                           ['SLTH_UNIT_ARCHMAGE'] = true,   ['SLTH_UNIT_EATER_OF_DREAMS'] = true,
-                           ['SLTH_UNIT_LICH'] = true,
-                           ['SLTH_UNIT_IMMORTAL'] = true, ['SLTH_UNIT_VAMPIRE_LORD'] = true, ['SLTH_UNIT_BONE_GOLEM'] = true, ['SLTH_UNIT_OGRE_WARCHIEF'] = true,
-                           ['SLTH_UNIT_OPHANIM'] = true, ['SLTH_UNIT_REPENTANT_ANGEL'] = true, ['SLTH_UNIT_ANGEL_OF_DEATH'] = true, ['SLTH_UNIT_SERAPH'] = true, ['SLTH_UNIT_VALKYRIE'] = true, ['SLTH_UNIT_HERALD'] = true,
-                           ['SLTH_UNIT_SHADOW'] = true, ['SLTH_UNIT_DWARVEN_SHADOW'] = true, ['SLTH_UNIT_COURTESAN'] = true,
-                           ['SLTH_UNIT_SHADOWRIDER'] = true, ['SLTH_BEAST_OF_AGARES'] = true,
-                           ['SLTH_UNIT_HIGH_PRIEST_OF_WINTER'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'] = true, ['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'] = true,  ['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'] = true,
-                           ['SLTH_UNIT_MARKSMAN'] = true,
-                           ['SLTH_UNIT_EIDOLON'] = true, ['SLTH_UNIT_PALADIN'] = true, ['SLTH_UNIT_DRUID'] = true, ['SLTH_UNIT_DWARVEN_DRUID'] = true, ['SLTH_UNIT_LUONNOTAR'] = true,
-                           ['SLTH_UNIT_CROSSBOWMAN'] = true, ['SLTH_UNIT_FLURRY'] = true,
-                           ['SLTH_UNIT_ROYAL_GUARD'] = true}
+local tNationalUpgrades = {}
+for row in GameInfo.NationalUnits() do
+    tNationalUpgrades[row.UnitType] = row.Amount
+end
+
+local tCivUnitReplaces = {}
+for row in GameInfo.CivUnitReplaces() do
+    if tCivUnitReplaces[row.ReplacesUnitType] then
+        tCivUnitReplaces[row.ReplacesUnitType][row.CivilizationType] = row.CivUniqueUnitType
+    else
+         tCivUnitReplaces[row.ReplacesUnitType] = {[row.CivilizationType]=row.CivUniqueUnitType}
+    end
+end
+
 
 local tAlignmentUnits = {
     ['SLTH_UNIT_EIDOLON'] = 'alignment_evil', ['SLTH_UNIT_PALADIN'] = 'alignment_good', ['SLTH_UNIT_DRUID'] = 'alignment_neutral', ['SLTH_UNIT_DWARVEN_DRUID'] = 'alignment_neutral',
-
 }
 
 local tPolicyUnits = {
@@ -116,7 +113,8 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
     local pPlot = Map.GetPlotByIndex(iPlot)
     local iPlotOwner = pPlot:GetOwner()
     local bUpgradableTerritory = iPlotOwner == iPlayerID            -- misses on allies, city states suzerains
-    if PlayerConfigurations[iPlayerID]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_DOVIELLO' then
+    local sCivType = PlayerConfigurations[iPlayerID]:GetCivilizationTypeName()
+    if sCivType == 'SLTH_CIVILIZATION_DOVIELLO' then
         bUpgradableTerritory = true                 -- also hides upgrade options, instead grey them out?
     end
     if tAltUpgrades then
@@ -132,6 +130,16 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
                 -- print('Unit has upgrade info on index ' .. tostring(idx))
                 local iUnitUpgradeIndex = tUpgradeInfo['index']
                 local rscUnitInfo = GameInfo.Units[iUnitUpgradeIndex]
+                local tPossibleReplacement = tCivUnitReplaces[rscUnitInfo.UnitType]
+                print('seeing if ', rscUnitInfo.UnitType, 'has a replacement', tPossibleReplacement)
+                if tPossibleReplacement then
+                    local sReplacementUnit = tPossibleReplacement[sCivType]
+                    if sReplacementUnit then
+                        rscUnitInfo = GameInfo.Units[sReplacementUnit]
+                        iUnitUpgradeIndex = rscUnitInfo.Index
+                        print('replaced unit!', rscUnitInfo.UnitType, 'has a replacement:', rscUnitInfo.UnitType, 'using string', sReplacementUnit)
+                    end
+                end
                 local sPrereqTech = rscUnitInfo.PrereqTech
                 local sPrereqCivic = rscUnitInfo.PrereqCivic
                 if sPrereqTech then
@@ -163,20 +171,13 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
                 end
 
                 local iPrereqExperience = tExperienceUpgrades[rscUnitInfo.UnitType]
-                if iPrereqExperience then
-                    bCanUpgrade = pUnit:GetExperience():GetLevel() >= iPrereqExperience
-                end
 
-                -- local iPrereqNationalMax = tNationalUpgrades[rscUnitInfo.UnitType]
-                -- if iPrereqNationalMax then
-                -- check
-                --    print('')
-                -- end
+                local iPrereqNationalMax = tNationalUpgrades[rscUnitInfo.UnitType]
 
                 if bCanUpgrade then
-                    -- print('Unit can upgrade, showing button')
                     gridButton:SetHide(false)
-                    local name = Locale.Lookup('LOC_' .. tUpgradeInfo['name'] .. '_NAME')
+                    local name = Locale.Lookup(rscUnitInfo.Name)
+                    print('Unit can upgrade, showing button. Name/RequiredLevel/UpgradeableTerritory/NationalLimit', name, iPrereqExperience, bUpgradableTerritory, iPrereqNationalMax)
                     local iUpgradeUnitCost = rscUnitInfo.Cost
                     local iOriginalUnitCost = rscOriginalUnitInfo.Cost
                     local iUpgradeCost = (iUpgradeUnitCost - iOriginalUnitCost) * 2
@@ -189,19 +190,39 @@ function myRefresh(iPlayerID, iUnitID, iOldID)
                         gridButton:SetDisabled(true)
                         gridButton:SetAlpha(0.4)
                         gridButton:SetToolTipString(sUpgradeInfo .. '[NEWLINE][COLOR:Red]Not in Friendly Territory.[ENDCOLOR]')
+                    elseif iPrereqExperience and pUnit:GetExperience():GetLevel() < iPrereqExperience then
+                        gridButton:SetDisabled(true)
+                        gridButton:SetAlpha(0.4)
+                        gridButton:SetToolTipString(sUpgradeInfo .. '[NEWLINE][COLOR:Red]' .. Locale.Lookup("LOC_UPGRADE_LEVEL_FAILED", iPrereqExperience) .. '[ENDCOLOR]')
+                    elseif iPrereqNationalMax then
+                        -- check player unit number...
+                        local pUnits = pPlayer:GetUnits()
+                        local iAmountOfThisUnit = 0
+                        for _, pOtherUnit in pUnits:Members() do
+                            if iAmountOfThisUnit < iPrereqNationalMax then
+                                if pOtherUnit:GetType() == rscUnitInfo.UnitType then
+                                    iAmountOfThisUnit = iAmountOfThisUnit + 1
+                                end
+                            end
+                        end
+                        if iAmountOfThisUnit >= iPrereqNationalMax then
+                            gridButton:SetDisabled(true)
+                            gridButton:SetAlpha(0.4)
+                            gridButton:SetToolTipString(sUpgradeInfo .. '[NEWLINE][COLOR:Red]' .. Locale.Lookup("LOC_UPGRADE_NATIONAL_FAILED", iPrereqNationalMax) .. '[ENDCOLOR]')
+                        end
                     else
                         gridButton:SetDisabled(false)
                         gridButton:SetAlpha(1)
-                        gridButton:SetToolTipString(sUpgradeInfo)
-                        tButtonInfo['button']:RegisterCallback(Mouse.eLClick, tButtonInfo['callback'])
+                    gridButton:SetToolTipString(sUpgradeInfo)
+                    tButtonInfo['button']:RegisterCallback(Mouse.eLClick, tButtonInfo['callback'])
                     end
                     -- print('setting up upgrade value on table index ' .. tostring(idx) .. ' to unit index ' .. tostring(iUnitUpgradeIndex))
                     tUpgradeUnitValues[idx] = iUnitUpgradeIndex
                     tUpgradeUnitCosts[idx] = iUpgradeCost
-                    local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas('ICON_' .. tUpgradeInfo['name'],38);
+                    local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas('ICON_' .. rscUnitInfo.UnitType,38);
                     if textureSheet then
-                        iconButton:SetTexture(textureOffsetX, textureOffsetY, textureSheet);
-                    end
+                    iconButton:SetTexture(textureOffsetX, textureOffsetY, textureSheet);
+                        end
                 else
                     gridButton:SetHide(true)
                 end
@@ -220,7 +241,6 @@ end
 
 function OnUnitSelectionChanged(iPlayerID, iUnitID, iPlotX, iPlotY, iPlotZ, bSelected, bEditable)
     if bSelected then
-        -- local iOldID = g_selectedUnitId         -- for preserving some buttons? not used
         g_selectedPlayerId = iPlayerID;
         g_selectedUnitId = iUnitID;
         myRefresh(iPlayerID, iUnitID);
@@ -391,18 +411,18 @@ function SlthLog(sMessage)
     end
 end
 
+tControlsAdded = {
+[1] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltTwo,   ['button'] = Controls.SettleButtonUnitUpgradesAltTwo,   ['callback'] = OnBespokeUpgradeTwo, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltTwo},
+[2] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltThree, ['button'] = Controls.SettleButtonUnitUpgradesAltThree, ['callback'] = OnBespokeUpgradeThree, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltThree },
+[3] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltFour,  ['button'] = Controls.SettleButtonUnitUpgradesAltFour,  ['callback'] = OnBespokeUpgradeFour, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltFour },
+[4] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltFive,  ['button'] = Controls.SettleButtonUnitUpgradesAltFive,  ['callback'] = OnBespokeUpgradeFive, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltFive },
+[5] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltSix,  ['button'] = Controls.SettleButtonUnitUpgradesAltSix,  ['callback'] = OnBespokeUpgradeSix, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltSix }
+}
+
 
 function Setup()
     local path = '/InGame/UnitPanel/StandardActionsStack'
     local ctrl = ContextPtr:LookUpControl(path)
-    tControlsAdded = {
-                   [1] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltTwo,   ['button'] = Controls.SettleButtonUnitUpgradesAltTwo,   ['callback'] = OnBespokeUpgradeTwo, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltTwo},
-                   [2] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltThree, ['button'] = Controls.SettleButtonUnitUpgradesAltThree, ['callback'] = OnBespokeUpgradeThree, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltThree },
-                   [3] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltFour,  ['button'] = Controls.SettleButtonUnitUpgradesAltFour,  ['callback'] = OnBespokeUpgradeFour, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltFour },
-                   [4] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltFive,  ['button'] = Controls.SettleButtonUnitUpgradesAltFive,  ['callback'] = OnBespokeUpgradeFive, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltFive },
-                   [5] = {['grid'] = Controls.SettleButtonGridUnitUpgradesAltSix,  ['button'] = Controls.SettleButtonUnitUpgradesAltSix,  ['callback'] = OnBespokeUpgradeSix, ['icon'] = Controls.SettleButtonIconUnitUpgradesAltSix }
-    }
-
     if ctrl ~= nil then
         for idx, tButtonInfo in pairs(tControlsAdded) do
             local gridButton = tButtonInfo['grid']
@@ -448,6 +468,9 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
     if iResourceInfo then
         print('it is monitored!')
         print('trying to update resources on player and resource', ownerPlayerID, resourceTypeID)
+        if iResourceInfo['improvement_bug'] then
+            print('its the raw mana bug! so instead we find the')
+        end
         local pPlayer = Players[ownerPlayerID];
         local resources = pPlayer:GetResources()
         local iResourceCount = resources:GetResourceAmount(resourceTypeID);
@@ -464,7 +487,7 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
             tParameters.sPropKey = sPropKeyCount;
             tParameters.iPropValue = iResourceCount;
             tParameters.OnStart = "SlthSetCapitalProperty";
-            UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+            UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);         -- set base 10 amount.
             if iResourceInfo['rtype'] == 'BINARYMAP' then
                 local tBinariesToSet = tBinaryMap[tostring(iResourceCount)]
                 local sPropKey =  sPropKeyCount .. '_BINARY_'
