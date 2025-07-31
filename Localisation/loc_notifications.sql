@@ -1,5 +1,3 @@
--- 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_NAME'
--- 'LOC_NOTIFICATION_LAIR_' .. sEvent .. '_DESCRIPTION'
 INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_NOTIFICATION_LAIR_BIGBAD_DESCRIPTION_NAME', 'BIGBAD_DESCRIPTION', 'en_US'),
 ('LOC_NOTIFICATION_LAIR_DEATH_DESCRIPTION', 'Your unit never returns from the depths of the lair.', 'en_US'),

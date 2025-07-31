@@ -162,4 +162,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_IMPROVEMENT_WHALING_BOATS_DESCRIPTION', 'Unlocks the Builder ability to construct Whaling Boats.[NEWLINE][NEWLINE] +1 [ICON_Production] Production. +2 ICON_Faith] Commerce. Can only be built on valid resources.[NEWLINE][NEWLINE]If built on Luxury resources, the city will gain use of that resource.', 'en_US'),
 ('LOC_IMPROVEMENT_WINDMILL_DESCRIPTION', 'Unlocks the Builder ability to construct Windmills.[NEWLINE][NEWLINE]+1 [ICON_Food] Food. +1 [ICON_Production] Production. +1 [ICON_Gold] Gold.', 'en_US'),
 ('LOC_IMPROVEMENT_WINERY_DESCRIPTION', 'Unlocks the Builder ability to construct Wineries.[NEWLINE][NEWLINE] +1 [ICON_Food] Food. +2 ICON_Faith] Commerce. Can only be built on valid resources.[NEWLINE][NEWLINE]If built on Luxury resources, the city will gain use of that resource.', 'en_US'),
-('LOC_IMPROVEMENT_WORKSHOP_DESCRIPTION', 'Unlocks the Builder ability to construct Workshops.[NEWLINE][NEWLINE] -1 [ICON_Food] Food. +1 [ICON_Production] Production. +1 [ICON_Gold] Gold.', 'en_US');
+('LOC_IMPROVEMENT_WORKSHOP_DESCRIPTION', 'Unlocks the Builder ability to construct Workshops.[NEWLINE][NEWLINE] -1 [ICON_Food] Food. +1 [ICON_Production] Production. +1 [ICON_Gold] Gold.', 'en_US'),
+('LOC_IMPROVEMENT_CITY_RUINS_DESCRIPTION', 'The Remnants of a city. Their existence increases the Armageddon counter by 1, unless they are Sanctified.', 'en_US'),
+('LOC_IMPROVEMENT_CITY_RUINS_NAME', 'City Ruins.', 'en_US');

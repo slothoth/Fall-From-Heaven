@@ -664,7 +664,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 			if previousRow == TREE_START_NONE_ID then
 
 			elseif startColumn > column	+3 then
-				print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
+				-- print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
 				tExtraPrereqIcons[item.Type] = prereqId
 				-- Nothing goes before this, not even a fake start area.
 
@@ -1034,13 +1034,13 @@ function PopulateNode(uiNode, playerTechData)
 			end
 			local sExtraPrereq = tExtraPrereqIcons[uiNode.Type]
 			if sExtraPrereq then
-				print(uiNode.Type)
-				print(sExtraPrereq)
+				-- print(uiNode.Type)
+				-- print(sExtraPrereq)
 				local sExtraPrereqIcon = DATA_ICON_PREFIX .. sExtraPrereq
-				print(sExtraPrereqIcon)
+				-- print(sExtraPrereqIcon)
 				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(sExtraPrereqIcon, 42);
 				if (textureOffsetX ~= nil) then
-					print('setting prereqTexture' .. iconName)
+					-- print('setting prereqTexture ' .. iconName)
 					uiNode.ExtraPrereq:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
 				end
 			end

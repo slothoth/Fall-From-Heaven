@@ -790,6 +790,7 @@ local function UpdateResourcePromotion(iPlayer, tParameters)
     end
 end
 -- testing only. TODO REMOVE before release
+--[[
 function GrantAllSphereSpells(iPlayer, iUnitID)
     local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
     local pUnitExp = pUnit:GetExperience()
@@ -799,6 +800,7 @@ function GrantAllSphereSpells(iPlayer, iUnitID)
         end
     end
 end
+]]
 
 
 GameEvents.UnitCreated.Add(onSpawnApplyPromotions)       -- not arcane or spiritual as implemented do as abilities that lua picks up on

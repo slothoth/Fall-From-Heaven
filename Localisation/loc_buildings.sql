@@ -241,8 +241,8 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_BUILDING_GORILLA_CAGE_DESCRIPTION', 'Built by a captured Gorilla unit, grants +1 [ICON_Amenities]Amenity.', 'en_US'),
 ('LOC_SLTH_BUILDING_GOVERNORS_MANOR_DESCRIPTION', 'Calabim Courthouse replacement. -1 [ICON_Amenities]Amenities. +1 production per required[ICON_Amenities]Amenity. -20% Maintenance in this city. Accumulate -25% less war weariness than usual.', 'en_US'),
 ('LOC_SLTH_BUILDING_GUILD_OF_HAMMERS_DESCRIPTION', 'Grant a free Forge in all cities. +1[ICON_Production] to all Engineers.', 'en_US'),
-('LOC_SLTH_BUILDING_HARBOR_DESCRIPTION', '+50% to all international Trade Route yields. +1[ICON_Housing] Housing for having a source of [ICON_RESOURCE_CLAMS]Clam, [ICON_RESOURCE_CRABS]Crabs and [ICON_RESOURCE_FISH]Fish, respectively.', 'en_US'),
-('LOC_SLTH_BUILDING_HARBOR_LANUN_DESCRIPTION', 'Lanun Harbor Replacement. International Trade Route yields grant 50% more yields. +25% production towards Naval units in this city. +1[ICON_Housing] Housing if you have a source of [ICON_RESOURCE_CLAM]Clam, [ICON_RESOURCE_CRAB]Crabs and [ICON_RESOURCE_FISH]Fish, respectively..', 'en_US'),
+('LOC_SLTH_BUILDING_HARBOR_DESCRIPTION', '+50% to all international Trade Route yields. +1[ICON_Housing] Housing for having a source of [ICON_RESOURCE_TURTLES]Clam, [ICON_RESOURCE_CRABS]Crabs and [ICON_RESOURCE_FISH]Fish, respectively.', 'en_US'),
+('LOC_SLTH_BUILDING_HARBOR_LANUN_DESCRIPTION', 'Lanun Harbor Replacement. International Trade Route yields grant 50% more yields. +25% production towards Naval units in this city. +1[ICON_Housing] Housing if you have a source of [ICON_RESOURCE_TURTLES]Clam, [ICON_RESOURCE_CRABS]Crabs and [ICON_RESOURCE_FISH]Fish, respectively.', 'en_US'),
 ('LOC_SLTH_BUILDING_HEROIC_EPIC_DESCRIPTION', '+100% Bonus Production to Military Units.', 'en_US'),
 ('LOC_SLTH_BUILDING_HUMAN_CAGE_DESCRIPTION', 'Built by a captured Slave without any racial promotion, grants +1 [ICON_Amenities]Amenity', 'en_US'),
 ('LOC_SLTH_BUILDING_INFERNAL_GRIMOIRE_DESCRIPTION', 'The secrets of Hell allows unlocking a random Technology... but may come at a price. Can be picked up as Equipment, allowing the user to cast Read Grimoire, casting a random spell.', 'en_US'),
@@ -295,4 +295,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_BUILDING_DEMONS_ALTAR_DESCRIPTION', '-1 [ICON_Amenities]Amenity. Built units start with the Scourge promotion.* Demon Units start with +16 experience. Living units can cast Sacrifice, converting them into Science.', 'en_US'),
 ('LOC_BUILDING_GUILD_OF_THE_NINE_DESCRIPTION', 'Allows the owner to hire Mercenary Units.*', 'en_US'),
 ('LOC_BUILDING_HALL_OF_KINGS_DESCRIPTION', '+2 [ICON_Culture]Culture to all Specialists.[NEWLINE]Double [ICON_Production]Production with [ICON_RESOURCE_MARBLE]Marble.', 'en_US'),
-('LOC_BUILDING_TEMPLE_OF_TEMPORENCE_DESCRIPTION', '+1 [ICON_Amenities]Amenity in all cities.[NEWLINE]Double [ICON_Production]Production with [ICON_RESOURCE_MARBLE]Marble.', 'en_US');
+('LOC_BUILDING_TEMPLE_OF_TEMPORENCE_DESCRIPTION', '+1 [ICON_Amenities]Amenity in all cities.[NEWLINE]Double [ICON_Production]Production with [ICON_RESOURCE_MARBLE]Marble.', 'en_US'),
+('LOC_SLTH_BUILDING_DUMMY_NAME', '', 'en_US'),
+('LOC_SLTH_BUILDING_DUMMY_DESCRIPTION', '', 'en_US');

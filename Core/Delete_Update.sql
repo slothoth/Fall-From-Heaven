@@ -61,6 +61,8 @@ UPDATE Districts SET PrereqCivic = 'CIVIC_GAMES_RECREATION' WHERE DistrictType =
 UPDATE Districts SET PrereqTech = 'TECH_SMELTING' WHERE DistrictType = 'DISTRICT_INDUSTRIAL_ZONE';
 UPDATE Districts SET PrereqTech = 'TECH_SANITATION' WHERE DistrictType = 'DISTRICT_AQUEDUCT';
 
+UPDATE Districts SET Maintenance = 0;
+
 UPDATE Units SET PurchaseYield = NULL;
 
 -- fix wonder location requirements, or do it invert and allow on all floodplains? hmmm

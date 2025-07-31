@@ -1,12 +1,5 @@
 include("TopPanel")
 
-function SlthLog(sMessage)
-    SLTH_DEBUG_ON = True
-    if SLTH_DEBUG_ON then
-        print(sMessage)
-    end
-end
-
 -- THIS IS BARELY USED SINCE THERES AN XP2 VERSION
 -- ===========================================================================
 --	Refresh Data and View

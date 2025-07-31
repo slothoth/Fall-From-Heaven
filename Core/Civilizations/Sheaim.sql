@@ -55,7 +55,7 @@ INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 ('SLTH_TRAIT_CIVILIZATION_SHEAIM_COOL', 'ALLOW_ELEGY');
 
 INSERT INTO Buildings(BuildingType, Name, PrereqTech, PrereqCivic, Cost, PrereqDistrict, Description, OuterDefenseHitPoints, Housing, Entertainment, TraitType, CitizenSlots, AdvisorType) VALUES
-('SLTH_BUILDING_NULL_CIVILIZATION_SHEAIM_TRAINING_YARD', 'LOC_SLTH_SHEAIM_BAN_TRAINING_BUILDING_NULL_NAME', NULL, NULL, '500', 'DISTRICT_CITY_CENTER', 'LOC_SLTH_BUILDING_NULLDESCRIPTION', '0', '0', '0', 'NULL_CIVILIZATION_SHEAIM', NULL, 'ADVISOR_RELIGIOUS');
+('SLTH_BUILDING_NULL_CIVILIZATION_SHEAIM_TRAINING_YARD', 'LOC_SLTH_BUILDING_DUMMY_NAME', NULL, NULL, '500', 'DISTRICT_CITY_CENTER', 'LOC_SLTH_BUILDING_NULLDESCRIPTION', '0', '0', '0', 'NULL_CIVILIZATION_SHEAIM', NULL, 'ADVISOR_RELIGIOUS');
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
 ('SLTH_UNIT_ABASHI', 'LOC_SLTH_UNIT_ABASHI_NAME', '2', '3', '101', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '360', '0', 'LOC_SLTH_UNIT_ABASHI_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_ABASHI', '0', 'PROMOTION_CLASS_BEAST', NULL, 'CIVIC_DIVINE_ESSENCE', '1', '1', '0', '0', '0', 'PSEUDOYIELD_UNIT_HERO', '0', 'ADVISOR_CONQUEST', '0'),

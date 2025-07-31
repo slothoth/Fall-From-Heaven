@@ -149,50 +149,8 @@ function ViableWildernessPlots(bOnlyTundraOrSnow)
 end
 
 
-function GetFullUpgradePath(iPlayer, iUnitIndex)
-    local bHasTech
-    local bHasCivic
-    local iUnitUpgradeIndex
-    local iUpgradeCost
-    local sUnit = GameInfo.Units[iUnitIndex].UnitType
-    local sUnitUpgradeUnitType = GameInfo.UnitUpgradesAlt[sUnit].UpgradeUnit
-    local sPrereqTech = GameInfo.Units[sUnitUpgradeUnitType].PrereqTech
-    local sPrereqCivic = GameInfo.Units[sUnitUpgradeUnitType].PrereqCivic
-    -- we should probably also look at other prereqs like strategic resources, or national units?
-    local pPlayer = Players[iPlayer]
-    print(sUnit)
-    print(sUnitUpgradeUnitType)
-    print(sPrereqTech)
-    print(sPrereqCivic)
-    if sPrereqTech then
-        local iPrereqTech = GameInfo.Technologies[sPrereqTech].TechnologyType
-        bHasTech = pPlayer:GetTechs():HasTech(iPrereqTech)
-    else
-        bHasTech = true
-    end
-
-    if sPrereqCivic then
-        local iPrereqCivic = GameInfo.Civics[sPrereqCivic].CivicType
-        bHasCivic = pPlayer:GetCulture():HasCivic(iPrereqCivic)
-    else
-        bHasCivic = true
-    end
-
-    if bHasTech and bHasCivic then
-        iUnitUpgradeIndex = GameInfo.Units[sUnitUpgradeUnitType].Index
-        local iUnitCost = GameInfo.Units[iUnitIndex].Cost
-        local iUpgradeUnitCost = GameInfo.Units[sUnitUpgradeUnitType].Cost
-        iUpgradeCost = (iUpgradeUnitCost - iUnitCost) *2
-        print('Upgraded unit cost: ' .. tostring(iUpgradeUnitCost) .. ' - original unit cost: ' .. tostring(iUnitCost) .. ' times by two is '.. tostring(iUpgradeCost))
-        -- iUnitUpgradeIndex = GetFullUpgradePath(iPlayer, iUnitUpgradeIndex)  -- recursive variant. but no cost summing
-    end                                                                        -- also doesnt deal with alt/normal path
-    print(iUnitUpgradeIndex)
-    print(iUpgradeCost)
-    return iUnitUpgradeIndex, iUpgradeCost                                                   -- mixing.
-end
-
 local function ConvertUnitType( iPlayer, tParameters)
-    print('converting unit on Gameplay side')
+    -- print('converting unit on Gameplay side')
     local iUnitID = tParameters.iUnitID
     local iNewUnitIndex = tParameters.iUpgradeUnitIndex
     local iUpgradeCost = tParameters.iCost
@@ -240,7 +198,7 @@ local function SpawnAcheron()
     end
 end
 
-function SpawnOrthus()
+local function SpawnOrthus()
     local tEligiblePlots = ViableWildernessPlots()
     local iNumEligiblePlots = table.count(tEligiblePlots)
     if iNumEligiblePlots > 0 then
@@ -320,7 +278,7 @@ function onTurnStartGameplay(playerId)
 
     for _, unit in pPlayer:GetUnits():Members() do              -- SECTION: do reset castable
         if unit:GetProperty('HasCast') and bAllowSpells then
-            print('setting HasCast to 0')
+            -- print('setting HasCast to 0')
             unit:SetProperty('HasCast', 0)
         end
         local iUnitIndex = unit:GetType();                      -- SECTION: passive experience gain
@@ -365,11 +323,10 @@ function onTurnStartGameplay(playerId)
         if not bLuonnotarApplied then
             local sLuonnotarDummyModifier = pCity:GetProperty('luonnotar_dummy')
             if sLuonnotarDummyModifier then
-                print('player turn started: and city valid for next altar. attaching:')
-                print(sLuonnotarDummyModifier)
+                -- print('player turn started: and city valid for next altar. attaching:', sLuonnotarDummyModifier)
                 pCity:AttachModifierByID(sLuonnotarDummyModifier)
                 bLuonnotarApplied = true
-                print('player turn started: removed blocker')
+                -- print('player turn started: removed blocker')
             end
         end
     end
@@ -404,7 +361,7 @@ function onTurnStartGameplay(playerId)
     -- SECTION: BarbarianSpawnEvents
     if playerId == 63 then              -- barbarian proxy
         local iCurrentTurn = Game.GetCurrentGameTurn()
-        print('current turn is', iCurrentTurn)
+        -- print('current turn is', iCurrentTurn)
         if iCurrentTurn == 100 then
             SpawnAcheron()
         elseif iCurrentTurn == math.floor(75 * iGameSpeedMult) then
@@ -535,8 +492,8 @@ function ImprovementsWorkOrPillageChange(x, y, improvementIndex, improvementPlay
              end
          end
          local iImprovementWorkedState =  pPlot:GetProperty('currently_worked') or 0
-         print( 'tile worked status was now: ' .. tostring(iImprovementWorkedState or "nil") )
-         print( 'tile worked status is now: ' .. tostring(isWorked or "nil") )
+         -- print( 'tile worked status was now: ' .. tostring(iImprovementWorkedState or "nil") )
+         -- print( 'tile worked status is now: ' .. tostring(isWorked or "nil") )
          if isWorked and iImprovementWorkedState == 0 then
              pPlot:SetProperty('currently_worked', 1)
          elseif iImprovementWorkedState > 0 and not isWorked then
@@ -568,7 +525,7 @@ function InitCottage(x, y, improvementIndex, playerID)
         if iImprovementUpgradeIndex == GameInfo.Improvements['IMPROVEMENT_ENCLAVE'].Index then    -- enclave exception
             local civ = PlayerConfigurations[playerID]:GetCivilizationTypeName()
             if civ ~= 'SLTH_CIVILIZATION_KURIOTATES' then
-                print('removing from list of incrementers')
+                -- print('removing from list of incrementers')
                 tImprovingImprovements[tostring(x) .. '_' .. tostring(y)] = nil
                 pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
                 return
@@ -577,7 +534,7 @@ function InitCottage(x, y, improvementIndex, playerID)
         local pPlot = Map.GetPlot(x, y)
         pPlot:SetProperty('worked_turns', 0)
         local iIsWorked = pPlot:GetWorkerCount()
-        print('Is tile worked: '.. tostring(iIsWorked or "nil"))
+        -- print('Is tile worked: '.. tostring(iIsWorked or "nil"))
         if iIsWorked > 0 then
             pPlot:SetProperty('currently_worked', 1)
         else
@@ -595,7 +552,7 @@ function InitCottage(x, y, improvementIndex, playerID)
             if iClanIndex then
                 pPlot:SetProperty('barbclantype', iClanIndex)
                 if Game.GetCurrentGameTurn() == 1 then
-                    print('killing barb unit')
+                    -- print('killing barb unit')
                     UnitManager.Kill(pUnit);
                 end
             end
@@ -608,7 +565,6 @@ function IncrementCottages(playerId, pPlayer)
     local tImprovingImprovements = pPlayer:GetProperty('improvements_to_increment')
     if not tImprovingImprovements then return end
     for idx, plot_tuple in pairs(tImprovingImprovements) do
-        print(idx)
         local iX, iY = plot_tuple['x'], plot_tuple['y']
         local pPlot = Map.GetPlot(iX, iY)
         local bIsWorked = pPlot:GetProperty('currently_worked')
@@ -618,14 +574,14 @@ function IncrementCottages(playerId, pPlayer)
             local iImprovementIndex = pPlot:GetImprovementType()
             local iUpgradeTurns = tImprovementsTurnAmount[iImprovementIndex] or 2               -- fallback, shouldnt happen
             if iWorkedTurns > iUpgradeTurns then
-                print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
+                -- print( 'tile will upgrade to: ' .. tostring(iImprovementIndex or "nil") )
                 local iImprovementUpgradedIndex = tImprovementsProgression[iImprovementIndex]
                 if iImprovementUpgradedIndex then
                     ImprovementBuilder.SetImprovementType(pPlot, iImprovementUpgradedIndex, playerId)
                 end
             else
                 pPlot:SetProperty('worked_turns', iWorkedTurns+1)
-                print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
+                -- print( 'tile upgrade turns: ' .. tostring(1 - iWorkedTurns or "nil") )
             end
         end
     end
@@ -643,7 +599,7 @@ function getValidDisplacementPlot(pUnit, iX, iY)
                 if otherPlot then
                     local iPlotID = otherPlot:GetIndex()
                     local tPlots = UnitManager.GetMoveToPath( pUnit, iPlotID )
-                    print(tPlots)
+                    -- print(tPlots)
                     if (table.count(tPlots) > 1) then            -- broken
                         if otherPlot:IsWater() then
                             chosenPlotWater = otherPlot
@@ -927,8 +883,7 @@ function onLairGrantAbility(pUnit, pPlot, sEventInfo)
 end
 
 function onGrantUnit(pUnit, pPlot, sUnitType)
-    print('After event unit is')
-    print(pUnit)
+    -- print('After event unit is', pUnit)
     local iPlayer = pUnit:GetOwner()
     local pPlayer = Players[iPlayer]
     local playerUnits = pPlayer:GetUnits();
@@ -969,7 +924,7 @@ function EventCollapse(x, y)
     local pPlot = Map.GetPlot(x, y)
     local tUnits = Map.GetUnitsAt(pPlot)
     for pUnit in tUnits:Units() do
-        print('remove health')
+        -- print('remove health')
         pUnit:ChangeDamage(20)
         if pUnit:GetDamage() < 1 then           -- is it at 0 or at 100?
             UnitManager.Kill(pUnit)
@@ -1292,26 +1247,26 @@ local hash_GameSpeed = GameConfiguration.GetGameSpeedType()
 local name_GameSpeed = GameInfo.GameSpeeds[hash_GameSpeed].GameSpeedType
 local iGameSpeed = tGameSpeedScalings[name_GameSpeed]
 
--- this shit is just super unstable, it triggers twice during the formation of a city, which is really not good.
+-- this shit is just super unstable, it triggers twice during the formation of a city over a camp which is really not good.
 function RemovedBarbCamp(x, y, owningPlayerID)
     local pPlot = Map.GetPlot(x, y)
-    print('improvement removed at plot x,y', x, y)
+    -- print('improvement removed at plot x,y', x, y)
     local iPlotOwner = pPlot:GetOwner()
     local tribeIndex = pPlot:GetProperty('barbclantype')
     local pUnit
     local bIsBarbOccupied = true
     for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
-        print('units in plot :', pOnTileUnit)
+        -- print('units in plot :', pOnTileUnit)
         if (pOnTileUnit) and (not pUnit) then
             local iUnitOwner = pOnTileUnit:GetOwner()
-            print('unit owner is:', iUnitOwner)
+            -- print('unit owner is:', iUnitOwner)
             if iUnitOwner > -1 and iUnitOwner ~= 63 then
                 bIsBarbOccupied = false
             end
             pUnit = pOnTileUnit
         end
     end
-    print('plotowner/tribeIndex/isBarbOcuppied on destroying improvement...', iPlotOwner, tribeIndex, bIsBarbOccupied)
+    -- print('plotowner/tribeIndex/isBarbOcuppied on destroying improvement...', iPlotOwner, tribeIndex, bIsBarbOccupied)
     if tribeIndex and iPlotOwner > -1 and bIsBarbOccupied then          -- todo still not perfect, barb camps will be destroyed on settle if a non-barb unit is occupying it
         local iPlotID = pPlot:GetIndex()
         Game.GetBarbarianManager():CreateTribeOfType(tribeIndex, iPlotID)       -- recreate camp
@@ -1334,7 +1289,7 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         local iUnitOwner = pUnit:GetOwner()                 -- assume causer is pUnit owner
         local iDifficultyHash = PlayerConfigurations[iUnitOwner]:GetHandicapTypeID()
         local iPlayerDifficulty = GameInfo.Difficulties[iDifficultyHash].Index
-        print('difficulty and amount', GameInfo.Difficulties[iDifficultyHash].DifficultyType, iPlayerDifficulty)
+        -- print('difficulty and amount', GameInfo.Difficulties[iDifficultyHash].DifficultyType, iPlayerDifficulty)
         local iDiff =  7 - iPlayerDifficulty        -- converted from python gc.getNumHandicapInfos() + 1 - int(gc.getGame().getHandicapType())
         iGrace = iGrace * iDiff
         print('grace is..', iGrace)
@@ -1426,7 +1381,7 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
         end
         if failedCheck then
             local pCity = CityManager.GetCity(playerID, cityID)                                         -- this was using Players[playerID], why?
-            print('player didnt have tech or civic for next lunnotar, blocking with building.')
+            -- print('player didnt have tech or civic for next lunnotar, blocking with building.')
             pCity:AttachModifierByID('MODIFIER_FREE_SLTH_BUILDING_NO_ALTAR_ALWAYS')         -- makes a building to block the altar, iLunnotarBlocker, BUILDING_BLOCK_ALTAR
         end
     end
@@ -1503,7 +1458,7 @@ function OnTechnologyResearch(playerID, technologyIndex)
     local pPlayer = Players[playerID]
     local iCurrentLuonnotar = tLuonnotarCivics[technologyIndex]
     if iCurrentLuonnotar then
-        print('unlocking altar after tech unlock')
+        -- print('unlocking altar after tech unlock')
         for _, pCity in pPlayer:GetCities():Members() do
             if pCity:GetBuildings():HasBuilding(iCurrentLuonnotar) then
                 pCity:GetBuildings():RemoveBuilding(iLunnotarBlocker)           -- removes the building that blocks next altar
@@ -1533,7 +1488,7 @@ function OnCivicGrantFirst(playerID, civicIndex, isCancelled)
     local pPlayer = Players[playerID]
     local iCurrentLuonnotar = tLuonnotarCivics[civicIndex]
     if iCurrentLuonnotar then
-        print('unlocking altar after civic unlock')
+        -- print('unlocking altar after civic unlock')
         for _, pCity in pPlayer:GetCities():Members() do
             if pCity:GetBuildings():HasBuilding(iCurrentLuonnotar) then
                 pCity:GetBuildings():RemoveBuilding(iLunnotarBlocker)           -- removes the building that blocks next altar
@@ -1552,10 +1507,9 @@ end
 
 local iGreatProphetIndex = GameInfo.GreatPersonClasses['GREAT_PERSON_CLASS_PROPHET'].Index
 function onGreatPersonActivated(unitOwner, unitID, greatPersonClassID, greatPersonIndividualID)
-    print('Great person activated!')
-    print(greatPersonClassID)
+    -- print('Great person activated!', greatPersonClassID)
     if greatPersonClassID == iGreatProphetIndex then
-        print('Great person recognised as prophet')
+        -- print('Great person recognised as prophet')
         local pPlayerCities = Players[unitOwner]:GetCities()
         for _, pCity in pPlayerCities:Members() do
             if pCity:GetBuildings():HasBuilding(iAltarBase) then
@@ -1563,7 +1517,7 @@ function onGreatPersonActivated(unitOwner, unitID, greatPersonClassID, greatPers
                 local iAltarLevel = pPlot:GetProperty('altar_level')
                 if iAltarLevel then
                     pPlot:SetProperty('altar_level', iAltarLevel + 1)
-                    print('plot prop update GP suceeded')
+                    -- print('plot prop update GP suceeded')
                 end
                 return
             end
@@ -1749,7 +1703,7 @@ local tAbilityMutations = { ['DISEASED'] = true, ['BUFF_EMPOWER'] = true, ['ABIL
 }
 local tFive = {2, 3, 4, 5}
 function onAbilityGained(playerID, unitID, unitAbilityIndex)
-    print(unitAbilityIndex)
+    -- print(unitAbilityIndex)
     if unitAbilityIndex == iABILITY_MUTATED then
         local pUnit = UnitManager.GetUnit(playerID, unitID)
         local pUnitExp = pUnit:GetExperience()
@@ -1793,17 +1747,12 @@ function InitializeClans()
                 local pPlot = Map.GetPlotByIndex(i);
                 local feature = pPlot:GetFeatureType()
                 if tBarbNW[feature] then
-                    print(feature)
+                    -- print(feature)
                     Game.GetBarbarianManager():CreateTribeOfType(1, i)
                 end
             end
         end
         Game.SetProperty('NW_Clans_Set', 1)
-            -- iterate over units
-        for _, pUnit in Players[63]:GetUnits():Members() do
-            -- UnitManager.Kill(pUnit);
-            print('')
-        end
     end
 
 end

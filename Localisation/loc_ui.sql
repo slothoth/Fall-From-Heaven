@@ -480,6 +480,15 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_CITY_MAINTENANCE', '{1_LostGoldRate} from number of Cities', 'en_US'),
 ('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_CITY_DISTANCE_MAINTENANCE', '{1_LostGoldRate} from City Distance from Palaces', 'en_US'),
 ('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_UNIT_SUPPORT', '-{1_LostGoldRate} from Units. (Unit Count = {2_Unit_Count}. Offset = {2_Unit_Count} - ({3_Pop}(Pop) / 4) + {5_Handicap}(Handicap) = {7_UnMultiplied}. {7_UnMultiplied} / {6_HandiMult} = {1_LostGoldRate}.', 'en_US'),
-('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_UNIT_AWAY_SUPPORT', '-{1_LostGoldRate} from Units in Foreign Territory. ({2_Unit_Count} Units away - 4) / 2 = {1_LostGoldRate}', 'en_US');
--- Expense: Units -12. (Unit count = 30 Pop= 24. 24/4 = 6. Handicap = 12. 30 - 6 - 12 = 12
-		--			Away Units: -3.5 (11 -4 free, /2)
+('LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_UNIT_AWAY_SUPPORT', '-{1_LostGoldRate} from Units in Foreign Territory. ({2_Unit_Count} Units away - 4) / 2 = {1_LostGoldRate}', 'en_US'),
+('LOC_TOOLTIP_SAMPLE_DIPLOMACY_EVIL_HATES_GOOD', 'You are Good, Evil hates you', 'en_US'),
+('LOC_TOOLTIP_SAMPLE_DIPLOMACY_EVIL_LOVES_EVIL', 'You are a fellow Evil player', 'en_US'),
+('LOC_TOOLTIP_SAMPLE_DIPLOMACY_EVIL_NEUTRAL', 'You are Neutral, Evil players dislike you haven''t picked a side', 'en_US'),
+('LOC_TOOLTIP_SAMPLE_DIPLOMACY_GOOD_NEUTRAL', 'You are Neutral, Good players dislike you haven''t picked a side', 'en_US'),
+('LOC_TOOLTIP_SAMPLE_DIPLOMACY_EVIL_HATES_GOOD', 'You are Good, Evil hates you', 'en_US'),
+('LOC_DIPLO_EVIL_HATES_GOOD', 'You are Good, they are Evil', 'en_US'),
+('LOC_DIPLO_EVIL_DISLIKES_NEUTRAL', 'You are Neutral, they are Evil', 'en_US'),
+('LOC_DIPLO_EVIL_LOVES_EVIL', 'You are Evil, they are Evil', 'en_US'),
+('LOC_DIPLO_GOOD_HATES_EVIL', 'You are Evil, they are Good', 'en_US'),
+('LOC_DIPLO_GOOD_DISLIKES_NEUTRAL', 'You are Neutral, they are Good', 'en_US'),
+('LOC_DIPLO_GOOD_LOVES_GOOD', 'You are Good, they are Good', 'en_US');

@@ -41,7 +41,6 @@ end
 -- ===========================================================================
 function GetGoldTooltip()
 	local szReturnValue = "";
-	print('getting gold tooltip')
 	local localPlayerID = Game.GetLocalPlayer();
 	if (localPlayerID ~= -1) then
 		local localPlayer = Players[localPlayerID]
@@ -76,7 +75,6 @@ function GetGoldTooltip()
 		szReturnValue = szReturnValue .. Locale.Lookup("LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_GROSS", playerTreasury:GetGoldYield());
 		local bSomeAdditionalCostsExist
 		for loc, val in pairs(tCosts) do
-			print(loc, val)
 			if val ~= 0 then
 				if not bSomeAdditionalCostsExist then
 					szReturnValue = szReturnValue .. "[NEWLINE][NEWLINE]";
@@ -93,7 +91,6 @@ function GetGoldTooltip()
 			szReturnValue = szReturnValue .. "[NEWLINE]" .. Locale.Lookup("LOC_TOP_PANEL_GOLD_YIELD_TOOLTIP_COSTS_UNIT_AWAY_SUPPORT", unit_away_support, iAwayUnitCount, unAdjustedAwaySupport);
 		end
 	end
-
 	return szReturnValue;
 end
 

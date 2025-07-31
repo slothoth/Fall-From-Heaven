@@ -706,7 +706,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 
 		if sActualTech then
-			print('skipping callbacks for ' .. techType)
+			-- print('skipping callbacks for ' .. techType)
 			node.NodeButton:SetHide(true)
 			node.OtherStates:SetHide(true)
 		else
@@ -747,7 +747,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- There had better be a preq if there is a prereq ID (unless debugging the tree).
 					local prereq :table = g_kItemDefaults[prereqId];
 					if (prereq ~= nil) then
-						print('Prereq tech is ' .. prereq.Type)
+						-- print('Prereq tech is ' .. prereq.Type)
 						previousRow		= prereq.UITreeRow;
 						-- previousColumn	= g_kEras[prereq.EraType].PriorColumns + prereq.Column;
 					else
@@ -773,12 +773,12 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- If a node is found, make sure it's the previous node this is looking for.
 					if (kNodeGrid[previousRow][column] ~= nil) then
 						if kNodeGrid[previousRow][column] == prereqId then
-							print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+							-- print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 							isAtPrior = true;
 						end
 					elseif column <= TREE_START_COLUMN then
-						print('no prereq found so just doing full')
-						print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+						-- print('no prereq found so just doing full')
+						-- print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 						isAtPrior = true;
 					end
 
@@ -800,7 +800,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- Nothing goes before this, not even a fake start area.
 
 				elseif startColumn > column	+3 then
-					print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
+					-- print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
 					tExtraPrereqIcons[item.Type] = prereqId
 
 				elseif previousRow < item.UITreeRow or previousRow > item.UITreeRow  then
@@ -1082,7 +1082,7 @@ function PopulateNode(uiNode, playerTechData)
 				local sExtraPrereqIcon = DATA_ICON_PREFIX .. sExtraPrereq
 				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(sExtraPrereqIcon, 30);
 				if (textureOffsetX ~= nil) then
-					print('setting prereqTexture' .. iconName)
+					-- print('setting prereqTexture ' .. iconName)
 					uiNode.ExtraPrereq:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
 				end
 			end
@@ -1140,7 +1140,7 @@ end
 --	active player's item data.
 -- ===========================================================================
 function View( playerTechData:table )
-	print('populating nodes')
+	-- print('populating nodes')
 	-- Output the node states for the tree
 	for _,uiNode in pairs(g_uiNodes) do
 		PopulateNode( uiNode, playerTechData);
@@ -1226,7 +1226,7 @@ end
 --	Load all the 'live' data for a player.
 -- ===========================================================================
 function GetCurrentData( ePlayer:number, eCompletedTech:number )
-	print('getting current data')
+	-- print('getting current data')
 	-- If first time, initialize player data tables.
 	local data	:table = m_kAllPlayersTechData[ePlayer];
 	if data == nil then
