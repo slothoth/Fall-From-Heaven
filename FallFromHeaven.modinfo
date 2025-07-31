@@ -167,6 +167,7 @@
       </Properties>
       <File>Core/ResourceBuffs.sql</File>
       <File>Core/PostEdits.sql</File>
+      <File>Core/Specialists/GeneratedGreatPeople.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
       <File>Localisation/loc_abilities.sql</File>
@@ -256,7 +257,7 @@
             <LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
-     <ReplaceUIScript id="ReplaceUI_UnitPanel">
+    <ReplaceUIScript id="ReplaceUI_UnitPanel">
         <Properties>
             <LoadOrder>1105</LoadOrder>
             <LuaContext>UnitPanel</LuaContext>
@@ -277,6 +278,13 @@
             <LuaReplace>UI/CivicsTree.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
+    <!--ReplaceUIScript id="ReplaceUI_MapLabeller">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>MapLabelManager</LuaContext>
+            <LuaReplace>UI/MapLabelManager.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript-->
     <ImportFiles id="ImportUIFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
@@ -293,6 +301,8 @@
       <File>UI/GovernmentScreen.xml</File>
       <File>UI/TabSupport.lua</File>
       <File>UI/ToolTipHelper_PlayerYields.lua</File>
+      <!--File>UI/MapLabelManager.lua</File>
+      <File>UI/MapLabelManager.xml</File-->
     </ImportFiles>
     <ImportFiles id="XP2WRxmlOverride">
       <Properties>
@@ -361,6 +371,7 @@
     <File>Core/Racials.sql</File>
     <File>Core/Specialists/Specialists.sql</File>
     <File>Core/Specialists/GreatPersons.sql</File>
+    <File>Core/Specialists/GeneratedGreatPeople.sql</File>
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
     <File>Core/National_Units.sql</File>
@@ -490,6 +501,8 @@
     <File>UI/TabSupport.lua</File>
     <File>UI/CivicsTree.xml</File>
     <File>UI/CivicsTree.lua</File>
+    <!--File>UI/MapLabelManager.lua</File>
+    <File>UI/MapLabelManager.xml</File-->
     <File>Maps/Erebus.lua</File>
 	<File>Maps/MapUtilities.lua</File>
   </Files>
