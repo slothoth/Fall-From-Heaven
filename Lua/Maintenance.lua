@@ -13,6 +13,8 @@ local MaintenanceReductionPolicies = {SLTH_POLICY_DESPOTISM={CityReduction=25}, 
                                 SLTH_POLICY_ARISTOCRACY={CityReduction=-40}};
 local GovernCentres = {SLTH_BUILDING_SUMMER_PALACE='summer', BUILDING_ORSZAGHAZ='winter'};
 
+-- todo, does maintenance reduce based on difficulty?
+
 function MasterTax(playerId)
     local pPlayer = Players[playerId];
     if not pPlayer:IsMajor() then return; end;
@@ -42,7 +44,46 @@ function MasterTax(playerId)
     SlthLog('Global Distance Cities Tax cost:'.. taxes);
     taxes = taxes + num_tax_final;
     SlthLog('Total tax cost:'.. -taxes);
-    pPlayer:GrantYield(2, -taxes);          -- 2 is hopefully gold attempt to index a number value?
+
+    -- unit maintenance section
+    local iDifficultySupport = pPlayer:GetProperty('FreeUnitSupport') or 12       -- we may alter this with the Military State one...
+    local pUnits = pPlayer:GetUnits()
+    local iUnitTotal = pUnits:GetCount()
+    local iUnitMaintenance = 0
+    local iPopSupport
+    local iFreeSupport
+    local iPlayerPop = 0
+    if iUnitTotal > iDifficultySupport then                 -- be smarter and cache in future, using pop change callbacks.
+        for _, pCity in pPlayer:GetCities():Members() do          -- but worried about drift and missing something, like
+            local iCityPop = pCity:GetPopulation() or 0             -- pop change on city conquer
+            iPlayerPop = iPlayerPop + iCityPop
+        end
+        iPopSupport = math.floor(iPlayerPop *0.25)
+        iFreeSupport = iPopSupport + iDifficultySupport
+        -- print('unit total/Support:', iUnitTotal, iFreeSupport)
+        if iUnitTotal > iFreeSupport then
+            local iDifficultyPaymentReducer = pPlayer:GetProperty('UnitSupportMult') or 0.5
+            iUnitMaintenance = iUnitTotal - iFreeSupport
+            iUnitMaintenance = math.floor(iUnitMaintenance * iDifficultyPaymentReducer)
+        end
+    end
+    local iDifficultyPaymentReducer = pPlayer:GetProperty('UnitSupportMult') or 0.5
+
+
+    local iAwaySupportCost = getUnitCountForeign(playerId, pUnits)
+    -- print('Player/Maintenance/Allowance:', playerId, -iUnitMaintenance, iFreeSupport);
+    -- print('Pop Allowance/Multiplier/Away Support cost', iPopSupport, iDifficultyPaymentReducer, iAwaySupportCost)
+    pPlayer:SetProperty('UnitMaintenance', iUnitMaintenance);
+    pPlayer:SetProperty('TotalPopulation', iPlayerPop);
+    pPlayer:SetProperty('AwayUnitSupport', iAwaySupportCost);
+    pPlayer:SetProperty('UnitCount', iUnitTotal)
+    taxes = taxes + iUnitMaintenance + iAwaySupportCost;
+    local playerReligion= pPlayer:GetReligion();
+    adjustSliders(pPlayer, playerReligion, taxes)
+    pPlayer:GrantYield(2, -taxes);
+    -- we also kill all faith accumulation, because the AI maybe using it, pesky
+    local faithBalance	 = playerReligion:GetFaithBalance();
+    pPlayer:GrantYield(5, -faithBalance);               -- TODO idx yield value, needs testing.
 end
 
 function InitCityTax(playerID, cityID, x, y)
@@ -215,44 +256,7 @@ As this is a game at Noble difficulty level, the handicap costs are 50% of 25 = 
 
 -- no vassalage afaik. Or pacifism. But rhere are some sources of free unit support.else
 
-function UnitSupportCheck(playerId)
-    local pPlayer = Players[playerId];
-    if not pPlayer:IsMajor() then return; end;
-    local iDifficultySupport = pPlayer:GetProperty('FreeUnitSupport') or 12       -- we may alter this with the Military State one...
-    local pUnits = pPlayer:GetUnits()
-    local iUnitTotal = pUnits:GetCount()
-    local iUnitMaintenance = 0
-    local iPopSupport
-    local iFreeSupport
-    local iPlayerPop = 0
-    if iUnitTotal > iDifficultySupport then                 -- be smarter and cache in future, using pop change callbacks.
-        for _, pCity in pPlayer:GetCities():Members() do          -- but worried about drift and missing something, like
-            local iCityPop = pCity:GetPopulation() or 0             -- pop change on city conquer
-            iPlayerPop = iPlayerPop + iCityPop
-        end
-        iPopSupport = math.floor(iPlayerPop *0.25)
-        iFreeSupport = iPopSupport + iDifficultySupport
-        print('unit total/Support:', iUnitTotal, iFreeSupport)
-        if iUnitTotal > iFreeSupport then
-            local iDifficultyPaymentReducer = pPlayer:GetProperty('UnitSupportMult') or 0.5
-            iUnitMaintenance = iUnitTotal - iFreeSupport
-            iUnitMaintenance = math.floor(iUnitMaintenance * iDifficultyPaymentReducer)
-        end
-    end
-    local iDifficultyPaymentReducer = pPlayer:GetProperty('UnitSupportMult') or 0.5
 
-
-    local iAwaySupportCost = getUnitCountForeign(playerId, pUnits)
-    print('Player/Maintenance/Allowance:', playerId, -iUnitMaintenance, iFreeSupport);
-    print('Pop Allowance/Multiplier/Away Support cost', iPopSupport, iDifficultyPaymentReducer, iAwaySupportCost)
-    pPlayer:SetProperty('UnitMaintenance', iUnitMaintenance);
-    pPlayer:SetProperty('TotalPopulation', iPlayerPop);
-    pPlayer:SetProperty('AwayUnitSupport', iAwaySupportCost);
-    pPlayer:SetProperty('UnitCount', iUnitTotal)
-
-    pPlayer:GrantYield(2, -iUnitMaintenance);
-    pPlayer:GrantYield(2, -iAwaySupportCost);
-end
 
 function getUnitCountForeign(playerId, pUnits)
     local iForeignTerritoryUnitCount = 0
@@ -261,7 +265,6 @@ function getUnitCountForeign(playerId, pUnits)
         local pPlot = Map.GetPlot(iX, iY)
         if pPlot then
             local iPlotOwner = pPlot:GetOwner()
-            print('Away unit check, plot owner is ', iPlotOwner)
             if iPlotOwner and iPlotOwner ~= playerId then
                 iForeignTerritoryUnitCount = iForeignTerritoryUnitCount + 1
             end
@@ -273,7 +276,64 @@ function getUnitCountForeign(playerId, pUnits)
     else
         return 0
     end
-
+end
+local sCommerceScienceConversionKey = 'CommIntoScience'
+local sCommerceGoldConversionKey = 'CommIntoGold'
+local iCustomSlidersOffKey = 'CustomSlidersOff'
+function adjustSliders(pPlayer, pReligion, iExtraTax)
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    if pCapitalCity then
+        local pPlot = pCapitalCity:GetPlot()
+        local playerTreasury = pPlayer:GetTreasury()
+        local goldYield = playerTreasury:GetGoldYield() - playerTreasury:GetTotalMaintenance() - iExtraTax;
+        print('goldyield is treasuryYield - maintenance - extraTax', playerTreasury:GetGoldYield(), '-', playerTreasury:GetTotalMaintenance(), '-', iExtraTax)
+        local goldBalance = math.floor(playerTreasury:GetGoldBalance());
+        local iGoldRatio = pPlot:GetProperty(sCommerceGoldConversionKey) or 1
+        local faithYield = pReligion:GetFaithYield();
+        local iCurrentCommerceGold = faithYield * iGoldRatio /10
+        print('our gold from commerce is faith * goldenRatio', faithYield, iGoldRatio, iCurrentCommerceGold)
+        local noCommerceGoldYield = goldYield - iCurrentCommerceGold
+        local iNewGoldAmount
+        if goldYield < 0 and goldYield > -goldBalance and iGoldRatio < 10 then                  -- in the red, try adjust slider
+            iNewGoldAmount = (noCommerceGoldYield * 10) / faithYield
+            print('We were in the red, changing sliders: commerce/GoldWithoutCommerce/NewGoldRatio', faithYield, noCommerceGoldYield, iNewGoldAmount)
+        else
+            -- positive gold. If the yield per turn is more than 10% gold ratio, adjust so
+            -- instead get the minimum unit, 10% and adjust so its always 10% more than required.
+            print('we were ok gold wise, see if we wanna adjust gold ratio', iGoldRatio)
+            if iGoldRatio > 0 then                      -- if all science, dont bother
+                local iGoldPer10 = faithYield/10
+                -- given the noCommerceGoldYield, what number of iGoldPer10 need added to make it at least iGoldPer10 gold
+                -- iGoldPer10 = noCommerceGoldYield + n*iGoldPer10
+                print('10pct of our commerce is granting', iGoldPer10)
+                print('aim to get at least 10pct commerce in the black')
+                print('Without any commerce our gold yield is', noCommerceGoldYield)
+                print('how many instances of 10pct commerce grant us 10pct gold positive?')
+                print('assume', iGoldPer10, 'positive gold yield, then we subtract our gold yield from that')
+                print(iGoldPer10, '-', noCommerceGoldYield, '=', (iGoldPer10 - noCommerceGoldYield))
+                print('Thats the amount of gold we want to earn from our commerce.',  (iGoldPer10 - noCommerceGoldYield))
+                print('So how many instances of our 10pct commerce fit into that')
+                print((iGoldPer10 - noCommerceGoldYield),  '/', iGoldPer10, (iGoldPer10 - noCommerceGoldYield)/iGoldPer10)
+                iNewGoldAmount = math.ceil((iGoldPer10 - noCommerceGoldYield) / iGoldPer10)
+                print('then rounded up', iNewGoldAmount)
+            else
+                iNewGoldAmount = iGoldRatio
+            end
+        end
+        print('Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
+        if iNewGoldAmount > 10 then iNewGoldAmount = 10 end                 -- oh dear, still in the red.
+        if iNewGoldAmount < 0 then iNewGoldAmount = 0 end
+        local iNewScienceAmount = 10 - iNewGoldAmount
+        print('Post adjust Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
+        print('science ratio', iNewScienceAmount)
+        if iNewGoldAmount ~= iGoldRatio then
+            pPlayer:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
+            pPlayer:SetProperty(sCommerceGoldConversionKey, iNewGoldAmount)
+            pPlot:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
+            pPlot:SetProperty(sCommerceGoldConversionKey, iNewGoldAmount)
+            print('updating commerce conversion to Science/Gold', iNewScienceAmount, iNewGoldAmount)
+        end
+    end
 end
 
 
@@ -319,7 +379,5 @@ for _, iPlayer in ipairs(PlayerManager.GetAliveMajorIDs()) do
     pPlayer:SetProperty('UnitSupportMult', iDifficultySupportMult)
 end
 
---- BLEH also outside borders units
 
-GameEvents.PlayerTurnStarted.Add(UnitSupportCheck);
 

@@ -269,6 +269,10 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
         if tAlignmentPropKeys[iAlignment] then print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment])); end
 
+        -- set capital commerce ratios
+        pPlot:SetProperty('CommIntoScience', 0)
+        pPlot:SetProperty('CommIntoGold', 10)
+
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')
             local iGameTurn = Game.GetCurrentGameTurn()         -- five turns to settle a city state
@@ -534,7 +538,7 @@ function onStart()
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
-                print('setting player alignment to ' .. tostring(iLeaderAlignment))
+                print('setting player', iPlayerID, ' alignment to ' .. tostring(iLeaderAlignment))
             else
                 pPlayer:SetProperty('alignment', -1)                -- to catch errors, remove at production
             end
