@@ -7,23 +7,25 @@ DELETE FROM BarbarianTribeNames;
 
 -- CAN_MOVE_AFTER_PURCHASE TypeProperties, CAN_EVER_TRAIN_CITY_STATE (seems unneeded), CAN_EVER_TRAIN_FREE_CITY (maybe useful to limit barb cities?)
 DELETE FROM UnitCommands WHERE CommandType='UNITCOMMAND_TREAT_WITH_CLAN_RAID';
-UPDATE TypeProperties SET Value=0 WHERE Type = 'UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE' and Name='XP_EARNED';
+UPDATE TypeProperties SET Value=5 WHERE Type = 'UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE' and Name='XP_EARNED';         -- was 0, now setting to 5?
 
 -- spawn into game. keeping same as goody huts for now
 -- trying to make not deleted on settle city. Setting Goody=0 didnt do it, neither did setting TraitType=NULL, or Removable=0. Removing Barbarian does.. but that ruins it
 -- ended up just respawning it with Lua
 UPDATE Improvements SET TilesPerGoody = 64, GoodyRange = 3, TraitType=NULL WHERE ImprovementType = 'IMPROVEMENT_BARBARIAN_CAMP';
 
-UPDATE TypeProperties SET Value='100' WHERE Name='BRIBE_CONVERSION_POINTS_CHANGE';          -- just for testing
-UPDATE TypeProperties SET Value='200' WHERE Name='BRIBE_INTERVAL_STANDARD';                 -- closest thing to peace with barbs
-UPDATE TypeProperties SET Value='0' WHERE Name='BRIBE_BASE_COST';                           -- need a way to constantly reapply this. But only on orc ones and lizards
+-- UPDATE TypeProperties SET Value='100' WHERE Name='BRIBE_CONVERSION_POINTS_CHANGE';          -- just for testing
+-- UPDATE TypeProperties SET Value='200' WHERE Name='BRIBE_INTERVAL_STANDARD';                 -- closest thing to peace with barbs
+-- UPDATE TypeProperties SET Value='0' WHERE Name='BRIBE_BASE_COST';                           -- need a way to constantly reapply this. But only on orc ones and lizards
 
-UPDATE TypeProperties SET Value='10' WHERE Name='RAID_CONVERSION_POINTS_CHANGE';
+UPDATE TypeProperties SET Value='10' WHERE Name='RAID_CONVERSION_POINTS_CHANGE';            -- so more orc cities if Clan are instructing them
 
 UPDATE GlobalParameters SET Value='0' WHERE Name='BARBARIAN_CLANS_RANSOM_COST_SCALAR';
 UPDATE GlobalParameters SET Value='0' WHERE Name='BARBARIAN_CLANS_BRIBE_COST_PER_CITY';
 UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_BARB_SOFT_CAP';               -- no cap on barb combat
 UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_MAX_BARB_LEVEL';
+-- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'BARBARIAN_CLANS_CIV_CONVERSION_INCREMENT_CHANCE';         -- this does literally nothing
+UPDATE GlobalParameters SET Value = '999' WHERE Name = 'BARBARIAN_CLANS_CIV_CONVERSION_POINTS_STANDARD';
 
 -- no new camps
 UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING';           -- this seems to not work
@@ -55,7 +57,7 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES (
 -- scorpion clan kept separate for template of any new tribe
 UPDATE BarbarianTribes SET Name='LOC_BARBARIAN_CLAN_TYPE_SCORPION', ScoutTag='CLASS_NULL', MeleeTag='CLASS_GOBLIN',
                            RangedTag='CLASS_GOBLIN', SiegeTag='CLASS_GOBLIN', DefenderTag='CLASS_GOBLIN',
-                           SupportTag='CLASS_GOBLIN', PercentRangedUnits='50', TurnsToWarriorSpawn='3'
+                           SupportTag='CLASS_GOBLIN', PercentRangedUnits='50', TurnsToWarriorSpawn='15'
                        WHERE TribeType='TRIBE_CLAN_MELEE_OPEN';
 
 INSERT INTO Tags(Tag, Vocabulary) VALUES
