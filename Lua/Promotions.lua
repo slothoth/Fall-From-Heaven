@@ -272,6 +272,8 @@ local tCivicPromoUnlocks = {
     [GameInfo.Civics['CIVIC_MILITARY_TRADITION'].Index] = GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WARFARE'].Index ,
     [GameInfo.Civics['CIVIC_CORRUPTION_OF_SPIRIT'].Index] = GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_CORRUPTION_OF_SPIRIT'].Index ,        -- stigmata pain
 }
+local iARETE_POLICY_INDEX = GameInfo.Policies["SLTH_POLICY_ARETE"].Index;
+local iTHE_ORDER_STATE_REL_INDEX = GameInfo.Policies["SLTH_POLICY_STATE_ORDER"].Index;
 
 local iCivicMilitaryTraining = GameInfo.Civics['CIVIC_MILITARY_TRAINING'].Index
 local iCivicHiddenPaths = GameInfo.Civics['CIVIC_HIDDEN_PATHS'].Index
@@ -337,7 +339,24 @@ local tConditionalUnlocks = {
     [i_SHADOW_TWO_INDEX]={{     ability='ABILITY_CHANNELING3',      promo_grant=i_SHADOW_THREE_ALLOW_INDEX}},
     [i_SPIRIT_TWO_INDEX]={{     ability='ABILITY_CHANNELING3',      promo_grant=i_SPIRIT_THREE_ALLOW_INDEX}},
     [i_WATER_TWO_INDEX]={{      ability='ABILITY_CHANNELING3',      promo_grant=i_WATER_THREE_ALLOW_INDEX}},
-    [i_SUN_TWO_INDEX]={{        ability='ABILITY_CHANNELING3',      promo_grant=i_SUN_THREE_ALLOW_INDEX}}
+    [i_SUN_TWO_INDEX]={{        ability='ABILITY_CHANNELING3',      promo_grant=i_SUN_THREE_ALLOW_INDEX}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_MELEE'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_SIEGE'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_NAVAL_MELEE'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_ADEPT'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_LIGHT_CAVALRY'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_ANIMAL'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_BEAST'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_RANGED'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_RECON'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMBAT5_DISCIPLE'].Index]={{ability='SLTH_ABILITY_HERO', promo_grant=GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_COMMAND3_DISCIPLE'].Index]={{policy=iTHE_ORDER_STATE_REL_INDEX, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ORDER_STATE'].Index}},         -- last two are irreversible, shouldnt be
+    [GameInfo.UnitPromotions['PROMOTION_GUERILLA2_RANGED'].Index]={{policy=iARETE_POLICY_INDEX, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_GUERILLA2_BEAST'].Index]={{policy=iARETE_POLICY_INDEX, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_GUERILLA2_DISCIPLE'].Index]={{policy=iARETE_POLICY_INDEX, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_GUERILLA2_MELEE'].Index]={{policy=iARETE_POLICY_INDEX, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index}},
+    [GameInfo.UnitPromotions['PROMOTION_GUERILLA2_RECON'].Index]={{policy=iARETE_POLICY_INDEX, promo_grant=GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index}},
+
 }
 
 -- not implemented as reversible
@@ -345,10 +364,9 @@ local tPolicyUnlocks ={
     GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ORDER_STATE'].Index ,
     GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index
 }
-
+-- no idea who gets fear
 local tHasPromoAndUnlocks = {
-    [GameInfo.UnitPromotions['PROMOTION_CAN_GET_FEAR'].Index] = 1,
-    [GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index] = 1}
+    [GameInfo.UnitPromotions['PROMOTION_CAN_GET_FEAR'].Index] = 1}
 
 -- upgrade only, marksmen, immortal, skuld, ogre warchief
 
@@ -635,9 +653,11 @@ function doComplexUnlocks(pUnitExp, pUnitAbilities, pPlayerTechs, pPlayerCulture
                     local civic_req = tPromoInfo['civic']
                     local promo_extra = tPromoInfo['extra_promo']
                     local sAbility_req = tPromoInfo['ability']
+                    local iPolicyIndex = tPromoInfo['policy']
+
                     local bar = 0
                     local score = 0
-                    if tech_req then
+                    if tech_req then                            -- was I high? this doesnt need bar gating? silly, but works
                         bar = bar + 1
                         if pPlayerTechs:HasTech(tech_req) then
                             score = score + 1
@@ -659,6 +679,13 @@ function doComplexUnlocks(pUnitExp, pUnitAbilities, pPlayerTechs, pPlayerCulture
                     if sAbility_req then
                         bar = bar + 1
                         if pUnitAbilities:HasAbility(sAbility_req) then
+                            score = score + 1
+                        end
+                    end
+
+                    if iPolicyIndex then
+                        bar = bar + 1
+                        if pPlayerCulture:IsPolicyActive(iPolicyIndex) then
                             score = score + 1
                         end
                     end
