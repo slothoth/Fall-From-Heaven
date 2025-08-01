@@ -6,7 +6,7 @@ INSERT INTO GreatPersonIndividualActionModifiers (GreatPersonIndividualType, Mod
 ('SLTH_GREAT_ENGINEER_1', 'SLTH_MODIFIER_HURRY_WONDER', 'GREAT_PERSON_ACTION_ATTACHMENT_TARGET_DISTRICT_WONDER_IN_TILE');
 
  */
-CREATE TEMPORARY TABLE IF NOT EXISTS GreatPersonRepeater ( GreatPersonIndividualType TEXT PRIMARY KEY);
+CREATE TEMPORARY TABLE IF NOT EXISTS GreatPersonRepeater ( GreatPersonIndividualType TEXT PRIMARY KEY, Name TEXT);
 -- GEngineer
 WITH RECURSIVE iterator AS (
     SELECT 21 AS i
@@ -15,12 +15,12 @@ WITH RECURSIVE iterator AS (
     FROM iterator
     WHERE i < 512
 )
-INSERT INTO GreatPersonRepeater (GreatPersonIndividualType)
-SELECT 'SLTH_GREAT_ENGINEER_' || i
+INSERT INTO GreatPersonRepeater (GreatPersonIndividualType, Name)
+SELECT 'SLTH_GREAT_ENGINEER_' || i, 'LOC_SLTH_GREAT_ENGINEER_' || ((i - 1) % 20 + 1)
 FROM iterator;
 
 INSERT INTO GreatPersonIndividuals (GreatPersonIndividualType, Name, GreatPersonClassType, EraType, ActionCharges, Gender, ActionRequiresIncompleteWonder)
-SELECT GreatPersonIndividualType, 'LOC_SLTH_GREAT_ENGINEER_21', 'GREAT_PERSON_CLASS_ENGINEER', 'ERA_CLASSICAL', '1', 'Male', '1'
+SELECT GreatPersonIndividualType, Name, 'GREAT_PERSON_CLASS_ENGINEER', 'ERA_CLASSICAL', '1', 'Male', '1'
 FROM GreatPersonRepeater;
 
 INSERT INTO GreatPersonIndividualActionModifiers (GreatPersonIndividualType, ModifierId, AttachmentTargetType)
@@ -40,12 +40,12 @@ WITH RECURSIVE iterator AS (
     FROM iterator
     WHERE i < 512
 )
-INSERT INTO GreatPersonRepeater (GreatPersonIndividualType)
-SELECT 'SLTH_GREAT_GENERAL_' || i
+INSERT INTO GreatPersonRepeater (GreatPersonIndividualType, Name)
+SELECT 'SLTH_GREAT_GENERAL_' || i, 'LOC_SLTH_GREAT_GENERAL_' || ((i - 1) % 20 + 1)
 FROM iterator;
 
 INSERT INTO GreatPersonIndividuals (GreatPersonIndividualType, Name, GreatPersonClassType, EraType, ActionCharges, Gender)
-SELECT GreatPersonIndividualType, 'LOC_SLTH_GREAT_GENERAL_21', 'GREAT_PERSON_CLASS_GENERAL', 'ERA_CLASSICAL', '1', 'Male'
+SELECT GreatPersonIndividualType, Name, 'GREAT_PERSON_CLASS_GENERAL', 'ERA_CLASSICAL', '1', 'Male'
 FROM GreatPersonRepeater;
 
 INSERT INTO GreatPersonIndividualActionModifiers (GreatPersonIndividualType, ModifierId, AttachmentTargetType)
@@ -86,12 +86,12 @@ WITH RECURSIVE iterator AS (
     FROM iterator
     WHERE i < 512
 )
-INSERT INTO GreatPersonRepeater (GreatPersonIndividualType)
-SELECT 'SLTH_GREAT_PROPHET_' || i
+INSERT INTO GreatPersonRepeater (GreatPersonIndividualType, Name)
+SELECT 'SLTH_GREAT_PROPHET_' || i, 'LOC_SLTH_GREAT_PROPHET_' || ((i - 1) % 20 + 1)
 FROM iterator;
 
 INSERT INTO GreatPersonIndividuals (GreatPersonIndividualType, Name, GreatPersonClassType, EraType, ActionCharges, Gender, ActionRequiresMissingBuildingType, ActionRequiresCompletedDistrictType, ActionRequiresOwnedTile, ActionEffectTextOverride)
-SELECT GreatPersonIndividualType, 'LOC_SLTH_GREAT_PROPHET_21', 'GREAT_PERSON_CLASS_PROPHET', 'ERA_CLASSICAL', '1', 'Female', 'BUILDING_BLOCK_ALTAR', 'DISTRICT_CITY_CENTER',  '1', 'LOC_GRANT_ALTAR'
+SELECT GreatPersonIndividualType, Name, 'GREAT_PERSON_CLASS_PROPHET', 'ERA_CLASSICAL', '1', 'Female', 'BUILDING_BLOCK_ALTAR', 'DISTRICT_CITY_CENTER',  '1', 'LOC_GRANT_ALTAR'
 FROM GreatPersonRepeater;
 
 INSERT INTO GreatPersonIndividualActionModifiers (GreatPersonIndividualType, ModifierId, AttachmentTargetType)
@@ -148,12 +148,12 @@ WITH RECURSIVE iterator AS (
     FROM iterator
     WHERE i < 512
 )
-INSERT INTO GreatPersonRepeater (GreatPersonIndividualType)
-SELECT 'SLTH_GREAT_MERCHANT_' || i
+INSERT INTO GreatPersonRepeater (GreatPersonIndividualType, Name)
+SELECT 'SLTH_GREAT_MERCHANT_' || i, 'LOC_SLTH_GREAT_MERCHANT_' || ((i - 1) % 20 + 1)
 FROM iterator;
 
 INSERT INTO GreatPersonIndividuals  (GreatPersonIndividualType, Name, GreatPersonClassType, EraType, ActionCharges, Gender)
-SELECT GreatPersonIndividualType, 'LOC_SLTH_GREAT_MERCHANT_21', 'GREAT_PERSON_CLASS_MERCHANT', 'ERA_CLASSICAL', '1', 'Male'
+SELECT GreatPersonIndividualType, Name, 'GREAT_PERSON_CLASS_MERCHANT', 'ERA_CLASSICAL', '1', 'Male'
 FROM GreatPersonRepeater;
 
 INSERT INTO GreatPersonIndividualActionModifiers (GreatPersonIndividualType, ModifierId, AttachmentTargetType)
@@ -206,12 +206,12 @@ WITH RECURSIVE iterator AS (
     FROM iterator
     WHERE i < 512
 )
-INSERT INTO GreatPersonRepeater (GreatPersonIndividualType)
-SELECT 'SLTH_GREAT_ARTIST_' || i
+INSERT INTO GreatPersonRepeater (GreatPersonIndividualType, Name)
+SELECT 'SLTH_GREAT_ARTIST_' || i, 'LOC_SLTH_GREAT_ARTIST_' || ((i - 1) % 20 + 1)
 FROM iterator;
 
 INSERT INTO GreatPersonIndividuals  (GreatPersonIndividualType, Name, GreatPersonClassType, EraType, ActionCharges, Gender)
-SELECT GreatPersonIndividualType, 'LOC_SLTH_GREAT_ARTIST_21', 'GREAT_PERSON_CLASS_ARTIST', 'ERA_CLASSICAL', '1', 'Male'
+SELECT GreatPersonIndividualType, Name, 'GREAT_PERSON_CLASS_ARTIST', 'ERA_CLASSICAL', '1', 'Male'
 FROM GreatPersonRepeater;
 
 INSERT INTO GreatPersonIndividualActionModifiers (GreatPersonIndividualType, ModifierId, AttachmentTargetType)
@@ -281,8 +281,8 @@ WITH RECURSIVE iterator AS (
     FROM iterator
     WHERE i < 512
 )
-INSERT INTO GreatPersonRepeater (GreatPersonIndividualType)
-SELECT 'SLTH_GREAT_SCIENTIST_' || i
+INSERT INTO GreatPersonRepeater (GreatPersonIndividualType, Name)
+SELECT 'SLTH_GREAT_SCIENTIST_' || i, 'LOC_SLTH_GREAT_SCIENTIST_' || ((i - 1) % 20 + 1)
 FROM iterator;
 
 INSERT INTO GreatPersonIndividuals  (GreatPersonIndividualType, Name, GreatPersonClassType, EraType, ActionCharges, Gender)
@@ -346,3 +346,15 @@ INSERT INTO GreatPersonIndividualActionModifiers (GreatPersonIndividualType, Mod
 ('SLTH_GREAT_SCIENTIST_1', 'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM', 'GREAT_PERSON_ACTION_ATTACHMENT_TARGET_CITY'),
 ('SLTH_GREAT_SCIENTIST_1', 'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP', 'GREAT_PERSON_ACTION_ATTACHMENT_TARGET_CITY');
  */
+
+
+-- get all great people, add a passive !(that increases cost of next great person)
+-- this kinda sucks as it makes all of them more expensive, but thats kinda how it worked in IV too
+INSERT INTO Modifiers(ModifierId, ModifierType, RunOnce, Permanent) VALUES
+('GREAT_PERSON_EXTRA_COST', 'MODIFIER_PLAYER_ADJUST_FREE_GREAT_PERSON_POINTS', 1, 1);
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value, Type) VALUES
+('GREAT_PERSON_EXTRA_COST', 'Amount', -100, 'ScaleByGameSpeed');
+
+INSERT INTO GreatPersonIndividualBirthModifiers(GreatPersonIndividualType, ModifierId)
+SELECT GreatPersonIndividualType, 'GREAT_PERSON_EXTRA_COST' FROM GreatPersonIndividuals;

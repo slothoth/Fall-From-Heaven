@@ -297,4 +297,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_BUILDING_HALL_OF_KINGS_DESCRIPTION', '+2 [ICON_Culture]Culture to all Specialists.[NEWLINE]Double [ICON_Production]Production with [ICON_RESOURCE_MARBLE]Marble.', 'en_US'),
 ('LOC_BUILDING_TEMPLE_OF_TEMPORENCE_DESCRIPTION', '+1 [ICON_Amenities]Amenity in all cities.[NEWLINE]Double [ICON_Production]Production with [ICON_RESOURCE_MARBLE]Marble.', 'en_US'),
 ('LOC_SLTH_BUILDING_DUMMY_NAME', '', 'en_US'),
-('LOC_SLTH_BUILDING_DUMMY_DESCRIPTION', '', 'en_US');
+('LOC_SLTH_BUILDING_DUMMY_DESCRIPTION', '', 'en_US'),
+('LOC_COASTAL_CITY_NAME', 'Coastal City', 'en_US'),
+('LOC_COASTAL_CITY_DESCRIPTION', 'This buildings shows the city is adjacent to the coast. It cannot be built or acquired any other way.', 'en_US');

@@ -614,4 +614,5 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_UNIT_WRATH_DESCRIPTION', 'Spawned for the Barbarians once the Armageddon score reaches 100, the Avatar of Wrath is very powerful, and can summon 4 Iras per turn, bloodthirsty spirits.', 'en_US'),
 ('LOC_SLTH_UNIT_YERSINIA_DESCRIPTION', 'The 3rd Horseman, Yersinia spreads the Plagued promotion to enemies in combat, weakening them substantially. They are also Magic Immune.', 'en_US'),
 ('LOC_SLTH_UNIT_YVAIN_DESCRIPTION', 'Yvain can move in mountains, summon treants, and is a powerful defender when fighting in forests.', 'en_US'),
-('LOC_UNIT_WARRIOR_DESCRIPTION', 'Warriors are your earliest units and make reasonable city attackers and defenders. But beware that they will obsolete quickly. Seeks out archers for more effective defense and Axemen for more effective attacks.', 'en_US');
+('LOC_UNIT_WARRIOR_DESCRIPTION', 'Warriors are your earliest units and make reasonable city attackers and defenders. But beware that they will obsolete quickly. Seeks out archers for more effective defense and Axemen for more effective attacks.', 'en_US'),
+('LOC_GREAT_PERSON_CLASS_MANE_NAME', 'Mane(Infernal Only)', 'en_US');

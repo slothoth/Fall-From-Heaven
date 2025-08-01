@@ -114,7 +114,7 @@ INSERT INTO Buildings(BuildingType, Name, PrereqTech, Cost, PrereqDistrict, Desc
 -- coastal unlock for buildings
 INSERT INTO Buildings
 		(BuildingType,						PrereqDistrict,				Cost,	PurchaseYield, MustPurchase,	AdvisorType,		Name,				Description)
-VALUES  ('BUILDING_CITY_IS_COASTAL',		'DISTRICT_CITY_CENTER',		0,		NULL,          '1',			    'ADVISOR_GENERIC',	'LOC_NULL',			'LOC_NULL');
+VALUES  ('BUILDING_CITY_IS_COASTAL',		'DISTRICT_CITY_CENTER',		0,		NULL,          '1',			    'ADVISOR_GENERIC',	'LOC_COASTAL_CITY_NAME',			'LOC_COASTAL_CITY_DESCRIPTION');
 
 INSERT OR IGNORE INTO Buildings_XP2(BuildingType, Pillage)VALUES
 ('BUILDING_CITY_IS_COASTAL', '0');

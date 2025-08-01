@@ -1,3 +1,14 @@
+UPDATE District_CitizenYieldChanges SET YieldChange='3' WHERE DistrictType='DISTRICT_CAMPUS' AND YieldType='YIELD_SCIENCE';
+
+DELETE FROM District_CitizenYieldChanges WHERE DistrictType='DISTRICT_HOLY_SITE';
+
+INSERT INTO District_CitizenYieldChanges (DistrictType, YieldType, YieldChange) VALUES
+('DISTRICT_HOLY_SITE', 'YIELD_PRODUCTION', '1'),
+('DISTRICT_HOLY_SITE', 'YIELD_GOLD', '1');
+
+UPDATE District_CitizenYieldChanges SET YieldChange='3' WHERE DistrictType='DISTRICT_COMMERCIAL_HUB' AND YieldType='YIELD_GOLD';
+-- IZ already right
+UPDATE District_CitizenYieldChanges SET YieldChange='4' WHERE DistrictType='DISTRICT_THEATER' AND YieldType='YIELD_CULTURE';
 
 -- Scholarship
 INSERT INTO PolicyModifiers (PolicyType, ModifierId) VALUES

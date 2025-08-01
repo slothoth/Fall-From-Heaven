@@ -121,4 +121,5 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_RING_OF_FLAMES_DESCRIPTION', 'Deals damage to adjacent hostile units*.', 'en_US'),
 ('LOC_PLACE_HORDE_DESCRIPTION', 'Converts the user''s Dragon''s Horde equipment into the Dragon''s Horde Building.', 'en_US'),
 ('LOC_PLACE_CAULDRON_DESCRIPTION', 'Converts the user''s Mokka''s Cauldron equipment into the Mokka''s Cauldron  Building.', 'en_US'),
-('LOC_TAKE_EQUIPMENT_DESCRIPTION', 'Picks up equipment from adjacent unit.', 'en_US');
+('LOC_TAKE_EQUIPMENT_DESCRIPTION', 'Picks up equipment from adjacent unit.', 'en_US'),
+('LOC_GRANT_POP', 'Grants a Population in this City.', 'en_US');

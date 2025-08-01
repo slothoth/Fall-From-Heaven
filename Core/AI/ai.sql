@@ -16,10 +16,10 @@ DELETE FROM RandomAgendas WHERE AgendaType IN ('AGENDA_AIRPOWER', 'AGENDA_CITY_S
 
 DELETE FROM RandomAgendas WHERE AgendaType IN ('AGENDA_BARBARIAN_LOVER');
 
-UPDATE AiFavoredItems SET Value = 10 WHERE ListType='DefaultYieldBias' and Item='YIELD_FAITH';
-DELETE FROM AiFavoredItems WHERE ListType='ClassicalYields' and Item='YIELD_FAITH';
-DELETE FROM AiFavoredItems WHERE ListType='MedievalYields' and Item='YIELD_FAITH';
-DELETE FROM AiFavoredItems WHERE ListType='IndustrialYields' and Item='YIELD_FAITH';
+UPDATE AiFavoredItems SET Value = 15 WHERE ListType='DefaultYieldBias' and Item='YIELD_FAITH';
+UPDATE AiFavoredItems SET Value = 15 WHERE ListType='ClassicalYields' and Item='YIELD_FAITH';
+UPDATE AiFavoredItems SET Value = 15 WHERE ListType='MedievalYields' and Item='YIELD_FAITH';
+UPDATE AiFavoredItems SET Value = 15 WHERE ListType='IndustrialYields' and Item='YIELD_FAITH';
 
 DELETE FROM AiLists WHERE ListType='DefaultTechBoostSupportList';
 
@@ -805,9 +805,9 @@ INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
 ('GolemCraftersCivics', 'CIVIC_WAY_OF_THE_EARTHMOTHER', '1'),           -- religion runes
 ('GolemCraftersCivics', 'CIVIC_ARETE', '1'),           -- r
-('GolemCraftersCivics', 'TECH_CONSTRUCTION', '1'),                    -- for wood golems
--- ('GolemCraftersCivics', 'TECH_IRON_WORKING', '1'),                     -- iron golems?
-('GolemCraftersCivics', 'TECH_BRONZE_WORKING', '0');                    -- dont care about swordsman
+('GolemCraftersTechs', 'TECH_CONSTRUCTION', '1'),                    -- for wood golems
+('GolemCraftersTechs', 'TECH_IRON_WORKING', '1'),                     -- iron golems?
+('GolemCraftersTechs', 'TECH_BRONZE_WORKING', '0');                    -- dont care about swordsman
 
 -- Malakim          Desert Nomads
 
@@ -863,7 +863,7 @@ INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
 ('DesertNomadsCivics', 'CIVIC_MIND_STAPLING', '0'),
 ('DesertNomadsCivics', 'CIVIC_INFERNAL_PACT', '0'),
 ('DesertNomadsCivics', 'CIVIC_MYSTICISM', '1'),             -- desert shrine
-('DesertNomadsTechs', 'TECH_TRADE', '1');                        -- for Honor, when we stitch trees.
+('DesertNomadsTechs',  'TECH_TRADE', '1');                        -- for Honor, when we stitch trees.
 
 INSERT INTO AiFavoredItems(ListType, Item, Value, StringVal) VALUES
 ('DesertNomadsPlotEval', 'Total Yield', '1', 'YIELD_FAITH'),
@@ -1038,13 +1038,21 @@ INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
 
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
 ('ElvenAssassinsCivics', 'CIVIC_DECEPTION', '1'),           -- religions
-('ElvenAssassinsCivics', 'TECH_POISONS', '1'),               -- recon line
-('ElvenAssassinsCivics', 'TECH_HUNTING', '1'),
-('ElvenAssassinsCivics', 'TECH_CONSTRUCTION', '0'),         -- no siege
+('ElvenAssassinsTechs', 'TECH_POISONS', '1'),               -- recon line
+('ElvenAssassinsTechs', 'TECH_HUNTING', '1'),
+('ElvenAssassinsTechs', 'TECH_CONSTRUCTION', '0'),         -- no siege
 ('ElvenAssassinsDiplomacy', 'DIPLOACTION_DECLARE_SURPRISE_WAR', '1'),         -- declare suprise war
 ('ElvenAssassinsDiplomacy', 'DIPLOACTION_DECLARE_FORMAL_WAR', '1');         -- declare war
 
 --
+INSERT INTO AiListTypes(ListType) VALUES
+('SlthDefaultTechs');
+                                                                            -- ai hates calender... dunno why
+INSERT INTO AiLists(ListType, LeaderType, System) VALUES
+('SlthDefaultTechs', 'TRAIT_LEADER_MAJOR_CIV', 'Technologies');
+INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
+('SlthDefaultTechs', 'TECH_CALENDAR', '1');          -- recon line
+
 DELETE FROM AiFavoredItems WHERE Item == 'PSEUDOYIELD_GPP_ADMIRAL';
 DELETE FROM AiFavoredItems WHERE Item == 'PSEUDOYIELD_GPP_MUSICIAN';
 UPDATE AiFavoredItems SET Value = 20 WHERE Item == 'PSEUDOYIELD_GPP_PROPHET' AND Value < 0;
@@ -1100,9 +1108,11 @@ DELETE FROM AiFavoredItems WHERE Item == 'PSEUDOYIELD_GOLDENAGE_POINT';
 --
 -- PSEUDOYIELD_UNIT_AIR_COMBAT
 UPDATE PseudoYields SET DefaultValue= '-4.00' WHERE PseudoYieldType='PSEUDOYIELD_UNIT_AIR_COMBAT';          -- ai cant use hawks right.
+UPDATE PseudoYields SET DefaultValue= '10.0' WHERE PseudoYieldType='PSEUDOYIELD_WONDER';          -- AI dont like building any wonders
 
 -- try stopping them building naval units only...
 DELETE FROM AiFavoredItems WHERE Item == 'PSEUDOYIELD_UNIT_NAVAL_COMBAT';
+
 
 -- Alignment hatred
 --

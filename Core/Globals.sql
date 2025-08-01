@@ -99,7 +99,9 @@ INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
 ('REQUIRES_NO_CAPITAL_CITY', 'CollectionType', 'COLLECTION_PLAYER_CAPITAL_CITY'),
 ('REQUIRES_NO_CAPITAL_CITY', 'Count', '1');
 
-
+-- mohenjo daro everyone has fresh water housing always... its just too snowbally as rivers are now also commerce
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'MINOR_CIV_MOHENJO_DARO_CITIES_FRESHWATER_HOUSING_BONUS');
 /*
 
 -- sadly this sejong/moon project modifier just fails outside of a runonce context. Rtried Repeatable, no such luck
