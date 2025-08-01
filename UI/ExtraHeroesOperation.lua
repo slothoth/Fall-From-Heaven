@@ -393,6 +393,32 @@ function OnGrantGoldenAgeClicked()
 	return;
 end
 
+function InitializeSetPolicies(playerID)                        -- this fails.
+    local iGameTurn = Game.GetCurrentGameTurn()
+    print('trying to set policies on turn', iGameTurn)
+    if iGameTurn == 1 then
+        print('activating policies')
+        local pPlayer = Players[playerID]
+        if pPlayer:IsMajor() then
+            local pPlayerCulture = pPlayer:GetCulture()
+            if pPlayerCulture:GetNumPolicySlotsOpen() > 0 then
+                local newClearList = {0, 1, 2, 3, 4}
+                local newAddList = {[0]=GameInfo.Policies['SLTH_POLICY_TRIBALISM'].Hash,
+                                    [1]=GameInfo.Policies['SLTH_POLICY_RELIGION'].Hash,
+                                    [2]=GameInfo.Policies['SLTH_POLICY_DESPOTISM'].Hash,
+                                    [3]=GameInfo.Policies['SLTH_POLICY_NO_STATE_RELIGION'].Hash,
+                                    [4]=GameInfo.Policies['SLTH_POLICY_DECENTRALIZATION'].Hash
+                }
+                pPlayerCulture:RequestPolicyChanges(newClearList, newAddList);
+                print('requesting policy changes')
+            end
+        end
+    end
+    if iGameTurn == 3 then
+        Events.PlayerTurnActivated.Remove(InitializeSetPolicies);
+    end
+end
+
 
 -- helper functions
 function UnitGatherInfo()
@@ -515,4 +541,5 @@ Events.LoadGameViewStateDone.Add(Setup)
 Events.UnitSelectionChanged.Add(OnUnitSelectionChanged)
 Events.UnitOperationsCleared.Add(onOperationMoveEnded)
 
+Events.PlayerTurnActivated.Add(InitializeSetPolicies);
 
