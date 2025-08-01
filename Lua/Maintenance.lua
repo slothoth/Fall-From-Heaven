@@ -22,28 +22,34 @@ function MasterTax(playerId)
     local num_cities = 0;
     local glob_dist_tax = 0.0;
     local glob_num_tax = 0.0;
+    -- num cities cost (0.6 + 0.033*(city pop - 1))*(number of cities)/2
+    -- d = (ring number)*0.29. we can approximate rings as hex distance. so simple euclidean.
+    -- distance D = (7 + pop)*d*0.29/8
     SlthLog('Player is: '.. playerId);
     for idx, city in pPlayer:GetCities():Members() do
         num_cities = num_cities + 1;
     end
     for idx, city in pPlayer:GetCities():Members() do
-        local dist_tax = city:GetProperty('distance');
+        local distance = city:GetProperty('distance');
         local mult_city = city:GetProperty('city_mult');
-        local dist_tax_final = (dist_tax * mult_city) / 100 / 2;
-        local num_tax_final = (num_cities * mult_city) / 100    / 2;
+        local iCityPop = city:GetPopulation() or 1
+        local distancePostSum = ((7 + iCityPop) * distance * 0.29) / 8
+        local numCityPostSum = (0.6 + (0.033 * (iCityPop - 1))) * num_cities / 2
+        local dist_tax_final = (distancePostSum * mult_city) / 100
+        local num_tax_final = (numCityPostSum * mult_city) / 100
         glob_dist_tax = glob_dist_tax + dist_tax_final;
         glob_num_tax = glob_num_tax + num_tax_final;
-        SlthLog('City Distance Tax cost:'.. dist_tax_final);
-        SlthLog('City Num Tax cost:'.. num_tax_final);
+        -- SlthLog('City Distance Tax cost:'.. dist_tax_final);
+        -- SlthLog('City Num Tax cost:'.. num_tax_final);
     end
     local num_tax_final = glob_num_tax * global_city_reduction / 100;
-    SlthLog('Global Num Cities Tax cost:'.. num_tax_final);
+    -- SlthLog('Global Num Cities Tax cost:'.. num_tax_final);
     pPlayer:SetProperty('city_num_maintenance', num_tax_final);
     local taxes = glob_dist_tax * global_dist_reduction / 100;
     pPlayer:SetProperty('city_distance_maintenance', taxes);
-    SlthLog('Global Distance Cities Tax cost:'.. taxes);
+    -- SlthLog('Global Distance Cities Tax cost:'.. taxes);
     taxes = taxes + num_tax_final;
-    SlthLog('Total tax cost:'.. -taxes);
+    -- SlthLog('Total tax cost:'.. -taxes);
 
     -- unit maintenance section
     local iDifficultySupport = pPlayer:GetProperty('FreeUnitSupport') or 12       -- we may alter this with the Military State one...
@@ -286,52 +292,52 @@ function adjustSliders(pPlayer, pReligion, iExtraTax)
         local pPlot = pCapitalCity:GetPlot()
         local playerTreasury = pPlayer:GetTreasury()
         local goldYield = playerTreasury:GetGoldYield() - playerTreasury:GetTotalMaintenance() - iExtraTax;
-        print('goldyield is treasuryYield - maintenance - extraTax', playerTreasury:GetGoldYield(), '-', playerTreasury:GetTotalMaintenance(), '-', iExtraTax)
+        -- print('goldyield is treasuryYield - maintenance - extraTax', playerTreasury:GetGoldYield(), '-', playerTreasury:GetTotalMaintenance(), '-', iExtraTax)
         local goldBalance = math.floor(playerTreasury:GetGoldBalance());
         local iGoldRatio = pPlot:GetProperty(sCommerceGoldConversionKey) or 1
         local faithYield = pReligion:GetFaithYield();
         local iCurrentCommerceGold = faithYield * iGoldRatio /10
-        print('our gold from commerce is faith * goldenRatio', faithYield, iGoldRatio, iCurrentCommerceGold)
+        -- print('our gold from commerce is faith * goldenRatio', faithYield, iGoldRatio, iCurrentCommerceGold)
         local noCommerceGoldYield = goldYield - iCurrentCommerceGold
         local iNewGoldAmount
         if goldYield < 0 and goldYield > -goldBalance and iGoldRatio < 10 then                  -- in the red, try adjust slider
             iNewGoldAmount = (noCommerceGoldYield * 10) / faithYield
-            print('We were in the red, changing sliders: commerce/GoldWithoutCommerce/NewGoldRatio', faithYield, noCommerceGoldYield, iNewGoldAmount)
+            -- print('We were in the red, changing sliders: commerce/GoldWithoutCommerce/NewGoldRatio', faithYield, noCommerceGoldYield, iNewGoldAmount)
         else
             -- positive gold. If the yield per turn is more than 10% gold ratio, adjust so
             -- instead get the minimum unit, 10% and adjust so its always 10% more than required.
-            print('we were ok gold wise, see if we wanna adjust gold ratio', iGoldRatio)
+            -- print('we were ok gold wise, see if we wanna adjust gold ratio', iGoldRatio)
             if iGoldRatio > 0 then                      -- if all science, dont bother
                 local iGoldPer10 = faithYield/10
                 -- given the noCommerceGoldYield, what number of iGoldPer10 need added to make it at least iGoldPer10 gold
                 -- iGoldPer10 = noCommerceGoldYield + n*iGoldPer10
-                print('10pct of our commerce is granting', iGoldPer10)
-                print('aim to get at least 10pct commerce in the black')
-                print('Without any commerce our gold yield is', noCommerceGoldYield)
-                print('how many instances of 10pct commerce grant us 10pct gold positive?')
-                print('assume', iGoldPer10, 'positive gold yield, then we subtract our gold yield from that')
-                print(iGoldPer10, '-', noCommerceGoldYield, '=', (iGoldPer10 - noCommerceGoldYield))
-                print('Thats the amount of gold we want to earn from our commerce.',  (iGoldPer10 - noCommerceGoldYield))
-                print('So how many instances of our 10pct commerce fit into that')
-                print((iGoldPer10 - noCommerceGoldYield),  '/', iGoldPer10, (iGoldPer10 - noCommerceGoldYield)/iGoldPer10)
+                -- print('10pct of our commerce is granting', iGoldPer10)
+                -- print('aim to get at least 10pct commerce in the black')
+                -- print('Without any commerce our gold yield is', noCommerceGoldYield)
+                -- print('how many instances of 10pct commerce grant us 10pct gold positive?')
+                -- print('assume', iGoldPer10, 'positive gold yield, then we subtract our gold yield from that')
+                -- print(iGoldPer10, '-', noCommerceGoldYield, '=', (iGoldPer10 - noCommerceGoldYield))
+                -- print('Thats the amount of gold we want to earn from our commerce.',  (iGoldPer10 - noCommerceGoldYield))
+                -- print('So how many instances of our 10pct commerce fit into that')
+                -- print((iGoldPer10 - noCommerceGoldYield),  '/', iGoldPer10, (iGoldPer10 - noCommerceGoldYield)/iGoldPer10)
                 iNewGoldAmount = math.ceil((iGoldPer10 - noCommerceGoldYield) / iGoldPer10)
                 print('then rounded up', iNewGoldAmount)
             else
                 iNewGoldAmount = iGoldRatio
             end
         end
-        print('Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
+        -- print('Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
         if iNewGoldAmount > 10 then iNewGoldAmount = 10 end                 -- oh dear, still in the red.
         if iNewGoldAmount < 0 then iNewGoldAmount = 0 end
         local iNewScienceAmount = 10 - iNewGoldAmount
-        print('Post adjust Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
-        print('science ratio', iNewScienceAmount)
+        -- print('Post adjust Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
+        -- print('science ratio', iNewScienceAmount)
         if iNewGoldAmount ~= iGoldRatio then
             pPlayer:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
             pPlayer:SetProperty(sCommerceGoldConversionKey, iNewGoldAmount)
             pPlot:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
             pPlot:SetProperty(sCommerceGoldConversionKey, iNewGoldAmount)
-            print('updating commerce conversion to Science/Gold', iNewScienceAmount, iNewGoldAmount)
+            -- print('updating commerce conversion to Science/Gold', iNewScienceAmount, iNewGoldAmount)
         end
     end
 end
