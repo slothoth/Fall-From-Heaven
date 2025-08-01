@@ -103,9 +103,9 @@ g_uiConnectorSets		= {};
 -- ===========================================================================
 
 -- Spacing / Positioning Constants
-local COLUMN_WIDTH					:number = 250;			-- Space of node and line(s) after it to the next node
+local COLUMN_WIDTH					:number = 200;			-- Space of node and line(s) after it to the next node
 local COLUMNS_NODES_SPAN			:number = 2;			-- How many colunms do the nodes span
-local PADDING_TIMELINE_LEFT			:number = 225;
+local PADDING_TIMELINE_LEFT			:number = 0;
 local PADDING_PAST_ERA_LEFT			:number = 30;
 local PADDING_FIRST_ERA_INDICATOR	:number = -300;
 
@@ -303,8 +303,15 @@ end
 --	Convert a virtual column # and row # to actual pixels within the
 --	scrollable tree area.
 -- ===========================================================================
+local colWidth = {[3]=80, [5]=80, [6]=60, [8]=60, [9]=45, [11]=50, [12]=40}
 function ColumnRowToPixelXY( column:number, row:number)
-	local horizontal		:number = ((column-1) * COLUMNS_NODES_SPAN * COLUMN_WIDTH) + PADDING_TIMELINE_LEFT + PADDING_PAST_ERA_LEFT;
+	local adjustedColWidth = colWidth[column]
+	if adjustedColWidth then
+		adjustedColWidth = COLUMN_WIDTH - adjustedColWidth
+	else
+		adjustedColWidth = COLUMN_WIDTH
+	end
+	local horizontal		:number = ((column-1) * COLUMNS_NODES_SPAN * adjustedColWidth) + PADDING_TIMELINE_LEFT + PADDING_PAST_ERA_LEFT;
 	local vertical			:number = PADDING_NODE_STACK_Y + (SIZE_WIDESCREEN_HEIGHT / 2) + (row * SIZE_NODE_Y);
 	return horizontal, vertical;
 end
@@ -547,6 +554,7 @@ end
 --	multiplayer or if a (spy) game rule allows looking at another's tree.
 -- ===========================================================================
 local tExtraPrereqIcons = {}
+local tEraSkips = {ERA_ANCIENT=true, [1]=true,  ERA_MEDIEVAL=true, [3]=true}
 function AllocateUI( kNodeGrid:table, kPaths:table )
 
 	g_uiNodes = {};
@@ -572,6 +580,11 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 		else
 			UI.DataError("Civic tree is unable to find an EraCivicBackgroundTexture entry for era '"..eraData.Description.."'; using a default.");
 			instArt.BG:SetTexture(PIC_DEFAULT_ERA_BACKGROUND);
+			instArt.BG:SetHide(true)
+		end
+
+		if tEraSkips[era]  then
+			instArt.BG:SetHide(true)
 		end
 
 		instArt.Top:SetOffsetX(GetEraArtXOffset(instArt, eraData));
