@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<GameInfo>
-    <IconDefinitions>
-		<Row Name="ICON_DISTRICT_HOTARU_ENHANCE_AQUEDUCT"                Atlas="ICON_ATLAS_DISTRICTS" Index="11"/>
-		<Row Name="ICON_DISTRICT_HOTARU_ENHANCE_AQUEDUCT_FOW"            Atlas="ICON_ATLAS_DISTRICTS_FOW" Index="11"/>
-    </IconDefinitions>
-</GameInfo>
