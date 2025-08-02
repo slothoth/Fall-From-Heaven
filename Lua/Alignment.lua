@@ -1,6 +1,6 @@
 local tLeaderAlignmentMap = {
     ['LEADER_ALEXIS']=0, ['LEADER_FLAUROS']=0, ['LEADER_KEELYN']=0, ['LEADER_PERPENTACH']=0,
-    ['LEADER_HYBOREM']=0, ['LEADER_TEBRYN']=0, ['LEADER_OSGABELLA']=0, ['LEADER_JONAS']=0,
+    ['LEADER_HYBOREM']=0, ['LEADER_TEBRYN']=0, ['LEADER_OS_GABELLA']=0, ['LEADER_JONAS']=0,
     ['LEADER_SHEELBA']=0, ['LEADER_CHARADON']=0, ['LEADER_MAHALA']=0,
     ['LEADER_AURIC']=0, ['LEADER_FAERYL']=0,
 
@@ -84,18 +84,21 @@ function onReligionSwitch(playerID, policyID, wasEnacted)
             iNewAlignment = tReligionFromEvil[sReligion]
         end
     end
-    local pPlot = pPlayer:GetCities():GetCapitalCity():GetPlot()
-    if iNewAlignment then
-        pPlayer:SetProperty('alignment', iNewAlignment)
-        pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
-        pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
-        print('Setting alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]))
-    end
-    for idx, sReligionPropKey in ipairs(tReligionNames) do
-        if sReligionPropKey == sReligion then
-            pPlot:SetProperty(sReligionPropKey, 1)
-        else
-            pPlot:SetProperty(sReligionPropKey, 0)
+    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+    if pCapitalCity then
+        local pPlot = pCapitalCity:GetPlot()
+        if iNewAlignment then
+            pPlayer:SetProperty('alignment', iNewAlignment)
+            pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
+            pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
+            print('Setting alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]))
+        end
+        for idx, sReligionPropKey in ipairs(tReligionNames) do
+            if sReligionPropKey == sReligion then
+                pPlot:SetProperty(sReligionPropKey, 1)
+            else
+                pPlot:SetProperty(sReligionPropKey, 0)
+            end
         end
     end
 end
@@ -162,7 +165,6 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     local pUnit = pPlayer:GetUnits():FindID(killedUnitID);
     if not pUnit then return; end
     local pUnitAbilities = pUnit:GetAbility()
-    -- or pUnit:GetExperience():HasPromotion() -- todo once we have magic do entropy and death promos.
     if pUnitAbilities:HasAbility('ALIGNMENT_EVIL') then
         iGrantPlayer = Game:GetProperty('Infernal')
         -- check player is alive
@@ -267,6 +269,10 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
         if tAlignmentPropKeys[iAlignment] then print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment])); end
 
+        -- set capital commerce ratios
+        pPlot:SetProperty('CommIntoScience', 0)
+        pPlot:SetProperty('CommIntoGold', 10)
+
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')
             local iGameTurn = Game.GetCurrentGameTurn()         -- five turns to settle a city state
@@ -355,92 +361,72 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             end
         end
     end
+    -- if we have hyborem and basium disabled, this dont work and causes weirdness.
     if civicIndex == iINFERNAL_PACT_INDEX then
         local iInfernalPlayerId = Game:GetProperty('Infernal')
         local bInfernalSpawned = Game:GetProperty('infernal_spawned')
         if bInfernalSpawned then return end;
-        -- find strongest city state. what if no cs
-        local tpMinorCivs = PlayerManager.GetAliveMinors()
-        local pCity
-        local iCurrentCityPop
-        local iBestCityPop = 0
-        local pBestCity
-        for idx, pPlayer in ipairs(tpMinorCivs) do
-            pCity = pPlayer:GetCities():GetCapitalCity()
-            if pCity then
-                iCurrentCityPop = pCity:GetPopulation()
-                if iCurrentCityPop > iBestCityPop then
-                    pBestCity = pCity
-                    iBestCityPop = pCity:GetPopulation()
-                end
-            end
-        end
-        if pBestCity then
-            CityManager.TransferCity(pCity, iInfernalPlayerId, -1821839791)     -- enum CityTransferTypes.BY_GIFT
-            GrantTechParity(iInfernalPlayerId, playerID)
-            GrantCultureParity(iInfernalPlayerId, playerID)
-        else
-            print('no city state found. PANIC! place a city at a tribe clan a decent spot far away.')
-            -- iter over plots,
-            local iW, iH = Map.GetGridSize();
-            local tCampTiles = {}
-            local iIMPROVEMENT_BARB_CAMP = GameInfo.Improvements['IMPROVEMENT_BARBARIAN_CAMP'].Index
-            for x = 0, iW - 1 do
-                for y = 0, iH - 1 do
-                    local i = y * iW + x;
-                    local pPlot = Map.GetPlotByIndex(i);
-                    local iPlotImprovement = pPlot:GetImprovementType()
-                    if iPlotImprovement then
-                        if iPlotImprovement == iIMPROVEMENT_BARB_CAMP then
-                            tCampTiles[i] = pPlot
-                        end
+        -- iter over plots,
+        local iW, iH = Map.GetGridSize();
+        local tCampTiles = {}
+        local iIMPROVEMENT_BARB_CAMP = GameInfo.Improvements['IMPROVEMENT_BARBARIAN_CAMP'].Index
+        for x = 0, iW - 1 do
+            for y = 0, iH - 1 do
+                local i = y * iW + x;
+                local pPlot = Map.GetPlotByIndex(i);
+                local iPlotImprovement = pPlot:GetImprovementType()
+                if iPlotImprovement then
+                    if iPlotImprovement == iIMPROVEMENT_BARB_CAMP then
+                        tCampTiles[i] = pPlot
                     end
                 end
             end
-            print(table.count(tCampTiles))
-            -- filter for the best camp
-            --IsValidFoundLocation
-            local aPlayers = PlayerManager.GetAlive();
-            local more_than_four_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4)
-            local iInfernalPlot
-            local iLeastWaterTiles = 20
-            local iCurrentWaterTiles
-            print(table.count(more_than_four_plots))
-            if table.count(more_than_four_plots) > 0 then
-                print('some 5+ plots exist')
-                for idx, pPlot in pairs(more_than_four_plots) do
-                    -- count coast within 3 tiles. choose smallest
+        end
+        print(table.count(tCampTiles))
+        -- filter for the best camp
+        --IsValidFoundLocation
+        local aPlayers = PlayerManager.GetAlive();
+        local more_than_four_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4)
+        local iInfernalPlot
+        local iLeastWaterTiles = 20
+        local iCurrentWaterTiles
+        print(table.count(more_than_four_plots))
+        if table.count(more_than_four_plots) > 0 then
+            print('some 5+ plots exist')
+            for idx, pPlot in pairs(more_than_four_plots) do
+                -- count coast within 3 tiles. choose smallest
+                iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
+                if iCurrentWaterTiles < iLeastWaterTiles then
+                    print('found better')
+                    iInfernalPlot = pPlot
+                    iLeastWaterTiles = iCurrentWaterTiles
+                end
+            end
+        end
+        if not iInfernalPlot then
+            local four_range_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4, true)
+            if table.count(four_range_plots) > 0 then
+                print('some 4 plots exist')
+                for idx, pPlot in pairs(four_range_plots) do
                     iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
                     if iCurrentWaterTiles < iLeastWaterTiles then
-                        print('found better')
                         iInfernalPlot = pPlot
                         iLeastWaterTiles = iCurrentWaterTiles
                     end
                 end
             end
-            if not iInfernalPlot then
-                local four_range_plots = FindPlotsAtRange(tCampTiles, aPlayers, 4, true)
-                if table.count(four_range_plots) > 0 then
-                    print('some 4 plots exist')
-                    for idx, pPlot in pairs(four_range_plots) do
-                        iCurrentWaterTiles = countPlotWithinThreeCoast(pPlot)
-                        if iCurrentWaterTiles < iLeastWaterTiles then
-                            iInfernalPlot = pPlot
-                            iLeastWaterTiles = iCurrentWaterTiles
-                        end
-                    end
-                end
-            end
-            if iInfernalPlot then
-                local pInfernal = Players[iInfernalPlayerId]
-                local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
-                pInfernal:GetCities():Create(iCityMakeX, iCityMakeY)
-                GrantTechParity(iInfernalPlayerId, playerID)
-                GrantCultureParity(iInfernalPlayerId, playerID)
-                Game:SetProperty('infernal_spawned', 1)
-            else
-                print('not yet implemented random city outside of camps')
-            end
+        end
+        if iInfernalPlot then
+            local pInfernal = Players[iInfernalPlayerId]
+            local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
+            print('creating hyborem at',iCityMakeX ,iCityMakeY)
+            local playerUnits = pInfernal:GetUnits()
+            playerUnits:Create(GameInfo.Units['UNIT_SETTLER'].Index, iCityMakeX, iCityMakeY);
+            GrantTechParity(iInfernalPlayerId, playerID)
+            GrantCultureParity(iInfernalPlayerId, playerID)
+            Game:SetProperty('infernal_spawned', 1)
+        else
+            print('not yet implemented random city outside of camps')
         end
     end
 end
@@ -552,7 +538,7 @@ function onStart()
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
-                print('setting player alignment to ' .. tostring(iLeaderAlignment))
+                print('setting player', iPlayerID, ' alignment to ' .. tostring(iLeaderAlignment))
             else
                 pPlayer:SetProperty('alignment', -1)                -- to catch errors, remove at production
             end
@@ -566,6 +552,9 @@ function onStart()
     end
     if not Game:GetProperty('ARMAGEDDON') then          -- initalize armageddon
         Game:SetProperty('ARMAGEDDON',  0)
+    end
+    if not Game:GetProperty('Infernal') then          -- initalize armageddon
+        Game:SetProperty('infernal_spawned',  1)            -- stop infernals spawning if no hyborem
     end
 end
 

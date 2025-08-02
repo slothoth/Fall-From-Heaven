@@ -24,7 +24,113 @@ INSERT INTO GameModifiers(ModifierId) VALUES
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_BASE_COST';
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_MINIMUM_COST';
 
-
--- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'GOVERNMENT_ALLOW_EMPTY_POLICY_SLOTS'; could be good
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_WORLD_CONGRESS';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_TOP_PANEL_ENVOYS';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_CITY_STATES_VIEW';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_DISPLAY_SCORE';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_ERAS';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GOLDEN_AND_DARK_AGES';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_HISTORIC_MOMENTS';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_EMERGENCIES';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_FAITH_PURCHASE';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GREAT_PEOPLE_RECRUIT_WITH_FAITH';
+DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GREAT_PEOPLE_RECRUIT_WITH_GOLD';
+-- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'GOVERNMENT_ALLOW_EMPTY_POLICY_SLOTS'; -- could be good
 
 -- UPDATE GlobalParameters SET Value = '5' WHERE Name = 'PLOT_UNIT_LIMIT';      - i dont want this but? does it worK?
+
+INSERT INTO GameModifiers(ModifierId) VALUES
+('SLTH_RIVER_GOLD');
+
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
+('SLTH_RIVER_GOLD', 'MODIFIER_GAME_ADJUST_PLOT_YIELD', 'RIVER_ADJACENT_AND_NOT_FORESTED_REQS');
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
+('SLTH_RIVER_GOLD', 'YieldType', 'YIELD_FAITH'),
+('SLTH_RIVER_GOLD', 'Amount', '1');
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS', 'REQUIREMENT_REQUIREMENTSET_IS_MET', '1');
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS', 'RequirementSetId', 'SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS');
+
+INSERT OR IGNORE  INTO RequirementSets(RequirementSetId,	RequirementSetType)
+VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',	'REQUIREMENTSET_TEST_ALL'),
+        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',	'REQUIREMENTSET_TEST_ANY');
+
+INSERT INTO RequirementSetRequirements
+		(RequirementSetId,								RequirementId)
+VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS'),
+        ('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'REQUIRES_PLOT_ADJACENT_TO_RIVER'),
+        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',     'PLOT_IS_FOREST_REQUIREMENT'),
+        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',     'REQUIRES_PLOT_HAS_JUNGLE');
+
+
+-- Settlers have extra movement and sight when you dont have a capital city
+INSERT INTO TypeTags(Type, Tag) VALUES
+('ABILITY_FIRST_SETTLER_SIGHT_MOVE', 'CLASS_SETTLER');
+
+INSERT INTO Types(Type, Kind) VALUES
+('ABILITY_FIRST_SETTLER_SIGHT_MOVE', 'KIND_ABILITY');
+
+INSERT INTO UnitAbilities(UnitAbilityType, Name, Description, Inactive, Permanent) VALUES
+('ABILITY_FIRST_SETTLER_SIGHT_MOVE', 'LOC_FIRST_SETTLER_SIGHT_MOVE_NAME', 'LOC_IRST_SETTLER_SIGHT_MOVE_DESCRIPTION', '0', '1');
+
+INSERT INTO UnitAbilityModifiers(UnitAbilityType, ModifierId) VALUES
+('ABILITY_FIRST_SETTLER_SIGHT_MOVE', 'MODIFIER_3_MORE_MOVES_SETTLER'),
+('ABILITY_FIRST_SETTLER_SIGHT_MOVE', 'MODIFIER_3_MORE_SIGHT_SETTLER');
+
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
+('MODIFIER_3_MORE_MOVES_SETTLER', 'MODIFIER_PLAYER_UNIT_ADJUST_MOVEMENT', 'SLTH_PLAYER_HAS_NO_CAPITAL'),
+('MODIFIER_3_MORE_SIGHT_SETTLER', 'MODIFIER_PLAYER_UNIT_ADJUST_SIGHT', 'SLTH_PLAYER_HAS_NO_CAPITAL');
+
+INSERT INTO ModifierArguments(ModifierId, Name, Type, Value) VALUES
+('MODIFIER_3_MORE_MOVES_SETTLER', 'Amount', 'ARGTYPE_IDENTITY', '3'),
+('MODIFIER_3_MORE_SIGHT_SETTLER', 'Amount', 'ARGTYPE_IDENTITY', '3');
+
+-- player has no capital
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('SLTH_PLAYER_HAS_NO_CAPITAL', 'REQUIREMENTSET_TEST_ALL');
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('SLTH_PLAYER_HAS_NO_CAPITAL', 'REQUIRES_NO_CAPITAL_CITY');
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('REQUIRES_NO_CAPITAL_CITY', 'REQUIREMENT_COLLECTION_COUNT_ATLEAST', 1);
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('REQUIRES_NO_CAPITAL_CITY', 'CollectionType', 'COLLECTION_PLAYER_CAPITAL_CITY'),
+('REQUIRES_NO_CAPITAL_CITY', 'Count', '1');
+
+-- mohenjo daro everyone has fresh water housing always... its just too snowbally as rivers are now also commerce
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'MINOR_CIV_MOHENJO_DARO_CITIES_FRESHWATER_HOUSING_BONUS');
+/*
+
+-- sadly this sejong/moon project modifier just fails outside of a runonce context. Rtried Repeatable, no such luck
+INSERT INTO Modifiers(ModifierId, ModifierType, Repeatable, SubjectRequirementSetId) VALUES
+('GOLD_INTO_CULTURE', 'MODIFIER_PLAYER_GRANT_YIELD_BASED_ON_CURRENT_YIELD_RATE', '1',  NULL),
+('GOLD_INTO_SCIENCE', 'MODIFIER_PLAYER_GRANT_YIELD_BASED_ON_CURRENT_YIELD_RATE', '1', NULL);
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
+('GOLD_INTO_CULTURE', 'YieldToBaseOn', 'YIELD_GOLD'),
+('GOLD_INTO_CULTURE', 'YieldToGrant', 'YIELD_CULTURE'),
+('GOLD_INTO_CULTURE', 'Multiplier', '30'),
+('GOLD_INTO_SCIENCE', 'YieldToBaseOn', 'YIELD_GOLD'),
+('GOLD_INTO_SCIENCE', 'YieldType', 'YIELD_SCIENCE'),
+('GOLD_INTO_SCIENCE', 'Multiplier', '30');
+
+
+INSERT INTO DynamicModifiers(ModifierType, CollectionType, EffectType) VALUES
+('MODIFIER_GRANT_YIELD_BASED_ON_CURRENT_YIELD_RATE_CITIES', 'COLLECTION_PLAYER_CITIES', 'EFFECT_GRANT_YIELD_BASED_ON_CURRENT_YIELD_RATE');
+
+INSERT INTO Types(Type, Kind) VALUES
+('MODIFIER_GRANT_YIELD_BASED_ON_CURRENT_YIELD_RATE_CITIES', 'KIND_MODIFIER');
+
+ */
+
+ -- hiding civilopedia
+
+INSERT INTO CivilopediaSectionExcludes(SectionId) VALUES
+('MOMENTS'),
+('GOVERNORS');
+
+DELETE FROM GoodyHuts WHERE GoodyHutType = 'GOODYHUT_DIPLOMACY';            -- no envoys, favour, or governors
+DELETE FROM GoodyHutSubTypes WHERE GoodyHut = 'GOODYHUT_MILITARY' AND GoodyHutSubTypes.SubTypeGoodyHut= 'GOODYHUT_RESOURCES';       -- no accumulating resources

@@ -33,7 +33,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_POLICY_ARISTOCRACY_DESCRIPTION', '-1 [ICON_Food] Food and  +4 [ICON_Gold] Gold for each Farm. Allows the Royal Guard cavalry unit with Feudalism.', 'en_US'),
 ('LOC_SLTH_POLICY_CASTE_SYSTEM_DESCRIPTION', 'Builders start with +2 charges.', 'en_US'),
 ('LOC_SLTH_POLICY_CITY_STATES_DESCRIPTION', '80% reduced city Maintenance distance. -20% [ICON_Culture] Culture in all Cities. Accumulate 25% less war weariness than usual.', 'en_US'),
-('LOC_SLTH_POLICY_CONQUEST_DESCRIPTION', '+2 experience to trained Units. All military units cost food [UNIMPLEMENTED]', 'en_US'),
+('LOC_SLTH_POLICY_CONQUEST_DESCRIPTION', '+2 experience to trained Units. All military units cost food*', 'en_US'),
 ('LOC_SLTH_POLICY_CONSUMPTION_DESCRIPTION', '20% [ICON_Gold] Gold in all Cities.  Markets, Taverns and Theatres all give +1 [ICON_Amenities] Amenity.', 'en_US'),
 ('LOC_SLTH_POLICY_CRUSADE_DESCRIPTION', 'Accumulate -75% less war weariness than usual.', 'en_US'),
 ('LOC_SLTH_POLICY_DECENTRALIZATION_DESCRIPTION', 'Does nothing', 'en_US'),
@@ -63,7 +63,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_POLICY_STATE_OCTOPUS_NAME', 'Octopus Overlords', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_EMPYREAN_NAME', 'The Empyrean', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_ESUS_NAME', 'Council of Esus', 'en_US'),
-
 ('LOC_SLTH_POLICY_NO_STATE_RELIGION_DESCRIPTION', '', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_VEIL_DESCRIPTION', 'Allows: Diseased Corpses, Beast of Agares, Ritualist, Profane, Rosier, Mardero, Meshabber of Dis.', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_LEAVES_DESCRIPTION', 'Allows: Fawn, Priest of the Leaves, High Priest of the Leaves, Kithra Kyriel, Yvain. ', 'en_US'),
@@ -71,4 +70,9 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_POLICY_STATE_ORDER_DESCRIPTION', 'Allows: Crusader, Basilica, Confessor, Prior, Valin Phanuel, Sphener', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_OCTOPUS_DESCRIPTION', 'Allows:Drown, Stygian Guard, Asylum, Cultist, Speaker, Saverous, Hemah', 'en_US'),
 ('LOC_SLTH_POLICY_STATE_EMPYREAN_DESCRIPTION', 'Allows: Ratha, Radiant Guard, Vicar, Luridus, Chalid', 'en_US'),
-('LOC_SLTH_POLICY_STATE_ESUS_DESCRIPTION', 'Allows: Nightwatch, Shadowrider, Shadow, Gibbon Goetia', 'en_US');
+('LOC_SLTH_POLICY_STATE_ESUS_DESCRIPTION', 'Allows: Nightwatch, Shadowrider, Shadow, Gibbon Goetia', 'en_US'),
+('LOC_SLOT_SLTHREL_NAME', 'State Religion', 'en_US'),
+('LOC_SLOT_SLTHCUL_NAME', 'Economic', 'en_US'),
+('LOC_SLOT_DIPLOMATIC_NAME', 'Government', 'en_US'),
+('LOC_SLOT_ECONOMIC_NAME', 'Cultural Values', 'en_US'),
+('LOC_SLOT_MILITARY_NAME', 'Labor', 'en_US');

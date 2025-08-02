@@ -302,18 +302,20 @@ function OnPromoteUnitPopup()
 				promotionInstance.PromotionName:SetOffsetX(44)
 			end
 			if (promotionDefinition ~= nil) then
+				-- print('-----------')
+				-- print(promotionDefinition.Name)
+				-- print(Locale.ToUpper(promotionDefinition.Name))
 				promotionInstance.PromotionName:SetText(Locale.ToUpper(promotionDefinition.Name));
 				promotionInstance.PromotionDescription:SetText(Locale.Lookup(promotionDefinition.Description));
-				local iconName = "ICON_" .. promotionDefinition.UnitPromotionType;
-				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(iconName,32);			-- change to amber? and then hijack for different ones
-				if (textureOffsetX ~= nil) then
-					if not bIsSmallNode then
-						promotionInstance.PromotionIcon:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
-					end
-				end
 				if bIsSmallNode then
 					--promotionInstance.PromotionListIcon:SetColor(0,0,0,0)
-					promotionInstance.PromotionListIcon:SetHide(1)			-- plan is. Replace name with ICON_RESOURCE when made.
+					promotionInstance.PromotionName:SetText('');
+					local icon_name = Locale.ToUpper(promotionDefinition.Name)
+					local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(Locale.ToUpper(promotionDefinition.Name), 32);			-- change to amber? and then hijack for different ones
+					if (textureOffsetX ~= nil) then
+						promotionInstance.PromotionIcon:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
+					end
+					--promotionInstance.PromotionListIcon:SetHide(1)			-- plan is. Replace name with ICON_RESOURCE when made.
 				end
 			end
 

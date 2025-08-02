@@ -6,10 +6,6 @@
 	</ID>
 	<RequiredGameArtIDs>
 		<Element>
-			<name text="Civ6"/>
-			<id text="cb2f71b7-843e-4af3-9ca7-992acda9c195"/>
-		</Element>
-		<Element>
 			<name text="Expansion1"/>
 			<id text="7446c8fe-29eb-44f8-801f-098f681cc5c5"/>
 		</Element>
@@ -24,7 +20,12 @@
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
 				<Element text="Unit_Bins.artdef"/>
+				<Element text="Post_Build_Units.artdef"/>
 				<Element text="Cultures.artdef"/>
+				<Element text="Animal_Units.artdef"/>
+				<Element text="Animal_Unit_Bins.artdef"/>
+				<Element text="Warfare_Units.artdef"/>
+				<Element text="Warfare_Unit_Bins.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="Unit"/>
@@ -51,6 +52,7 @@
 				<Element text="Cultures.artdef"/>
 				<Element text="Clutter.artdef"/>
 				<Element text="Buildings.artdef"/>
+				<Element text="Features.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="CityBuildings"/>
@@ -136,7 +138,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Terrain"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="TerrainStyle.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="TerrainAsset"/>
 				<Element text="TerrainElement"/>
@@ -173,7 +177,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="WonderMovie"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="WonderMovie.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="WonderMovie"/>
 				<Element text="TileBase"/>
@@ -247,7 +253,14 @@
 		</Element>
 		<Element>
 			<ConsumerName text="Features"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+				<Element text="Features.artdef"/>
+				<Element text="Clutter.artdef"/>
+				<Element text="Landmarks.artdef"/>
+				<Element text="Buildings.artdef"/>
+				<Element text="Cultures.artdef"/>
+				<Element text="Civilizations.artdef"/>
+			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
 		</Element>
@@ -262,6 +275,11 @@
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
 				<Element text="Unit_Bins.artdef"/>
+				<Element text="Post_Build_Units.artdef"/>
+				<Element text="Animal_Units.artdef"/>
+				<Element text="Animal_Unit_Bins.artdef"/>
+				<Element text="Warfare_Units.artdef"/>
+				<Element text="Warfare_Unit_Bins.artdef"/>
 				<Element text="Civilizations.artdef"/>
 				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
@@ -273,6 +291,7 @@
 			<ArtDefDependencyPaths>
 				<Element text="Resources.artdef"/>
 				<Element text="Clutter.artdef"/>
+				<Element text="Features.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
@@ -280,10 +299,13 @@
 		<Element>
 			<ConsumerName text="Improvements"/>
 			<ArtDefDependencyPaths>
+				<Element text="Improvements.artdef"/>
 				<Element text="Cultures.artdef"/>
+				<Element text="Landmarks.artdef"/>
+				<Element text="Buildings.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
-			<LoadsLibraries>false</LoadsLibraries>
+			<LoadsLibraries>true</LoadsLibraries>
 		</Element>
 		<Element>
 			<ConsumerName text="WorldView_Translate"/>
@@ -307,9 +329,15 @@
 			<ConsumerName text="Audio"/>
 			<ArtDefDependencyPaths>
 				<Element text="Units.artdef"/>
+				<Element text="Post_Build_Units.artdef"/>
+				<Element text="Animal_Units.artdef"/>
+				<Element text="Animal_Unit_Bins.artdef"/>
+				<Element text="Warfare_Units.artdef"/>
+				<Element text="Warfare_Unit_Bins.artdef"/>
 				<Element text="Resources.artdef"/>
 				<Element text="Cultures.artdef"/>
 				<Element text="Clutter.artdef"/>
+				<Element text="Features.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies/>
 			<LoadsLibraries>false</LoadsLibraries>
@@ -421,17 +449,52 @@
 	</SystemDependencies>
 	<ArtDefDependencies>
 		<Element>
-			<ArtDefPath text="Units.artdef"/>
+			<ArtDefPath text="Features.artdef"/>
 			<ArtDefDependencyPaths>
+				<Element text="Clutter.artdef"/>
+				<Element text="Landmarks.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="TerrainStyle.artdef"/>
+			<ArtDefDependencyPaths/>
+		</Element>
+		<Element>
+			<ArtDefPath text="Animal_Units.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Units.artdef"/>
+				<Element text="Animal_Units.artdef"/>
+				<Element text="Animal_Unit_Bins.artdef"/>
+				<Element text="Cultures.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Animal_Unit_Bins.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Animal_Units.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Post_Build_Units.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Post_Build_Units.artdef"/>
 				<Element text="Units.artdef"/>
 				<Element text="Unit_Bins.artdef"/>
 				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 		<Element>
-			<ArtDefPath text="Unit_Bins.artdef"/>
+			<ArtDefPath text="Warfare_Units.artdef"/>
 			<ArtDefDependencyPaths>
-				<Element text="Units.artdef"/>
+				<Element text="Warfare_Unit_Bins.artdef"/>
+				<Element text="Unit_Bins.artdef"/>
+				<Element text="Cultures.artdef"/>
+			</ArtDefDependencyPaths>
+		</Element>
+		<Element>
+			<ArtDefPath text="Warfare_Unit_Bins.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Warfare_Units.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 		<Element>
@@ -468,11 +531,21 @@
 			<ArtDefDependencyPaths>
 				<Element text="Landmarks.artdef"/>
 				<Element text="Buildings.artdef"/>
+				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
 		</Element>
 		<Element>
 			<ArtDefPath text="FallbackLeaders.artdef"/>
 			<ArtDefDependencyPaths/>
+		</Element>
+		<Element>
+			<ArtDefPath text="Improvements.artdef"/>
+			<ArtDefDependencyPaths>
+				<Element text="Improvements.artdef"/>
+				<Element text="Landmarks.artdef"/>
+				<Element text="Cultures.artdef"/>
+				<Element text="Buildings.artdef"/>
+			</ArtDefDependencyPaths>
 		</Element>
 	</ArtDefDependencies>
 	<LibraryDependencies>
@@ -587,19 +660,24 @@
 		<Element>
 			<LibraryName text="UITexture"/>
 			<PackageDependencies>
+				<Element text="IconsAnimal.blp"/>
 				<Element text="UI/Icons.blp"/>
-				<Element text="Slth_Unit_Atlas_Test.blp"/>
+				<Element text="UI/Shell_Loading.blp"/>
 			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="Unit"/>
 			<PackageDependencies>
-				<Element text="UnitBinAccessories.blp"/>
+				<Element text="animals.blp"/>
+				<Element text="units/units.blp"/>
 			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="VFX"/>
-			<PackageDependencies/>
+			<PackageDependencies>
+				<Element text="VFX_FireFX.blp"/>
+				<Element text="VFX.blp"/>
+			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="Water"/>

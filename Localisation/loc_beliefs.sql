@@ -15,7 +15,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_ESUS_BELIEFS', 'The Nightwatch to spread religion for a Gold cost, comparable to the Longbowman, and the ShadowRider, a National mounted unit that ignores fortifications.', 'en_US'),
 ('LOC_VEIL_BELIEFS', 'The Savant, and Temple of the Veil', 'en_US'),
 ('LOC_BELIEF_BUILDINGS_WITH_STATE_SLTH_NAME', 'As State Religion, Buildings:', 'en_US'),
-('LOC_THE_ORDER_STATE_BUILDINGS', 'Basilicas acts as a second courthouse.', 'en_US'),
+('LOC_THE_ORDER_STATE_BUILDINGS', 'Basilicas act as a second courthouse.', 'en_US'),
 ('LOC_EMPYREAN_STATE_BUILDINGS', 'Holy Wonder Dies Diei grants Sun Mana, along with the Perfect Sight ability for units', 'en_US'),
 ('LOC_KILMORPH_STATE_BUILDINGS', 'Mines of Gal-Dur Wonder provides a source of Iron', 'en_US'),
 ('LOC_LEAVES_STATE_BUILDINGS', 'Holy Wonder Song of Autumn provides nature mana', 'en_US'),
@@ -36,5 +36,5 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_KILMORPH_STATE_SPECIAL', 'The Arete Technology and Policy, granting mine production and GPP', 'en_US'),
 ('LOC_LEAVES_STATE_SPECIAL', 'The Hidden Paths Civic and Guardian of Nature Policy, forest will transform into Ancient Forest over time, and Treants may spawn in to defend Ancient Forests from invaders', 'en_US'),
 ('LOC_OVERLORDS_STATE_SPECIAL', 'Allows access to the Mind Staping civic, as well as the ability to convert any unit to a Drown.', 'en_US'),
-('LOC_ESUS_STATE_SPECIAL', 'Any unit with the Esus religion can spread it, for a price. Recon units with the religion can cast Steal to steal gold from enemy cities and Mask to appear to others as barbarians (TODO). Prevents units from being removed from enemy territory on war declaration. Religion choice hidden from other players.', 'en_US'),
+('LOC_ESUS_STATE_SPECIAL', 'Any unit with the Esus religion can spread it, for a price. Recon units with the religion can cast Steal to steal gold from enemy cities and Mask to appear to others as barbarians*. Prevents units from being removed from enemy territory on war declaration*. Religion choice hidden from other players.', 'en_US'),
 ('LOC_VEIL_STATE_SPECIAL', 'Raises Armageddon count per city it is in. The Sacrifice the Weak civic reduces food consumption to 1, but also reduces GPP. One of the best Veil cities can be taken by Hyborem using his world spell.', 'en_US');

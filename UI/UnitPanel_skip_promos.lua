@@ -54,6 +54,16 @@ local tManaNodeBuilder = {
 	[GameInfo.Units['SLTH_UNIT_ILLUSIONIST'].Index] = 1,
 	[GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = 1 }
 
+local tExperienceUpgrades = {}
+for row in GameInfo.PromotionGatedUpgrades() do
+    tExperienceUpgrades[row.UnitType] = row.UnitLevel
+end
+
+local tNationalUpgrades = {}
+for row in GameInfo.NationalUnits() do
+    tNationalUpgrades[row.UnitType] = row.Amount
+end
+
 
 -- ===========================================================================
 --	CONSTANTS
@@ -518,9 +528,14 @@ function GetUnitActionsTable( pUnit )
 					local bDisabled = not bCanStartNow;
 					local toolTipString;
 					local bIsDoviello;
+					local iPrereqExperience
+					local iPrereqNationalMax
+					local bDisabledExperience
+					local bDisabledNational
 					local bDovielloUpgrade
 					if (actionHash == UnitCommandTypes.UPGRADE) then
 						-- if it's a unit upgrade action, add the unit it will upgrade to in the tooltip as well as the upgrade cost
+						print('its upgrade', tResults)
 						if (tResults ~= nil) then
 							if (tResults[UnitCommandResults.UNIT_TYPE] ~= nil) then
 								upgradeUnitInfo = GameInfo.Units[tResults[UnitCommandResults.UNIT_TYPE]]
@@ -532,6 +547,28 @@ function GetUnitActionsTable( pUnit )
 								end
 								toolTipString = toolTipString .. AddUpgradeResourceCost(pUnit);
 								print(toolTipString)
+								iPrereqExperience = tExperienceUpgrades[upgradeUnitInfo.UnitType]						-- experience and national unit gating, human only sadly
+								iPrereqNationalMax = tNationalUpgrades[upgradeUnitInfo.UnitType]
+								print('checking if have experience, is prereq/actual', iPrereqExperience, pUnit:GetExperience():GetLevel())
+								if iPrereqExperience and pUnit:GetExperience():GetLevel() < iPrereqExperience then
+									bDisabled = true
+									bDisabledExperience = true
+								end
+								if iPrereqNationalMax then
+									local pUnits = Players[Game.GetLocalPlayer()]:GetUnits()
+									local iAmountOfThisUnit = 0
+									for _, pOtherUnit in pUnits:Members() do
+										if iAmountOfThisUnit < iPrereqNationalMax then
+											if pOtherUnit:GetUnitType() == upgradeUnitInfo.Index then
+												iAmountOfThisUnit = iAmountOfThisUnit + 1
+											end
+										end
+									end
+									if iAmountOfThisUnit >= iPrereqNationalMax then
+										bDisabled = true
+										bDisabledNational = true
+									end
+								end
 							end
 						end
 						bIsDoviello = PlayerConfigurations[pUnit:GetOwner()]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_DOVIELLO'
@@ -584,6 +621,12 @@ function GetUnitActionsTable( pUnit )
 										toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup(v) .. "[ENDCOLOR]";
 									end
 								end
+							end
+							if bDisabledExperience then
+									toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup("LOC_UPGRADE_LEVEL_FAILED", iPrereqExperience) .. "[ENDCOLOR]";
+							end
+							if bDisabledNational then
+								toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup("LOC_UPGRADE_NATIONAL_FAILED", iPrereqNationalMax) .. "[ENDCOLOR]";
 							end
 						end
 					end
@@ -663,7 +706,7 @@ function GetUnitActionsTable( pUnit )
 								improvement["IsBestImprovement"] = false;
 							end
 
-							improvement["CategoryInUI"] = "BUILD";	-- TODO: Force improvement to be a type of "BUILD", this can be removed if CategoryInUI is added to "Improvements" in the database schema. ??TRON
+							improvement["CategoryInUI"] = "BUILD";
 							local callbackFn, isDisabled = GetBuildImprovementCallback( actionHash, isDisabled );
 							AddActionToTable( actionsTable, improvement, isDisabled, toolTipString, actionHash, callbackFn, improvement.Hash );
 						end
@@ -770,6 +813,7 @@ function GetUnitActionsTable( pUnit )
 						end
 						reqAbility = CustomOperationInfo.AbilityPrereq			-- need to iterate over abilities here
 						if reqAbility and not failedReq then
+							-- print('looking for', reqAbility)
 							local iAbilityToCheck = GameInfo.UnitAbilities[reqAbility].Index
 							if CustomOperationInfo.AlternateAbilityPrereq then
 								local iAbilityAltToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlternateAbilityPrereq].Index;
@@ -805,7 +849,7 @@ function GetUnitActionsTable( pUnit )
 					if (bCanStart) then
 						-- Check again if the operation can occur, this time for real.
 						if CustomOperationInfo then
-							local iHasCast = pUnit:GetProperty('HasCast') or 0
+							local iHasCast = 0					--  TODO free casting for testing pUnit:GetProperty('HasCast') or 0
 							if iHasCast == 0 then
 								if CustomOperationInfo.ActivationPrereq then
 									bCanStart = CustomCheck(CustomOperationInfo, pUnit)
@@ -973,7 +1017,7 @@ end
 -- ===========================================================================
 function View(data)
 
-	m_buildActionsIM:DestroyInstances();		-- TODO: Explore what (if anything) could be done with prior values so Reset can be utilized instead of destory; this would gain LUA side pooling
+	m_buildActionsIM:DestroyInstances();
     m_standardActionsIM:ResetInstances();
     m_secondaryActionsIM:ResetInstances();
 	m_groupArtIM:ResetInstances();
@@ -2702,7 +2746,6 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 				end
 			else
 				if (actionType == UnitOperationTypes.TYPE) then
-
 					local eInterfaceMode = InterfaceModeTypes.NONE;
 					local interfaceMode = GameInfo.UnitOperations[actionHash].InterfaceMode;
 					if (interfaceMode) then
@@ -2752,6 +2795,7 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 							UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
 							UI.DeselectUnit(pSelectedUnit);
 						else
+							print('doing operation normally')
 							UnitManager.RequestOperation( pSelectedUnit, actionHash );		-- No mode needed, just do the operation
 						end
 
@@ -2779,6 +2823,26 @@ end
 -- ===========================================================================
 -- UnitAction<BuildImprovement> was clicked.
 -- ===========================================================================
+local MANA_INDEX = GameInfo.Resources['RESOURCE_MANA'].Index
+local tManaNodeMapper = {
+    [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Hash]         = GameInfo.Resources['RESOURCE_MANA_AIR'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Hash]        = GameInfo.Resources['RESOURCE_MANA_BODY'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Hash]       = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Hash]       = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Hash]       = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Hash] = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Hash]     = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Hash]        = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Hash]         = GameInfo.Resources['RESOURCE_MANA_LAW'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Hash]        = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Hash]   = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Hash]        = GameInfo.Resources['RESOURCE_MANA_MIND'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Hash]      = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Hash]      = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Hash]      = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Hash]         = GameInfo.Resources['RESOURCE_MANA_SUN'].Index,
+    [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Hash]       = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
+}
 function OnUnitActionClicked_BuildImprovement( improvementHash, unused )
 	if (g_isOkayToProcess) then
 		local pSelectedUnit = UI.GetHeadSelectedUnit();
@@ -2787,7 +2851,22 @@ function OnUnitActionClicked_BuildImprovement( improvementHash, unused )
 			tParameters[UnitOperationTypes.PARAM_X] = pSelectedUnit:GetX();
 			tParameters[UnitOperationTypes.PARAM_Y] = pSelectedUnit:GetY();
 			tParameters[UnitOperationTypes.PARAM_IMPROVEMENT_TYPE] = improvementHash;
-
+			print('doing improvement build operation normally')
+			-- first cheap check to get unit
+			local pPlot = Map.GetPlot(pSelectedUnit:GetX(), pSelectedUnit:GetY())
+			local iResource = pPlot:GetResourceType()
+			if iResource == MANA_INDEX then
+				local iNewResourceIndex = tManaNodeMapper[improvementHash]
+				if iNewResourceIndex then
+					local iOwner = pSelectedUnit:GetOwner()
+					local tFirstParameters = {}
+					tFirstParameters.iPlotIndex = pPlot:GetIndex()
+					tFirstParameters.iResourceType = iNewResourceIndex
+					tFirstParameters.OnStart = 'SlthOnSetResource';
+					print('seding off change resource')
+					UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tFirstParameters)
+				end
+			end
 			UnitManager.RequestOperation( pSelectedUnit, UnitOperationTypes.BUILD_IMPROVEMENT, tParameters );
 		end
 		ContextPtr:RequestRefresh();
@@ -2856,7 +2935,7 @@ function OnUnitActionClicked_FoundCity(kResults:table)
 	if (g_isOkayToProcess) then
 		local pSelectedUnit = UI.GetHeadSelectedUnit();
 		if ( pSelectedUnit ~= nil ) then
-			if kResults ~= nil and table.count(kResults) ~= 0 then
+			if kResults ~= nil and table.count(kResults) ~= 0 and bDummyAlwaysFound then									-- i hate this popup
 				local popupString:string = Locale.Lookup("LOC_FOUND_CITY_CONFIRM_POPUP");
 				if (kResults[UnitOperationResults.FEATURE_TYPE] ~= nil) then
 					local featureName = GameInfo.Features[kResults[UnitOperationResults.FEATURE_TYPE]].Name;
@@ -2991,7 +3070,7 @@ function OnDeleteUnit(unitID : table)
 		UnitManager.RequestCommand( pUnit, UnitCommandTypes.DELETE );
 	end
 
-	--	TODO: Re-eval if below is needed, SelectedUnit may now handle this even with kUnit==nil there:
+
 	if UILens.IsLayerOn( m_HexColoringWaterAvail) then
 		UILens.ToggleLayerOff( m_HexColoringWaterAvail );
 	elseif UILens.IsLayerOn( m_HexColoringGreatPeople ) then
@@ -3203,7 +3282,7 @@ end
 -- ===========================================================================
 function ShowCombatAssessment()
 
-	-- TODO: Is there a case this would be called when m_combatResults NIL?
+
 	if (m_combatResults == nil) then
 		return;
 	end
@@ -4550,6 +4629,8 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 			bCanStart = pPlot:GetProperty('HellConversion') or 0 > 9
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff' then
+		local iPlotID = pUnit:GetPlotId()
+		local pPlot = Map.GetPlotByIndex(iPlotID)
 		local ResourceInfo = GameInfo.Resources[pPlot:GetResourceType()]
 		bCanStart = ResourceInfo and ResourceInfo.ResourceClassType == 'RESOURCECLASS_MANA'
 		-- if not bCanStart then
@@ -4563,15 +4644,33 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentAllyEligibleAbility' then
 		bCanStart = CheckAdjacentUnitsHasntAbility(pUnit, iOwner, CustomOperationInfo, true)
 	elseif CustomOperationInfo.ActivationPrereq == 'HasntAbility' then
+		local iAbilityToCheck
 		local pAbilities = pUnit:GetAbility():GetAbilities()
-		local bAllyUnitFound
-		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOperationInfo.SimpleText].Index
-		if (pAbilities and table.count(pAbilities) > 0) then
+		local pAbilityInfo = GameInfo.UnitAbilities[CustomOperationInfo.SimpleText]
+		if pAbilityInfo then
+			iAbilityToCheck = pAbilityInfo.Index
+			print('checking if can grant ability to self:', CustomOperationInfo.SimpleText)
+		elseif CustomOperationInfo.SecondText then
+			pAbilityInfo = GameInfo.UnitAbilities[CustomOperationInfo.SecondText]
+			if pAbilityInfo then
+				iAbilityToCheck = pAbilityInfo.Index
+				print('checking if can grant ability to self:', CustomOperationInfo.SecondText)
+			end
+		end
+		local hasAbility
+		print('do we have abilities', pAbilities)
+		if (pAbilities and table.count(pAbilities) > 0 and iAbilityToCheck) then
+			print('pre ability start, ensure false', hasAbility)
 			for i,ability in ipairs (pAbilities) do
-				if not bAllyUnitFound then
-					bAllyUnitFound = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
+				if not hasAbility then
+					print('checking if ability 1 == ability 2',ability,  iAbilityToCheck)
+					hasAbility = ability == iAbilityToCheck
 				end
 			end
+			print('do we have the ability', hasAbility)
+			bCanStart = not hasAbility
+		else
+			bCanStart = true
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'OnCityPopTwoPlus' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
@@ -4601,8 +4700,8 @@ function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a
 		end
 	elseif CustomOperationInfo.ActivationPrereq == 'EnoughGreatPeople' then
 		local pPlayer = Players[iOwner]
-		local iBar = pPlayer:GetProperty('GOLDEN_AGE_GP') or 1
-		local bCanStart = GPChecker(pPlayer, iBar)
+		local iBar = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
+		bCanStart = GPChecker(pPlayer, iBar)
 	elseif CustomOperationInfo.ActivationPrereq == 'OnHolyCity' then
 		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
 		if pCity then
@@ -4730,6 +4829,11 @@ function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, CustomOpInfo)
 end
 
 function CheckAdjacentUnitsHasntAbility(pUnit, iPlayer, CustomOpInfo, bIsAlly)
+	local abilityToCheckInfo = GameInfo.UnitAbilities[CustomOpInfo.SimpleText]
+	if not abilityToCheckInfo then
+		print('Error in checking adjacent units for Ability for use in CustomOP, couldnt find ability:', CustomOpInfo.SimpleText, CustomOpInfo.OperationType)
+		return false;
+	end
 	local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()

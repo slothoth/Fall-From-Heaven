@@ -57,7 +57,7 @@ local m_CurrentReportTab:number = 1;
 local m_kResourceData		:table = nil;
 local m_kCityData			:table = nil;
 local m_kCityTotalData		:table = nil;
-local m_kUnitData			:table = nil;	-- TODO: Show units by promotion class
+local m_kUnitData			:table = nil;
 local m_kDealData			:table = nil;
 local m_uiGroups			:table = nil;	-- Track the groups on-screen for collapse all action.
 
@@ -198,7 +198,7 @@ function GetData()
 	kCityTotalData.Treasury["TOURISM"]				= Round( kCityTotalData.Income["TOURISM"], 0 );
 
 
-	-- Units (TODO: Group units by promotion class and determine total maintenance cost)
+	-- Units
 	local MaintenanceDiscountPerUnit:number = pTreasury:GetMaintDiscountPerUnit();
 	local pUnits :table = player:GetUnits(); 	
 	for i, pUnit in pUnits:Members() do

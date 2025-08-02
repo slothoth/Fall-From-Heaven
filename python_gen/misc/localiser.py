@@ -1,7 +1,7 @@
 import logging
 from collections import Counter
 import xmltodict
-from utils import make_or_add
+from python_gen.misc.utils import make_or_add
 import json
 
 
@@ -257,6 +257,6 @@ class Localizer:
         return i
 
 def custom_loc():
-    with open("data/prebuilt_loc.json", 'r') as json_file:
+    with open("../data/prebuilt_loc.json", 'r') as json_file:
         loc_prebuilt = json.load(json_file)
     return loc_prebuilt

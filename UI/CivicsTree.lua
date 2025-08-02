@@ -103,9 +103,9 @@ g_uiConnectorSets		= {};
 -- ===========================================================================
 
 -- Spacing / Positioning Constants
-local COLUMN_WIDTH					:number = 250;			-- Space of node and line(s) after it to the next node
+local COLUMN_WIDTH					:number = 200;			-- Space of node and line(s) after it to the next node
 local COLUMNS_NODES_SPAN			:number = 2;			-- How many colunms do the nodes span
-local PADDING_TIMELINE_LEFT			:number = 225;
+local PADDING_TIMELINE_LEFT			:number = 0;
 local PADDING_PAST_ERA_LEFT			:number = 30;
 local PADDING_FIRST_ERA_INDICATOR	:number = -300;
 
@@ -303,8 +303,15 @@ end
 --	Convert a virtual column # and row # to actual pixels within the
 --	scrollable tree area.
 -- ===========================================================================
+local colWidth = {[3]=80, [5]=80, [6]=60, [8]=60, [9]=45, [11]=50, [12]=40}
 function ColumnRowToPixelXY( column:number, row:number)
-	local horizontal		:number = ((column-1) * COLUMNS_NODES_SPAN * COLUMN_WIDTH) + PADDING_TIMELINE_LEFT + PADDING_PAST_ERA_LEFT;
+	local adjustedColWidth = colWidth[column]
+	if adjustedColWidth then
+		adjustedColWidth = COLUMN_WIDTH - adjustedColWidth
+	else
+		adjustedColWidth = COLUMN_WIDTH
+	end
+	local horizontal		:number = ((column-1) * COLUMNS_NODES_SPAN * adjustedColWidth) + PADDING_TIMELINE_LEFT + PADDING_PAST_ERA_LEFT;
 	local vertical			:number = PADDING_NODE_STACK_Y + (SIZE_WIDESCREEN_HEIGHT / 2) + (row * SIZE_NODE_Y);
 	return horizontal, vertical;
 end
@@ -540,13 +547,14 @@ end
 --	Create UI controls based on the a node grid and connecting paths.
 --
 --	kNodeGrid,	A 2D table array of [row][columns]=itemType
---	kPaths,		A table describing paths.  TODO: Describe this format. ??TRON
+--	kPaths,		A table describing paths.
 --
 --	No state specific data (e.g., selected node) should be set here in order
 --	to reuse the nodes across viewing other players' trees for single seat
 --	multiplayer or if a (spy) game rule allows looking at another's tree.
 -- ===========================================================================
 local tExtraPrereqIcons = {}
+local tEraSkips = {ERA_ANCIENT=true, [1]=true,  ERA_MEDIEVAL=true, [3]=true}
 function AllocateUI( kNodeGrid:table, kPaths:table )
 
 	g_uiNodes = {};
@@ -572,6 +580,11 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 		else
 			UI.DataError("Civic tree is unable to find an EraCivicBackgroundTexture entry for era '"..eraData.Description.."'; using a default.");
 			instArt.BG:SetTexture(PIC_DEFAULT_ERA_BACKGROUND);
+			instArt.BG:SetHide(true)
+		end
+
+		if tEraSkips[era]  then
+			instArt.BG:SetHide(true)
 		end
 
 		instArt.Top:SetOffsetX(GetEraArtXOffset(instArt, eraData));
@@ -664,7 +677,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 			if previousRow == TREE_START_NONE_ID then
 
 			elseif startColumn > column	+3 then
-				print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
+				-- print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
 				tExtraPrereqIcons[item.Type] = prereqId
 				-- Nothing goes before this, not even a fake start area.
 
@@ -910,28 +923,29 @@ function PopulateNode(uiNode, playerTechData)
 				if prereq ~= nil then
 					local previousRow	:number = prereq.UITreeRow;
 					local previousColumn:number = g_kEras[prereq.EraType].PriorColumns;
-
-					for lineNum,line in pairs(g_uiConnectorSets[item.Type..","..prereqId]) do
-						if(lineNum == 1 or lineNum == 5) then
-							line:SetTexture("Controls_TreePathEW");
-						end
-						if( lineNum == 3) then
-							line:SetTexture("Controls_TreePathNS");
-						end
-
-						if(lineNum==2)then
-							if previousRow < item.UITreeRow  then
-								line:SetTexture("Controls_TreePathSE");
-							else
-								line:SetTexture("Controls_TreePathNE");
+					if g_uiConnectorSets[item.Type..","..prereqId] then
+						for lineNum,line in pairs(g_uiConnectorSets[item.Type..","..prereqId]) do
+							if(lineNum == 1 or lineNum == 5) then
+								line:SetTexture("Controls_TreePathEW");
 							end
-						end
+							if( lineNum == 3) then
+								line:SetTexture("Controls_TreePathNS");
+							end
 
-						if(lineNum==4)then
-							if previousRow < item.UITreeRow  then
-								line:SetTexture("Controls_TreePathES");
-							else
-								line:SetTexture("Controls_TreePathEN");
+							if(lineNum==2)then
+								if previousRow < item.UITreeRow  then
+									line:SetTexture("Controls_TreePathSE");
+								else
+									line:SetTexture("Controls_TreePathNE");
+								end
+							end
+
+							if(lineNum==4)then
+								if previousRow < item.UITreeRow  then
+									line:SetTexture("Controls_TreePathES");
+								else
+									line:SetTexture("Controls_TreePathEN");
+								end
 							end
 						end
 					end
@@ -1033,13 +1047,13 @@ function PopulateNode(uiNode, playerTechData)
 			end
 			local sExtraPrereq = tExtraPrereqIcons[uiNode.Type]
 			if sExtraPrereq then
-				print(uiNode.Type)
-				print(sExtraPrereq)
+				-- print(uiNode.Type)
+				-- print(sExtraPrereq)
 				local sExtraPrereqIcon = DATA_ICON_PREFIX .. sExtraPrereq
-				print(sExtraPrereqIcon)
+				-- print(sExtraPrereqIcon)
 				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(sExtraPrereqIcon, 42);
 				if (textureOffsetX ~= nil) then
-					print('setting prereqTexture' .. iconName)
+					-- print('setting prereqTexture ' .. iconName)
 					uiNode.ExtraPrereq:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
 				end
 			end
@@ -1150,7 +1164,7 @@ function View( playerTechData:table )
 				instance.Num:SetHide( true );
 				local playerNum		:number = markerStat.PlayerNums[1];
 				local pPlayerConfig :table = PlayerConfigurations[playerNum];
-				tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetPlayerName());	-- TODO: Temporary using player name until leaderame is fixed
+				tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetPlayerName());
 
 				if not markerStat.IsPlayerHere then
 					local iconName:string = "ICON_"..pPlayerConfig:GetLeaderTypeName();
@@ -1163,16 +1177,8 @@ function View( playerTechData:table )
 				instance.Num:SetText(tostring(numOfPlayersAtThisColumn));
 				for i,playerNum in ipairs(markerStat.PlayerNums) do
 					local pPlayerConfig :table = PlayerConfigurations[playerNum];
-					--[[ TODO: The human player, player 0, has whack values! No leader name coming from engine!
-						local name = pPlayerConfig:GetPlayerName();
-						local nick = pPlayerConfig:GetNickName();
-						local leader = pPlayerConfig:GetLeaderName();
-						local civ = pPlayerConfig:GetCivilizationTypeName();
-						local isHuman = pPlayerConfig:IsHuman();
-						print("debug info:",name,nick,leader,civ,isHuman);
-					]]
 					--tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetLeaderName());
-					tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetPlayerName());	-- TODO:: Temporary using player name until leaderame is fixed
+					tooltipString = tooltipString.. Locale.Lookup(pPlayerConfig:GetPlayerName());
 					if i < numOfPlayersAtThisColumn then
 						tooltipString = tooltipString.."[NEWLINE]";
 					end
@@ -1757,15 +1763,6 @@ function PopulateFilterData()
 		local controlTable	 = {};
 		Controls.FilterPulldown:BuildEntry( "FilterItemInstance", controlTable );
 		-- If a text icon exists, use it and bump the label in the button over.
-		--[[ TODO: Uncomment if icons are added.
-		if filterIconText ~= nil and filterIconText ~= "" then
-			controlTable.IconText:SetText( Locale.Lookup(filterIconText) );
-			controlTable.DescriptionText:SetOffsetX(24);
-		else
-			controlTable.IconText:SetText( "" );
-			controlTable.DescriptionText:SetOffsetX(4);
-		end
-		]]
 		controlTable.DescriptionText:SetOffsetX(8);
 		controlTable.DescriptionText:SetText( filterLabel );
 

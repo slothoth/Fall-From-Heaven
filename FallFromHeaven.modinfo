@@ -6,7 +6,7 @@
     <Created>1714825549</Created>
     <Teaser>Ports Kael's excellent Fall From Heaven mod to Civ VI</Teaser>
     <Authors>Slothoth</Authors>
-    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi, SeelingCat and Sukritact, Honey for their great reference mods for Lua.</SpecialThanks>
+    <SpecialThanks>SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Flactine, Leugi, SeelingCat and Sukritact, Honey for their great reference mods for Lua. Game-Icons.net for the vast quantity of icons used in UnitFlags. This mod would not have been possible without them. Low poly Chest pack from https://www.fab.com/sellers/AnderArts</SpecialThanks>
     <Homepage>https://github.com/slothoth/civvitests</Homepage>
     <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>
@@ -28,9 +28,11 @@
   <FrontEndActions>
     <UpdateDatabase id="config">
       <Properties>
-        <LoadOrder>100</LoadOrder>
+        <LoadOrder>500</LoadOrder>
       </Properties>
-      <File>Core/frontend_config.sql</File>
+      <File>Frontend/frontendConfig.sql</File>
+      <File>Frontend/leaderConfig.sql</File>
+      <File>BarbClans/frontend.sql</File>
     </UpdateDatabase>
     <UpdateText id="UpdateText">
       <File>Localisation/loc_playeritems.sql</File>
@@ -39,6 +41,8 @@
       <File>Localisation/loc_traits.sql</File>
       <File>Localisation/loc_units.sql</File>
       <File>Localisation/loc_menu.sql</File>
+      <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
+      <File>Localisation/loc_projects.sql</File>
     </UpdateText>
     <UpdateArt id="Art">
       <File>FallFromHeaven.dep</File>
@@ -49,8 +53,12 @@
     <UpdateIcons id="Icons">
       <File>Icons/LeaderIcons.sql</File>
       <File>Icons/UnitIcons.sql</File>
-      <File>Icons/ResourceIcons.sql</File>
-      <File>Icons.xml</File>
+      <File>Icons/FrontEndResourceIcons.sql</File>
+      <File>Icons/FrontEndBuildingIcons.sql</File>
+      <File>Icons/FrontEndImprovementIcons.sql</File>
+      <File>Icons/FrontEndProjectIcons.sql</File>
+      <File>Icons/CommandIcons.sql</File>
+      <File>Icons/ModeIcons.xml</File>
     </UpdateIcons>
    </FrontEndActions>
   <InGameActions>
@@ -132,7 +140,7 @@
       <File>Core/CivPolishing.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
-      <File>Core/BarbarianClans.sql</File>
+      <File>BarbClans/BarbarianClans.sql</File>
       <File>Core/Equipment.sql</File>
       <File>Core/Globals.sql</File>
       <File>Core/Victories.sql</File>
@@ -142,7 +150,13 @@
       <File>Core/Affinity.sql</File>
       <File>Core/UnitCommands.sql</File>
       <File>Core/LeaderTraits.sql</File>
+      <File>Core/CombatBuffs.sql</File>
+      <File>Core/Magic.sql</File>
       <File>Core/AiInfos.sql</File>
+      <File>Core/AI/ai.sql</File>
+      <File>Core/AI/ai_trait.sql</File>
+      <File>Core/Experimental/Commerce.sql</File>
+      <File>Core/Experimental/GPP_FromSpecialists.sql</File>
       <File>Core/BespokeUpgrades.sql</File>
       <File>Core/WorldSpellSupport.sql</File>
       <File>Core/Lua_support/Tech_dummies.sql</File>
@@ -152,6 +166,8 @@
         <LoadOrder>110</LoadOrder>
       </Properties>
       <File>Core/ResourceBuffs.sql</File>
+      <File>Core/PostEdits.sql</File>
+      <File>Core/Specialists/GeneratedGreatPeople.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
       <File>Localisation/loc_abilities.sql</File>
@@ -165,14 +181,15 @@
       <File>Localisation/loc_techs_civics.sql</File>
       <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
       <File>Localisation/loc_traits.sql</File>
-      <File>Localisation/loc_nulls.sql</File>
       <File>Localisation/loc_units.sql</File>
       <File>Localisation/loc_beliefs.sql</File>
       <File>Localisation/loc_barbs.sql</File>
       <File>Localisation/loc_ui.sql</File>
       <File>Localisation/loc_notifications.sql</File>
+      <File>Localisation/loc_projects.sql</File>
+      <File>Localisation/loc_commands.sql</File>
     </UpdateText>
-    <AddGameplayScripts id="NewAction">
+    <AddGameplayScripts id="luaGameplayFFH">
       <File>Lua/Maintenance.lua</File>
 	  <File>Lua/ExtraHeroes.lua</File>
       <File>Lua/Gameplay.lua</File>
@@ -184,16 +201,11 @@
       <File>Lua/WorldSpellSupport.lua</File>
       <File>Lua/RequestOperationSupport.lua</File>
     </AddGameplayScripts>
-    <AddUserInterfaces id="NewAction">
+    <AddUserInterfaces id="UIIngameFFH">
 	  <Properties>
         <Context>InGame</Context>
       </Properties>
 	  <File>UI/ExtraHeroesOperation.xml</File>
-    </AddUserInterfaces>
-    <AddUserInterfaces id="AddUserInterfaceWorldSpell">
-      <Properties>
-        <Context>InGame</Context>
-      </Properties>
       <File>UI/WorldSpell.xml</File>
     </AddUserInterfaces>
     <ReplaceUIScript id="ResearchChooserHideFFH">
@@ -203,7 +215,6 @@
           <LuaReplace>UI/ResearchChooser_overrides.lua</LuaReplace>
       </Properties>
     </ReplaceUIScript>
-
     <ReplaceUIScript id="ReplaceUI_TechTree_BaseFFH">
         <Properties>
             <LoadOrder>10950</LoadOrder>
@@ -246,18 +257,32 @@
             <LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
-     <ReplaceUIScript id="ReplaceUI_UnitPanel">
+    <ReplaceUIScript id="ReplaceUI_UnitPanel">
         <Properties>
             <LoadOrder>1105</LoadOrder>
             <LuaContext>UnitPanel</LuaContext>
             <LuaReplace>UI/UnitPanel_skip_promos.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript>
-    <!--ReplaceUIScript id="ReplaceUI_BarbClanPopup_BaseFFH">
+    <ReplaceUIScript id="XP2WROverride">
+      <Properties>
+        <LoadOrder>1001</LoadOrder>
+        <LuaContext>WorldRankings</LuaContext>
+        <LuaReplace>UI/world_rankings.lua</LuaReplace>
+      </Properties>
+    </ReplaceUIScript>
+    <ReplaceUIScript id="ReplaceUI_CivicsTree_BaseFFH">
         <Properties>
             <LoadOrder>10950</LoadOrder>
-            <LuaContext>TreatWithTribePopup</LuaContext>
-            <LuaReplace>UI/Null.lua</LuaReplace>
+            <LuaContext>CivicsTree</LuaContext>
+            <LuaReplace>UI/CivicsTree.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
+    <!--ReplaceUIScript id="ReplaceUI_MapLabeller">
+        <Properties>
+            <LoadOrder>1105</LoadOrder>
+            <LuaContext>MapLabelManager</LuaContext>
+            <LuaReplace>UI/MapLabelManager.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript-->
     <ImportFiles id="ImportUIFiles">
@@ -272,59 +297,40 @@
       <File>UI/TechTreeNode.xml</File>
       <File>UI/CivicsTree.xml</File>
       <File>UI/CivicsTree.lua</File>
+      <File>UI/GovernmentScreen.lua</File>
+      <File>UI/GovernmentScreen.xml</File>
+      <File>UI/TabSupport.lua</File>
+      <File>UI/ToolTipHelper_PlayerYields.lua</File>
+      <!--File>UI/MapLabelManager.lua</File>
+      <File>UI/MapLabelManager.xml</File-->
     </ImportFiles>
-    <!--ReplaceUIScript id="XP2EndGameOverrideLowPriorityTODO">
-      <Properties>
-        <LoadOrder>1001</LoadOrder>
-        <LuaContext>EndGameMenu</LuaContext>
-        <LuaReplace>UI/XP2/honey_victory_menagerie_endgame_override_xp2.lua</LuaReplace>
-      </Properties>
-    </ReplaceUIScript-->
-
-    <ReplaceUIScript id="XP2WROverride">
-      <Properties>
-        <LoadOrder>1001</LoadOrder>
-        <LuaContext>WorldRankings</LuaContext>
-        <LuaReplace>UI/world_rankings.lua</LuaReplace>
-      </Properties>
-    </ReplaceUIScript>
     <ImportFiles id="XP2WRxmlOverride">
       <Properties>
         <LoadOrder>101</LoadOrder>
       </Properties>
       <File>UI/WorldRankings.xml</File>
     </ImportFiles>
-    <ImportFiles id="ImportUIGovScreen">
-      <Properties>
-        <LoadOrder>901</LoadOrder>
-      </Properties>
-      <File>UI/GovernmentScreen.lua</File>
-      <File>UI/GovernmentScreen.xml</File>
-      <File>UI/TabSupport.lua</File>
-    </ImportFiles>
-
-    <ReplaceUIScript id="ReplaceUI_CivicsTree_BaseFFH">
-        <Properties>
-            <LoadOrder>10950</LoadOrder>
-            <LuaContext>CivicsTree</LuaContext>
-            <LuaReplace>UI/CivicsTree.lua</LuaReplace>
-        </Properties>
-    </ReplaceUIScript>
-    <!--ImportFiles id="ImportMapGenOverrideFiles">
-      <Properties>
-        <LoadOrder>901</LoadOrder>
-      </Properties>
-      <File>MapUtilities.lua</File>
-    </ImportFiles-->
   <UpdateIcons id="Icons">
     <File>Icons/LeaderIcons.sql</File>
     <File>Icons/UnitIcons.sql</File>
     <File>Icons/ResourceIcons.sql</File>
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
+    <File>Icons/BuildingIcons.sql</File>
+    <File>Icons/ImprovementIcons.sql</File>
+    <File>Icons/ProjectIcons.sql</File>
+    <File>Icons/CommandIcons.sql</File>
+    <File>Icons/ModeIcons.xml</File>
   </UpdateIcons>
   <ImportFiles id="ErebusMap">
 	<File>Maps/Erebus.lua</File>
+	<File>Maps/MapUtilities.lua</File>
+  </ImportFiles>
+  <ImportFiles id="ImportIncludeScripts">
+      <Properties>
+        <LoadOrder>902</LoadOrder>
+      </Properties>
+      <File>Lua/SpawnSupport.lua</File>
   </ImportFiles>
   </InGameActions>
   <Files>
@@ -335,7 +341,6 @@
     <File>Localisation/loc_cities_great_people_names.sql</File>
     <File>Localisation/loc_civ_leader.sql</File>
     <File>Localisation/loc_equipment.sql</File>
-    <File>Localisation/loc_nulls.sql</File>
     <File>Localisation/loc_pedia.sql</File>
     <File>Localisation/loc_policies.sql</File>
     <File>Localisation/loc_promotions.sql</File>
@@ -346,7 +351,9 @@
     <File>Localisation/loc_playeritems.sql</File>
     <File>Localisation/loc_ui.sql</File>
     <File>Localisation/loc_notifications.sql</File>
+    <File>Localisation/loc_projects.sql</File>
     <File>Localisation/loc_menu.sql</File>
+    <File>Localisation/loc_commands.sql</File>
     <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
@@ -357,12 +364,14 @@
     <File>Core/Promotion.sql</File>
     <File>Core/Resources.sql</File>
     <File>Core/ResourceBuffs.sql</File>
+    <File>Core/PostEdits.sql</File>
     <File>Core/Improvements.sql</File>
     <File>Core/Technologies.sql</File>
     <File>Core/Units.sql</File>
     <File>Core/Racials.sql</File>
     <File>Core/Specialists/Specialists.sql</File>
     <File>Core/Specialists/GreatPersons.sql</File>
+    <File>Core/Specialists/GeneratedGreatPeople.sql</File>
     <File>Core/Modifier_Support.sql</File>
     <File>Core/CivPolishing.sql</File>
     <File>Core/National_Units.sql</File>
@@ -394,7 +403,8 @@
     <File>Core/Civilizations/BeastRaces/Clan.sql</File>
     <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
     <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
-    <File>Core/BarbarianClans.sql</File>
+    <File>BarbClans/BarbarianClans.sql</File>
+    <File>BarbClans/frontend.sql</File>
     <File>Core/Equipment.sql</File>
     <File>Core/Globals.sql</File>
     <File>Core/Victories.sql</File>
@@ -405,14 +415,21 @@
     <File>Core/UnitCommands.sql</File>
     <File>Core/LeaderTraits.sql</File>
     <File>Core/AiInfos.sql</File>
+    <File>Core/AI/ai.sql</File>
+    <File>Core/AI/ai_trait.sql</File>
+    <File>Core/Experimental/Commerce.sql</File>
+    <File>Core/Experimental/GPP_FromSpecialists.sql</File>
     <File>Core/BespokeUpgrades.sql</File>
     <File>Core/WorldSpellSupport.sql</File>
     <File>Core/Lua_support/Tech_dummies.sql</File>
     <File>Core/AbsorbDeletes.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
-    <File>Core/frontend_config.sql</File>
+    <File>Frontend/frontendConfig.sql</File>
+    <File>Frontend/leaderConfig.sql</File>
     <File>Core/Assets_ingame.sql</File>
+    <File>Core/CombatBuffs.sql</File>
+    <File>Core/Magic.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Gameplay.lua</File>
     <File>Lua/Maintenance.lua</File>
@@ -424,6 +441,7 @@
     <File>Lua/RequestOperationSupport.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
+    <File>Lua/SpawnSupport.lua</File>
     <!--File>MapUtilities.lua</File-->
     <File>ArtDefs/Buildings.artdef</File>
     <File>ArtDefs/Civilizations.artdef</File>
@@ -434,6 +452,10 @@
     <File>Artdefs/Resources.artdef</File>
     <File>Artdefs/Units.artdef</File>
     <File>Artdefs/Unit_Bins.artdef</File>
+    <File>Artdefs/TerrainStyle.artdef</File>
+    <File>Artdefs/WonderMovie.artdef</File>
+    <File>Artdefs/Features.artdef</File>
+    <File>Artdefs/Improvements.artdef</File>
     <File>XLP/LeaderFallbacks.xlp</File>
     <File>FallFromHeaven.dep</File>
     <File>Icons/LeaderIcons.sql</File>
@@ -441,7 +463,15 @@
     <File>Icons/ResourceIcons.sql</File>
     <File>Icons/TechIcons.sql</File>
     <File>Icons/MiscIcons.sql</File>
-    <File>Icons.xml</File>
+    <File>Icons/BuildingIcons.sql</File>
+    <File>Icons/ImprovementIcons.sql</File>
+    <File>Icons/ProjectIcons.sql</File>
+    <File>Icons/CommandIcons.sql</File>
+    <File>Icons/FrontEndBuildingIcons.sql</File>
+    <File>Icons/FrontEndResourceIcons.sql</File>
+    <File>Icons/FrontEndImprovementIcons.sql</File>
+    <File>Icons/FrontEndProjectIcons.sql</File>
+    <File>Icons/ModeIcons.xml</File>
     <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
     <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
     <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
@@ -471,6 +501,9 @@
     <File>UI/TabSupport.lua</File>
     <File>UI/CivicsTree.xml</File>
     <File>UI/CivicsTree.lua</File>
+    <!--File>UI/MapLabelManager.lua</File>
+    <File>UI/MapLabelManager.xml</File-->
     <File>Maps/Erebus.lua</File>
+	<File>Maps/MapUtilities.lua</File>
   </Files>
 </Mod>

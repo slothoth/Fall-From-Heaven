@@ -172,15 +172,17 @@ function OnImprovementAddedToMap(locX , locY , eImprovementType , eOwner )
 		local pBarbTribe  = GameInfo.BarbarianTribeNames[barbType];
 		if(pBarbTribe ~= nil)then
 			local pPlot  = Map.GetPlot(locX, locY);
-			-- ExposedMembers.ExtraHeroes.SetPlotProperty(locX, locY, 'barbclantype', tribeIndex);
 			CreateBarbarianTribeBanner(pPlot, pBarbTribe);
 		end
 	end
 end
 
 -- ===========================================================================
+local iIMPROVEMENT_BARB_CAMP = GameInfo.Improvements['IMPROVEMENT_BARBARIAN_CAMP'].Index
 function OnImprovementRemovedFromMap( locX , locY , eOwner  )
+	print('removed improvement', locX, locY)
 	if(eOwner == -1)then
+		print('likely a barb')
 		local pPlot  = Map.GetPlot(locX, locY);
 		for k,v in ipairs(m_BarbarianTribeBanners) do
 			if(pPlot == v.Plot)then
@@ -188,6 +190,14 @@ function OnImprovementRemovedFromMap( locX , locY , eOwner  )
 				m_BarbarianTribeBannerIM:ReleaseInstance(v.BannerInstance);
 				table.remove(m_BarbarianTribeBanners, k);
 				return;
+			end
+		end
+		print('didnt find barb tribe instance to release')
+		for k,v in ipairs(m_BarbarianTribeBanners) do
+			local iImprovementIndex = v.Plot:GetImprovementType()
+			print('improvement of barb plot is', iImprovementIndex)
+			if iImprovementIndex ~= iIMPROVEMENT_BARB_CAMP then
+				m_BarbarianTribeBannerIM:ReleaseInstance(v.BannerInstance);
 			end
 		end
 	end
@@ -294,7 +304,4 @@ function Initialize()
 	Events.LocalPlayerTurnBegin.Add(OnLocalPlayerTurnBegin);
 
 	LuaEvents.PlayerChange_Close.Add(OnPlayerChangeClosed);
-	if ExposedMembers.ExtraHeroes == nil then
-		ExposedMembers.ExtraHeroes = {}
-	end
 end

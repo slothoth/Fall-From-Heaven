@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameInfo>
+	<IconTextureAtlases>
+		<Row Name="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS"   IconSize="38" IconsPerRow="4" IconsPerColumn="4"      Filename="Zombies_UnitActions38"/>
+		<Row Name="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS"   IconSize="50" IconsPerRow="4" IconsPerColumn="4"      Filename="Zombies_UnitActions50"/>
+		<Row Name="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS"   IconSize="80" IconsPerRow="4" IconsPerColumn="4"      Filename="Zombies_UnitActions80"/>
+		<Row Name="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS"   IconSize="256" IconsPerRow="4" IconsPerColumn="4"     Filename="Zombies_UnitActions256"/>
+    <Row Name="ICON_ATLAS_ZOMBIES_ESPIONAGE"      IconSize="20" IconsPerRow="8" IconsPerColumn="1"      Filename="Zombies_Outbreak20.dds"/>
+    <Row Name="ICON_ATLAS_ZOMBIES_ESPIONAGE"      IconSize="40" IconsPerRow="8" IconsPerColumn="1"      Filename="Zombies_Outbreak40.dds"/>
+    <Row Name="ICON_ATLAS_ZOMBIES_ESPIONAGE"      IconSize="200" IconsPerRow="8" IconsPerColumn="1"     Filename="Zombies_Outbreak200.dds"/>
+	</IconTextureAtlases>
+	<IconDefinitions>
+    <!--Row Name="ICON_PROJECT_WHITE_HAND"  Atlas="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS" Index="0"/-->
+    <Row Name="ICON_IMPROVEMENT_ANCIENT_TRAP_DEFENSE"  Atlas="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS" Index="1"/>
+    <Row Name="ICON_IMPROVEMENT_MANA_FIRE"  Atlas="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS" Index="2"/>
+    <Row Name="ICON_IMPROVEMENT_ANCIENT_TOWER_DEFENSE"  Atlas="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS" Index="3"/>
+    <Row Name="ICON_IMPROVEMENT_MODERN_TOWER_DEFENSE"  Atlas="ICON_ATLAS_ZOMBIES_UNIT_ACTIONS" Index="4"/>
+    <Row Name="ICON_UNITOPERATION_SPY_ZOMBIFY"  Atlas="ICON_ATLAS_ZOMBIES_ESPIONAGE" Index="0"/>
+	</IconDefinitions>
+
+	<IconTextureAtlases>
+		<Row Name="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" IconSize="32" IconsPerRow="4" IconsPerColumn="1" Filename="XP2_Buildings32.dds"/>
+		<Row Name="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" IconSize="38" IconsPerRow="4" IconsPerColumn="1" Filename="XP2_Buildings38.dds"/>
+		<Row Name="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" IconSize="50" IconsPerRow="4" IconsPerColumn="1" Filename="XP2_Buildings50.dds"/>
+		<Row Name="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" IconSize="80" IconsPerRow="4" IconsPerColumn="1" Filename="XP2_Buildings80.dds"/>
+		<Row Name="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" IconSize="128" IconsPerRow="4" IconsPerColumn="1" Filename="XP2_Buildings128.dds"/>
+		<Row Name="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" IconSize="256" IconsPerRow="4" IconsPerColumn="1" Filename="XP2_Buildings256.dds"/>
+	</IconTextureAtlases>
+	<IconDefinitions>
+		<Row Name="ICON_BUILDING_GUILDHALL" Atlas="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" Index="0"/>
+		<Row Name="ICON_BUILDING_WALLED_QUARTER" Atlas="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" Index="1"/>
+		<Row Name="ICON_BUILDING_MASS_GRAVE" Atlas="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" Index="2"/>
+		<Row Name="ICON_BUILDING_PLAGUE_HOSPITAL" Atlas="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" Index="3"/>
+		<Row Name="ICON_BUILDING_KEEP" Atlas="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" Index="4"/>
+	</IconDefinitions>
+</GameInfo>

@@ -80,9 +80,9 @@ STATUS_ART[ITEM_STATUS.UNREVEALED]	= { Name="UNREVEALED",	TextColor0=UI.GetColor
 -- ===========================================================================
 
 -- Spacing / Positioning Constants
-local COLUMN_WIDTH					:number = 220;			-- Space of node and line(s) after it to the next node
+local COLUMN_WIDTH					:number = 200;			-- Space of node and line(s) after it to the next node, changed from 220
 local COLUMNS_NODES_SPAN			:number = 2;			-- How many colunms do the nodes span
-local PADDING_TIMELINE_LEFT			:number = 275;
+local PADDING_TIMELINE_LEFT			:number = 50;					-- changed from 300 odd
 local PADDING_PAST_ERA_LEFT			:number = 30;
 local PADDING_FIRST_ERA_INDICATOR	:number = -300;
 
@@ -142,7 +142,7 @@ local m_width				:number= SIZE_MIN_SPEC_X;	-- Screen Width (default / min spec)
 local m_height				:number= SIZE_MIN_SPEC_Y;	-- Screen Height (default / min spec)
 local m_previousHeight		:number= SIZE_MIN_SPEC_Y;	-- Screen Height (default / min spec)
 local m_scrollWidth			:number= SIZE_MIN_SPEC_X;	-- Width of the scroll bar
-local m_kEraCounter			:table = {};				-- counter to determine which eras have techs --TODO Tronster: refactor, is this still necessary?
+local m_kEraCounter			:table = {};				-- counter to determine which eras have techs
 local m_maxColumns			:number= 0;					-- # of columns (highest column #)
 local m_ePlayer				:number= -1;
 local m_kAllPlayersTechData	:table = {};				-- All data for local players.
@@ -216,6 +216,13 @@ local iTECH_PASS_THROUGH_THE_ETHER = GameInfo.Technologies['TECH_PASS_THROUGH_TH
 local iTECH_BRONZE_WORKING = GameInfo.Technologies['TECH_BRONZE_WORKING'].Index
 local iTECH_SAILING = GameInfo.Technologies['SLTH_TECH_SAILING'].Index
 local iTECH_DIVINATION = GameInfo.Technologies['TECH_DIVINATION'].Index
+
+local iTECH_ARCHERY_INDEX = GameInfo.Technologies['SLTH_TECH_ARCHERY'].Index
+local iTECH_OMNISCIENCE_INDEX = GameInfo.Technologies['TECH_OMNISCIENCE'].Index
+local iTECH_SANITATION_INDEX = GameInfo.Technologies['TECH_SANITATION'].Index
+local iTECH_SORCERY_INDEX = GameInfo.Technologies['TECH_SORCERY'].Index
+local iTECH_TRADE_INDEX = GameInfo.Technologies['TECH_TRADE'].Index
+
 local tExclusionHash = {
 						[GameInfo.Technologies['TECH_ARCHERY_SKIP'].Index]={pref=iTECH_MINING, other={iTECH_HUNTING}, skip=true},
 						[GameInfo.Technologies['TECH_OMNISCIENCE_SKIP'].Index]={pref=iTECH_STRENGTH_OF_WILL, other={iTECH_PASS_THROUGH_THE_ETHER}, skip=true},
@@ -223,35 +230,28 @@ local tExclusionHash = {
 						[GameInfo.Technologies['TECH_SORCERY_SKIP'].Index]={pref=iTECH_DIVINATION ,other={iTECH_ALTERATION, iTECH_ELEMENTALISM, iTECH_NECROMANCY}, skip=true},
 						[GameInfo.Technologies['TECH_TRADE_SKIP'].Index]={pref=iTECH_SAILING, other={iTECH_HORSEBACK_RIDING, skip=true}},
 
-						[GameInfo.Technologies['SLTH_TECH_ARCHERY'].Index]={pref=iTECH_MINING, other={iTECH_HUNTING}},
-						[GameInfo.Technologies['TECH_OMNISCIENCE'].Index]={pref=iTECH_STRENGTH_OF_WILL, other={iTECH_PASS_THROUGH_THE_ETHER}},
-						[GameInfo.Technologies['TECH_SANITATION'].Index]={pref=iTECH_BRONZE_WORKING, other={iTECH_CONSTRUCTION}},
-						[GameInfo.Technologies['TECH_SORCERY'].Index]={pref=iTECH_DIVINATION ,other={iTECH_ALTERATION, iTECH_ELEMENTALISM, iTECH_NECROMANCY}},
-						[GameInfo.Technologies['TECH_TRADE'].Index]={pref=iTECH_SAILING, other={iTECH_HORSEBACK_RIDING}},
+						[iTECH_ARCHERY_INDEX]={pref=iTECH_MINING, other={iTECH_HUNTING}},
+						[iTECH_OMNISCIENCE_INDEX]={pref=iTECH_STRENGTH_OF_WILL, other={iTECH_PASS_THROUGH_THE_ETHER}},
+						[iTECH_SANITATION_INDEX]={pref=iTECH_BRONZE_WORKING, other={iTECH_CONSTRUCTION}},
+						[iTECH_SORCERY_INDEX]={pref=iTECH_DIVINATION ,other={iTECH_ALTERATION, iTECH_ELEMENTALISM, iTECH_NECROMANCY}},
+						[iTECH_TRADE_INDEX]={pref=iTECH_SAILING, other={iTECH_HORSEBACK_RIDING}},
 }
-local tCheckTechsComplete = {	{[iTECH_HUNTING]=true, [iTECH_MINING]=true},
-								{[iTECH_STRENGTH_OF_WILL]=true, [iTECH_PASS_THROUGH_THE_ETHER]=true},
-								{[iTECH_CONSTRUCTION]=true, [iTECH_BRONZE_WORKING]=true},
-								{[iTECH_HORSEBACK_RIDING]=true, [iTECH_SAILING]=true},
-								{[iTECH_ALTERATION]=true, [iTECH_DIVINATION]=true, [iTECH_ELEMENTALISM]=true, [iTECH_NECROMANCY]=true}
+local tCheckTechsComplete = {	[iTECH_ARCHERY_INDEX]={[iTECH_HUNTING]=true, [iTECH_MINING]=true},
+								[iTECH_OMNISCIENCE_INDEX]={[iTECH_STRENGTH_OF_WILL]=true, [iTECH_PASS_THROUGH_THE_ETHER]=true},
+								[iTECH_SANITATION_INDEX]={[iTECH_CONSTRUCTION]=true, [iTECH_BRONZE_WORKING]=true},
+								[iTECH_SORCERY_INDEX]={[iTECH_HORSEBACK_RIDING]=true, [iTECH_SAILING]=true},
+								[iTECH_TRADE_INDEX]={[iTECH_ALTERATION]=true, [iTECH_DIVINATION]=true, [iTECH_ELEMENTALISM]=true, [iTECH_NECROMANCY]=true}
 						}
 
 
 function AdjustTechPath(pathToTech, localPlayerTechs)
+	print('new chekc start -----------------------')
 	local newPathToTech = {}
 	local tAddedSkips = {}
 	for key, val in pairs(pathToTech) do
+		print('checking', key, val)
 		local bHasORResearched
 		local sTechName = GameInfo.Technologies[val].TechnologyType
-		for idx, tCheckTechs in ipairs(tCheckTechsComplete) do
-			if tCheckTechs[val] then
-				for iCheckOrTech, _ in pairs(tCheckTechs) do
-					if (iCheckOrTech ~= tech) and (not bHasORResearched) then
-						bHasORResearched = localPlayerTechs:HasTech(iCheckOrTech)
-					end
-				end
-			end
-		end
 		local tDummyOrSkips = tExclusionHash[val]
 		if tDummyOrSkips then
 			if tDummyOrSkips['skip'] then bHasORResearched = true; end
@@ -259,16 +259,16 @@ function AdjustTechPath(pathToTech, localPlayerTechs)
 			local preferredRequiredTechs = {}
 			local sTech = GameInfo.Technologies[iPreferredTechPrereq].TechnologyType
 			if not localPlayerTechs:HasTech(iPreferredTechPrereq) then
-				-- print(sTechName .. ' doesnt have preferred prereq ' .. sTech .. ' researched, pre-filtering unpreferred paths.')
+				print(sTechName .. ' doesnt have preferred prereq ' .. sTech .. ' researched, pre-filtering unpreferred paths.')
 				local prereqHash = GameInfo.Types[sTech].Hash
 				local preferredPath = localPlayerTechs:GetResearchPath( prereqHash );
 				for key_, val_ in pairs(preferredPath) do
 					local prefTechName = GameInfo.Technologies[val_].TechnologyType
-					-- print('Filtered ' .. tostring(prefTechName) .. ' out of removal list')
+					print('Filtered ' .. tostring(prefTechName) .. ' out of removal list')
 					preferredRequiredTechs[val_] = true
 				end
 			else
-				-- print('does have preferred prereq researched ' .. sTech)
+				print('does have preferred prereq researched ' .. sTech)
 			end
 			local pathTechsToFilter = {}
 			for _, iMyTechPrereqs in ipairs(tDummyOrSkips['other']) do
@@ -280,22 +280,22 @@ function AdjustTechPath(pathToTech, localPlayerTechs)
 				-- if we have tech B, instead filter tech A, and other techs
 				local sTech = GameInfo.Technologies[iMyTechPrereqs].TechnologyType
 				if not localPlayerTechs:HasTech(iMyTechPrereqs) then
-					-- print('other tech prereq ' .. sTech)
+					print('other tech prereq ' .. sTech)
 					local otherHash = GameInfo.Types[sTech].Hash
 					local otherPath = localPlayerTechs:GetResearchPath( otherHash );
-					-- print('filter techs as we dont have prereq A (preferred)')
+					print('filter techs as we dont have prereq A (preferred)')
 					for key_, val_ in pairs(otherPath) do
 						if not preferredRequiredTechs[val_] then
 							local sTechSkip = GameInfo.Technologies[val_].TechnologyType
-							-- print('skipping tech in path: ' .. sTechSkip)
+							print('skipping tech in path: ' .. sTechSkip)
 							tAddedSkips[val_] = true
 						end
 					end
 				else
-					-- print('we have the tech, so proceed with prior skips without filter')
+					print('we have the tech, so proceed with prior skips without filter')
 					for key_, val_ in pairs(preferredRequiredTechs) do
 						local sTechSkip = GameInfo.Technologies[val_].TechnologyType
-						-- print('skipping tech in path: ' .. sTechSkip)
+						print('skipping tech in path: ' .. sTechSkip)
 						tAddedSkips[val_] = true
 					end
 				end
@@ -303,10 +303,10 @@ function AdjustTechPath(pathToTech, localPlayerTechs)
 		end
 
 		if bHasORResearched then
-			-- print('skipping tech in path: ' .. sTechName)
+			print('skipping tech in path: ' .. sTechName)
 		else
 			table.insert(newPathToTech, val)
-			-- print('adding tech: ' .. sTechName)
+			print('adding tech: ' .. sTechName)
 		end
 	end
 	return newPathToTech, tAddedSkips
@@ -317,7 +317,7 @@ function FilterTechPath(newPathToTech, tAddedSkips)
 	for key, val in pairs(newPathToTech) do
 		if tAddedSkips[val] then
 			table.insert(tRemoveFromPathIndices, key)
-			-- print('tech was skipped as was part of dummy path route ' .. GameInfo.Technologies[val].TechnologyType)
+			print('tech was skipped as was part of dummy path route ' .. GameInfo.Technologies[val].TechnologyType)
 		end
 	end
 	table.sort(tRemoveFromPathIndices, function(a,b) return a > b; end)
@@ -338,6 +338,7 @@ function SetCurrentNode( hash:number )
 		local pathToTech
 		pathToTech = localPlayerTechs:GetResearchPath( hash );
 		-- if there are any of the techs that have a skip in the path
+
 		local newPathToTech, tAddedSkips = AdjustTechPath(pathToTech, localPlayerTechs)
 
 		FilterTechPath(newPathToTech, tAddedSkips)
@@ -397,7 +398,17 @@ end
 --	scrollable tree area.
 -- ===========================================================================
 function ColumnRowToPixelXY( column:number, row:number)
-	local horizontal		:number = ((column-1) * COLUMNS_NODES_SPAN * COLUMN_WIDTH) + PADDING_TIMELINE_LEFT + PADDING_PAST_ERA_LEFT;
+	local adjustedColWidth
+	if column > 13 then
+		adjustedColWidth = COLUMN_WIDTH-80
+	elseif column > 12 then
+		adjustedColWidth = COLUMN_WIDTH-80
+	elseif column > 11 then
+		adjustedColWidth = COLUMN_WIDTH-90
+	else
+		adjustedColWidth = COLUMN_WIDTH - 100
+	end
+	local horizontal		:number = ((column-1) * COLUMNS_NODES_SPAN * adjustedColWidth) + PADDING_TIMELINE_LEFT + PADDING_PAST_ERA_LEFT;
 	local vertical			:number = PADDING_NODE_STACK_Y + (SIZE_WIDESCREEN_HEIGHT / 2) + (row * SIZE_NODE_Y);
 	return horizontal, vertical;
 end
@@ -434,7 +445,7 @@ end
 function LayoutNodeGrid()
 
 	local kNodeGrid :table = {};
-	local kPaths	:table = {};	-- TODO: unused currently
+	local kPaths	:table = {};
 
 	-- Loop items, first put into era columns.
 	for _,item in pairs(g_kItemDefaults) do
@@ -586,7 +597,7 @@ end
 --	Create UI controls based on the a node grid and connecting paths.
 --
 --	kNodeGrid,	A 2D table array of [row][columns]=itemType
---	kPaths,		A table describing paths.  TODO: Describe this format. ??TRON
+--	kPaths,		A table describing paths.
 --
 --	No state specific data (e.g., selected node) should be set here in order
 --	to reuse the nodes across viewing other players' trees for single seat
@@ -603,6 +614,7 @@ local tDummyTechs = {		['TECH_ARCHERY_SKIP'] = 'SLTH_TECH_ARCHERY',
 							['TECH_SORCERY_SKIP'] = 'TECH_SORCERY',
 							['TECH_TRADE_SKIP'] = 'TECH_TRADE'}
 local tExtraPrereqIcons = {}
+local tEraSkips = {ERA_ANCIENT=true, [1]=true,  ERA_MEDIEVAL=true, [3]=true}
 function AllocateUI( kNodeGrid:table, kPaths:table )
 	g_uiNodes = {};
 	m_kNodeIM:ResetInstances();
@@ -622,7 +634,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 	end
 
 	for era,eraData in pairs(g_kEras) do
-
+		-- print('era is', era, type(era))
 		local instArt :table = m_kEraArtIM:GetInstance();
 		if eraData.BGTexture ~= nil then
 			instArt.BG:SetTexture( eraData.BGTexture );
@@ -630,11 +642,17 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 		else
 			UI.DataError("Tech tree is unable to find an EraTechBackgroundTexture entry for era '"..eraData.Description.."'; using a default.");
 			instArt.BG:SetTexture(PIC_DEFAULT_ERA_BACKGROUND);
+			instArt.BG:SetHide(true)
 		end
 
+
+
+		if tEraSkips[era]  then
+			instArt.BG:SetHide(true)
+		end
 		instArt.Top:SetOffsetX(GetEraArtXOffset(instArt, eraData));
 		instArt.Top:SetOffsetY((SIZE_WIDESCREEN_HEIGHT * 0.5) - (instArt.BG:GetSizeY() * 0.5));
-		instArt.Top:SetSizeVal(eraData.NumColumns * SIZE_NODE_X, 600);
+		instArt.Top:SetSizeVal(eraData.NumColumns * SIZE_NODE_X, 20);
 
 		local inst:table = m_kEraLabelIM:GetInstance();
 		local eraMarkerx, _	= ColumnRowToPixelXY( eraData.PriorColumns + 1, 0) - PADDING_PAST_ERA_LEFT;	-- Need to undo the padding in place that nodes use to get past the era marker column
@@ -706,7 +724,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 
 		if sActualTech then
-			print('skipping callbacks for ' .. techType)
+			-- print('skipping callbacks for ' .. techType)
 			node.NodeButton:SetHide(true)
 			node.OtherStates:SetHide(true)
 		else
@@ -720,7 +738,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 
 	if Controls.TreeStart ~= nil then
 		local h,v = ColumnRowToPixelXY( TREE_START_COLUMN, TREE_START_ROW );
-		Controls.TreeStart:SetOffsetVal( h+SIZE_NODE_X-42,v-71 );		-- TODO: Science-out the magic (numbers).
+		Controls.TreeStart:SetOffsetVal( h+SIZE_NODE_X-42,v-71 );
 	end
 
 	-- Determine the lines between nodes.
@@ -747,7 +765,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- There had better be a preq if there is a prereq ID (unless debugging the tree).
 					local prereq :table = g_kItemDefaults[prereqId];
 					if (prereq ~= nil) then
-						print('Prereq tech is ' .. prereq.Type)
+						-- print('Prereq tech is ' .. prereq.Type)
 						previousRow		= prereq.UITreeRow;
 						-- previousColumn	= g_kEras[prereq.EraType].PriorColumns + prereq.Column;
 					else
@@ -773,12 +791,12 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- If a node is found, make sure it's the previous node this is looking for.
 					if (kNodeGrid[previousRow][column] ~= nil) then
 						if kNodeGrid[previousRow][column] == prereqId then
-							print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+							-- print('Found prereq ' .. prereqId ..' at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 							isAtPrior = true;
 						end
 					elseif column <= TREE_START_COLUMN then
-						print('no prereq found so just doing full')
-						print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
+						-- print('no prereq found so just doing full')
+						-- print('behind start, at column/row ' .. tostring(column) .. ', ' .. tostring(item.UITreeRow))
 						isAtPrior = true;
 					end
 
@@ -800,7 +818,7 @@ function AllocateUI( kNodeGrid:table, kPaths:table )
 					-- Nothing goes before this, not even a fake start area.
 
 				elseif startColumn > column	+3 then
-					print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
+					-- print(' more than three columns away, dont show ' .. item.Type .. ' needing ' .. prereqId)
 					tExtraPrereqIcons[item.Type] = prereqId
 
 				elseif previousRow < item.UITreeRow or previousRow > item.UITreeRow  then
@@ -1082,7 +1100,7 @@ function PopulateNode(uiNode, playerTechData)
 				local sExtraPrereqIcon = DATA_ICON_PREFIX .. sExtraPrereq
 				local textureOffsetX, textureOffsetY, textureSheet = IconManager:FindIconAtlas(sExtraPrereqIcon, 30);
 				if (textureOffsetX ~= nil) then
-					print('setting prereqTexture' .. iconName)
+					-- print('setting prereqTexture ' .. iconName)
 					uiNode.ExtraPrereq:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
 				end
 			end
@@ -1140,7 +1158,7 @@ end
 --	active player's item data.
 -- ===========================================================================
 function View( playerTechData:table )
-	print('populating nodes')
+	-- print('populating nodes')
 	-- Output the node states for the tree
 	for _,uiNode in pairs(g_uiNodes) do
 		PopulateNode( uiNode, playerTechData);
@@ -1226,7 +1244,7 @@ end
 --	Load all the 'live' data for a player.
 -- ===========================================================================
 function GetCurrentData( ePlayer:number, eCompletedTech:number )
-	print('getting current data')
+	-- print('getting current data')
 	-- If first time, initialize player data tables.
 	local data	:table = m_kAllPlayersTechData[ePlayer];
 	if data == nil then
@@ -1712,11 +1730,6 @@ function PopulateFilterData()
 	-- Hard coded/special filters:
 
 	-- Load entried into filter table from TechFilters XML data
-	--[[ TODO: Only add filters based on what is in the game database. ??TRON
-	for row in GameInfo.TechFilters() do
-		table.insert( m_kFilters, { row.IconString, row.Description, g_TechFilters[row.Type] });
-	end
-	]]
 	m_kFilters = {};
 	table.insert( m_kFilters, { Func=nil,										Description="LOC_TECH_FILTER_NONE",			Icon=nil } );
 	--table.insert( m_kFilters, { Func=g_TechFilters["TECHFILTER_RECOMMENDED"],	Description="LOC_TECH_FILTER_RECOMMENDED",	Icon="[ICON_Recommended]" });
@@ -1741,15 +1754,7 @@ function PopulateFilterData()
 		Controls.FilterPulldown:BuildEntry( "FilterItemInstance", controlTable );
 
 		-- If a text icon exists, use it and bump the label in the button over.
-		--[[ TODO: Uncomment if icons are added.
-		if filterIconText ~= nil and filterIconText ~= "" then
-			controlTable.IconText:SetText( Locale.Lookup(filterIconText) );
-			controlTable.DescriptionText:SetOffsetX(24);
-		else
-			controlTable.IconText:SetText( "" );
-			controlTable.DescriptionText:SetOffsetX(4);
-		end
-		]]
+
 		controlTable.DescriptionText:SetOffsetX(8);
 		controlTable.DescriptionText:SetText( filterLabel );
 

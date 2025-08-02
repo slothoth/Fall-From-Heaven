@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <AssetObjects..ArtDefSet>
 	<m_Version>
 		<major>1</major>
@@ -22,7 +23,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_ALEXIS"/>
+										<m_EntryName text="LEADER_FALLBACK_NEUTRAL_LEADER_ALEXIS_ALT"/>
 										<m_XLPClass text="LeaderFallback"/>
 										<m_XLPPath text="leaderfallbacks.xlp"/>
 										<m_BLPPackage text="LeaderFallbacks"/>
@@ -728,6 +729,36 @@
 					</Element>
 				</m_ChildCollections>
 				<m_Name text="LEADER_JONAS"/>
+				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+			</Element>
+			<Element>
+				<m_Fields>
+					<m_Values/>
+				</m_Fields>
+				<m_ChildCollections>
+					<Element>
+						<m_CollectionName text="Animations"/>
+						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..BLPEntryValue">
+										<m_EntryName text="FALLBACK_NEUTRAL_LEADER_KANDROS"/>
+										<m_XLPClass text="LeaderFallback"/>
+										<m_XLPPath text="leaderfallbacks.xlp"/>
+										<m_BLPPackage text="LeaderFallbacks"/>
+										<m_LibraryName text="LeaderFallback"/>
+										<m_ParamName text="BLP Entry"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="DEFAULT"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+					</Element>
+				</m_ChildCollections>
+				<m_Name text="LEADER_KANDROS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>

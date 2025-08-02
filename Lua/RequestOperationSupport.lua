@@ -1,3 +1,35 @@
+include "SpawnSupport"
+local transientBuffKeys = {
+        BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
+        BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
+        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
+    }
+
+local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
+	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
+	[GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]={
+	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_SCIENCE', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION',
+	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_SIDAR', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_GUILD_OF_HAMMERS'},
+	[GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]={
+		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_PROD', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE',
+		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_SIDAR', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_GREAT_LIB'},
+	[GameInfo.Units['UNIT_GREAT_ARTIST'].Index]={
+		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_GOLD',
+		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_SIDAR', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_THEATRE_OF_DREAMS'},
+	[GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]={
+		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
+		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
+}
+
+local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_HALL_OF_KINGS',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_CASTE_SYSTEM',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
+									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
+
+
+
 local function SetCapitalProperty(iPlayer, tParameters)
     local sPropKey = tParameters.sPropKey;
     local iPropValue = tParameters.iPropValue;
@@ -15,13 +47,23 @@ local function SetPlayerProperty(iPlayer, tParameters)
     print('set '.. sPropKey .. 'to ' .. iPropValue)
 end
 
+local function SlthSetResource(iPlayer, tParameters)
+    local iResourceType = tParameters.iResourceType;
+    local iPlotIndex = tParameters.iPlotIndex;
+    local pPlot = Map.GetPlotByIndex(iPlotIndex)
+    ResourceBuilder.SetResourceType(pPlot, iResourceType, 1)
+    print('set terrain plot '.. iPlotIndex .. 'to have resource ' .. iResourceType)
+end
+
 local function OnSummon(iPlayer, tParameters)
+    print('trying summon')
     local sUnitOperationType = tParameters.UnitOperationType;
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
     local pUnitExp = pUnit:GetExperience()
     local pUnitAbility = pUnit:GetAbility()
+    print('trying summon of ', OperationInfo.SimpleText)
     local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
     for iUnitID, pNewUnit in pairs(tNewUnits) do
         print(OperationInfo.SimpleText)
@@ -159,6 +201,10 @@ local function OnGrantDebuffAoe(iPlayer, tParameters)
     local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
+    if transientBuffKeys[OperationInfo.SimpleText] then
+        sPropbuff_propkey = OperationInfo.SimpleText .. ('_UNITS')
+        tSpecificBuffState = Game:GetProperty(sPropbuff_propkey) or {}
+    end
     for _, plot in ipairs(tNeighborPlots) do
         for _, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
             if pNearUnit then
@@ -270,44 +316,55 @@ local function GrantGoldenAge(iPlayer, tParameters)
     local pPlayer = Players[iPlayer]
     local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
     local t_iUnits = {}
-    t_iUnits[1] = tParameters.iCastingUnit                      -- set to just the owner for now
-    for iUnitType, iUnitID in pairs(t_iUnits) do
-        local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
-        UnitManager.Kill(pUnit);
+    -- t_iUnits[1] = tParameters.iCastingUnit                      -- set to just the owner for now
+    local iBar = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
+    local iGpAmount = 0
+	for iUnitID, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
+        if iGpAmount < iBar then
+            if pPlayerUnit:GetGreatPerson():GetClass() > -1 then
+                iGpAmount = iGpAmount + 1
+                table.insert(t_iUnits, pPlayerUnit)
+            end
+        end
+	end
+    for iUnitType, pUnit in pairs(t_iUnits) do
+        if pUnit then
+            print('killing unit...')
+            UnitManager.Kill(pUnit);
+        else
+            print('somehow not a unit...')
+        end
     end
     local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
-    local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
-    local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
-    GoldenAgeGrant(pPlayer, iGoldenAgeLength)                                                             -- should scale by speed
+    -- local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
+    -- local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
+    GoldenAgeGrant(pPlayer, 10)                                                             -- should scale by speed
     pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
 end
 
-local function GoldenAgeGrant(pPlayer, iGoldenDuration)
-    for _, pCity in pPlayer:GetCities():Members() do
-        local pPlot = pCity:GetPlot();
-        if pPlot then
-            pPlot:SetProperty('InGoldenAge', 1);		-- but =function expected instead of nil?
-        end
-    end
-    pPlayer:SetProperty('GoldenAgeDuration', (pPlayer:GetProperty('GoldenAgeDuration') or 0) + iGoldenDuration)
-end
-
-
 
 local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
+    print('applying attributes')
     for _, pNewUnit in pairs(tNewUnits) do
+        print('new unit!')
         pNewUnit:SetDamage(iHealth)
         local pUnitExp = pNewUnit:GetExperience()
         local pUnitAbilities = pNewUnit:GetAbility()
+        print('granting promos')
         for _, iUnitPromotionIndex in ipairs(tPromos) do
             if not pUnitExp:HasPromotion(iUnitPromotionIndex) then
                 pUnitExp:SetPromotion(iUnitPromotionIndex)
+                print('grant promo', GameInfo.UnitPromotions[iUnitPromotionIndex].UnitPromotionType)
             end
+            print('iter promo')
         end
+        print('granting abilitiees')
         for _, sAbility in ipairs(tAbilities) do
             if not pUnitAbilities:HasAbility(sAbility) then
                 pUnitAbilities:AddAbilityCount(sAbility)
+                print('grant ability', sAbility)
             end
+            print('iter ability')
         end
     end
 end
@@ -319,8 +376,22 @@ local tBuildingGrantModiferMap = {
     ['SLTH_BUILDING_SONG_OF_AUTUMN'] = 'SLTH_MODIFIER_GRANT_SONG_OF_AUTUMN',
     ['SLTH_BUILDING_THE_NECRONOMICON'] = 'SLTH_MODIFIER_GRANT_THE_NECRONOMICON',
     ['SLTH_BUILDING_NOX_NOCTIS'] = 'SLTH_MODIFIER_GRANT_NOX_NOCTIS',
-    ['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'] = 'SLTH_MODIFIER_GRANT_STIGMATA_ON_THE_UNBORN'
+    ['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'] = 'SLTH_MODIFIER_GRANT_STIGMATA_ON_THE_UNBORN',
+
+    ['BUILDING_ALCHEMICAL_SOCIETY'] = 'SLTH_MODIFIER_GRANT_ACADEMY',
+    ['SLTH_BUILDING_DANCING_BEAR'] = 'SLTH_MODIFIER_GRANT_DANCING_BEAR',
+    ['SLTH_BUILDING_GORILLA_CAGE'] = 'SLTH_MODIFIER_GRANT_GORILLA_CAGE',
+    ['SLTH_BUILDING_LION_CAGE'] = 'SLTH_MODIFIER_GRANT_LION_CAGE',
+    ['SLTH_BUILDING_SPIDER_PEN'] = 'SLTH_MODIFIER_GRANT_SPIDER_PEN',
+    ['SLTH_BUILDING_TIGER_CAGE'] = 'SLTH_MODIFIER_GRANT_TIGER_CAGE',
+    ['SLTH_BUILDING_WOLF_PEN'] = 'SLTH_MODIFIER_GRANT_WOLF_PEN',
+    ['SLTH_BUILDING_FREAK_SHOW'] = 'SLTH_MODIFIER_GRANT_FREAK_SHOW',
+    ['SLTH_BUILDING_DWARF_CAGE'] = 'SLTH_MODIFIER_GRANT_DWARF_CAGE',
+    ['SLTH_BUILDING_ELF_CAGE'] = 'SLTH_MODIFIER_GRANT_ELF_CAGE',
+    ['SLTH_BUILDING_HUMAN_CAGE'] = 'SLTH_MODIFIER_GRANT_HUMAN_CAGE',
+    ['SLTH_BUILDING_ORC_CAGE'] = 'SLTH_MODIFIER_GRANT_ORC_CAGE'
 }
+
 
 local function GrantBuildingFunction(iPlayer, tParameters)
     local iUnit = tParameters.iCastingUnit
@@ -421,6 +492,7 @@ local function UnitCityInteract(iPlayer, tParameters)
         local iX =  pUnit:GetX()
         local iY =  pUnit:GetY()
         local pCity = Cities.GetCityInPlot(iX, iY)
+        print('attaching modifier to city', OperationInfo.SimpleText)
         pCity:AttachModifierByID(OperationInfo.SimpleText);
         local pUnitAbilityManager = pUnit:GetAbility()
         pUnitAbilityManager:RemoveAbilityCount(tEquipmentOps[sOperationAbility]);
@@ -434,7 +506,9 @@ local function ConvertSelfUnit(iPlayer, tParameters)
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
     local iUnitToSummon = GameInfo.Units[OperationInfo.SimpleText].Index
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
-    BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, tParameters.iCastingUnit)
+    local tNewUnits = BaseSummon(pUnit, iPlayer, iUnitToSummon)
+    ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     UnitManager.Kill(pUnit);
 end
 
@@ -636,11 +710,12 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
-
 -- UnitOperation Works
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
-GameEvents.SlthSetResourcePromotions.Add(UpdateResourcePromotion);
+GameEvents.SlthOnSetResource.Add(SlthSetResource);
+
+
 GameEvents.SlthOnSummon.Add(OnSummon);
 GameEvents.SlthOnSummonPerm.Add(OnSummonPermanent);
 GameEvents.SlthOnGrantBuffSelf.Add(OnGrantBuffSelf);

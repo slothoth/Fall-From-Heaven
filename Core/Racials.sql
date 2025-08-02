@@ -300,7 +300,6 @@ INSERT INTO TypeTags(Type, Tag) VALUES
 INSERT INTO Types(Type, Kind) VALUES
 ('ABILITY_UNDEAD', 'KIND_ABILITY');
 
--- TODO racial human ability wont trigger until we do the elf equivalent on training units on human civs
 INSERT INTO UnitAbilities(UnitAbilityType, Name, Description, Inactive, Permanent) VALUES
 ('ABILITY_INHERENT_HUMAN', 'LOC_NULL', 'LOC_NULL', '0', '1'),
 ('ABILITY_RACIAL_HUMAN', 'LOC_NULL', 'LOC_NULL', '1', '1');

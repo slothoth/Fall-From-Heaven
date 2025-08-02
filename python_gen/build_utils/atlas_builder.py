@@ -6,7 +6,14 @@ import cairosvg
 import io
 import numpy as np
 import xml.etree.ElementTree as ET
-from PIL.ImageFile import ImageFile
+from PIL.ImageFile import ImageFile#
+
+size_chart = {'CIV': [256, 200, 128, 80, 64, 50, 48, 44, 36, 30, 22],
+              'UNITS': [256, 80, 50, 38, 32, 22],
+              'RESOURCE': [256, 64, 50, 38, 32, 22],
+              'LEADER': [256, 80, 64, 55, 50, 48, 45, 32],
+              'BUILDINGS': [256, 128, 80, 50, 38, 32],
+              'OPERATION': [256, 80, 50, 38]}
 
 
 def make_atlas(processed_images: dict, target_sizes: list, output_folder, output_path):
@@ -39,23 +46,13 @@ def make_atlas(processed_images: dict, target_sizes: list, output_folder, output
             compress_level=0)
 
 def process_svg(svg_path: str, target_sizes: list = [256], replace_black=True) -> dict[Any, ImageFile]:
-    """
-    Process an SVG file with color inversion and border checking.
-
-    Args:
-        svg_path: Path to the SVG file
-        target_size: Desired size of the output image
-
-    Returns:
-        PIL Image object of the processed SVG
-    """
     png_dict = {}
     # First convert SVG to PNG in memory with white fill
     # Replace black with white in the SVG content
     with open(svg_path, 'r') as f:
         svg_content = f.read()
     if replace_black:
-        svg_content = svg_content.replace('/>', ' style="fill:#ffffff"/>')
+        svg_content = replace_path_endings(svg_content, ' style="fill:#ffffff"/>')
 
     # Convert to PNG with cairosvg
     png_data = cairosvg.svg2png(
@@ -127,16 +124,6 @@ def process_svg(svg_path: str, target_sizes: list = [256], replace_black=True) -
 
 
 def check_borders(image: Image.Image, border_size: int = 10) -> bool:
-    """
-    Check if there are any non-transparent pixels in the border area.
-
-    Args:
-        image: PIL Image to check
-        border_size: Size of border to check in pixels
-
-    Returns:
-        True if there are non-transparent pixels in the border
-    """
     alpha = np.array(image.split()[3])  # Get alpha channel
 
     # Check top and bottom borders
@@ -148,6 +135,33 @@ def check_borders(image: Image.Image, border_size: int = 10) -> bool:
     right_border = alpha[:, -border_size:].any()
 
     return top_border or bottom_border or left_border or right_border
+
+
+def replace_path_endings(text: str, replacement: str):
+    result = ""
+    i = 0
+    while i < len(text):
+        path_index = text.find("path", i)
+
+        if path_index == -1:
+            result += text[i:]
+            break
+
+        result += text[i:path_index]
+        end_index = text.find("/>", path_index)
+
+        if end_index == -1:
+            result += text[path_index:]
+            break
+        if 'style' in text[path_index:end_index]:
+            style_index = text.find("fill:", path_index)
+            result += text[path_index:style_index]+'fill:#ffffff' + text[style_index+12:end_index] + "/>"
+        else:
+            result += text[path_index:end_index] + replacement
+
+        i = end_index + 2
+
+    return result
 
 
 def build_sql_def(master_files: list, target_sizes: list, output_path: str, modder: str, iconType: str):
@@ -171,19 +185,7 @@ def build_sql_def(master_files: list, target_sizes: list, output_path: str, modd
         file.write(sql_icons)
 
 
-def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = "atlas.png", output_folder: str = "Atlas", target_sizes: list = [256]) -> dict:
-    """
-    Creates an atlas from SVG files after processing them.
-
-    Args:
-        svg_files: list of svgs to process in folder
-        svg_folder: Path to the folder containing SVG files
-        output_path: Path where the atlas will be saved
-        output_folder: folder where atlas saved
-        target_sizes = specifications of each atlas and the size of an element icon
-    Returns:
-        Dictionary mapping icon filenames to their positions in the atlas
-    """
+def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = "atlas.png", output_folder: str = "Atlas", target_sizes: list = [256], convert_black: bool = True) -> dict:
     num_icons = len(svg_files)
 
     if num_icons == 0:
@@ -193,7 +195,7 @@ def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = 
     for svg_file in svg_files:
         svg_path = os.path.join(svg_folder, svg_file)
         try:
-            processed_images[svg_file] = process_svg(svg_path, target_sizes)
+            processed_images[svg_file] = process_svg(svg_path, target_sizes, convert_black)
         except Exception as e:
             print(f"Error processing {svg_file}: {e}")
             continue
@@ -201,21 +203,8 @@ def create_atlas_from_svgs(svg_files: list, svg_folder: str, output_path: str = 
         make_atlas(processed_images, target_sizes, output_folder, output_path)
 
 
-def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atlas", output_folder: str = 'Atlas', target_sizes: list = [256], modder: str= '', iconType: str = '') -> dict:
-    """
-    Creates a high-quality atlas from individual icon files with transparency.
-    Handles both PNG and SVG files.
-
-    Args:
-        icon_folder: Path to the folder containing icon files
-        icon_size: Size of each icon (assumes square icons)
-        output_path: base Path where the atlas will be saved
-        output_folder: Folder where atlases are deposited
-        target_sizes: specifications of each atlas and the size of an element icon
-
-    Returns:
-        Dictionary mapping icon filenames to their positions in the atlas as (x, y) coordinates
-    """
+def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atlas", output_folder: str = 'Atlas',
+                 target_sizes: list = [256], modder: str= '', iconType: str = '', convert_black: bool =True) -> dict:
     # Check if we're dealing with SVGs
     MAX_ATLAS_COUNT = 64
     svg_files = [f for f in os.listdir(icon_folder) if f.endswith('.svg')]
@@ -226,7 +215,7 @@ def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atl
             master_files = [svg_files]
         for idx, atlas_files in enumerate(master_files):
             atlas_file_path = f'{output_path}_{idx}'
-            create_atlas_from_svgs(atlas_files, icon_folder, atlas_file_path, output_folder, target_sizes)
+            create_atlas_from_svgs(atlas_files, icon_folder, atlas_file_path, output_folder, target_sizes, convert_black)
 
         build_sql_def(master_files, target_sizes, output_path, modder, iconType)
     else:
@@ -254,23 +243,13 @@ def create_atlas(icon_folder: str, icon_size: int = 256, output_path: str = "atl
 
         build_sql_def(master_files, target_sizes, output_path, modder, iconType)
 
+
 def get_icon_coordinates(position: tuple, icon_size: int = 256) -> tuple:
-    """
-    Converts atlas position to pixel coordinates.
-
-    Args:
-        position: (column, row) position in the atlas
-        icon_size: Size of each icon
-
-    Returns:
-        Tuple of ((x1, x2), (y1, y2)) coordinates for the icon in the atlas
-    """
     col, row = position
     x1 = col * icon_size
     y1 = row * icon_size
     x2 = x1 + icon_size
     y2 = y1 + icon_size
-
     return ((x1, x2), (y1, y2))
 
 
@@ -283,14 +262,16 @@ if __name__ == "__main__":
     # OUTPUT_FOLDER = 'Unit_Atlas'
     # ICON_TYPE = 'UNIT'
     # TARGET_SIZES = [256, 80, 50, 38, 32, 22]
+    icon_type = 'Operation'
+    ATLAS_FILENAME = f'Slth_{icon_type}_Atlas'
+    INPUT_FOLDER = 'atlas_svg_operation'
+    icon_type = icon_type.upper()
+    OUTPUT_FOLDER = f'{icon_type}_Atlas_Folder'
 
-    ATLAS_FILENAME = 'Slth_Resource_Atlas'
-    INPUT_FOLDER = 'atlas_wd_rsc'
-    OUTPUT_FOLDER = 'Resource_Atlas_Folder'
-    ICON_TYPE = 'RESOURCE'
-    TARGET_SIZES = [256, 64, 50, 38, 32, 22]
+    TARGET_SIZES = size_chart[icon_type]
+    # TARGET_SIZES = [256, 64, 50, 38, 32, 22]
 
     MODDER_TAG = 'SLTH_'
     if not os.path.exists(OUTPUT_FOLDER):
         os.makedirs(OUTPUT_FOLDER)
-    create_atlas(INPUT_FOLDER, 256, ATLAS_FILENAME, OUTPUT_FOLDER, TARGET_SIZES, MODDER_TAG, ICON_TYPE)
+    create_atlas(INPUT_FOLDER, 256, ATLAS_FILENAME, OUTPUT_FOLDER, TARGET_SIZES, MODDER_TAG, icon_type, convert_black=True)

@@ -2,6 +2,8 @@
 -- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
  --[ ]  Attach some Projects when armageddon hits 70. To do not unlock, need it to be pPlot:SetProperty() on capital
 
+include('SpawnSupport')
+
 tArmageddonEvents = {[10]=fWarning,[30]=Blight, [40]=ArmaSummonSteph, [50]=ArmaSummonBuboes, [60]=ArmaSummonYersinia,
                      [70]=ArmaSummonArs,  [90]=ArmaSpawnWrath, [100]=ArmaKillHalf}
 -- helper
@@ -38,7 +40,7 @@ function AdjustArmageddonCount(iAmount)
             local iHasHitSeventy = pFirstPlayer:GetProperty('ArmageddonAboveSeventy')
             if not iHasHitSeventy then
                 for _, pPlayer in ipairs(PlayerManager.GetAliveMajors()) do
-                    pPlayer:SetProperty('ArmageddonAboveSeventy', 1)
+                    pPlayer:SetProperty('ArmageddonAboveSeventy', 1)        -- this needs to be on a plotprop at capital.
                 end
             end
         end
@@ -132,7 +134,7 @@ function ArmageddonUnitDied(killedPlayerID, killedUnitID, playerID, unitID)
     end
 end
 -- building tracker, create increase armageddon, delete decrease
-local tArmageddonBuildings = {[GameInfo.Buildings['PILLAR_OF_CHAINS'].Index]=4,
+local tArmageddonBuildings = {[GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index]=4,
                         [GameInfo.Buildings['STIGMATA_FROM_UNBORN'].Index]=5}
 
 function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)
@@ -224,14 +226,16 @@ local tPlotConversionDeepeningMap = {
 local iPlotProportionChanged = 20
 function Deepening(playerID, cityID, projectID, buildingIndex, x, y)
     local iTerrainType
-    local tMapPlots = Map.Plots()
-    local iCount = 1
-    for _, iPlotIndex in ipairs(tMapPlots) do
-        local pPlot = Map.GetPlotByIndex(iPlotIndex)
-        if (pPlot ~= nil) then
-            iTerrainType = pPlot:GetTerrainType()
-            if tPlotsByTerrainType[iTerrainType] then
-                table.insert(tPlotsByTerrainType[iTerrainType], iPlotIndex)
+    local iW, iH = Map.GetGridSize();
+    for iX = 0, iW - 1 do
+        for iY = 0, iH - 1 do
+            local i = iY * iW + iX;
+            local pPlot = Map.GetPlotByIndex(i);
+            if (pPlot ~= nil) then
+                iTerrainType = pPlot:GetTerrainType()
+                if tPlotsByTerrainType[iTerrainType] then
+                    table.insert(tPlotsByTerrainType[iTerrainType], i)
+                end
             end
         end
     end
@@ -359,7 +363,7 @@ local iLION_INDEX = GameInfo.Units['SLTH_UNIT_LION'].Index
 local iTIGER_INDEX = GameInfo.Units['SLTH_UNIT_TIGER'].Index
 local tBarbarianAnimalMap = {[GameInfo.Units['UNIT_BUILDER'].Index] = iWOLF_INDEX,
                              [GameInfo.Units['SLTH_UNIT_GOBLIN'].Index] = iLION_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_ARCHER_SCORPION_CLAN'].Index] = iLION_INDEX,
+                             [GameInfo.Units['SLTH_UNIT_ARCHER'].Index] = iLION_INDEX,
                              [GameInfo.Units['UNIT_WARRIOR'].Index] = iLION_INDEX,
                              [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = iTIGER_INDEX,
                              [GameInfo.Units['SLTH_UNIT_SWORDSMAN'].Index] = iBEAR_INDEX
@@ -374,11 +378,9 @@ local tAnimals = {
     [GameInfo.Units['SLTH_UNIT_GORILLA'].Index] = true,
     [GameInfo.Units['SLTH_UNIT_GRIFFON'].Index] = true,
     [iLION_INDEX] = true,
-    [GameInfo.Units['SLTH_UNIT_LION_PRIDE'].Index] = true,
     [GameInfo.Units['SLTH_UNIT_SEA_SERPENT'].Index] = true,
     [GameInfo.Units['SLTH_UNIT_SCORPION'].Index] = true,
     [iWOLF_INDEX] = true,
-    [GameInfo.Units['SLTH_UNIT_WOLF_PACK'].Index] = true,
     [iTIGER_INDEX] = true
 }
 
@@ -501,20 +503,23 @@ function RitesOghma(playerID, cityID, projectID, buildingIndex, x, y)
     local iMapSize = Map.GetMapSize()                       -- returns an index, need to check they are correct
     local iResourceCount = tMapSizeManaCount[iMapSize]
     local iW, iH = Map.GetGridSize();
-    local tAllPlots = Map.Plots()
     local tValidResourcePlots = {}
-    for _, iPlotIndex in ipairs(tAllPlots) do
-        pPlot = Map.GetPlotByIndex(iPlotIndex)
-        if (pPlot ~= nil) then
-            if (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
-                tValidResourcePlots[iPlotIndex] = true
+    for iX = 0, iW - 1 do
+        for iY = 0, iH - 1 do
+            local i = iY * iW + iX;
+            pPlot = Map.GetPlotByIndex(i);
+            if (pPlot ~= nil) then
+                if (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
+                    tValidResourcePlots[iPlotIndex] = true
+                end
             end
         end
     end
     local tPlotsToPlaceMana = selectEquidistantPoints(tValidResourcePlots, iW, iH, iResourceCount)
     for _, iPlotIndex in ipairs(tPlotsToPlaceMana) do
         pPlot = Map.GetPlotByIndex(iPlotIndex)
-        TerrainBuilder.SetResourceType(pPlot, iRAW_MANA_INDEX, 1)       -- what is ResourceAmount
+        ResourceBuilder.SetResourceType(pPlot, iRAW_MANA_INDEX, 1)
+        -- TerrainBuilder.SetResourceType(pPlot, iRAW_MANA_INDEX, 1)       -- what is ResourceAmount
         TerrainBuilder.CanHaveResource(pPlot, iRAW_MANA_INDEX)
     end
     -- get map size MapConfiguration.GetValue(""), need to find what value. cant use MapConfiguration.GetMapSize() as its UI onlu
@@ -647,45 +652,49 @@ local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true
                         [GameInfo.Terrains['TERRAIN_SNOW'].Index]         = true,
                         [GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index]   = true
 }
+
 -- nicked from Leugi Wildlife++
 function ViableWildernessPlots(bOnlyTundraOrSnow)
-    local tTable = Map.Plots()
     local tNewTable = {}
     local iCount = 1
     local bViablePlot
-    for _, iPlotIndex in ipairs(tTable) do
-        local pPlot = Map.GetPlotByIndex(iPlotIndex)
-        if (pPlot ~= nil) then
-            local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
-            if (pPlot:IsAdjacentOwned() == false) and (pPlot:IsOwned() == false) and (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
-                if bOnlyTundraOrSnow then
-                    local iTerrainIndex = pPlot:GetTerrainType()
-                    bViablePlot = tColdTerrain[iTerrainIndex]
-                else
-                    bViablePlot = true
-                end
-                local bPlotHasUnit = false
-                local unitList = Units.GetUnitsInPlotLayerID(iPlotX, iPlotY, MapLayers.ANY)
-                if unitList ~= nil then
-                    for _, pUnit in ipairs(unitList) do
-                        local tUnitDetails = GameInfo.Units[pUnit:GetType()]
-                        if tUnitDetails ~= nil then
-                            if not pUnit:IsDead() and not pUnit:IsDelayedDeath() then
-                                bPlotHasUnit = true
-                                break
+    local iW, iH = Map.GetGridSize();
+    for x = 0, iW - 1 do
+        for y = 0, iH - 1 do
+            local i = y * iW + x;
+            local pPlot = Map.GetPlotByIndex(i);
+            if (pPlot ~= nil) then
+                if (pPlot:IsAdjacentOwned() == false) and (pPlot:IsOwned() == false) and (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
+                    if bOnlyTundraOrSnow then
+                        local iTerrainIndex = pPlot:GetTerrainType()
+                        bViablePlot = tColdTerrain[iTerrainIndex]
+                    else
+                        bViablePlot = true
+                    end
+                    local bPlotHasUnit = false
+                    local unitList = Units.GetUnitsInPlotLayerID(x, y, MapLayers.ANY)
+                    if unitList ~= nil then
+                        for _, pUnit in ipairs(unitList) do
+                            local tUnitDetails = GameInfo.Units[pUnit:GetType()]
+                            if tUnitDetails ~= nil then
+                                if not pUnit:IsDead() and not pUnit:IsDelayedDeath() then
+                                    bPlotHasUnit = true
+                                    break
+                                end
                             end
                         end
                     end
-                end
-                if (bPlotHasUnit == false) then
-                    tNewTable[iCount] = pPlot
-                    iCount = iCount + 1
+                    if (bPlotHasUnit == false) then
+                        tNewTable[iCount] = pPlot
+                        iCount = iCount + 1
+                    end
                 end
             end
         end
     end
     return tNewTable
 end
+
 -- nicked from Leugi Wildlife++
 function SpawnUnitInWilderness(iUnitToSpawn, eligiblePlots)
     local iNumEligiblePlots = table.Count(eligiblePlots)
@@ -722,21 +731,21 @@ local tHellTransforms = { [GameInfo.Terrains['TERRAIN_DESERT'].Index]=GameInfo.T
                     [GameInfo.Terrains['TERRAIN_FIELDS_OF_PERDITION'].Index]=GameInfo.Terrains['TERRAIN_PLAINS'].Index,
                     [GameInfo.Terrains["TERRAIN_FIELDS_OF_PERDITION_HILLS"].Index]=GameInfo.Terrains["TERRAIN_PLAINS_HILLS"].Index}
 
-local tResourceTransform = {  [GameInfo.Resources['RESOURCE_PIG'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
+local tResourceTransform = {  [GameInfo.Resources['RESOURCE_TRUFFLES'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
                         [GameInfo.Resources['RESOURCE_SHEEP'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
-                        [GameInfo.Resources['RESOURCE_COW'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
-                        [GameInfo.Resources['RESOURCE_HORSE'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
-                        [GameInfo.Resources['RESOURCE_MARBLE'].Index]=GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index,
-                        [GameInfo.Resources['RESOURCE_BANANA'].Index]=GameInfo.Resources['RESOURCE_GULAGARM'].Index,
-                        [GameInfo.Resources['RESOURCE_SUGAR'].Index]=GameInfo.Resources['RESOURCE_GULAGARM'].Index,
-                        [GameInfo.Resources['RESOURCE_SILK'].Index]=GameInfo.Resources['RESOURCE_RAZORWEED'].Index,
-                        [GameInfo.Resources['RESOURCE_COTTON'].Index]=GameInfo.Resources['RESOURCE_RAZORWEED'].Index}
+                        [GameInfo.Resources['RESOURCE_CATTLE'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
+                        [GameInfo.Resources['RESOURCE_HORSES'].Index]=GameInfo.Resources['RESOURCE_NIGHTMARE'].Index,
+                        [GameInfo.Resources['RESOURCE_MARBLE'].Index]=GameInfo.Resources['RESOURCE_JADE'].Index,
+                        [GameInfo.Resources['RESOURCE_BANANAS'].Index]=GameInfo.Resources['RESOURCE_TOBACCO'].Index,
+                        [GameInfo.Resources['RESOURCE_SUGAR'].Index]=GameInfo.Resources['RESOURCE_TOBACCO'].Index,
+                        [GameInfo.Resources['RESOURCE_SILK'].Index]=GameInfo.Resources['RESOURCE_OLIVES'].Index,
+                        [GameInfo.Resources['RESOURCE_COTTON'].Index]=GameInfo.Resources['RESOURCE_OLIVES'].Index}
 
 local tResourceReverse = {  [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo.Resources['RESOURCE_SHEEP'].Index,
-                        [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index]=GameInfo.Resources['RESOURCE_HORSE'].Index,
-                        [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index]=GameInfo.Resources['RESOURCE_MARBLE'].Index,
-                        [GameInfo.Resources['RESOURCE_GULAGARM'].Index]=GameInfo.Resources['RESOURCE_SUGAR'].Index,
-                        [GameInfo.Resources['RESOURCE_RAZORWEED'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index}
+                        [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index]=GameInfo.Resources['RESOURCE_HORSES'].Index,
+                        [GameInfo.Resources['RESOURCE_JADE'].Index]=GameInfo.Resources['RESOURCE_MARBLE'].Index,
+                        [GameInfo.Resources['RESOURCE_TOBACCO'].Index]=GameInfo.Resources['RESOURCE_SUGAR'].Index,
+                        [GameInfo.Resources['RESOURCE_OLIVES'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index}
 
 local tHellReverse = reverse_table(tHellTransforms)
 function HellSpread()
@@ -844,7 +853,8 @@ function ConvertTerrain(pPlot, tTerrainConverter, tResourceConverter)
         if iCurrentResource then
             iNewResource =  tResourceConverter[iCurrentResource]
             if iNewResource then
-                TerrainBuilder.SetResourceType(pPlot, iNewResource, 1)       -- what does amount do
+                ResourceBuilder.SetResourceType(pPlot, iNewResource, 1)
+                -- TerrainBuilder.SetResourceType(pPlot, iNewResource, 1)       -- what does amount do
             end
         end
     end
@@ -873,7 +883,7 @@ function OnStart()
     end
 end
 
-Events.CityReligionFollowersChanged.Add(religionLostCity)
+-- Events.CityReligionFollowersChanged.Add(religionLostCity)            -- or CityReligionChanged? We would use this to track religions present in a civ with plotProps, so we can do a collection_PLAYER_CITIES and COLLECTIONCOUNT_ANY to allow that religion.
 Events.DistrictRemovedFromMap.Add(OnCityRaze)
 Events.UnitAddedToMap.Add(ArmageddonUnitSpawning)
 Events.UnitKilledInCombat.Add(ArmageddonUnitDied)

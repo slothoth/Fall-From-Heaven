@@ -7,7 +7,13 @@ local iExplosionDamage = 40
 -- Withered: Granted by Withered Touch, spells. 10% reduced strength, -20% reduced healing, -50% exp
 -- Poisoned: Removed at full hp. Probably an ability reducing healing. Infirmary remove
 -- Rusted: -10% strength. Done by Entropy promo, removed by Forge
+-- could we try REQUIREMENT_COMBAT_RESULTS_ATTACKING_UNIT_HAS_TAG? problem is, it wont work for dynamic things like promotions or gained equipment.
+-- So it could work with Withered Touch, at least outside of Athame, as Ars and Wraiths have it
 
+-- could work with DISEASED_INHERENT, which is Diseased Corpses
+-- Plague Carrier (Mary) covered in CombatBuffs.sql
+
+-- could it work with pyre zombie?
 -- events.  Combat, Enter City
 --
 function CombatApplyDebuffs(combatResult)
