@@ -544,14 +544,16 @@ function InitCottage(x, y, improvementIndex, playerID)
         pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
     end
     local pPlot = Map.GetPlot(x,y);
-    if improvementIndex and improvementIndex == iBarbCampImprovement then                        -- also check its a barb camp? or has it not spawned yet
+    if improvementIndex and improvementIndex == iBarbCampImprovement then
         local plotID = pPlot:GetIndex()
         local isLegalBarb = Game.GetProperty('BarbFree_' .. plotID) or 0
         if Game.GetCurrentGameTurn() == 1 then
+            print('game turn was 1, ensuring legality.')
             isLegalBarb = 1
         end
         print('barb camp made, is it legal? 1:yes, 0 no:', isLegalBarb)
         if isLegalBarb == 1 then
+            print('it was')
             local tUnits = Map.GetUnitsAt(pPlot)
             for pUnit in tUnits:Units() do
                 local iUnitIndex = pUnit:GetType()
@@ -1258,6 +1260,7 @@ local name_GameSpeed = GameInfo.GameSpeeds[hash_GameSpeed].GameSpeedType
 local iGameSpeed = tGameSpeedScalings[name_GameSpeed]
 
 -- this shit is just super unstable, it triggers twice during the formation of a city over a camp which is really not good.
+local sDontDoBarbLairRemoval = 'BarbNoLair_'
 function RemovedBarbCamp(x, y, owningPlayerID)
     local pPlot = Map.GetPlot(x, y)
     -- print('improvement removed at plot x,y', x, y)
@@ -1267,7 +1270,8 @@ function RemovedBarbCamp(x, y, owningPlayerID)
     local bIsBarbOccupied = true
     local iPlotID = pPlot:GetIndex()
     local isPartOfCleanup = Game:GetProperty('BarbFree_' .. iPlotID)
-    local dontDoLairReveal = Game:GetProperty('BarbNoLair_' .. iPlotID)
+    local dontDoLairReveal = Game:GetProperty(sDontDoBarbLairRemoval .. iPlotID)
+    local isDisperseCamp = pPlot:GetProperty('DisperseCamp')
     for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
         -- print('units in plot :', pOnTileUnit)
         if (pOnTileUnit) and (not pUnit) then
@@ -1280,7 +1284,7 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         end
     end
     print('are we doing lair roll', dontDoLairReveal)
-    if (isPartOfCleanup or not dontDoLairReveal) then
+    if (isPartOfCleanup or dontDoLairReveal) then
         print('had an barb clan improvement spawn naturally that was cleant up')
         if pUnit and tribeIndex then
             UnitManager.Kill(pUnit)
@@ -1288,8 +1292,10 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         return
     end
     -- print('plotowner/tribeIndex/isBarbOcuppied on destroying improvement...', iPlotOwner, tribeIndex, bIsBarbOccupied)
+    --[[
     if tribeIndex then          -- todo still not perfect, barb camps will be destroyed on settle if a non-barb unit is occupying it
         if iPlotOwner > -1 and bIsBarbOccupied then
+            print('spawning tribe because someone owns the plot and a barb unit is on it', iPlotOwner)
             spawnTribeSafe(iPlotID, tribeIndex)
             for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do            -- but kill new spawned unit. This also kills any unit you have on there too...
                 if pOnTileUnit then
@@ -1300,7 +1306,8 @@ function RemovedBarbCamp(x, y, owningPlayerID)
                 end
             end
         end
-    elseif (owningPlayerID == 63 or iPlotOwner == -1) and not dontDoLairReveal then                        -- we do lair clearing
+    else]]if (owningPlayerID == 63 or iPlotOwner == -1) and not dontDoLairReveal and isDisperseCamp then                        -- we do lair clearing
+        pPlot:SetProperty('DisperseCamp', nil)
         local iFeatureType = pPlot:GetFeatureType()
         local bIsWater = pPlot:IsWater()
         tribeIndex = pPlot:GetProperty('barbclantype') or 1             -- or logic, unsure why
@@ -1323,6 +1330,7 @@ function RemovedBarbCamp(x, y, owningPlayerID)
             else
                 doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
             end
+            print('spawning tribe because natural wonder exists on plot, superlair')
             spawnTribeSafe(pPlot:GetIndex(), tribeIndex)
         else
             if iDiceRoll < 14 then
@@ -1340,6 +1348,7 @@ function RemovedBarbCamp(x, y, owningPlayerID)
             end
             local iDestroyLairDiceRoll = math.random(100)
             if iDestroyLairDiceRoll <= iThreshold then
+                print('spawning tribe, as failed destroy dice roll')
                 spawnTribeSafe(iPlotID, tribeIndex)
             end
         end
@@ -1354,9 +1363,9 @@ end
 
 function deleteTribeSafe(pPlot, playerID)
     local iPlotID = pPlot:GetIndex()
-    Game:SetProperty('BarbNoLair_' .. iPlotID, 1)
+    Game:SetProperty(sDontDoBarbLairRemoval .. iPlotID, 1)
     ImprovementBuilder.SetImprovementType(pPlot, -1, playerID)
-    Game:SetProperty('BarbNoLair_' .. iPlotID, nil)
+    Game:SetProperty(sDontDoBarbLairRemoval .. iPlotID, nil)
 end
 
 local tLuonnotar = {
@@ -1784,6 +1793,7 @@ function InitializeClans()
                 local feature = pPlot:GetFeatureType()
                 if tBarbNW[feature] then
                     -- print(feature)
+                    print('spawning tribe as initiating super lair')
                     spawnTribeSafe(i, 1)
                 end
             end

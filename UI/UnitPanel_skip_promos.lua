@@ -2722,6 +2722,7 @@ local tCachedViableActionUnits = {}
 -- ===========================================================================
 --	UnitAction was clicked.
 -- ===========================================================================
+local iClanDisperseHash = GameInfo.UnitCommands['UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE'].Hash
 function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:number )
 	if g_isOkayToProcess then
 		local pSelectedUnit :table= UI.GetHeadSelectedUnit();
@@ -2741,6 +2742,13 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 						UI.SetInterfaceMode(eInterfaceMode);
 					end
 				else
+					if actionHash == iClanDisperseHash then		-- setting plot property on gameplay side so dont redo lair
+						print('placing op first')
+						local iOwner = pSelectedUnit:GetOwner()
+						local tParameters = {sPropKey='DisperseCamp', iPropValue=1, iPlotIndex=pSelectedUnit:GetPlotId(),
+											 OnStart='SlthSetPlotProperty'}
+						UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+					end
 					-- No mode needed, just do the operation
 					UnitManager.RequestCommand( pSelectedUnit, actionHash );
 				end
