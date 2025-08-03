@@ -1,3 +1,5 @@
+include('SpawnSupport')
+
 local tLeaderAlignmentMap = {
     ['LEADER_ALEXIS']=0, ['LEADER_FLAUROS']=0, ['LEADER_KEELYN']=0, ['LEADER_PERPENTACH']=0,
     ['LEADER_HYBOREM']=0, ['LEADER_TEBRYN']=0, ['LEADER_OS_GABELLA']=0, ['LEADER_JONAS']=0,
@@ -253,9 +255,9 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
         end
     end
 end
-
+local iBuildingPalace = GameInfo.Buildings['BUILDING_PALACE'].Index
 function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstruction)
-    if buildingID == GameInfo.Buildings['BUILDING_PALACE'].Index then
+    if buildingID == iBuildingPalace then
         local pPlayer = Players[playerID]
         local pConfig = PlayerConfigurations[playerID]
         if pConfig:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
@@ -352,13 +354,14 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
         end
         pLeastReligionsCity:GetReligion():AddReligiousPressure(playerID, iReligion, 1000)
         if bHolyCityEstablished < 1 then
-            Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)
+            Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)            -- like RELIGION_BUDDHISM
             local pPlot = pLeastReligionsCity:GetPlot()
             pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
             pLeastReligionsCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
             if iReligion == iReligionVeil then
                 AdjustArmageddonCount(5)
             end
+            NotifyAllHumans(Locale.Lookup('LOC_RELIGION_FOUNDED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_' .. sReligion .. '_FOUNDED_NOTIFICATION_DESCRIPTION'), pPlot:GetX(), pPlot:GetY())
         end
     end
     -- if we have hyborem and basium disabled, this dont work and causes weirdness.
