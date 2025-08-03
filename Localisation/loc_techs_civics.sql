@@ -116,4 +116,5 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_CIVIC_WAY_OF_THE_WICKED_DESCRIPTION', 'Unlocks the Scourge Promotion option for eligible units.', 'en_US'),
 ('LOC_CIVIC_WAY_OF_THE_WISE_DESCRIPTION', 'Unlocks the Demon Slaying and Undead Slaying Promotions option for eligible units.', 'en_US'),
 ('LOC_TECH_SAILING_DESCRIPTION', 'Allows all units to embark.', 'en_US'),
-('LOC_TECH_MITHRIL_WORKING_DESCRIPTION', 'Allows building the Mithril Golem, if you control the Runes of Kilmorph Holy City, and have it as your State Religion, and the Armageddon counter is above 70*. For all that, its pretty darn strong.', 'en_US');
+('LOC_TECH_MITHRIL_WORKING_DESCRIPTION', 'Allows building the Mithril Golem, if you control the Runes of Kilmorph Holy City, and have it as your State Religion, and the Armageddon counter is above 70*. For all that, its pretty darn strong.', 'en_US'),
+('LOC_TECH_SANITATION_DESCRIPTION', '+1 [ICON_Food]Food on all Farms. Farms spread Irrigation*.', 'en_US');

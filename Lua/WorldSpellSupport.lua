@@ -1,6 +1,6 @@
 local sWorldSpellPropKey = 'WorldSpellReady'
 local iNotifType = NotificationTypes.USER_DEFINED_2;
-function NotifyAllHumans(notificationData, iX, iY)
+function NotifyAllHumansAlt(notificationData, iX, iY)
     for iPlayer, pPlayer in ipairs(Players) do
         if pPlayer:IsHuman() then
             NotificationManager.SendNotification(iPlayer, iNotifType, notificationData, nil, iX, iY)

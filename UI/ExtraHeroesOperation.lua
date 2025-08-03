@@ -30,7 +30,27 @@ local tMonitoredResources = {
     [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_IRON' },
     [GameInfo.Resources['RESOURCE_SILVER'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_MITHRIL' },
     [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_NIGHTMARE' },
-    [GameInfo.Resources['RESOURCE_MANA'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_MANA', improvement_bug=true},
+
+    [GameInfo.Resources['RESOURCE_DYES'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_DYES' },
+    [GameInfo.Resources['RESOURCE_INCENSE'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_INCENSE' },
+    [GameInfo.Resources['RESOURCE_SPICES'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_SPICES' },
+    [GameInfo.Resources['RESOURCE_DIAMONDS'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_DIAMONDS' },
+    [GameInfo.Resources['RESOURCE_WINE'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_WINE' },
+    [GameInfo.Resources['RESOURCE_DEER'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_DEER' },
+    [GameInfo.Resources['RESOURCE_GOLD'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_GOLD' },
+    [GameInfo.Resources['RESOURCE_SILK'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_SILK' },
+    [GameInfo.Resources['RESOURCE_COTTON'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_COTTON' },
+    [GameInfo.Resources['RESOURCE_PEARLS'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_PEARLS' },
+    [GameInfo.Resources['RESOURCE_MAIZE'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_MAIZE' },
+    [GameInfo.Resources['RESOURCE_RICE'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_RICE' },
+    [GameInfo.Resources['RESOURCE_WHEAT'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_WHEAT' },
+    [GameInfo.Resources['RESOURCE_CATTLE'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_CATTLE' },
+    [GameInfo.Resources['RESOURCE_TRUFFLES'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_TRUFFLES' },
+    [GameInfo.Resources['RESOURCE_SHEEP'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_SHEEP' },
+    [GameInfo.Resources['RESOURCE_CLAM'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_CLAM' },
+    [GameInfo.Resources['RESOURCE_CRABS'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_CRABS' },
+    [GameInfo.Resources['RESOURCE_FISH'].Index] = { rtype = 'ONOFF', name = 'RESOURCE_FISH' },
+
     -- [GameInfo.Resources['RESOURCE_IRON'].Index] = { rtype='AFFINITY', name='RESOURCE_IRON'},
     -- [GameInfo.Resources['RESOURCE_SILVER'].Index] = { rtype='AFFINITY', name='RESOURCE_SILVER'},
     -- [GameInfo.Resources['RESOURCE_SHEUT_STONE'].Index] = { rtype='AFFINITY', name='RESOURCE_SHEUT_STONE'},
@@ -494,9 +514,6 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
     if iResourceInfo then
         print('it is monitored!')
         print('trying to update resources on player and resource', ownerPlayerID, resourceTypeID)
-        if iResourceInfo['improvement_bug'] then
-            print('its the raw mana bug! so instead we find the')
-        end
         local pPlayer = Players[ownerPlayerID];
         local resources = pPlayer:GetResources()
         local iResourceCount = resources:GetResourceAmount(resourceTypeID);
@@ -505,9 +522,9 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
         local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
         local sPropKeyCount = iResourceInfo['name']
         local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or 0
-        print('previous: '  .. sPropKeyCount .. tostring(iPastResource))
-        print('new Gameplay: '  .. sPropKeyCount .. tostring(iResourceCount))
-        print('new UI: '  .. sPropKeyCount .. tostring(iResourceCount))
+        print('previous: '  .. sPropKeyCount .. ' ' ..tostring(iPastResource))
+        print('new Gameplay: '  .. sPropKeyCount .. ' ' ..tostring(iResourceCount))
+        print('new UI: '  .. sPropKeyCount .. ' ' ..tostring(iResourceCount))
         if iResourceCount ~= iPastResource then
             local tParameters = {}
             tParameters.sPropKey = sPropKeyCount;

@@ -60,6 +60,9 @@
       <File>Icons/CommandIcons.sql</File>
       <File>Icons/ModeIcons.xml</File>
     </UpdateIcons>
+    <ImportFiles id="ImportUtilFilesFFH">
+      <!--File>UI/Overrides/Civ6Common.lua</File-->
+    </ImportFiles>
    </FrontEndActions>
   <InGameActions>
     <UpdateArt id="Art">
@@ -285,6 +288,12 @@
             <LuaReplace>UI/MapLabelManager.lua</LuaReplace>
         </Properties>
     </ReplaceUIScript-->
+    <ReplaceUIScript id="ProductionPanelOverride">
+        <Properties>
+            <LuaContext>ProductionPanel</LuaContext>
+            <LuaReplace>UI/Replacements/ProductionQueue.lua</LuaReplace>
+        </Properties>
+    </ReplaceUIScript>
     <ImportFiles id="ImportUIFiles">
       <Properties>
         <LoadOrder>901</LoadOrder>
@@ -301,6 +310,7 @@
       <File>UI/GovernmentScreen.xml</File>
       <File>UI/TabSupport.lua</File>
       <File>UI/ToolTipHelper_PlayerYields.lua</File>
+      <!--File>UI/Overrides/Civ6Common.lua</File-->
       <!--File>UI/MapLabelManager.lua</File>
       <File>UI/MapLabelManager.xml</File-->
     </ImportFiles>
@@ -501,6 +511,8 @@
     <File>UI/TabSupport.lua</File>
     <File>UI/CivicsTree.xml</File>
     <File>UI/CivicsTree.lua</File>
+    <File>UI/Overrides/Civ6Common.lua</File>
+    <File>UI/Replacements/ProductionQueue.lua</File>
     <!--File>UI/MapLabelManager.lua</File>
     <File>UI/MapLabelManager.xml</File-->
     <File>Maps/Erebus.lua</File>

@@ -491,4 +491,13 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_DIPLO_EVIL_LOVES_EVIL', 'You are Evil, they are Evil', 'en_US'),
 ('LOC_DIPLO_GOOD_HATES_EVIL', 'You are Evil, they are Good', 'en_US'),
 ('LOC_DIPLO_GOOD_DISLIKES_NEUTRAL', 'You are Neutral, they are Good', 'en_US'),
-('LOC_DIPLO_GOOD_LOVES_GOOD', 'You are Good, they are Good', 'en_US');
+('LOC_DIPLO_GOOD_LOVES_GOOD', 'You are Good, they are Good', 'en_US'),
+('LOC_RELIGION_FOUNDED_NOTIFICATION_TITLE', 'Religion Founded', 'en_US'),
+('LOC_RELIGION_CONFUCIANISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'Runes of Kilmorph was founded in a distant land', 'en_US'),
+('LOC_RELIGION_PROTESTANTISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'The Order was founded in a distant land', 'en_US'),
+('LOC_RELIGION_JUDAISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'The Empyrean was founded in a distant land', 'en_US'),
+('LOC_RELIGION_CATHOLICISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'Fellowship of the Leaves was founded in a distant land', 'en_US'),
+('LOC_RELIGION_HINDUISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'Octopus Overlords was founded in a distant land', 'en_US'),
+('LOC_RELIGION_ISLAM_FOUNDED_NOTIFICATION_DESCRIPTION', 'Council of Esus was founded in a distant land', 'en_US'),
+('LOC_RELIGION_BUDDHISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'The Ashen Veil was founded in a distant land', 'en_US');
+

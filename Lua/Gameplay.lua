@@ -257,6 +257,18 @@ function CountdownReducePlayer(pPlayer, countdown_propKey, plotPropKey)
         end
     end
 end
+
+function AddExperienceIfAble(pUnit, iFXP_gain)
+    local pExp = pUnit:GetExperience()
+    local iExpForNextLevel = pExp:GetExperienceForNextLevel()
+    if iExpForNextLevel > iFXP_gain then
+        pExp:ChangeExperience(iFXP_gain);
+    else
+        local iReservedXP = iFXP_gain - iExpForNextLevel
+        pUnit:SetProperty('xp_portion', iReservedXP);
+        pExp:ChangeExperience(iExpForNextLevel);
+    end
+end
 local iGameSpeedMult = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier / 100
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
@@ -291,28 +303,22 @@ function onTurnStartGameplay(playerId)
             end
             if fXP_gain > 0 then
                 if fXP_gain == math.floor(fXP_gain) then
-                    -- if integer, simple add xp
-                    unit:GetExperience():ChangeExperience(fXP_gain);
-                else
-                    -- if float, use property to set state.
+                    AddExperienceIfAble(unit, fXP_gain)        -- if integer, simple add xp
+                else                                                    -- if float, use property to set state.
                     local iXP_portion, fXP_portion = math.modf(fXP_gain);
-                    SlthLog('Decimal portion of xp gain is:')
-                    SlthLog(fXP_portion);
                     local existing_xp_portion = unit:GetProperty('xp_portion');
                     if not existing_xp_portion then
                         unit:SetProperty('xp_portion', fXP_portion);
-                        SlthLog('No prior xp_portion');
                     else
                         local new_xp_portion = existing_xp_portion + fXP_portion;
                         if new_xp_portion > 1 then
-                            iXP_portion = iXP_portion + 1;
-                            new_xp_portion = new_xp_portion - 1;
+                            local iIntegerXp = math.floor(new_xp_portion)
+                            iXP_portion = iXP_portion + iIntegerXp;
+                            new_xp_portion = new_xp_portion -iIntegerXp;
                         end
                         unit:SetProperty('xp_portion', new_xp_portion);
-                        SlthLog('Old xp_portion: ' .. existing_xp_portion .. ' New xp_portion: ' .. new_xp_portion);
                     end
-                    SlthLog('Adding ' .. iXP_portion .. ' to unit.')
-                    unit:GetExperience():ChangeExperience(iXP_portion);
+                    AddExperienceIfAble(unit, iXP_portion)
                 end
             end
         end
@@ -1390,7 +1396,7 @@ local tLuonnotarCivics = {
 }
 local iPillarOfChains = GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index
 local iBonePalace = GameInfo.Buildings['BUILDING_TAJ_MAHAL'].Index
-
+local iBuildingPalace = GameInfo.Buildings['BUILDING_PALACE'].Index
 -- luonnotar checking, also marking plot prop for pillar of chains, for amenity updates
 function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     local tLuonnotarInfo = tLuonnotar[buildingID]
@@ -1434,6 +1440,13 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
     end
     if buildingID == iBonePalace then
         GoldenAgeGrant(Players[playerID],10)
+    end
+    if buildingID == iBuildingPalace then                       -- mostly aesthetic, just ensures science isnt way small before maintenance kicks in on turn 1
+        if Game.GetCurrentGameTurn() < 5 then
+            local pPlot = Map.GetPlotByIndex(plotID)
+            pPlot:SetProperty('CommIntoScience', 9)
+            pPlot:SetProperty('CommIntoGold', 1)
+        end
     end
 end
 
@@ -1819,6 +1832,43 @@ function InitializeFreeCivics()
         end
     end
 end
+tNoBuildDistricts = {['DISTRICT_WONDER']=true, ['DISTRICT_CITY_CENTER']=true}
+tDistricts = {}
+for row in GameInfo.Districts() do
+    if not tNoBuildDistricts[row.DistrictType] then
+        tDistricts[row.Index] = row.DistrictType
+    end
+end
+
+function OnCityProductionChanged( ePlayer, cityID, productionID, objectID)
+	print('city prod changed, productionid', productionID, 'objectID', objectID)
+    -- check what city is making
+    local pCity = CityManager.GetCity(ePlayer, cityID)
+    if pCity then
+        local pDistricts = pCity:GetDistricts()
+        if pDistricts then
+            for DistrictIndex, DistrictType in pairs(tDistricts) do
+                print('checking if city has', DistrictType)
+                local hasDistrict = pDistricts:GetDistrict(DistrictIndex)
+                print('do have?', hasDistrict)
+                if hasDistrict then
+                    local isComplete = hasDistrict:IsComplete()
+                    print('is complete?', isComplete)
+                    if not isComplete then
+                        local pBuildQueue = pCity:GetBuildQueue()
+                        local buildCurrent = pBuildQueue:CurrentlyBuilding()
+                        print('currently building', buildCurrent)
+                        -- CurrentlyBuilding
+                        if DistrictType == buildCurrent then
+                            pBuildQueue:FinishProgress()
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 
 -- Hook in events
 function onStart()
@@ -1833,7 +1883,7 @@ function onStart()
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
     Events.UnitAbilityGained.Add(onAbilityGained)
     GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
-    Events.DistrictAddedToMap.Add(onDistrictPlace)
+    Events.CityProductionChanged.Add(OnCityProductionChanged);
 
     -- InitializeClans()
     InitializeFreeCivics()
@@ -2148,23 +2198,6 @@ local function ForTheHorde(iPlayer, tParameters)                -- TODO
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
-
-
-
-function onDistrictPlace(playerID, districtID, cityID, x, y, districtIndex, percentComplete)
-    if districtIndex ~= 0 and districtIndex ~= 6 then                   -- not wonder, not city centre
-        local pCity = CityManager.GetCity(playerID, cityID)
-        local pDistricts = pCity:GetDistricts()
-        local madeDistrict = pDistricts:GetDistrict(districtIndex)
-        if madeDistrict then
-            local buildQueue = pCity:GetBuildQueue()
-            buildQueue:FinishProgress()
-        else
-            print('couldnt find district id when trying to finish it for free', districtID, districtIndex)
-        end
-    end
-end
-
 
 -- world spells
 GameEvents.SlthOnRally.Add(Rally);
