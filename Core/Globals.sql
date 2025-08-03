@@ -102,6 +102,32 @@ INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
 -- mohenjo daro everyone has fresh water housing always... its just too snowbally as rivers are now also commerce
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 ('TRAIT_LEADER_MAJOR_CIV', 'MINOR_CIV_MOHENJO_DARO_CITIES_FRESHWATER_HOUSING_BONUS');
+
+-- trade route limit for every city you have
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'MOD_TRADE_ROUTE_PER_CITY');
+
+INSERT INTO Modifiers(ModifierId, ModifierType) VALUES
+('MOD_TRADE_ROUTE_PER_CITY', 'MODIFIER_PLAYER_CITIES_ATTACH_MODIFIER');
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
+('MOD_TRADE_ROUTE_PER_CITY', 'ModifierId', 'MODIFIER_SLTH_POLICY_FOREIGN_TRADE_ADJUST_TRADE_ROUTE_CAPACITY');
+
+INSERT INTO DynamicModifiers(ModifierType, CollectionType, EffectType) VALUES
+('MODIFIER_ALL_GRANT_COMBAT_ADJACENCY', 'COLLECTION_ALL_PLAYERS', 'EFFECT_GRANT_COMBAT_ADJACENCY');
+
+INSERT INTO Types(Type, Kind) VALUES
+('MODIFIER_ALL_GRANT_COMBAT_ADJACENCY', 'KIND_MODIFIER');
+
+INSERT INTO Modifiers(ModifierId, ModifierType) VALUES
+('START_WITH_COMBAT_FLANKING', 'MODIFIER_ALL_GRANT_COMBAT_ADJACENCY');
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
+('START_WITH_COMBAT_FLANKING', 'Enable', 'true');
+
+INSERT INTO GameModifiers(ModifierId) VALUES
+('START_WITH_COMBAT_FLANKING');
+
 /*
 
 -- sadly this sejong/moon project modifier just fails outside of a runonce context. Rtried Repeatable, no such luck

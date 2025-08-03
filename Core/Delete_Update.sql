@@ -1,11 +1,15 @@
-DELETE FROM Route_ValidBuildUnits;
+UPDATE Route_ValidBuildUnits Set UnitType='UNIT_BUILDER';
+
 UPDATE Building_BuildChargeProductions SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';
 UPDATE District_BuildChargeProductions SET UnitType = 'UNIT_BUILDER' WHERE UnitType = 'UNIT_MILITARY_ENGINEER';
 DELETE FROM Routes WHERE RouteType == 'ROUTE_RAILROAD' OR RouteType == 'ROUTE_MODERN_ROAD';
 UPDATE Routes SET MovementCost = 0.75 WHERE RouteType == 'ROUTE_ANCIENT_ROAD';
 UPDATE Routes SET MovementCost = 0.75 WHERE RouteType == 'ROUTE_MEDIEVAL_ROAD';          -- how to absorb engineering buffing roads?
 
-UPDATE Routes SET MovementCost = 0.5, PrereqEra='ERA_MODERN' WHERE RouteType == 'ROUTE_INDUSTRIAL_ROAD';
+UPDATE Routes SET MovementCost = 0.5, PrereqEra='ERA_MODERN' WHERE RouteType == 'ROUTE_INDUSTRIAL_ROAD';        -- this hopefully
+
+UPDATE Routes_XP2 SET BuildWithUnitChargeCost=0;         -- no build charge cost
+UPDATE Routes_XP2 SET PrereqTech='TECH_EXPLORATION' WHERE RouteType='ROUTE_ANCIENT_ROAD';         -- no build charge cost
 
 UPDATE Eras SET TechTreeLayoutMethod='Prereq';
 -- UPDATE DiplomaticActions SET TargetPrereqCivic = 'CIVIC_HONOR', InitiatorPrereqCivic = 'CIVIC_HONOR' WHERE DiplomaticActionType = 'DIPLOACTION_DEFENSIVE_PACT';
