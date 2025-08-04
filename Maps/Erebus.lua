@@ -65,6 +65,26 @@ local TerrainTextMapper = {
     [g_TERRAIN_TYPE_COAST] = 'COAST',
     [g_TERRAIN_TYPE_OCEAN] = 'OCEAN',
 }
+
+local terrainKeyMapper = {
+[g_TERRAIN_TYPE_GRASS] = "green",
+[g_TERRAIN_TYPE_GRASS_HILLS] = "",
+[g_TERRAIN_TYPE_GRASS_MOUNTAIN] = "red",
+[g_TERRAIN_TYPE_PLAINS] = "orange",
+[g_TERRAIN_TYPE_PLAINS_HILLS] = "",
+[g_TERRAIN_TYPE_PLAINS_MOUNTAIN] = "red",
+[g_TERRAIN_TYPE_DESERT] = "",
+[g_TERRAIN_TYPE_DESERT_HILLS] = "",
+[g_TERRAIN_TYPE_DESERT_MOUNTAIN] = "red",
+[g_TERRAIN_TYPE_TUNDRA] = "cream",
+[g_TERRAIN_TYPE_TUNDRA_HILLS] = "",
+[g_TERRAIN_TYPE_TUNDRA_MOUNTAIN] = "red",
+[g_TERRAIN_TYPE_SNOW] = "white",
+[g_TERRAIN_TYPE_SNOW_HILLS] = "",
+[g_TERRAIN_TYPE_SNOW_MOUNTAIN] = "red",
+[g_TERRAIN_TYPE_COAST] = "",
+[g_TERRAIN_TYPE_OCEAN] = ""
+}
 -- ENTRY POINT
 function GenerateMap()
     -- g_iW, g_iH = 84, 52
@@ -117,8 +137,10 @@ function GenerateMap()
     out_plots = plotMap
     plotTypes = ConvertToFiraxisFormSimple(out_plots, plotErebusFxsMapper)
     terrainTypes = ConvertToFiraxisFormSimple(terrainMap_out_plots, terrainErebusFxsMapper)
-    simpleGridPrint(plotTypes, 'final plots')
-    simpleGridPrint(terrainTypes, 'final terrains')
+    simpleGridPrint(plotTypes, 'final plots',
+			{[g_PLOT_TYPE_LAND]='green', [g_PLOT_TYPE_HILLS]='orange',
+			 [g_PLOT_TYPE_OCEAN]='blue', [g_PLOT_TYPE_MOUNTAIN]='red'})
+    simpleGridPrint(terrainTypes, 'final terrains', terrainKeyMapper)
     ApplyTerrain(plotTypes, terrainTypes);
 
     -- Temp

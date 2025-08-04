@@ -1649,7 +1649,7 @@ function createPlotMap()            -- Entry point from main script
             borderMap[i] = '1'
         end
     end
-    simpleGridPrint(borderMap, 'bordermap')
+    simpleGridPrint(borderMap, 'bordermap', {['3']='red', ['1']='green'})
     simpleGridPrint(plotMap, 'post_land_water_mountain')
 
     for n=1, #scrambledPlotList do
@@ -1729,15 +1729,15 @@ function createPlotMap()            -- Entry point from main script
         plotMap[i] = plotMap[i + g_iW]
     end
 
-    simpleGridPrint(plotMap, '2_post_river_peaks')
-
     -- Now for SoftenPeakPercent of peaks, make them hills
-    for y=1,g_iH do
-        for x= 1,g_iW do
-            local i = GetIndex(x,y)
-            if plotMap[i] == PEAK then
-                if SoftenPeakPercent >= math.random() then
-                    plotMap[i] = HILLS
+    if SoftenPeakPercent > 0 then
+        for y=1,g_iH do
+            for x= 1,g_iW do
+                local i = GetIndex(x,y)
+                if plotMap[i] == PEAK then
+                    if SoftenPeakPercent >= math.random() then
+                        plotMap[i] = HILLS
+                    end
                 end
             end
         end
@@ -1778,7 +1778,7 @@ function createPlotMap()            -- Entry point from main script
             end
         end
     end
-    simpleGridPrint(plotMap, 'post fix impassable areas')
+    simpleGridPrint(plotMap, 'post fix impassable areas', {[HILLS]='green', [LAND]='green'})
     slthLog('plot map dim', #plotMap)
 end
 
@@ -2022,16 +2022,16 @@ local function addTerrain(index, value) if plotMap[index] then terrainMap[index]
 
 -- TERRAIN --
 function createTerrainMap()
-    DESERT = 0
-    PLAINS = 1
-    ICE = 2
-    TUNDRA = 3
-    GRASS = 4
-    HILL = 5
-    COAST = 6
-    OCEAN_TERRAIN = 7
-    PEAK_TERRAIN = 8
-    MARSH = 9
+    local DESERT = 0
+    local PLAINS = 1
+    local ICE = 2
+    local TUNDRA = 3
+    local GRASS = 4
+    local HILL = 5
+    local COAST = 6
+    local OCEAN_TERRAIN = 7
+    local PEAK_TERRAIN = 8
+    local MARSH = 9
     terrainMap = {}
     --  initialize terrainMap with OCEAN
     for y=1, g_iH do
@@ -2058,7 +2058,7 @@ function createTerrainMap()
         end
     end
     slthLog('terrain_total is:', #terrainMap)
-    simpleGridPrint(terrainMap, 'post_terrain_init_ocean')
+    simpleGridPrint(terrainMap, 'post_terrain_init_ocean', {[4]='green', [6]='yellow', [7]='blue'})
 
     for y=1, g_iH-1 do
         for x=1, g_iW-1 do
@@ -2095,27 +2095,22 @@ function createTerrainMap()
         end
     end
     slthLog('terrain_total is:', #terrainMap)
-    simpleGridPrint(terrainMap, 'post terrain biome')
+    simpleGridPrint(terrainMap, 'post terrain biome',
+            {[COAST]='blue', [OCEAN_TERRAIN]='deepblue', [GRASS]='green', [DESERT]='yellow', [PLAINS]='orange',
+            [TUNDRA]='cream'})
     -- clean up desert peaks to avoid burning peaks all over the map
+
     for y=1,g_iH -1 do
         for x=1, g_iW-1 do
             local i = GetIndex(x, y)
             if plotMap[i] == PEAK then
                 addTerrain(i, TUNDRA)
-                for direction=1, 8 do
-                    local xx = x + directionXmap[direction]
-                    local yy = y + directionYmap[direction]
-                    local ii = GetIndex(xx, yy)
-                    if plotMap[ii] ~= PEAK and plotMap[ii] ~= OCEAN then
-                        addTerrain(i, terrainMap[ii])
-                        break
-                    end
-                end
             end
         end
     end
     simpleGridPrint(terrainMap, 'post cleanup desert mountains')
-    simpleGridPrint(plotMap,'post terrain gen PLOTS')
+
+    simpleGridPrint(plotMap,'plotType_post_terrain_gen')
     slthLog('terrain map dim', #terrainMap)
 end
 

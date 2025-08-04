@@ -1,5 +1,3 @@
-require('mobdebug').start()
-print("Hello world")
 local missing_globals = {}
 
 setmetatable(_G, {
@@ -13,16 +11,19 @@ setmetatable(_G, {
 })
 
 local tExternals = {['PythonConversion']=true, ['IO_Fake']=true}
+local tReplace = {['IO_Fake']='IO_Debug'}
 if not include then
     function include(name)
-		if tExternals[name] then
-      print('loading', name)
-			local ok, err = pcall(require, name)
-			if not ok then
-        print('was not ok, err', err)
-				dofile(name .. ".lua")
-			end
-		end
+      local newName = name
+      if tExternals[name] then
+        newName = tReplace[name] or name
+        print('loading', newName)
+        local ok, err = pcall(require, newName)
+        if not ok then
+          print('was not ok, err', err)
+          dofile(newName .. ".lua")
+        end
+      end
     end
 end
 
