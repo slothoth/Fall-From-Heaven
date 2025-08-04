@@ -360,4 +360,4 @@ INSERT INTO GreatPersonIndividualBirthModifiers(GreatPersonIndividualType, Modif
 SELECT GreatPersonIndividualType, 'GREAT_PERSON_EXTRA_COST' FROM GreatPersonIndividuals;
 
 INSERT INTO ModifierStrings(ModifierId, Context, Text) VALUES
-('GREAT_PERSON_EXTRA_COST', 'Summary', 'LOC_GREATPERSON_EXTRA_COST'),
+('GREAT_PERSON_EXTRA_COST', 'Summary', 'LOC_GREATPERSON_EXTRA_COST');
