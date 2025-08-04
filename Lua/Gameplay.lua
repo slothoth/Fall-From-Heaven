@@ -1,10 +1,10 @@
 include('WorldSpellSupport')
 include('SpawnSupport')
 
-local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN = 1, SLTH_UNIT_ARCHMAGE = 2, SLTH_UNIT_EATER_OF_DREAMS = 2,
-                      SLTH_UNIT_CORLINDALE = 2, SLTH_UNIT_DISCIPLE_OF_ACHERON = 1, SLTH_UNIT_GAELAN = 1.5, SLTH_UNIT_GIBBON = 2,
-                      SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
-                      SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2}
+local FreeXPUnits = { SLTH_UNIT_ADEPT = 8, SLTH_UNIT_IMP = 8, SLTH_UNIT_SHAMAN = 8, SLTH_UNIT_ARCHMAGE = 16, SLTH_UNIT_EATER_OF_DREAMS = 16,
+                      SLTH_UNIT_CORLINDALE = 8, SLTH_UNIT_DISCIPLE_OF_ACHERON = 8, SLTH_UNIT_GAELAN = 12, SLTH_UNIT_GIBBON = 8,
+                      SLTH_UNIT_GOVANNON = 8, SLTH_UNIT_HEMAH = 8, SLTH_UNIT_LICH = 16, SLTH_UNIT_ILLUSIONIST = 12, SLTH_UNIT_MAGE = 12,
+                      SLTH_UNIT_WIZARD = 12, SLTH_UNIT_MOBIUS_WITCH = 12, SLTH_UNIT_MOKKA = 12, SLTH_UNIT_SON_OF_THE_INFERNO = 16}
 local iNotifType = NotificationTypes.USER_DEFINED_2;
 local iIMP_INDEX = GameInfo.Units['SLTH_UNIT_IMP'].Index
 local tArcaneUnits = {
@@ -299,7 +299,7 @@ function onTurnStartGameplay(playerId)
             local fXP_gain = FreeXPUnits[sUnitType] or 0
             local pUnitAbilities = unit:GetAbility()
             if pUnitAbilities and pUnitAbilities:HasAbility('SLTH_ABILITY_POTENCY') or pUnitAbilities:HasAbility('SLTH_ABILITY_HERO') then
-                fXP_gain = fXP_gain + 1
+                fXP_gain = fXP_gain + 8
             end
             if fXP_gain > 0 then
                 if fXP_gain == math.floor(fXP_gain) then

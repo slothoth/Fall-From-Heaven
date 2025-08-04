@@ -67,7 +67,8 @@ INSERT INTO Buildings(BuildingType, Name, PrereqTech, PrereqCivic, Cost, PrereqD
 
 INSERT INTO BuildingModifiers(BuildingType, ModifierId) VALUES
 ('SLTH_BUILDING_HARBOR_LANUN', 'MODIFIER_SLTH_BUILDING_HARBOR_LANUN_DOMAIN_SEA_PROD_MULT'),
-('SLTH_BUILDING_HARBOR_LANUN', 'MODIFIER_SLTH_BUILDING_HARBOR_TRADE_ROUTE_YIELD_MULT');
+('SLTH_BUILDING_HARBOR_LANUN', 'HARBOR_TRADE_ROUTE_YIELD_MULT_DOMESTIC'),
+('SLTH_BUILDING_HARBOR_LANUN', 'HARBOR_TRADE_ROUTE_YIELD_MULT_INATIONAL');
 
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion) VALUES
 ('SLTH_UNIT_BLACK_WIND', 'LOC_SLTH_UNIT_BLACK_WIND_NAME', '2', '4', '48', '0', '0', 'DOMAIN_SEA', 'FORMATION_CLASS_NAVAL', '300', '0', 'LOC_SLTH_UNIT_BLACK_WIND_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_BLACK_WIND', '0', 'PROMOTION_CLASS_NAVAL_MELEE', 'TECH_OPTICS', NULL, '1', '1', '0', '0', '0', 'PSEUDOYIELD_UNIT_NAVAL_COMBAT', '0', 'ADVISOR_CONQUEST', '0'),

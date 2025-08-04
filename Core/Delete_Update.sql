@@ -61,6 +61,9 @@ UPDATE Districts SET Cost=1, PlunderAmount=0, PlunderType='NO_PLUNDER', CostProg
 UPDATE Districts SET PrereqCivic=NULL, PrereqTech=NULL;
 UPDATE Districts SET RequiresPopulation=0 WHERE RequiresPopulation=1;
 UPDATE District_TradeRouteYields SET YieldChangeAsDomesticDestination = 0.0 WHERE YieldChangeAsDomesticDestination != 0.0;          -- trade imbalance issues, todo
+UPDATE District_TradeRouteYields SET YieldChangeAsDomesticDestination=3.0 WHERE DistrictType='DISTRICT_CITY_CENTER' AND YieldType='YIELD_GOLD';         -- domestic trade has gold too
+-- somehow make it so traders dont need harbors
+
 -- uodate District_CitizenYieldChanges to give specialists right amount, for ex scientists are two, not three. check ffh for vals
 DELETE FROM GreatPersonIndividuals;
 

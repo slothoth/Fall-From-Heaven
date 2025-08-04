@@ -587,4 +587,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_GREAT_GENERAL_8', 'K''thun', 'en_US'),
 ('LOC_SLTH_GREAT_GENERAL_9', 'Morsuelis', 'en_US'),
 ('LOC_GRANT_ALTAR', 'Grant the next tier of the Altar of Luonnotar', 'en_US'),
-('LOC_BUILDING_BLOCK_ALTAR_NAME', 'Blocked from next Altar tier by Civic.', 'en_US');
+('LOC_BUILDING_BLOCK_ALTAR_NAME', 'Blocked from next Altar tier by Civic.', 'en_US'),
+('LOC_GREATPERSON_EXTRA_COST', 'Makes all future Great People cost 100 more points (Scaled by Speed)', 'en_US'),
+('LOC_GREATPERSON_MOVEMENT_AOE_LAND', '+1[Icon_Movement] Movement for all units within 2 range.', 'en_US');

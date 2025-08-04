@@ -30,7 +30,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_POLICY_AGRARIANISM_DESCRIPTION', '+1[ICON_Housing] Housing in all cities. +1 [ICON_Food] Food and -1 [ICON_Production] Production  for each Farm.', 'en_US'),
 ('LOC_SLTH_POLICY_APPRENTICESHIP_DESCRIPTION', '+16 experience to trained Units. -10% [ICON_Production] Production to Military Units.', 'en_US'),
 ('LOC_SLTH_POLICY_ARETE_DESCRIPTION', '+1 [ICON_Production] Production for each Mine. 20% increased Great People points in cities following your state religion. Can use gold to finish production in a City*', 'en_US'),
-('LOC_SLTH_POLICY_ARISTOCRACY_DESCRIPTION', '-1 [ICON_Food] Food and  +4 [ICON_Gold] Gold for each Farm. 40% reduced city Maintenance distance. Allows the Royal Guard Cavalry unit with Feudalism.', 'en_US'),
+('LOC_SLTH_POLICY_ARISTOCRACY_DESCRIPTION', '-1 [ICON_Food] Food and  +2 [ICON_Faith] Commerce for each Farm. 40% reduced city Maintenance distance. Allows the Royal Guard Cavalry unit with Feudalism.', 'en_US'),
 ('LOC_SLTH_POLICY_CASTE_SYSTEM_DESCRIPTION', 'Builders start with +2 charges. +1[ICON_Science] Science, +2[ICON_Culture] Culture on specialists. +1 [ICON_Amenities] Amenity in your four largest cities*. Can use gold to finish production in a City*', 'en_US'),
 ('LOC_SLTH_POLICY_CITY_STATES_DESCRIPTION', '80% reduced city Maintenance distance. 25% reduced Number of cities Maintenance. -20% [ICON_Culture] Culture in all Cities. Accumulate 25% less war weariness than usual.', 'en_US'),
 ('LOC_SLTH_POLICY_CONQUEST_DESCRIPTION', '+16 experience to trained Units. All military units cost food*', 'en_US'),

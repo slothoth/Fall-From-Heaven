@@ -128,6 +128,7 @@ INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 INSERT INTO GameModifiers(ModifierId) VALUES
 ('START_WITH_COMBAT_FLANKING');
 
+
 /*
 
 -- sadly this sejong/moon project modifier just fails outside of a runonce context. Rtried Repeatable, no such luck

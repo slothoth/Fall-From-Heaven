@@ -60,9 +60,6 @@
       <File>Icons/CommandIcons.sql</File>
       <File>Icons/ModeIcons.xml</File>
     </UpdateIcons>
-    <ImportFiles id="ImportUtilFilesFFH">
-      <!--File>UI/Overrides/Civ6Common.lua</File-->
-    </ImportFiles>
    </FrontEndActions>
   <InGameActions>
     <UpdateArt id="Art">
@@ -310,9 +307,6 @@
       <File>UI/GovernmentScreen.xml</File>
       <File>UI/TabSupport.lua</File>
       <File>UI/ToolTipHelper_PlayerYields.lua</File>
-      <!--File>UI/Overrides/Civ6Common.lua</File-->
-      <!--File>UI/MapLabelManager.lua</File>
-      <File>UI/MapLabelManager.xml</File-->
     </ImportFiles>
     <ImportFiles id="XP2WRxmlOverride">
       <Properties>
@@ -350,20 +344,26 @@
     <File>Localisation/loc_buildings.sql</File>
     <File>Localisation/loc_cities_great_people_names.sql</File>
     <File>Localisation/loc_civ_leader.sql</File>
+    <File>Localisation/loc_commands.sql</File>
     <File>Localisation/loc_equipment.sql</File>
+    <File>Localisation/loc_menu.sql</File>
+    <File>Localisation/loc_notifications.sql</File>
     <File>Localisation/loc_pedia.sql</File>
+    <File>Localisation/loc_playeritems.sql</File>
     <File>Localisation/loc_policies.sql</File>
+    <File>Localisation/loc_projects.sql</File>
     <File>Localisation/loc_promotions.sql</File>
     <File>Localisation/loc_techs_civics.sql</File>
     <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
     <File>Localisation/loc_traits.sql</File>
-    <File>Localisation/loc_units.sql</File>
-    <File>Localisation/loc_playeritems.sql</File>
     <File>Localisation/loc_ui.sql</File>
-    <File>Localisation/loc_notifications.sql</File>
-    <File>Localisation/loc_projects.sql</File>
-    <File>Localisation/loc_menu.sql</File>
-    <File>Localisation/loc_commands.sql</File>
+    <File>Localisation/loc_units.sql</File>
+    <File>Core/Absorb_deletes/Leaning.sql</File>
+    <File>Core/Absorb_deletes/Porcelain.sql</File>
+    <File>Core/AI/ai.sql</File>
+    <File>Core/AI/ai_trait.sql</File>
+    <File>Core/AbsorbDeletes.sql</File>
+    <File>Core/AiInfos.sql</File>
     <File>Core/Civilization_Colors.sql</File>
     <File>Core/Delete_Update.sql</File>
     <File>Core/Buildings.sql</File>
@@ -424,17 +424,11 @@
     <File>Core/Affinity.sql</File>
     <File>Core/UnitCommands.sql</File>
     <File>Core/LeaderTraits.sql</File>
-    <File>Core/AiInfos.sql</File>
-    <File>Core/AI/ai.sql</File>
-    <File>Core/AI/ai_trait.sql</File>
     <File>Core/Experimental/Commerce.sql</File>
     <File>Core/Experimental/GPP_FromSpecialists.sql</File>
     <File>Core/BespokeUpgrades.sql</File>
     <File>Core/WorldSpellSupport.sql</File>
     <File>Core/Lua_support/Tech_dummies.sql</File>
-    <File>Core/AbsorbDeletes.sql</File>
-    <File>Core/Absorb_deletes/Leaning.sql</File>
-    <File>Core/Absorb_deletes/Porcelain.sql</File>
     <File>Frontend/frontendConfig.sql</File>
     <File>Frontend/leaderConfig.sql</File>
     <File>Core/Assets_ingame.sql</File>
@@ -511,10 +505,7 @@
     <File>UI/TabSupport.lua</File>
     <File>UI/CivicsTree.xml</File>
     <File>UI/CivicsTree.lua</File>
-    <File>UI/Overrides/Civ6Common.lua</File>
     <File>UI/Replacements/ProductionQueue.lua</File>
-    <!--File>UI/MapLabelManager.lua</File>
-    <File>UI/MapLabelManager.xml</File-->
     <File>Maps/Erebus.lua</File>
 	<File>Maps/MapUtilities.lua</File>
   </Files>
