@@ -328,6 +328,8 @@
   </UpdateIcons>
   <ImportFiles id="ErebusMap">
 	<File>Maps/Erebus.lua</File>
+	<File>Maps/PythonConversion.lua</File>
+	<File>Maps/IO_Fake.lua</File>
 	<File>Maps/MapUtilities.lua</File>
   </ImportFiles>
   <ImportFiles id="ImportIncludeScripts">
@@ -508,5 +510,7 @@
     <File>UI/Replacements/ProductionQueue.lua</File>
     <File>Maps/Erebus.lua</File>
 	<File>Maps/MapUtilities.lua</File>
+    <File>Maps/PythonConversion.lua</File>
+	<File>Maps/IO_Fake.lua</File>
   </Files>
 </Mod>
