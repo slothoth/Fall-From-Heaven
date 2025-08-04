@@ -299,6 +299,7 @@ function createRegions()
     --on a map (regionRxMap) that corresponds to rivers rather than
     --map tiles. This ensures rivers have a path from region to
     --region.
+    math.randomseed(os.time())
 
     -- globals
     currentRegion = -99

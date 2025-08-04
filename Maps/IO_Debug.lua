@@ -200,7 +200,7 @@ function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_m
     for char in pairs(uniqueChars) do
         colors[char] = colorPalette[colorIndex]
         colour_string = colour_string .. string.format('%s = %s | ', char, colorPalette[colorIndex])
-        print('color for char', char, colour_string)
+        -- print('color for char', char, colour_string)
         colorIndex = (colorIndex % 256) + 1
     end
 
@@ -572,11 +572,11 @@ function createHexGridSVG(grid, keymap)
             if not uniqueChars[char] and not symbols[char] and not hexCodeMap[char] then
                 charCount = charCount + 1
                 uniqueChars[char] = true
-                print('unique char found', char)
+                -- print('unique char found', char)
             end
         end
     end
-    print('unique character count', charCount)
+    -- print('unique character count', charCount)
     local colorPalette = generateOptimizedColors(charCount) or {}
     -- If optimized colors weren't generated, create 256-color palette
     if #colorPalette == 0 then
