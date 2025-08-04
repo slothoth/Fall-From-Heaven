@@ -1,100 +1,89 @@
 -- This variable will make a percentage of peaks into hills in order to break
 -- up the worlds valleys. I set this to zero because I feel it diminishes the
 -- illusion of differing climates between valleys and looks bad.
-SoftenPeakPercent = 0.0
+local SoftenPeakPercent = 0.0
 
 -- This variable decides how many tiles of drainage is needed to create a
 -- river.
-RiverThreshold = 5.0
+local RiverThreshold = 5.0
 
 -- The amount of rainfall in the dryest desert. Must be between 1.0 and 0.0
-MinRainfall = .25
+local MinRainfall = .25
 
 -- This number is multiplied by the RiverThreshold to determine when a river
 -- is large enough to have a 100% chance to flatten nearby hills and peaks.
-RiverFactorFlattensAll = 10.0
+local RiverFactorFlattensAll = 10.0
 
-RiverAddsMoistureRange = .20
-RiverAddsMoistureMax = 10.0
+local RiverAddsMoistureRange = .20
+local RiverAddsMoistureMax = 10.0
 
 -- These variables control the frequency of hills and peaks at the lowest
 -- and highest altitudes
-HillChanceAtZero = .15
+local HillChanceAtZero = .15
 
-HillChanceAtOne = .90
-PeakChanceAtZero = .0
-PeakChanceAtOne = .20
+local HillChanceAtOne = .90
+local PeakChanceAtZero = .0
+local PeakChanceAtOne = .20
 
 -- These valiables control the moisture thresholds for desert and plains
-JungleThreshold = .90
-PlainsThreshold = .50
-DesertThreshold = .30
-
--- Chance for jungle to have marsh, and chance for marsh to replace jungle
-ChanceForMarsh = 0.30
-ChanceForOnlyMarsh = 0.33
+local PlainsThreshold = .50
+local DesertThreshold = .30
 
 -- These variables control the altitude of tundra and ice. Also, in Civ,
 -- deserts are supposed to be hot, so we'll limit the altitude for deserts
-TundraThreshold = .74
-IceThreshold = .84
-MaxDesertAltitude = .65
+local TundraThreshold = .74
+local IceThreshold = .84
+local MaxDesertAltitude = .65
 
--- Chance for an oasis to appear in desert
-OasisChance = .08
 
--- Map constants - I'm making a point on this map to hardcode nothing, so some
--- of these may seem a bit obscure.
--- -------------------------------------------------------------------
-RegionsPerPlot = 0.009              -- Map regions(valleys, seas) per map plot
-WaterRegionsPerPlot = 0.002         -- Water regions per map plot
-MinSeedRange = 5                    -- Closest that a region seed can be placed to another
-MinEdgeRange = 5                    -- Closest that a region seed can be to map edge
-ChanceToGrow = 0.25                 -- Base chance for each tile in region to grow
-EdgeLimit = 2                       -- Region stops growing this far from edge
-RiverAltitudeSubtraction = 2.0      -- Amount subtracted from a plots altitude depending on river size
-RiverAltRangeFactor = 2.0           -- Amount of RiverThreshold to use for altitude calc
-MinRegionSizeStart = 40             -- Minimum region size for a starting plot
-MinRegionSizeTower = 30             -- Minimum region size for a tower placement
-ChokePointAreaSize = 10             -- chokepoint needs this size area on both sides
-ChokePointWalkAroundDistance = 12   -- chokepoint must cause this much extra walking to be considered a choke
-WrapX = false                       -- Dont touch these, this map has no wrap
-WrapY = false
+-- Map constants
+----------------------------------------------------------------------
+local RegionsPerPlot = 0.009              -- Map regions(valleys, seas) per map plot
+local WaterRegionsPerPlot = 0.002         -- Water regions per map plot
+local MinSeedRange = 5                    -- Closest that a region seed can be placed to another
+local MinEdgeRange = 5                    -- Closest that a region seed can be to map edge
+local ChanceToGrow = 0.25                 -- Base chance for each tile in region to grow
+local EdgeLimit = 2                       -- Region stops growing this far from edge
+local RiverAltitudeSubtraction = 2.0      -- Amount subtracted from a plots altitude depending on river size
+local RiverAltRangeFactor = 2.0           -- Amount of RiverThreshold to use for altitude calc
+local MinRegionSizeStart = 40             -- Minimum region size for a starting plot
+local MinRegionSizeTower = 30             -- Minimum region size for a tower placement
+local ChokePointAreaSize = 10             -- chokepoint needs this size area on both sides
+local ChokePointWalkAroundDistance = 12   -- chokepoint must cause this much extra walking to be considered a choke
+local WrapX = false                       -- Dont touch these, this map has no wrap
+local WrapY = false
 
 
 
 -- new defines:
-L = 0
-N = 1
-S = 2
-E = 3
-W = 4
-NE = 5
-NW = 6
-SE = 7
-SW = 8
-directionXmap = {[N]=0,[S]=0,[E]=1,[W]=-1, [NE]=1, [NW]=-1, [SE]=1, [SW]=-1}
-directionYmap = {[N]=1,[S]=-1,[E]=0,[W]=0, [NE]=1, [NW]=1, [SE]=-1, [SW]=-1}
+local L = 0
+local N = 1
+local S = 2
+local E = 3
+local W = 4
+local NE = 5
+local NW = 6
+local SE = 7
+local SW = 8
+local directionXmap = {[N]=0,[S]=0,[E]=1,[W]=-1, [NE]=1, [NW]=-1, [SE]=1, [SW]=-1}
+local directionYmap = {[N]=1,[S]=-1,[E]=0,[W]=0, [NE]=1, [NW]=1, [SE]=-1, [SW]=-1}
 
-rxXMap = {[NE]= 0, [NW] = -1, [SE] = 0, [SW] = -1}
-rxYMap = {[NE]= 0, [NW] = 0, [SE] = -1, [SW] = -1}
-highestRegionAltitude = 0
-OCEAN = 0
-LAND = 1
-HILLS = 2
-PEAK = 3
+local rxXMap = {[NE]= 0, [NW] = -1, [SE] = 0, [SW] = -1}
+local rxYMap = {[NE]= 0, [NW] = 0, [SE] = -1, [SW] = -1}
+local highestRegionAltitude = 0
+local OCEAN = 0
+local LAND = 1
+local HILLS = 2
+local PEAK = 3
 
 LeafyAltitude = 0.3
 
-if Map then
-    g_iW, g_iH = Map.GetGridSize();
-else
-    g_iW, g_iH = 84, 52
-end
+g_iW, g_iH = Map.GetGridSize();
 
-
+local RegionCharMap = {}
+local CharRegionMap = {}
 -- conversion table for prints
-function mapChar(integer)
+local function mapChar(integer)
     local c
     if integer <= 26 then
         c = string.char(integer + 96)  -- 'a' to 'z'
@@ -103,8 +92,6 @@ function mapChar(integer)
     end
     return c
 end
-RegionCharMap = {}
-CharRegionMap = {}
 
 for count=1, 52 do
     table.insert(RegionCharMap, mapChar(count))
@@ -112,6 +99,197 @@ end
 
 for key, val in ipairs(RegionCharMap) do
     CharRegionMap[val] = key
+end
+
+local function canRegionGrowHere(x, y, regionID)
+    local i = GetRxIndex(x, y)
+    if i == -1 then
+        return false
+    end
+    if regionRxMap[i] ~= -1 then
+        return false
+    end
+    local region = getRegionByID(regionID)
+    if not region.isGrowing then
+        return false
+    end
+    local assume = true
+    for direction=1, 8 do
+        local xx = x + directionXmap[direction]
+        local yy = y + directionYmap[direction]
+        local ii = GetRxIndex(xx, yy)
+        if not(ii == -1 or regionRxMap[ii] == regionID or regionRxMap[ii] == -1) then
+            region.isTouchingNeighbor = true
+            assume = false
+        end
+    end
+    return assume
+end
+
+local function rxTouchesMapEdge(x, y)
+    if x >= (g_iW + 1) - EdgeLimit or x < EdgeLimit then
+        return true
+    end
+    if y >= (g_iH + 1) - EdgeLimit or y < EdgeLimit then
+        return true
+    end
+    return false
+end
+local function plotFromRx(rxX, rxY, direction)
+    local x = rxX + rxXMap[direction]
+    local y = rxY + rxYMap[direction]
+    if x < 0 or x >= g_iW or y < 0 or y >= g_iH then
+        return -1, -1
+    end
+    return x, y
+end
+
+local function isSeedBlocked(seedX, seedY)
+    for _, region in ipairs(regionList) do
+        if seedX > region.seedX - MinSeedRange and seedX < region.seedX + MinSeedRange then
+            if seedY > region.seedY - MinSeedRange and seedY < region.seedY + MinSeedRange then
+                return true
+            end
+        end
+    end
+    --Check for edge
+    if seedX < MinEdgeRange or seedX >= (g_iW + 1) - MinEdgeRange then
+        return true
+    end
+    if seedY < MinEdgeRange or seedY >= (g_iH + 1) - MinEdgeRange then
+        return true
+    end
+    return false
+end
+
+-- helper functions
+local tXDirections = {}
+local tYDirections = {}
+local function GetDirection(direction, plot)
+    local xx, yy = 0, 0
+    if direction == 1 then      -- N
+        xx = plot.x
+        yy = plot.y + 1
+    elseif direction == 2 then  -- S
+        xx = plot.x
+        yy = plot.y - 1
+    elseif direction == 3 then  -- E
+        xx = plot.x + 1
+        yy = plot.y
+    else                        -- W
+        xx = plot.x - 1
+        yy = plot.y
+    end
+    -- ii = GetIndex(xx, yy)
+    return xx, yy
+end
+
+local function list_contains(list, val)
+    for _, v in ipairs(list) do
+        if v == val then
+            return true
+        end
+    end
+    return false
+end
+
+local function print_table(tbl_)
+    for key, val in pairs(tbl_) do
+        if type(val) == "table" then
+            slthLog('recursive table on ', key)
+            print_table(val)
+        else
+            slthLog(string.format('key: %s . val: %s', key, val))
+        end
+    end
+end
+
+local function check_in_table(tbl, val)
+  for _, v in ipairs(tbl) do
+    if v == val then
+      return true
+    end
+  end
+  return false
+end
+
+local function make_grid(tPlots, use_keys)
+    -- iterate over combined string, to make the dict we want
+    local squareGrid = {}
+    local count = 0
+    local row = 1
+    squareGrid[row] = {}
+
+    for _, i in ipairs(tPlots) do
+        table.insert(squareGrid[row], i)
+        count = count + 1
+        if count == g_iW then
+            count = 0
+            row = row + 1
+            squareGrid[row] = {}
+        end
+    end
+    return squareGrid
+end
+
+-- This function converts x and y to an index. Useful in case of future wrapping. Overriden for performance
+if WrapX or WrapY then
+    function GetIndex(x, y)
+        local xx = x
+        local yy = y
+        if WrapX then
+            xx = x % g_iW
+        elseif x < 0 or x > g_iW then
+            return -1
+        end
+        if WrapY then
+            yy = y % g_iH
+        elseif y < 0 or y > g_iH then
+            return -1
+        end
+        return  y * g_iW + x
+    end
+    function GetRxIndex(x, y)
+        local xx, yy
+        if WrapX then
+            xx = x % (g_iW + 1)
+        elseif x < 0 or x >= (g_iW + 1) then
+            return -1
+        else
+            xx = x
+        end
+        -- Check y for wrap
+        if WrapY then
+            yy = y % (g_iH + 1)
+        elseif y < 0 or y >= (g_iH + 1) then
+            return -1
+        else
+            yy = y
+        end
+        return yy * (g_iW + 1) + xx
+    end
+else
+    function GetIndex(x, y)
+        if x < 0 or x > g_iW or y < 0 or y > g_iH then
+            return -1
+        else
+            return  y * g_iW + x
+        end
+    end
+    function GetRxIndex(x, y)
+        local xx, yy
+        if x < 0 or x >= (g_iW + 1) then
+            return -1
+        else
+            xx = x
+        end
+        if y < 0 or y >= (g_iH + 1) then
+            return -1
+        else
+            yy = y
+        end
+        return yy * (g_iW + 1) + xx
+    end
 end
 
 
@@ -123,6 +301,7 @@ function createRegions()
     --region.
 
     -- globals
+    currentRegion = -99
     g_IV_iW = g_iW + 2
     g_IV_iH = g_iH + 2
     numTiles = (g_IV_iW ) * (g_IV_iH )
@@ -319,67 +498,6 @@ function createRegions()
     end
 end
 
-function canRegionGrowHere(x, y, regionID)
-    local i = GetRxIndex(x, y)
-    if i == -1 then
-        return false
-    end
-    if regionRxMap[i] ~= -1 then
-        return false
-    end
-    local region = getRegionByID(regionID)
-    if not region.isGrowing then
-        return false
-    end
-    local assume = true
-    for direction=1, 8 do
-        local xx = x + directionXmap[direction]
-        local yy = y + directionYmap[direction]
-        local ii = GetRxIndex(xx, yy)
-        if not(ii == -1 or regionRxMap[ii] == regionID or regionRxMap[ii] == -1) then
-            region.isTouchingNeighbor = true
-            assume = false
-        end
-    end
-    return assume
-end
-
-function rxTouchesMapEdge(x, y)
-    if x >= (g_iW + 1) - EdgeLimit or x < EdgeLimit then
-        return true
-    end
-    if y >= (g_iH + 1) - EdgeLimit or y < EdgeLimit then
-        return true
-    end
-    return false
-end
-function plotFromRx(rxX, rxY, direction)
-    local x = rxX + rxXMap[direction]
-    local y = rxY + rxYMap[direction]
-    if x < 0 or x >= g_iW or y < 0 or y >= g_iH then
-        return -1, -1
-    end
-    return x, y
-end
-
-function isSeedBlocked(seedX, seedY)
-    for _, region in ipairs(regionList) do
-        if seedX > region.seedX - MinSeedRange and seedX < region.seedX + MinSeedRange then
-            if seedY > region.seedY - MinSeedRange and seedY < region.seedY + MinSeedRange then
-                return true
-            end
-        end
-    end
-    --Check for edge
-    if seedX < MinEdgeRange or seedX >= (g_iW + 1) - MinEdgeRange then
-        return true
-    end
-    if seedY < MinEdgeRange or seedY >= (g_iH + 1) - MinEdgeRange then
-        return true
-    end
-    return false
-end
-
 function getRegionByID(ID)
     if not ID then
         error('ID of region was nil')
@@ -440,6 +558,149 @@ end
 
 -- bleh Region Class
 
+-- needs gate stuff defined first
+
+local function getRiverIndex(x, y)
+    local xx
+    local yy
+    if x < 0 or x >= g_iW + 1 then
+        slthLog('when getting river index, x too small')
+        return -1
+    else
+        xx = x
+    end
+    if y < 0 or y >= g_iH + 1 then
+        slthLog('when getting river index, y too small')
+        return -1
+    else
+        yy = y
+    end
+    local i = yy * (g_iW + 1) + xx
+    slthLog('getting river index: ', i)
+    return i
+end
+
+local function isRxInRegion(x, y, regionID)
+    -- Rxs on the border are not in region. All plots touching rx must
+    -- be in region
+    for direction=5, 8 do
+        local xx, yy = plotFromRx(x, y, direction)
+        local i = GetIndex(xx, yy)
+        if i == -1 or regionMap[i] ~= regionID then
+            return false
+        end
+    end
+    return true
+end
+
+local function isValidHalfGate(regionID, rxX, rxY)
+    -- A valid half gate is a rx that is not in a region, touches
+    -- only 2 regions and is 4-connected to an rx that is in the region
+    local forGatesRegionList = {}
+    local key = tostring(regionID) .. '/' .. tostring(rxX) .. '/' .. tostring(rxY)
+    if failedGateAttempts[currentRegion] then
+        slthLog('region existed alreaedy')
+    else
+        failedGateAttempts[currentRegion] = {}
+    end
+
+    if failedGateAttempts[currentRegion][key] then
+        slthLog('region plot existed alreaedy')
+    else
+        failedGateAttempts[currentRegion][key] = {x=rxX, y=rxY}
+    end
+    for direction=5, 8 do
+        local px, py = plotFromRx(rxX, rxY, direction)
+        local i = GetIndex(px, py)
+        local pRegID = regionMap[i]
+        if not pRegID or pRegID == -1 then
+            slthLog(string.format('RX is not valid half gate by cant find region ID or id is -1 for index %d and x/y: %d/%d', i, px, py))
+            return false
+        end
+        if not check_in_table(forGatesRegionList, pRegID) then
+            table.insert(forGatesRegionList, pRegID)
+            failedGateAttempts[currentRegion][key][direction] = pRegID
+        end
+    end
+    local table_contents = ''
+    for _, val in ipairs(forGatesRegionList) do table_contents = table_contents .. ' ' .. val; end
+    if #forGatesRegionList ~= 2 then
+        slthLog(string.format('RX %d/%d is not valid half gate by not touching 2 regions, instead touching %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+        failedGateAttempts[currentRegion][key]['failure'] = 'not_two_gates'
+        return false
+    end
+    if isRxInRegion(rxX, rxY, regionID) then
+        slthLog(string.format('RX %d/%d is not valid half gate by RX being in region, but does touch %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+        failedGateAttempts[currentRegion][key]['failure'] = 'RX_being_in_region'
+        return false
+    end
+    for direction=1, 4 do
+        local xx = rxX + directionXmap[direction]
+        local yy = rxY + directionYmap[direction]
+        if isRxInRegion(xx, yy, regionID) then
+            slthLog(string.format('RX %d/%d is valid half gate by RX being in region, it is not in region, but it touches %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
+            failedGateAttempts[currentRegion][key]['failure'] = 'success!'
+            return true
+        end
+    end
+    slthLog('RX is not valid half gate as RX was not in region in all 4 directions ')
+    failedGateAttempts[currentRegion][key]['failure'] = 'RX not in region, and 2 regions adjacent, but every direction did not have an RX in region'
+    return false
+end
+
+local function isValidFullGate(regionID, rxX, rxY)
+    if not isValidHalfGate(regionID, rxX, rxY) then
+        return false
+    end
+    slthLog('passed owner region can have gate check')
+    local region = getRegionByID(regionID)
+    slthLog('neighbours of region count:', #(region.neighborList))
+    slthLog(region.neighborList)          -- !! NEIGHBOURLIST WAS EMPTY
+    local key = tostring(regionID) .. '/' .. tostring(rxX) .. '/' .. tostring(rxY)
+    for _, nRegionID in ipairs(region.neighborList) do
+        slthLog('checking valid neighbours....')
+        if isValidHalfGate(nRegionID, rxX, rxY) then
+            slthLog('other adjacent region has valid gate')
+            failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
+            return true
+        end
+        for direction=1, 4 do
+            -- local xx = rxX + directionXmap[direction]
+            -- local yy = rxY + directionYmap[direction]
+            -- local xx, yy = getXYFromDirection(rxX, rxY, direction)          -- TODO this seems wrong to not use them, but was the original logic
+            if isValidHalfGate(nRegionID, rxX, rxY) then
+                slthLog('alternate path valid gate, shouldnt work')
+                failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
+                return true
+            end
+        end
+    end
+end
+
+local function isRxTouchingRegion(x, y, regionID)
+    -- Check all four plots
+    local plotX, plotY = plotFromRx(x, y, NW)
+    local i = GetIndex(plotX, plotY)
+    if i and i ~= -1 and regionMap[i] == regionID then
+        return true
+    end
+    plotX, plotY = plotFromRx(x, y, NE)
+    i = GetIndex(plotX, plotY)
+    if i and i ~= -1 and regionMap[i] == regionID then
+        return true
+    end
+    plotX, plotY = plotFromRx(x, y, SW)
+    i = GetIndex(plotX, plotY)
+    if i and i ~= -1 and regionMap[i] == regionID then
+        return true
+    end
+    plotX, plotY = plotFromRx(x, y, SE)
+    i = GetIndex(plotX, plotY)
+    if i and i ~= -1 and regionMap[i] == regionID then
+        return true
+    end
+end
+
 Region = {}
 Region.__index = Region
 
@@ -451,7 +712,7 @@ function Region.new(ID, seedX, seedY)
     self.isGrowing = true
     self.neighborList = {}
     self.gateRegion = -1
-    self.gatePlot = None
+    self.gatePlot = nil
     self.plotList = {}
     self.isWater = false
     self.isTouchingNeighbor = false
@@ -582,7 +843,7 @@ end
 -- In this case the center is the plot farthest from any border
 function Region:getCenter()
     local maxDistance = 0.0
-    local center = None
+    local center = nil
     for plot in self.plotList do
         local distance = self.getDistanceToClosestBorderPlot(plot)
         if maxDistance < distance then
@@ -595,99 +856,8 @@ function Region:getCenter()
     return center
 end
 
--- helper functions
 
-function GetDirection(direction, plot)
-    local xx, yy = 0, 0
-    if direction == 1 then      -- N
-        xx = plot.x
-        yy = plot.y + 1
-    elseif direction == 2 then  -- S
-        xx = plot.x
-        yy = plot.y - 1
-    elseif direction == 3 then  -- E
-        xx = plot.x + 1
-        yy = plot.y
-    else                        -- W
-        xx = plot.x - 1
-        yy = plot.y
-    end
-    -- ii = GetIndex(xx, yy)
-    return xx, yy
-end
-
-function GetRxIndex(x, y)
-    local xx, yy
-    if WrapX then
-        xx = x % (mapSize.MapWidth + 1)
-    elseif x < 0 or x >= (g_iW + 1) then
-        return -1
-    else
-        xx = x
-    end
-    -- Check y for wrap
-    if WrapY then
-        yy = y % (mapSize.MapHeight + 1)
-    elseif y < 0 or y >= (g_iH + 1) then
-        return -1
-    else
-        yy = y
-    end
-    return yy * (g_iW + 1) + xx
-end
-
-function GetRxIndex(x, y)
-    local xx, yy
-    if x < 0 or x >= (g_iW + 1) then
-        return -1
-    else
-        xx = x
-    end
-    if y < 0 or y >= (g_iH + 1) then
-        return -1
-    else
-        yy = y
-    end
-    return yy * (g_iW + 1) + xx
-end
-
--- This function converts x and y to an index. Useful in case of future wrapping.
-function GetIndex(x, y)
-    local xx = x
-    local yy = y
-    if WrapX then
-        xx = x % g_iW
-    elseif x < 0 or x > g_iW then
-        return -1
-    end
-    if WrapY then
-        yy = y % g_iH
-    elseif y < 0 or y > g_iH then
-        return -1
-    end
-    return  y * g_iW + x
-end
-
--- overriden as performance, and seemingly does nothing
-function GetIndex(x, y)
-    if x < 0 or x > g_iW or y < 0 or y > g_iH then
-        return -1
-    else
-        return  y * g_iW + x
-    end
-end
--- Overriden again, because of lua 1 based indexing means it isnt right
--- like assume we have a grid of 74 * 46. Because our indices are starting at one,
--- it means they go y=1, 74, inclusive.
-function GetIndex(x, y)
-    if x < 0 or x > g_iW or y < 0 or y > g_iH then
-        slthLog('x or y out of bounds. x, XMax, y, YMax', x, g_iW, y, g_iH)
-        return -1
-    else
-        return  y * g_iW + x
-    end
-end
-
+-- used in AssignPlots (well thats unused too, but still)
 function ShuffleList(theList)
     for i = #theList, 2, -1 do
         local j = math.random(1, i)
@@ -696,95 +866,109 @@ function ShuffleList(theList)
     return theList
 end
 
-function print_table(tbl_)
-    for key, val in pairs(tbl_) do
-        if type(val) == "table" then
-            slthLog('recursive table on ', key)
-            print_table(val)
-        else
-            slthLog(string.format('key: %s . val: %s', key, val))
-        end
-    end
-end
 
-function check_in_table(tbl, val)
-  for _, v in ipairs(tbl) do
-    if v == val then
-      return true
-    end
-  end
-  return false
-end
-
-function checkRegions()
-    local all_found = true
-    for j=1, #regionList do
-        local found = false
-        for i, region in ipairs(regionList) do
-            if region.ID == j then
-                found = true        -- slthLog(string.format('found region %d at index %d', region.ID, i))
-            end
-        end
-        if not found then
-            slthLog(string.format('couldnt find region %d', j))
-            all_found = false
-        end
-    end
-    if all_found then
-        slthLog('all good')
-    end
-end
 
 ------------------- RIVER ----------
-function createRiverMap()
-    createFlowMap()
-    calculateWetAndDry()
-    riverMap = {}
-    for i=1, ((g_iH + 1) * (g_iW + 1))-1 do                     -- should this be adjusted for python -> lua -1?
-        table.insert(riverMap, 0)
+local function defineGates()
+    -- Now each region picks one gate that is not in the current gate line
+    -- to avoid recursive loops
+    local numRegions = #regionList
+    local numGatesPlaced = 0
+    local iterations = 0
+    -- water is considered gated for this purpose
+    for i, region in ipairs(regionList) do
+        region:defineValidGateList()
+        -- regions should always have gates
+        slthLog(string.format('checking region %d', region.ID))
+        if #(region.gateList) == 0 then
+            slthLog(" has no gates!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            -- slthLog(PrintRegionMap(false))
+            local squareGrid = make_grid(regionMap)
+            local svgContent = createCharacterImageSVG(squareGrid, failedGateAttempts)
+            saveSVG(svgContent, "flow_regions.svg")
+            error(string.format("region has no gates, got to iter %d", i))
+        end
     end
-    for y=1, g_iH do
-        for x=1, g_iW do
-            local i = getRiverIndex(x, y)
-            local direction = flowMap[i]
-            local regionID = getRegion(x, y)
-            -- slthLog(string.format('region is %d: %d, %d', regionID, x, y))
-            if regionID ~= -1 then
-                local region = getRegionByID(regionID)
-                local xx = x
-                local yy = y
-                while direction ~= -1 and direction ~= L do
-                    xx = xx + directionXmap[direction]
-                    yy = yy + directionYmap[direction]
-                    local ii = getRiverIndex(xx, yy)
-                    riverMap[ii] = riverMap[ii] + MinRainfall + (1.0 - MinRainfall) * region.moisture
-                    direction = flowMap[ii]
+    while numGatesPlaced < numRegions do
+        if iterations > 10000 then
+            error(string.format("Endless loop occured in gate placement, gates placed: %d, regions: %d", numGatesPlaced, numRegions))
+        else
+            iterations = iterations + 1
+            regionList = ShuffleList(regionList)
+            for _, region in ipairs(regionList) do
+                if region.gateRegion == -1 then
+                    local gatedNeighborList = region:getGatedNeighborList()
+                    if #gatedNeighborList > 0 then
+                        gatedNeighborList = ShuffleList(gatedNeighborList)
+                        region.gateRegion = gatedNeighborList[1]
+                        if region.isWater then
+                            region.altitude = 0
+                        else
+                            gateRegion = getRegionByID(region.gateRegion)
+                            region.altitude = gateRegion.altitude + 1
+                            slthLog(string.format("region %d gateRegion is %d", region.ID, region.gateRegion))
+                        end
+                        numGatesPlaced = numGatesPlaced + 1
+                    else
+                        slthLog(string.format("Region %d has no gated neighbors", region.ID))
+                    end
                 end
             end
         end
     end
 end
 
-function make_grid(tPlots, use_keys)
-    -- iterate over combined string, to make the dict we want
-    local squareGrid = {}
-    local count = 0
-    local row = 1
-    squareGrid[row] = {}
-
-    for _, i in ipairs(tPlots) do
-        table.insert(squareGrid[row], i)
-        count = count + 1
-        if count == g_iW then
-            count = 0
-            row = row + 1
-            squareGrid[row] = {}
+local function getPossiblePaths(rxX, rxY)
+    local possiblePaths = {}
+    local regionID = getRegion(rxX, rxY)
+    if regionID == -1 then
+        return possiblePaths
+    end
+    local region = getRegionByID(regionID)
+    if region.isWater then
+        return possiblePaths
+    end
+    local rxI = getRiverIndex(rxX, rxY)
+    local altitude = heightMap[rxI]
+    local rejectedDirection = L
+    for direction=1, 4 do
+        local x = rxX + directionXmap[direction]
+        local y = rxY + directionYmap[direction]
+        local i = getRiverIndex(x, y)
+        if isRxInRegion(x, y, regionID) then
+            if heightMap[i] > altitude then
+                if rejectedDirection == L then
+                    rejectedDirection = getOppositeDirection(direction)
+                else
+                    rejectedDirection = L
+                end
+            end
         end
     end
-    return squareGrid
+
+    for direction=1, 4 do
+        local x = rxX + directionXmap[direction]
+        local y = rxY + directionYmap[direction]
+        if isRxInRegion(x, y, regionID) or (x == region.gatePlot.x and y == region.gatePlot.y) then
+            local i = getRiverIndex(x, y)
+            if i ~= -1 and heightMap[i] < altitude then
+            table.insert(possiblePaths, direction)
+            end
+        end
+    end
+
+    if #possiblePaths > 1 then
+        for n=1, #possiblePaths do
+            if rejectedDirection == possiblePaths[n] then
+                -- del possiblePaths[n]
+                break
+            end
+        end
+    end
+    return possiblePaths
 end
 
-function createFlowMap()
+local function createFlowMap()
     -- Start with an outflow from the region, then randomly decide which neighbors
     -- will flow into this square by how many choices that neighbor has. If the
     -- neighbor has only one choice, then the chance is 100 percent. At least
@@ -902,7 +1086,7 @@ function createFlowMap()
         end
     end
     local squareGrid = make_grid(regionMap)
-    local svgContent = createCharacterImageSVG(squareGrid, failedGateAttempts)
+    local svgContent = createCharacterImageSVG(squareGrid)
     saveSVG(svgContent, "complete_regions.svg")
     --                        print "newPlot appended"
     -- Create flow map
@@ -921,7 +1105,7 @@ end
 -- region and making it's base the wettest region. Then eliminate
 -- those regions from the list. Then get the highest of the remaining
 -- regions and make it's base the dryest region.
-function calculateWetAndDry()
+local function calculateWetAndDry()
     local loc_regionList = {}
     for _, region in ipairs(regionList) do
         table.insert(loc_regionList, region)
@@ -939,8 +1123,8 @@ function calculateWetAndDry()
     end
     -- Now calculate moisture for each region
     local minMoisture = 1.0
-    for _, region in ipairs(regionList) do
-        local gate = region.gatePlot
+    for _, pRegion in ipairs(regionList) do
+        local gate = pRegion.gatePlot
         if gate then
             local distance = math.sqrt(math.abs(((gate.x - wetSpotX) * (gate.x - wetSpotX)) + ((gate.y - wetSpotY) * (gate.y - wetSpotY))))
             region.moisture = 1.0 - distance / g_iW
@@ -948,195 +1132,69 @@ function calculateWetAndDry()
         end
     end
     local scaler = 1.0 / (1.0 - minMoisture)
-    for _, region in ipairs(regionList) do
-        region.moisture = (region.moisture - minMoisture) * scaler
+    for _, pRegion in ipairs(regionList) do
+        region.moisture = (pRegion.moisture - minMoisture) * scaler
     end
 end
 
-function defineGates()
-    -- Now each region picks one gate that is not in the current gate line
-    -- to avoid recursive loops
-    local numRegions = #regionList
-    local numGatesPlaced = 0
-    local iterations = 0
-    -- water is considered gated for this purpose
-    for i, region in ipairs(regionList) do
-        region:defineValidGateList()
-        -- regions should always have gates
-        slthLog(string.format('checking region %d', region.ID))
-        if #(region.gateList) == 0 then
-            slthLog(" has no gates!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            -- slthLog(PrintRegionMap(false))
-            local squareGrid = make_grid(regionMap)
-            local svgContent = createCharacterImageSVG(squareGrid, failedGateAttempts)
-            saveSVG(svgContent, "flow_regions.svg")
-            error(string.format("region has no gates, got to iter %d", i))
-        end
+function createRiverMap()
+    failedGateAttempts = {}
+    createFlowMap()
+    calculateWetAndDry()
+    riverMap = {}
+    for i=1, ((g_iH + 1) * (g_iW + 1))-1 do                     -- should this be adjusted for python -> lua -1?
+        table.insert(riverMap, 0)
     end
-    while numGatesPlaced < numRegions do
-        if iterations > 10000 then
-            error(string.format("Endless loop occured in gate placement, gates placed: %d, regions: %d", numGatesPlaced, numRegions))
-        else
-            iterations = iterations + 1
-            regionList = ShuffleList(regionList)
-            for _, region in ipairs(regionList) do
-                if region.gateRegion == -1 then
-                    local gatedNeighborList = region:getGatedNeighborList()
-                    if #gatedNeighborList > 0 then
-                        gatedNeighborList = ShuffleList(gatedNeighborList)
-                        region.gateRegion = gatedNeighborList[1]
-                        if region.isWater then
-                            region.altitude = 0
-                        else
-                            gateRegion = getRegionByID(region.gateRegion)
-                            region.altitude = gateRegion.altitude + 1
-                            slthLog(string.format("region %d gateRegion is %d", region.ID, region.gateRegion))
-                        end
-                        numGatesPlaced = numGatesPlaced + 1
-                    else
-                        slthLog(string.format("Region %d has no gated neighbors", region.ID))
-                    end
-                end
-            end
-        end
-    end
-end
-
-function isValidHalfGate(regionID, rxX, rxY)
-    -- A valid half gate is a rx that is not in a region, touches
-    -- only 2 regions and is 4-connected to an rx that is in the region
-    local forGatesRegionList = {}
-    local key = tostring(regionID) .. '/' .. tostring(rxX) .. '/' .. tostring(rxY)
-    if failedGateAttempts[currentRegion] then
-        slthLog('region existed alreaedy')
-    else
-        failedGateAttempts[currentRegion] = {}
-    end
-
-    if failedGateAttempts[currentRegion][key] then
-        slthLog('region plot existed alreaedy')
-    else
-        failedGateAttempts[currentRegion][key] = {x=rxX, y=rxY}
-    end
-    for direction=5, 8 do
-        local px, py = plotFromRx(rxX, rxY, direction)
-        local i = GetIndex(px, py)
-        local pRegID = regionMap[i]
-        if not pRegID or pRegID == -1 then
-            slthLog(string.format('RX is not valid half gate by cant find region ID or id is -1 for index %d and x/y: %d/%d', i, px, py))
-            return false
-        end
-        if not check_in_table(forGatesRegionList, pRegID) then
-            table.insert(forGatesRegionList, pRegID)
-            failedGateAttempts[currentRegion][key][direction] = pRegID
-        end
-    end
-    local table_contents = ''
-    for _, val in ipairs(forGatesRegionList) do table_contents = table_contents .. ' ' .. val; end
-    if #forGatesRegionList ~= 2 then
-        slthLog(string.format('RX %d/%d is not valid half gate by not touching 2 regions, instead touching %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
-        failedGateAttempts[currentRegion][key]['failure'] = 'not_two_gates'
-        return false
-    end
-    if isRxInRegion(rxX, rxY, regionID) then
-        slthLog(string.format('RX %d/%d is not valid half gate by RX being in region, but does touch %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
-        failedGateAttempts[currentRegion][key]['failure'] = 'RX_being_in_region'
-        return false
-    end
-    for direction=1, 4 do
-        local xx = rxX + directionXmap[direction]
-        local yy = rxY + directionYmap[direction]
-        if isRxInRegion(xx, yy, regionID) then
-            slthLog(string.format('RX %d/%d is valid half gate by RX being in region, it is not in region, but it touches %d regions: %s',rxX, rxY, #forGatesRegionList, table_contents))
-            failedGateAttempts[currentRegion][key]['failure'] = 'success!'
-            return true
-        end
-    end
-    slthLog('RX is not valid half gate as RX was not in region in all 4 directions ')
-    failedGateAttempts[currentRegion][key]['failure'] = 'RX not in region, and 2 regions adjacent, but every direction did not have an RX in region'
-    return false
-end
-
-function isValidFullGate(regionID, rxX, rxY)
-    if not isValidHalfGate(regionID, rxX, rxY) then
-        return false
-    end
-    slthLog('passed owner region can have gate check')
-    local region = getRegionByID(regionID)
-    slthLog('neighbours of region count:', #(region.neighborList))
-    slthLog(region.neighborList)          -- !! NEIGHBOURLIST WAS EMPTY
-    local key = tostring(regionID) .. '/' .. tostring(rxX) .. '/' .. tostring(rxY)
-    for _, nRegionID in ipairs(region.neighborList) do
-        slthLog('checking valid neighbours....')
-        if isValidHalfGate(nRegionID, rxX, rxY) then
-            slthLog('other adjacent region has valid gate')
-            failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
-            return true
-        end
-        for direction=1, 4 do
-            -- local xx = rxX + directionXmap[direction]
-            -- local yy = rxY + directionYmap[direction]
-            -- local xx, yy = getXYFromDirection(rxX, rxY, direction)          -- TODO this seems wrong to not use them, but was the original logic
-            if isValidHalfGate(nRegionID, rxX, rxY) then
-                slthLog('alternate path valid gate, shouldnt work')
-                failedGateAttempts[currentRegion][key]['failure'] = 'FULL_GATE'
-                return true
-            end
-        end
-    end
-end
-
-function getPossiblePaths(rxX, rxY)
-    local possiblePaths = {}
-    local regionID = getRegion(rxX, rxY)
-    if regionID == -1 then
-        return possiblePaths
-    end
-    local region = getRegionByID(regionID)
-    if region.isWater then
-        return possiblePaths
-    end
-    local rxI = getRiverIndex(rxX, rxY)
-    local altitude = heightMap[rxI]
-    local rejectedDirection = L
-    for direction=1, 4 do
-        local x = rxX + directionXmap[direction]
-        local y = rxY + directionYmap[direction]
-        local i = getRiverIndex(x, y)
-        if isRxInRegion(x, y, regionID) then
-            if heightMap[i] > altitude then
-                if rejectedDirection == L then
-                    rejectedDirection = getOppositeDirection(direction)
-                else
-                    rejectedDirection = L
-                end
-            end
-        end
-    end
-
-    for direction=1, 4 do
-        local x = rxX + directionXmap[direction]
-        local y = rxY + directionYmap[direction]
-        if isRxInRegion(x, y, regionID) or (x == region.gatePlot.x and y == region.gatePlot.y) then
+    for y=1, g_iH do
+        for x=1, g_iW do
             local i = getRiverIndex(x, y)
-            if i ~= -1 and heightMap[i] < altitude then
-            table.insert(possiblePaths, direction)
+            local direction = flowMap[i]
+            local regionID = getRegion(x, y)
+            -- slthLog(string.format('region is %d: %d, %d', regionID, x, y))
+            if regionID ~= -1 then
+                local region = getRegionByID(regionID)
+                local xx = x
+                local yy = y
+                while direction ~= -1 and direction ~= L do
+                    xx = xx + directionXmap[direction]
+                    yy = yy + directionYmap[direction]
+                    local ii = getRiverIndex(xx, yy)
+                    riverMap[ii] = riverMap[ii] + MinRainfall + (1.0 - MinRainfall) * region.moisture
+                    direction = flowMap[ii]
+                end
             end
         end
     end
-
-    if #possiblePaths > 1 then
-        for n=1, #possiblePaths do
-            if rejectedDirection == possiblePaths[n] then
-                -- del possiblePaths[n]
-                break
-            end
-        end
-    end
-
-    return possiblePaths
 end
-function fillInLake(rxX, rxY)
+
+local function rxFromPlot(plotX, plotY, direction)
+    local x, y
+    if direction == SW then
+        x = plotX
+        y = plotY
+    elseif direction == SE then
+        x = plotX + 1
+        y = plotY
+    elseif direction == NW then
+        x = plotX
+        y = plotY + 1
+    else  -- NE
+        x = plotX + 1
+        y = plotY + 1
+    end
+    -- check for validity
+    if x < 0 or x >= g_iW + 1 then
+        return -1, -1
+    end
+    if y < 0 or y >= g_iH + 1 then
+        return -1, -1
+    end
+    return x, y
+end
+
+
+-- deprecated for now?
+local function fillInLake(rxX, rxY)
     local rxI = getRiverIndex(rxX, rxY)
     local altitude = heightMap[rxI]
     local regionID = getRegion(rxX, rxY)
@@ -1157,7 +1215,7 @@ function fillInLake(rxX, rxY)
         heightMap[rxI] = altitude * 1.05
     end
 end
-function isLake(rxX, rxY)
+local function isLake(rxX, rxY)                 -- deprecated
     local rxI = getRiverIndex(rxX, rxY)
     local altitude = heightMap[rxI]
     local regionID = getRegion(rxX, rxY)
@@ -1177,8 +1235,8 @@ function isLake(rxX, rxY)
     end
 end
 
-
-function isOutFlowGate(rxX, rxY)
+-- deprecated? Feels like it shouldnt be...
+local function isOutFlowGate(rxX, rxY)
     for region in regionList do
         if not region.isWater then
             local gateRxX, gateRxY = rxFromPlot(region.gatePlot.x, region.gatePlot.y, SW)
@@ -1188,7 +1246,7 @@ function isOutFlowGate(rxX, rxY)
         end
     end
 end
-
+-- used in assignStarts
 function getOppositeDirection(direction)
     local opposite = L
     if direction == N then
@@ -1203,39 +1261,7 @@ function getOppositeDirection(direction)
     return opposite
 end
 
-function getRiverIndex(x, y)
-    local xx
-    local yy
-    if x < 0 or x >= g_iW + 1 then
-        slthLog('when getting river index, x too small')
-        return -1
-    else
-        xx = x
-    end
-    if y < 0 or y >= g_iH + 1 then
-        slthLog('when getting river index, y too small')
-        return -1
-    else
-        yy = y
-    end
-    local i = yy * (g_iW + 1) + xx
-    slthLog('getting river index: ', i)
-    return i
-end
-function isRxInRegion(x, y, regionID)
-    -- Rxs on the border are not in region. All plots touching rx must
-    -- be in region
-    for direction=5, 8 do
-        local xx, yy = plotFromRx(x, y, direction)
-        local i = GetIndex(xx, yy)
-        if i == -1 or regionMap[i] ~= regionID then
-            return false
-        end
-    end
-    return true
-end
-
-function getRegion(x, y)
+function getRegion(x, y)            -- Used in AssignStartPlots
     -- Rxs on the border are not in region. All plots touching rx must
     -- be in region, unless this is the gate for that region
     local xx, yy = plotFromRx(x, y, SW)
@@ -1270,53 +1296,9 @@ function getRegion(x, y)
     end
     return regionID
 end
-function isRxTouchingRegion(x, y, regionID)
-    -- Check all four plots
-    local plotX, plotY = plotFromRx(x, y, NW)
-    local i = GetIndex(plotX, plotY)
-    if i and i ~= -1 and regionMap[i] == regionID then
-        return true
-    end
-    plotX, plotY = plotFromRx(x, y, NE)
-    i = GetIndex(plotX, plotY)
-    if i and i ~= -1 and regionMap[i] == regionID then
-        return true
-    end
-    plotX, plotY = plotFromRx(x, y, SW)
-    i = GetIndex(plotX, plotY)
-    if i and i ~= -1 and regionMap[i] == regionID then
-        return true
-    end
-    plotX, plotY = plotFromRx(x, y, SE)
-    i = GetIndex(plotX, plotY)
-    if i and i ~= -1 and regionMap[i] == regionID then
-        return true
-    end
-end
 
-function rxFromPlot(plotX, plotY, direction)
-    if direction == SW then
-        x = plotX
-        y = plotY
-    elseif direction == SE then
-        x = plotX + 1
-        y = plotY
-    elseif direction == NW then
-        x = plotX
-        y = plotY + 1
-    else  -- NE
-        x = plotX + 1
-        y = plotY + 1
-    end
-    -- check for validity
-    if x < 0 or x >= g_iW + 1 then
-        return -1, -1
-    end
-    if y < 0 or y >= g_iH + 1 then
-        return -1, -1
-    end
-    return x, y
-end
+
+
 
 function PrintFlowMap()
     slthLog("Flow Map")
@@ -1324,7 +1306,7 @@ function PrintFlowMap()
     for y=g_iH, -1, -1 do
         lineString = ""
         for x=1, g_iW do
-            mapLoc = flowMap[getRiverIndex(x, y)]
+            local mapLoc = flowMap[getRiverIndex(x, y)]
             if mapLoc == -1 then
                 lineString = lineString .. "X"
             elseif mapLoc == N then
@@ -1342,8 +1324,8 @@ function PrintFlowMap()
         slthLog(lineString)
     end
 end
-
-function getRiverRegionByID(x,y)
+-- Deprecated
+local function getRiverRegionByID(x,y)
     -- Rxs on the border are not in region. All plots touching rx must
     -- be in region, unless this is the gate for that region
     local xx,yy = plotFromRx(x,y, SW)
@@ -1372,28 +1354,244 @@ function getRiverRegionByID(x,y)
     end
 end
 
-function helper_get_gridsize(table_of_tables)
-    local count = 0
-    local is_nested = true
-    for y, x_row in pairs(table_of_tables) do
-        if type(x_row) == 'table' then
-            for x, val in ipairs(x_row) do
-                count = count + 1
-            end
-
-        else
-            count = count + 1
-            is_nested = false
+---- PLOT MAP -----------
+--- Locals
+local function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
+    if riverMap[rxI] and riverMap[rxI] > RiverThreshold then            -- again TODO on fail forward with RiverMap finds
+        local xx = x + directionXmap[pDir]
+        local yy = y + directionYmap[pDir]
+        local ii = GetIndex(xx,yy)
+        if plotMap[ii] == PEAK then
+            return true
         end
-    end
-    slthLog('table size is:', count)
-    if is_nested then
-        slthLog('is nested')
+        if flowMap[rxI] == direction_2 then
+            xx = x + directionXmap[direction_2_change]
+            yy = y + directionYmap[direction_2_change]
+            ii = GetIndex(xx,yy)
+            if plotMap[ii] == PEAK then
+                return true
+            end
+        end
+        if flowMap[rxI] == direction_3 then
+            xx = x + directionXmap[direction_3_change]
+            yy = y + directionYmap[direction_3_change]
+            ii = GetIndex(xx,yy)
+            if plotMap[ii] == PEAK then
+                return true
+            end
+        end
     end
 end
 
----- PLOT MAP -----------
-function createPlotMap()
+local function shouldFlattenRiverPeak(x,y)
+    local rxX,rxY = rxFromPlot(x,y,NW)
+    local rxI = getRiverIndex(rxX,rxY)
+    if flattenPeakSubFunc(x, y, rxI, NW, E, S, N, W) then
+        return true
+    end
+    rxX,rxY = rxFromPlot(x,y,NE)
+    rxI = getRiverIndex(rxX,rxY)
+    if flattenPeakSubFunc(x, y, rxI, NE, W, S, N, E) then
+        return true
+    end
+    rxX,rxY = rxFromPlot(x,y,SE)
+    rxI = getRiverIndex(rxX,rxY)
+    if flattenPeakSubFunc(x, y, rxI, SE, W, N, S, E) then
+        return true
+    end
+    rxX,rxY = rxFromPlot(x,y,SW)
+    rxI = getRiverIndex(rxX,rxY)
+    if flattenPeakSubFunc(x, y, rxI, SW, E, N, S, W) then
+        return true
+    end
+end
+
+local function IsPlotTouchingRiver(x, y)
+    for direction=5, 8 do
+        local rxX, rxY = rxFromPlot(x, y, direction)
+        local rxI = getRiverIndex(rxX, rxY)
+        if riverMap[rxI] and riverMap[rxI] > RiverThreshold then                  -- TODO this may cause fail throughs as rivers should be gettable
+            return true
+        end
+    end
+end
+
+local function IsPlotSurroundedByOcean(x, y)
+    for direction=1, 8 do
+        local xx = x + directionXmap[direction]
+        local yy = y + directionYmap[direction]
+        local i = GetIndex(xx, yy)
+        if plotMap[i] ~= OCEAN then
+            return false
+        end
+    end
+    return true
+end
+
+local OppositeDirections = {[N]=S, [S]=N, [E]=W, [W]=E, [NW]=SE, [SE]=NW, [SW]=NE, [NE]=SW}
+function placeLandInWater(x,y)
+    local i = GetIndex(x,y)
+    local regionID = regionMap[i]
+    if regionID == -1 then
+        return false
+    end
+    local region = getRegionByID(regionID)
+    local borderPlotIsLand = false
+    for direction=1,5 do
+        local xx = x + directionXmap[direction]
+        local yy = y + directionYmap[direction]
+        local ii = GetIndex(xx,yy)
+        if ii ~= -1 then
+            if plotMap[ii] ~= OCEAN and regionMap[ii] ~= regionID then
+                local oceanNeighborTouchingRiver = true
+                if IsPlotTouchingRiver(x,y) then
+                    oceanNeighborTouchingRiver = false
+                    for dir2= 1,5,1 do
+                        local xxx = x + directionXmap[dir2]
+                        local yyy = y + directionYmap[dir2]
+                        local iii = GetIndex(xxx,yyy)
+                        if plotMap[iii] == OCEAN and IsPlotTouchingRiver(xxx,yyy) then
+                            oceanNeighborTouchingRiver = true
+                        end
+                    end
+                end
+                if oceanNeighborTouchingRiver then
+                    local oppDirection = OppositeDirections[direction] or L
+                    local xxx = x + directionXmap[oppDirection]
+                    local yyy = y + directionYmap[oppDirection]
+                    if IsPlotSurroundedByOcean(xxx,yyy) then
+                        if math.random(0,1) == 0 then
+                            local nRegionID = regionMap[ii]
+                            if nRegionID and nRegionID ~= -1 then
+                                local nRegion = getRegionByID(nRegionID)
+                                slthLog("placing land in water")
+                                if nRegion.altitude < 2 then
+                                    plotMap[i] = LAND
+                                elseif nRegion.altitude < 3 and highestRegionAltitude >= 3 then
+                                    plotMap[i] = HILLS
+                                else
+                                    plotMap[i] = PEAK
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function shouldPlacePeak(x,y)
+    local i = GetIndex(x,y)
+    slthLog('trying to find region of index, at plot ', i, ':', x, y)
+    local regionID = regionMap[i]
+    slthLog('region, x, y:', regionID, x, y)
+    if regionID == -1 or not regionID then
+        return true -- Plots without a region are always peaks
+    end
+    local region = getRegionByID(regionID)
+    if region.isWater then
+        return false -- Water regions have no peaks
+    end
+    -- if neighbor in different region not peak, then return true
+    for direction = 1, 8, 1 do
+        local xx = x + directionXmap[direction]
+        local yy = y + directionYmap[direction]
+        local ii = GetIndex(xx,yy)
+        if ii == -1 then
+            return true -- Land plots on map edge are peaks, water handled above
+        end
+        if plotMap[ii] ~= PEAK then
+            local nRegionID = regionMap[ii]
+            if nRegionID and nRegionID ~= -1 then
+                -- if nRegionID == region.gateRegion then
+                local nRegion = getRegionByID(nRegionID)
+                if nRegion.isWater and region.altitude < 2 then
+                    return false
+                elseif nRegion.isWater and region.altitude < 3 and highestRegionAltitude >= 3 then
+                    plotMap[i] = HILLS -- Cheating sorta
+                    return true
+                end
+                if nRegionID ~= regionID then
+                    return true
+                end
+            end
+        end
+    end
+end
+
+local function getBorders(x, y)
+    local i = GetIndex(x,y)
+    local regionID = regionMap[i]
+    if regionID and regionID ~= -1 then
+        local region = getRegionByID(regionID)
+        if not region.isWater then
+            for direction = 1, 8, 1 do
+                local xx = x + directionXmap[direction]
+                local yy = y + directionYmap[direction]
+                local ii = GetIndex(xx,yy)
+                if ii ~= -1 then
+                    if plotMap[ii] ~= PEAK then
+                        local nRegionID = regionMap[ii]
+                        if nRegionID and nRegionID ~= -1 then
+                            if nRegionID ~= regionID then
+                                if borderPeaks[i] then
+                                    borderPeaks[i][direction] = {region=regionID, adjacent_region=nRegionID}
+                                else
+                                    borderPeaks[i] = {[direction]={region=regionID, adjacent_region=nRegionID}}
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function GetRiverSize(x, y)
+    local riverAverage = 0.0
+    for direction=5, 8 do
+        local rxX, rxY = rxFromPlot(x, y, direction)
+        local rxI = getRiverIndex(rxX, rxY)
+        local riverVal = riverMap[rxI] or 0
+        riverAverage = riverAverage + riverVal             -- sometimes we arent getting these
+    end
+    riverAverage = riverAverage / 4.0
+    return riverAverage
+end
+
+function GetPlotAltitude(x, y)      -- calculate highest region altitude if necessary and save it for later. Used in main script.
+    local loc_regionList = regionList
+    if highestRegionAltitude == 0 then
+        table.sort(loc_regionList, function(a, b)
+            return a.altitude > b.altitude
+        end)
+        local highestRegionAltitude = loc_regionList[1].altitude            -- TODO BUG
+    end
+    local i = GetIndex(x, y)
+    local regionID = regionMap[i]
+    if regionID == -1 then
+        return -1.0
+    end
+    local region = getRegionByID(regionID)
+    ----    slthLog "GetPlotAltitude"
+    local regionAlt = (region.altitude + 1) / (highestRegionAltitude + 1)
+    ----    slthLog "regionAlt = %(ra)f" % {"ra":regionAlt}
+    local riverAltRange = RiverAltRangeFactor * RiverThreshold
+    local riverSize = GetRiverSize(x, y)
+    if riverSize > riverAltRange then
+        riverSize = riverAltRange
+    end----    slthLog "riverSize = %(r)f" % {"r":riverSize}
+    local riverSubtract = riverSize * ((RiverAltitudeSubtraction / riverAltRange) / (highestRegionAltitude + 1))
+    ----    slthLog "riverSubtract = %(rs)f" % {"rs":riverSubtract}
+    local altitude = regionAlt - riverSubtract
+    ----    slthLog "altitude = %(a)f" % {"a":altitude}
+    ----    slthLog ""
+    return altitude
+end
+
+function createPlotMap()            -- Entry point from main script
     plotMap = {}
     slthLog('map dimensions', g_iH, g_iW)
     local scrambledPlotList = {}
@@ -1584,244 +1782,8 @@ function createPlotMap()
     slthLog('plot map dim', #plotMap)
 end
 
-function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
-    if riverMap[rxI] and riverMap[rxI] > RiverThreshold then            -- again TODO on fail forward with RiverMap finds
-        local xx = x + directionXmap[pDir]
-        local yy = y + directionYmap[pDir]
-        local ii = GetIndex(xx,yy)
-        if plotMap[ii] == PEAK then
-            return true
-        end
-        if flowMap[rxI] == direction_2 then
-            xx = x + directionXmap[direction_2_change]
-            yy = y + directionYmap[direction_2_change]
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-        if flowMap[rxI] == direction_3 then
-            xx = x + directionXmap[direction_3_change]
-            yy = y + directionYmap[direction_3_change]
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-    end
-end
 
-function shouldFlattenRiverPeak(x,y)
-    local rxX,rxY = rxFromPlot(x,y,NW)
-    local rxI = getRiverIndex(rxX,rxY)
-    if flattenPeakSubFunc(x, y, rxI, NW, E, S, N, W) then
-        return true
-    end
-    rxX,rxY = rxFromPlot(x,y,NE)
-    rxI = getRiverIndex(rxX,rxY)
-    if flattenPeakSubFunc(x, y, rxI, NE, W, S, N, E) then
-        return true
-    end
-    rxX,rxY = rxFromPlot(x,y,SE)
-    rxI = getRiverIndex(rxX,rxY)
-    if flattenPeakSubFunc(x, y, rxI, SE, W, N, S, E) then
-        return true
-    end
-    rxX,rxY = rxFromPlot(x,y,SW)
-    rxI = getRiverIndex(rxX,rxY)
-    if flattenPeakSubFunc(x, y, rxI, SW, E, N, S, W) then
-        return true
-    end
-end
-
-local OppositeDirections = {[N]=S, [S]=N, [E]=W, [W]=E, [NW]=SE, [SE]=NW, [SW]=NE, [NE]=SW}
-
-function placeLandInWater(x,y)
-    local i = GetIndex(x,y)
-    local regionID = regionMap[i]
-    if regionID == -1 then
-        return false
-    end
-    local region = getRegionByID(regionID)
-    local borderPlotIsLand = false
-    for direction=1,5 do
-        local xx = x + directionXmap[direction]
-        local yy = y + directionYmap[direction]
-        local ii = GetIndex(xx,yy)
-        if ii ~= -1 then
-            if plotMap[ii] ~= OCEAN and regionMap[ii] ~= regionID then
-                local oceanNeighborTouchingRiver = true
-                if IsPlotTouchingRiver(x,y) then
-                    oceanNeighborTouchingRiver = false
-                    for dir2= 1,5,1 do
-                        local xxx = x + directionXmap[dir2]
-                        local yyy = y + directionYmap[dir2]
-                        local iii = GetIndex(xxx,yyy)
-                        if plotMap[iii] == OCEAN and IsPlotTouchingRiver(xxx,yyy) then
-                            oceanNeighborTouchingRiver = true
-                        end
-                    end
-                end
-                if oceanNeighborTouchingRiver then
-                    local oppDirection = OppositeDirections[direction] or L
-                    local xxx = x + directionXmap[oppDirection]
-                    local yyy = y + directionYmap[oppDirection]
-                    if IsPlotSurroundedByOcean(xxx,yyy) then
-                        if math.random(0,1) == 0 then
-                            local nRegionID = regionMap[ii]
-                            if nRegionID and nRegionID ~= -1 then
-                                local nRegion = getRegionByID(nRegionID)
-                                slthLog("placing land in water")
-                                if nRegion.altitude < 2 then
-                                    plotMap[i] = LAND
-                                elseif nRegion.altitude < 3 and highestRegionAltitude >= 3 then
-                                    plotMap[i] = HILLS
-                                else
-                                    plotMap[i] = PEAK
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-
-function shouldPlacePeak(x,y)
-    local i = GetIndex(x,y)
-    slthLog('trying to find region of index, at plot ', i, ':', x, y)
-    local regionID = regionMap[i]
-    slthLog('region, x, y:', regionID, x, y)
-    if regionID == -1 or not regionID then
-        return true -- Plots without a region are always peaks
-    end
-    local region = getRegionByID(regionID)
-    if region.isWater then
-        return false -- Water regions have no peaks
-    end
-    -- if neighbor in different region not peak, then return true
-    for direction = 1, 8, 1 do
-        local xx = x + directionXmap[direction]
-        local yy = y + directionYmap[direction]
-        local ii = GetIndex(xx,yy)
-        if ii == -1 then
-            return true -- Land plots on map edge are peaks, water handled above
-        end
-        if plotMap[ii] ~= PEAK then
-            local nRegionID = regionMap[ii]
-            if nRegionID and nRegionID ~= -1 then
-                -- if nRegionID == region.gateRegion then
-                local nRegion = getRegionByID(nRegionID)
-                if nRegion.isWater and region.altitude < 2 then
-                    return false
-                elseif nRegion.isWater and region.altitude < 3 and highestRegionAltitude >= 3 then
-                    plotMap[i] = HILLS -- Cheating sorta
-                    return true
-                end
-                if nRegionID ~= regionID then
-                    return true
-                end
-            end
-        end
-    end
-end
-
-function getBorders(x, y)
-    local i = GetIndex(x,y)
-    local regionID = regionMap[i]
-    if regionID and regionID ~= -1 then
-        local region = getRegionByID(regionID)
-        if not region.isWater then
-            for direction = 1, 8, 1 do
-                local xx = x + directionXmap[direction]
-                local yy = y + directionYmap[direction]
-                local ii = GetIndex(xx,yy)
-                if ii ~= -1 then
-                    if plotMap[ii] ~= PEAK then
-                        local nRegionID = regionMap[ii]
-                        if nRegionID and nRegionID ~= -1 then
-                            if nRegionID ~= regionID then
-                                if borderPeaks[i] then
-                                    borderPeaks[i][direction] = {region=regionID, adjacent_region=nRegionID}
-                                else
-                                    borderPeaks[i] = {[direction]={region=regionID, adjacent_region=nRegionID}}
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-function IsPlotTouchingRiver(x, y)
-    for direction=5, 8 do
-        local rxX, rxY = rxFromPlot(x, y, direction)
-        local rxI = getRiverIndex(rxX, rxY)
-        if riverMap[rxI] and riverMap[rxI] > RiverThreshold then                  -- TODO this may cause fail throughs as rivers should be gettable
-            return true
-        end
-    end
-end
-
-function IsPlotSurroundedByOcean(x, y)
-    for direction=1, 8 do
-        local xx = x + directionXmap[direction]
-        local yy = y + directionYmap[direction]
-        local i = GetIndex(xx, yy)
-        if plotMap[i] ~= OCEAN then
-            return false
-        end
-    end
-    return true
-end
-
-function GetPlotAltitude(x, y)
-    -- calculate highest region altitude if necessary and save it for later
-    local loc_regionList = regionList
-    if highestRegionAltitude == 0 then
-        table.sort(loc_regionList, function(a, b)
-            return a.altitude > b.altitude
-        end)
-        local highestRegionAltitude = loc_regionList[1].altitude
-    end
-    local i = GetIndex(x, y)
-    local regionID = regionMap[i]
-    if regionID == -1 then
-        return -1.0
-    end
-    local region = getRegionByID(regionID)
-    ----    slthLog "GetPlotAltitude"
-    local regionAlt = (region.altitude + 1) / (highestRegionAltitude + 1)
-    ----    slthLog "regionAlt = %(ra)f" % {"ra":regionAlt}
-    local riverAltRange = RiverAltRangeFactor * RiverThreshold
-    local riverSize = GetRiverSize(x, y)
-    if riverSize > riverAltRange then
-        riverSize = riverAltRange
-    end----    slthLog "riverSize = %(r)f" % {"r":riverSize}
-    local riverSubtract = riverSize * ((RiverAltitudeSubtraction / riverAltRange) / (highestRegionAltitude + 1))
-    ----    slthLog "riverSubtract = %(rs)f" % {"rs":riverSubtract}
-    local altitude = regionAlt - riverSubtract
-    ----    slthLog "altitude = %(a)f" % {"a":altitude}
-    ----    slthLog ""
-    return altitude
-end
-
-function GetRiverSize(x, y)
-    local riverAverage = 0.0
-    for direction=5, 8 do
-        local rxX, rxY = rxFromPlot(x, y, direction)
-        local rxI = getRiverIndex(rxX, rxY)
-        local riverVal = riverMap[rxI] or 0
-        riverAverage = riverAverage + riverVal             -- sometimes we arent getting these
-    end
-    riverAverage = riverAverage / 4.0
-    return riverAverage
-end
-
+local bShowMap = false
 function PrintPlotMap()
     local combined = ''
     local out_plots = {}
@@ -1933,15 +1895,6 @@ function newAreaMap:build_region(start_x, start_y, current_region)
             end
         end
     end
-end
-
-local function list_contains(list, val)
-    for _, v in ipairs(list) do
-        if v == val then
-            return true
-        end
-    end
-    return false
 end
 
 ---
@@ -2065,12 +2018,7 @@ function newAreaMap:find_largest_region()
     return largest_region
 end
 
-
-function addTerrain(index, value)
-    if plotMap[index] then
-        terrainMap[index] = value
-    end
-end
+local function addTerrain(index, value) if plotMap[index] then terrainMap[index] = value end end
 
 -- TERRAIN --
 function createTerrainMap()
@@ -2171,7 +2119,7 @@ function createTerrainMap()
     slthLog('terrain map dim', #terrainMap)
 end
 
-function GetRainfall(x, y)
+function GetRainfall(x, y)              -- used in main script.
     local rainfall = 0
     local i = GetIndex(x, y)
     local regionID = regionMap[i]
@@ -2187,54 +2135,8 @@ function GetRainfall(x, y)
     return rainfall
 end
 
-function check_regions()
-    local missed_region
-    slthLog('---- did regions all exist')
-    for x=1, g_iW do
-        for y=1, g_iH do
-            local i = GetIndex(x,y)
-            local regionID = regionMap[i]
-            if not regionID then
-                slthLog(string.format('%d, %d: no region, index was %d', x, y, i))
-                missed_region = true
-            end
-        end
-    end
-    if missed_region then
-        slthLog('ending check regions, REGIONS DONT EXIST')
-    else
-        slthLog('ending check regions, all accounted for')
-    end
-end
-
-function check_rx()
-    for x=1, g_iW do
-        for y=1, g_iH do
-            local i = GetRxIndex(x, y)
-            local regionID = regionRxMap[i]
-            if not regionID then
-                slthLog(string.format('%d, %d: no region', x, y))
-            end
-        end
-    end
-end
-
-function placeRiversInPlot(x, y)
-    local plot = Map.GetPlot(x, y)
-    tryPlaceRiver(x, y, NE, S, FlowDirectionTypes.FLOWDIRECTION_SOUTH)
-    tryPlaceRiver(x, y, SW, E, FlowDirectionTypes.FLOWDIRECTION_EAST)
-    local xx,yy = rxFromPlot(x,y,SE)
-    local ii = getRiverIndex(xx,yy)
-    if riverMap[ii] and flowMap[ii] then
-        if riverMap[ii] > RiverThreshold and flowMap[ii] == N then
-            TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_NORTH);
-        elseif riverMap[ii] > RiverThreshold and flowMap[ii] == W then
-            TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_WEST);
-        end
-    end
-end
-
-function tryPlaceRiver(x, y, direction1, direction2, flow_direction)
+-- River section, maybe move this
+local function tryPlaceRiver(x, y, direction1, direction2, flow_direction)
     local xx,yy = rxFromPlot(x,y,direction1)
     local ii = getRiverIndex(xx,yy)
     if riverMap[ii] and flowMap[ii] then
@@ -2247,7 +2149,18 @@ end
 function makeErebusRivers()
     for y=1, g_iH do
         for x=1, g_iW do
-            placeRiversInPlot(x,y)
+            local plot = Map.GetPlot(x, y)
+            tryPlaceRiver(x, y, NE, S, FlowDirectionTypes.FLOWDIRECTION_SOUTH)
+            tryPlaceRiver(x, y, SW, E, FlowDirectionTypes.FLOWDIRECTION_EAST)
+            local xx,yy = rxFromPlot(x,y,SE)
+            local ii = getRiverIndex(xx,yy)
+            if riverMap[ii] and flowMap[ii] then
+                if riverMap[ii] > RiverThreshold and flowMap[ii] == N then
+                    TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_NORTH);
+                elseif riverMap[ii] > RiverThreshold and flowMap[ii] == W then
+                    TryStartRiver(plot, FlowDirectionTypes.FLOWDIRECTION_WEST);
+                end
+            end
         end
     end
 end

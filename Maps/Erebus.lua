@@ -19,6 +19,14 @@ local g_riverStartPlots = {};
 local g_riverPlots = {};
 local g_iRiverID = 0;
 
+local JungleThreshold = .90
+-- Chance for jungle to have marsh, and chance for marsh to replace jungle
+local ChanceForMarsh = 0.30
+local ChanceForOnlyMarsh = 0.33
+local OasisChance = .08             -- Chance for an oasis to appear in desert
+local LeafyAltitude = 0.3
+
+local OCEAN, LAND, HILLS, PEAK = 0, 1, 2, 3
 
 local plotErebusFxsMapper = {[OCEAN] = g_PLOT_TYPE_OCEAN, [LAND] = g_PLOT_TYPE_LAND,
                                 [HILLS] = g_PLOT_TYPE_HILLS, [PEAK] = g_PLOT_TYPE_MOUNTAIN,
@@ -37,6 +45,7 @@ local terrainErebusFxsMapper = {
      ['8'] = g_TERRAIN_TYPE_GRASS_MOUNTAIN,
      ['9'] = g_TERRAIN_TYPE_GRASS               -- was marsh
 }
+
 local TerrainTextMapper = {
     [g_TERRAIN_TYPE_DESERT] = 'DESERT',
     [g_TERRAIN_TYPE_DESERT_HILLS] = 'DESERT HILLS',
@@ -61,7 +70,10 @@ function GenerateMap()
     -- g_iW, g_iH = 84, 52
     g_iW, g_iH = Map.GetGridSize();
     slthLog('map size', g_iW, g_iH)
-    g_iFlags = TerrainBuilder.GetFractalFlags();
+	local world_age_new = 5;
+	local world_age_normal = 3;
+	local world_age_old = 2;
+    -- g_iFlags = TerrainBuilder.GetFractalFlags();
     local temperature = MapConfiguration.GetValue("temperature"); -- Default setting is Temperate.
     if temperature == 4 then
         temperature  =  1 + TerrainBuilder.GetRandomNumber(3, "Random Temperature- Lua");
@@ -75,8 +87,6 @@ function GenerateMap()
         world_age = 2 + TerrainBuilder.GetRandomNumber(4, "Random World Age - Lua");
     end
 
-    currentRegion = -99
-    local success = false
     river_map_attempts = 0
     createRegions()
     slthLog('START ;reg_map_1_final_regionmap')
@@ -89,7 +99,6 @@ function GenerateMap()
     slthLog('STOP')
     slthLog(region_plots)
 
-    failedGateAttempts = {}
     createRiverMap()
     river_plots = PrintFlowMap()
 
@@ -669,7 +678,7 @@ function GetMapInitData(MapSize)
 		end
 	end
 
-	return {Width = Width, Height = Height, WrapX = WrapX, WrapY=WrapY}
+	return {Width = Width, Height = Height, WrapX = false, WrapY=false}				-- set for now, since was true???
 end
 
 -- from firaxis continents
@@ -1348,34 +1357,5 @@ function do_ascii(plot_types, terrain_types,do_feature, text, by_actual)
     end
     slthLog('STOP')
 end
-print_counter = 0
-function simpleGridPrint(tbl, title)
-    startPrinter(title)
-    local count = 0
-    local x_string = ''
-    for i, val in pairs(tbl) do
-    if count == g_iW then
-    count = 0
-    slthLog(x_string)
-    x_string = ''
-    end
-    count = count + 1
-    x_string = x_string .. val .. '|'
-    end
-    slthLog('STOP')
-    print_counter = print_counter + 1
-end
 
-function startPrinter(title)
-    local index_string
-    if print_counter > 29 then
-        index_string = 'c' .. print_counter
-    elseif print_counter > 19 then
-        index_string = 'b' .. print_counter
-    elseif print_counter > 9 then
-        index_string = 'a' .. print_counter
-    else
-        index_string = print_counter
-    end
-    slthLog('START ; ', index_string .. title)
-end
+

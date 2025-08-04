@@ -16,10 +16,46 @@ end
 function saveSVG(content, filename)
     return
 end
+print_counter = 0
+function simpleGridPrint(tbl, title)
+    startPrinter(title)
+    local count = 0
+    local x_string = ''
+    for i, val in pairs(tbl) do
+    if count == g_iW then
+    count = 0
+    slthLog(x_string)
+    x_string = ''
+    end
+    count = count + 1
+    x_string = x_string .. val .. '|'
+    end
+    slthLog('STOP')
+    print_counter = print_counter + 1
+end
+
+function startPrinter(title)
+    local index_string
+    if print_counter > 29 then
+        index_string = 'c' .. print_counter
+    elseif print_counter > 19 then
+        index_string = 'b' .. print_counter
+    elseif print_counter > 9 then
+        index_string = 'a' .. print_counter
+    else
+        index_string = print_counter
+    end
+    slthLog('START ; ', index_string .. title)
+end
 
 -- Actual functions, if we arent in the civ environment
-if not Map then
+if not Game then
+    local OCEAN = 0
+    local LAND = 1
+    local HILLS = 2
+    local PEAK = 3
     function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_mapper)
+        print('trying to create image')
         if not key_mapper then
             key_mapper = {}
         end
@@ -34,6 +70,7 @@ if not Map then
             end
             for key, val in pairs(rx_data) do
                 for key_, val_ in pairs(val) do
+                    print(val_)
                     local reason = val_['failure']
                     if reason == 'FULL_GATE' then
                         excludedPlots[val_['x'] .. '/' .. val_['y']] = true
@@ -409,10 +446,13 @@ if not Map then
     end
 
     function saveSVG(content, filename)
-        local file = io.open(filename, "w")
+        local folder_extended = 'DebugDisplay/' .. filename
+        print('trying to save image at', folder_extended)
+        local file = io.open(folder_extended, "w")
         if file then
             file:write(content)
             file:close()
+            print('file written to', folder_extended)
             return true
         else
             return false, "Could not open file for writing"
@@ -687,5 +727,29 @@ if not Map then
         end
         local centre = math.floor(sum_total / #tbl)
         return centre
+    end
+
+    function simpleGridPrint(tbl, title)
+        local count = 0
+        local x_string = ''
+        for i, val in pairs(tbl) do
+        if count == g_iW then
+        count = 0
+        slthLog(x_string)
+        x_string = ''
+        end
+        count = count + 1
+        x_string = x_string .. val .. '|'
+        end
+        slthLog('STOP')
+        print_counter = print_counter + 1
+    end
+end
+
+local function check_in_table(tbl, val)
+    for _, v in ipairs(tbl) do
+        if v == val then
+            return true
+        end
     end
 end
