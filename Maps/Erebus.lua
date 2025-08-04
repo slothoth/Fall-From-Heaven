@@ -19,6 +19,14 @@ local g_riverStartPlots = {};
 local g_riverPlots = {};
 local g_iRiverID = 0;
 
+local JungleThreshold = .90
+-- Chance for jungle to have marsh, and chance for marsh to replace jungle
+local ChanceForMarsh = 0.30
+local ChanceForOnlyMarsh = 0.33
+local OasisChance = .08             -- Chance for an oasis to appear in desert
+local LeafyAltitude = 0.3
+
+local OCEAN, LAND, HILLS, PEAK = 0, 1, 2, 3
 
 local plotErebusFxsMapper = {[OCEAN] = g_PLOT_TYPE_OCEAN, [LAND] = g_PLOT_TYPE_LAND,
                                 [HILLS] = g_PLOT_TYPE_HILLS, [PEAK] = g_PLOT_TYPE_MOUNTAIN,

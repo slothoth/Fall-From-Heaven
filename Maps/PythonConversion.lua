@@ -1,100 +1,91 @@
 -- This variable will make a percentage of peaks into hills in order to break
 -- up the worlds valleys. I set this to zero because I feel it diminishes the
 -- illusion of differing climates between valleys and looks bad.
-SoftenPeakPercent = 0.0
+local SoftenPeakPercent = 0.0
 
 -- This variable decides how many tiles of drainage is needed to create a
 -- river.
-RiverThreshold = 5.0
+local RiverThreshold = 5.0
 
 -- The amount of rainfall in the dryest desert. Must be between 1.0 and 0.0
-MinRainfall = .25
+local MinRainfall = .25
 
 -- This number is multiplied by the RiverThreshold to determine when a river
 -- is large enough to have a 100% chance to flatten nearby hills and peaks.
-RiverFactorFlattensAll = 10.0
+local RiverFactorFlattensAll = 10.0
 
-RiverAddsMoistureRange = .20
-RiverAddsMoistureMax = 10.0
+local RiverAddsMoistureRange = .20
+local RiverAddsMoistureMax = 10.0
 
 -- These variables control the frequency of hills and peaks at the lowest
 -- and highest altitudes
-HillChanceAtZero = .15
+local HillChanceAtZero = .15
 
-HillChanceAtOne = .90
-PeakChanceAtZero = .0
-PeakChanceAtOne = .20
+local HillChanceAtOne = .90
+local PeakChanceAtZero = .0
+local PeakChanceAtOne = .20
 
 -- These valiables control the moisture thresholds for desert and plains
-JungleThreshold = .90
-PlainsThreshold = .50
-DesertThreshold = .30
-
--- Chance for jungle to have marsh, and chance for marsh to replace jungle
-ChanceForMarsh = 0.30
-ChanceForOnlyMarsh = 0.33
+local PlainsThreshold = .50
+local DesertThreshold = .30
 
 -- These variables control the altitude of tundra and ice. Also, in Civ,
 -- deserts are supposed to be hot, so we'll limit the altitude for deserts
-TundraThreshold = .74
-IceThreshold = .84
-MaxDesertAltitude = .65
+local TundraThreshold = .74
+local IceThreshold = .84
+local MaxDesertAltitude = .65
 
--- Chance for an oasis to appear in desert
-OasisChance = .08
 
--- Map constants - I'm making a point on this map to hardcode nothing, so some
--- of these may seem a bit obscure.
--- -------------------------------------------------------------------
-RegionsPerPlot = 0.009              -- Map regions(valleys, seas) per map plot
-WaterRegionsPerPlot = 0.002         -- Water regions per map plot
-MinSeedRange = 5                    -- Closest that a region seed can be placed to another
-MinEdgeRange = 5                    -- Closest that a region seed can be to map edge
-ChanceToGrow = 0.25                 -- Base chance for each tile in region to grow
-EdgeLimit = 2                       -- Region stops growing this far from edge
-RiverAltitudeSubtraction = 2.0      -- Amount subtracted from a plots altitude depending on river size
-RiverAltRangeFactor = 2.0           -- Amount of RiverThreshold to use for altitude calc
-MinRegionSizeStart = 40             -- Minimum region size for a starting plot
-MinRegionSizeTower = 30             -- Minimum region size for a tower placement
-ChokePointAreaSize = 10             -- chokepoint needs this size area on both sides
-ChokePointWalkAroundDistance = 12   -- chokepoint must cause this much extra walking to be considered a choke
-WrapX = false                       -- Dont touch these, this map has no wrap
-WrapY = false
+-- Map constants
+----------------------------------------------------------------------
+local RegionsPerPlot = 0.009              -- Map regions(valleys, seas) per map plot
+local WaterRegionsPerPlot = 0.002         -- Water regions per map plot
+local MinSeedRange = 5                    -- Closest that a region seed can be placed to another
+local MinEdgeRange = 5                    -- Closest that a region seed can be to map edge
+local ChanceToGrow = 0.25                 -- Base chance for each tile in region to grow
+local EdgeLimit = 2                       -- Region stops growing this far from edge
+local RiverAltitudeSubtraction = 2.0      -- Amount subtracted from a plots altitude depending on river size
+local RiverAltRangeFactor = 2.0           -- Amount of RiverThreshold to use for altitude calc
+local MinRegionSizeStart = 40             -- Minimum region size for a starting plot
+local MinRegionSizeTower = 30             -- Minimum region size for a tower placement
+local ChokePointAreaSize = 10             -- chokepoint needs this size area on both sides
+local ChokePointWalkAroundDistance = 12   -- chokepoint must cause this much extra walking to be considered a choke
+local WrapX = false                       -- Dont touch these, this map has no wrap
+local WrapY = false
 
 
 
 -- new defines:
-L = 0
-N = 1
-S = 2
-E = 3
-W = 4
-NE = 5
-NW = 6
-SE = 7
-SW = 8
-directionXmap = {[N]=0,[S]=0,[E]=1,[W]=-1, [NE]=1, [NW]=-1, [SE]=1, [SW]=-1}
-directionYmap = {[N]=1,[S]=-1,[E]=0,[W]=0, [NE]=1, [NW]=1, [SE]=-1, [SW]=-1}
+local L = 0
+local N = 1
+local S = 2
+local E = 3
+local W = 4
+local NE = 5
+local NW = 6
+local SE = 7
+local SW = 8
+local directionXmap = {[N]=0,[S]=0,[E]=1,[W]=-1, [NE]=1, [NW]=-1, [SE]=1, [SW]=-1}
+local directionYmap = {[N]=1,[S]=-1,[E]=0,[W]=0, [NE]=1, [NW]=1, [SE]=-1, [SW]=-1}
 
-rxXMap = {[NE]= 0, [NW] = -1, [SE] = 0, [SW] = -1}
-rxYMap = {[NE]= 0, [NW] = 0, [SE] = -1, [SW] = -1}
-highestRegionAltitude = 0
-OCEAN = 0
-LAND = 1
-HILLS = 2
-PEAK = 3
+local rxXMap = {[NE]= 0, [NW] = -1, [SE] = 0, [SW] = -1}
+local rxYMap = {[NE]= 0, [NW] = 0, [SE] = -1, [SW] = -1}
+local highestRegionAltitude = 0
+local OCEAN = 0
+local LAND = 1
+local HILLS = 2
+local PEAK = 3
 
-LeafyAltitude = 0.3
-
+local g_iW, g_iH = 84, 52
 if Map then
     g_iW, g_iH = Map.GetGridSize();
-else
-    g_iW, g_iH = 84, 52
 end
 
 
+local RegionCharMap = {}
+local CharRegionMap = {}
 -- conversion table for prints
-function mapChar(integer)
+local function mapChar(integer)
     local c
     if integer <= 26 then
         c = string.char(integer + 96)  -- 'a' to 'z'
@@ -103,8 +94,6 @@ function mapChar(integer)
     end
     return c
 end
-RegionCharMap = {}
-CharRegionMap = {}
 
 for count=1, 52 do
     table.insert(RegionCharMap, mapChar(count))
