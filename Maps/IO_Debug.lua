@@ -10,7 +10,7 @@ end
 local doLog = false
 function slthLog(text)
     if doLog then
-        slthLog(text)
+        print(text)
     end
 end
 

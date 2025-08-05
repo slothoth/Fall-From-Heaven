@@ -5,8 +5,12 @@
 local doLog = false
 function slthLog(text)
     if doLog then
-        slthLog(text)
+        print(text)
     end
+end
+
+function changeLogLevel(boolean)
+    doLog = boolean
 end
 
 print_counter = 0
