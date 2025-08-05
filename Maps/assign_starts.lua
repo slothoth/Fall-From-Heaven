@@ -301,7 +301,6 @@ function collectAllWatchtowers()
 end
 
 function replaceWatchtowers(count)
-----        PrintRegionMap(false)
     gc = CyGlobalContext()
     gameMap = CyMap()
     towersPlacedAtChoke = 0

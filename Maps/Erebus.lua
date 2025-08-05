@@ -120,22 +120,14 @@ function GenerateMap()
 			end
 		end
 	end			-- no gates found ever
-    slthLog('START ;reg_map_1_final_regionmap')
-    final_reg_map = PrintRegionMap()
-    slthLog('STOP')
-    -- PrintRegionList()
-    slthLog('reg map water')
-    slthLog('START ; reg_map_1_final_regionmap_no_water')
-    region_plots = PrintRegionMap(true)
-    slthLog('STOP')
-    slthLog(region_plots)
+	simpleGridPrint(regionRxMap, 'regionRX_map', {}, true, true)
+	simpleGridPrint(regionMap, 'region_map', {}, true, true)
 
     createRiverMap()
     river_plots = PrintFlowMap()
 
     createPlotMap()
     createTerrainMap()
-    combined, out_plots = PrintPlotMap()
 
     local terrainMap_out_plots = {}
     for y = g_iH - 1, 0, -1 do

@@ -1,9 +1,9 @@
 require("mobdebug").start()
 local missing_globals = {}
-
+local fine_to_miss = {['include']=true, ['Game']=true}
 setmetatable(_G, {
     __index = function(t, k)
-        if missing_globals[k] == nil then
+        if missing_globals[k] == nil and not fine_to_miss[k] then
             missing_globals[k] = true
             print("[MISSING GLOBAL]", k)
         end
@@ -18,7 +18,7 @@ if not include then
       local newName = name
       if tExternals[name] then
         newName = tReplace[name] or name
-        print('loading', newName)
+        -- print('loading', newName)
         local ok, err = pcall(require, newName)
         if not ok then
           print('was not ok, err', err)
@@ -106,7 +106,6 @@ end
 
 dofile("Erebus.lua")
 
-print('doing map script')
 GenerateMap()
 print("\n--- Missing Globals Detected ---")
 for k in pairs(missing_globals) do

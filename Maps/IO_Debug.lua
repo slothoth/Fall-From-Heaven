@@ -226,7 +226,7 @@ function saveSVG(content, filename)
     if file then
         file:write(content)
         file:close()
-        print('file written to', folder_extended)
+        -- print('file written to', folder_extended)
         return true
     else
         return false, "Could not open file for writing"
@@ -290,7 +290,7 @@ function getAveragedTerrain(grid, x, y, default_val)
 end
 
 
-function createHexGridSVG(grid, keymap, bDoLabeledRegions)
+function createHexGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelledHexes)
     local height = #grid
     local width = 0
     for i = 1, height do
@@ -315,7 +315,7 @@ function createHexGridSVG(grid, keymap, bDoLabeledRegions)
             if not uniqueChars[char] and not symbols[char] and not hexCodeMap[char] then
                 charCount = charCount + 1
                 uniqueChars[char] = true
-                print('unique char found', char)
+                -- print('unique char found', char)
             end
         end
     end
@@ -351,8 +351,9 @@ function createHexGridSVG(grid, keymap, bDoLabeledRegions)
         '  <!-- Background -->',
         string.format('  <rect width="%.2f" height="%.2f" fill="#1a1a1a"/>', svgWidth, svgHeight)
     }
-    local colorAverageX, colorAverageY, colourCount = {}, {}, {}
+    local colorAverageX, colorAverageY, colourCount, hexPositions = {}, {}, {}, {}
     for y = 1, height do            -- Add hexagons
+        hexPositions[y] = {}
         for x = 1, #grid[y] do
             local char = grid[y][x]
             if colors[char] or symbols[char] or hexCodeMap[char] then
@@ -360,6 +361,7 @@ function createHexGridSVG(grid, keymap, bDoLabeledRegions)
                 -- Calculate hex center position
                 local cx = padding + x * horizontalSpacing + ((y-1) % 2) * (horizontalSpacing / 2)
                 local cy = padding + y * verticalSpacing
+                hexPositions[y][x] = {x=cx, y=cy}
                 local hexPoints = getHexagonPoints(cx, cy, hexSize)      -- Create hexagon
                 local hex = string.format(
                     '  <polygon points="%s" fill="%s" stroke="#000000" stroke-width="1"/>',
@@ -390,6 +392,26 @@ function createHexGridSVG(grid, keymap, bDoLabeledRegions)
             ))
         end
     end
+    if bDoLabelledHexes then
+        for y = 1, height do            -- Add hexagons
+            for x = 1, #grid[y] do
+                local iPlotID = (y-1) * g_iW + (x +1)
+                local xOffset = 0
+                if iPlotID > 999 then
+                    xOffset = -25
+                elseif iPlotID > 99 then
+                    xOffset = -15
+                elseif iPlotID > 9 then
+                    xOffset = -10
+                end
+                table.insert(svgParts, string.format(
+            '  <text x="%.2f" y="%.2f" fill="#000000" font-size="20">%d</text>',
+            hexPositions[y][x]['x']+xOffset, hexPositions[y][x]['y']+5, iPlotID
+            ))
+            end
+        end
+    end
+
     -- Add color key (only if there are less than 20 unique characters)
     if charCount < 40 then
         local keyY = svgHeight - 20
@@ -414,7 +436,7 @@ function createHexGridSVG(grid, keymap, bDoLabeledRegions)
     return table.concat(svgParts, '\n')
 end
 
-function simpleGridPrint(tbl, title, keymap, bDoLabeledRegions)            -- convert back to 1x1
+function simpleGridPrint(tbl, title, keymap, bDoLabeledRegions, bDoLabelledHexes)            -- convert back to 1x1
     local table_of_table = {}
     if type(tbl[1]) == 'string' or type(tbl[1]) == 'number' then
         for y=0, g_iH do
@@ -427,13 +449,13 @@ function simpleGridPrint(tbl, title, keymap, bDoLabeledRegions)            -- co
             end
             table.insert(table_of_table, transientXRow)
         end
-        print('converting table to TT', title)
+        -- print('converting table to TT', title)
     else
         table_of_table = tbl
-        print('table was already TT', title)
+        -- print('table was already TT', title)
     end
-    print('making', title)
-    local hexSvg = createHexGridSVG(table_of_table, keymap, bDoLabeledRegions)
+    -- print('making', title)
+    local hexSvg = createHexGridSVG(table_of_table, keymap, bDoLabeledRegions, bDoLabelledHexes)
     local adjusted_title = title .. '.svg'
     adjusted_title = startPrinter() .. '_' .. adjusted_title
     saveSVG(hexSvg, adjusted_title)
