@@ -109,6 +109,17 @@ function GenerateMap()
 
     river_map_attempts = 0
     createRegions()
+	print('region try find rxGates')
+	for i, reg in ipairs(regionList) do
+		if reg['gateRegion'] ~= -1 then
+			print('GATE REGION!!!!!', reg['ID'], reg['gateRegion'])
+		end
+		for j, plot in pairs(reg['plotList']) do
+			if plot['bBorder'] then
+				-- print('plot x/y', plot['x'], plot['y'], ' in region ', plot['regionId'], '. Had gate value ', plot['gateRx'], ' was it a border/edge?', plot['bBorder'], plot['bEdge'])
+			end
+		end
+	end			-- no gates found ever
     slthLog('START ;reg_map_1_final_regionmap')
     final_reg_map = PrintRegionMap()
     slthLog('STOP')

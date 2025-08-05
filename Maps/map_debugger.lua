@@ -1,3 +1,4 @@
+require("mobdebug").start()
 local missing_globals = {}
 
 setmetatable(_G, {

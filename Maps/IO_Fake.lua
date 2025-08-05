@@ -41,10 +41,6 @@ function startPrinter(title)
     slthLog('START ; ', index_string .. title)
 end
 
-function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_mapper)
-    return {}
-end
-
 function saveSVG(content, filename)
     return
 end

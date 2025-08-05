@@ -14,6 +14,10 @@ function slthLog(text)
     end
 end
 
+function changeLogLevel(boolean)
+    doLog = boolean
+end
+
 print_counter = 0
 function startPrinter()
     local index_string
@@ -63,6 +67,8 @@ local text_hex_map = {["blue"] = '#0000FF',
         ["black"] = '#000000',
         ["white"] = '#FFFFFF',
         ["cream"] = '#FFFDD0',
+        ["pink"] = '#AAAA32',
+        ["brown"] = '#777732'
 
 }
 
@@ -97,347 +103,125 @@ local function hexToRGB(hex)
            tonumber(hex:sub(6, 7), 16)
 end
 
-local function generateOptimizedColors(count, excludeList)
+-- Helper function to convert a HEX color string to RGB values (0-255).
+local function hexToRGB(hex)
+    hex = hex:gsub("#", "")
+    return tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6))
+end
+
+-- Helper function to convert HSL (Hue, Saturation, Lightness) to RGB.
+-- h, s, l are in the range [0, 1]. r, g, b are in the range [0, 255].
+local function HSLtoRGB(h, s, l)
+    local r, g, b
+
+    if s == 0 then
+        r, g, b = l, l, l
+    else
+        local function hue2rgb(p, q, t)
+            if t < 0 then t = t + 1 end
+            if t > 1 then t = t - 1 end
+            if t < 1/6 then return p + (q - p) * 6 * t end
+            if t < 1/2 then return q end
+            if t < 2/3 then return p + (q - p) * (2/3 - t) * 6 end
+            return p
+        end
+
+        local q = l < 0.5 and l * (1 + s) or l + s - l * s
+        local p = 2 * l - q
+        r = hue2rgb(p, q, h + 1/3)
+        g = hue2rgb(p, q, h)
+        b = hue2rgb(p, q, h - 1/3)
+    end
+
+    return math.floor(r * 255 + 0.5), math.floor(g * 255 + 0.5), math.floor(b * 255 + 0.5)
+end
+
+-- Calculates the squared Euclidean distance between two RGB colors.
+-- Using squared distance avoids a square root calculation and is sufficient for comparisons.
+local function colorDistanceSq(r1, g1, b1, r2, g2, b2)
+    local dr, dg, db = r1 - r2, g1 - g2, b1 - b2
+    return dr * dr + dg * dg + db * db
+end
+
+local function generateDistinctColors(count, excludeList)
     local colors = {}
     local excludeRGB = {}
+    local hueOffset = math.random() -- Start at a random point in the color wheel.
+    local goldenRatio = 0.61803398875
 
+    -- A minimum distance threshold to avoid colors that are too similar.
+    -- (40*40 is a reasonable squared distance threshold for 8-bit RGB).
+    local minDistanceSq = 1600
+
+    -- Prepare the exclusion list by converting HEX to RGB
     for _, hex in ipairs(excludeList or {}) do
         local r, g, b = hexToRGB(hex)
         table.insert(excludeRGB, {r, g, b})
     end
 
-    if count <= 64 then
-        local hueStep = 1.0 / (count * 2)  -- oversample to account for skipped colors
-        local i, generated = 1, 0
-        while generated < count and i <= count * 4 do
-            local s = i % 2 == 0 and 1.0 or 0.8
-            local v = i % 2 == 0 and 0.9 or 1.0
-            local h = (i - 1) * hueStep
-            local r, g, b = HSVtoRGB(h, s, v)
-            local isTooClose = false
-            for _, rgb in ipairs(excludeRGB) do
-                if colorDistance(r, g, b, rgb[1], rgb[2], rgb[3]) < 10 then
+    local generated = 0
+    while generated < count do
+        local h = (hueOffset + generated * goldenRatio) % 1.0
+
+        -- Vary saturation and lightness in cycles to get a wider range of colors
+        local cycle = math.floor(generated / 5) -- Change band every 5 colors
+        local s = 0.5 + (cycle % 3) * 0.2 -- Varies saturation: 0.5, 0.7, 0.9
+        local l = 0.6 - (math.floor(cycle / 3) % 2) * 0.2 -- Varies lightness: 0.6, 0.4
+
+        local r, g, b = HSLtoRGB(h, s, l)
+        local isTooClose = false
+
+        -- Check against the exclusion list
+        for _, rgb in ipairs(excludeRGB) do
+            if colorDistanceSq(r, g, b, rgb[1], rgb[2], rgb[3]) < minDistanceSq then
+                isTooClose = true
+                break
+            end
+        end
+
+        -- Also check against colors already generated to ensure they are distinct from each other
+        if not isTooClose then
+            for _, existingHex in ipairs(colors) do
+                local er, eg, eb = hexToRGB(existingHex)
+                if colorDistanceSq(r, g, b, er, eg, eb) < minDistanceSq then
                     isTooClose = true
                     break
                 end
             end
-            if not isTooClose then
-                colors[#colors + 1] = string.format('#%02X%02X%02X', r, g, b)
-                generated = generated + 1
-            end
-            i = i + 1
         end
-        return colors
+
+        if not isTooClose then
+            colors[#colors + 1] = string.format('#%02X%02X%02X', r, g, b)
+            generated = generated + 1
+        else
+            -- If a color is rejected, we still increment the hue generator
+            -- to try a different part of the color space next time.
+            generated = generated + 1
+            count = count + 1 -- This ensures we still get the desired number of colors
+        end
     end
+
+    -- Trim the result in case we overshot
+    while #colors > count do
+        table.remove(colors)
+    end
+
+    return colors
 end
 
-function createCharacterImageSVG(grid, rx_data, debug_mode, symbol_mapper, key_mapper)
-    print('trying to create image')
-    if not key_mapper then
-        key_mapper = {}
+local function getHexagonPoints(cx, cy, hexSize)     -- Function to generate hexagon points
+    local points = {}
+    for i = 0, 5 do
+        local angle = math.pi / 3 * i + math.pi / 6  -- Rotate 30 degrees to point up
+        local x = cx + hexSize * math.cos(angle)
+        local y = cy + hexSize * math.sin(angle)
+        table.insert(points, string.format("%.2f,%.2f", x, y))
     end
-    local excludedPlots = {}
-    local highlighted_regions = {}
-    if rx_data then
-        for k, v in pairs(rx_data) do
-            for part in string.gmatch(k, "[^/]+") do
-                highlighted_regions[tonumber(part)] = tonumber(part)
-                break
-            end
-        end
-        for key, val in pairs(rx_data) do
-            for key_, val_ in pairs(val) do
-                local reason = val_['failure']
-                if reason == 'FULL_GATE' then
-                    excludedPlots[val_['x'] .. '/' .. val_['y']] = true
-                end
-            end
-        end
-    end
-    local height = #grid
-    local width = 0
-    for i = 1, height do
-        width = math.max(width, #grid[i])
-    end
-    -- First find unique characters
-    local uniqueChars = {}
-    local charCount = 0
-    local sym_mapper = symbols
-    if symbol_mapper then
-        sym_mapper = symbol_mapper
-    end
-
-    -- Get unique characters (removed the charCount < 9 limitation)
-    for y = 1, height do
-        for x = 1, #grid[y] do
-            local char = grid[y][x]
-            if not uniqueChars[char] then
-                charCount = charCount + 1
-                uniqueChars[char] = true
-            end
-            if debug_mode then
-                slthLog(x .. y)
-            end
-        end
-    end
-
-    -- Generate color palette based on character count
-    local colorPalette = generateOptimizedColors(charCount, {'#0000FF'}) or {}
-    if #colorPalette == 0 then
-        for i = 0, 255 do
-            local h = (i % 16) / 16
-            local s = math.floor(i / 16) % 4 / 3
-            local v = math.floor(i / 64) % 4 / 3
-            local r, g, b = HSVtoRGB(h, 0.5 + s * 0.5, 0.5 + v * 0.5)
-            colorPalette[i + 1] = string.format('#%02X%02X%02X', r, g, b)
-        end
-    end
-
-    -- Assign colors to characters
-    local colors = {}
-    local colorIndex = 1
-    local colour_string = ""
-    for char in pairs(uniqueChars) do
-        colors[char] = colorPalette[colorIndex]
-        colour_string = colour_string .. string.format('%s = %s | ', char, colorPalette[colorIndex])
-        -- print('color for char', char, colour_string)
-        colorIndex = (colorIndex % 256) + 1
-    end
-
-    -- Calculate pixel size (make SVG 600px wide)
-    local svgWidth = 600
-    local pixelWidth = math.floor(svgWidth / width)
-    local svgHeight = pixelWidth * height
-
-    -- Start SVG string
-    if debug_mode then
-        slthLog('width: ' .. width .. ' | svgWidth: ' .. svgWidth .. ' | svgHeight: ' .. svgHeight .. ' | pixelWidth: ' .. pixelWidth)
-    end
-    -- local doKey = charCount < 20
-    local doKey = true
-    local KeyOffset = 0
-    if doKey then
-        KeyOffset = 100
-    end
-    local rulerOffset = pixelWidth * 3
-    local svgParts = {
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        string.format('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d">', svgWidth + rulerOffset, svgHeight + KeyOffset + rulerOffset),
-    }
-
-    local keyParts = {}
-
-    -- Add color key (only if there are less than 20 unique characters to keep it readable)
-    if doKey then
-        local varKeyHeight = svgHeight + rulerOffset + (pixelWidth * 4)
-        table.insert(keyParts, '  <!-- Color Key -->')
-        local xPosition = 10
-        local keys = {}
-        for char in pairs(colors) do
-            table.insert(keys, char)
-        end
-        table.sort(keys)
-
-        for _, char in ipairs(keys) do
-            local colour = colors[char]
-            local label = key_mapper[char] or char
-            if sym_mapper[char] then
-                colour = sym_mapper[char]
-            end
-            slthLog(string.format('label %s for char: %s. Colour: %s', label, char, colour))
-            local labelLength = string.len(label) * 7
-            local keyString = string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">',
-            xPosition, varKeyHeight, math.floor(pixelWidth)) .. label .. ":"
-            table.insert(keyParts, keyString .. '</text>')
-            local rect = string.format(
-                    '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
-                    xPosition+labelLength-5, varKeyHeight-5, pixelWidth, pixelWidth, colour
-                )
-            table.insert(keyParts, rect)
-            if xPosition > svgWidth - labelLength then
-                xPosition = 10
-                varKeyHeight = varKeyHeight + 20
-            else
-                xPosition = xPosition + labelLength + 10
-            end
-        end
-    end
-
-    -- Process string line by line
-    local regionsEncountered = {}
-    table.insert(keyParts, '  <!-- first of labelling -->')
-    for y = 1, height do
-        for x = 1, #grid[y] do
-            if true then
-                local char = grid[y][x]
-                if colors[char] or sym_mapper[char] then
-                    local colour
-                    if sym_mapper[char] then
-                        colour = sym_mapper[char]
-                    else
-                        colour = colors[char]
-                    end
-                    -- Create SVG rect element for this character
-                    local rect = string.format(
-                        '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
-                            ((x-1) * pixelWidth)+pixelWidth, ((y-1) * pixelWidth)+pixelWidth, pixelWidth, pixelWidth, colour
-                    )
-                    table.insert(svgParts, rect)
-                    if not regionsEncountered[char] then
-                        regionsEncountered[char] = true
-                        table.insert(keyParts, string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">%s</text>',
-                                ((x-1) * pixelWidth)+pixelWidth, (y * pixelWidth)+pixelWidth, math.floor(pixelWidth), char))
-                    end
-                end
-            end
-        end
-    end
-    for i, j in pairs(regionsEncountered) do
-        slthLog(i)
-    end
-
-    -- centralised region numbers
-
-    local function get_split_centres(char, char_xs, char_ys, char_centres)
-        char_xs[char] = {}
-        char_ys[char] = {}
-        for y = 1, height do
-            for x = 1, #grid[y] do
-                local map_char = grid[y][x]
-                if map_char == char then
-                    table.insert(char_xs[char], x)
-                    table.insert(char_ys[char], y)
-                end
-            end
-        end
-
-        if check_in_table(char_xs[char], 1) and check_in_table(char_xs[char], width) then
-            slthLog('found wrapping region')
-            -- this is a split region, so we want to plot both
-            -- first find all plots that are closer to one side or the other
-            -- so to find left plots, find all plots that are below width/2
-            local left_plots_x = {}
-            local left_plots_y = {}
-            local right_plots_x = {}
-            local right_plots_y = {}
-            for i, x in ipairs(char_xs[char]) do
-                 if x > width/2 then
-                     table.insert(left_plots_x, x)
-                     table.insert(left_plots_y, char_ys[char][i])
-                 else
-                     table.insert(right_plots_x, x)
-                     table.insert(right_plots_y, char_ys[char][i])
-                 end
-            end
-            local left_x_centre = calculateCentre(left_plots_x)
-            local left_y_centre = calculateCentre(left_plots_y)
-            local right_x_centre = calculateCentre(right_plots_x)
-            local right_y_centre = calculateCentre(right_plots_y)
-            char_centres[char] = {left_x=left_x_centre, left_y=left_y_centre, right_x=right_x_centre , right_y=right_y_centre}
-        else
-            local x_centre = calculateCentre(char_xs[char])
-            local y_centre = calculateCentre(char_ys[char])
-            char_centres[char] = {x=x_centre, y=y_centre}
-        end
-        return char_centres
-    end
-    if true then
-        slthLog('')
-    else
-        local char_xs = {}
-        local char_ys = {}
-        local char_centres = {}
-        for char, color in pairs(colors) do
-            if char ~= -1 then
-                char_centres = get_split_centres(char, char_xs, char_ys, char_centres)
-            end
-        end
-        for key, val in pairs(highlighted_regions) do
-            char_centres = get_split_centres(key, char_xs, char_ys, char_centres)
-        end
-        -- mark char_centres issues from world wrap on regions? fixed now
-        table.insert(keyParts, '  <!-- centroids -->')
-        for char, char_centroid in pairs(char_centres) do
-            local fillcol = ''
-            if highlighted_regions[char] then
-                fillcol = '#000000'
-            else
-                fillcol = '#FFFFFF'
-            end
-            if char_centroid['left_x'] then
-                local left_centre_x = char_centroid['left_x']
-                local left_centre_y = char_centroid['left_y']
-                local svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
-                        left_centre_x * pixelWidth, left_centre_y * pixelWidth, fillcol,  math.floor(pixelWidth)*2, char)
-                table.insert(keyParts, svg_string)
-
-                local right_centre_x = char_centroid['right_x']
-                local right_centre_y = char_centroid['right_y']
-                svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
-                        right_centre_x * pixelWidth, right_centre_y * pixelWidth, fillcol, math.floor(pixelWidth)*2, char)
-                table.insert(keyParts, svg_string)
-            else
-                local centre_x = char_centroid['x']
-                local centre_y = char_centroid['y']
-                local svg_string = string.format('  <text x="%d" y="%d" fill="%s" font-size="%d">%s</text>',
-                        (centre_x) * pixelWidth, centre_y * pixelWidth, fillcol, math.floor(pixelWidth)*2, char)
-                table.insert(keyParts, svg_string)
-            end
-        end
-    end
-
-    table.insert(keyParts, '  <!-- Ruler label -->')
-    local count = 0
-    for i=0, svgWidth, pixelWidth*5 do
-        table.insert(keyParts, string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">%s</text>',
-                i+pixelWidth, svgHeight+ rulerOffset, math.floor(pixelWidth)*3, count))
-        count = count + 5
-    end
-
-    count = 0
-    for i=0, svgHeight, pixelWidth*5 do
-        table.insert(keyParts, string.format('  <text x="%d" y="%d" fill="#FFFFFF" font-size="%d">%s</text>',
-                svgWidth, i+pixelWidth, math.floor(pixelWidth)*3, count))
-        count = count + 5
-    end
-
-    -- hightlighted region colour specifics
-    if rx_data then
-        local used_plots = {}
-        for key, val in pairs(rx_data) do
-            for key_, val_ in pairs(val) do
-                slthLog(string.format('for region: %d and plot %s', key, key_))
-                local x = val_['x']
-                local y = val_['y']
-                local reason = val_['failure']
-                local colour = '#000000'
-                if not used_plots[x .. '/' .. y] then
-                    used_plots[x .. '/' .. y] = true
-                    if reason == 'FULL_GATE' then
-                        colour = '#FFFFFF'                      -- yellow
-                        slthLog(string.format('highlighted region plot %d/%d is White as full gate', x, y))
-                         local rect = string.format(
-                            '  <rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>',
-                            ((x-1) * pixelWidth)+pixelWidth, ((y-1) * pixelWidth)+pixelWidth, pixelWidth, pixelWidth, colour
-                        )
-                        table.insert(keyParts, rect)
-                    end
-                else
-                    slthLog('plot already used!')
-                end
-            end
-        end
-    end
-
-    -- Close SVG
-    table.insert(keyParts, '</svg>')
-    local full =  {table.concat(svgParts, '\n'),  table.concat(keyParts, '\n')}
-    return table.concat(full, '\n')
+    return table.concat(points, " ")
 end
 
 function saveSVG(content, filename)
     local folder_extended = 'DebugDisplay/' .. filename
-    print('trying to save image at', folder_extended)
     local file = io.open(folder_extended, "w")
     if file then
         file:write(content)
@@ -452,7 +236,7 @@ end
 doLog = false
 function slthLog(text)
     if doLog then
-        slthLog(text)
+        print(text)
     end
 end
 
@@ -505,49 +289,8 @@ function getAveragedTerrain(grid, x, y, default_val)
     end
 end
 
--- Function to create a new hex grid
-function createHexGrid(squareGrid, default_filler)
-    local height = #squareGrid
-    local width = #squareGrid[1]
-    -- Create empty hex grid, Hex grid needs different dimensions due to the offset pattern
-    local hexWidth = width-- Hex tiles overlap horizontally
-    local hexHeight = height                     -- was 3/4 for svg compression afaik, math.ceil(height * 3/4)
-    local hexGrid = {}
-    for y = 1, hexHeight do
-        hexGrid[y] = {}
-        for x = 1, hexWidth do
-            hexGrid[y][x] = nil
-        end
-    end
-    -- Convert square coordinates to hex coordinates and transfer terrain
-    for y = 1, height do
-        for x = 1, width do
-            -- Convert square coordinates to hex coordinates using offset coordinates (odd-r offset)
-            local hexX = x  -- Compress x coordinates
-            local hexY = math.ceil(y * 3/4)          -- was less:  math.ceil(y * 3/4)
-            if x % 2 == 1 then
-                hexY = hexY + 0.5           -- Offset every other row
-            end
-            hexY = math.floor(hexY + 0.5)       -- Round to nearest hex cell
-            if hexX >= 1 and hexX <= hexWidth and hexY >= 1 and hexY <= hexHeight then      -- Ensure coordinates are within bounds
-                -- Transfer terrain type
-                hexGrid[hexY][hexX] = squareGrid[y][x]
-            end
-        end
-    end
-    -- Fill in any gaps with averaged terrain from neighbors
-    for y = 1, hexHeight do
-        for x = 1, hexWidth do
-            if hexGrid[y][x] == nil then
-                hexGrid[y][x] = getAveragedTerrain(hexGrid, x, y, default_filler)
-            end
-        end
-    end
-    table.remove(hexGrid, #hexGrid)             -- TODO bodge fix here... worth looking into if we are doing weird stuff to get hexes, and if theres a simpler method
-    return hexGrid
-end
 
-function createHexGridSVG(grid, keymap)
+function createHexGridSVG(grid, keymap, bDoLabeledRegions)
     local height = #grid
     local width = 0
     for i = 1, height do
@@ -572,12 +315,11 @@ function createHexGridSVG(grid, keymap)
             if not uniqueChars[char] and not symbols[char] and not hexCodeMap[char] then
                 charCount = charCount + 1
                 uniqueChars[char] = true
-                -- print('unique char found', char)
+                print('unique char found', char)
             end
         end
     end
-    -- print('unique character count', charCount)
-    local colorPalette = generateOptimizedColors(charCount) or {}
+    local colorPalette = generateDistinctColors(charCount, hexCodeMap) or {}
     -- If optimized colors weren't generated, create 256-color palette
     if #colorPalette == 0 then
         for i = 0, 255 do
@@ -589,16 +331,13 @@ function createHexGridSVG(grid, keymap)
         end
     end
     -- Assign colors to characters
-    local colors = {}
-    local colorIndex = 1
-    local colour_string = ""
+    local colors, colorIndex, colour_string = {}, 1, ""
     for char in pairs(uniqueChars) do
         colors[char] = colorPalette[colorIndex]
         colour_string = colour_string .. string.format('%s = %s |', char, colorPalette[colorIndex])
         colorIndex = (colorIndex % #colorPalette) + 1
     end
     local hexSize = 30  -- Size of hexagon (radius)
-    local hexWidth = hexSize * 2
     local hexHeight = hexSize * math.sqrt(3)
     local horizontalSpacing = 3 * hexSize / 2
     local verticalSpacing = hexHeight
@@ -606,22 +345,13 @@ function createHexGridSVG(grid, keymap)
     -- Calculate SVG dimensions with padding
     local svgWidth = width * horizontalSpacing + padding * 2
     local svgHeight = height * verticalSpacing + padding * 2
-    local function getHexagonPoints(cx, cy)     -- Function to generate hexagon points
-        local points = {}
-        for i = 0, 5 do
-            local angle = math.pi / 3 * i + math.pi / 6  -- Rotate 30 degrees to point up
-            local x = cx + hexSize * math.cos(angle)
-            local y = cy + hexSize * math.sin(angle)
-            table.insert(points, string.format("%.2f,%.2f", x, y))
-        end
-        return table.concat(points, " ")
-    end
     local svgParts = {
         '<?xml version="1.0" encoding="UTF-8"?>',
         string.format('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %.2f %.2f">', svgWidth, svgHeight),
         '  <!-- Background -->',
         string.format('  <rect width="%.2f" height="%.2f" fill="#1a1a1a"/>', svgWidth, svgHeight)
     }
+    local colorAverageX, colorAverageY, colourCount = {}, {}, {}
     for y = 1, height do            -- Add hexagons
         for x = 1, #grid[y] do
             local char = grid[y][x]
@@ -630,12 +360,14 @@ function createHexGridSVG(grid, keymap)
                 -- Calculate hex center position
                 local cx = padding + x * horizontalSpacing + ((y-1) % 2) * (horizontalSpacing / 2)
                 local cy = padding + y * verticalSpacing
-                local hexPoints = getHexagonPoints(cx, cy)      -- Create hexagon
+                local hexPoints = getHexagonPoints(cx, cy, hexSize)      -- Create hexagon
                 local hex = string.format(
                     '  <polygon points="%s" fill="%s" stroke="#000000" stroke-width="1"/>',
                     hexPoints,
-                    colour
-                )
+                    colour)
+                if not colorAverageX[char] then colorAverageX[char] = cx else colorAverageX[char] = colorAverageX[char] + cx end
+                if not colorAverageY[char] then colorAverageY[char] = cy else colorAverageY[char] = colorAverageY[char] + cy end
+                if not colourCount[char] then colourCount[char] = 1 else colourCount[char] = colourCount[char] + 1 end
                 table.insert(svgParts, hex)
                 if x == 1 or y == 1 then        -- Add coordinate guides for first row and column
                     local guide
@@ -648,8 +380,18 @@ function createHexGridSVG(grid, keymap)
             end
         end
     end
+    if bDoLabeledRegions then
+        for char, count in pairs(colourCount) do
+            colorAverageX[char] = colorAverageX[char] / count
+            colorAverageY[char] = colorAverageY[char] / count
+            table.insert(svgParts, string.format(
+            '  <text x="%.2f" y="%.2f" fill="#000000" font-size="100">%s</text>',
+            colorAverageX[char], colorAverageY[char], char
+            ))
+        end
+    end
     -- Add color key (only if there are less than 20 unique characters)
-    if charCount < 20 then
+    if charCount < 40 then
         local keyY = svgHeight - 20
         table.insert(svgParts, string.format(
             '  <text x="10" y="%.2f" fill="#FFFFFF" font-size="14">Key: </text>',
@@ -672,16 +414,7 @@ function createHexGridSVG(grid, keymap)
     return table.concat(svgParts, '\n')
 end
 
-function calculateCentre(tbl)
-    local sum_total = 0
-    for _, y in ipairs(tbl) do
-        sum_total = sum_total + y
-    end
-    local centre = math.floor(sum_total / #tbl)
-    return centre
-end
-
-function simpleGridPrint(tbl, title, keymap)            -- convert back to 1x1
+function simpleGridPrint(tbl, title, keymap, bDoLabeledRegions)            -- convert back to 1x1
     local table_of_table = {}
     if type(tbl[1]) == 'string' or type(tbl[1]) == 'number' then
         for y=0, g_iH do
@@ -700,7 +433,7 @@ function simpleGridPrint(tbl, title, keymap)            -- convert back to 1x1
         print('table was already TT', title)
     end
     print('making', title)
-    local hexSvg = createHexGridSVG(table_of_table, keymap)
+    local hexSvg = createHexGridSVG(table_of_table, keymap, bDoLabeledRegions)
     local adjusted_title = title .. '.svg'
     adjusted_title = startPrinter() .. '_' .. adjusted_title
     saveSVG(hexSvg, adjusted_title)
