@@ -57,6 +57,21 @@ end
 for count=1, 52 do table.insert(RegionCharMap, mapChar(count)) end
 for key, val in ipairs(RegionCharMap) do CharRegionMap[val] = key end
 
+local function flipVertical(tiles, w, h)
+    local width, height = w, h
+    if not width then
+        width,height = g_iW, g_iH
+    end
+    local flipped = {}
+    for row = 0, height - 1 do
+        local srcRow = height - 1 - row
+        for col = 0, width - 1 do
+            flipped[row * width + col + 1] = tiles[srcRow * width + col + 1]
+        end
+    end
+    return flipped
+end
+
 local function canRegionGrowHere(x, y, regionID)
     local i = GetRxIndex(x, y)
     if i == -1 then return false end
@@ -128,7 +143,7 @@ local function print_table(tbl_)
         if type(val) == "table" then
             print_table(val)
         else
-            slthLog(string.format('key: %s . val: %s', key, val))
+            print(string.format('key: %s . val: %s', key, val))
         end
     end
 end
@@ -195,14 +210,19 @@ else
         end
         return yy * (g_iW + 1) + xx
     end
+    function GetXY(index)
+        local y = math.floor(index / g_iW)
+        local x = index % g_iW
+        return x, y
+    end
 end
 
 local function buildNeighbourTable(width, height)
     local neighboursTable = {}
-    local nCounts = {0,0,0,0,0,0,0,0,0}
+    local nCounts = {0,0,0,0,0,0,0,0}
     for y = 1, height do
         for x = 1, width do
-            local i = (y - 1) * width + x
+            local i = GetIndex(x, y)
             local neighbours = {}
             for dy = -1, 1 do
                 local ny = y + dy
@@ -210,7 +230,7 @@ local function buildNeighbourTable(width, height)
                     for dx = -1, 1 do
                         local nx = x + dx
                         if not (dx == 0 and dy == 0) and nx >= 1 and nx <= width then
-                            table.insert(neighbours, (ny - 1) * width + nx)
+                            table.insert(neighbours, GetIndex(nx, ny))
                         end
                     end
                 end
@@ -222,35 +242,13 @@ local function buildNeighbourTable(width, height)
     return neighboursTable
 end
 
-function createRegions()
-    --Growing the regions directly according to the map size created
-    --unsolvable problems for the river system. Instead, I am growing
-    --on a map (regionRxMap) that corresponds to rivers rather than
-    --map tiles. This ensures rivers have a path from region to
-    --region.
-    math.randomseed(os.time())
-
-    -- globals
-    currentRegion = -99
-    g_IV_iW = g_iW
-    g_IV_iH = g_iH + 1
-    numTiles = (g_IV_iW ) * (g_IV_iH )
-    numRx = (g_IV_iW) * (g_IV_iH)
-    regionMap = {}
-    regionRxMap = {}
-    regionList = {}
-    regionPlotList = {}
-    regionPlotsInfo = {}
-    regionNeighbours = buildNeighbourTable(g_iW, g_iH)
-
-    --The value for unplayable areas will remain -1. playable regions
-    --will stop growing when they touch a map edge.
+local function seedRegions()
     for i = 1, numTiles do regionMap[i] = -1 end
     for i = 1, numRx do regionRxMap[i] = -1 end
     local numRegions = math.floor(tonumber(numTiles) * RegionsPerPlot)
     slthLog('number of regions!: ', numRegions)
     for i = 1, numRegions do
-        local iterations = 0                  -- first find a random seed point that is not blocked by
+        local iterations = 0            -- first find a random seed point that is not blocked by
         local notFoundSeed = true       -- previous points
         while notFoundSeed do
             iterations = iterations + 1
@@ -277,7 +275,9 @@ function createRegions()
             end
         end
     end
-    --Now cause the seeds to grow into regions
+end
+
+local function growRegions()
     local iterations = 0
     while #regionPlotList > 0 do
         iterations = iterations + 1
@@ -316,18 +316,20 @@ function createRegions()
                     end
                 end
             end
-            --move plot to the end of the list if room left, otherwise
-            --delete it if no room left
-            if roomLeft then
+
+            if roomLeft then                    --move plot to the end of the list if room left
                 table.insert(regionPlotList, plot)
             end
             plot = table.remove(regionPlotList, 1)
         else
-            plot = table.remove(regionPlotList, 1)
+            plot = table.remove(regionPlotList, 1)      --delete it if no room left
         end
     end
-    --Now convert regionRxMap to regionMap
-    for y=1, g_iH do
+end
+
+local function convertRxToRegion()          -- TODO we are getting spots that arent converted in RegionMap?
+    simpleSquareGridPrint(flipVertical(regionRxMap), 'rxMap', {}, true, true)
+    for y=1, g_iH do                        -- This may be intentional
         for x=1, g_iW do
             local i = GetRxIndex(x, y)
             local regionID = regionRxMap[i]
@@ -348,7 +350,50 @@ function createRegions()
             end
         end
     end
-    --Mark border tiles and neighbor regions
+    simpleSquareGridPrint(flipVertical(regionMap), 'region_map_post_RX_prefix', {}, true, true)
+    local not_perimeter = {}
+    for y = 3, g_iH - 3 do
+        for x = 3, g_iW - 3 do
+            local index = y * g_iW + x
+            not_perimeter[index] = true
+        end
+    end
+    for i=1, numTiles do
+        if not_perimeter[i] and regionMap[i] and regionMap[i] == -1 then
+            local nbors = regionNeighbours[i]
+            local nbor_regions = {[-1]=0}
+            local bHadNoRegionNeighbour = false
+            for _, nPlotID in ipairs(nbors) do
+                local nRegionID = regionMap[nPlotID]
+                if not nbor_regions[nRegionID] then
+                    nbor_regions[nRegionID] = 1
+                else
+                    nbor_regions[nRegionID] = nbor_regions[nRegionID] + 1
+                end
+            end
+            local common_region_id = -10
+            local largest_common = -20
+            for nRegion, count in pairs(nbor_regions) do
+                if count > largest_common then
+                    largest_common = count
+                    common_region_id = nRegion
+                end
+            end
+            if common_region_id ~= -10 and nbor_regions[-1] < 2 then
+                local newRegion = getRegionByID(common_region_id)
+                local x,y = GetXY(i)
+                local newPlot = {regionId=common_region_id, x=x, y=y, gateRx=-1}
+                newRegion.plotList[i] = newPlot
+                regionPlotsInfo[i] = newPlot
+                regionMap[i] = common_region_id
+                -- print('set index', i, 'to new region', common_region_id)
+            end
+        end
+    end
+    simpleSquareGridPrint(flipVertical(regionMap), 'region_map_post_RX_postidx', {}, true, true)
+end
+
+local function markBorders()
     for _, region in ipairs(regionList) do
         for iPlotID, plot in pairs(region.plotList) do
             local plotBordersRegions = {}
@@ -379,7 +424,9 @@ function createRegions()
             plot.numRegionsBordered = iBorderCount
         end
     end
-    --Now choose areas to be water
+end
+
+local function defineWaterRegions()
     local numWaterRegions = math.floor(tonumber(numTiles) * WaterRegionsPerPlot)
     slthLog(string.format("numTiles = %d, numWaterRegions = %d", numTiles, numWaterRegions))
     for i, region in ipairs(regionList) do slthLog(i, region.ID); end
@@ -418,6 +465,34 @@ function createRegions()
             end
         end
     end
+end
+
+function createRegions()
+    --Growing the regions directly according to the map size created
+    --unsolvable problems for the river system. Instead, I am growing
+    --on a map (regionRxMap) that corresponds to rivers rather than
+    --map tiles. This ensures rivers have a path from region to
+    --region.
+    math.randomseed(1)
+    -- math.randomseed(os.time())
+    currentRegion = -99
+    g_IV_iW = g_iW
+    g_IV_iH = g_iH + 1
+    numTiles = (g_IV_iW ) * (g_IV_iH )
+    numRx = (g_IV_iW) * (g_IV_iH)
+    regionMap = {}
+    regionRxMap = {}
+    regionList = {}
+    regionPlotList = {}
+    regionPlotsInfo = {}
+    regionNeighbours = buildNeighbourTable(g_iW, g_iH)
+    seedRegions()           --The value for unplayable areas will remain -1. playable regions
+                            --will stop growing when they touch a map edge.
+    growRegions()           --Now cause the seeds to grow into regions
+
+    convertRxToRegion()             -- Now convert regionRxMap to regionMap
+    markBorders()
+    defineWaterRegions()            --Now choose areas to be water
 end
 
 function getRegionByID(ID)
@@ -465,33 +540,49 @@ local function isRxInRegion(x, y, regionID)
     return true
 end
 
+local function gateFailLog(masterPlotID, num)
+    if first_furlong == 1 then
+        firstFailLessTwoMap[masterPlotID] = num
+    elseif first_furlong == 2 then
+        firstFailLessTwoMap[masterPlotID] = num+50
+    else
+        firstFailLessTwoMap[masterPlotID] = num+75
+    end
+end
+
 local function isValidHalfGate(regionID, rxX, rxY)
     -- A valid half gate is a rx that is not in a region, touches
     -- only 2 regions and is 4-connected to an rx that is in the region
     local masterPlotID = GetIndex(rxX, rxY)
     local testPlotRegionId = regionMap[masterPlotID]
+    if testPlotRegionId == -1 then return end
     local tPlotBorders = getRegionByID(testPlotRegionId)
     tPlotBorders = tPlotBorders['plotList']
     tPlotBorders = tPlotBorders[masterPlotID]
+    if not tPlotBorders then
+        print('finding plot', masterPlotID)
+    end
     local iPlotRegionsBordered = tPlotBorders['numRegionsBordered']
     tPlotBorders = tPlotBorders['bordersRegions']
     if not gateRegionAdjacents[currentRegion][testPlotRegionId] then
         gateRegionAdjacents[currentRegion][testPlotRegionId] = true;
     end
     slthLog('plot check on ' .. masterPlotID)
-    if iPlotRegionsBordered ~= 2 then
+    if iPlotRegionsBordered ~= 1 then
         local sBorderedPlots = ''
         local tRegionsAdjacent = {}
-        for _, val in pairs(tPlotBorders) do
-            if not gateRegionAdjacents[currentRegion][val] then
-                gateRegionAdjacents[currentRegion][val] = true;
-            end
-            if not tRegionsAdjacent[val] then
-                sBorderedPlots = sBorderedPlots .. val .. ', '
-                tRegionsAdjacent[val] = true
+        if tPlotBorders then
+            for _, val in pairs(tPlotBorders) do
+                if not gateRegionAdjacents[currentRegion][val] then
+                    gateRegionAdjacents[currentRegion][val] = true;
+                end
+                if not tRegionsAdjacent[val] then
+                    sBorderedPlots = sBorderedPlots .. val .. ', '
+                    tRegionsAdjacent[val] = true
+                end
             end
         end
-        slthLog(string.format('RX %d, region: %d touches regions %s %d!=2.', masterPlotID, testPlotRegionId, sBorderedPlots, iPlotRegionsBordered))
+        gateFailLog(masterPlotID,100)
         return false
     end
     if isRxInRegion(rxX, rxY, regionID) then
@@ -501,6 +592,7 @@ local function isValidHalfGate(regionID, rxX, rxY)
                 gateRegionAdjacents[currentRegion][val] = true;
             end
         end
+        gateFailLog(masterPlotID,200)
         return false
     end
     for direction=1, 4 do
@@ -512,13 +604,16 @@ local function isValidHalfGate(regionID, rxX, rxY)
         end
     end
     slthLog('RX is not valid half gate as RX was not in region in all 4 directions ')
-    return true
+    gateFailLog(masterPlotID,300)
+    return false
 end
 
 local function isValidFullGate(regionID, rxX, rxY)
+    first_furlong = 1
     if not isValidHalfGate(regionID, rxX, rxY) then
         return false
     end
+    first_furlong = 2
     local region = getRegionByID(regionID)
     slthLog('neighbours of region count:', #(region.neighborList))
     for _, nRegionID in ipairs(region.neighborList) do
@@ -527,6 +622,7 @@ local function isValidFullGate(regionID, rxX, rxY)
             slthLog('other adjacent region has valid gate')
             return true
         end
+        first_furlong = 3
         for direction=1, 4 do
             local xx = rxX + directionXmap[direction]
             local yy = rxY + directionYmap[direction]
@@ -662,6 +758,9 @@ function Region:defineValidGateList()
                             local rPlot = {x=nPlotInfo.x, y=nPlotInfo.y, direction=-1, currentRegion}
                             table.insert(self.gateList, rPlot)
                             gateMap[GetIndex(nPlotInfo.x, nPlotInfo.y)] = 100
+                            firstFailLessTwoMap[GetIndex(nPlotInfo.x, nPlotInfo.y)] = 500
+                        else
+                            gateAttemptMap[GetIndex(nPlotInfo.x, nPlotInfo.y)] = 100
                         end
                     end
                 end
@@ -737,7 +836,7 @@ function ShuffleList(theList)
     return theList
 end
 
-local function failedGatePrint(failedGates)
+local function failedGateLog(failedGates)
     local failed_string = ''
     local iFailedCount = 0
     for key, val in pairs(failedGates) do
@@ -748,6 +847,19 @@ local function failedGatePrint(failedGates)
     end
     failed_string = failed_string .. ' Total: ' .. iFailedCount
     slthLog(failed_string)
+    local iGlobalGateCount = 0
+    for i, region in ipairs(regionList) do
+        local gateString = ''
+        local iGateCount = 0
+        for j, gatePlot in ipairs(region.gateList) do
+            gateString = gateString .. '(' .. gatePlot.x .. ',' .. gatePlot.y .. ')' .. ', '
+            iGateCount = iGateCount + 1
+        end
+        iGlobalGateCount = iGlobalGateCount + iGateCount
+        gateString = region.ID .. ' region gate count' .. iGateCount .. ':' .. gateString
+        slthLog(gateString)
+    end
+    slthLog('total gate count:', iGlobalGateCount)
 end
 
 local function gateError(region, failedGates)
@@ -774,22 +886,34 @@ local function gateError(region, failedGates)
             iAdjacentColors[region_.ID] = "green"
         end
     end
-    simpleGridPrint(regionMap, 'FAIL_Gate_error' .. region.ID, iAdjacentColors, true, true)
-    simpleGridPrint(regionMap, 'FAIL_All_Regions' .. region.ID, iAllColors, true)
+    simpleSquareGridPrint(regionMap, 'FAIL_Gate_error' .. region.ID, iAdjacentColors, true, true)
+    simpleSquareGridPrint(regionMap, 'FAIL_All_Regions' .. region.ID, iAllColors, true)
     bLogLow = false
     changeLogLevel(false)
 end
 
+local function initGateMap()
+    gateMap = {}
+    for key, val in ipairs(regionMap) do
+        gateMap[key] = val
+    end
+    gateAttemptMap = {}
+    for key, val in ipairs(regionMap) do
+        gateAttemptMap[key] = val
+    end
+
+    firstFailLessTwoMap = {}
+    for key, val in ipairs(regionMap) do
+        firstFailLessTwoMap[key] = val
+    end
+end
 ------------------- RIVER ----------
 local function defineGates()
     -- Now each region picks one gate that is not in the current gate line
     -- to avoid recursive loops water is considered gated for this purpose
     gateRegionAdjacents = {}
     local bLogLow = false
-    gateMap = {}
-    for key, val in ipairs(regionMap) do
-        gateMap[key] = val
-    end
+    initGateMap()
     local failedGates = {[100]='white'}
     for i, region in ipairs(regionList) do
         region:defineValidGateList()                -- regions should always have gates
@@ -797,40 +921,23 @@ local function defineGates()
             gateError(region, failedGates)
         end
     end
-    simpleGridPrint(gateMap, 'All_Gates', failedGates, true, true)
-    failedGatePrint(failedGates)
-    local iGlobalGateCount = 0
-    for i, region in ipairs(regionList) do
-        local gateString = ''
-        local iGateCount = 0
-        for j, gatePlot in ipairs(region.gateList) do
-            gateString = gateString .. '(' .. gatePlot.x .. ',' .. gatePlot.y .. ')' .. ', '
-            iGateCount = iGateCount + 1
-        end
-        iGlobalGateCount = iGlobalGateCount + iGateCount
-        gateString = region.ID .. ' region gate count' .. iGateCount .. ':' .. gateString
-        slthLog(gateString)
-    end
-    slthLog('total gate count:', iGlobalGateCount)
+    simpleSquareGridPrint(flipVertical(gateMap), 'All_Gates', failedGates, true, true)
+    simpleSquareGridPrint(flipVertical(gateAttemptMap), 'Gate_Tiles_Tried', {[100]='white'}, true, true)
+     local contrast = {[100]="yellow", [150]="cream", [175]="orange", [200]="deepblue", [250]="brown",
+             [275]="pink", [300]="white", [350]="peach", [375]="goldenrod"}
+    local sliding_scale = {[100]="redscale1", [150]="redscale2", [175]="redscale3", [200]="redscale4", [250]="redscale5",
+             [275]="redscale6", [300]="redscale7", [350]="redscale8", [375]="redscale9", [500]="white"}
+    simpleSquareGridPrint(flipVertical(firstFailLessTwoMap), 'Classified_Gate_Fails', sliding_scale, true, true)
+    failedGateLog(failedGates)
 end
 
 local function placeGates()
     local numRegions = #regionList
     local numGatesPlaced = 0
     local iterations = 0
-    tMissedGates = {}
     while numGatesPlaced < numRegions do
         if iterations > 10000 then
             print(string.format("Endless loop occured in gate placement, gates placed: %d, regions: %d", numGatesPlaced, numRegions))
-            for _, region in ipairs(regionList) do
-                if region.gateRegion == -1 then
-                    if region.isWater then
-                        region.altitude = 0
-                    else
-                       tMissedGates[region] = true
-                    end
-                end
-            end
             break
         else
             iterations = iterations + 1
@@ -844,29 +951,18 @@ local function placeGates()
                         if region.isWater then
                             region.altitude = 0
                         else
-                            gateRegion = getRegionByID(region.gateRegion)
+                            local gateRegion = getRegionByID(region.gateRegion)
                             region.altitude = gateRegion.altitude + 1
-                            slthLog(string.format("region %d gateRegion is %d", region.ID, region.gateRegion))
+                            print(string.format("region %d gateRegion is %d", region.ID, region.gateRegion))
                         end
                         numGatesPlaced = numGatesPlaced + 1
                     else
-                        slthLog(string.format("Region %d has no gated neighbors", region.ID))
+                        print(string.format("Region %d has no gated neighbors", region.ID))
                     end
                 end
             end
         end
     end
-end
-
-local function flipVertical(tiles, w, h)
-    local flipped = {}
-    for row = 0, h - 1 do
-        local srcRow = h - 1 - row
-        for col = 0, w - 1 do
-            flipped[row * w + col + 1] = tiles[srcRow * w + col + 1]
-        end
-    end
-    return flipped
 end
 
 local function getPossiblePaths(rxX, rxY)
@@ -928,19 +1024,60 @@ local function initFlowMap()
     end
 end
 
+local function setFlow()
+    for _, region in ipairs(regionList) do
+        if not region.isWater then
+            slthLog("region.gateRegion =", region.gateRegion)
+            local validGateList = region:getGateListToNeighbor(region.gateRegion) -- randomly choose an outflow gate
+            if #validGateList  == 0 then
+                print("For region %s validGateList == 0!!!!", region)
+            end
+            if #validGateList > 1 then
+                local partGatePlot = validGateList[math.random(1, #validGateList)]
+                print('part gateplot is', partGatePlot['x'], partGatePlot['y'])
+                region.gatePlot = partGatePlot
+                local rxX, rxY = region.gatePlot.x, region.gatePlot.y
+                local rxI = getRiverIndex(rxX, rxY)
+                local iterations = 0
+                local continuing = true
+                while continuing do                 -- set flow so that it is pointing out of region
+                    iterations = iterations + 1         -- NOTE this seems not to build a flow map, just get
+                    if iterations > 100 then                -- the first direction of it
+                        print("endless loop in gate setter")
+                        break
+                    end
+                    local gateRegion = getRegionByID(region.gateRegion)
+                    if gateRegion.isWater then
+                        flowMap[rxI] = L
+                        heightMap[rxI] = 0.01
+                        continuing = false
+                    end
+                    if continuing then
+                        local direction = math.random(1, 4)      -- pick random cardinal direction
+                        local xx = rxX + directionXmap[direction]
+                        local yy = rxY + directionYmap[direction]
+                        if isRxInRegion(xx, yy, region.gateRegion) then
+                            flowMap[rxI] = direction
+                            heightMap[rxI] = 0.01
+                            continuing = false
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 local function makeHeightMap()
     local plotList = {}         -- Place all gates on queue.
-    for_continue = true
     for _, region in ipairs(regionList) do
-        if for_continue then
-            if not region.gatePlot then
-                for_continue = false
-            else
-                local rxX = region.gatePlot.x
-                local rxY = region.gatePlot.y
-                local riverPlot = {x=rxX, y=rxY, direction=0,  regionID=region.ID}
-                table.insert(plotList, riverPlot)
-            end
+        if not region.gatePlot then
+            print('no gateplot in region', region.ID)
+        else
+            local rxX = region.gatePlot.x
+            local rxY = region.gatePlot.y
+            local riverPlot = {x=rxX, y=rxY, direction=0,  regionID=region.ID}
+            table.insert(plotList, riverPlot)
         end
     end
     while #plotList > 0 do
@@ -966,7 +1103,7 @@ local function makeHeightMap()
 end
 
 local function makeFlowPaths()      -- Create flow map
-    simpleGridPrint(flowMap, 'FlowMap_1')
+    simpleSquareGridPrint(flowMap, 'FlowMap_1')
     for y=1, g_iH do
         for x=1, g_iW do
             local paths = getPossiblePaths(x, y)
@@ -977,7 +1114,7 @@ local function makeFlowPaths()      -- Create flow map
             end
         end
     end
-    simpleGridPrint(flowMap, 'FlowMap_2')
+    simpleSquareGridPrint(flowMap, 'FlowMap_2')
 end
 
 local function createFlowMap()
@@ -992,61 +1129,14 @@ local function createFlowMap()
     initFlowMap()
     defineGates()
     placeGates()
-    local for_continue = true
-    for _, region in ipairs(regionList) do
-        if not region.isWater then
-            if not tMissedGates[region.ID] then
-                slthLog("region.gateRegion =", region.gateRegion)
-                local validGateList = region:getGateListToNeighbor(region.gateRegion) -- randomly choose an outflow gate
-                if #validGateList  == 0 then
-                    slthLog("validGateList == 0!!!!!!!!!!!!!!!!!!!!")
-                    slthLog("region = %s", region)
-                    -- error("region has neighbor but no valid gates. see debug file")
-                end
-                if #validGateList > 1 then
-                    local partGatePlot = validGateList[math.random(1, #validGateList)]
-                    slthLog('part gateplot is')
-                    slthLog(partGatePlot['x'], partGatePlot['y'])
-                    region.gatePlot = partGatePlot
-                    local rxX = region.gatePlot.x
-                    local rxY = region.gatePlot.y
-                    local rxI = getRiverIndex(rxX, rxY)
-                    local iterations = 0
-                    local continuing = true
-                    while continuing do                 -- set flow so that it is pointing out of region
-                        iterations = iterations + 1
-                        if iterations > 100 then
-                            print("endless loop in gate setter")
-                            break
-                        end
-                        local gateRegion = getRegionByID(region.gateRegion)
-                        if gateRegion.isWater then
-                            flowMap[rxI] = L
-                            heightMap[rxI] = 0.01
-                            continuing = false
-                        end
-                        if continuing then
-                            local direction = math.random(1, 4)      -- pick random cardinal direction
-                            local xx = rxX + directionXmap[direction]
-                            local yy = rxY + directionYmap[direction]
-                            if isRxInRegion(xx, yy, region.gateRegion) then
-                                flowMap[rxI] = direction
-                                heightMap[rxI] = 0.01
-                                continuing = false
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
+
+    setFlow()
+
     -- Now create heightmap. Start from each gate and increase altitude of
     -- neighbors by a random percentage, and then place each neighbor on a
     -- queue for similar processing. Randomize the queue order for each pass.
     -- This method should avoid lakes.
     makeHeightMap()
-    local new_region_flipped = flipVertical(regionMap, g_iW, g_iH)
-    simpleGridPrint(new_region_flipped, 'hex_regions', {}, true)
     makeFlowPaths()
 end
 -- Dryness should be calculated by getting the highest altitude
@@ -1086,13 +1176,14 @@ local function calculateWetAndDry()
     end
 end
 
-function createRiverMap()
-    createFlowMap()
-    calculateWetAndDry()
+local function initRiverMap()
     riverMap = {}
     for i=1, ((g_iH + 1) * (g_iW + 1))-1 do                     -- should this be adjusted for python -> lua -1?
         table.insert(riverMap, 0)
     end
+end
+
+local function applyRiverMap()
     for y=1, g_iH do
         for x=1, g_iW do
             local i = getRiverIndex(x, y)
@@ -1113,6 +1204,13 @@ function createRiverMap()
             end
         end
     end
+end
+
+function createRiverMap()
+    createFlowMap()
+    calculateWetAndDry()
+    initRiverMap()
+    applyRiverMap()
     simpleGridPrint(riverMap, 'rivermap', {[1]='blue', [0]='green'})
     simpleGridPrint(flowMap, 'flowmap', {[1]='blue', [0]='green'})
 end
@@ -1454,7 +1552,6 @@ local function shouldPlacePeak(x,y)
         if plotMap[ii] ~= PEAK then
             local nRegionID = regionMap[ii]
             if nRegionID and nRegionID ~= -1 then
-                -- if nRegionID == region.gateRegion then
                 local nRegion = getRegionByID(nRegionID)
                 if nRegion.isWater and region.altitude < 2 then
                     return false

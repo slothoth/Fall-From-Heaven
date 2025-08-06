@@ -85,43 +85,25 @@ local terrainKeyMapper = {
 [g_TERRAIN_TYPE_COAST] = "",
 [g_TERRAIN_TYPE_OCEAN] = ""
 }
--- ENTRY POINT
-function GenerateMap()
-    -- g_iW, g_iH = 84, 52
-    g_iW, g_iH = Map.GetGridSize();
-    slthLog('map size', g_iW, g_iH)
-	local world_age_new = 5;
-	local world_age_normal = 3;
-	local world_age_old = 2;
-    -- g_iFlags = TerrainBuilder.GetFractalFlags();
+
+local function mapVarsSetup()
+	-- g_iFlags = TerrainBuilder.GetFractalFlags();
     local temperature = MapConfiguration.GetValue("temperature"); -- Default setting is Temperate.
     if temperature == 4 then
         temperature  =  1 + TerrainBuilder.GetRandomNumber(3, "Random Temperature- Lua");
     end
-
-    --	local world_age
     local world_age = MapConfiguration.GetValue("world_age");
-    local tWorldAges = {world_age_new, world_age_normal, world_age_old}
+    local tWorldAges = {5, 3, 2}
     world_age = tWorldAges[world_age]
     if not world_age then
         world_age = 2 + TerrainBuilder.GetRandomNumber(4, "Random World Age - Lua");
     end
-
-    river_map_attempts = 0
+end
+-- ENTRY POINT
+function GenerateMap()
+    g_iW, g_iH = Map.GetGridSize();
+    mapVarsSetup()
     createRegions()
-	print('region try find rxGates')
-	for i, reg in ipairs(regionList) do
-		if reg['gateRegion'] ~= -1 then
-			print('GATE REGION!!!!!', reg['ID'], reg['gateRegion'])
-		end
-		for j, plot in pairs(reg['plotList']) do
-			if plot['bBorder'] then
-				-- print('plot x/y', plot['x'], plot['y'], ' in region ', plot['regionId'], '. Had gate value ', plot['gateRx'], ' was it a border/edge?', plot['bBorder'], plot['bEdge'])
-			end
-		end
-	end			-- no gates found ever
-	simpleGridPrint(regionRxMap, 'regionRX_map', {}, true, true)
-	simpleGridPrint(regionMap, 'region_map', {}, true, true)
 
     createRiverMap()
     river_plots = PrintFlowMap()
