@@ -31,6 +31,11 @@ function simpleGridPrint(tbl, title, keymap)
     print_counter = print_counter + 1
 end
 
+function simpleSquareGridPrint(tbl, title, keymap)
+    simpleGridPrint(tbl, title, keymap)
+end
+
+
 function startPrinter(title)
     local index_string
     if print_counter > 29 then

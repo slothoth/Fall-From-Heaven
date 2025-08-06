@@ -146,12 +146,12 @@ function GenerateMap()
 			g_riverPlots[i] = 0;
 		end
 	end
-    -- AddRiversInlandLake()
     -- new rivers
     simpleGridPrint(riverMap, 'River Map')
     simpleGridPrint(flowMap, 'Flow Map')
 
-	makeErebusRivers()
+	--makeErebusRivers()
+	AddRiversInlandLake()
     -- Lakes would interfere with rivers, causing them to stop and not reach the ocean, if placed any sooner.
     local numLargeLakes = GameInfo.Maps[Map.GetMapSize()].Continents;
     AddLakesToPresentAreas(numLargeLakes);

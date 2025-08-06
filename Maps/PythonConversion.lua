@@ -477,8 +477,8 @@ function createRegions()
     --on a map (regionRxMap) that corresponds to rivers rather than
     --map tiles. This ensures rivers have a path from region to
     --region.
-    math.randomseed(1)
-    -- math.randomseed(os.time())
+    -- math.randomseed(1)
+    math.randomseed(os.time())
     currentRegion = -99
     g_IV_iW = g_iW
     g_IV_iH = g_iH + 1
@@ -976,7 +976,7 @@ local function placeGates()
                         end
                         numGatesPlaced = numGatesPlaced + 1
                     else
-                        print(string.format("Region %d has no gated neighbors", region.ID))
+                        -- print(string.format("Region %d has no gated neighbors", region.ID))
                     end
                 end
             end
@@ -1049,7 +1049,7 @@ local function setFlow()
             slthLog("region.gateRegion =", region.gateRegion)
             local validGateList = region:getGateListToNeighbor(region.gateRegion) -- randomly choose an outflow gate
             if #validGateList  == 0 then
-                print("For region %s validGateList == 0!!!!", region)
+                print("For region %s validGateList == 0!!!!", region.ID)
             end
             if #validGateList > 1 then
                 local partGatePlot = validGateList[math.random(1, #validGateList)]
@@ -1155,7 +1155,7 @@ local function calculateWetAndDry()         -- TODO when this function works, it
             return a.altitude > b.altitude
         end)
     local region = local_regionList[1]          -- start at highest altitude
-    local wetSpotX, wetSpotY
+    local wetSpotX, wetSpotY = 0,0
     local iter = 0
     print('region altitude was', region.altitude, type(region.altitude))
     while region.altitude > 0 and iter <= #local_regionList + 1  do
@@ -2315,9 +2315,6 @@ end
 
 local function placeRiversInPlot(x,y)
     local pPlot = Map.GetPlot(x, y)
-    -- TryStartRiver(plot, )
-    -- TerrainBuilder.SetNWOfRiver(pStartPlot, true, FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST);
-
     local xx,yy = rxFromPlot(x,y,NE)
     local ii = getRiverIndex(xx,yy)
     if ii > -1 and riverMap[ii] > RiverThreshold and flowMap[ii] == S then
@@ -2328,7 +2325,7 @@ local function placeRiversInPlot(x,y)
     ii = getRiverIndex(xx,yy)
     if ii > -1 and riverMap[ii] > RiverThreshold and flowMap[ii] == E then
         print('placing river', riverMap[ii], 'index',ii, 'using flowmap direction East')
-        TerrainBuilder.SetNEOfRiver(pPlot, true, FlowDirectionTypes.FLOWDIRECTION_EAST)
+        TerrainBuilder.SetNEOfRiver(pPlot, true, FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST)
     end
     xx,yy = rxFromPlot(x,y,SE)
     ii = getRiverIndex(xx,yy)
@@ -2337,11 +2334,11 @@ local function placeRiversInPlot(x,y)
         TerrainBuilder.SetWOfRiver(pPlot, true,FlowDirectionTypes.FLOWDIRECTION_NORTH)
     elseif ii > -1 and riverMap[ii] > RiverThreshold and flowMap[ii] == W then
         print('placing river', riverMap[ii], 'index',ii, 'using flowmap direction West')
-        TerrainBuilder.SetNEOfRiver(pPlot, true,FlowDirectionTypes.FLOWDIRECTION_WEST)
+        TerrainBuilder.SetNEOfRiver(pPlot, true,FlowDirectionTypes.FLOWDIRECTION_NORTHWEST)
     end
     -- two west, two north???
 end
-
+--[[
 function makeErebusRivers()
     -- unlike IV, rivers have IDs we need to set.
     -- precompute rivers by adjacency?
@@ -2352,5 +2349,5 @@ function makeErebusRivers()
         end
     end
 end
-
+]]
 
