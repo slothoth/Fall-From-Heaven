@@ -104,10 +104,7 @@ function GenerateMap()
     g_iW, g_iH = Map.GetGridSize();
     mapVarsSetup()
     createRegions()
-
     createRiverMap()
-    river_plots = PrintFlowMap()
-
     createPlotMap()
     createTerrainMap()
 
@@ -132,7 +129,6 @@ function GenerateMap()
     AreaBuilder.Recalculate();
     TerrainBuilder.AnalyzeChokepoints();
     TerrainBuilder.StampContinents();
-
     local iContinentBoundaryPlots = GetContinentBoundaryPlotCount(g_iW, g_iH);
     local biggest_area = Areas.FindBiggestArea(false);
     slthLog("After Adding Hills: ", biggest_area:GetPlotCount());
@@ -150,7 +146,7 @@ function GenerateMap()
 			g_riverPlots[i] = 0;
 		end
 	end
-    AddRiversInlandLake()
+    -- AddRiversInlandLake()
     -- new rivers
     simpleGridPrint(riverMap, 'River Map')
     simpleGridPrint(flowMap, 'Flow Map')

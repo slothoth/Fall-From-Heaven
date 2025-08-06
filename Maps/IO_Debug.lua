@@ -154,6 +154,10 @@ local function colorDistanceSq(r1, g1, b1, r2, g2, b2)
 end
 
 local function generateDistinctColors(count, excludeList)
+    if count > 60 then
+        print('not generating distinct colours as crappy while loop and wayyy too many colours')
+        return
+    end
     local colors = {}
     local excludeRGB = {}
     local hueOffset = math.random() -- Start at a random point in the color wheel.
@@ -299,7 +303,7 @@ function getAveragedTerrain(grid, x, y, default_val)
     end
 end
 
-local function setUpSvgColors(height, width, grid, keymap)
+local function setUpSvgColors(height, width, grid, keymap, customSymbols)
     for i = 1, height do
         width = math.max(width, #grid[i])
     end
@@ -319,13 +323,13 @@ local function setUpSvgColors(height, width, grid, keymap)
         for x = 1, #grid[y] do
             local char = grid[y][x]
             if not char then print(' x/y didnt exist while looking for it for char', x, y) end
-            if not uniqueChars[char] and not symbols[char] and not hexCodeMap[char] then
+            if not uniqueChars[char] and not customSymbols[char] and not hexCodeMap[char] then
                 charCount = charCount + 1
                 uniqueChars[char] = true
-                -- print('unique char found', char)
             end
         end
     end
+    -- print('unique char count', charCount)
     local colorPalette = generateDistinctColors(charCount, hexCodeMap) or {}
     -- If optimized colors weren't generated, create 256-color palette
     if #colorPalette == 0 then
@@ -337,6 +341,7 @@ local function setUpSvgColors(height, width, grid, keymap)
             colorPalette[i + 1] = string.format('#%02X%02X%02X', r, g, b)
         end
     end
+
     -- Assign colors to characters
     local colors, colorIndex, colour_string = {}, 1, ""
     for char in pairs(uniqueChars) do
@@ -344,6 +349,7 @@ local function setUpSvgColors(height, width, grid, keymap)
         colour_string = colour_string .. string.format('%s = %s |', char, colorPalette[colorIndex])
         colorIndex = (colorIndex % #colorPalette) + 1
     end
+
     return width, colors, hexCodeMap, charCount
 end
 
@@ -367,11 +373,11 @@ local function labelTiles(svgParts, height, grid, tilePositions, fontsize, xOffs
             perTileYoffset = yOffset
             local iPlotID = (y-1) * g_iW + (x +1)
             if iPlotID > 999 then
-                perTileXoffset = xOffset -25
+                perTileXoffset = xOffset -fontsize - (fontsize / 2)
             elseif iPlotID > 99 then
-                perTileXoffset = xOffset -15
+                perTileXoffset = xOffset -fontsize
             elseif iPlotID > 9 then
-                perTileXoffset = xOffset -10
+                perTileXoffset = xOffset -fontsize +  (fontsize / 2)
             end
             table.insert(svgParts, string.format(
         '  <text x="%.2f" y="%.2f" fill="#000000" font-size="%d">%d</text>',
@@ -400,9 +406,31 @@ local function addColorKey(svgParts, svgHeight, colors)
     end
 end
 
-local function createHexGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelledHexes)
+local function copyTable(tbl, table_type)
+    local new_tbl = {}
+    if table_type == 'list' then
+        for _, val in ipairs(tbl) do
+            table.insert(new_tbl, val)
+        end
+    elseif table_type == 'dict' then
+        for key, val in pairs(tbl) do
+            new_tbl[key] = val
+        end
+    else
+        print('ERROR: Tried to copy table without specifying the type of table')
+    end
+    return new_tbl
+end
+
+local function createHexGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelledHexes, ignoreSymbolColors)
+    local customSymbols
+    if ignoreSymbolColors then
+        customSymbols = {}
+    else
+        customSymbols = copyTable(symbols, 'dict')
+    end
     local height = #grid
-    local width, colors, hexCodeMap, charCount = setUpSvgColors(height, 0, grid, keymap)
+    local width, colors, hexCodeMap, charCount = setUpSvgColors(height, 0, grid, keymap, customSymbols)
     local hexSize = 30  -- Size of hexagon (radius)
     local hexHeight = hexSize * math.sqrt(3)
     local horizontalSpacing = 3 * hexSize / 2
@@ -417,13 +445,14 @@ local function createHexGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelledHexe
         '  <!-- Background -->',
         string.format('  <rect width="%.2f" height="%.2f" fill="#1a1a1a"/>', svgWidth, svgHeight)
     }
-    local colorAverageX, colorAverageY, colourCount, hexPositions = {}, {}, {}, {}
+    local colorAverageX, colorAverageY, colourCount, hexPositions, usedColors = {}, {}, {}, {}, {}
     for y = 1, height do            -- Add hexagons
         hexPositions[y] = {}
         for x = 1, #grid[y] do
             local char = grid[y][x]
-            if colors[char] or symbols[char] or hexCodeMap[char] then
-                local colour = hexCodeMap[char] or symbols[char] or colors[char]
+            if colors[char] or customSymbols[char] or hexCodeMap[char] then
+                local colour = hexCodeMap[char] or customSymbols[char] or colors[char]
+                if not usedColors[char] then usedColors[char] = colour end
                 -- Calculate hex center position
                 local cx = padding + x * horizontalSpacing + ((y-1) % 2) * (horizontalSpacing / 2)
                 local cy = padding + y * verticalSpacing
@@ -455,15 +484,21 @@ local function createHexGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelledHexe
         labelTiles(svgParts, height, grid, hexPositions, 20, 0, 5)
     end
     if charCount < 40 then
-        addColorKey(svgParts, svgHeight, colors)
+        addColorKey(svgParts, svgHeight, usedColors)
     end
     table.insert(svgParts, '</svg>')
     return table.concat(svgParts, '\n')
 end
 
-local function createSquareGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelled)
+local function createSquareGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelled, ignoreSymbolColors)
+    local customSymbols
+    if ignoreSymbolColors then
+        customSymbols = {}
+    else
+        customSymbols = copyTable(symbols, 'dict')
+    end
     local height = #grid
-    local width, colors, hexCodeMap, charCount = setUpSvgColors(height, 0, grid, keymap)
+    local width, colors, hexCodeMap, charCount = setUpSvgColors(height, 0, grid, keymap, customSymbols)
     local squareSize = 30  -- Size of hexagon (radius)
     local padding = squareSize * 2
     -- Calculate SVG dimensions with padding
@@ -475,13 +510,14 @@ local function createSquareGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelled)
         '  <!-- Background -->',
         string.format('  <rect width="%.2f" height="%.2f" fill="#1a1a1a"/>', svgWidth, svgHeight)
     }
-    local colorAverageX, colorAverageY, colourCount, squarePositions = {}, {}, {}, {}
+    local colorAverageX, colorAverageY, colourCount, squarePositions, usedColors = {}, {}, {}, {}, {}
     for y = 1, height do            -- Add hexagons
         squarePositions[y] = {}
         for x = 1, #grid[y] do
             local char = grid[y][x]
-            if colors[char] or symbols[char] or hexCodeMap[char] then
-                local colour = hexCodeMap[char] or symbols[char] or colors[char]
+            if colors[char] or customSymbols[char] or hexCodeMap[char] then
+                local colour = hexCodeMap[char] or customSymbols[char] or colors[char]
+                if not usedColors[char] then usedColors[char] = colour end
                 local cx = padding + x * squareSize
                 local cy = padding + y * squareSize
                 squarePositions[y][x] = {x=cx, y=cy}
@@ -510,7 +546,7 @@ local function createSquareGridSVG(grid, keymap, bDoLabeledRegions, bDoLabelled)
         labelTiles(svgParts, height, grid, squarePositions, 12, 20, 20)
     end
     if charCount < 40 then
-        addColorKey(svgParts, svgHeight, colors)
+        addColorKey(svgParts, svgHeight, usedColors)
     end
     table.insert(svgParts, '</svg>')
     return table.concat(svgParts, '\n')
@@ -535,17 +571,17 @@ local function make_2d(tbl)
     return table_of_table
 end
 
-function simpleGridPrint(tbl, title, keymap, bDoLabeledRegions, bDoLabelledHexes)            -- convert back to 1x1
+function simpleGridPrint(tbl, title, keymap, bDoLabeledRegions, bDoLabelledHexes, ignoreSymbolColors)
     local table_of_table = make_2d(tbl)
-    local hexSvg = createHexGridSVG(table_of_table, keymap, bDoLabeledRegions, bDoLabelledHexes)
+    local hexSvg = createHexGridSVG(table_of_table, keymap, bDoLabeledRegions, bDoLabelledHexes, ignoreSymbolColors)
     local adjusted_title = title .. '.svg'
     adjusted_title = startPrinter() .. '_' .. adjusted_title
     saveSVG(hexSvg, adjusted_title)
 end
 
-function simpleSquareGridPrint(tbl, title, keymap, bDoLabeledRegions, bDoLabelledHexes)
+function simpleSquareGridPrint(tbl, title, keymap, bDoLabeledRegions, bDoLabelledHexes, ignoreSymbolColors)
     local table_of_table = make_2d(tbl)
-    local Svg = createSquareGridSVG(table_of_table, keymap, bDoLabeledRegions, bDoLabelledHexes)
+    local Svg = createSquareGridSVG(table_of_table, keymap, bDoLabeledRegions, bDoLabelledHexes, ignoreSymbolColors)
     local adjusted_title = title .. '.svg'
     adjusted_title = startPrinter() .. '_' .. adjusted_title
     saveSVG(Svg, adjusted_title)

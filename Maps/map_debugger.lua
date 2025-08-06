@@ -1,4 +1,3 @@
-require("mobdebug").start()
 local missing_globals = {}
 local fine_to_miss = {['include']=true, ['Game']=true}
 setmetatable(_G, {
@@ -29,6 +28,7 @@ if not include then
 end
 
 -- globals
+-- io.stdout:setvbuf("no")
 g_PLOT_TYPE_MOUNTAIN = 0
 g_PLOT_TYPE_HILLS = 1
 g_PLOT_TYPE_LAND = 2
@@ -52,6 +52,14 @@ g_TERRAIN_TYPE_SNOW_MOUNTAIN = 14
 g_TERRAIN_TYPE_COAST = 15
 g_TERRAIN_TYPE_OCEAN = 16
 
+-- enums
+
+FlowDirectionTypes = {FLOWDIRECTION_NORTH=1, FLOWDIRECTION_EAST=2, FLOWDIRECTION_SOUTH=3,  FLOWDIRECTION_WEST=4}
+
+-- standalone functions
+function GetContinentBoundaryPlotCount(w,h)
+
+end
 -- classes
 FeatureGenerator = {}
 FeatureGenerator.__index = FeatureGenerator
@@ -67,6 +75,14 @@ end
 
 function Map.GetPlotByIndex(iPlotIndex)
     return Map.MapTable[iPlotIndex]
+end
+
+function Map.GetPlot(x, y)
+    if x < 0 or x > 84 or y < 0 or y > 52 then
+        return -1
+    else
+        return { y * 84 + x }
+    end
 end
 
 MapConfiguration = {}
@@ -95,13 +111,36 @@ end
 function TerrainBuilder.StampContinents()
     return
 end
+function TerrainBuilder.SetWOfRiver(pPlot, bBool, eDirection)
+    return
+end
+function TerrainBuilder.SetNWOfRiver(pPlot, bBool, eDirection)
+    return
+end
+function TerrainBuilder.SetNEOfRiver(pPlot, bBool, eDirection)
+    return
+end
+function TerrainBuilder.SetSOfRiver(pPlot, bBool, eDirection)
+    return
+end
+
 
 
 AreaBuilder = {}
 function AreaBuilder.Recalculate(text)
     return
 end
+function AreaBuilder.FindBiggestArea(bBool)
+    return
+end
+function AreaBuilder.GetPlotCount(bBool)
+    return -1
+end
 
+Areas = {}
+function Areas.FindBiggestArea(bBool)
+    return AreaBuilder
+end
 
 
 dofile("Erebus.lua")
