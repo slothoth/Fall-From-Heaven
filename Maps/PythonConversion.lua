@@ -1071,13 +1071,15 @@ end
 local function makeHeightMap()
     local plotList = {}         -- Place all gates on queue.
     for _, region in ipairs(regionList) do
-        if not region.gatePlot then
-            print('no gateplot in region', region.ID)
-        else
-            local rxX = region.gatePlot.x
-            local rxY = region.gatePlot.y
-            local riverPlot = {x=rxX, y=rxY, direction=0,  regionID=region.ID}
-            table.insert(plotList, riverPlot)
+        if for_continue then
+            if not region.gatePlot then
+                for_continue = false
+            else
+                local rxX = region.gatePlot.x
+                local rxY = region.gatePlot.y
+                local riverPlot = {x=rxX, y=rxY, direction=0,  regionID=region.ID}
+                table.insert(plotList, riverPlot)
+            end
         end
     end
     while #plotList > 0 do
