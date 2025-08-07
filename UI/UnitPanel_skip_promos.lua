@@ -824,6 +824,7 @@ function GetUnitActionsTable( pUnit )
 							if CustomOperationInfo.AlsoTwoAbilityPrereq then
 								local iAbilityAlsoTwoToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlsoTwoAbilityPrereq].Index;
 							end
+							print('which is null', AbilityChecker)
 							bCanStart = AbilityChecker(pUnit, iAbilityToCheck, iAbilityAltToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
 						end
 						reqBuildingType = CustomOperationInfo.BuildingPrereq
@@ -4564,8 +4565,11 @@ end
 
 local tDeserts = {[GameInfo.Terrains['TERRAIN_DESERT_HILLS'].Index]= true,
 			[GameInfo.Terrains['TERRAIN_DESERT'].Index] = true}
-local tFlames = {[GameInfo.Features['FEATURE_BURNING_FOREST'].Index]= true,
-			[GameInfo.Features['FEATURE_BURNING_JUNGLE'].Index]= true}			-- once i implement flames feature  todo
+local tFlames = {}
+if GameInfo.Features['FEATURE_BURNING_FOREST'] then
+	tFlames = {[GameInfo.Features['FEATURE_BURNING_FOREST'].Index]= true,
+				[GameInfo.Features['FEATURE_BURNING_JUNGLE'].Index]= true}			-- once i implement flames feature  todo
+end
 local tScorch = {[GameInfo.Terrains['TERRAIN_SNOW'].Index]= true,
 			[GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index] = true,
 			[GameInfo.Terrains['TERRAIN_PLAINS'].Index]= true,

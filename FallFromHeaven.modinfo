@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Mod id="301d9851-b589-45ca-8c1a-931c8d16ede0" version="1">
+<Mod id="301d9851-b589-45ca-8c1a-931c8d16ede0" version="1.1">
   <Properties>
     <Name>Fall From Heaven: VI Port</Name>
     <Description>Ports Kael's excellent Fall From Heaven mod for Civ IV to Civ VI. Total Conversion mod that redoes the entire tech tree, units, buildings, wonders, Civilizations and Leaders. 20 New Civilizations, 37 New Leaders, 302 Units, 207 Buildings. Most every mechanic has been reverted to Civ IV style, including Commerce, unit and City Maintenance. Notable exclusions are 1 Unit per tile and 3 radius Cities. [NEWLINE][NEWLINE]SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Leugi, SeelingCat and Sukritact for their great reference mods for Lua. Game-Icons.net for the vast quantity of icons used in UnitFlags. This mod would not have been possible without them. Low poly Chest pack from https://www.fab.com/sellers/AnderArts. Some assets were used from Warfare Expanded, and Deliverator's Wildlife.</Description>
@@ -11,8 +11,8 @@
     <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>
   <Dependencies>
+    <Mod id="1B28771A-C749-434B-9053-D1380C553DE9" title="LOC_EXPANSION1_MOD_TITLE"/>
     <Mod id="4873eb62-8ccc-4574-b784-dda455e74e68" title="LOC_EXPANSION2_MOD_TITLE"/>
-    <Mod id="8424840C-92EF-4426-A9B4-B4E0CB818049" title="LOC_BABYLON_MOD_TITLE" />
   </Dependencies>
   <ActionCriteria>
     <Criteria id="Expansion2">
@@ -23,6 +23,33 @@
     </Criteria>
     <Criteria id="LeaningTowerNotOn">
 	  <ModInUse inverse="1">d1c3ef16-00ed-4d72-a468-1e584fdb85ad</ModInUse>
+	</Criteria>
+    <Criteria id="AztecNotOn">
+	  <ModInUse inverse="1">02A8BDDE-67EA-4D38-9540-26E685E3156E</ModInUse>
+	</Criteria>
+    <Criteria id="BabylonNotOn">
+	  <ModInUse inverse="1">8424840C-92EF-4426-A9B4-B4E0CB818049</ModInUse>
+	</Criteria>
+    <Criteria id="EthiopiaNotOn">
+	  <ModInUse inverse="1">1B394FE9-23DC-4868-8F0A-5220CB8FB427</ModInUse>
+	</Criteria>
+    <Criteria id="KhmerNotOn">
+	  <ModInUse inverse="1">1F367231-A040-4793-BDBB-088816853683</ModInUse>
+	</Criteria>
+    <Criteria id="MayaNotOn">
+	  <ModInUse inverse="1">9DE86512-DE1A-400D-8C0A-AB46EBBF76B9</ModInUse>
+	</Criteria>
+    <Criteria id="NubiaNotOn">
+	  <ModInUse inverse="1">643EA320-8E1A-4CF1-A01C-00D88DDD131A</ModInUse>
+	</Criteria>
+    <Criteria id="PersiaNotOn">
+	  <ModInUse inverse="1">E2749E9A-8056-45CD-901B-C368C8E83DEB</ModInUse>
+	</Criteria>
+    <Criteria id="PortugalNotOn">
+	  <ModInUse inverse="1">FFDF4E79-DEE2-47BB-919B-F5739106627A</ModInUse>
+	</Criteria>
+    <Criteria id="VietnamNotOn">
+	  <ModInUse inverse="1">A3F42CD4-6C3E-4F5A-BC81-BE29E0C0B87C</ModInUse>
 	</Criteria>
   </ActionCriteria>
   <FrontEndActions>
@@ -168,6 +195,33 @@
       <File>Core/ResourceBuffs.sql</File>
       <File>Core/PostEdits.sql</File>
       <File>Core/Specialists/GeneratedGreatPeople.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="AztecFallbackFFH" criteria="AztecNotOn">
+      <File>DLC_Compat/aztec.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="BabylonFallbackFFH" criteria="BabylonNotOn">
+      <File>DLC_Compat/babylon.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="EthiopiaFallbackFFH" criteria="EthiopiaNotOn">
+      <File>DLC_Compat/ethiopia.sql</File>
+    </UpdateDatabase>
+     <UpdateDatabase id="KhmerFallbackFFH" criteria="KhmerNotOn">
+      <File>DLC_Compat/khmer.sql</File>
+    </UpdateDatabase>
+     <UpdateDatabase id="MayaFallbackFFH" criteria="MayaNotOn">
+      <File>DLC_Compat/maya.sql</File>
+    </UpdateDatabase>
+     <UpdateDatabase id="NubiaFallbackFFH" criteria="NubiaNotOn">
+      <File>DLC_Compat/nubia.sql</File>
+    </UpdateDatabase>
+     <UpdateDatabase id="PersiaFallbackFFH" criteria="PersiaNotOn">
+      <File>DLC_Compat/persia.sql</File>
+    </UpdateDatabase>
+     <UpdateDatabase id="PortugalFallbackFFH" criteria="PortugalNotOn">
+      <File>DLC_Compat/portugal.sql</File>
+    </UpdateDatabase>
+    <UpdateDatabase id="VietnamFallbackFFH" criteria="VietnamNotOn">
+      <File>DLC_Compat/vietnam.sql</File>
     </UpdateDatabase>
     <UpdateText id="Text">
       <File>Localisation/loc_abilities.sql</File>
@@ -436,6 +490,15 @@
     <File>Core/Assets_ingame.sql</File>
     <File>Core/CombatBuffs.sql</File>
     <File>Core/Magic.sql</File>
+    <File>DLC_Compat/aztec.sql</File>
+    <File>DLC_Compat/babylon.sql</File>
+    <File>DLC_Compat/ethiopia.sql</File>
+    <File>DLC_Compat/khmer.sql</File>
+    <File>DLC_Compat/maya.sql</File>
+    <File>DLC_Compat/nubia.sql</File>
+    <File>DLC_Compat/persia.sql</File>
+    <File>DLC_Compat/portugal.sql</File>
+    <File>DLC_Compat/vietnam.sql</File>
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Gameplay.lua</File>
     <File>Lua/Maintenance.lua</File>
