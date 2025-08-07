@@ -371,6 +371,10 @@ INSERT INTO Improvement_ValidResources(ImprovementType, ResourceType, MustRemove
 INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
 ('SLTH_MOD_FARM_IRRIGATION', 'MODIFIER_GAME_ADJUST_PLOT_YIELD', 'SLTH_PLOT_IS_FRESH_AND_FARM_REQS');
 
+INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
+('SLTH_MOD_FARM_IRRIGATION', 'YieldType', 'YIELD_FOOD'),
+('SLTH_MOD_FARM_IRRIGATION', 'Amount', '1');
+
 INSERT INTO GameModifiers(ModifierId) VALUES
 ('SLTH_MOD_FARM_IRRIGATION');
 

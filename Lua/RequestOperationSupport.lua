@@ -47,6 +47,15 @@ local function SetPlayerProperty(iPlayer, tParameters)
     print('set '.. sPropKey .. 'to ' .. iPropValue)
 end
 
+local function SetPlotProperty(iPlayer, tParameters)
+    local sPropKey = tParameters.sPropKey;
+    local iPropValue = tParameters.iPropValue;
+    local iPlotIndex = tParameters.iPlotIndex;
+    local pPlot = Map.GetPlotByIndex(iPlotIndex)
+    pPlot:SetProperty(sPropKey, iPropValue)
+    print('set '.. sPropKey .. 'to ' .. iPropValue)
+end
+
 local function SlthSetResource(iPlayer, tParameters)
     local iResourceType = tParameters.iResourceType;
     local iPlotIndex = tParameters.iPlotIndex;
@@ -713,7 +722,9 @@ end
 -- UnitOperation Works
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
+GameEvents.SlthSetPlotProperty.Add(SetPlotProperty);
 GameEvents.SlthOnSetResource.Add(SlthSetResource);
+
 
 
 GameEvents.SlthOnSummon.Add(OnSummon);

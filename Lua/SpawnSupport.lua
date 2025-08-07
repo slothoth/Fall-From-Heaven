@@ -135,13 +135,14 @@ function GoldenAgeGrant(pPlayer, iGoldenDuration)
     end
 end
 
+local iUserDefNotif = NotificationTypes.USER_DEFINED_2;
 function NotifyAllHumans(sMessage, sSummary, iX, iY)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = sMessage
     notificationData[ParameterTypes.SUMMARY] = sSummary
     for iPlayer, pPlayer in ipairs(Players) do
         if pPlayer:IsHuman() then
-            NotificationManager.SendNotification(iPlayer, iNotifType, notificationData, nil, iX, iY)
+            NotificationManager.SendNotification(iPlayer, iUserDefNotif, notificationData, nil, iX, iY)
         end
     end
 end
@@ -150,7 +151,7 @@ function NotifyMetHumans(iSourcePlayer, notificationData, iX, iY)
     for iPlayer, pPlayer in ipairs(Players) do
         if pPlayer:IsHuman() then
             if pPlayer:GetDiplomacy():HasMet(iSourcePlayer) then
-                NotificationManager.SendNotification(iPlayer, iNotifType, notificationData, nil, iX, iY)
+                NotificationManager.SendNotification(iPlayer, iUserDefNotif, notificationData, nil, iX, iY)
             end
         end
     end

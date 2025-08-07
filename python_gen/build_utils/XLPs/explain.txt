@@ -1,1 +1,0 @@
-These files are used in Modbuddy, but as we arent doing VC on that, want to store them somewhere at least

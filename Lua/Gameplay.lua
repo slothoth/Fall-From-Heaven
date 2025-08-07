@@ -1,10 +1,10 @@
 include('WorldSpellSupport')
 include('SpawnSupport')
 
-local FreeXPUnits = { SLTH_UNIT_ADEPT = 1, SLTH_UNIT_IMP = 1, SLTH_UNIT_SHAMAN = 1, SLTH_UNIT_ARCHMAGE = 2, SLTH_UNIT_EATER_OF_DREAMS = 2,
-                      SLTH_UNIT_CORLINDALE = 2, SLTH_UNIT_DISCIPLE_OF_ACHERON = 1, SLTH_UNIT_GAELAN = 1.5, SLTH_UNIT_GIBBON = 2,
-                      SLTH_UNIT_GOVANNON = 2, SLTH_UNIT_HEMAH = 2, SLTH_UNIT_LICH = 2, SLTH_UNIT_ILLUSIONIST = 1.5, SLTH_UNIT_MAGE = 1.5,
-                      SLTH_UNIT_WIZARD = 1.5, SLTH_UNIT_MOBIUS_WITCH = 1.5, SLTH_UNIT_MOKKA = 1.5, SLTH_UNIT_SON_OF_THE_INFERNO = 2}
+local FreeXPUnits = { SLTH_UNIT_ADEPT = 8, SLTH_UNIT_IMP = 8, SLTH_UNIT_SHAMAN = 8, SLTH_UNIT_ARCHMAGE = 16, SLTH_UNIT_EATER_OF_DREAMS = 16,
+                      SLTH_UNIT_CORLINDALE = 8, SLTH_UNIT_DISCIPLE_OF_ACHERON = 8, SLTH_UNIT_GAELAN = 12, SLTH_UNIT_GIBBON = 8,
+                      SLTH_UNIT_GOVANNON = 8, SLTH_UNIT_HEMAH = 8, SLTH_UNIT_LICH = 16, SLTH_UNIT_ILLUSIONIST = 12, SLTH_UNIT_MAGE = 12,
+                      SLTH_UNIT_WIZARD = 12, SLTH_UNIT_MOBIUS_WITCH = 12, SLTH_UNIT_MOKKA = 12, SLTH_UNIT_SON_OF_THE_INFERNO = 16}
 local iNotifType = NotificationTypes.USER_DEFINED_2;
 local iIMP_INDEX = GameInfo.Units['SLTH_UNIT_IMP'].Index
 local tArcaneUnits = {
@@ -257,6 +257,18 @@ function CountdownReducePlayer(pPlayer, countdown_propKey, plotPropKey)
         end
     end
 end
+
+function AddExperienceIfAble(pUnit, iFXP_gain)
+    local pExp = pUnit:GetExperience()
+    local iExpForNextLevel = pExp:GetExperienceForNextLevel()
+    if iExpForNextLevel > iFXP_gain then
+        pExp:ChangeExperience(iFXP_gain);
+    else
+        local iReservedXP = iFXP_gain - iExpForNextLevel
+        pUnit:SetProperty('xp_portion', iReservedXP);
+        pExp:ChangeExperience(iExpForNextLevel);
+    end
+end
 local iGameSpeedMult = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier / 100
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
@@ -287,32 +299,26 @@ function onTurnStartGameplay(playerId)
             local fXP_gain = FreeXPUnits[sUnitType] or 0
             local pUnitAbilities = unit:GetAbility()
             if pUnitAbilities and pUnitAbilities:HasAbility('SLTH_ABILITY_POTENCY') or pUnitAbilities:HasAbility('SLTH_ABILITY_HERO') then
-                fXP_gain = fXP_gain + 1
+                fXP_gain = fXP_gain + 8
             end
             if fXP_gain > 0 then
                 if fXP_gain == math.floor(fXP_gain) then
-                    -- if integer, simple add xp
-                    unit:GetExperience():ChangeExperience(fXP_gain);
-                else
-                    -- if float, use property to set state.
+                    AddExperienceIfAble(unit, fXP_gain)        -- if integer, simple add xp
+                else                                                    -- if float, use property to set state.
                     local iXP_portion, fXP_portion = math.modf(fXP_gain);
-                    SlthLog('Decimal portion of xp gain is:')
-                    SlthLog(fXP_portion);
                     local existing_xp_portion = unit:GetProperty('xp_portion');
                     if not existing_xp_portion then
                         unit:SetProperty('xp_portion', fXP_portion);
-                        SlthLog('No prior xp_portion');
                     else
                         local new_xp_portion = existing_xp_portion + fXP_portion;
                         if new_xp_portion > 1 then
-                            iXP_portion = iXP_portion + 1;
-                            new_xp_portion = new_xp_portion - 1;
+                            local iIntegerXp = math.floor(new_xp_portion)
+                            iXP_portion = iXP_portion + iIntegerXp;
+                            new_xp_portion = new_xp_portion -iIntegerXp;
                         end
                         unit:SetProperty('xp_portion', new_xp_portion);
-                        SlthLog('Old xp_portion: ' .. existing_xp_portion .. ' New xp_portion: ' .. new_xp_portion);
                     end
-                    SlthLog('Adding ' .. iXP_portion .. ' to unit.')
-                    unit:GetExperience():ChangeExperience(iXP_portion);
+                    AddExperienceIfAble(unit, iXP_portion)
                 end
             end
         end
@@ -544,14 +550,16 @@ function InitCottage(x, y, improvementIndex, playerID)
         pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
     end
     local pPlot = Map.GetPlot(x,y);
-    if improvementIndex and improvementIndex == iBarbCampImprovement then                        -- also check its a barb camp? or has it not spawned yet
+    if improvementIndex and improvementIndex == iBarbCampImprovement then
         local plotID = pPlot:GetIndex()
         local isLegalBarb = Game.GetProperty('BarbFree_' .. plotID) or 0
         if Game.GetCurrentGameTurn() == 1 then
+            print('game turn was 1, ensuring legality.')
             isLegalBarb = 1
         end
         print('barb camp made, is it legal? 1:yes, 0 no:', isLegalBarb)
         if isLegalBarb == 1 then
+            print('it was')
             local tUnits = Map.GetUnitsAt(pPlot)
             for pUnit in tUnits:Units() do
                 local iUnitIndex = pUnit:GetType()
@@ -1258,6 +1266,7 @@ local name_GameSpeed = GameInfo.GameSpeeds[hash_GameSpeed].GameSpeedType
 local iGameSpeed = tGameSpeedScalings[name_GameSpeed]
 
 -- this shit is just super unstable, it triggers twice during the formation of a city over a camp which is really not good.
+local sDontDoBarbLairRemoval = 'BarbNoLair_'
 function RemovedBarbCamp(x, y, owningPlayerID)
     local pPlot = Map.GetPlot(x, y)
     -- print('improvement removed at plot x,y', x, y)
@@ -1267,7 +1276,8 @@ function RemovedBarbCamp(x, y, owningPlayerID)
     local bIsBarbOccupied = true
     local iPlotID = pPlot:GetIndex()
     local isPartOfCleanup = Game:GetProperty('BarbFree_' .. iPlotID)
-    local dontDoLairReveal = Game:GetProperty('BarbNoLair_' .. iPlotID)
+    local dontDoLairReveal = Game:GetProperty(sDontDoBarbLairRemoval .. iPlotID)
+    local isDisperseCamp = pPlot:GetProperty('DisperseCamp')
     for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do
         -- print('units in plot :', pOnTileUnit)
         if (pOnTileUnit) and (not pUnit) then
@@ -1280,7 +1290,7 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         end
     end
     print('are we doing lair roll', dontDoLairReveal)
-    if (isPartOfCleanup or not dontDoLairReveal) then
+    if (isPartOfCleanup or dontDoLairReveal) then
         print('had an barb clan improvement spawn naturally that was cleant up')
         if pUnit and tribeIndex then
             UnitManager.Kill(pUnit)
@@ -1288,8 +1298,10 @@ function RemovedBarbCamp(x, y, owningPlayerID)
         return
     end
     -- print('plotowner/tribeIndex/isBarbOcuppied on destroying improvement...', iPlotOwner, tribeIndex, bIsBarbOccupied)
+    --[[
     if tribeIndex then          -- todo still not perfect, barb camps will be destroyed on settle if a non-barb unit is occupying it
         if iPlotOwner > -1 and bIsBarbOccupied then
+            print('spawning tribe because someone owns the plot and a barb unit is on it', iPlotOwner)
             spawnTribeSafe(iPlotID, tribeIndex)
             for _, pOnTileUnit in ipairs(Units.GetUnitsInPlot(pPlot)) do            -- but kill new spawned unit. This also kills any unit you have on there too...
                 if pOnTileUnit then
@@ -1300,7 +1312,8 @@ function RemovedBarbCamp(x, y, owningPlayerID)
                 end
             end
         end
-    elseif (owningPlayerID == 63 or iPlotOwner == -1) and not dontDoLairReveal then                        -- we do lair clearing
+    else]]if (owningPlayerID == 63 or iPlotOwner == -1) and not dontDoLairReveal and isDisperseCamp then                        -- we do lair clearing
+        pPlot:SetProperty('DisperseCamp', nil)
         local iFeatureType = pPlot:GetFeatureType()
         local bIsWater = pPlot:IsWater()
         tribeIndex = pPlot:GetProperty('barbclantype') or 1             -- or logic, unsure why
@@ -1323,6 +1336,7 @@ function RemovedBarbCamp(x, y, owningPlayerID)
             else
                 doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
             end
+            print('spawning tribe because natural wonder exists on plot, superlair')
             spawnTribeSafe(pPlot:GetIndex(), tribeIndex)
         else
             if iDiceRoll < 14 then
@@ -1340,6 +1354,7 @@ function RemovedBarbCamp(x, y, owningPlayerID)
             end
             local iDestroyLairDiceRoll = math.random(100)
             if iDestroyLairDiceRoll <= iThreshold then
+                print('spawning tribe, as failed destroy dice roll')
                 spawnTribeSafe(iPlotID, tribeIndex)
             end
         end
@@ -1354,9 +1369,9 @@ end
 
 function deleteTribeSafe(pPlot, playerID)
     local iPlotID = pPlot:GetIndex()
-    Game:SetProperty('BarbNoLair_' .. iPlotID, 1)
+    Game:SetProperty(sDontDoBarbLairRemoval .. iPlotID, 1)
     ImprovementBuilder.SetImprovementType(pPlot, -1, playerID)
-    Game:SetProperty('BarbNoLair_' .. iPlotID, nil)
+    Game:SetProperty(sDontDoBarbLairRemoval .. iPlotID, nil)
 end
 
 local tLuonnotar = {
@@ -1381,7 +1396,7 @@ local tLuonnotarCivics = {
 }
 local iPillarOfChains = GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index
 local iBonePalace = GameInfo.Buildings['BUILDING_TAJ_MAHAL'].Index
-
+local iBuildingPalace = GameInfo.Buildings['BUILDING_PALACE'].Index
 -- luonnotar checking, also marking plot prop for pillar of chains, for amenity updates
 function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     local tLuonnotarInfo = tLuonnotar[buildingID]
@@ -1425,6 +1440,13 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
     end
     if buildingID == iBonePalace then
         GoldenAgeGrant(Players[playerID],10)
+    end
+    if buildingID == iBuildingPalace then                       -- mostly aesthetic, just ensures science isnt way small before maintenance kicks in on turn 1
+        if Game.GetCurrentGameTurn() < 5 then
+            local pPlot = Map.GetPlotByIndex(plotID)
+            pPlot:SetProperty('CommIntoScience', 9)
+            pPlot:SetProperty('CommIntoGold', 1)
+        end
     end
 end
 
@@ -1784,6 +1806,7 @@ function InitializeClans()
                 local feature = pPlot:GetFeatureType()
                 if tBarbNW[feature] then
                     -- print(feature)
+                    print('spawning tribe as initiating super lair')
                     spawnTribeSafe(i, 1)
                 end
             end
@@ -1809,6 +1832,43 @@ function InitializeFreeCivics()
         end
     end
 end
+tNoBuildDistricts = {['DISTRICT_WONDER']=true, ['DISTRICT_CITY_CENTER']=true}
+tDistricts = {}
+for row in GameInfo.Districts() do
+    if not tNoBuildDistricts[row.DistrictType] then
+        tDistricts[row.Index] = row.DistrictType
+    end
+end
+
+function OnCityProductionChanged( ePlayer, cityID, productionID, objectID)
+	print('city prod changed, productionid', productionID, 'objectID', objectID)
+    -- check what city is making
+    local pCity = CityManager.GetCity(ePlayer, cityID)
+    if pCity then
+        local pDistricts = pCity:GetDistricts()
+        if pDistricts then
+            for DistrictIndex, DistrictType in pairs(tDistricts) do
+                print('checking if city has', DistrictType)
+                local hasDistrict = pDistricts:GetDistrict(DistrictIndex)
+                print('do have?', hasDistrict)
+                if hasDistrict then
+                    local isComplete = hasDistrict:IsComplete()
+                    print('is complete?', isComplete)
+                    if not isComplete then
+                        local pBuildQueue = pCity:GetBuildQueue()
+                        local buildCurrent = pBuildQueue:CurrentlyBuilding()
+                        print('currently building', buildCurrent)
+                        -- CurrentlyBuilding
+                        if DistrictType == buildCurrent then
+                            pBuildQueue:FinishProgress()
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 
 -- Hook in events
 function onStart()
@@ -1823,7 +1883,7 @@ function onStart()
     Events.UnitGreatPersonActivated.Add(onGreatPersonActivated)
     Events.UnitAbilityGained.Add(onAbilityGained)
     GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
-    Events.DistrictAddedToMap.Add(onDistrictPlace)
+    Events.CityProductionChanged.Add(OnCityProductionChanged);
 
     -- InitializeClans()
     InitializeFreeCivics()
@@ -2138,23 +2198,6 @@ local function ForTheHorde(iPlayer, tParameters)                -- TODO
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
-
-
-
-function onDistrictPlace(playerID, districtID, cityID, x, y, districtIndex, percentComplete)
-    if districtIndex ~= 0 and districtIndex ~= 6 then                   -- not wonder, not city centre
-        local pCity = CityManager.GetCity(playerID, cityID)
-        local pDistricts = pCity:GetDistricts()
-        local madeDistrict = pDistricts:GetDistrict(districtIndex)
-        if madeDistrict then
-            local buildQueue = pCity:GetBuildQueue()
-            buildQueue:FinishProgress()
-        else
-            print('couldnt find district id when trying to finish it for free', districtID, districtIndex)
-        end
-    end
-end
-
 
 -- world spells
 GameEvents.SlthOnRally.Add(Rally);

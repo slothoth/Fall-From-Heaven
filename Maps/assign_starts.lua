@@ -39,7 +39,7 @@ end
 
 function getStartPlotInRegion(region,player,civPref)
     bestValue = 0
-    bestPlot = None
+    bestPlot = nil
     for _, plot in ipairs(region.plotList) do
         local startPlot = Map.GetPlot(plot.x,plot.y)
         if not(civPref.needCoastalStart and not startPlot.IsShallowWater()) and not startPlot.IsMountain() then
@@ -139,7 +139,7 @@ function replaceUniqueImprovements()
             impInfo = gc.getImprovementInfo(impType)
             if impInfo then
                 print("Found %(i)s", impInfo.getType())
-                impPref = None
+                impPref = nil
                 --Find impType in preference list
                 for foundImpPref in impPrefList do
                     if foundImpPref.improvement == impType then
@@ -197,7 +197,7 @@ function getBestImprovementRegion(availableRegionList,occupiedRegionList,impPref
             Failed = true
         end
         if impPref.needChoke then
-            if findChokePoint(startRegion.region) == None then
+            if findChokePoint(startRegion.region) == nil then
                 Failed = true
             end
         end
@@ -301,7 +301,6 @@ function collectAllWatchtowers()
 end
 
 function replaceWatchtowers(count)
-----        PrintRegionMap(false)
     gc = CyGlobalContext()
     gameMap = CyMap()
     towersPlacedAtChoke = 0

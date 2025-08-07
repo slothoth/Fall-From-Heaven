@@ -358,3 +358,6 @@ INSERT INTO ModifierArguments(ModifierId, Name, Value, Type) VALUES
 
 INSERT INTO GreatPersonIndividualBirthModifiers(GreatPersonIndividualType, ModifierId)
 SELECT GreatPersonIndividualType, 'GREAT_PERSON_EXTRA_COST' FROM GreatPersonIndividuals;
+
+INSERT INTO ModifierStrings(ModifierId, Context, Text) VALUES
+('GREAT_PERSON_EXTRA_COST', 'Summary', 'LOC_GREATPERSON_EXTRA_COST');
