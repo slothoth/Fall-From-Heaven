@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Mod id="301d9851-b589-45ca-8c1a-931c8d16ede0" version="1">
+<Mod id="301d9851-b589-45ca-8c1a-931c8d16ede0" version="1.1">
   <Properties>
     <Name>Fall From Heaven: VI Port</Name>
     <Description>Ports Kael's excellent Fall From Heaven mod for Civ IV to Civ VI. Total Conversion mod that redoes the entire tech tree, units, buildings, wonders, Civilizations and Leaders. 20 New Civilizations, 37 New Leaders, 302 Units, 207 Buildings. Most every mechanic has been reverted to Civ IV style, including Commerce, unit and City Maintenance. Notable exclusions are 1 Unit per tile and 3 radius Cities. [NEWLINE][NEWLINE]SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Leugi, SeelingCat and Sukritact for their great reference mods for Lua. Game-Icons.net for the vast quantity of icons used in UnitFlags. This mod would not have been possible without them. Low poly Chest pack from https://www.fab.com/sellers/AnderArts. Some assets were used from Warfare Expanded, and Deliverator's Wildlife.</Description>
@@ -11,6 +11,7 @@
     <CompatibleVersions>2.0</CompatibleVersions>
   </Properties>
   <Dependencies>
+    <Mod id="1B28771A-C749-434B-9053-D1380C553DE9" title="LOC_EXPANSION1_MOD_TITLE"/>
     <Mod id="4873eb62-8ccc-4574-b784-dda455e74e68" title="LOC_EXPANSION2_MOD_TITLE"/>
   </Dependencies>
   <ActionCriteria>
