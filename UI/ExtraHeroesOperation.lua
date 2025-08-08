@@ -413,7 +413,7 @@ function OnGrantGoldenAgeClicked()
 	return;
 end
 
-function InitializeSetPolicies(playerID)                        -- this fails.
+function InitializeSetPolicies(playerID)
     local iGameTurn = Game.GetCurrentGameTurn()
     print('trying to set policies on turn', iGameTurn)
     if iGameTurn == 1 then

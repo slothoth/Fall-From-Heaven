@@ -47,13 +47,13 @@ function RefreshYields()
 
 	---- FAITH ----
 	if GameCapabilities.HasCapability("CAPABILITY_FAITH") and GameCapabilities.HasCapability("CAPABILITY_DISPLAY_TOP_PANEL_YIELDS") then
-		m_FaithYieldButton = m_FaithYieldButton or m_YieldButtonDoubleManager:GetInstance();
+		m_FaithYieldButton = m_FaithYieldButton or m_YieldButtonSingleManager:GetInstance();
 		local playerReligion		:table	= localPlayer:GetReligion();
 		local faithYield			:number = playerReligion:GetFaithYield();
-		local faithBalance			:number = playerReligion:GetFaithBalance();
-		m_FaithYieldButton.YieldBalance:SetText( Locale.ToNumber(0, "#,###.#") );
 		m_FaithYieldButton.YieldPerTurn:SetText( FormatValuePerTurn(faithYield) );
 		m_FaithYieldButton.YieldBacking:SetToolTipString( GetFaithTooltip() );
+		m_FaithYieldButton.YieldPerTurn:SetColorByName("ResFaithLabelCS");
+		m_CultureYieldButton.YieldBacking:SetColor(UI.GetColorValueFromHexLiteral(0x99fe2aec));
 		m_FaithYieldButton.YieldIconString:SetText("[ICON_FaithLarge]");
 		m_FaithYieldButton.YieldButtonStack:CalculateSize();
 	end

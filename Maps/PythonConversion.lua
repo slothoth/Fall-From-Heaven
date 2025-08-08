@@ -1066,19 +1066,21 @@ local function setFlow()
                         break
                     end
                     local gateRegion = tRegionIdMap[region.gateRegion]
-                    if gateRegion.isWater then
-                        flowMap[rxI] = L
-                        heightMap[rxI] = 0.01
-                        continuing = false
-                    end
-                    if continuing then
-                        local direction = math.random(1, 4)      -- pick random cardinal direction
-                        local xx = rxX + directionXmap[direction]
-                        local yy = rxY + directionYmap[direction]
-                        if isRxInRegion(xx, yy, region.gateRegion) then
-                            flowMap[rxI] = direction
+                    if gateRegion then
+                        if gateRegion.isWater then
+                            flowMap[rxI] = L
                             heightMap[rxI] = 0.01
                             continuing = false
+                        end
+                        if continuing then
+                            local direction = math.random(1, 4)      -- pick random cardinal direction
+                            local xx = rxX + directionXmap[direction]
+                            local yy = rxY + directionYmap[direction]
+                            if isRxInRegion(xx, yy, region.gateRegion) then
+                                flowMap[rxI] = direction
+                                heightMap[rxI] = 0.01
+                                continuing = false
+                            end
                         end
                     end
                 end

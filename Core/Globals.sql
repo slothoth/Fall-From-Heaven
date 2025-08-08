@@ -99,16 +99,28 @@ INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
 ('REQUIRES_NO_CAPITAL_CITY', 'CollectionType', 'COLLECTION_PLAYER_CAPITAL_CITY'),
 ('REQUIRES_NO_CAPITAL_CITY', 'Count', '1');
 
--- mohenjo daro everyone has fresh water housing always... its just too snowbally as rivers are now also commerce
+-- mohenjo daro everyone has fresh water housing always... its just too snowbally as rivers are now also commerce. Should change the UI as well likely..
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 ('TRAIT_LEADER_MAJOR_CIV', 'MINOR_CIV_MOHENJO_DARO_CITIES_FRESHWATER_HOUSING_BONUS');
+
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('SLTH_REQUIRES_CITY_HAS_NOT_PALACE', 'REQUIREMENT_CITY_HAS_BUILDING', '1');
+
+INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES
+('SLTH_REQUIRES_CITY_HAS_NOT_PALACE', 'BuildingType', 'BUILDING_PALACE');
+
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
+('SLTH_CITY_IS_NOT_CAPITAL_REQS', 'SLTH_REQUIRES_CITY_HAS_NOT_PALACE');
+
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('SLTH_CITY_IS_NOT_CAPITAL_REQS', 'REQUIREMENTSET_TEST_ALL');
 
 -- trade route limit for every city you have
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 ('TRAIT_LEADER_MAJOR_CIV', 'MOD_TRADE_ROUTE_PER_CITY');
 
-INSERT INTO Modifiers(ModifierId, ModifierType) VALUES
-('MOD_TRADE_ROUTE_PER_CITY', 'MODIFIER_PLAYER_CITIES_ATTACH_MODIFIER');
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
+('MOD_TRADE_ROUTE_PER_CITY', 'MODIFIER_PLAYER_CITIES_ATTACH_MODIFIER', 'SLTH_CITY_IS_NOT_CAPITAL_REQS');
 
 INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 ('MOD_TRADE_ROUTE_PER_CITY', 'ModifierId', 'MODIFIER_SLTH_POLICY_FOREIGN_TRADE_ADJUST_TRADE_ROUTE_CAPACITY');

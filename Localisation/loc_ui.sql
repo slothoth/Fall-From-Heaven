@@ -499,5 +499,8 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_RELIGION_CATHOLICISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'Fellowship of the Leaves was founded in a distant land', 'en_US'),
 ('LOC_RELIGION_HINDUISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'Octopus Overlords was founded in a distant land', 'en_US'),
 ('LOC_RELIGION_ISLAM_FOUNDED_NOTIFICATION_DESCRIPTION', 'Council of Esus was founded in a distant land', 'en_US'),
-('LOC_RELIGION_BUDDHISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'The Ashen Veil was founded in a distant land', 'en_US');
+('LOC_RELIGION_BUDDHISM_FOUNDED_NOTIFICATION_DESCRIPTION', 'The Ashen Veil was founded in a distant land', 'en_US'),
+('LOC_INCREMENT_GOLD_SLIDER', 'Increase ratio of [ICON_Faith]Commerce Converted into [ICON_Gold]Gold', 'en_US'),
+('LOC_INCREMENT_SCIENCE_SLIDER', 'Increase ratio of [ICON_Faith]Commerce converted into [ICON_Science]Science', 'en_US'),
+('LOC_COMMERCE_SLIDER', 'Commerce Sliders', 'en_US');
 

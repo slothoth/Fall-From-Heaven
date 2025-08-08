@@ -284,6 +284,7 @@ end
 local sCommerceScienceConversionKey = 'CommIntoScience'
 local sCommerceGoldConversionKey = 'CommIntoGold'
 local iCustomSlidersOffKey = 'CustomSlidersOff'
+local sManualSlidersKey = 'manualSlidersSet'
 function adjustSliders(playerId, pPlayer, pReligion, iExtraTax)
     local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
     if pCapitalCity then
@@ -298,30 +299,39 @@ function adjustSliders(playerId, pPlayer, pReligion, iExtraTax)
         local noCommerceGoldYield = goldYield - iCurrentCommerceGold
         print('For player:', playerId, 'Commerce', faithYield, 'GoldRatio', iGoldRatio, 'Gold From Commerce', iCurrentCommerceGold, 'Gold without Commerce', noCommerceGoldYield)
         local iNewGoldAmount
-        if goldYield < 0 and goldYield > -goldBalance and iGoldRatio < 10 then                  -- in the red, try adjust slider
+        print('is gold yield below 0',goldYield )
+        print('Gold Yield',goldYield, '< ', goldBalance, ' and is 10 >', iGoldRatio)
+        if goldYield < 0 and goldYield < goldBalance and iGoldRatio < 10 then                  -- in the red, try adjust slider
             iNewGoldAmount = (noCommerceGoldYield * 10) / faithYield
             print('We were in the red, changing sliders: commerce/GoldWithoutCommerce/NewGoldRatio', faithYield, noCommerceGoldYield, iNewGoldAmount)
         else
             -- positive gold. If the yield per turn is more than 10% gold ratio, adjust so
             -- instead get the minimum unit, 10% and adjust so its always 10% more than required.
-            print('we were ok gold wise, see if we wanna adjust gold ratio', iGoldRatio)
-            if iGoldRatio < 10 then                      -- if all science, dont bother
-                local iGoldPer10 = faithYield/10
-                -- given the noCommerceGoldYield, what number of iGoldPer10 need added to make it at least iGoldPer10 gold
-                -- iGoldPer10 = noCommerceGoldYield + n*iGoldPer10
-                print('10pct of our commerce is granting', iGoldPer10)
-                print('aim to get at least 10pct commerce in the black')
-                print('Without any commerce our gold yield is', noCommerceGoldYield)
-                print('how many instances of 10pct commerce grant us 10pct gold positive?')
-                print('assume', iGoldPer10, 'positive gold yield, then we subtract our gold yield from that')
-                print(iGoldPer10, '-', noCommerceGoldYield, '=', (iGoldPer10 - noCommerceGoldYield))
-                print('Thats the amount of gold we want to earn from our commerce.',  (iGoldPer10 - noCommerceGoldYield))
-                print('So how many instances of our 10pct commerce fit into that')
-                print((iGoldPer10 - noCommerceGoldYield),  '/', iGoldPer10, (iGoldPer10 - noCommerceGoldYield)/iGoldPer10)
-                iNewGoldAmount = math.ceil((iGoldPer10 - noCommerceGoldYield) / iGoldPer10)
-                print('then rounded up', iNewGoldAmount)
-            else
+            -- But first, ensure we arent manually managing sliders
+            local bIsManualSliders = pPlayer:GetProperty(sManualSlidersKey) or 0
+            if bIsManualSliders == 1 then
                 iNewGoldAmount = iGoldRatio
+                print('player had manually set sliders.')
+            else
+                print('we were ok gold wise, and no sliders set, see if we wanna adjust gold ratio', iGoldRatio)
+                if iGoldRatio < 10 then                      -- if all science, dont bother
+                    local iGoldPer10 = faithYield/10
+                    -- given the noCommerceGoldYield, what number of iGoldPer10 need added to make it at least iGoldPer10 gold
+                    -- iGoldPer10 = noCommerceGoldYield + n*iGoldPer10
+                    print('10pct of our commerce is granting', iGoldPer10)
+                    print('aim to get at least 10pct commerce in the black')
+                    print('Without any commerce our gold yield is', noCommerceGoldYield)
+                    print('how many instances of 10pct commerce grant us 10pct gold positive?')
+                    print('assume', iGoldPer10, 'positive gold yield, then we subtract our gold yield from that')
+                    print(iGoldPer10, '-', noCommerceGoldYield, '=', (iGoldPer10 - noCommerceGoldYield))
+                    print('Thats the amount of gold we want to earn from our commerce.',  (iGoldPer10 - noCommerceGoldYield))
+                    print('So how many instances of our 10pct commerce fit into that')
+                    print((iGoldPer10 - noCommerceGoldYield),  '/', iGoldPer10, (iGoldPer10 - noCommerceGoldYield)/iGoldPer10)
+                    iNewGoldAmount = math.ceil((iGoldPer10 - noCommerceGoldYield) / iGoldPer10)
+                    print('then rounded up', iNewGoldAmount)
+                else
+                    iNewGoldAmount = iGoldRatio
+                end
             end
         end
         print('Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
@@ -331,10 +341,11 @@ function adjustSliders(playerId, pPlayer, pReligion, iExtraTax)
         print('Post adjust Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
         print('science ratio', iNewScienceAmount)
         if iNewGoldAmount ~= iGoldRatio then
-            pPlayer:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
             pPlayer:SetProperty(sCommerceGoldConversionKey, iNewGoldAmount)
-            pPlot:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
             pPlot:SetProperty(sCommerceGoldConversionKey, iNewGoldAmount)
+
+            pPlayer:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
+            pPlot:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
             print('updating commerce conversion to Science/Gold', iNewScienceAmount, iNewGoldAmount)
         end
     end
