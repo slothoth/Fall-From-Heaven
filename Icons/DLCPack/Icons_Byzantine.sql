@@ -1,0 +1,3 @@
+INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES                     -- units
+('ICON_SLTH_UNIT_ROYAL_GUARD', 'ICON_ATLAS_BYZANTIUM_GAUL_UNITS' , '1'),
+('ICON_SLTH_UNIT_BEASTMAN', 'ICON_ATLAS_BYZANTIUM_GAUL_UNITS' , '2');

@@ -85,9 +85,6 @@ INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES
 INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES
 ('ICON_SLTH_BUILDING_HARBOR', 'ICON_SLTH_BUILDINGS_ATLAS_1', 0),                    --
 ('ICON_BUILDING_MAGE_GUILD', 'ICON_ATLAS_BUILDINGS', 19),                     -- madrasa
-('ICON_SLTH_BUILDING_INFIRMARY', 'ICON_ATLAS_ETHIOPIA_BUILDINGS', 2),                 -- Chancery
-('ICON_SLTH_BUILDING_DEMONS_ALTAR', 'ICON_ATLAS_ETHIOPIA_BUILDINGS', 5),                 -- old god obelisk
--- ('ICON_SLTH_BUILDING_ASYLUM', 'ICON_ATLAS_ETHIOPIA_BUILDINGS', 0),                 -- consulate but unneeded
 ('ICON_SLTH_BUILDING_CHANCEL', 'ICON_ATLAS_EXPANSION_1_DISTRICT_BUILDINGS', 5),                 -- consulate but unneeded
 ('ICON_SLTH_BUILDING_CARNIVAL', 'ICON_ATLAS_BUILDINGS', 31),                                 -- zoo
 ('ICON_SLTH_BUILDING_TAVERN', 'ICON_ATLAS_EXPANSION_2_BUILDINGS', 0),                                  -- guildhall xp2 (black death)

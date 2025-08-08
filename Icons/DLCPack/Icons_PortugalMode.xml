@@ -33,4 +33,7 @@
 		<Row Name="ICON_BUILDING_PLAGUE_HOSPITAL" Atlas="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" Index="3"/>
 		<Row Name="ICON_BUILDING_KEEP" Atlas="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" Index="4"/>
 	</IconDefinitions>
+	<IconDefinitions>
+    	<Row Name="ICON_SLTH_UNIT_ARCANE_BARGE"  Atlas="ICON_ATLAS_PORTUGAL_UNITS" Index="0"/>
+	</IconDefinitions>
 </GameInfo>

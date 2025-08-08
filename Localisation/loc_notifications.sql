@@ -145,6 +145,12 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_NOTIFICATION_LAIR_NOTHING_NAME', 'NOTHING', 'en_US'),
 ('LOC_NOTIFICATION_LAIR_GOLDEN_AGE_NAME', 'GOLDEN_AGE', 'en_US'),
 ('LOC_NOTIFICATION_LAIR_TECH', 'Tech', 'en_US'),
+
+('LOC_NOTIFICATION_LAIR_BONUS_MANA_NAME', 'Bonus Mana', 'en_US'),
+('LOC_NOTIFICATION_LAIR_BONUS_MANA_DESCRIPTION', 'The lair was set upon a raw mana node', 'en_US'),
+('LOC_NOTIFICATION_LAIR_POSSESSED_NAME', 'Possessed', 'en_US'),
+('LOC_NOTIFICATION_LAIR_POSSESSED_NAME', 'Though it seems empty, occasional moans echo through the lair. Following them your unit encounters a violent spirit that possesses him.', 'en_US'),
+
 ('LOC_ORTHUS_SPAWN_NOTIFICATION_TITLE', 'Orthus Awakens', 'en_US'),
 ('LOC_ORTHUS_SPAWN_NOTIFICATION_DESCRIPTION', 'Orthus, the Barbarian King, has entered the lands. This powerful hero is responsible for the deaths of more empires than any in creation. But the unit that defeats Orthus gains his powerful axe.', 'en_US'),
 ('LOC_WORLDSPELL_LEGENDS_NOTIFICATION_TITLE', 'Legends Cast', 'en_US'),
@@ -182,11 +188,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_WORLDSPELL_HYBOREMS_WHISPER_NOTIFICATION_TITLE', 'Hyborems Whisper Cast', 'en_US'),
 ('LOC_WORLDSPELL_HYBOREMS_WHISPER_NOTIFICATION_DESCRIPTION', 'Dreams of Hyborem have infiltrated the minds of most populous Ashen Veil city, X. Fallen to temptation, those followers opened a portal and welcomed Hell into their city, which is now under Infernal control.', 'en_US'),
 ('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_TITLE', 'Rivers of Blood Cast', 'en_US'),
-('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_DESCRIPTION', 'The Calabim have cast Rivers of Blood, reducing the population of all other players cities by 2, and increasing their own by 2.', 'en_US');
-
-
--- 'The lair was set upon a raw mana node.' RAW_MANA
-
--- POSSESSED 'Though it seems empty, occasional moans echo through the lair. Following them your unit encounters a violent spirit that possesses him.'
-
--- 'Travellers speak of a mighty Dragon, who wants to make %s1_city his lair'
+('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_DESCRIPTION', 'The Calabim have cast Rivers of Blood, reducing the population of all other players cities by 2, and increasing their own by 2.', 'en_US'),
+('LOC_ACHERON_SPAWN_NOTIFICATION_TITLE', 'Acheron Awakens', 'en_US'),
+('LOC_ACHERON_SPAWN_NOTIFICATION_DESCRIPTION', 'Travellers speak of a mighty Dragon, who wants to make {1_city} his lair.', 'en_US');

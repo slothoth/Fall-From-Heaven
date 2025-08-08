@@ -51,6 +51,42 @@
     <Criteria id="VietnamNotOn">
 	  <ModInUse inverse="1">A3F42CD4-6C3E-4F5A-BC81-BE29E0C0B87C</ModInUse>
 	</Criteria>
+    <Criteria id="AztecOn">
+	  <ModInUse>02A8BDDE-67EA-4D38-9540-26E685E3156E</ModInUse>
+	</Criteria>
+    <Criteria id="AustraliaOn">
+	  <ModInUse>E3F53C61-371C-440B-96CE-077D318B36C0</ModInUse>
+	</Criteria>
+    <Criteria id="BabylonOn">
+	  <ModInUse>8424840C-92EF-4426-A9B4-B4E0CB818049</ModInUse>
+	</Criteria>
+    <Criteria id="ByzantineOn">
+	  <ModInUse>A1100FC4-70F2-4129-AC27-2A65A685ED08</ModInUse>
+	</Criteria>
+    <Criteria id="EthiopiaOn">
+	  <ModInUse>1B394FE9-23DC-4868-8F0A-5220CB8FB427</ModInUse>
+	</Criteria>
+    <Criteria id="KhmerOn">
+	  <ModInUse>1F367231-A040-4793-BDBB-088816853683</ModInUse>
+	</Criteria>
+    <Criteria id="MayaOn">
+	  <ModInUse>9DE86512-DE1A-400D-8C0A-AB46EBBF76B9</ModInUse>
+	</Criteria>
+    <Criteria id="NubiaOn">
+	  <ModInUse>643EA320-8E1A-4CF1-A01C-00D88DDD131A</ModInUse>
+	</Criteria>
+    <Criteria id="PersiaOn">
+	  <ModInUse>E2749E9A-8056-45CD-901B-C368C8E83DEB</ModInUse>
+	</Criteria>
+    <Criteria id="PortugalOn">
+	  <ModInUse>FFDF4E79-DEE2-47BB-919B-F5739106627A</ModInUse>
+	</Criteria>
+    <Criteria id="VietnamOn">
+	  <ModInUse>A3F42CD4-6C3E-4F5A-BC81-BE29E0C0B87C</ModInUse>
+	</Criteria>
+    <Criteria id="VikingsOn">
+	  <ModInUse>2F6E858A-28EF-46B3-BEAC-B985E52E9BC1</ModInUse>
+	</Criteria>
   </ActionCriteria>
   <FrontEndActions>
     <UpdateDatabase id="config">
@@ -61,7 +97,7 @@
       <File>Frontend/leaderConfig.sql</File>
       <File>BarbClans/frontend.sql</File>
     </UpdateDatabase>
-    <UpdateText id="UpdateText">
+    <UpdateText id="UpdateTextFFHFrontend">
       <File>Localisation/loc_playeritems.sql</File>
       <File>Localisation/loc_buildings.sql</File>
       <File>Localisation/loc_civ_leader.sql</File>
@@ -71,25 +107,28 @@
       <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
       <File>Localisation/loc_projects.sql</File>
     </UpdateText>
-    <UpdateArt id="Art">
+    <UpdateArt id="FFHArtFrontend">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
     <UpdateColors id="FFH_UpdateColorsFrontend">
       <File>Core/Civilization_Colors.sql</File>
     </UpdateColors>
     <UpdateIcons id="Icons">
+      <Properties>
+        <LoadOrder>500</LoadOrder>
+      </Properties>
       <File>Icons/LeaderIcons.sql</File>
-      <File>Icons/UnitIcons.sql</File>
-      <File>Icons/FrontEndResourceIcons.sql</File>
-      <File>Icons/FrontEndBuildingIcons.sql</File>
-      <File>Icons/FrontEndImprovementIcons.sql</File>
-      <File>Icons/FrontEndProjectIcons.sql</File>
+      <File>Icons/Frontend/FrontEndBuildingIcons.sql</File>
+      <File>Icons/Frontend/FrontEndImprovementIcons.sql</File>
+      <File>Icons/Frontend/FrontEndResourceIcons.sql</File>
+      <File>Icons/Frontend/FrontEndProjectIcons.sql</File>
+      <File>Icons/Frontend/FrontEndUnitIcons.sql</File>
       <File>Icons/CommandIcons.sql</File>
-      <File>Icons/ModeIcons.xml</File>
+      <File>Icons/DLCPack/Icons_DLC_FrontEnd.sql</File>
     </UpdateIcons>
    </FrontEndActions>
   <InGameActions>
-    <UpdateArt id="Art">
+    <UpdateArt id="FFHArtGameplay">
       <File>FallFromHeaven.dep</File>
     </UpdateArt>
     <UpdateColors id="FFH_UpdateColorsBackend">
@@ -223,25 +262,28 @@
     <UpdateDatabase id="VietnamFallbackFFH" criteria="VietnamNotOn">
       <File>DLC_Compat/vietnam.sql</File>
     </UpdateDatabase>
-    <UpdateText id="Text">
+    <UpdateText id="FFHText">
+       <Properties>
+        <LoadOrder>500</LoadOrder>
+      </Properties>
       <File>Localisation/loc_abilities.sql</File>
+      <File>Localisation/loc_barbs.sql</File>
+      <File>Localisation/loc_beliefs.sql</File>
       <File>Localisation/loc_buildings.sql</File>
       <File>Localisation/loc_cities_great_people_names.sql</File>
       <File>Localisation/loc_civ_leader.sql</File>
+      <File>Localisation/loc_commands.sql</File>
       <File>Localisation/loc_equipment.sql</File>
+      <File>Localisation/loc_notifications.sql</File>
       <File>Localisation/loc_pedia.sql</File>
       <File>Localisation/loc_policies.sql</File>
+      <File>Localisation/loc_projects.sql</File>
       <File>Localisation/loc_promotions.sql</File>
       <File>Localisation/loc_techs_civics.sql</File>
       <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
       <File>Localisation/loc_traits.sql</File>
-      <File>Localisation/loc_units.sql</File>
-      <File>Localisation/loc_beliefs.sql</File>
-      <File>Localisation/loc_barbs.sql</File>
       <File>Localisation/loc_ui.sql</File>
-      <File>Localisation/loc_notifications.sql</File>
-      <File>Localisation/loc_projects.sql</File>
-      <File>Localisation/loc_commands.sql</File>
+      <File>Localisation/loc_units.sql</File>
     </UpdateText>
     <AddGameplayScripts id="luaGameplayFFH">
       <File>Lua/Maintenance.lua</File>
@@ -262,6 +304,22 @@
 	  <File>UI/ExtraHeroesOperation.xml</File>
       <File>UI/WorldSpell.xml</File>
     </AddUserInterfaces>
+    <AddUserInterfaces id="FFHTrackerSliderAttach">
+      <Properties>
+          <Context>InGame</Context>
+          <LoadOrder>900</LoadOrder>
+      </Properties>
+      <Items>
+          <File>UI/Panels/Slider_Attach_Tracker.xml</File>
+      </Items>
+    </AddUserInterfaces>
+    <ImportFiles id="FFHTrackerSliderImport">
+        <Properties>
+            <LoadOrder>900</LoadOrder>
+        </Properties>
+        <File>UI/Panels/Slider_Attach_Tracker.lua</File>
+        <File>UI/Panels/SliderSupport.lua</File>
+    </ImportFiles>
     <ReplaceUIScript id="ResearchChooserHideFFH">
       <Properties>
           <LoadOrder>1100</LoadOrder>
@@ -322,7 +380,7 @@
       <Properties>
         <LoadOrder>1001</LoadOrder>
         <LuaContext>WorldRankings</LuaContext>
-        <LuaReplace>UI/world_rankings.lua</LuaReplace>
+        <LuaReplace>UI/WorldRankings.lua</LuaReplace>
       </Properties>
     </ReplaceUIScript>
     <ReplaceUIScript id="ReplaceUI_CivicsTree_BaseFFH">
@@ -369,16 +427,69 @@
       <File>UI/WorldRankings.xml</File>
     </ImportFiles>
   <UpdateIcons id="Icons">
+    <File>Icons/BuildingIcons.sql</File>
+    <File>Icons/CommandIcons.sql</File>
+    <File>Icons/ImprovementIcons.sql</File>
     <File>Icons/LeaderIcons.sql</File>
-    <File>Icons/UnitIcons.sql</File>
+    <File>Icons/MiscIcons.sql</File>
+    <File>Icons/ProjectIcons.sql</File>
     <File>Icons/ResourceIcons.sql</File>
     <File>Icons/TechIcons.sql</File>
-    <File>Icons/MiscIcons.sql</File>
-    <File>Icons/BuildingIcons.sql</File>
-    <File>Icons/ImprovementIcons.sql</File>
-    <File>Icons/ProjectIcons.sql</File>
-    <File>Icons/CommandIcons.sql</File>
-    <File>Icons/ModeIcons.xml</File>
+    <File>Icons/UnitIcons.sql</File>
+  </UpdateIcons>
+  <UpdateIcons id="AustraliaIconsFFH" criteria="AustraliaOn">
+    <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_Australia.sql</File>
+  </UpdateIcons>
+  <UpdateIcons id="BabylonIconsFFH">
+    <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_Babylon.sql</File>
+  </UpdateIcons>
+  <UpdateIcons id="ByzantineIconsFFH">
+    <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_Byzantine.sql</File>
+  </UpdateIcons>
+  <UpdateIcons id="EthiopiaIconsFFH" criteria="EthiopiaOn">
+    <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_Ethiopian.sql</File>
+  </UpdateIcons>
+  <UpdateIcons id="KhmerIconsFFH" criteria="KhmerOn">
+    <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_Khmer.sql</File>
+  </UpdateIcons>
+  <UpdateIcons id="MayaIconsFFH" criteria="MayaOn">
+    <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_Maya.sql</File>
+  </UpdateIcons>
+    <UpdateIcons id="PersiaIconsFFH" criteria="PersiaOn">
+      <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_Persia.sql</File>
+  </UpdateIcons>
+  <UpdateIcons id="PortugalIconsFFH" criteria="PortugalOn">
+    <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_PortugalMode.xml</File>
+  </UpdateIcons>
+   <UpdateIcons id="VikingsIconsFFH" criteria="VikingsOn">
+     <Properties>
+        <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Icons/DLCPack/Icons_Vikings.sql</File>
   </UpdateIcons>
   <ImportFiles id="ErebusMap">
 	<File>Maps/Erebus.lua</File>
@@ -394,6 +505,128 @@
   </ImportFiles>
   </InGameActions>
   <Files>
+    <File>ArtDefs/Buildings.artdef</File>
+    <File>ArtDefs/Civilizations.artdef</File>
+    <File>Artdefs/Clutter.artdef</File>
+    <File>Artdefs/Cultures.artdef</File>
+    <File>Artdefs/FallbackLeaders.artdef</File>
+    <File>Artdefs/Features.artdef</File>
+    <File>Artdefs/Improvements.artdef</File>
+    <File>Artdefs/Landmarks.artdef</File>
+    <File>Artdefs/Resources.artdef</File>
+    <File>Artdefs/TerrainStyle.artdef</File>
+    <File>Artdefs/Unit_Bins.artdef</File>
+    <File>Artdefs/Units.artdef</File>
+    <File>Artdefs/WonderMovie.artdef</File>
+    <File>BarbClans/BarbarianClans.sql</File>
+    <File>BarbClans/frontend.sql</File>
+    <File>Core/Absorb_deletes/Leaning.sql</File>
+    <File>Core/Absorb_deletes/Porcelain.sql</File>
+    <File>Core/AI/ai.sql</File>
+    <File>Core/AI/ai_trait.sql</File>
+    <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
+    <File>Core/Civilizations/BeastRaces/Clan.sql</File>
+    <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
+    <File>Core/Civilizations/Dwarves/DwarfCivs.sql</File>
+    <File>Core/Civilizations/Dwarves/Khazad.lua</File>
+    <File>Core/Civilizations/Dwarves/Khazad.sql</File>
+    <File>Core/Civilizations/Dwarves/Luchuirp.sql</File>
+    <File>Core/Civilizations/Elves/ElfSupport.sql</File>
+    <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
+    <File>Core/Civilizations/Elves/Svartalfar.sql</File>
+    <File>Core/Civilizations/Winterborn/Doviello.sql</File>
+    <File>Core/Civilizations/Winterborn/Illians.sql</File>
+    <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
+    <File>Core/Civilizations/Amurites.sql</File>
+    <File>Core/Civilizations/Balseraphs.sql</File>
+    <File>Core/Civilizations/Bannor.sql</File>
+    <File>Core/Civilizations/Calabim.sql</File>
+    <File>Core/Civilizations/Elohim.sql</File>
+    <File>Core/Civilizations/Grigori.sql</File>
+    <File>Core/Civilizations/Hippus.sql</File>
+    <File>Core/Civilizations/Infernal.sql</File>
+    <File>Core/Civilizations/Kuriotates.sql</File>
+    <File>Core/Civilizations/Lanun.sql</File>
+    <File>Core/Civilizations/Malakim.sql</File>
+    <File>Core/Civilizations/Mercurians.sql</File>
+    <File>Core/Civilizations/shared_grant_modifiers.sql</File>
+    <File>Core/Civilizations/Sheaim.sql</File>
+    <File>Core/Civilizations/Sidar.sql</File>
+    <File>Core/Experimental/Commerce.sql</File>
+    <File>Core/Experimental/GPP_FromSpecialists.sql</File>
+    <File>Core/Lua_support/Tech_dummies.sql</File>
+    <File>Core/Specialists/GeneratedGreatPeople.sql</File>
+    <File>Core/Specialists/GreatPersons.sql</File>
+    <File>Core/Specialists/Specialists.sql</File>
+    <File>Core/Abilities.sql</File>
+    <File>Core/AbsorbDeletes.sql</File>
+    <File>Core/Affinity.sql</File>
+    <File>Core/AiInfos.sql</File>
+    <File>Core/Assets_ingame.sql</File>
+    <File>Core/BespokeUpgrades.sql</File>
+    <File>Core/Buildings.sql</File>
+    <File>Core/Civilization_Colors.sql</File>
+    <File>Core/CivPolishing.sql</File>
+    <File>Core/CombatBuffs.sql</File>
+    <File>Core/ConditionalBuildings.sql</File>
+    <File>Core/Delete_Update.sql</File>
+    <File>Core/ElementalDamage.sql</File>
+    <File>Core/Equipment.sql</File>
+    <File>Core/Globals.sql</File>
+    <File>Core/Governments.sql</File>
+    <File>Core/HeroBanning.sql</File>
+    <File>Core/Improvements.sql</File>
+    <File>Core/LeaderTraits.sql</File>
+    <File>Core/Magic.sql</File>
+    <File>Core/Modifier_Support.sql</File>
+    <File>Core/National_Units.sql</File>
+    <File>Core/NaturalWonders.sql</File>
+    <File>Core/PostEdits.sql</File>
+    <File>Core/Promotion.sql</File>
+    <File>Core/Racials.sql</File>
+    <File>Core/Religions.sql</File>
+    <File>Core/ResourceBuffs.sql</File>
+    <File>Core/Resources.sql</File>
+    <File>Core/Technologies.sql</File>
+    <File>Core/UnitCommands.sql</File>
+    <File>Core/Units.sql</File>
+    <File>Core/Victories.sql</File>
+    <File>Core/WorldSpellSupport.sql</File>
+    <File>DLC_Compat/aztec.sql</File>
+    <File>DLC_Compat/babylon.sql</File>
+    <File>DLC_Compat/ethiopia.sql</File>
+    <File>DLC_Compat/khmer.sql</File>
+    <File>DLC_Compat/maya.sql</File>
+    <File>DLC_Compat/nubia.sql</File>
+    <File>DLC_Compat/persia.sql</File>
+    <File>DLC_Compat/portugal.sql</File>
+    <File>DLC_Compat/vietnam.sql</File>
+    <File>Frontend/frontendConfig.sql</File>
+    <File>Frontend/leaderConfig.sql</File>
+    <File>Icons/DLCPack/Icons_Australia.sql</File>
+    <File>Icons/DLCPack/Icons_Babylon.sql</File>
+    <File>Icons/DLCPack/Icons_DLC_FrontEnd.sql</File>
+    <File>Icons/DLCPack/Icons_Byzantine.sql</File>
+    <File>Icons/DLCPack/Icons_Ethiopian.sql</File>
+    <File>Icons/DLCPack/Icons_Khmer.sql</File>
+    <File>Icons/DLCPack/Icons_Maya.sql</File>
+    <File>Icons/DLCPack/Icons_Persia.sql</File>
+    <File>Icons/DLCPack/Icons_PortugalMode.xml</File>
+    <File>Icons/DLCPack/Icons_Vikings.sql</File>
+    <File>Icons/Frontend/FrontEndBuildingIcons.sql</File>
+    <File>Icons/Frontend/FrontEndImprovementIcons.sql</File>
+    <File>Icons/Frontend/FrontEndProjectIcons.sql</File>
+    <File>Icons/Frontend/FrontEndResourceIcons.sql</File>
+    <File>Icons/Frontend/FrontEndUnitIcons.sql</File>
+    <File>Icons/BuildingIcons.sql</File>
+    <File>Icons/CommandIcons.sql</File>
+    <File>Icons/ImprovementIcons.sql</File>
+    <File>Icons/LeaderIcons.sql</File>
+    <File>Icons/MiscIcons.sql</File>
+    <File>Icons/ProjectIcons.sql</File>
+    <File>Icons/ResourceIcons.sql</File>
+    <File>Icons/TechIcons.sql</File>
+    <File>Icons/UnitIcons.sql</File>
     <File>Localisation/loc_abilities.sql</File>
     <File>Localisation/loc_barbs.sql</File>
     <File>Localisation/loc_beliefs.sql</File>
@@ -414,166 +647,55 @@
     <File>Localisation/loc_traits.sql</File>
     <File>Localisation/loc_ui.sql</File>
     <File>Localisation/loc_units.sql</File>
-    <File>Core/Absorb_deletes/Leaning.sql</File>
-    <File>Core/Absorb_deletes/Porcelain.sql</File>
-    <File>Core/AI/ai.sql</File>
-    <File>Core/AI/ai_trait.sql</File>
-    <File>Core/AbsorbDeletes.sql</File>
-    <File>Core/AiInfos.sql</File>
-    <File>Core/Civilization_Colors.sql</File>
-    <File>Core/Delete_Update.sql</File>
-    <File>Core/Buildings.sql</File>
-    <File>Core/Religions.sql</File>
-    <File>Core/Governments.sql</File>
-    <File>Core/Abilities.sql</File>
-    <File>Core/HeroBanning.sql</File>
-    <File>Core/Promotion.sql</File>
-    <File>Core/Resources.sql</File>
-    <File>Core/ResourceBuffs.sql</File>
-    <File>Core/PostEdits.sql</File>
-    <File>Core/Improvements.sql</File>
-    <File>Core/Technologies.sql</File>
-    <File>Core/Units.sql</File>
-    <File>Core/Racials.sql</File>
-    <File>Core/Specialists/Specialists.sql</File>
-    <File>Core/Specialists/GreatPersons.sql</File>
-    <File>Core/Specialists/GeneratedGreatPeople.sql</File>
-    <File>Core/Modifier_Support.sql</File>
-    <File>Core/CivPolishing.sql</File>
-    <File>Core/National_Units.sql</File>
-    <File>Core/Civilizations/Amurites.sql</File>
-    <File>Core/Civilizations/Balseraphs.sql</File>
-    <File>Core/Civilizations/Bannor.sql</File>
-    <File>Core/Civilizations/Calabim.sql</File>
-    <File>Core/Civilizations/Elohim.sql</File>
-    <File>Core/Civilizations/Grigori.sql</File>
-    <File>Core/Civilizations/Hippus.sql</File>
-    <File>Core/Civilizations/Infernal.sql</File>
-    <File>Core/Civilizations/Kuriotates.sql</File>
-    <File>Core/Civilizations/Lanun.sql</File>
-    <File>Core/Civilizations/Malakim.sql</File>
-    <File>Core/Civilizations/Mercurians.sql</File>
-    <File>Core/Civilizations/Sheaim.sql</File>
-    <File>Core/Civilizations/Sidar.sql</File>
-    <File>Core/Civilizations/Elves/ElfSupport.sql</File>
-    <File>Core/Civilizations/Elves/Ljosalfar.sql</File>
-    <File>Core/Civilizations/Elves/Svartalfar.sql</File>
-    <File>Core/Civilizations/shared_grant_modifiers.sql</File>
-    <File>Core/Civilizations/Dwarves/Khazad.sql</File>
-    <File>Core/Civilizations/Dwarves/Khazad.lua</File>
-    <File>Core/Civilizations/Dwarves/Luchuirp.sql</File>
-    <File>Core/Civilizations/Dwarves/DwarfCivs.sql</File>
-    <File>Core/Civilizations/Winterborn/Doviello.sql</File>
-    <File>Core/Civilizations/Winterborn/Illians.sql</File>
-    <File>Core/Civilizations/Winterborn/Winterborn.sql</File>
-    <File>Core/Civilizations/BeastRaces/Clan.sql</File>
-    <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
-    <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
-    <File>BarbClans/BarbarianClans.sql</File>
-    <File>BarbClans/frontend.sql</File>
-    <File>Core/Equipment.sql</File>
-    <File>Core/Globals.sql</File>
-    <File>Core/Victories.sql</File>
-    <File>Core/ConditionalBuildings.sql</File>
-    <File>Core/NaturalWonders.sql</File>
-    <File>Core/ElementalDamage.sql</File>
-    <File>Core/Affinity.sql</File>
-    <File>Core/UnitCommands.sql</File>
-    <File>Core/LeaderTraits.sql</File>
-    <File>Core/Experimental/Commerce.sql</File>
-    <File>Core/Experimental/GPP_FromSpecialists.sql</File>
-    <File>Core/BespokeUpgrades.sql</File>
-    <File>Core/WorldSpellSupport.sql</File>
-    <File>Core/Lua_support/Tech_dummies.sql</File>
-    <File>Frontend/frontendConfig.sql</File>
-    <File>Frontend/leaderConfig.sql</File>
-    <File>Core/Assets_ingame.sql</File>
-    <File>Core/CombatBuffs.sql</File>
-    <File>Core/Magic.sql</File>
-    <File>DLC_Compat/aztec.sql</File>
-    <File>DLC_Compat/babylon.sql</File>
-    <File>DLC_Compat/ethiopia.sql</File>
-    <File>DLC_Compat/khmer.sql</File>
-    <File>DLC_Compat/maya.sql</File>
-    <File>DLC_Compat/nubia.sql</File>
-    <File>DLC_Compat/persia.sql</File>
-    <File>DLC_Compat/portugal.sql</File>
-    <File>DLC_Compat/vietnam.sql</File>
+    <File>Lua/Alignment.lua</File>
+    <File>Lua/Armageddon.lua</File>
     <File>Lua/ExtraHeroes.lua</File>
+    <File>Lua/Combat.lua</File>
     <File>Lua/Gameplay.lua</File>
     <File>Lua/Maintenance.lua</File>
-    <File>Lua/Specialists.lua</File>
     <File>Lua/Promotions.lua</File>
-    <File>Lua/Alignment.lua</File>
-    <File>Lua/Combat.lua</File>
-    <File>Lua/WorldSpellSupport.lua</File>
     <File>Lua/RequestOperationSupport.lua</File>
+    <File>Lua/SpawnSupport.lua</File>
+    <File>Lua/Specialists.lua</File>
+    <File>Lua/WorldSpellSupport.lua</File>
+    <File>Maps/Erebus.lua</File>
+	<File>Maps/IO_Fake.lua</File>
+	<File>Maps/MapUtilities.lua</File>
+    <File>Maps/PythonConversion.lua</File>
+    <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
+    <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
+    <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
+    <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
+    <File>UI/Panels/Slider_Attach_Tracker.xml</File>
+    <File>UI/Panels/Slider_Attach_Tracker.lua</File>
+    <File>UI/Panels/SliderSupport.lua</File>
+    <File>UI/Replacements/ProductionQueue.lua</File>
+    <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
+    <File>UI/CivicsTree.xml</File>
+    <File>UI/CivicsTree.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
     <File>UI/ExtraHeroesOperation.xml</File>
-    <File>Lua/SpawnSupport.lua</File>
-    <!--File>MapUtilities.lua</File-->
-    <File>ArtDefs/Buildings.artdef</File>
-    <File>ArtDefs/Civilizations.artdef</File>
-    <File>Artdefs/Clutter.artdef</File>
-    <File>Artdefs/Cultures.artdef</File>
-    <File>Artdefs/FallbackLeaders.artdef</File>
-    <File>Artdefs/Landmarks.artdef</File>
-    <File>Artdefs/Resources.artdef</File>
-    <File>Artdefs/Units.artdef</File>
-    <File>Artdefs/Unit_Bins.artdef</File>
-    <File>Artdefs/TerrainStyle.artdef</File>
-    <File>Artdefs/WonderMovie.artdef</File>
-    <File>Artdefs/Features.artdef</File>
-    <File>Artdefs/Improvements.artdef</File>
-    <File>XLP/LeaderFallbacks.xlp</File>
-    <File>FallFromHeaven.dep</File>
-    <File>Icons/LeaderIcons.sql</File>
-    <File>Icons/UnitIcons.sql</File>
-    <File>Icons/ResourceIcons.sql</File>
-    <File>Icons/TechIcons.sql</File>
-    <File>Icons/MiscIcons.sql</File>
-    <File>Icons/BuildingIcons.sql</File>
-    <File>Icons/ImprovementIcons.sql</File>
-    <File>Icons/ProjectIcons.sql</File>
-    <File>Icons/CommandIcons.sql</File>
-    <File>Icons/FrontEndBuildingIcons.sql</File>
-    <File>Icons/FrontEndResourceIcons.sql</File>
-    <File>Icons/FrontEndImprovementIcons.sql</File>
-    <File>Icons/FrontEndProjectIcons.sql</File>
-    <File>Icons/ModeIcons.xml</File>
-    <File>Platforms/MacOS/BLPs/LeaderFallbacks.blp</File>
-    <File>Platforms/MacOS/BLPs/UI/Icons.blp</File>
-    <File>Platforms/Windows/BLPs/LeaderFallbacks.blp</File>
-    <File>Platforms/Windows/BLPs/UI/Icons.blp</File>
-    <File>UI/ToolTipHelper_PlayerYields.lua</File>
     <File>UI/FFH_TopPanel.lua</File>
     <File>UI/FFH_TopPanel_XP2.lua</File>
-    <File>UI/ReportScreen.lua</File>
+    <File>UI/GovernmentScreen.lua</File>
+    <File>UI/GovernmentScreen.xml</File>
     <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
+    <File>UI/ReportScreen.lua</File>
+    <File>UI/ResearchChooser_overrides.lua</File>
+    <File>UI/TabSupport.lua</File>
     <File>UI/TechTree_support.lua</File>
     <File>UI/TechTree.xml</File>
     <File>UI/TechTree_overrides.lua</File>
     <File>UI/TechTreeNode.xml</File>
-    <File>UI/ResearchChooser_overrides.lua</File>
+    <File>UI/ToolTipHelper_PlayerYields.lua</File>
     <File>UI/UnitPromotionPopup.lua</File>
     <File>UI/UnitPromotionPopup.xml</File>
     <File>UI/UnitPanel_skip_promos.lua</File>
-    <File>UI/Null.lua</File>
-    <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
     <File>UI/TreatWithTribePopup.lua</File>
-    <File>UI/world_rankings.lua</File>
+    <File>UI/WorldRankings.lua</File>
     <File>UI/WorldRankings.xml</File>
     <File>UI/WorldSpell.xml</File>
     <File>UI/WorldSpell.lua</File>
-    <File>UI/GovernmentScreen.lua</File>
-    <File>UI/GovernmentScreen.xml</File>
-    <File>UI/TabSupport.lua</File>
-    <File>UI/CivicsTree.xml</File>
-    <File>UI/CivicsTree.lua</File>
-    <File>UI/Replacements/ProductionQueue.lua</File>
-    <File>Maps/Erebus.lua</File>
-	<File>Maps/MapUtilities.lua</File>
-    <File>Maps/PythonConversion.lua</File>
-	<File>Maps/IO_Fake.lua</File>
+    <File>FallFromHeaven.dep</File>
   </Files>
 </Mod>

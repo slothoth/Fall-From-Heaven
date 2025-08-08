@@ -824,7 +824,6 @@ function GetUnitActionsTable( pUnit )
 							if CustomOperationInfo.AlsoTwoAbilityPrereq then
 								local iAbilityAlsoTwoToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlsoTwoAbilityPrereq].Index;
 							end
-							print('which is null', AbilityChecker)
 							bCanStart = AbilityChecker(pUnit, iAbilityToCheck, iAbilityAltToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
 						end
 						reqBuildingType = CustomOperationInfo.BuildingPrereq
