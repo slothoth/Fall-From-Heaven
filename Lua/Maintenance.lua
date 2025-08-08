@@ -87,7 +87,7 @@ function MasterTax(playerId)
     pPlayer:GrantYield(2, -taxes);
     -- we also kill all faith accumulation, because the AI maybe using it, pesky
     local faithBalance	 = playerReligion:GetFaithBalance();
-    pPlayer:GrantYield(5, -faithBalance);               -- TODO idx yield value, needs testing.
+    pPlayer:GrantYield(5, -faithBalance);
 end
 
 function InitCityTax(playerID, cityID, x, y)
@@ -300,9 +300,9 @@ function adjustSliders(playerId, pPlayer, pReligion, iExtraTax)
         print('For player:', playerId, 'Commerce', faithYield, 'GoldRatio', iGoldRatio, 'Gold From Commerce', iCurrentCommerceGold, 'Gold without Commerce', noCommerceGoldYield)
         local iNewGoldAmount
         print('is gold yield below 0',goldYield )
-        print('Gold Yield',goldYield, '< ', goldBalance, ' and is 10 >', iGoldRatio)
-        if goldYield < 0 and goldYield < goldBalance and iGoldRatio < 10 then                  -- in the red, try adjust slider
-            iNewGoldAmount = (noCommerceGoldYield * 10) / faithYield
+        print('Gold loss',-goldYield, '> ', goldBalance, ' and is 10 >', iGoldRatio)
+        if goldYield < 0 and -goldYield > goldBalance and iGoldRatio < 10 then                  -- in the red, try adjust slider
+            iNewGoldAmount = math.ceil((-noCommerceGoldYield * 10) / faithYield)
             print('We were in the red, changing sliders: commerce/GoldWithoutCommerce/NewGoldRatio', faithYield, noCommerceGoldYield, iNewGoldAmount)
         else
             -- positive gold. If the yield per turn is more than 10% gold ratio, adjust so

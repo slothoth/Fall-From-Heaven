@@ -768,7 +768,7 @@ function Region:defineValidGateList()
     local neighbors
     for plotID, plot in pairs(self.plotList) do             -- get plots of region
         if plot['bBorder'] then
-            neighbors = regionNeighbours[plotID]
+            neighbors = regionNeighbours[plotID] or {}
             for idx, nPlotID in ipairs(neighbors) do
                 local bIsInSameRegion = self.plotList[nPlotID]        -- if plot region is not same
                 if not bIsInSameRegion then

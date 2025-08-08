@@ -70,15 +70,19 @@ end
 
 function UpdateCommerceFromProperty(playerID, iChange)
 	print('was iChange a number', type(iChange) == 'number')
+	local iScience
+	local iGold
 	if type(iChange) == 'number' then
-		iCommerceScience = tostring(10 * (iCommerceScience + (iChange*-1)))
-		iCommerceGold = tostring(10 * (iCommerceGold + iChange))
-		Controls.CommerceSciencePercent:SetText(iCommerceScience .. '%');
-		Controls.CommerceGoldPercent:SetText(iCommerceGold .. '%');
+		iScience = tostring(10 * (iCommerceScience + (iChange*-1)))
+		iGold = tostring(10 * (iCommerceGold + iChange))
+		Controls.CommerceSciencePercent:SetText(iScience .. '%');
+		Controls.CommerceGoldPercent:SetText(iGold .. '%');
 	else
 		if playerID == Game.GetLocalPlayer() then
-			local iScience = tostring(10 * iCommerceScience)
-			local iGold = tostring(10 * iCommerceGold)
+			iCommerceGold = pPlayer:GetProperty('CommIntoGold') or 10
+			iCommerceScience = pPlayer:GetProperty('CommIntoScience') or 0
+			iScience = tostring(10 * iCommerceScience)
+			iGold = tostring(10 * iCommerceGold)
 			Controls.CommerceSciencePercent:SetText(iScience .. '%');
 			Controls.CommerceGoldPercent:SetText(iGold .. '%');
 		end
