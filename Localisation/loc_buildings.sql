@@ -304,4 +304,14 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_BUILDING_BANNED_ALCHEMY_NAME', 'No Alchemy Labs', 'en_US'),
 ('LOC_SLTH_BUILDING_BANNED_LIBRARY_NAME', 'No Libraries', 'en_US'),
 ('LOC_SLTH_BUILDING_BANNED_MAGE_GUILD_NAME', 'No Mage Guilds', 'en_US'),
-('LOC_SLTH_BUILDING_BANNED_ELDER_NAME', 'No Elder Council', 'en_US');
+('LOC_SLTH_BUILDING_BANNED_ELDER_NAME', 'No Elder Council', 'en_US'),
+('LOC_SLTH_BUILDING_BANNED_TRAINING_NAME', 'No Training Yard', 'en_US'),
+('LOC_SLTH_BUILDING_BANNED_SIEGE_NAME', 'No Siege Workshop', 'en_US'),
+
+('LOC_SLTH_BUILDING_BANNED_PAGAN_NAME', 'No Pagan Temple', 'en_US'),
+('LOC_SLTH_BUILDING_BANNED_KILMORPH_NAME', 'No Temple of Kilmorph', 'en_US'),
+('LOC_SLTH_BUILDING_BANNED_LEAVES_NAME', 'No Temple of Leaves', 'en_US'),
+('LOC_SLTH_BUILDING_BANNED_EMPYREAN_NAME', 'No Temple of Empyrean', 'en_US'),
+('LOC_SLTH_BUILDING_BANNED_ORDER_NAME', 'No Temple of Order', 'en_US'),
+('LOC_SLTH_BUILDING_BANNED_OVERLORDS_NAME', 'No Temple of Overlords', 'en_US'),
+('LOC_SLTH_BUILDING_BANNED_VEIL_NAME', 'No Temple of Veil', 'en_US');
