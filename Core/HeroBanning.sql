@@ -379,3 +379,36 @@ INSERT INTO Types(Type, Kind) VALUES
 ('BAN_ABILITY_SLTH_UNIT_YVAIN', 'KIND_ABILITY'),
 ('BAN_ABILITY_SLTH_UNIT_BLACK_WIND', 'KIND_ABILITY'),
 ('SLTH_ABILITY_HERO', 'KIND_ABILITY');
+
+-- wilboman test. At some breaking release point, we will convert all hero ability bans to this, its simpler.
+INSERT INTO Modifiers(ModifierId, ModifierType, RunOnce, Permanent, SubjectRequirementSetId) VALUES
+('TRAIT_CANT_BUILD_HERO_WILBOMAN', 'MODIFIER_PLAYER_UNIT_BUILD_DISABLED', '1', '1', 'WILBOMAN_EXISTS_REQS');
+
+INSERT INTO ModifierArguments(ModifierId, Name, Type, Value) VALUES
+('TRAIT_CANT_BUILD_HERO_WILBOMAN', 'UnitType', 'ARGTYPE_IDENTITY', 'SLTH_UNIT_WILBOMAN');
+
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('SLTH_TRAIT_CIVILIZATION_ILLIANS_COOL', 'TRAIT_CANT_BUILD_HERO_WILBOMAN');
+
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
+('WILBOMAN_EXISTS_REQS', 'REQUIRE_ANYONE_BUILT_WILBOMAN');
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES
+('WILBOMAN_EXISTS_REQS', 'REQUIREMENTSET_TEST_ALL');
+
+INSERT INTO Requirements(RequirementId, RequirementType) VALUES
+('REQUIRE_ANYONE_BUILT_WILBOMAN', 'REQUIREMENT_COLLECTION_COUNT_ATLEAST');
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('REQUIRE_ANYONE_BUILT_WILBOMAN', 'CollectionType', 'COLLECTION_ALL_UNITS'),
+('REQUIRE_ANYONE_BUILT_WILBOMAN', 'Count', '1'),
+('REQUIRE_ANYONE_BUILT_WILBOMAN', 'RequirementSetId', 'SUBREQSET_UNIT_IS_WILBOMAN');
+
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
+('SUBREQSET_UNIT_IS_WILBOMAN', 'REQUIRE_UNIT_IS_WILBOMAN');
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES
+('SUBREQSET_UNIT_IS_WILBOMAN', 'REQUIREMENTSET_TEST_ALL');
+
+INSERT INTO Requirements(RequirementId, RequirementType) VALUES
+('REQUIRE_UNIT_IS_WILBOMAN', 'REQUIREMENT_UNIT_TYPE_MATCHES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('REQUIRE_UNIT_IS_WILBOMAN', 'UnitType', 'SLTH_UNIT_WILBOMAN');
