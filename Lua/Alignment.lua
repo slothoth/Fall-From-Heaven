@@ -93,7 +93,7 @@ function onReligionSwitch(playerID, policyID, wasEnacted)
             pPlayer:SetProperty('alignment', iNewAlignment)
             pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
             pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
-            print('Setting alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]))
+            print('Uodating alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]) .. ' for ' .. PlayerConfigurations[playerID]:GetLeaderTypeName())
         end
         for idx, sReligionPropKey in ipairs(tReligionNames) do
             if sReligionPropKey == sReligion then
@@ -264,12 +264,21 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
             Game:SetProperty('InfernalPlot', plotID)
             AdjustArmageddonCount(5)            -- Compact broken
         end
-        local iAlignment = pPlayer:GetProperty('alignment') or 0                                -- set player alignment
-        print('Player ' .. tostring(playerID) .. ' alignment on capital settle was ' .. tostring(iAlignment))
+        local iAlignment = pPlayer:GetProperty('alignment')                                -- set player alignment
+        if not iAlignment then
+            iAlignment = 0
+            print('ERROR COULD NOT FIND PLAYER ALIGNMENT')
+        end
+        print('Player ' .. pConfig:GetLeaderTypeName() .. ' alignment on capital settle was ' ..tAlignmentPropKeys[iAlignment])
 
         local pPlot = Map.GetPlotByIndex(plotID)
-        pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
-        if tAlignmentPropKeys[iAlignment] then print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment])); end
+        for _, sAlignmentPropKey in pairs(tAlignmentPropKeys) do
+            pPlot:SetProperty(sAlignmentPropKey, 0)
+        end
+        if tAlignmentPropKeys[iAlignment] then
+            pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
+            print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment]));
+        end
 
         -- set capital commerce ratios
         if not pPlot:GetProperty('CommIntoGold') then
@@ -539,23 +548,22 @@ function countPlotWithinThreeCoast(pPlot)
     return iWaterCount
 end
 function onStart()
-    for iPlayerID, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
+    for _, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
         local alignment = pPlayer:GetProperty('alignment')
-        local sLeaderName = PlayerConfigurations[iPlayerID]:GetLeaderTypeName()
+        local sLeaderName = PlayerConfigurations[pPlayer:GetID()]:GetLeaderTypeName()
+        print('looking for alignment for', sLeaderName)
         if not alignment then
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
-                print('setting player', iPlayerID, ' alignment to ' .. tostring(iLeaderAlignment))
-            else
-                pPlayer:SetProperty('alignment', -1)                -- to catch errors, remove at production
+                print('setting player', sLeaderName, tAlignmentPropKeys[iLeaderAlignment])
             end
         end
         if sLeaderName == 'LEADER_HYBOREM' then
-            Game:SetProperty('Infernal', iPlayerID)
+            Game:SetProperty('Infernal', pPlayer:GetID())
         end
         if sLeaderName == 'LEADER_BASIUM' then
-            Game:SetProperty('Mercurian', iPlayerID)
+            Game:SetProperty('Mercurian', pPlayer:GetID())
         end
     end
     if not Game:GetProperty('ARMAGEDDON') then          -- initalize armageddon

@@ -3,6 +3,8 @@
 -- ===========================================================================
 -- CACHE BASE FUNCTIONS
 -- ===========================================================================
+include("GameCapabilities");
+
 local BASE_Initialize = Initialize;
 local BASE_OnImprovementAddedToMap = OnImprovementAddedToMap;
 local BASE_OnImprovementRemovedFromMap = OnImprovementRemovedFromMap;
@@ -29,7 +31,9 @@ local ZOFFSET_3DVIEW				 = 36;
 local m_BarbarianTribeBanners  = {};
 local m_BarbarianTribeBannerIM  = InstanceManager:new( "TribeBanner", "Anchor", Controls.CityBanners );
 
-
+local m_iActivePlayer = Game.GetLocalPlayer();
+local pConfig = PlayerConfigurations[m_iActivePlayer]
+local m_sCivName = pConfig:GetCivilizationTypeName()
 -- ===========================================================================
 function CreateBarbarianTribeBanner(pPlot , pBarbTribe )
 	local uiTribeBanner  = m_BarbarianTribeBannerIM:GetInstance();
@@ -42,7 +46,7 @@ function CreateBarbarianTribeBanner(pPlot , pBarbTribe )
 	if not pPlayerConfig then return end;				-- just done for doing autoplay
     local sCivName = pPlayerConfig:GetCivilizationTypeName()
 	if sCivName == 'SLTH_CIVILIZATION_CLAN_OF_EMBERS' then
-		if sTribeType == 'TRIBE_CLAN_MELEE_OPEN' or sTribeType == 'TRIBE_CLAN_MELEE_FOREST' then
+		if sTribeType == 'TRIBE_CLAN_MELEE_OPEN' or sTribeType == 'TRIBE_CLAN_MELEE_FOREST' then				-- ruins or goblin fort
 			uiTribeBanner.TribeBannerButton:RegisterCallback( Mouse.eLClick, function() OnTribeBannerButtonClicked(pPlot:GetIndex()); end );
 		end
 	end
@@ -50,7 +54,6 @@ function CreateBarbarianTribeBanner(pPlot , pBarbTribe )
 	local backColor , _ = UI.GetPlayerColors( PlayerTypes.BARBARIAN );
 	uiTribeBanner.Banner_Base:SetColor(backColor);
 
-	local iActivePlayer  = Game.GetLocalPlayer();
 	if(iActivePlayer == -1) then
 		-- No local player.
 		return;
@@ -61,6 +64,9 @@ function CreateBarbarianTribeBanner(pPlot , pBarbTribe )
 		Plot = pPlot;
 		BarbarianTribe = pBarbTribe;
 		BannerInstance = uiTribeBanner;
+		X = pPlot:GetX();
+		Y = pPlot:GetY();
+		Index = pPlot:GetIndex();
 	}
 
 	table.insert(m_BarbarianTribeBanners, tribeBannerEntry)
@@ -131,7 +137,10 @@ function UpdateTribeBannerPositioning(pPlot , uiBannerInstance )
 	uiBannerInstance.Anchor:SetWorldPositionVal( worldX, worldY+yOffset, worldZ + zOffset );
 end
 
+local iGamePlayer = Game.GetLocalPlayer()
+
 -- ===========================================================================
+local tClanTribes = {TRIBE_CLAN_MELEE_OPEN=true, TRIBE_CLAN_MELEE_FOREST=true}
 function UpdateTribeBannerVisibility(tribeBannerEntry , eVisibility )
 	--Banner can be interacted with as long as plot is not hidden
 	if(eVisibility == PLOT_HIDDEN)then
@@ -140,8 +149,12 @@ function UpdateTribeBannerVisibility(tribeBannerEntry , eVisibility )
 		tribeBannerEntry.BannerInstance.TribeBannerButton:SetDisabled(true);
 	else
 		tribeBannerEntry.BannerInstance.Anchor:SetHide(false);
-		tribeBannerEntry.BannerInstance.TribeBannerButton:LocalizeAndSetToolTip("LOC_TRIBE_BANNER_TREAT_WITH_TRIBE_TT", tribeBannerEntry.BarbarianTribe.TribeDisplayName);
 		tribeBannerEntry.BannerInstance.TribeBannerButton:SetDisabled(false);
+	end
+	if m_sCivName == 'SLTH_CIVILIZATION_CLAN_OF_EMBERS' and tClanTribes[tribeBannerEntry.BarbarianTribe.TribeType] then
+		tribeBannerEntry.BannerInstance.TribeBannerButton:LocalizeAndSetToolTip("LOC_TRIBE_BANNER_TREAT_WITH_TRIBE_TT", tribeBannerEntry.BarbarianTribe.TribeDisplayName);
+	else
+		tribeBannerEntry.BannerInstance.TribeBannerButton:LocalizeAndSetToolTip("LOC_SLTH_TRIBE_BANNER_NAME", tribeBannerEntry.BarbarianTribe.TribeDisplayName);
 	end
 end
 
@@ -180,24 +193,13 @@ end
 -- ===========================================================================
 local iIMPROVEMENT_BARB_CAMP = GameInfo.Improvements['IMPROVEMENT_BARBARIAN_CAMP'].Index
 function OnImprovementRemovedFromMap( locX , locY , eOwner  )
-	print('removed improvement', locX, locY)
-	if(eOwner == -1)then
-		print('likely a barb')
-		local pPlot  = Map.GetPlot(locX, locY);
+	BASE_OnImprovementRemovedFromMap(locX, locY, eOwner);
+	if(eOwner == PlayerTypes.BARBARIAN)then
+		local pPlot = Map.GetPlot(locX, locY);
 		for k,v in ipairs(m_BarbarianTribeBanners) do
 			if(pPlot == v.Plot)then
-				print('releasing barb banner instance')
 				m_BarbarianTribeBannerIM:ReleaseInstance(v.BannerInstance);
 				table.remove(m_BarbarianTribeBanners, k);
-				return;
-			end
-		end
-		print('didnt find barb tribe instance to release')
-		for k,v in ipairs(m_BarbarianTribeBanners) do
-			local iImprovementIndex = v.Plot:GetImprovementType()
-			print('improvement of barb plot is', iImprovementIndex)
-			if iImprovementIndex ~= iIMPROVEMENT_BARB_CAMP then
-				m_BarbarianTribeBannerIM:ReleaseInstance(v.BannerInstance);
 			end
 		end
 	end
@@ -292,6 +294,39 @@ function OnPlayerChangeClosed()
 	end
 end
 
+function PermaBribeBarbarianTrait(playerID)
+	local iBribeCost
+	local iBribeDuration = 20
+	local pPlayer = Players[playerID]
+	local iCurrentTurn = Game.GetCurrentGameTurn()
+	local iBribeTurn = iBribeDuration and math.floor(((iCurrentTurn - 1) / iBribeDuration)) == ((iCurrentTurn - 1) / iBribeDuration)			-- even division
+	if iCurrentTurn == 1 or iBribeTurn then
+		local tGrantGoldParameters = {iYieldIndex=2, iYieldAmount=10, OnStart='SlthOnGrantYield'}
+		if HasTrait("SLTH_TRAIT_BARBARIAN", playerID) then					-- in future we want to gate this behind not being ahead in tech
+			for k,barbarianTribeEntry in ipairs(m_BarbarianTribeBanners) do
+				local sTribe = barbarianTribeEntry.BarbarianTribe.TribeType
+				if barbarianTribeEntry.Index and (sTribe == 'TRIBE_CLAN_MELEE_OPEN' or sTribe == 'TRIBE_CLAN_MELEE_FOREST') then
+					local tParameters = {[PlayerOperations.PARAM_PLOT_ONE] = barbarianTribeEntry.Index}
+					local bCanStartBribe, tBribeResults = UI.CanStartPlayerOperation(Game.GetLocalPlayer(), PlayerOperations.BRIBE_CLAN, tParameters, false)
+					if not bCanStartBribe and tBribeResults[PlayerOperationResults.FAILURE_REASONS][1] == 'Not enough [ICON_Gold] Gold.' then
+						if not iBribeCost then
+							local v = tBribeResults[PlayerOperationResults.ADDITIONAL_DESCRIPTION][1]
+							print('description check', v)
+							local regexed = v:match("Spend%s+(.-)%s+%[ICON")
+							local comma_subbed = regexed:gsub(",", "")
+							iBribeCost = tonumber(comma_subbed)
+							print('end increase is', iBribeCost)
+							tGrantGoldParameters.iYieldAmount = iBribeCost
+						end
+						UI.RequestPlayerOperation(playerID, PlayerOperations.EXECUTE_SCRIPT, tGrantGoldParameters)
+						UI.RequestPlayerOperation(playerID, PlayerOperations.BRIBE_CLAN, tParameters);
+					end
+				end
+			end
+		end
+	end
+end
+
 -- ===========================================================================
 function Initialize()
 	BASE_Initialize();
@@ -304,4 +339,7 @@ function Initialize()
 	Events.LocalPlayerTurnBegin.Add(OnLocalPlayerTurnBegin);
 
 	LuaEvents.PlayerChange_Close.Add(OnPlayerChangeClosed);
+
+	-- new
+	Events.PlayerTurnActivated.Add(PermaBribeBarbarianTrait);
 end

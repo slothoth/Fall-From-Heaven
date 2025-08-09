@@ -549,34 +549,6 @@ function InitCottage(x, y, improvementIndex, playerID)
         tImprovingImprovements[tostring(x) .. '_' .. tostring(y)] = {['x']=x, ['y']=y}
         pPlayer:SetProperty('improvements_to_increment', tImprovingImprovements)
     end
-    local pPlot = Map.GetPlot(x,y);
-    if improvementIndex and improvementIndex == iBarbCampImprovement then
-        local plotID = pPlot:GetIndex()
-        local isLegalBarb = Game.GetProperty('BarbFree_' .. plotID) or 0
-        if Game.GetCurrentGameTurn() == 1 then
-            print('game turn was 1, ensuring legality.')
-            isLegalBarb = 1
-        end
-        print('barb camp made, is it legal? 1:yes, 0 no:', isLegalBarb)
-        if isLegalBarb == 1 then
-            print('it was')
-            local tUnits = Map.GetUnitsAt(pPlot)
-            for pUnit in tUnits:Units() do
-                local iUnitIndex = pUnit:GetType()
-                local iClanIndex = tBarbClanUnitMapper[iUnitIndex]
-                if iClanIndex then
-                    pPlot:SetProperty('barbclantype', iClanIndex)
-                    if Game.GetCurrentGameTurn() == 1 then
-                        -- print('killing barb unit')
-                        UnitManager.Kill(pUnit);
-                    end
-                end
-            end
-        else
-            -- remove it.. wait are we adding this back somehow
-            deleteTribeSafe(pPlot, playerID)
-        end
-    end
 end
 
 function IncrementCottages(playerId, pPlayer)
@@ -750,7 +722,9 @@ function BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, iBarbClanType, iFeatureTyp
                 table.insert(leaderTable, iTREANT_INDEX)
             end
             henchTable = tBigBadFailedGraceHench
+            print('failed grace leaders and henchman')
         else
+            print('didnt fail grace, leaders and henchman')
             leaderTable = tBigBadLeader
             henchTable = tBigBadHench
             local iTerrain = pPlot:GetTerrainType()
@@ -1269,7 +1243,6 @@ local iGameSpeed = tGameSpeedScalings[name_GameSpeed]
 local sDontDoBarbLairRemoval = 'BarbNoLair_'
 function RemovedBarbCamp(x, y, owningPlayerID)
     local pPlot = Map.GetPlot(x, y)
-    -- print('improvement removed at plot x,y', x, y)
     local iPlotOwner = pPlot:GetOwner()
     local tribeIndex = pPlot:GetProperty('barbclantype')
     local pUnit
@@ -1289,12 +1262,13 @@ function RemovedBarbCamp(x, y, owningPlayerID)
             pUnit = pOnTileUnit
         end
     end
-    print('are we doing lair roll', dontDoLairReveal)
+    print('are we do cleaning up an unplanned barb camp spawn', dontDoLairReveal or isPartOfCleanup)
     if (isPartOfCleanup or dontDoLairReveal) then
-        print('had an barb clan improvement spawn naturally that was cleant up')
+        print('had an barb clan improvement spawn naturally that was cleant up, attempting to kill unit and not continue lair spawn')
         if pUnit and tribeIndex then
             UnitManager.Kill(pUnit)
         end
+        print('not respawning barb camp.')
         return
     end
     -- print('plotowner/tribeIndex/isBarbOcuppied on destroying improvement...', iPlotOwner, tribeIndex, bIsBarbOccupied)
@@ -1356,8 +1330,12 @@ function RemovedBarbCamp(x, y, owningPlayerID)
             if iDestroyLairDiceRoll <= iThreshold then
                 print('spawning tribe, as failed destroy dice roll')
                 spawnTribeSafe(iPlotID, tribeIndex)
+            else
+                print('not respawning barb camp')
             end
         end
+    else
+        print('not respawning barb camp.')
     end
 end
 
@@ -1806,21 +1784,11 @@ end
 
 -- im not sure these even existed in base FFH
 function InitializeClans()
-    if not Game.GetProperty('NW_Clans_Set') then
-        local iW, iH = Map.GetGridSize()                    -- create natural wonder Barb big bad lairs
-        for x = 0, iW - 1 do
-            for y = 0, iH - 1 do
-                local i = y * iW + x;
-                local pPlot = Map.GetPlotByIndex(i);
-                local feature = pPlot:GetFeatureType()
-                if tBarbNW[feature] then
-                    -- print(feature)
-                    print('spawning tribe as initiating super lair')
-                    spawnTribeSafe(i, 1)
-                end
-            end
+    if not Game.GetProperty('Init_Barbs_Killed') then
+        for _, pUnit in Players[63]:GetUnits():Members() do
+            UnitManager.Kill(pUnit)
         end
-        Game:SetProperty('NW_Clans_Set', 1)
+        Game:SetProperty('Init_Barbs_Killed', 1)
     end
 
 end
@@ -1894,7 +1862,7 @@ function onStart()
     GameEvents.SlthOnConvertUnitType.Add(ConvertUnitType)
     Events.CityProductionChanged.Add(OnCityProductionChanged);
 
-    -- InitializeClans()
+    InitializeClans()
     InitializeFreeCivics()
     print('-----------------Gameplay loaded')
 end

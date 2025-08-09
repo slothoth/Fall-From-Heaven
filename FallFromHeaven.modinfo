@@ -283,6 +283,7 @@
       <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
       <File>Localisation/loc_traits.sql</File>
       <File>Localisation/loc_ui.sql</File>
+      <File>Localisation/loc_ui_replacements.sql</File>
       <File>Localisation/loc_units.sql</File>
     </UpdateText>
     <AddGameplayScripts id="luaGameplayFFH">
@@ -293,6 +294,7 @@
       <File>Core/Civilizations/Dwarves/Khazad.lua</File>
       <File>Lua/Promotions.lua</File>
       <File>Lua/Alignment.lua</File>
+      <File>Lua/Armageddon.lua</File>
       <File>Lua/Combat.lua</File>
       <File>Lua/WorldSpellSupport.lua</File>
       <File>Lua/RequestOperationSupport.lua</File>
@@ -409,8 +411,10 @@
       </Properties>
       <File>UI/UnitPromotionPopup.lua</File>
       <File>UI/UnitPromotionPopup.xml</File>
-      <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
-      <File>UI/TreatWithTribePopup.lua</File>
+      <File>UI/Replacements/CityBannerManager_BarbarianClansMode.lua</File>
+      <File>UI/CityBannerManager.xml</File>
+      <File>UI/Replacements/TreatWithTribePopup.lua</File>
+      <File>UI/Replacements/TreatWithTribePopup.xml</File>
       <File>UI/TechTree.xml</File>
       <File>UI/TechTreeNode.xml</File>
       <File>UI/CivicsTree.xml</File>
@@ -646,6 +650,7 @@
     <File>Localisation/loc_terrain_res_terrain_improvements.sql</File>
     <File>Localisation/loc_traits.sql</File>
     <File>Localisation/loc_ui.sql</File>
+    <File>Localisation/loc_ui_replacements.sql</File>
     <File>Localisation/loc_units.sql</File>
     <File>Lua/Alignment.lua</File>
     <File>Lua/Armageddon.lua</File>
@@ -670,7 +675,8 @@
     <File>UI/Panels/Slider_Attach_Tracker.lua</File>
     <File>UI/Panels/SliderSupport.lua</File>
     <File>UI/Replacements/ProductionQueue.lua</File>
-    <File>UI/CityBannerManager_BarbarianClansMode.lua</File>
+    <File>UI/Replacements/CityBannerManager_BarbarianClansMode.lua</File>
+    <File>UI/CityBannerManager.xml</File>
     <File>UI/CivicsTree.xml</File>
     <File>UI/CivicsTree.lua</File>
     <File>UI/ExtraHeroesOperation.lua</File>
@@ -691,7 +697,8 @@
     <File>UI/UnitPromotionPopup.lua</File>
     <File>UI/UnitPromotionPopup.xml</File>
     <File>UI/UnitPanel_skip_promos.lua</File>
-    <File>UI/TreatWithTribePopup.lua</File>
+    <File>UI/Replacements/TreatWithTribePopup.lua</File>
+    <File>UI/Replacements/TreatWithTribePopup.xml</File>
     <File>UI/WorldRankings.lua</File>
     <File>UI/WorldRankings.xml</File>
     <File>UI/WorldSpell.xml</File>

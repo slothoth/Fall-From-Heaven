@@ -18,17 +18,19 @@ UPDATE Improvements SET TilesPerGoody = 64, GoodyRange = 3, TraitType=NULL WHERE
 -- UPDATE TypeProperties SET Value='200' WHERE Name='BRIBE_INTERVAL_STANDARD';                 -- closest thing to peace with barbs
 -- UPDATE TypeProperties SET Value='0' WHERE Name='BRIBE_BASE_COST';                           -- need a way to constantly reapply this. But only on orc ones and lizards
 
-UPDATE TypeProperties SET Value='10' WHERE Name='RAID_CONVERSION_POINTS_CHANGE';            -- so more orc cities if Clan are instructing them
+UPDATE TypeProperties SET Value='10' WHERE Name='RAID_CONVERSION_POINTS_CHANGE';            -- so more orc cities if Clan are instructing them.. but disabled for now
 
 UPDATE GlobalParameters SET Value='0' WHERE Name='BARBARIAN_CLANS_RANSOM_COST_SCALAR';
-UPDATE GlobalParameters SET Value='0' WHERE Name='BARBARIAN_CLANS_BRIBE_COST_PER_CITY';
+UPDATE GlobalParameters SET Value='10000' WHERE Name='BARBARIAN_CLANS_BRIBE_COST_PER_CITY';             -- make it nearly impossible to bribe, for AI
 UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_BARB_SOFT_CAP';               -- no cap on barb combat
 UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_MAX_BARB_LEVEL';
--- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'BARBARIAN_CLANS_CIV_CONVERSION_INCREMENT_CHANCE';         -- this does literally nothing
 UPDATE GlobalParameters SET Value = '999' WHERE Name = 'BARBARIAN_CLANS_CIV_CONVERSION_POINTS_STANDARD';
 
 -- no new camps
-UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING';           -- this seems to not work
+UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CAMP_MAX_PER_MAJOR_CIV';
+
+--UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING';           -- this seems to not work
+-- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'BARBARIAN_CLANS_CIV_CONVERSION_INCREMENT_CHANCE';         -- this does literally nothing
 
 -- delete the single minor civ needed to spawn in
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES

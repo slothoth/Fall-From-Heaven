@@ -64,6 +64,14 @@ local function SlthSetResource(iPlayer, tParameters)
     print('set terrain plot '.. iPlotIndex .. 'to have resource ' .. iResourceType)
 end
 
+local function SlthGrantYield(iPlayer, tParameters)
+    local iYieldAmount = tParameters.iYieldAmount;
+    local iYieldIndex = tParameters.iYieldIndex;
+    local pPlayer = Players[iPlayer]
+    pPlayer:GrantYield(iYieldIndex, iYieldAmount);
+    print('granting yield type', iYieldIndex, 'with amount', iYieldAmount)
+end
+
 local function OnSummon(iPlayer, tParameters)
     print('trying summon')
     local sUnitOperationType = tParameters.UnitOperationType;
@@ -724,6 +732,7 @@ GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
 GameEvents.SlthSetPlotProperty.Add(SetPlotProperty);
 GameEvents.SlthOnSetResource.Add(SlthSetResource);
+GameEvents.SlthOnGrantYield.Add(SlthGrantYield);
 
 
 

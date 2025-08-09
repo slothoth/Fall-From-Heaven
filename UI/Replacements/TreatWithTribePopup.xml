@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Context Hidden="1">
+	<Container Style="FullScreenVignetteConsumer" />
+
+	<Grid ID="PopupDrowShadowGrid" Anchor="C,C" Offset="0,0"  Size="auto,auto" AutoSizePadding="50,50"	Style="DropShadow" >
+		<Image ID="PopupBackgroundImage" Anchor="C,C"  Size="auto,auto" AutoSizePadding="-10,-10" Texture="Parchment_Pattern"	StretchMode="Tile" ConsumeMouse="1">
+			<Grid ID="PopupFrameGrid" Anchor="C,C"  Size="900,640" Offset="0,0" Texture="CompletedPopup_Frame" SliceCorner="112,120" SliceSize="2,1">
+				<!-- Corner Icons -->
+				<Button	ID="CloseButton"		Texture="Controls_CloseLarge" Size="44,44" Anchor="R,T"	Offset="11,11"	/>
+
+				<Container Size="353, 80" Anchor="C,T" Offset="0,0">
+					<Label ID="HeaderLabel" String="LOC_TREAT_WITH_TRIBE_POPUP_TITLE" Anchor="C,C" Align="C,C" Color="92,86,85,255" Offset="0,10" Style="FontFlair20" SmallCaps="26" SmallCapsType="EveryWord" WrapWidth="350" />
+				</Container>
+
+				<Container Size="512, 40" Anchor="C,T" Offset="0,64">
+					<Label ID="SubheaderLabel" Anchor="C,C" Align="C,C" Color="92,86,85,255" Offset="0,0" Style="FontFlair16" SmallCaps="20" SmallCapsType="EveryWord" WrapWidth="500" />
+				</Container>
+				
+				<Stack ID="TreatOptionsStack" Anchor="C,C" Offset="0,20" StackGrowth="Right" StackPadding="2">
+
+					<!--Bribe-->
+					<Container ID="BribeOption" Anchor="C,C" Size="auto, 525">
+						<Image Anchor="C,T" Size="270,256" Offset="-1,24" Texture="Barbarians_Bribe"/>
+						<Grid Anchor="C,C" Style="DecoGrid" Size="260,auto" Offset="0, 110" Color="40,40,40,170" AutoSizePadding="0,15">
+							<ScrollPanel Anchor="C,C" Size="235,156" Vertical="1" AutoScrollBar="1">
+								<Label ID="TreatOptionBribeDescription" Anchor="C,C" Color="52,45,48,230" String="$Treat Option Info$" WrapWidth="235" Style="FontNormal14"/>
+								<ScrollBar Style="Slider_Light"	Color="20,20,20,200"	Anchor="R,C" AnchorSide="O,I"/>
+							</ScrollPanel>
+						</Grid>
+						<GridButton ID="TreatOptionButtonBribe" Size="210,41" Anchor="C,B" Offset="0,0" String="LOC_TREAT_WITH_TRIBE_OPTION_BRIBE" Style="MainButton"/>
+					</Container>
+
+					<!--Hire-->
+					<Container ID="HireOption" Anchor="C,C" Size="auto, 525">
+						<Image Anchor="C,T" Size="270,256" Offset="-1,24" Texture="Barbarians_Hire"/>
+						<Grid Anchor="C,C" Style="DecoGrid" Size="260,auto" Offset="0, 110" Color="40,40,40,170" AutoSizePadding="0,15">
+							<ScrollPanel Anchor="C,C" Size="235,156" Vertical="1" AutoScrollBar="1">
+								<Label ID="TreatOptionHireDescription" Anchor="C,C" Color="52,45,48,230" String="$Treat Option Info$" WrapWidth="235" Style="FontNormal14"/>
+								<ScrollBar Style="Slider_Light"	Color="20,20,20,200"	Anchor="R,C" AnchorSide="O,I"/>
+							</ScrollPanel>
+						</Grid>
+						<GridButton ID="TreatOptionButtonHire" Size="210,41" Anchor="C,B" String="LOC_TREAT_WITH_TRIBE_OPTION_HIRE" Style="MainButton"/>
+					</Container>
+
+					<!--Ransom-->
+					<Container ID="RansomOption" Anchor="C,C" Size="auto, 525">
+						<Image Anchor="C,T" Size="270,256" Offset="-1,24" Texture="Barbarians_RansomUnit"/>
+						<Grid Anchor="C,C" Style="DecoGrid" Size="260,auto" Offset="0, 110" Color="40,40,40,170" AutoSizePadding="0,15">
+							<ScrollPanel Anchor="C,C" Size="235,156" Vertical="1" AutoScrollBar="1">
+								<Label ID="TreatOptionRansomDescription" Anchor="C,C" Color="52,45,48,230" String="$Treat Option Info$" WrapWidth="235" Style="FontNormal14"/>
+								<ScrollBar Style="Slider_Light"	Color="20,20,20,200"	Anchor="R,C" AnchorSide="O,I"/>
+							</ScrollPanel>
+						</Grid>
+						<GridButton ID="TreatOptionButtonRansom" Size="210,41" Anchor="C,B" String="LOC_TREAT_WITH_TRIBE_OPTION_RANSOM" Style="MainButton"/>
+					</Container>
+
+					<!--Incite-->
+					<Container ID="InciteOption" Anchor="C,C" Size="auto, 525">
+						<Image Anchor="C,T" Size="270,256" Offset="-1,24" Texture="Barbarians_Incite"/>
+						<Grid Anchor="C,C" ID="InciteOptionGrid" Style="DecoGrid" Size="260,auto" Offset="0, 92" Color="40,40,40,170" AutoSizePadding="0,15">
+							<ScrollPanel ID="InciteOptionScroll" Anchor="C,C" Size="235,120" Vertical="1" AutoScrollBar="1">
+								<Label ID="TreatOptionInciteDescription" Anchor="C,C" Color="52,45,48,230" String="$Treat Option Info$" WrapWidth="235" Style="FontNormal14"/>
+								<ScrollBar Style="Slider_Light"	Color="20,20,20,200"	Anchor="R,C" AnchorSide="O,I"/>
+							</ScrollPanel>
+						</Grid>
+						
+						<PullDown ID="InciteTargetPulldown" Size="250,24" Offset="0,64" Anchor="C,B" AutoSizePopup="1"	ScrollThreshold="450" SpaceForScroll="0">
+							<ButtonData>
+								<GridButton  Size="194,28" Style="TabFont" TruncateWidth="203" TruncatedTooltip="1">
+									<GridData Texture="Controls_DropDownControl" StateOffsetIncrement="0,24"	SliceCorner="10,12"	SliceSize="1,1"		SliceTextureSize="45,24" />
+								</GridButton>
+							</ButtonData>
+							<GridData Offset="0,24" Texture="Controls_DropdownPanel" InnerPadding="3,6" SliceCorner="10,10" SliceTextureSize="22,22"/>
+							<ScrollPanelData Anchor="C,C" Vertical="1" Size="parent,parent" AutoScrollBar="1" >
+								<ScrollBar Style="Slider_Blue" Anchor="R,C" AnchorSide="O,I"   />
+							</ScrollPanelData>
+							<StackData StackGrowth="Bottom" Anchor="C,T"/>
+							<InstanceData Name="InstanceOne">
+								<GridButton Style="ButtonControl" ID="Button" Anchor="L,T"	Size="190,24" FontStyle="glow" ColorSet="BlueGlow" TruncateWidth="225" TruncatedTooltip="1"/>
+							</InstanceData>
+						</PullDown>
+						
+						<Label ID="InciteCostLabel" Anchor="C,B" Offset="0,44" Style="FontNormal14" String="$Cost: $"/>
+						<GridButton ID="TreatOptionButtonIncite" Size="210,41" Anchor="C,B" String="LOC_TREAT_WITH_TRIBE_OPTION_INCITE" Style="MainButton"/>
+					</Container>
+
+				</Stack>
+			</Grid>
+		</Image>
+	</Grid>
+</Context>
