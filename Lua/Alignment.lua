@@ -272,8 +272,13 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         if tAlignmentPropKeys[iAlignment] then print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment])); end
 
         -- set capital commerce ratios
-        pPlot:SetProperty('CommIntoScience', 0)
-        pPlot:SetProperty('CommIntoGold', 10)
+        if not pPlot:GetProperty('CommIntoGold') then
+            pPlot:SetProperty('CommIntoGold', 10)
+            pPlayer:SetProperty('CommIntoGold', 10)
+
+            pPlot:SetProperty('CommIntoScience', 0)
+            pPlayer:SetProperty('CommIntoScience', 0)
+        end
 
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')

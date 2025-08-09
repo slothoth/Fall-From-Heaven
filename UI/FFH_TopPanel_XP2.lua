@@ -80,9 +80,9 @@ function RefreshYields()
 	end
 
 	---- TOURISM ----
-	if GameCapabilities.HasCapability("CAPABILITY_TOURISM") and GameCapabilities.HasCapability("CAPABILITY_DISPLAY_TOP_PANEL_YIELDS") then
+	if GameCapabilities.HasCapability("CAPABILITY_DISPLAY_TOP_PANEL_YIELDS") then
 		m_TourismYieldButton = m_TourismYieldButton or m_YieldButtonSingleManager:GetInstance();
-		local tourismRate = Round(localPlayer:GetStats():GetTourism(), 1);
+		local tourismRate = Game.GetProperty('ARMAGEDDON') or 0
 		local tourismRateTT:string = Locale.Lookup("LOC_WORLD_RANKINGS_OVERVIEW_CULTURE_TOURISM_RATE", tourismRate);
 		local tourismBreakdown = localPlayer:GetStats():GetTourismToolTip();
 		if(tourismBreakdown and #tourismBreakdown > 0) then
@@ -93,12 +93,8 @@ function RefreshYields()
 		m_TourismYieldButton.YieldBacking:SetToolTipString(tourismRateTT);
 		m_TourismYieldButton.YieldPerTurn:SetColorByName("ResTourismLabelCS");
 		m_TourismYieldButton.YieldBacking:SetColorByName("ResTourismLabelCS");
-		m_TourismYieldButton.YieldIconString:SetText("[ICON_TourismLarge]");
-		if (tourismRate > 0) then
-			m_TourismYieldButton.Top:SetHide(false);
-		else
-			m_TourismYieldButton.Top:SetHide(true);
-		end
+		m_TourismYieldButton.YieldIconString:SetText("[ICON_RESOURCE_MANA_FIRE]");
+		m_TourismYieldButton.Top:SetHide(false);
 	end
 
 	Controls.YieldStack:CalculateSize();

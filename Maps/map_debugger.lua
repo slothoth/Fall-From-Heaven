@@ -66,11 +66,11 @@ FeatureGenerator.__index = FeatureGenerator
 
 Map = {}
 Map.MapTable = {}
-for i = 0, 84* 52 do
+for i = 0, 73* 45 do
     Map.MapTable[i] = -1
 end
 function Map.GetGridSize()
-    return 84, 52
+    return 73, 45
 end
 
 function Map.GetPlotByIndex(iPlotIndex)
@@ -78,10 +78,10 @@ function Map.GetPlotByIndex(iPlotIndex)
 end
 
 function Map.GetPlot(x, y)
-    if x < 0 or x > 84 or y < 0 or y > 52 then
+    if x < 0 or x > 73 or y < 0 or y > 52 then
         return -1
     else
-        return { y * 84 + x }
+        return { y * 73 + x }
     end
 end
 

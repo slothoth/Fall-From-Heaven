@@ -719,8 +719,6 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
--- TODO, haste UnitManager.ChangeMovesRemaining(pUnit, 1);          -- OR, could we do a check on units gaining movement? if that exists, and has to be full movement. OR ability? that will be needed elsewhere Im sure
-
 -- UnitOperation Works
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);

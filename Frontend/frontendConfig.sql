@@ -17,6 +17,11 @@ UPDATE MapSizes SET MinPlayers=MinPlayers+2;
 UPDATE MapSizes SET DefaultPlayers=DefaultPlayers+2;
 UPDATE MapSizes SET MaxPlayers=MaxPlayers+2;
 
+UPDATE MapSizes SET DefaultPlayers=DefaultPlayers+1 WHERE MapSizeType='MAPSIZE_SMALL' OR MapSizeType='MAPSIZE_STANDARD';
+UPDATE MapSizes SET MaxPlayers=MaxPlayers+1 WHERE MapSizeType='MAPSIZE_SMALL' OR MapSizeType='MAPSIZE_STANDARD';
+
+-- also need to do some more size increases to deal with different map wilderness due to no city states.
+
 INSERT INTO Maps(Domain, File, Name, Description, Image, SortIndex) VALUES
 ('StandardMaps', 'Erebus.lua', 'LOC_MAP_SLTH_EREBUS_NAME', 'LOC_MAP_SLTH_EREBUS_DESCRIPTION', 'Map_Highlands', 130);
 

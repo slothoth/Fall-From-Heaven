@@ -115,37 +115,50 @@ local tArmageddonUnits = {['SLTH_UNIT_BEAST_OF_AGARES']=1, ['SLTH_UNIT_ROSIER']=
                     ['SLTH_UNIT_SPHENER']=-3, ['SLTH_UNIT_VALIN']=-2}
 function ArmageddonUnitSpawning(playerID, unitID)
     local pUnit = UnitManager.GetUnit(playerID, unitID);
-    local sUnitType = pUnit:GetUnitType()
-    local iArmageddonCountRaise = tArmageddonUnits[sUnitType]
-    if iArmageddonCountRaise then
-        AdjustArmageddonCount(iArmageddonCountRaise)
-    end
-    local bHasProphecyMark = pUnit:GetAbility():HasAbility('ABILITY_PROPHECY_MARK')
-    if bHasProphecyMark then
-        AdjustArmageddonCount(1)
+    if pUnit then
+        local sUnitType = pUnit:GetType()
+        local iArmageddonCountRaise = tArmageddonUnits[sUnitType]
+        if iArmageddonCountRaise then
+            AdjustArmageddonCount(iArmageddonCountRaise)
+        end
+        local bHasProphecyMark = pUnit:GetAbility():HasAbility('ABILITY_PROPHECY_MARK')
+        if bHasProphecyMark then
+            AdjustArmageddonCount(1)
+            local pPlayer = Players[playerID]
+            local tProphecyUnits = pPlayer:GetProperty('ProphecyMarkUnits')
+            if tProphecyUnits then
+                tProphecyUnits[unitID] = true
+            else
+                tProphecyUnits = {[unitID] = true}
+            end
+            pPlayer:SetProperty('ProphecyMarkUnits', tProphecyUnits)
+        end
     end
 end
 
 function ArmageddonUnitDied(killedPlayerID, killedUnitID, playerID, unitID)
-    local pUnit = UnitManager.GetUnit(killedPlayerID, killedUnitID);
-    local bHasProphecyMark = pUnit:GetAbility():HasAbility('ABILITY_PROPHECY_MARK')
-    if bHasProphecyMark then
-        AdjustArmageddonCount(-1)
+    local pPlayer = Players[killedPlayerID]
+    local tProphecyUnits = pPlayer:GetProperty('ProphecyMarkUnits')
+    if tProphecyUnits then
+        local bHasProphecyMark = tProphecyUnits[killedUnitID]
+        if bHasProphecyMark then
+            AdjustArmageddonCount(-1)
+            tProphecyUnits[killedUnitID] = nil
+            pPlayer:SetProperty('ProphecyMarkUnits', tProphecyUnits)
+        end
     end
 end
 -- building tracker, create increase armageddon, delete decrease
 local tArmageddonBuildings = {[GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index]=4,
-                        [GameInfo.Buildings['STIGMATA_FROM_UNBORN'].Index]=5}
+                              [GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index]=5}
 
-function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)
-    -- buildingID is hopefully Buildings.Index?
+function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)       -- buildingID is hopefully Buildings.Index?
     local iArmaggeddonChange = tArmageddonBuildings[buildingID]
     if iArmaggeddonChange then
         AdjustArmageddonCount(iArmaggeddonChange)
     end
 end
 -- covered destroyed buildings in city raze logic
-
 
 function customFunc(playerID, cityID, projectID, buildingIndex, x, y)
     print('in custom project action UNIMPLEMENTED')
@@ -240,12 +253,12 @@ function Deepening(playerID, cityID, projectID, buildingIndex, x, y)
         end
     end
     local tPlotsToChange, iNewTerrainIndex, pPlot
-    for idx, tPlotTable in ipairs(tPlotConversionDeepeningMap) do
+    for iInitPlotTerrain, iPostPlotTerrain in pairs(tPlotConversionDeepeningMap) do
+        local tPlotTable = tPlotsByTerrainType[iInitPlotTerrain]
         tPlotsToChange = selectPercentage(tPlotTable, iPlotProportionChanged)
-        iNewTerrainIndex = tPlotConversionDeepeningMap[idx]
         for _, iPlotIndex in ipairs(tPlotsToChange) do
             pPlot = Map.GetPlotByIndex(iPlotIndex)
-            TerrainBuilder.SetTerrainType(pPlot, iNewTerrainIndex)
+            TerrainBuilder.SetTerrainType(pPlot, iPostPlotTerrain)
         end
     end
     -- When it is completed, the entire world will be cooled down - changing some of the deserts to plains,
@@ -590,7 +603,7 @@ local tProjectFunctions = {
     [GameInfo.Projects['PROJECT_NATURES_REVOLT'].Index]   = NaturesRevolt,
     [GameInfo.Projects['PROJECT_RITES_OGHMA'].Index]   = RitesOghma,
     [GameInfo.Projects['PROJECT_PURGE_THE_UNFAITHFUL'].Index]   = PurgeUnfaithful,
-    [GameInfo.Projects['PROJECT_PHOENIX'].Index]   = BloodOfThePhoenix
+    -- [GameInfo.Projects['PROJECT_PHOENIX'].Index]   = BloodOfThePhoenix
 }
 
 function ArmaProjectComplete(playerID, cityID, projectID, buildingIndex, x, y, isCancelled)
@@ -697,7 +710,7 @@ end
 
 -- nicked from Leugi Wildlife++
 function SpawnUnitInWilderness(iUnitToSpawn, eligiblePlots)
-    local iNumEligiblePlots = table.Count(eligiblePlots)
+    local iNumEligiblePlots = table.count(eligiblePlots)
     if iNumEligiblePlots > 0 then
         local iRandomEligiblePlotsPosition = Game.GetRandNum((iNumEligiblePlots + 1) - 1, 'RNG_barb_placement') + 1
         local spawnPlot = eligiblePlots[iRandomEligiblePlotsPosition]
@@ -748,8 +761,9 @@ local tResourceReverse = {  [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo
                         [GameInfo.Resources['RESOURCE_OLIVES'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index}
 
 local tHellReverse = reverse_table(tHellTransforms)
+local tTransformableTiles = {}
+local tLandTiles = {}
 function HellSpread()
-    local pPlot
     local iTerrainType
     local tAdjacentPlots
     local bIsOwned
@@ -761,8 +775,7 @@ function HellSpread()
     local tPotentialHellTiles = {}
     local tCoveredTiles = {}
     local iArmageddonCount = Game.GetProperty('ARMAGEDDON') or 0
-    for idx, plotID in tLandTiles do
-        pPlot = Map.GetPlotByIndex(plotID)
+    for plotID, pPlot in pairs(tLandTiles) do
         iTerrainType = pPlot:GetTerrainType()
         if tHellTerrains[iTerrainType] then
             tCurrentHellTiles[plotID] = 1
@@ -770,9 +783,9 @@ function HellSpread()
     end
     -- get potential hell tiles
     for iPlotID, _ in pairs(tCurrentHellTiles) do
-        pPlot = Map.GetPlotByIndex(iPlotID)
+        local pHellPlot = Map.GetPlotByIndex(iPlotID)
         -- not implemented yet, state religion Veil.
-        tAdjacentPlots = Map.GetAdjacentPlots(pPlot:GetX(), pPlot:GetY())       -- Plots?
+        tAdjacentPlots = Map.GetAdjacentPlots(pHellPlot:GetX(), pHellPlot:GetY())       -- Plots?
         for idx, pAdjPlot in ipairs(tAdjacentPlots) do
             iAdjPlotID = pAdjPlot:GetIndex()                    -- maybe the idx is in tAdjacentPlots? then dont need this line
             if not tCoveredTiles[iAdjPlotID] then
@@ -825,9 +838,8 @@ function HellSpread()
             ConvertTerrain(pAdjPlot, tHellTransforms, tResourceTransform)
         end
     end
-    for idx, iPlotID in tLandTiles do
-        if not tPotentialHellTiles[iPlotID] then                        -- filter non hell adjacent tiles
-            pPlot = Map.GetPlotByIndex(iPlotID)
+    for plotID, pPlot in pairs(tLandTiles) do
+        if not tPotentialHellTiles[plotID] then                        -- filter non hell adjacent tiles
             HellConversion = pPlot:GetProperty('HellConversion') or 0
             NewHellConversion = HellConversion -1
             if HellConversion > -1 then
@@ -860,8 +872,7 @@ function ConvertTerrain(pPlot, tTerrainConverter, tResourceConverter)
     end
 end
 
-local tTransformableTiles = {}
-local tLandTiles = {}
+
 function OnStart()
     local iW, iH = Map.GetGridSize();
 
@@ -885,7 +896,7 @@ end
 
 -- Events.CityReligionFollowersChanged.Add(religionLostCity)            -- or CityReligionChanged? We would use this to track religions present in a civ with plotProps, so we can do a collection_PLAYER_CITIES and COLLECTIONCOUNT_ANY to allow that religion.
 Events.DistrictRemovedFromMap.Add(OnCityRaze)
-Events.UnitAddedToMap.Add(ArmageddonUnitSpawning)
+GameEvents.UnitCreated.Add(ArmageddonUnitSpawning)           --
 Events.UnitKilledInCombat.Add(ArmageddonUnitDied)
 GameEvents.BuildingConstructed.Add(ArmageddonBuildingMade)
 Events.CityProjectCompleted.Add(ArmaProjectComplete)

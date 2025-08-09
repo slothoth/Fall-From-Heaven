@@ -1299,7 +1299,7 @@ function RemovedBarbCamp(x, y, owningPlayerID)
     end
     -- print('plotowner/tribeIndex/isBarbOcuppied on destroying improvement...', iPlotOwner, tribeIndex, bIsBarbOccupied)
     --[[
-    if tribeIndex then          -- todo still not perfect, barb camps will be destroyed on settle if a non-barb unit is occupying it
+    if tribeIndex then          -- still not perfect, barb camps will be destroyed on settle if a non-barb unit is occupying it
         if iPlotOwner > -1 and bIsBarbOccupied then
             print('spawning tribe because someone owns the plot and a barb unit is on it', iPlotOwner)
             spawnTribeSafe(iPlotID, tribeIndex)
@@ -1592,6 +1592,11 @@ end
 
 -- VULN_fire will not work as it requires tags
 local iABILITY_MUTATED = GameInfo.UnitAbilities['BUFF_MUTATED'].Index
+local iABILITY_HASTE = GameInfo.UnitAbilities['BUFF_HASTE'].Index
+local iABILITY_FAIR_WINDS = GameInfo.UnitAbilities['BUFF_FAIR_WINDS'].Index
+local tMovementBuffAbility = {[iABILITY_HASTE]=1, [iABILITY_FAIR_WINDS]=1}
+
+
 local iAMPH_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_AMPHIBIOUS_MELEE'].Index
 local iBLITZ_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_BLITZ_MELEE'].Index
 local iCANNIBALIZE_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_CANNIBALIZE_MELEE'].Index
@@ -1761,7 +1766,7 @@ local tAbilityMutations = { ['DISEASED'] = true, ['BUFF_EMPOWER'] = true, ['ABIL
 }
 local tFive = {2, 3, 4, 5}
 function onAbilityGained(playerID, unitID, unitAbilityIndex)
-    -- print(unitAbilityIndex)
+    -- print(unitAbilityIndex)          -- also do the
     if unitAbilityIndex == iABILITY_MUTATED then
         local pUnit = UnitManager.GetUnit(playerID, unitID)
         local pUnitExp = pUnit:GetExperience()
@@ -1792,6 +1797,10 @@ function onAbilityGained(playerID, unitID, unitAbilityIndex)
                 end
             end
         end
+    end
+    if tMovementBuffAbility[unitAbilityIndex] then
+        local pUnit = UnitManager.GetUnit(playerID, unitID)
+        UnitManager.ChangeMovesRemaining(pUnit, tMovementBuffAbility[unitAbilityIndex]);
     end
 end
 
@@ -2040,7 +2049,7 @@ local function MarchOfTheTrees(iPlayer, tParameters)
     for id, pUnit in pPlayer:GetUnits():Members() do
         if (not cachedUnits[id]) then
             print('new unit, setting lifespan')
-            pUnit:SetProperty('LifespanRemaining', 5)                  -- TODO NOT WORKING
+            pUnit:SetProperty('LifespanRemaining', 5)
         end
     end
     NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_DESCRIPTION'))

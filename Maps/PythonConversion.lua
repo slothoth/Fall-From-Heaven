@@ -1049,7 +1049,7 @@ local function setFlow()
             slthLog("region.gateRegion =", region.gateRegion)
             local validGateList = region:getGateListToNeighbor(region.gateRegion) -- randomly choose an outflow gate
             if #validGateList  == 0 then
-                print("For region %s validGateList == 0!!!!", region.ID)
+                print("For region validGateList == 0!!!!", region.ID)
             end
             if #validGateList > 1 then
                 local partGatePlot = validGateList[math.random(1, #validGateList)]

@@ -40,7 +40,7 @@ UPDATE Improvements SET PrereqTech='TECH_CALENDAR' WHERE ImprovementType='IMPROV
 UPDATE Improvements SET PrereqTech='TECH_HUNTING' WHERE ImprovementType='IMPROVEMENT_CAMP';
 UPDATE Improvements SET PrereqTech='SLTH_TECH_ARCHERY' WHERE ImprovementType='IMPROVEMENT_LUMBER_MILL';
 UPDATE Improvements SET PrereqTech='TECH_ANIMAL_HUSBANDRY' WHERE ImprovementType='IMPROVEMENT_PASTURE';
-UPDATE Improvements SET PrereqTech='SLTH_TECH_SAILING' WHERE ImprovementType='IMPROVEMENT_FISHING_BOATS';
+UPDATE Improvements SET PrereqTech='TECH_FISHING' WHERE ImprovementType='IMPROVEMENT_FISHING_BOATS';
 UPDATE Improvements SET PrereqTech = 'TECH_MASONRY' WHERE ImprovementType='IMPROVEMENT_QUARRY';
 
 UPDATE Improvements SET PlunderType='PLUNDER_GOLD' WHERE PlunderType='PLUNDER_FAITH';

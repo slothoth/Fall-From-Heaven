@@ -140,6 +140,7 @@ INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 INSERT INTO GameModifiers(ModifierId) VALUES
 ('START_WITH_COMBAT_FLANKING');
 
+UPDATE Maps SET DefaultPlayers=DefaultPlayers+2;
 
 /*
 
