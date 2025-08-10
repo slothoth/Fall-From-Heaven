@@ -535,4 +535,5 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_GOLDEN_AGE_ENDED_NOTIFICATION_TITLE', 'Player Golden Age Over', 'en_US'),
 ('LOC_GOLDEN_AGE_ENDED_NOTIFICATION_DESCRIPTION', '{1_LeaderType}{2_Ownership} Golden Age has ended', 'en_US'),
 ('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_TITLE', '{1_LeaderType} {2_Ownership} changed Traits', 'en_US'),
-('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_DESCRIPTION', '{1_LeaderType} {2_Ownership} Traits have changed from {3_trait}, {4_trait}, {5_trait} to {6_trait}, {7_trait}, {8_trait}', 'en_US');
+('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_DESCRIPTION', '{1_LeaderType} {2_Ownership} Traits have changed from {3_trait}, {4_trait}, {5_trait} to {6_trait}, {7_trait}, {8_trait}', 'en_US'),
+('LOC_CAST_WORLD_SPELL', 'Cast your One time World Spell?[NEWLINE][NEWLINE]{1_Description}', 'en_US');

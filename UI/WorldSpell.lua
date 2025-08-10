@@ -87,7 +87,11 @@ function OnOpen()
 	end
 	print('clicked')
 	local popup = PopupDialogInGame:new( "UnitPanelPopup" );
-	popup:ShowYesNoDialog( 'Cast your Onetime World Spell?', function() CastWorldSpell() end, OnNoCastWorldSpell);
+	local pConfig = PlayerConfigurations[Game.GetLocalPlayer()]
+	local sCivName = pConfig:GetCivilizationTypeName()
+	sCivName = 'LOC_WORLDSPELL_' .. sCivName .. '_DESCRIPTION'
+	local localisedDescription = Locale.Lookup("LOC_CAST_WORLD_SPELL", sCivName)
+	popup:ShowYesNoDialog( localisedDescription, function() CastWorldSpell() end, OnNoCastWorldSpell);
 	m_DeleteInProgress = true;
 end
 
