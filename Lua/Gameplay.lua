@@ -1,6 +1,8 @@
 include('WorldSpellSupport')
 include('SpawnSupport')
 
+include("GameCapabilities");                -- NOT SURE IF exists outside of UI
+
 local FreeXPUnits = { SLTH_UNIT_ADEPT = 8, SLTH_UNIT_IMP = 8, SLTH_UNIT_SHAMAN = 8, SLTH_UNIT_ARCHMAGE = 16, SLTH_UNIT_EATER_OF_DREAMS = 16,
                       SLTH_UNIT_CORLINDALE = 8, SLTH_UNIT_DISCIPLE_OF_ACHERON = 8, SLTH_UNIT_GAELAN = 12, SLTH_UNIT_GIBBON = 8,
                       SLTH_UNIT_GOVANNON = 8, SLTH_UNIT_HEMAH = 8, SLTH_UNIT_LICH = 16, SLTH_UNIT_ILLUSIONIST = 12, SLTH_UNIT_MAGE = 12,
@@ -224,7 +226,7 @@ function CountdownReduceGame(countdown_propKey, plotPropKey)
                     local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
                     local iCurrentPlotAmount = pCapitalPlot:GetProperty(plotPropKey)
                     if iCurrentPlotAmount then
-                        pCapitalPlot:SetProperty(plotPropKey, 0)
+                        setPlayerPropForRequirementsCapital(pCountdownPlayer, pCapitalPlot, plotPropKey, 0)
                     end
                 end
             end
@@ -236,12 +238,14 @@ function CountdownReducePlayer(pPlayer, countdown_propKey, plotPropKey)
     if pPlayer:GetCities() then
         local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
         if pCapitalCity then
-            local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
+            local iX = pCapitalCity:GetX()
+            local iY = pCapitalCity:GetY()
+            local pCapitalPlot = Map.GetPlot(iX, iY)
             local countDownDelay = pCapitalPlot:GetProperty(countdown_propKey)
             if countDownDelay and countDownDelay > 1 then
-                pCapitalPlot:SetProperty(countdown_propKey, countDownDelay - 1)
+                setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, countdown_propKey, countDownDelay - 1)
             elseif countDownDelay and countDownDelay == 1 then
-                pCapitalPlot:SetProperty(countdown_propKey, countDownDelay - 1)
+                setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, countdown_propKey, countDownDelay - 1)
                 -- turn off property in all city centre plots
                  for _, pCity in pPlayer:GetCities():Members() do
                     local pPlot = pCity:GetPlot();
@@ -250,7 +254,16 @@ function CountdownReducePlayer(pPlayer, countdown_propKey, plotPropKey)
                     end
                 end
                 if countdown_propKey == 'GoldenAgeDuration' then
-                    NotifyMetHumans()
+                    local iPlayer = pPlayer:GetID()
+                    local pConfig = PlayerConfigurations[iPlayer]
+                    local sLeaderType = pConfig:GetLeaderTypeName()
+                    local notificationData = {[ParameterTypes.MESSAGE]=Locale.Lookup('LOC_GOLDEN_AGE_ENDED_NOTIFICATION_TITLE'),
+                                              [ParameterTypes.SUMMARY]=Locale.Lookup('LOC_GOLDEN_AGE_ENDED_NOTIFICATION_DESCRIPTION', sLeaderType, "'s")
+                    }
+                    -- notify yourself differently
+                    NotifyMetHumans(iPlayer, notificationData, iX, iY)
+                    notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_GOLDEN_AGE_ENDED_NOTIFICATION_DESCRIPTION', 'Your', '')
+                    NotifySelf(iPlayer, notificationData)
                     print("(Leader name)'s Golden Age has ended")
                 end
             end
@@ -269,6 +282,53 @@ function AddExperienceIfAble(pUnit, iFXP_gain)
         pExp:ChangeExperience(iExpForNextLevel);
     end
 end
+
+
+local tTraitPropKeys = {
+        SELECTED_AGGRESSIVE=true,
+        SELECTED_ARCANE=true,
+        SELECTED_CHARISMATIC=true,
+        SELECTED_CREATIVE=true,
+        SELECTED_DEFENDER=true,
+        SELECTED_EXPANSIVE=true,
+        SELECTED_FINANCIAL=true,
+        SELECTED_INDUSTRIOUS=true,
+        SELECTED_ORGANIZED=true,
+        SELECTED_PHILOSOPHICAL=true,
+        SELECTED_RAIDERS=true,
+        SELECTED_SPIRITUAL=true,
+        SELECTED_SUMMONER=true
+    }
+
+local tTraitPropStrings = {
+        SELECTED_AGGRESSIVE='Aggressive',
+        SELECTED_ARCANE='Arcane',
+        SELECTED_CHARISMATIC='Charismatic',
+        SELECTED_CREATIVE='Creative',
+        SELECTED_DEFENDER='Defender',
+        SELECTED_EXPANSIVE='Expansive',
+        SELECTED_FINANCIAL='Financial',
+        SELECTED_INDUSTRIOUS='Industrious',
+        SELECTED_ORGANIZED='Organized',
+        SELECTED_PHILOSOPHICAL='Philosophical',
+        SELECTED_RAIDERS='Raiders',
+        SELECTED_SPIRITUAL='Spiritual',
+        SELECTED_SUMMONER='Summoner'
+    }
+
+function getCurrentTraits(pPlayer)
+    local tCurrentTraits = {}
+    local tIndexedCurrentTraits = {}
+    for propKey, _ in pairs(tTraitPropKeys) do
+        local iTraitActive = pPlayer:GetProperty(propKey)
+        if iTraitActive and iTraitActive > 0 then
+            tCurrentTraits[propKey] = true
+            table.insert(tIndexedCurrentTraits, tTraitPropStrings[propKey])
+        end
+    end
+    return tCurrentTraits, tIndexedCurrentTraits
+end
+
 local iGameSpeedMult = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier / 100
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
@@ -469,6 +529,64 @@ function onTurnStartGameplay(playerId)
             end
         end
     end
+    if HasTrait("SLTH_TRAIT_INSANE", playerId) then
+        if math.random(100) < 2 then
+            print('doing insane change trait')
+            local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
+            if pCapitalCity then
+                local pCapitalPlot = pCapitalCity:GetPlot()
+                local tCurrentTraits, tNotifyStrings = getCurrentTraits(pPlayer)
+                local tPossibleNewTraits = {}
+                for propKey, _ in pairs(tTraitPropKeys) do
+                    if not tCurrentTraits[propKey] then
+                        table.insert(tPossibleNewTraits, propKey)
+                        print('possible to get this trait', propKey)
+                    end
+                end
+                local tNewTraits = {}
+                for propKey, _ in pairs(tCurrentTraits) do
+                    print('changing current trait', propKey)
+                    local iChoice = math.random(#tPossibleNewTraits)
+                    local sNewTrait = tPossibleNewTraits[iChoice]
+                    table.remove(tPossibleNewTraits, iChoice)
+                    tNewTraits[propKey] = sNewTrait
+                    table.insert(tNotifyStrings, tTraitPropStrings[sNewTrait])
+                    print('choosing this trait', tTraitPropStrings[sNewTrait])
+                end
+                -- now the payoff
+                for oldPropKey, newPropKey in pairs(tNewTraits) do
+                    setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, oldPropKey, 0)
+                    setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, newPropKey, 1)
+                end
+                -- finally, notify
+                local pConfig = PlayerConfigurations[playerId]
+                local sLeaderType = pConfig:GetLeaderTypeName()
+                print('trying to do summary, args',tNotifyStrings[1],
+                                                tNotifyStrings[2], tNotifyStrings[3], tNotifyStrings[4], tNotifyStrings[5],
+                                                tNotifyStrings[6])
+                local sSummary = Locale.Lookup('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_DESCRIPTION', 'Your', '', tNotifyStrings[1],
+                                                tNotifyStrings[2], tNotifyStrings[3], tNotifyStrings[4], tNotifyStrings[5],
+                                                tNotifyStrings[6])
+                local notificationData = {[ParameterTypes.MESSAGE]=Locale.Lookup('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_TITLE', 'You', 'have'),
+                                          [ParameterTypes.SUMMARY]=sSummary
+                }
+                NotifySelf(playerId, notificationData)
+                sSummary = Locale.Lookup('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_DESCRIPTION', sLeaderType, "'s", tNotifyStrings[1],
+                                                tNotifyStrings[2], tNotifyStrings[3], tNotifyStrings[4], tNotifyStrings[5],
+                                                tNotifyStrings[6])
+                notificationData = {[ParameterTypes.MESSAGE]=Locale.Lookup('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_TITLE', sLeaderType, 'has'),
+                                    [ParameterTypes.SUMMARY]=sSummary
+                }
+                NotifyMetHumans(playerId, notificationData, pCapitalPlot:GetX(), pCapitalPlot:GetY())               -- LEADER_NAME traits have changed from x, y, z to a, b, c
+            end
+        end
+    end
+    if HasTrait("SLTH_TRAIT_ADAPTIVE", playerId) then
+        local iCurrentTurn = Game.GetCurrentGameTurn()
+        if iCurrentTurn == 100 then
+            -- offerChangeTrait()
+        end
+    end
 end
 
 function updatePlotPropertyAmenities(pCity)
@@ -479,6 +597,7 @@ function updatePlotPropertyAmenities(pCity)
         pPlot:SetProperty('CITY_AMENITIES_REQUIRED_'.. idx, bin_val)
     end
 end
+
 ------------ Cottage / Pirate Cove improvement upgrading over turns  ---------
 
 function ImprovementsWorkOrPillageChange(x, y, improvementIndex, improvementPlayerID, resourceIndex, isPillaged, isWorked)
@@ -1417,14 +1536,7 @@ function BuildingBuilt(playerID, cityID, buildingID, plotID, isOriginalConstruct
         Game:SetProperty('PILLAR_OF_CHAINS_CITY', cityID)
     end
     if buildingID == iBonePalace then
-        GoldenAgeGrant(Players[playerID],10)
-    end
-    if buildingID == iBuildingPalace then                       -- mostly aesthetic, just ensures science isnt way small before maintenance kicks in on turn 1
-        if Game.GetCurrentGameTurn() < 5 then
-            local pPlot = Map.GetPlotByIndex(plotID)
-            pPlot:SetProperty('CommIntoScience', 9)
-            pPlot:SetProperty('CommIntoGold', 1)
-        end
+        GoldenAgeGrant(playerID,10)
     end
 end
 
@@ -1809,6 +1921,24 @@ function InitializeFreeCivics()
         end
     end
 end
+local tStartingTraitsInsane = { 'SELECTED_ARCANE', 'SELECTED_CHARISMATIC', 'SELECTED_CREATIVE' }
+function IntializeVariableTraits()
+    if Game.GetCurrentGameTurn() == 1 then
+        for playerId, pPlayer in ipairs(Players) do
+            if pPlayer:IsMajor() then
+                if HasTrait("SLTH_TRAIT_INSANE", playerId) then
+                    for _, propKey in ipairs(tStartingTraitsInsane) do
+                        setPlayerPropForRequirements(playerId, propKey, 1)
+                    end
+                elseif HasTrait("SLTH_TRAIT_ADAPTIVE", playerId) then
+                    setPlayerPropForRequirements(playerId, 'SELECTED_PHILOSOPHICAL', 1)
+                end
+            end
+        end
+    end
+end
+
+
 tNoBuildDistricts = {['DISTRICT_WONDER']=true, ['DISTRICT_CITY_CENTER']=true}
 tDistricts = {}
 for row in GameInfo.Districts() do
@@ -1864,6 +1994,7 @@ function onStart()
 
     InitializeClans()
     InitializeFreeCivics()
+    IntializeVariableTraits()
     print('-----------------Gameplay loaded')
 end
 
@@ -2138,7 +2269,7 @@ end
 function Revelry(iPlayer, tParameters)            -- TODO
 	-- Double length Golden age. Needs to check gamespeed for golden age speed. then fix golden age granting.
     local pPlayer = Players[iPlayer]
-    GoldenAgeGrant(pPlayer,20)
+    GoldenAgeGrant(iPlayer,20)
     NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_REVELRY_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_REVELRY_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end

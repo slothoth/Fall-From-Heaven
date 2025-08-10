@@ -114,7 +114,8 @@ function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
     return tNewUnits
 end
 
-function GoldenAgeGrant(pPlayer, iGoldenDuration)
+function GoldenAgeGrant(iPlayer, iGoldenDuration)
+    local pPlayer = Players[iPlayer]
     local iAdjustedGoldenAgeDuration = iGoldenDuration * iGameSpeedMult
     for _, pCity in pPlayer:GetCities():Members() do
         local pPlot = pCity:GetPlot();
@@ -128,7 +129,7 @@ function GoldenAgeGrant(pPlayer, iGoldenDuration)
     local bNewGoldenAge = iPropertyGoldenAge < 1
     iPropertyGoldenAge = iPropertyGoldenAge + iAdjustedGoldenAgeDuration
     print('setting golden age duration to', iPropertyGoldenAge)
-    pCapitalPlot:SetProperty('GoldenAgeDuration', iPropertyGoldenAge)
+    setPlayerPropForRequirements(iPlayer, 'GoldenAgeDuration', iPropertyGoldenAge)
     print('confirm golden age exists on capital', pCapitalPlot:GetProperty('GoldenAgeDuration'))
     if bNewGoldenAge then
         print("(Leader name)'s Golden Age has just begun for x turns." )
@@ -157,4 +158,87 @@ function NotifyMetHumans(iSourcePlayer, notificationData, iX, iY)
     end
 end
 
+function NotifySelf(iSourcePlayer, notificationData, iX, iY)
+    local pPlayer = Players[iSourcePlayer]
+    if pPlayer:IsHuman() then
+        NotificationManager.SendNotification(iSourcePlayer, iUserDefNotif, notificationData, nil, iX, iY)
+    end
+end
+
+local sPropTrackKey = 'property_tracking'
+function setPlayerPropForRequirements(iPlayer, sPropKey, value)
+    local pPlayer = Players[iPlayer]
+    if pPlayer then
+        local pCities = pPlayer:GetCities()
+        if pCities:GetCapitalCity() then                                             -- ZZ some properties could be set before city settlement
+            local pCapitalPlot = pCities:GetCapitalCity():GetPlot()
+            pCapitalPlot:SetProperty(sPropKey, value)
+        end
+        pPlayer:SetProperty(sPropKey, value)
+        local tPropertyList = pPlayer:GetProperty(sPropTrackKey)          -- SHOULD NEVER FAIL so no fallback
+        if tPropertyList[sPropKey] then
+            if not value then
+                tPropertyList[sPropKey] = nil
+            end
+        else
+            tPropertyList[sPropKey] = true
+        end
+        pPlayer:SetProperty(sPropTrackKey, tPropertyList)
+    end
+    print('setting and tracking', sPropKey, value)
+end
+
+function setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, value)                -- faster version, when setting many and dont wanna reget capital
+    pCapitalPlot:SetProperty(sPropKey, value)
+    pPlayer:SetProperty(sPropKey, value)
+    local tPropertyList = pPlayer:GetProperty(sPropTrackKey)          -- SHOULD NEVER FAIL so no fallback
+    if tPropertyList[sPropKey] then
+        if not value then
+            tPropertyList[sPropKey] = nil
+        end
+    else
+        tPropertyList[sPropKey] = true
+    end
+    pPlayer:SetProperty(sPropTrackKey, tPropertyList)
+    print('setting and tracking', sPropKey, value)
+end
+
+function initPropertyTracking()                     -- property tracking list is a key:val list of properties to migrate when losing a capital
+    for iPlayer, pPlayer in ipairs(Players) do          -- by referencing the cached version on the player object
+        if pPlayer:IsMajor() then
+            local tPropertyList = pPlayer:GetProperty(sPropTrackKey)        -- NOTE: Not all properties assigned to a city should migrate
+            if not tPropertyList then                                       -- for example, holy city property, so dont blanket use it
+                pPlayer:SetProperty(sPropTrackKey, {})                     -- it needs to be keyed for fast lookup when adjust property that may already be in table
+            end                                                             -- as otherwise could grow very long
+        end
+    end
+end
+
+function migrateCapitalProperties(pPlayer, newCapitalPlot, oldCapitalPlot)
+    local tPropertyList = pPlayer:GetProperty(sPropTrackKey)
+    print('migrating plot properties')
+    for sPropKey, val in pairs(tPropertyList) do
+        local propValue = pPlayer:GetProperty(sPropKey)
+        print('migrating plot prop to new capital', sPropKey, propValue)
+        if propValue then
+            newCapitalPlot:SetProperty(sPropKey, propValue)
+        end
+        oldCapitalPlot:SetProperty(sPropKey, nil)
+    end
+
+end
+
+function setCapitalProperties(pPlayer, newCapitalPlot)
+    local tPropertyList = pPlayer:GetProperty(sPropTrackKey)
+    for sPropKey, val in pairs(tPropertyList) do
+        local propValue = pPlayer:GetProperty(sPropKey)
+        if propValue then
+            newCapitalPlot:SetProperty(sPropKey, propValue)
+            print('setting plot prop on newly settled capital', sPropKey, propValue)
+        else
+            print('could not find property on player! issue with setCapitalProperties')
+        end
+    end
+end
 print('initialised spawn support')
+initPropertyTracking()

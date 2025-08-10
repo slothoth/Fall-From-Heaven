@@ -1,3 +1,4 @@
+include('SpawnSupport')
 local sWorldSpellPropKey = 'WorldSpellReady'
 local iNotifType = NotificationTypes.USER_DEFINED_2;
 function NotifyAllHumansAlt(notificationData, iX, iY)
@@ -201,18 +202,7 @@ function Stasis(iPlayer, tParameters)
     print('setting Stasis to ' .. tostring(iDelay))
     Game:SetProperty('STASIS_COUNTDOWN', iNewStasis)
     for iPlayerID, pPlayer in ipairs(Players) do
-        if pPlayer then
-            local pCities = pPlayer:GetCities()
-            if pCities then
-                local pCapitalCity = pCities:GetCapitalCity()
-                if pCapitalCity then
-                    iX = pCapitalCity:GetX()
-                    iY = pCapitalCity:GetY()
-                    local pCapitalPlot = Map.GetPlot(iX, iY)
-                    pCapitalPlot:SetProperty('InStasis', 1)
-                end
-            end
-        end
+        setPlayerPropForRequirements(iPlayerID, 'InStasis', 1)
     end
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)

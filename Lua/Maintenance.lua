@@ -1,3 +1,4 @@
+include "SpawnSupport"
 -- Can we only trigger event when
 -- any city is built
  --city builds a maintenance building, or is pillaged
@@ -341,11 +342,8 @@ function adjustSliders(playerId, pPlayer, pReligion, iExtraTax)
         print('Post adjust Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
         print('science ratio', iNewScienceAmount)
         if iNewGoldAmount ~= iGoldRatio then
-            pPlayer:SetProperty(sCommerceGoldConversionKey, iNewGoldAmount)
-            pPlot:SetProperty(sCommerceGoldConversionKey, iNewGoldAmount)
-
-            pPlayer:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
-            pPlot:SetProperty(sCommerceScienceConversionKey, iNewScienceAmount)
+            setPlayerPropForRequirements(playerId, sCommerceGoldConversionKey, iNewGoldAmount)
+            setPlayerPropForRequirements(playerId, sCommerceScienceConversionKey, iNewScienceAmount)
             print('updating commerce conversion to Science/Gold', iNewScienceAmount, iNewGoldAmount)
         end
     end

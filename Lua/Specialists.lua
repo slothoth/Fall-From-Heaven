@@ -1,3 +1,4 @@
+include('SpawnSupport')
 -- When Policy slots change
 -- check if Policy removed is Scholarship or Caste System
 -- remove all dummy buildings associated with each
@@ -56,13 +57,14 @@ function OnPolicyChanged(iPlayerID, ePolicyIndex, bEnacted)
 			if pCities then
 				local pCapitalCity = pCities:GetCapitalCity()
 				if pCapitalCity then
-					local pPlot = pCapitalCity:GetPlot()
+					local pCapitalPlot = pCapitalCity:GetPlot()
 					for eStatePolicyIndex, sPropKey in pairs(m_tStateReligionPolicies) do
 						if eStatePolicyIndex == ePolicyIndex then
-							pPlot:SetProperty(sPropKey, 1)
+							setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, 1)
 							print('changed state religion to ', sPropKey)
 						else
 							pPlot:SetProperty(sPropKey, 0)
+							setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, 0)
 						end
 					end
 				end

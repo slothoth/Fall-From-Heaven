@@ -229,4 +229,8 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_TRAIT_SUMMONER_NAME', 'Summoner', 'en_US'),
 ('LOC_SLTH_TRAIT_SPIRITUAL_NAME', 'Spiritual', 'en_US'),
 ('LOC_SLTH_TRAIT_ORGANIZED_NAME', 'Organized', 'en_US'),
-('LOC_DIPLO_CHARISMA', 'You are charming.', 'en_US');
+('LOC_DIPLO_CHARISMA', 'You are charming.', 'en_US'),
+('LOC_SLTH_TRAIT_INSANE_NAME', 'Insane', 'en_US'),
+('LOC_SLTH_TRAIT_INSANE_DESCRIPTION', 'Start with 3 traits, Arcane, Charismatic and Creative. Will change traits randomly. Have fun!', 'en_US'),
+('LOC_SLTH_TRAIT_ADAPTIVE_NAME', 'Insane', 'en_US'),
+('LOC_SLTH_TRAIT_ADAPTIVE_DESCRIPTION', 'Starts with the Philosophical Trait. Can change this trait to any others you do not have every hundred turns*. The default trait, Philosophical, grants Double [ICON_GreatPerson]Great People points , Double Production[ICON_Production] towards Elder Councils and Libraries', 'en_US');

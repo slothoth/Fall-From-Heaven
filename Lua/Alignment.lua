@@ -86,20 +86,24 @@ function onReligionSwitch(playerID, policyID, wasEnacted)
             iNewAlignment = tReligionFromEvil[sReligion]
         end
     end
-    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-    if pCapitalCity then
-        local pPlot = pCapitalCity:GetPlot()
-        if iNewAlignment then
-            pPlayer:SetProperty('alignment', iNewAlignment)
-            pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
-            pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
-            print('Uodating alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]) .. ' for ' .. PlayerConfigurations[playerID]:GetLeaderTypeName())
-        end
-        for idx, sReligionPropKey in ipairs(tReligionNames) do
-            if sReligionPropKey == sReligion then
-                pPlot:SetProperty(sReligionPropKey, 1)
-            else
-                pPlot:SetProperty(sReligionPropKey, 0)
+
+    local pCities = pPlayer:GetCities()
+    if pCities then
+        local pCapitalCity = pCities:GetCapitalCity()
+        if pCapitalCity then
+            local pCapitalPlot = pCapitalCity:GetPlot()
+            if iNewAlignment then
+                setPlayerPropForRequirements(playerID, 'alignment', iNewAlignment)
+                setPlayerPropForRequirements(playerID, tAlignmentPropKeys[iNewAlignment], 1)
+                setPlayerPropForRequirements(playerID, tAlignmentPropKeys[iCurrentAlignment], 0)
+                print('Updating alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]) .. ' for ' .. PlayerConfigurations[playerID]:GetLeaderTypeName())
+            end
+            for _, sReligionPropKey in ipairs(tReligionNames) do
+                if sReligionPropKey == sReligion then
+                    setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sReligionPropKey, 1)
+                else
+                    setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sReligionPropKey, 0)
+                end
             end
         end
     end
@@ -256,9 +260,29 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     end
 end
 local iBuildingPalace = GameInfo.Buildings['BUILDING_PALACE'].Index
+local sCapitalXPropKey = 'capitalX'
+local sCapitalYPropKey = 'capitalY'
 function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     if buildingID == iBuildingPalace then
         local pPlayer = Players[playerID]
+        -- first we need to do palace migrations, as all propkey stuff leads from that
+        local iCapitalPlotX = pPlayer:GetProperty(sCapitalXPropKey)
+        local iCapitalPlotY = pPlayer:GetProperty(sCapitalYPropKey)
+        local pPlot = Map.GetPlotByIndex(plotID)
+        local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
+        if iCapitalPlotX and (iCapitalPlotX ~= iPlotX or iCapitalPlotY ~= iPlotY) then
+            pPlayer:SetProperty(sCapitalXPropKey, iPlotX)
+            pPlayer:SetProperty(sCapitalYPropKey, iPlotY)
+            local oldCapitalPlot = Map.GetPlot(iCapitalPlotX, iCapitalPlotY)
+            migrateCapitalProperties(pPlayer, pPlot, oldCapitalPlot)                   -- we migrate capital properties
+        end
+
+        if not iCapitalPlotX then                           -- establish capital
+            pPlayer:SetProperty(sCapitalXPropKey, iPlotX)
+            pPlayer:SetProperty(sCapitalYPropKey, iPlotY)
+            setCapitalProperties(pPlayer, pPlot)
+        end
+
         local pConfig = PlayerConfigurations[playerID]
         if pConfig:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
@@ -271,22 +295,19 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
         end
         print('Player ' .. pConfig:GetLeaderTypeName() .. ' alignment on capital settle was ' ..tAlignmentPropKeys[iAlignment])
 
-        local pPlot = Map.GetPlotByIndex(plotID)
+
         for _, sAlignmentPropKey in pairs(tAlignmentPropKeys) do
-            pPlot:SetProperty(sAlignmentPropKey, 0)
+            setPlayerPropForRequirementsCapital(pPlayer, pPlot, sAlignmentPropKey, 0)
         end
         if tAlignmentPropKeys[iAlignment] then
-            pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
+            setPlayerPropForRequirementsCapital(pPlayer, pPlot, tAlignmentPropKeys[iAlignment], 1)
             print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment]));
         end
 
         -- set capital commerce ratios
         if not pPlot:GetProperty('CommIntoGold') then
-            pPlot:SetProperty('CommIntoGold', 10)
-            pPlayer:SetProperty('CommIntoGold', 10)
-
-            pPlot:SetProperty('CommIntoScience', 0)
-            pPlayer:SetProperty('CommIntoScience', 0)
+            setPlayerPropForRequirementsCapital(pPlayer, pPlot, 'CommIntoGold', 9)
+            setPlayerPropForRequirementsCapital(pPlayer, pPlot, 'CommIntoScience', 1)
         end
 
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
@@ -438,7 +459,17 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
             print('creating hyborem at',iCityMakeX ,iCityMakeY)
             local playerUnits = pInfernal:GetUnits()
+            local iLongbowMan = GameInfo.Units['SLTH_UNIT_LONGBOWMAN'].Index
+            local iChampion = GameInfo.Units['SLTH_UNIT_CHAMPION'].Index
+            playerUnits:Create(iLongbowMan, iCityMakeX, iCityMakeY);            -- should have mobility eh
+            playerUnits:Create(iLongbowMan, iCityMakeX, iCityMakeY);
+            playerUnits:Create(iChampion, iCityMakeX, iCityMakeY);
+            playerUnits:Create(iChampion, iCityMakeX, iCityMakeY);
+            playerUnits:Create(GameInfo.Units['SLTH_UNIT_IMP'].Index, iCityMakeX, iCityMakeY);
             playerUnits:Create(GameInfo.Units['UNIT_SETTLER'].Index, iCityMakeX, iCityMakeY);
+            playerUnits:Create(GameInfo.Units['UNIT_BUILDER'].Index, iCityMakeX, iCityMakeY);
+            -- 3 manes: , probably needs done on city settle
+            -- a second settler?
             GrantTechParity(iInfernalPlayerId, playerID)
             GrantCultureParity(iInfernalPlayerId, playerID)
             Game:SetProperty('infernal_spawned', 1)

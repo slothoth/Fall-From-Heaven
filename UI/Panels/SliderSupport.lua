@@ -20,16 +20,11 @@ function ChangeCommerceRatio(iChange)              -- accepts 1 or -1.
     end
     local iNewScienceRatio = 10 - iNewGoldRatio
 	local tGoldPlotParameters = {OnStart='SlthSetCapitalProperty', sPropKey=sCommerceGoldConversionKey, iPropValue=iNewGoldRatio}
-	local tGoldPlayerParameters = {OnStart='SlthSetPlayerProperty', sPropKey=sCommerceGoldConversionKey, iPropValue=iNewGoldRatio}
 
     local tSciencePlotParameters = {OnStart='SlthSetCapitalProperty', sPropKey=sCommerceScienceConversionKey, iPropValue=iNewScienceRatio}
-	local tSciencePlayerParameters = {OnStart='SlthSetPlayerProperty', sPropKey=sCommerceScienceConversionKey, iPropValue=iNewScienceRatio}
 
     UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tGoldPlotParameters);
-    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tGoldPlayerParameters);
-
     UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tSciencePlotParameters);
-    UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tSciencePlayerParameters);
 
     local bIsManualSliders = pPlayer:GetProperty(sManualSlidersKey) or 0
     if bIsManualSliders == 0 then

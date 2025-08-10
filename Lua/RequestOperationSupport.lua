@@ -33,13 +33,10 @@ local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTUR
 local function SetCapitalProperty(iPlayer, tParameters)
     local sPropKey = tParameters.sPropKey;
     local iPropValue = tParameters.iPropValue;
-    local pPlayer = Players[iPlayer];
-    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-    local pCapitalPlot = pCapitalCity:GetPlot()
-    pCapitalPlot:SetProperty(sPropKey, iPropValue)
+    setPlayerPropForRequirements(iPlayer, sPropKey, iPropValue)
 end
 
-local function SetPlayerProperty(iPlayer, tParameters)
+local function SetPlayerProperty(iPlayer, tParameters)          -- used for commerce using manual sliders
     local sPropKey = tParameters.sPropKey;
     local iPropValue = tParameters.iPropValue;
     local pPlayer = Players[iPlayer];
@@ -355,7 +352,7 @@ local function GrantGoldenAge(iPlayer, tParameters)
     local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
     -- local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
     -- local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
-    GoldenAgeGrant(pPlayer, 10)                                                             -- should scale by speed
+    GoldenAgeGrant(iPlayer, 10)                                                             -- should scale by speed
     pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
 end
 

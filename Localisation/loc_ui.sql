@@ -531,4 +531,8 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_TOOLTIP_SAMPLE_DIPLOMACY_ESUS_DIFFERENT_STATE_RELIGION', 'You are a heathen. (You worship another religion)', 'en_US'),
 ('LOC_DIPLO_SAME_RELIGION_ESUS', 'We appreciate our brothers and sisters in the faith.', 'en_US'),
 ('LOC_DIPLO_DIFFERENT_RELIGION_ESUS', 'You follow a different Religion than ours (Council of Esus).', 'en_US'),
-('LOC_SLTH_TRIBE_BANNER_NAME', '{1_ClanName}', 'en_US');
+('LOC_SLTH_TRIBE_BANNER_NAME', '{1_ClanName}', 'en_US'),
+('LOC_GOLDEN_AGE_ENDED_NOTIFICATION_TITLE', 'Player Golden Age Over', 'en_US'),
+('LOC_GOLDEN_AGE_ENDED_NOTIFICATION_DESCRIPTION', '{1_LeaderType}{2_Ownership} Golden Age has ended', 'en_US'),
+('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_TITLE', '{1_LeaderType} {2_Ownership} changed Traits', 'en_US'),
+('LOC_INSANE_CHANGE_TRAIT_NOTIFICATION_DESCRIPTION', '{1_LeaderType} {2_Ownership} Traits have changed from {3_trait}, {4_trait}, {5_trait} to {6_trait}, {7_trait}, {8_trait}', 'en_US');
