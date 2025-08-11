@@ -3,6 +3,10 @@ UPDATE GlobalParameters SET Value = '5' WHERE Name = 'FORTIFY_TURN_MAX';
 UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_MAX_LEVEL';
 UPDATE GlobalParameters SET Value = '99' WHERE Name = 'INFLUENCE_TOKENS_MINIMUM_FOR_SUZERAIN';
 UPDATE GlobalParameters SET Value = '1000' WHERE Name = 'RELIGION_PANTHEON_MIN_FAITH';
+UPDATE GlobalParameters SET Value = '50' WHERE Name = 'UPGRADE_NET_PRODUCTION_PERCENT_COST';
+
+UPDATE GlobalParameters SET Value = '3' WHERE Name = 'CAPITAL_IDENTITY_PRESSURE_TILE_RADIUS_MAXIUMUM_BASE';
+UPDATE GlobalParameters SET Value = '3' WHERE Name = 'CITIZEN_IDENTITY_PRESSURE_RADIUS_CUTOFF';
 
 UPDATE GlobalParameters SET Value = '99' WHERE Name = 'EXPERIENCE_MAXIMUM_ONE_COMBAT';
 
@@ -20,10 +24,11 @@ INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES ('GLOBAL_PROMOTION
 INSERT INTO GameModifiers(ModifierId) VALUES
 ('GLOBAL_PROMOTION_DOESNT_END_TURN');
 
+UPDATE ModifierArguments SET Value= '5' WHERE ModifierId='STANDARD_DIPLOMATIC_WARMONGER' AND Name='PercentOfGrievances';
 
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_BASE_COST';
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_MINIMUM_COST';
-
+-- This is only UI stuff I think
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_WORLD_CONGRESS';
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_TOP_PANEL_ENVOYS';
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_CITY_STATES_VIEW';
@@ -39,11 +44,14 @@ DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GREAT_PEOPLE_REC
 
 -- UPDATE GlobalParameters SET Value = '5' WHERE Name = 'PLOT_UNIT_LIMIT';      - i dont want this but? does it worK?
 
-INSERT INTO GameModifiers(ModifierId) VALUES
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'SLTH_RIVER_GOLD');
+
+INSERT INTO GameModifiers(ModifierId) VALUES                -- DO AS TRAITMODIFIER, since fails sometimes to update
 ('SLTH_RIVER_GOLD');
 
 INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
-('SLTH_RIVER_GOLD', 'MODIFIER_GAME_ADJUST_PLOT_YIELD', 'RIVER_ADJACENT_AND_NOT_FORESTED_REQS');
+('SLTH_RIVER_GOLD', 'MODIFIER_PLAYER_ADJUST_PLOT_YIELD', 'RIVER_ADJACENT_AND_NOT_FORESTED_REQS');
 
 INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 ('SLTH_RIVER_GOLD', 'YieldType', 'YIELD_FAITH'),
@@ -141,6 +149,17 @@ INSERT INTO GameModifiers(ModifierId) VALUES
 ('START_WITH_COMBAT_FLANKING');
 
 UPDATE Maps SET DefaultPlayers=DefaultPlayers+2;
+
+-- no loyalty
+INSERT INTO Modifiers(ModifierId, ModifierType) VALUES
+('SLTH_LOYALTY_OFF', 'MODIFIER_PLAYER_CITIES_ADJUST_ALWAYS_LOYAL');
+
+INSERT INTO ModifierArguments(ModifierId, Name, "Value") VALUES
+('SLTH_LOYALTY_OFF', 'AlwaysLoyal', '1');
+
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'SLTH_LOYALTY_OFF');
+
 
 /*
 
