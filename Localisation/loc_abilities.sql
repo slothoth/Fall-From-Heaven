@@ -1024,6 +1024,8 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_MORALE_DESCRIPTION', '+2[ICON_Strength] Combat Strength, doubled when attacking a city. 10% chance of wearing off each turn.', 'en_US'),
 ('LOC_BUFF_MORALE_CITY_ATTACK_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength from Morale City Attack.', 'en_US'),
 ('LOC_PROMOTION_RUSTED_DESCRIPTION', '-2[ICON_STRENGTH] Combat Strength from Rusted.', 'en_US'),
+('MODIFIER_MINOR_WEAK_STRENGTH_LOSS', '-{1_Amount}[ICON_STRENGTH] Combat Strength from Weak.', 'en_US'),
+('LOC_ABILITY_SUMMONED_STRENGTH_DESCRIPTION', '+{1_Amount}[ICON_STRENGTH] Combat Strength from Summoner Trait.', 'en_US'),
 ('LOC_DISEASED_COMBAT_WEAKNESS_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength from Diseased. Spreads Disease to melee Combatants.', 'en_US'),
 ('LOC_ABILITY_BRONZE_WEAPONS_DESCRIPTION', '+5 [ICON_Strength] Combat Strength from Bronze Weapons.', 'en_US'),
 ('LOC_ABILITY_IRON_WEAPONS_DESCRIPTION', '+10[ICON_Strength] Combat Strength from Iron Weapons', 'en_US'),

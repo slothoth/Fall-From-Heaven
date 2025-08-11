@@ -34,3 +34,4 @@ python_gen/data/foreign_keys.json
 /python_gen/misc/ModbuddyValidation.py
 /python_gen/run.sh
 /Maps/Erebus.py
+/Maps/DebugDisplay/*
