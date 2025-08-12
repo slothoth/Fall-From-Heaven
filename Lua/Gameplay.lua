@@ -806,8 +806,8 @@ local tArmaLeaders = { GameInfo.Units['SLTH_UNIT_PIT_BEAST'].Index, GameInfo.Uni
                            GameInfo.Units['SLTH_UNIT_BALOR'].Index}
 local tArmaHench = { iIMP_INDEX, GameInfo.Units['SLTH_UNIT_HELLHOUND'].Index }
 local tBarbClanExtraUnits = {
-    [TRIBE_CLAN_SKELETON]= {'SLTH_UNIT_SKELETON', 'SLTH_UNIT_PYRE_ZOMBIE'},
-    [TRIBE_CLAN_LIZARDMEN]= {'SLTH_UNIT_LIZARDMAN', 'SLTH_UNIT_GORILLA'},
+    [TRIBE_CLAN_SKELETON]= {GameInfo.Units['SLTH_UNIT_SKELETON'].Index, GameInfo.Units['SLTH_UNIT_PYRE_ZOMBIE'].Index},
+    [TRIBE_CLAN_LIZARDMEN]= {GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index, GameInfo.Units['SLTH_UNIT_GORILLA'].Index},
 
 }
 
@@ -872,12 +872,16 @@ function BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, iBarbClanType, iFeatureTyp
     if leaderTable then
         iChosenLeaderIndex = math.random(#leaderTable)
         iChosenLeader = leaderTable[iChosenLeaderIndex]
+        print('chosen leader were', iChosenLeader)
+        print('spawning ', GameInfo.Units[iChosenLeader].UnitType)
         playerUnits:Create(iChosenLeader, iX, iY);
     end
 
     if henchTable then
         iChosenHenchIndex = math.random(#henchTable)
         iChosenHench = henchTable[iChosenHenchIndex]
+        print('chosen henchman were', iChosenHench)
+        print('spawning 4', GameInfo.Units[iChosenHenchIndex].UnitType)
         for _=1, 5 do
             playerUnits:Create(iChosenHench, iX, iY);
         end

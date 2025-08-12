@@ -308,7 +308,7 @@ function PermaBribeBarbarianTrait(playerID)
 				if barbarianTribeEntry.Index and (sTribe == 'TRIBE_CLAN_MELEE_OPEN' or sTribe == 'TRIBE_CLAN_MELEE_FOREST') then
 					local tParameters = {[PlayerOperations.PARAM_PLOT_ONE] = barbarianTribeEntry.Index}
 					local bCanStartBribe, tBribeResults = UI.CanStartPlayerOperation(Game.GetLocalPlayer(), PlayerOperations.BRIBE_CLAN, tParameters, false)
-					if not bCanStartBribe and tBribeResults[PlayerOperationResults.FAILURE_REASONS][1] == 'Not enough [ICON_Gold] Gold.' then
+					if not bCanStartBribe and tBribeResults and tBribeResults[PlayerOperationResults.FAILURE_REASONS] and tBribeResults[PlayerOperationResults.FAILURE_REASONS][1] == 'Not enough [ICON_Gold] Gold.' then
 						if not iBribeCost then
 							local v = tBribeResults[PlayerOperationResults.ADDITIONAL_DESCRIPTION][1]
 							print('description check', v)

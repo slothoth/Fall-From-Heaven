@@ -114,6 +114,30 @@ function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
     return tNewUnits
 end
 
+function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
+    print('applying attributes')
+    for _, pNewUnit in pairs(tNewUnits) do
+        print('new unit!')
+        pNewUnit:SetDamage(iHealth)
+        local pUnitExp = pNewUnit:GetExperience()
+        local pUnitAbilities = pNewUnit:GetAbility()
+        print('granting promos')
+        for _, iUnitPromotionIndex in ipairs(tPromos) do
+            if not pUnitExp:HasPromotion(iUnitPromotionIndex) then
+                pUnitExp:SetPromotion(iUnitPromotionIndex)
+                print('grant promo', GameInfo.UnitPromotions[iUnitPromotionIndex].UnitPromotionType)
+            end
+        end
+        print('granting abilitiees')
+        for _, sAbility in ipairs(tAbilities) do
+            if not pUnitAbilities:HasAbility(sAbility) then
+                pUnitAbilities:AddAbilityCount(sAbility)
+                print('grant ability', sAbility)
+            end
+        end
+    end
+end
+
 function GoldenAgeGrant(iPlayer, iGoldenDuration)
     local pPlayer = Players[iPlayer]
     local iAdjustedGoldenAgeDuration = iGoldenDuration * iGameSpeedMult
@@ -189,7 +213,9 @@ function setPlayerPropForRequirements(iPlayer, sPropKey, value)
 end
 
 function setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, value)                -- faster version, when setting many and dont wanna reget capital
-    pCapitalPlot:SetProperty(sPropKey, value)
+    if pCapitalPlot then
+        pCapitalPlot:SetProperty(sPropKey, value)
+    end
     pPlayer:SetProperty(sPropKey, value)
     local tPropertyList = pPlayer:GetProperty(sPropTrackKey)          -- SHOULD NEVER FAIL so no fallback
     if tPropertyList[sPropKey] then

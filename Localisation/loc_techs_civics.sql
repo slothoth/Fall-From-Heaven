@@ -142,4 +142,4 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_CIVIC_MALEVOLENT_DESIGNS_DESCRIPTION', 'Can train Mardero and Beast of Agares'' with the Veil State Religion. Can train Eidolons with the Evil Alignment.', 'en_US'),
 ('LOC_CIVIC_MIND_STAPLING_DESCRIPTION', 'Can train Saverous and Lunatics with the Octopus Overlords State Religion.', 'en_US'),
 ('LOC_CIVIC_HIDDEN_PATHS_DESCRIPTION', 'Unlocks the Woodsman II Promotion option for eligible units.', 'en_US'),
-('LOC_CIVIC_PRIESTHOOD_NAME', 'Allows training Priests with their State Religions and their Temple, Cultist: Octopus Overlords, Ritualist: Veil, Stonewarden: Kilmorph, Vicar: Empyrean, Confessor: Order, Priest of Leaves: Leaves.', 'en_US');
+('LOC_CIVIC_PRIESTHOOD_DESCRIPTION', 'Allows training Priests with their State Religions and their Temple, Cultist: Octopus Overlords, Ritualist: Veil, Stonewarden: Kilmorph, Vicar: Empyrean, Confessor: Order, Priest of Leaves: Leaves.', 'en_US');

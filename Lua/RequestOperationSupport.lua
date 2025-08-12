@@ -356,33 +356,6 @@ local function GrantGoldenAge(iPlayer, tParameters)
     pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
 end
 
-
-local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
-    print('applying attributes')
-    for _, pNewUnit in pairs(tNewUnits) do
-        print('new unit!')
-        pNewUnit:SetDamage(iHealth)
-        local pUnitExp = pNewUnit:GetExperience()
-        local pUnitAbilities = pNewUnit:GetAbility()
-        print('granting promos')
-        for _, iUnitPromotionIndex in ipairs(tPromos) do
-            if not pUnitExp:HasPromotion(iUnitPromotionIndex) then
-                pUnitExp:SetPromotion(iUnitPromotionIndex)
-                print('grant promo', GameInfo.UnitPromotions[iUnitPromotionIndex].UnitPromotionType)
-            end
-            print('iter promo')
-        end
-        print('granting abilitiees')
-        for _, sAbility in ipairs(tAbilities) do
-            if not pUnitAbilities:HasAbility(sAbility) then
-                pUnitAbilities:AddAbilityCount(sAbility)
-                print('grant ability', sAbility)
-            end
-            print('iter ability')
-        end
-    end
-end
-
 local tBuildingGrantModiferMap = {
     ['SLTH_BUILDING_CODE_OF_JUNIL'] = 'SLTH_MODIFIER_GRANT_CODE_OF_JUNIL',
     ['BUILDING_ANGKOR_WAT'] = 'SLTH_MODIFIER_GRANT_DIES_DEI',
@@ -581,9 +554,10 @@ local tEquipmentAbilities = {
 
 local function ConsumeEquipment(iPlayer, tParameters)
     local hasEquipment
-    local iEquipmentAbilityToGrant
     local iUnitID = tParameters.iCastingUnit
     local consumeUnitID = tParameters.iTargetID
+    local iEquipmentAbilityToGrant = tParameters.iAbilityToGrant
+    print('equipment ability index', iEquipmentAbilityToGrant)
     local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
     local pUnitAbilityManager = pUnit:GetAbility()
     local pConsumeUnit = UnitManager.GetUnit(iPlayer, consumeUnitID);			-- assumes consume unit is owned by same
@@ -598,14 +572,8 @@ local function ConsumeEquipment(iPlayer, tParameters)
         end
     else
         local pConsumeUnitAbilityManager = pConsumeUnit:GetAbility()
-        for _, equipAbilityAb in ipairs(tEquipmentAbilities) do
-            hasEquipment = pConsumeUnitAbilityManager:HasAbility(equipAbilityAb)
-            if hasEquipment then
-                iEquipmentAbilityToGrant = equipAbilityAb
-                break
-            end
-        end
-        if iEquipmentAbilityToGrant then
+        -- second check to make sure has ability
+        if pConsumeUnitAbilityManager:HasAbility(iEquipmentAbilityToGrant) then
             if not pUnitAbilityManager:HasAbility(iEquipmentAbilityToGrant) then
                 pUnitAbilityManager:AddAbilityCount(iEquipmentAbilityToGrant)
                 print('Added ability to unit')

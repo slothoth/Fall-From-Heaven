@@ -1,0 +1,2 @@
+INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
+('LOC_SLTH_TRAIT_INSANE_DESCRIPTION', 'Start with 3 traits, Arcane, Charismatic and Creative. Will change traits randomly. Have fun!', 'en_US');

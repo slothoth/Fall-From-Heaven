@@ -55,17 +55,18 @@ function OnPolicyChanged(iPlayerID, ePolicyIndex, bEnacted)
 		if pPlayer then
 			local pCities = pPlayer:GetCities()
 			if pCities then
+				local pCapitalPlot
 				local pCapitalCity = pCities:GetCapitalCity()
 				if pCapitalCity then
-					local pCapitalPlot = pCapitalCity:GetPlot()
-					for eStatePolicyIndex, sPropKey in pairs(m_tStateReligionPolicies) do
-						if eStatePolicyIndex == ePolicyIndex then
-							setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, 1)
-							print('changed state religion to ', sPropKey)
-						else
-							pPlot:SetProperty(sPropKey, 0)
-							setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, 0)
-						end
+					pCapitalPlot = pCapitalCity:GetPlot()
+				end
+				for eStatePolicyIndex, sPropKey in pairs(m_tStateReligionPolicies) do
+					if eStatePolicyIndex == ePolicyIndex then
+						setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, 1)
+						setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, 'STATE_RELIGION', sPropKey)
+						print('changed state religion to ', sPropKey)
+					else
+						setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, 0)
 					end
 				end
 			end
