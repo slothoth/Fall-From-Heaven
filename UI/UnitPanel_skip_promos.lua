@@ -11,59 +11,12 @@ include( "Civ6Common" );
 include( "EspionageSupport" );
 include("GameCapabilities");
 
-include( "UnitPanel" );
+print('trying to load new unit support, next line should be nil')
+print(TrackPlot)
+include( "UnitPanelSupportSloth" );
+print('loaded new unit support')
 
-local tSkipPromos = { [GameInfo.UnitPromotions['PROMOTION_IS_UNDEAD'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_CAN_GET_FEAR'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_IS_HERO_COMBATV'].Index] = 1,
-				[GameInfo.UnitPromotions['PROMOTION_IS_DEMON'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ORDER_STATE'].Index] = 1,
-				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WARFARE'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_HIDDEN_PATHS'].Index] = 1,
-				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ANIMAL_HUSBANDRY'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ANIMAL_MASTERY'].Index] = 1,
-				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_CORRUPTION_OF_SPIRIT'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index] = 1,
-				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WISE'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_WAY_OF_WICKED'].Index] = 1,
-				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_MIL_STRATEGY'].Index] = 1, [GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARCANE_LORE'].Index] = 1,
-				[GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_HORSEBACK_RIDING'].Index] = 1,
-				[GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED'].Index] = 1,
-				[GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED'].Index] = 1,
-				[GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['ICE_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED'].Index] = 1,
-				[GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED'].Index] = 1,
-				[GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED'].Index] = 1,
-				[GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED'].Index] = 1, [GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_2'].Index] = 1,
-				[GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_2'].Index] = 1,
-				[GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_2'].Index] = 1,
-				[GameInfo.UnitPromotions['ICE_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_2'].Index] = 1,
-				[GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_2'].Index] = 1,
-				[GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_2'].Index] = 1,
-				[GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_2'].Index] = 1, [GameInfo.UnitPromotions['DEATH_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['FIRE_SPHERE_ALLOWED_3'].Index] = 1,
-				[GameInfo.UnitPromotions['AIR_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['BODY_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['CHAOS_SPHERE_ALLOWED_3'].Index] = 1,
-				[GameInfo.UnitPromotions['EARTH_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['ENCHANTMENT_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['ENTROPY_SPHERE_ALLOWED_3'].Index] = 1,
-				[GameInfo.UnitPromotions['ICE_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['LAW_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['LIFE_SPHERE_ALLOWED_3'].Index] = 1,
-				[GameInfo.UnitPromotions['METAMAGIC_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['MIND_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['NATURE_SPHERE_ALLOWED_3'].Index] = 1,
-				[GameInfo.UnitPromotions['SPIRIT_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['WATER_SPHERE_ALLOWED_3'].Index] = 1, [GameInfo.UnitPromotions['SUN_SPHERE_ALLOWED_3'].Index] = 1,
-				[GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_3'].Index] = 1 }
-
-local tManaNodeBuilder = {
-	[GameInfo.Units['SLTH_UNIT_ADEPT'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_IMP'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_SHAMAN'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_ARCHMAGE'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_LICH'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_MAGE'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_MOBIUS_WITCH'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_EATER_OF_DREAMS'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_GOVANNON'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_ILLUSIONIST'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = 1 }
-
-local tExperienceUpgrades = {}
-for row in GameInfo.PromotionGatedUpgrades() do
-    tExperienceUpgrades[row.UnitType] = row.UnitLevel
-end
-
-local tNationalUpgrades = {}
-for row in GameInfo.NationalUnits() do
-    tNationalUpgrades[row.UnitType] = row.Amount
-end
-
+print('did the new functions exist', TrackPlot)
 
 -- ===========================================================================
 --	CONSTANTS
@@ -406,9 +359,30 @@ end
 -- ===========================================================================
 --	Returns: Callback function, Disabled state
 -- ===========================================================================
-function GetBuildImprovementCallback( actionHash:number, isDisabled:boolean )
-	local callbackFn = OnUnitActionClicked_BuildImprovement;
-	return callbackFn, isDisabled;
+function GetBuildImprovementCallback( actionHash :number, isDisabledIn:boolean )			--updated for GS
+	local callbackFn	:ifunction = OnUnitActionClicked_BuildImprovement;
+	local isDisabled	:boolean = isDisabledIn;
+	if (actionHash == UnitOperationTypes.BUILD_IMPROVEMENT_ADJACENT) then
+		callbackFn = OnUnitActionClicked_BuildImprovementAdjacent;
+		isDisabledModified = false;
+	else
+		callbackFn = OnUnitActionClicked_BuildImprovement;
+		isDisabledModified = isDisabled;
+	end
+	return callbackFn, isDisabledModified;
+end
+
+function OnUnitActionClicked_BuildImprovementAdjacent( improvementHash, dummy )
+	if (g_isOkayToProcess) then
+		local pSelectedUnit = UI.GetHeadSelectedUnit();
+		if (pSelectedUnit ~= nil) then
+			local tParameters = {};
+			tParameters[UnitOperationTypes.PARAM_IMPROVEMENT_TYPE] = improvementHash;
+			tParameters[UnitOperationTypes.PARAM_OPERATION_TYPE] = UnitOperationTypes.BUILD_IMPROVEMENT_ADJACENT;
+			UI.SetInterfaceMode(InterfaceModeTypes.BUILD_IMPROVEMENT_ADJACENT, tParameters);
+		end
+		ContextPtr:RequestRefresh();
+	end
 end
 
 -- ===========================================================================
@@ -431,6 +405,7 @@ end
 -- ===========================================================================
 local tDovielloUpgradeParams = {}
 function GetUnitActionsTable( pUnit )
+	print('in custom get Unit Actions table.')
 
 	-- Build action table; holds sub-tables of commands & operations based on UI categories set in DB.
 	-- Also defines order actions show in panel.
@@ -449,19 +424,19 @@ function GetUnitActionsTable( pUnit )
 		}
 	};
 
-	local bestValidImprovement  = -1;	-- To recommend to player.
+	local bestValidImprovement:number  = -1;	-- To recommend to player.
 
 	if pUnit == nil then
 		UI.DataError("NIL unit when attempting to get action table.");
 		return;
 	end
 
-	local unitType  = GameInfo.Units[pUnit:GetUnitType()].UnitType;
+	local unitType :string = GameInfo.Units[pUnit:GetUnitType()].UnitType;
 
 	for commandRow in GameInfo.UnitCommands() do
 		if ( commandRow.VisibleInUI ) then
-			local actionHash			= commandRow.Hash;
-			local isDisabled		= IsDisabledByTutorial(unitType, actionHash );
+			local actionHash	:number		= commandRow.Hash;
+			local isDisabled	:boolean	= IsDisabledByTutorial(unitType, actionHash );
 
 			if (actionHash == UnitCommandTypes.MOVE_JUMP) then
 				local foo = 0;
@@ -478,8 +453,8 @@ function GetUnitActionsTable( pUnit )
 							local pUnitInstance = Players[unit.player]:GetUnits():FindID(unit.id);
 							if (pUnitInstance ~= nil) then
 
-								local toolTipString 		= Locale.Lookup(commandRow.Description, GameInfo.Units[pUnitInstance:GetUnitType()].Name);
-								local callback			= function() OnUnitActionClicked_EnterFormation(pUnitInstance) end
+								local toolTipString :string		= Locale.Lookup(commandRow.Description, GameInfo.Units[pUnitInstance:GetUnitType()].Name);
+								local callback		:ifunction	= function() OnUnitActionClicked_EnterFormation(pUnitInstance) end
 
 								AddActionToTable( actionsTable, commandRow, isDisabled, toolTipString, actionHash, callback );
 							end
@@ -526,16 +501,10 @@ function GetUnitActionsTable( pUnit )
 					-- Check again if the operation can occur, this time for real.
 					local bCanStartNow, tResults = UnitManager.CanStartCommand( pUnit, actionHash, false, true);
 					local bDisabled = not bCanStartNow;
-					local toolTipString;
-					local bIsDoviello;
-					local iPrereqExperience
-					local iPrereqNationalMax
-					local bDisabledExperience
-					local bDisabledNational
-					local bDovielloUpgrade
+					local toolTipString:string;
+					local iPrereqExperience, iPrereqNationalMax, bDisabledExperience,bDisabledNational,bDovielloUpgrade
 					if (actionHash == UnitCommandTypes.UPGRADE) then
 						-- if it's a unit upgrade action, add the unit it will upgrade to in the tooltip as well as the upgrade cost
-						print('its upgrade', tResults)
 						if (tResults ~= nil) then
 							if (tResults[UnitCommandResults.UNIT_TYPE] ~= nil) then
 								upgradeUnitInfo = GameInfo.Units[tResults[UnitCommandResults.UNIT_TYPE]]
@@ -546,32 +515,9 @@ function GetUnitActionsTable( pUnit )
 									toolTipString = Locale.Lookup("LOC_UNITOPERATION_UPGRADE_INFO", upgradeUnitName, upgradeCost);
 								end
 								toolTipString = toolTipString .. AddUpgradeResourceCost(pUnit);
-								print(toolTipString)
-								iPrereqExperience = tExperienceUpgrades[upgradeUnitInfo.UnitType]						-- experience and national unit gating, human only sadly
-								iPrereqNationalMax = tNationalUpgrades[upgradeUnitInfo.UnitType]
-								print('checking if have experience, is prereq/actual', iPrereqExperience, pUnit:GetExperience():GetLevel())
-								if iPrereqExperience and pUnit:GetExperience():GetLevel() < iPrereqExperience then
-									bDisabled = true
-									bDisabledExperience = true
-								end
-								if iPrereqNationalMax then
-									local pUnits = Players[Game.GetLocalPlayer()]:GetUnits()
-									local iAmountOfThisUnit = 0
-									for _, pOtherUnit in pUnits:Members() do
-										if iAmountOfThisUnit < iPrereqNationalMax then
-											if pOtherUnit:GetUnitType() == upgradeUnitInfo.Index then
-												iAmountOfThisUnit = iAmountOfThisUnit + 1
-											end
-										end
-									end
-									if iAmountOfThisUnit >= iPrereqNationalMax then
-										bDisabled = true
-										bDisabledNational = true
-									end
-								end
+								bDisabled, bDisabledExperience, bDisabledNational = CustomUpgradeTest(toolTipString, upgradeUnitInfo, pUnit, bDisabled)
 							end
 						end
-						bIsDoviello = PlayerConfigurations[pUnit:GetOwner()]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_DOVIELLO'
 					elseif (actionHash == UnitCommandTypes.FORM_CORPS) then
 						if (GameInfo.Units[unitType].Domain == "DOMAIN_SEA") then
 							toolTipString = Locale.Lookup("LOC_UNITCOMMAND_FORM_FLEET_DESCRIPTION");
@@ -610,24 +556,10 @@ function GetUnitActionsTable( pUnit )
 							if (tResults[UnitOperationResults.FAILURE_REASONS] ~= nil) then
 								-- Add the reason(s) to the tool tip
 								for i,v in ipairs(tResults[UnitOperationResults.FAILURE_REASONS]) do
-									if (v == 'Must be in friendly territory.') and (bIsDoviello) then
-										if table.count(tResults[UnitOperationResults.FAILURE_REASONS]) == 1 then
-											bDisabled = false
-											print('enabling doviello upgrade')
-											bDovielloUpgrade = true
-											tDovielloUpgradeParams[pUnit:GetID()] = {cost=upgradeCost, upgradeUnitIndex=upgradeUnitInfo.Index}
-										end
-									else
-										toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup(v) .. "[ENDCOLOR]";
-									end
+									bDisabled, bDovielloUpgrade, toolTipString, tDovielloUpgradeParams = DovielloUpgradeForeignOverride(v,tResults, pUnit, toolTipString, upgradeCost, upgradeUnitInfo, tDovielloUpgradeParams)
 								end
 							end
-							if bDisabledExperience then
-									toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup("LOC_UPGRADE_LEVEL_FAILED", iPrereqExperience) .. "[ENDCOLOR]";
-							end
-							if bDisabledNational then
-								toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup("LOC_UPGRADE_NATIONAL_FAILED", iPrereqNationalMax) .. "[ENDCOLOR]";
-							end
+							toolTipString = amendNationalPromoToolTip(toolTipString, bDisabledExperience, bDisabledNational)
 						end
 					end
 					local eUnitCommandType = UnitCommandTypes.TYPE
@@ -635,7 +567,7 @@ function GetUnitActionsTable( pUnit )
 						eUnitCommandType = 80085
 					end
 					isDisabled = bDisabled or isDisabled;	-- Mix in tutorial disabledness
-					local overrideIcon = nil;
+					local overrideIcon:string = nil;
 
 					isDisabled, tooltipString, overrideIcon = LateCheckActionBeforeAdd( kActionsTable, actionHash, isDisabled, tooltipString, overrideIcon );
 					AddActionToTable( actionsTable, commandRow, isDisabled, toolTipString, actionHash, OnUnitActionClicked, eUnitCommandType, actionHash, overrideIcon  );
@@ -654,8 +586,8 @@ function GetUnitActionsTable( pUnit )
 
 		for operationRow in GameInfo.UnitOperations() do
 
-			local actionHash	 = operationRow.Hash;
-			local isDisabled	= IsDisabledByTutorial( unitType, actionHash );
+			local actionHash	:number = operationRow.Hash;
+			local isDisabled	:boolean= IsDisabledByTutorial( unitType, actionHash );
 
 			-- if unit can build an improvement, show all the buildable improvements for that tile
 			if IsBuildingImprovement(actionHash) then
@@ -706,24 +638,24 @@ function GetUnitActionsTable( pUnit )
 								improvement["IsBestImprovement"] = false;
 							end
 
-							improvement["CategoryInUI"] = "BUILD";
+							improvement["CategoryInUI"] = "BUILD";	-- TODO: Force improvement to be a type of "BUILD", this can be removed if CategoryInUI is added to "Improvements" in the database schema. ??TRON
 							local callbackFn, isDisabled = GetBuildImprovementCallback( actionHash, isDisabled );
 							AddActionToTable( actionsTable, improvement, isDisabled, toolTipString, actionHash, callbackFn, improvement.Hash );
 						end
 					end
 				end
 			elseif (actionHash == UnitOperationTypes.MOVE_TO) then
-				local bCanStart		= UnitManager.CanStartOperation( pUnit,  UnitOperationTypes.MOVE_TO, nil, false, false);	-- No exclusion test, no results
+				local bCanStart		:boolean= UnitManager.CanStartOperation( pUnit,  UnitOperationTypes.MOVE_TO, nil, false, false);	-- No exclusion test, no results
 				if (bCanStart) then
-					local toolTipString		= Locale.Lookup(operationRow.Description);
+					local toolTipString	:string	= Locale.Lookup(operationRow.Description);
 					AddActionToTable( actionsTable, operationRow, isDisabled, toolTipString, actionHash, OnUnitActionClicked_MoveTo );
 				end
 			elseif (operationRow.CategoryInUI == "OFFENSIVESPY") then
-				local bCanStart		= UnitManager.CanStartOperation( pUnit, actionHash, nil, false, false);	-- No exclusion test, no result
+				local bCanStart		:boolean= UnitManager.CanStartOperation( pUnit, actionHash, nil, false, false);	-- No exclusion test, no result
 				if (bCanStart) then
 					---- We only want a single offensive spy action which opens the EspionageChooser side panel
 					if actionsTable[operationRow.CategoryInUI] ~= nil and table.count(actionsTable[operationRow.CategoryInUI]) == 0 then
-						local toolTipString		= Locale.Lookup("LOC_UNITPANEL_ESPIONAGE_CHOOSE_MISSION");
+						local toolTipString	:string	= Locale.Lookup("LOC_UNITPANEL_ESPIONAGE_CHOOSE_MISSION");
 						AddActionToTable( actionsTable, operationRow, isDisabled, toolTipString, actionHash, OnUnitActionClicked, UnitOperationTypes.TYPE, actionHash, "ICON_UNITOPERATION_SPY_MISSIONCHOOSER");
 					end
 				end
@@ -736,7 +668,7 @@ function GetUnitActionsTable( pUnit )
 			elseif (actionHash == UnitOperationTypes.FOUND_CITY) then
 				local bCanStart, tResults = UnitManager.CanStartOperation( pUnit,  UnitOperationTypes.FOUND_CITY, nil, false, OperationResultsTypes.ALL);	-- No exclusion test
 				if (bCanStart) then
-					local toolTipString		= Locale.Lookup(operationRow.Description);
+					local toolTipString	:string	= Locale.Lookup(operationRow.Description);
 					AddActionToTable( actionsTable, operationRow, isDisabled, toolTipString, actionHash, function() OnUnitActionClicked_FoundCity(tResults); end);
 				end
 			elseif (actionHash == UnitOperationTypes.WMD_STRIKE) then
@@ -748,8 +680,8 @@ function GetUnitActionsTable( pUnit )
 						local tParameters = {};
 						tParameters[UnitOperationTypes.PARAM_WMD_TYPE] = entry.Index;
 						bCanStart, tResults = UnitManager.CanStartOperation(pUnit, actionHash, nil, tParameters, true);
-						local isWMDTypeDisabled = (not bCanStart) or isDisabled;
-						local toolTipString		= Locale.Lookup(operationRow.Description);
+						local isWMDTypeDisabled:boolean = (not bCanStart) or isDisabled;
+						local toolTipString	:string	= Locale.Lookup(operationRow.Description);
 						local wmd = entry.Index;
 						toolTipString = toolTipString .. "[NEWLINE]" .. Locale.Lookup(entry.Name);
 						local callBack =
@@ -778,92 +710,21 @@ function GetUnitActionsTable( pUnit )
 				-- The UI check of an operation is a loose check where it only fails if the unit could never do the operation.
 				if ( operationRow.VisibleInUI ) then
 					local CustomOperationInfo = GameInfo.CustomOperations[operationRow.OperationType]
-					local bHasRelevantPromotion
-					local sReqPromo
-					local reqAbility
-					local reqUnitType
-					local failedReq
-					bCanStart, tResults = nil, nil
-					if CustomOperationInfo then				-- do promtion check here, have pUnit.
-						local sReqDomain =  CustomOperationInfo.DomainPrereq
-						if sReqDomain then
-							if GameInfo.Units[unitType].Domain == 'DOMAIN_LAND' then
-								bCanStart = true;
-							else
-								failedReq = true
-							end
-						end
-
-						sReqPromo = CustomOperationInfo.PromotionPrereq
-						if sReqPromo and not failedReq then
-							bHasRelevantPromotion = pUnitExp:HasPromotion(GameInfo.UnitPromotions[sReqPromo].Index)
-							if bHasRelevantPromotion then
-								bCanStart = bHasRelevantPromotion
-							else
-								failedReq = true
-							end
-						end
-						reqUnitType = CustomOperationInfo.UnitPrereq
-						if reqUnitType and not failedReq then
-							if reqUnitType == unitType then
-								bCanStart = true
-							else
-								failedReq = true
-							end
-						end
-						reqAbility = CustomOperationInfo.AbilityPrereq			-- need to iterate over abilities here
-						if reqAbility and not failedReq then
-							-- print('looking for', reqAbility)
-							local iAbilityToCheck = GameInfo.UnitAbilities[reqAbility].Index
-							if CustomOperationInfo.AlternateAbilityPrereq then
-								local iAbilityAltToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlternateAbilityPrereq].Index;
-							end
-							if CustomOperationInfo.AlsoAbilityPrereq then
-								local iAbilityAlsoToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlsoAbilityPrereq].Index;
-							end
-							if CustomOperationInfo.AlsoTwoAbilityPrereq then
-								local iAbilityAlsoTwoToCheck = GameInfo.UnitAbilities[CustomOperationInfo.AlsoTwoAbilityPrereq].Index;
-							end
-							bCanStart = AbilityChecker(pUnit, iAbilityToCheck, iAbilityAltToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
-						end
-						reqBuildingType = CustomOperationInfo.BuildingPrereq
-						if reqBuildingType and not failedReq then
-							local iOwner = pUnit:GetOwner()
-							local pPlayer = Players[iOwner]
-							local pPlayerCities = pPlayer:GetCities()
-							local iPrereqBuilding = GameInfo.Buildings[reqBuildingType].Index
-							if pPlayerCities then
-								for idx, pCity in pPlayerCities:Members() do
-									if not bCanStart then
-										local pBuildings = pCity:GetBuildings()
-										if pBuildings:HasBuilding(iPrereqBuilding) then
-											bCanStart = true
-										end
-									end
-								end
-							end
-						end
+					local bCanStart, tResults, tIterations
+					if CustomOperationInfo then
+						bCanStart = CustomOpCheck(CustomOperationInfo, pUnit, unitType, pUnitExp)
 					else
 						bCanStart, tResults = UnitManager.CanStartOperation( pUnit, actionHash, nil, true );
 					end
 					if (bCanStart) then
 						-- Check again if the operation can occur, this time for real.
 						if CustomOperationInfo then
-							local iHasCast = 0					--  TODO free casting for testing pUnit:GetProperty('HasCast') or 0
-							if iHasCast == 0 then
-								if CustomOperationInfo.ActivationPrereq then
-									bCanStart = CustomCheck(CustomOperationInfo, pUnit)
-								else
-									bCanStart = true
-								end
-							else
-								bCanStart = false
-							end
+							bCanStart, tIterations = hasCastCheck(CustomOperationInfo, pUnit, bCanStart)
 						else
 							bCanStart, tResults = UnitManager.CanStartOperation(pUnit, actionHash, nil, false, OperationResultsTypes.NO_TARGETS);		-- Hint that we don't require possibly expensive target results.
 						end
-						local bDisabled = not bCanStart;
-						local toolTipString = GetUnitOperationTooltip(operationRow);
+						local bDisabled:boolean = not bCanStart;
+						local toolTipString:string = GetUnitOperationTooltip(operationRow);
 
 						if (tResults ~= nil) then
 							if (tResults[UnitOperationResults.ACTION_NAME] ~= nil and tResults[UnitOperationResults.ACTION_NAME] ~= "") then
@@ -894,10 +755,16 @@ function GetUnitActionsTable( pUnit )
 						isDisabled = bDisabled or isDisabled;
 
 						if(not IsActionLimited(operationRow.PrimaryKey, pUnit, bCanStart))then
-							local overrideIcon = nil;
+							local overrideIcon:string = nil;
 
 							isDisabled, toolTipString, overrideIcon = LateCheckOperationBeforeAdd( tResults, actionsTable, actionHash, isDisabled, toolTipString, overrideIcon );
-							AddActionToTable( actionsTable, operationRow, isDisabled, toolTipString, actionHash, OnUnitActionClicked, UnitOperationTypes.TYPE, actionHash, overrideIcon  );
+							if tIterations then
+								for iEquipmentUnit, sLocTake in pairs(tIterations) do
+									AddActionToTable( actionsTable, operationRow, isDisabled, Locale.Lookup(sLocTake), actionHash, OnEquipmentTakeClicked, iEquipmentUnit, actionHash, overrideIcon  );
+								end
+							else
+								AddActionToTable( actionsTable, operationRow, isDisabled, toolTipString, actionHash, OnUnitActionClicked, UnitOperationTypes.TYPE, actionHash, overrideIcon  );
+							end
 						end
 					end
 				end
@@ -1017,7 +884,7 @@ end
 -- ===========================================================================
 function View(data)
 
-	m_buildActionsIM:DestroyInstances();
+	m_buildActionsIM:DestroyInstances();		-- TODO: Explore what (if anything) could be done with prior values so Reset can be utilized instead of destory; this would gain LUA side pooling
     m_standardActionsIM:ResetInstances();
     m_secondaryActionsIM:ResetInstances();
 	m_groupArtIM:ResetInstances();
@@ -1037,14 +904,14 @@ function View(data)
 		for _,categoryName in ipairs(data.Actions.displayOrder.primaryArea) do
 			local categoryTable = data.Actions[categoryName];
 			if (categoryTable == nil ) then
-				local allNames  = "";
+				local allNames :string = "";
 				for _,catName in ipairs(data.Actions) do allNames = allNames .. "'" .. catName .. "' "; end
 				UI.DataError("Unit panel's primary actions sort reference '"..categoryName.."' but no table of that name.  Tables in actionsTable: " .. allNames);
 				Controls.ForceAnAssertDueToAboveCondition();
 			else
 				StartIconGroup();
 				for _,action in ipairs(categoryTable) do
-					local instance = m_standardActionsIM:GetInstance();
+					local instance:table = m_standardActionsIM:GetInstance();
 					AddActionButton( instance, action );
 				end
 				EndIconGroup();
@@ -1053,17 +920,17 @@ function View(data)
 
 
 		-- Next fill in secondardy actions area
-		local numSecondaryItems = 0;
+		local numSecondaryItems:number = 0;
 		for _,categoryName in ipairs(data.Actions.displayOrder.secondaryArea) do
 			local categoryTable = data.Actions[categoryName];
 			if (categoryTable == nil ) then
-				local allNames  = "";
+				local allNames :string = "";
 				for _,catName in ipairs(data.Actions) do allNames = allNames .. "'" .. catName .. "' "; end
 				UI.DataError("Unit panel's secondary actions sort reference '"..categoryName.."' but no table of that name.  Tables in actionsTable: " .. allNames);
 				Controls.ForceAnAssertDueToAboveCondition();
 			else
 				for _,action in ipairs(categoryTable) do
-					local instance = m_secondaryActionsIM:GetInstance();
+					local instance:table = m_secondaryActionsIM:GetInstance();
 					AddActionButton( instance, action );
 					numSecondaryItems = numSecondaryItems + 1;
 				end
@@ -1078,20 +945,12 @@ function View(data)
 
 		Controls.BuildActionsPanel:SetHide(false);
 
-		local bestBuildAction  = nil;
+		local bestBuildAction :table = nil;
 		local tBuildActions = data.Actions["BUILD"]
 		if data.UnitType ~= -1 then
-			if tManaNodeBuilder[data.UnitType] then
-				tBuildActions = {}											-- reset buildactions
-				for idx, pAction in ipairs(data.Actions["BUILD"]) do
-					if pAction.Disabled and pAction.userTag == UnitOperationTypes.BUILD_IMPROVEMENT then
-					else
-						table.insert(tBuildActions, pAction)
-					end
-				end
-			end
+			tBuildActions = hideManaImprovements(tBuildActions, data)
 		end
-			-- Create columns (each able to hold x3 icons) and fill the top to bottom
+		-- Create columns (each able to hold x3 icons) and fill the top to bottom
 		local numBuildCommands = table.count(tBuildActions);
 		tSlthBuildActions = {}
 		for i=1,numBuildCommands,3 do
@@ -1101,7 +960,7 @@ function View(data)
 					local slotName	= "Row"..tostring(iRow);
 					local action	= tBuildActions[(i+iRow)-1];
 					local instance	= {};
-					ContextPtr:BuildInstanceForControl( "BuildActionInstance", instance, buildColumnInstance[slotName])
+					ContextPtr:BuildInstanceForControl( "BuildActionInstance", instance, buildColumnInstance[slotName]);
 					table.insert(tSlthBuildActions, instance);
 
 					BuildActionModHook(instance, action);
@@ -1120,7 +979,7 @@ function View(data)
 						bestBuildAction = action;
 					end
 
-					instance.UnitActionButton:SetTag( action.userTag );
+					instance.UnitActionButton:SetTag( action.userTag );         --??
 				end
 			end
 		end
@@ -1128,8 +987,8 @@ function View(data)
 		local BUILD_PANEL_ART_PADDING_X = 24;
 		local BUILD_PANEL_ART_PADDING_Y = 20;
 		Controls.BuildActionsStack:CalculateSize();
-		local buildStackWidth  = Controls.BuildActionsStack:GetSizeX();
-		local buildStackHeight  = Controls.BuildActionsStack:GetSizeY();
+		local buildStackWidth :number = Controls.BuildActionsStack:GetSizeX();
+		local buildStackHeight :number = Controls.BuildActionsStack:GetSizeY();
 		Controls.BuildActionsPanel:SetSizeX( buildStackWidth + BUILD_PANEL_ART_PADDING_X);
 
 		Controls.RecommendedActionFrame:SetHide( bestBuildAction == nil );
@@ -1140,7 +999,7 @@ function View(data)
 			Controls.RecommendedActionIcon:SetTexture( IconManager:FindIconAtlas(bestBuildAction.IconId, 38) );
 			Controls.RecommendedActionButton:SetDisabled( bestBuildAction.Disabled );
 			Controls.RecommendedActionIcon:SetAlpha( (bestBuildAction.Disabled and 0.4) or 1 );
-			local tooltipString = Locale.Lookup("LOC_HUD_UNIT_PANEL_RECOMMENDED") .. ":[NEWLINE]" .. bestBuildAction.helpString;
+			local tooltipString:string = Locale.Lookup("LOC_HUD_UNIT_PANEL_RECOMMENDED") .. ":[NEWLINE]" .. bestBuildAction.helpString;
 			Controls.RecommendedActionButton:SetToolTipString( tooltipString );
 			Controls.RecommendedActionButton:RegisterCallback( Mouse.eLClick, bestBuildAction.CallbackFunc );
 			Controls.RecommendedActionButton:SetVoid1( bestBuildAction.CallbackVoid1 );
@@ -1191,7 +1050,7 @@ function View(data)
 	end
 
 	-- If it's a unit (not a district) and name does not match the type name, suffix it up.
-	local tooltip = "";
+	local tooltip:string = "";
 	if (data.UnitTypeName ~= nil) and data.Name ~= data.UnitTypeName then
 		tooltip = unitName .. " " .. Locale.Lookup("LOC_UNIT_UNIT_TYPE_NAME_SUFFIX", data.UnitTypeName);
 	end
@@ -1202,7 +1061,7 @@ function View(data)
 
 	-- Portrait Icons
 	-- Cascade attempts to set the icon name based on one with the most attribute to most common attributes.
-	local isIconSet = false;
+	local isIconSet:boolean = false;
 	if data.IconName ~= nil and Controls.UnitIcon:TrySetIcon(data.IconName) then
 		isIconSet = true;
 	elseif data.PrefixOnlyIconName ~= nil and Controls.UnitIcon:TrySetIcon(data.PrefixOnlyIconName) then
@@ -1230,12 +1089,12 @@ function View(data)
 
 	-- Damage meters ---
 	if (data.MaxWallDamage > 0) then
-		local healthPercent		 = 1 - GetPercentFromDamage( data.Damage + data.PotentialDamage, data.MaxDamage );
-		local healthShadowPercent	 = 1 - GetPercentFromDamage( data.Damage, data.MaxDamage );
+		local healthPercent		:number = 1 - GetPercentFromDamage( data.Damage + data.PotentialDamage, data.MaxDamage );
+		local healthShadowPercent	:number = 1 - GetPercentFromDamage( data.Damage, data.MaxDamage );
 		RealizeHealthMeter( Controls.CityHealthMeter, healthPercent, Controls.CityHealthMeterShadow, healthShadowPercent );
 
-		local wallsPercent		 = 1 - GetPercentFromDamage(data.WallDamage + data.PotentialWallDamage, data.MaxWallDamage);
-		local wallsShadowPercent	 = 1 - GetPercentFromDamage( data.WallDamage, data.MaxWallDamage );
+		local wallsPercent		:number = 1 - GetPercentFromDamage(data.WallDamage + data.PotentialWallDamage, data.MaxWallDamage);
+		local wallsShadowPercent	:number = 1 - GetPercentFromDamage( data.WallDamage, data.MaxWallDamage );
 		local wallRealizedPercent			= (wallsPercent * 0.5) + 0.5;
 		Controls.WallHealthMeter:SetPercent( wallRealizedPercent )
 		local wallShadowRealizedPercent			= (wallsShadowPercent * 0.5) + 0.5;
@@ -1250,7 +1109,7 @@ function View(data)
 		end
 
 		-- Update health tooltip
-		local tooltip = "";
+		local tooltip:string = "";
 		if data.UnitType ~= -1 then
 			tooltip = Locale.Lookup(data.UnitTypeName);
 		end
@@ -1260,20 +1119,20 @@ function View(data)
 		end
 		Controls.CityHealthMeter:SetToolTipString(tooltip);
 	else
-		local percent		 = 1 - GetPercentFromDamage( data.Damage, data.MaxDamage );
+		local percent		:number = 1 - GetPercentFromDamage( data.Damage, data.MaxDamage );
 		RealizeHealthMeter( Controls.UnitHealthMeter, percent, Controls.UnitHealthMeterShadow, percent );
 		Controls.UnitHealthMeter:SetHide(false);
 		Controls.CityHealthMeters:SetHide(true);
 
 		-- Update health and unit abilities tooltip
-		local tooltip = Locale.Lookup(data.UnitTypeName);
+		local tooltip:string = Locale.Lookup(data.UnitTypeName);
 		tooltip = tooltip .. "[NEWLINE]" .. Locale.Lookup("LOC_HUD_UNIT_PANEL_HEALTH_TOOLTIP", data.MaxDamage - data.Damage, data.MaxDamage);
 		-- Update UnitAbilities text
 		local unitAbilitiesList = data.Ability;
 		if (unitAbilitiesList ~= nil and table.count(unitAbilitiesList) > 0) then
-			local abilityText = "[NEWLINE]" .. Locale.Lookup("LOC_UNIT_PANEL_ABILITIES_HEADER");
+			local abilityText:string = "[NEWLINE]" .. Locale.Lookup("LOC_UNIT_PANEL_ABILITIES_HEADER");
 			for i,ability in ipairs (unitAbilitiesList) do
-				local sDesc = GetUnitAbilityDescription(ability);
+				local sDesc:string = GetUnitAbilityDescription(ability);
 				if (sDesc ~= nil and sDesc ~= "") then
 					abilityText = abilityText .. "[NEWLINE][ICON_Bullet] " .. Locale.Lookup(sDesc);
 				end
@@ -1322,8 +1181,8 @@ function View(data)
 	if data.IsSettler then
 		Controls.SettlementWaterContainer:SetHide(false);
 
-		local HAS_WATER_BONUS_GRID_SIZE  = 46;
-		local NO_WATER_BONUS_GRID_SIZE	 = 92;
+		local HAS_WATER_BONUS_GRID_SIZE : number = 46;
+		local NO_WATER_BONUS_GRID_SIZE	: number = 92;
 
 		--Check if this civilization receives no bonus from water availability (i.e. Mayans)
 		if HasTrait("TRAIT_CIVILIZATION_MAYAB", Game.GetLocalPlayer())then
@@ -2206,31 +2065,8 @@ function GetCombatModifierList(combatantHash:number)
 		end
 	end
 	if (modifierModifierText ~= nil) then
-		local tModifierUniques = {}
-		local tNumStrippedUniques = {}
-		local tNumStrippedUniquesAmounts = {}
-		local sStrippedItem
-		local sNewItem
-		local iStrippedAmount
+		modifierModifierText = summedCombatModifierStrings(modifierModifierText)
 		for i, item in ipairs(modifierModifierText) do
-			iStrippedAmount = item:match("%d+")
-			if iStrippedAmount then
-				sStrippedItem = item:gsub(iStrippedAmount, '{{PLACEHOLDER}}', 1)
-				if tNumStrippedUniques[sStrippedItem] then
-					tNumStrippedUniques[sStrippedItem] = tNumStrippedUniques[sStrippedItem] + iStrippedAmount
-				else
-					tNumStrippedUniques[sStrippedItem] = iStrippedAmount
-				end
-			else
-				tModifierUniques[item] = 1
-			end
-		end
-		for item, amount in pairs(tNumStrippedUniques) do
-			sNewItem = item:gsub('{{PLACEHOLDER}}', tostring(amount), 1)
-			item = sNewItem
-			modifierList, modifierListSize = AddModifierToList(modifierList, modifierListSize, Locale.Lookup(item), "ICON_STRENGTH");
-		end
-		for item, amount in pairs(tModifierUniques) do
 			modifierList, modifierListSize = AddModifierToList(modifierList, modifierListSize, Locale.Lookup(item), "ICON_STRENGTH");
 		end
 	end
@@ -2444,16 +2280,15 @@ end
 --	ARGS: unit, A unit object from the game.
 --	RETURNS: A table of stats for the given unit type.
 -- ===========================================================================
-function ReadUnitData( unit )
+function ReadUnitData( unit:table )
 
-	local pUnitDef = GameInfo.Units[unit:GetUnitType()];
+	local pUnitDef:table = GameInfo.Units[unit:GetUnitType()];
 	local unitExperience = unit:GetExperience();
 	local unitAbility = unit:GetAbility();
-	local potentialDamage  = 0;
+	local potentialDamage :number = 0;
 
-	local kSubjectData  = InitSubjectData();
+	local kSubjectData :table = InitSubjectData();
 	local iconName, iconNamePrefixOnly, iconNameEraOnly, fallbackIconName = GetUnitPortraitIconNames( unit );
-
 	kSubjectData.Name						= unit:GetName();
 	kSubjectData.UnitTypeName				= pUnitDef.Name;
 	kSubjectData.IconName					= iconName;
@@ -2508,19 +2343,7 @@ function ReadUnitData( unit )
 		kSubjectData.GreatPersonActionCharges = unitGreatPerson:GetActionCharges();
 	end
 
-	local promotionList  = unitExperience:GetPromotions();
-	local i=0;
-	for i, promotion in ipairs(promotionList) do
-		if not tSkipPromos[promotion] then
-			local promotionDef = GameInfo.UnitPromotions[promotion];
-			table.insert(kSubjectData.CurrentPromotions, {
-				Name = promotionDef.Name,
-				Desc = promotionDef.Description,
-				Level = promotionDef.Level
-				})
-			--print(promotionDef.Name)
-		end
-	end
+	populatePromosSkip(unitExperience, kSubjectData)
 
 	kSubjectData = ReadCustomUnitStats( unit, kSubjectData );
 	kSubjectData.StatData = FilterUnitStatsFromUnitData( kSubjectData );
@@ -2627,6 +2450,7 @@ function OnUnitSelectionChanged(player, unitId, locationX, locationY, locationZ,
 		Controls.UnitPanelSlide:Play();
 	else
 		g_selectedPlayerId	= -1;
+		print('somehow index error here?', UI, g_UnitID)
 		g_UnitId			= nil;
 		m_primaryColor		= UI.GetColorValueFromHexLiteral(0xdeadbeef);
 		m_secondaryColor	= UI.GetColorValueFromHexLiteral(0xbaadf00d);
@@ -2716,13 +2540,9 @@ function OnUnitAbilityLost(player :number, unitId :number, eAbilityType :number)
 	end
 end
 
-local tCachedViableActionPlots = {}
-local tCachedViableActionUnits = {}
-
 -- ===========================================================================
 --	UnitAction was clicked.
 -- ===========================================================================
-local iClanDisperseHash = GameInfo.UnitCommands['UNITCOMMAND_TREAT_WITH_CLAN_DISPERSE'].Hash
 function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:number )
 	if g_isOkayToProcess then
 		local pSelectedUnit :table= UI.GetHeadSelectedUnit();
@@ -2742,13 +2562,7 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 						UI.SetInterfaceMode(eInterfaceMode);
 					end
 				else
-					if actionHash == iClanDisperseHash then		-- setting plot property on gameplay side so dont redo lair
-						print('placing op first')
-						local iOwner = pSelectedUnit:GetOwner()
-						local tParameters = {sPropKey='DisperseCamp', iPropValue=1, iPlotIndex=pSelectedUnit:GetPlotId(),
-											 OnStart='SlthSetPlotProperty'}
-						UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-					end
+					DisperseCampPlotProp(actionHash, pSelectedUnit)
 					-- No mode needed, just do the operation
 					UnitManager.RequestCommand( pSelectedUnit, actionHash );
 				end
@@ -2769,18 +2583,7 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 							local opName =  GameInfo.UnitOperations[actionHash].OperationType
 							local CustomOperation = GameInfo.CustomOperations[opName]
 							if CustomOperation then
-								local sOpType = CustomOperation.OperationType
-								local sOpCallback = CustomOperation.Callback
-								local iUnit = pSelectedUnit:GetID()
-								local iOwner = pSelectedUnit:GetOwner()
-								m_CachedUnitOperation = sOpType
-								m_CachedUnitOperationCallback = sOpCallback
-								UI.SetInterfaceMode(InterfaceModeTypes.SELECTION)
-								UI.SetInterfaceMode(InterfaceModeTypes.WB_SELECT_PLOT)
-								m_wbInterfaceMode = true
-								local green = UI.GetColorValue("COLOR_GREEN")
-								UILens.SetLayerHexesColoredArea(SLTH_HEX_COLORING_MOVEMENT, Game.GetLocalPlayer(), tCachedViableActionPlots[sOpType], green)
-								UILens.ToggleLayerOn(SLTH_HEX_COLORING_MOVEMENT)			-- await user input in OnSelectPlot
+								m_wbInterfaceMode = interfaceCustomOp(CustomOperation)		-- await user input in OnSelectPlot
 							else
 								local tParameters = {};
 								tParameters[UnitOperationTypes.PARAM_OPERATION_TYPE] = actionHash;
@@ -2791,35 +2594,15 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 						local opName =  GameInfo.UnitOperations[actionHash].OperationType
 						local CustomOperation = GameInfo.CustomOperations[opName]
 						if CustomOperation then
-							local sOpType = CustomOperation.OperationType
-							local sOpCallback = CustomOperation.Callback
-							local iUnit = pSelectedUnit:GetID()
-							local iOwner = pSelectedUnit:GetOwner()
-							local tParameters = {}
-							tParameters.UnitOperationType = sOpType;
-							tParameters.iCastingUnit = iUnit;
-							tParameters.OnStart = sOpCallback;
-							print(sOpType .. ', ' .. sOpCallback .. tostring(iUnit).. tostring(iOwner))
-							UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
-							UI.DeselectUnit(pSelectedUnit);
+							noInterfaceCustomOp(CustomOperation, pSelectedUnit)
 						else
-							print('doing operation normally')
+							-- No mode needed, just do the operation
 							UnitManager.RequestOperation( pSelectedUnit, actionHash );		-- No mode needed, just do the operation
 						end
 
 					end
-				elseif actionType == 80085 then			-- its the doviello ovveride
-					local tParameters = {}
-					tParameters.OnStart = 'SlthOnConvertUnitType'
-					local iUnit = pSelectedUnit:GetID()
-					local iOwner = pSelectedUnit:GetOwner()
-					tParameters.iUnitID = iUnit
-					tParameters.iUpgradeUnitIndex = tDovielloUpgradeParams[iUnit]['upgradeUnitIndex']
-					tParameters.iCost = tDovielloUpgradeParams[iUnit]['cost']
-					print('doviello custom upgrade')
-					UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
-					UI.DeselectUnit(pSelectedUnit);
-    				UnitManager.RequestCommand( pSelectedUnit, UnitCommandTypes.DELETE )
+				elseif actionType == 80085 then			-- its the doviello upgrade ovveride, was i really that childish
+					dovielloCustomUpgrade(pSelectedUnit, tDovielloUpgradeParams)
 				end
 			end
 		end
@@ -2828,29 +2611,28 @@ function OnUnitActionClicked( actionType:number, actionHash:number, currentMode:
 	end
 end
 
+function OnEquipmentTakeClicked(iEquipmentType, actionHash, currentMode)
+    if g_isOkayToProcess then
+        local opName =  GameInfo.UnitOperations[actionHash].OperationType
+        local CustomOperation = GameInfo.CustomOperations[opName]
+        if CustomOperation then
+            local sOpType = CustomOperation.OperationType
+            local sOpCallback = CustomOperation.Callback
+			setCachedOperation(iEquipmentType)
+			setCachedOperationCallback(sOpCallback)
+            UI.SetInterfaceMode(InterfaceModeTypes.SELECTION)
+            UI.SetInterfaceMode(InterfaceModeTypes.WB_SELECT_PLOT)
+            m_wbInterfaceMode = true
+			local tPlots = getActionPlots(iEquipmentType)
+            UILens.SetLayerHexesColoredArea(SLTH_HEX_COLORING_MOVEMENT, Game.GetLocalPlayer(), tPlots, UI.GetColorValue("COLOR_GREEN"))
+            UILens.ToggleLayerOn(SLTH_HEX_COLORING_MOVEMENT)			-- await user input in OnSelectPlot
+        end
+    end
+end
+
 -- ===========================================================================
 -- UnitAction<BuildImprovement> was clicked.
 -- ===========================================================================
-local MANA_INDEX = GameInfo.Resources['RESOURCE_MANA'].Index
-local tManaNodeMapper = {
-    [GameInfo.Improvements['IMPROVEMENT_MANA_AIR'].Hash]         = GameInfo.Resources['RESOURCE_MANA_AIR'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_BODY'].Hash]        = GameInfo.Resources['RESOURCE_MANA_BODY'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_CHAOS'].Hash]       = GameInfo.Resources['RESOURCE_MANA_CHAOS'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_DEATH'].Hash]       = GameInfo.Resources['RESOURCE_MANA_DEATH'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_EARTH'].Hash]       = GameInfo.Resources['RESOURCE_MANA_EARTH'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_ENCHANTMENT'].Hash] = GameInfo.Resources['RESOURCE_MANA_ENCHANTMENT'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_ENTROPY'].Hash]     = GameInfo.Resources['RESOURCE_MANA_ENTROPY'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_FIRE'].Hash]        = GameInfo.Resources['RESOURCE_MANA_FIRE'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_LAW'].Hash]         = GameInfo.Resources['RESOURCE_MANA_LAW'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_LIFE'].Hash]        = GameInfo.Resources['RESOURCE_MANA_LIFE'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_METAMAGIC'].Hash]   = GameInfo.Resources['RESOURCE_MANA_METAMAGIC'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_MIND'].Hash]        = GameInfo.Resources['RESOURCE_MANA_MIND'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_NATURE'].Hash]      = GameInfo.Resources['RESOURCE_MANA_NATURE'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_SHADOW'].Hash]      = GameInfo.Resources['RESOURCE_MANA_SHADOW'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_SPIRIT'].Hash]      = GameInfo.Resources['RESOURCE_MANA_SPIRIT'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_SUN'].Hash]         = GameInfo.Resources['RESOURCE_MANA_SUN'].Index,
-    [GameInfo.Improvements['IMPROVEMENT_MANA_WATER'].Hash]       = GameInfo.Resources['RESOURCE_MANA_WATER'].Index
-}
 function OnUnitActionClicked_BuildImprovement( improvementHash, unused )
 	if (g_isOkayToProcess) then
 		local pSelectedUnit = UI.GetHeadSelectedUnit();
@@ -2859,7 +2641,7 @@ function OnUnitActionClicked_BuildImprovement( improvementHash, unused )
 			tParameters[UnitOperationTypes.PARAM_X] = pSelectedUnit:GetX();
 			tParameters[UnitOperationTypes.PARAM_Y] = pSelectedUnit:GetY();
 			tParameters[UnitOperationTypes.PARAM_IMPROVEMENT_TYPE] = improvementHash;
-			print('doing improvement build operation normally')
+			-- print('doing improvement build operation normally')
 			-- first cheap check to get unit
 			local pPlot = Map.GetPlot(pSelectedUnit:GetX(), pSelectedUnit:GetY())
 			local iResource = pPlot:GetResourceType()
@@ -2871,7 +2653,7 @@ function OnUnitActionClicked_BuildImprovement( improvementHash, unused )
 					tFirstParameters.iPlotIndex = pPlot:GetIndex()
 					tFirstParameters.iResourceType = iNewResourceIndex
 					tFirstParameters.OnStart = 'SlthOnSetResource';
-					print('seding off change resource')
+					-- print('seding off change resource')
 					UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tFirstParameters)
 				end
 			end
@@ -2943,24 +2725,7 @@ function OnUnitActionClicked_FoundCity(kResults:table)
 	if (g_isOkayToProcess) then
 		local pSelectedUnit = UI.GetHeadSelectedUnit();
 		if ( pSelectedUnit ~= nil ) then
-			if kResults ~= nil and table.count(kResults) ~= 0 and bDummyAlwaysFound then									-- i hate this popup
-				local popupString:string = Locale.Lookup("LOC_FOUND_CITY_CONFIRM_POPUP");
-				if (kResults[UnitOperationResults.FEATURE_TYPE] ~= nil) then
-					local featureName = GameInfo.Features[kResults[UnitOperationResults.FEATURE_TYPE]].Name;
-					popupString = popupString .. "[NEWLINE]" .. Locale.Lookup("LOC_FOUND_CITY_WILL_REMOVE_FEATURE", featureName);
-				end
-
-				--Request confirmation
-				local pPopupDialog :table = PopupDialogInGame:new("FoundCityAt"); -- unique identifier
-				pPopupDialog:AddText(popupString);
-				pPopupDialog:AddConfirmButton(Locale.Lookup("LOC_YES"), function()
-					UnitManager.RequestOperation( pSelectedUnit, UnitOperationTypes.FOUND_CITY );
-				end);
-				pPopupDialog:AddCancelButton(Locale.Lookup("LOC_NO"), nil);
-				pPopupDialog:Open();
-			else
-				UnitManager.RequestOperation( pSelectedUnit, UnitOperationTypes.FOUND_CITY );
-			end
+			UnitManager.RequestOperation( pSelectedUnit, UnitOperationTypes.FOUND_CITY );
 		end
 	end
 	if UILens.IsLayerOn( m_HexColoringWaterAvail ) then
@@ -3165,7 +2930,7 @@ end
 function OnPlayerChangeClose( ePlayer:number )
 
 	local isPaused:boolean = GameConfiguration.IsPaused();
-	-- print("OnPlayerChangeClose: " .. ePlayer .. ", GameConfiguration.IsPaused()=" .. tostring(isPaused));
+	print("OnPlayerChangeClose: " .. ePlayer .. ", GameConfiguration.IsPaused()=" .. tostring(isPaused));
 	if(isPaused) then
 		Events.GameConfigChanged.Add(OnGameConfigChanged_Hotseat_Paused);
 	end
@@ -3290,7 +3055,7 @@ end
 -- ===========================================================================
 function ShowCombatAssessment()
 
-
+	-- TODO: Is there a case this would be called when m_combatResults NIL?
 	if (m_combatResults == nil) then
 		return;
 	end
@@ -4149,10 +3914,9 @@ function OnInterfaceModeChanged( eOldMode:number, eNewMode:number )
 	end
 
 	if (eNewMode == InterfaceModeTypes.WB_SELECT_PLOT) then
-		SetTheSelectedButtonByInterfaceMode("INTERFACEMODE_WB_SELECT_PLOT", true, true);
+		CustomSetTheSelectedButtonByInterfaceMode("INTERFACEMODE_WB_SELECT_PLOT", true, tSlthBuildActions);
 	elseif (eOldMode == InterfaceModeTypes.WB_SELECT_PLOT) then
-		SetTheSelectedButtonByInterfaceMode("INTERFACEMODE_WB_SELECT_PLOT", false, true);
-		QuitWBInterfaceMode(true)
+		m_wbInterfaceMode = CustomSetTheSelectedButtonByInterfaceMode("INTERFACEMODE_WB_SELECT_PLOT", false, tSlthBuildActions);
 	end
 
 	if (eOldMode == InterfaceModeTypes.CITY_RANGE_ATTACK or eOldMode == InterfaceModeTypes.DISTRICT_RANGE_ATTACK) then
@@ -4171,34 +3935,16 @@ function OnLocalPlayerTurnEnd()
 end
 
 -- ===========================================================================
-function SetTheSelectedButtonByInterfaceMode( interfaceModeString:string, isSelected:boolean, isCustom:boolean)
-	if not isCustom then
-		for i=1,m_standardActionsIM.m_iCount,1 do
-			local instance:table = m_standardActionsIM:GetAllocatedInstance(i);
-			if instance then
-				local actionHash = instance.UnitActionButton:GetVoid2();
-				local unitOperation = GameInfo.UnitOperations[actionHash];
-				if unitOperation then
-					local interfaceMode = unitOperation.InterfaceMode;
-					if interfaceMode == interfaceModeString then
-						instance.UnitActionButton:SetSelected(isSelected);
-					end
-				end
-			end
-		end
-	else
-		local slth_instance = tSlthBuildActions
-		for idx, instanceButton in ipairs(tSlthBuildActions) do
-			if instanceButton.UnitActionButton then
-				local actionHash = instanceButton.UnitActionButton:GetTag();
-				local unitOperation = GameInfo.UnitOperations[actionHash];
-				if unitOperation then
-					local interfaceMode = unitOperation.InterfaceMode;
-					if interfaceMode == interfaceModeString then
-						if unitOperation.OperationType == m_CachedUnitOperation then
-							instanceButton.UnitActionButton:SetSelected(isSelected);
-						end
-					end
+function SetTheSelectedButtonByInterfaceMode( interfaceModeString:string, isSelected:boolean)
+	for i=1,m_standardActionsIM.m_iCount,1 do
+		local instance:table = m_standardActionsIM:GetAllocatedInstance(i);
+		if instance then
+			local actionHash = instance.UnitActionButton:GetVoid2();
+			local unitOperation = GameInfo.UnitOperations[actionHash];
+			if unitOperation then
+				local interfaceMode = unitOperation.InterfaceMode;
+				if interfaceMode == interfaceModeString then
+					instance.UnitActionButton:SetSelected(isSelected);
 				end
 			end
 		end
@@ -4562,889 +4308,20 @@ function OnPortraitRightClick()
 	end
 end
 
-local tDeserts = {[GameInfo.Terrains['TERRAIN_DESERT_HILLS'].Index]= true,
-			[GameInfo.Terrains['TERRAIN_DESERT'].Index] = true}
-local tFlames = {}
-if GameInfo.Features['FEATURE_BURNING_FOREST'] then
-	tFlames = {[GameInfo.Features['FEATURE_BURNING_FOREST'].Index]= true,
-				[GameInfo.Features['FEATURE_BURNING_JUNGLE'].Index]= true}			-- once i implement flames feature  todo
-end
-local tScorch = {[GameInfo.Terrains['TERRAIN_SNOW'].Index]= true,
-			[GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index] = true,
-			[GameInfo.Terrains['TERRAIN_PLAINS'].Index]= true,
-			[GameInfo.Terrains['TERRAIN_PLAINS_HILLS'].Index] = true}
-local tForested = {[GameInfo.Features['FEATURE_FOREST'].Index]= true,
-			[GameInfo.Features['FEATURE_JUNGLE'].Index]= true}
-local tGrassland = {[GameInfo.Terrains['TERRAIN_GRASS'].Index]= true,
-			[GameInfo.Terrains['TERRAIN_GRASS_HILLS'].Index]= true}
-local tSanctify = {[GameInfo.Features['FEATURE_MARSH'].Index]= true}					--	once i implement graveyards, city ruins todo
-
-function CustomCheck(CustomOperationInfo, pUnit)					-- does the checks to let a possible allowed unitcommand pressable in the current context
-	local bCanStart
-	local tParameters = {}
-	local iUnit = pUnit:GetID()
-	local iOwner = pUnit:GetOwner()
-	tParameters.UnitOperationType = CustomOperationInfo.OperationType;
-	tParameters.iCastingUnit = iUnit;
-	if CustomOperationInfo.ActivationPrereq == 'SingleSummon' then
-		local iSummonID = pUnit:GetProperty(CustomOperationInfo.SimpleText)
-		if iSummonID then
-			local pSummonUnit = UnitManager.GetUnit(iOwner, iSummonID)
-			bCanStart = not pSummonUnit
-		else
-			bCanStart = true
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'PlayerHeroDead' then
-		local pPlayer = Players[iOwner]
-		bCanStart = (pPlayer:GetProperty('HERO_DEAD') or 0) > 0
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyUnit' then
-		bCanStart = CheckAdjacentUnitIsEnemy(pUnit, iOwner, CustomOperationInfo)
-	elseif CustomOperationInfo.ActivationPrereq == 'DesertOrFlamesAdjacent' then
-		local iPlotID = pUnit:GetPlotId()
-		local pPlot = Map.GetPlotByIndex(iPlotID)
-		local iFeature = pPlot:GetFeatureType()										-- need logic for aoe flames
-		if iFeature then
-			bCanStart = tFlames[iFeature]
-			if not bCanStart then
-				local iTerrain = pPlot:GetTerrainType()
-				bCanStart = tDeserts[iTerrain]
-			end
-		end
-
-	elseif CustomOperationInfo.ActivationPrereq == 'OnSnowOrPlains' then
-		local iPlotID = pUnit:GetPlotId()
-		local pPlot = Map.GetPlotByIndex(iPlotID)
-		local iTerrain = pPlot:GetTerrainType()
-		bCanStart = tScorch[iTerrain]
-	elseif CustomOperationInfo.ActivationPrereq == 'OnLandNotWoodedGrass' then
-		local iPlotID = pUnit:GetPlotId()
-		local pPlot = Map.GetPlotByIndex(iPlotID)
-		local iFeature = pPlot:GetFeatureType()
-		if tForested[iFeature] then
-			local iTerrain = pPlot:GetTerrainType()
-			bCanStart = not tGrassland[iTerrain]
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnForestOrJungle' then
-		local iPlotID = pUnit:GetPlotId()
-		local pPlot = Map.GetPlotByIndex(iPlotID)
-		local iFeature = pPlot:GetFeatureType()
-		if iFeature then
-			bCanStart = tForested[iFeature]
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnCityRuinsOrGraveyardOrHellTerrain' then
-		local iPlotID = pUnit:GetPlotId()
-		local pPlot = Map.GetPlotByIndex(iPlotID)
-		local iFeature = pPlot:GetFeatureType()
-		bCanStart = tSanctify[iFeature]
-		if not bCanStart then
-			bCanStart = pPlot:GetProperty('HellConversion') or 0 > 9
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnManaOrAdjacentUnitHasMagicDebuffOrBuff' then
-		local iPlotID = pUnit:GetPlotId()
-		local pPlot = Map.GetPlotByIndex(iPlotID)
-		local ResourceInfo = GameInfo.Resources[pPlot:GetResourceType()]
-		bCanStart = ResourceInfo and ResourceInfo.ResourceClassType == 'RESOURCECLASS_MANA'
-		-- if not bCanStart then
- 		--	bCanStart = CheckAdjacentOwnUnitsHasntAbility(pUnit, iOwner, -1)
-		--	if not bCanStart then
- 		--		bCanStart = CheckAdjacentEnemyUnitsHasAbility(pUnit, iOwner, -1)
-		--	end
-		-- end
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyEligibleAbility' then
-		bCanStart = CheckAdjacentUnitsHasntAbility(pUnit, iOwner, CustomOperationInfo)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentAllyEligibleAbility' then
-		bCanStart = CheckAdjacentUnitsHasntAbility(pUnit, iOwner, CustomOperationInfo, true)
-	elseif CustomOperationInfo.ActivationPrereq == 'HasntAbility' then
-		local iAbilityToCheck
-		local pAbilities = pUnit:GetAbility():GetAbilities()
-		local pAbilityInfo = GameInfo.UnitAbilities[CustomOperationInfo.SimpleText]
-		if pAbilityInfo then
-			iAbilityToCheck = pAbilityInfo.Index
-			print('checking if can grant ability to self:', CustomOperationInfo.SimpleText)
-		elseif CustomOperationInfo.SecondText then
-			pAbilityInfo = GameInfo.UnitAbilities[CustomOperationInfo.SecondText]
-			if pAbilityInfo then
-				iAbilityToCheck = pAbilityInfo.Index
-				print('checking if can grant ability to self:', CustomOperationInfo.SecondText)
-			end
-		end
-		local hasAbility
-		print('do we have abilities', pAbilities)
-		if (pAbilities and table.count(pAbilities) > 0 and iAbilityToCheck) then
-			print('pre ability start, ensure false', hasAbility)
-			for i,ability in ipairs (pAbilities) do
-				if not hasAbility then
-					print('checking if ability 1 == ability 2',ability,  iAbilityToCheck)
-					hasAbility = ability == iAbilityToCheck
-				end
-			end
-			print('do we have the ability', hasAbility)
-			bCanStart = not hasAbility
-		else
-			bCanStart = true
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnCityPopTwoPlus' then
-		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
-		if pCity then
-			bCanStart = pCity:GetPopulation() > 1
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGeneric' then
-		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
-		if pCity then
-			bCanStart = true
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGrantBuilding' then
-		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
-		-- print(' City grant building')
-		if pCity then
-			bCanStart = not pCity:GetBuildings():HasBuilding(GameInfo.Buildings[CustomOperationInfo.SimpleText].Index)
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'OnCityGrantBuildingPrereqBuilding' then
-		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
-		if pCity then
-			local pBuildings = pCity:GetBuildings()
-			if pBuildings:HasBuilding(GameInfo.Buildings[CustomOperationInfo.SecondText].Index) then
-				if not pBuildings:HasBuilding(GameInfo.Buildings[CustomOperationInfo.SimpleText].Index) then
-					bCanStart = true
-				end
-			end
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'EnoughGreatPeople' then
-		local pPlayer = Players[iOwner]
-		local iBar = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
-		bCanStart = GPChecker(pPlayer, iBar)
-	elseif CustomOperationInfo.ActivationPrereq == 'OnHolyCity' then
-		local pCity = Cities.GetCityInPlot(pUnit:GetX(), pUnit:GetY())
-		if pCity then
-			local pBuildings = pCity:GetBuildings()
-			if not pBuildings:HasBuilding(GameInfo.Buildings[CustomOperationInfo.SimpleText].Index) then
-				local bIsCorrectHolyCity = pCity:GetProperty(CustomOperationInfo.SecondText)
-				bCanStart = bIsCorrectHolyCity and bIsCorrectHolyCity > 0
-			end
-		end
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentEnemyEligiblePromoClass' then
-		bCanStart = CheckAdjacentEnemyUnitsHasPromoClass(pUnit, iOwner, CustomOperationInfo)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleAllyUnitMatches' then
-		bCanStart = CheckAdjacentAllyUnitTypeMatches(pUnit, iOwner, CustomOperationInfo)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentAllyUnitAbilityMatches' then									-- use for herald
-		bCanStart = CheckAdjacentOwnUnitHasAbility(pUnit, iOwner, CustomOperationInfo)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleAllyIsDamaged' then
-		bCanStart = CheckAdjacentAllyUnitIsntFullHealth(pUnit, iOwner, CustomOperationInfo)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleAllyIsDamagedAndGolem' then
-		bCanStart = CheckAdjacentAllyUnitIsntFullHealthAndAbilityMatches(pUnit, iOwner, CustomOperationInfo)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleAllyIsLevelMinimum' then
-		bCanStart = CheckAdjacentAllyUnitLevelMatches(pUnit, iOwner, CustomOperationInfo)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleAlly' then
-		bCanStart = CheckAdjacentAllyUnit(pUnit, iOwner, CustomOperationInfo)			-- todo flesh golem exclusion seems complicated
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleEnemy' then
-		bCanStart = CheckAdjacentEnemyUnit(pUnit, iOwner)
-	elseif CustomOperationInfo.ActivationPrereq == 'OnAdjacentOwnedCity' then
-		bCanStart = CheckAdjacentCity(pUnit, iOwner, CustomOperationInfo, 1)
-	elseif CustomOperationInfo.ActivationPrereq == 'OnAdjacentEnemyCity' then
-		bCanStart = CheckAdjacentCity(pUnit, iOwner, CustomOperationInfo, false)
-	elseif CustomOperationInfo.ActivationPrereq == 'OnAdjacentCity' then
-		bCanStart = CheckAdjacentCity(pUnit, iOwner, CustomOperationInfo, 2)
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentSingleAllyHasEquipmentOrIsEquipment' then
-		bCanStart = GetNearbyEquipment(pUnit, iOwner, CustomOperationInfo)			-- todo
-	elseif CustomOperationInfo.ActivationPrereq == 'UnitIsLevel' then
-		bCanStart = pUnit:GetExperience():GetLevel() > 5
-	elseif CustomOperationInfo.ActivationPrereq == 'AdjacentCityHasBuilding' then
-		bCanStart = CheckAdjacentCity(pUnit, iOwner, CustomOperationInfo, 1, GameInfo.Buildings[CustomOperationInfo.BuildingPrereq].Index)
-	elseif CustomOperationInfo.ActivationPrereq == 'IsDamaged' then
-		bCanStart = pUnit:GetDamage() > 0
-	elseif CustomOperationInfo.ActivationPrereq == 'AtWar' then
-		bCanStart = CheckAtWar(iOwner)
-	else
-		print('Not covered:')
-		print(CustomOperationInfo.ActivationPrereq)
-		bCanStart = true
-	end
-	return bCanStart
-end
-
-function CheckAdjacentUnitIsEnemy(pUnit, iPlayer, CustomOpInfo)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bEnemyUnitFound
-	local iUnitID
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit) then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer ~= iPlayer) then
-					if Players[iPlayer]:GetDiplomacy():IsAtWarWith(iOwnerPlayer) then
-						TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-local tMagicBuffs = {[GameInfo.UnitAbilities['BUFF_ENCHANTED_BLADE'].Index] = true}								-- incomplete list
-local tMagicDebuffs = {[GameInfo.UnitAbilities['BUFF_RUSTED'].Index] = true}
-
-function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, CustomOpInfo)
-	if CustomOpInfo == -1 then
-		bMultipleChecks = true
-	else
-		local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
-	end
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bEnemyUnitHasAbility
-	local pAbilities
-	local iUnitID
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit) then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer ~= iPlayer) then
-					pAbilities = pNearUnit:GetAbility():GetAbilities()
-					if (pAbilities and table.count(pAbilities) > 0) then
-						for i,ability in ipairs (pAbilities) do
-							if not bEnemyUnitHasAbility then
-								if bMultipleChecks then
-									bEnemyUnitHasAbility = tMagicBuffs[ability]
-								else
-									bEnemyUnitHasAbility = ability == iAbilityToCheck							-- GameInfo.UnitAbilities[ability]
-								end
-								if bEnemyUnitHasAbility then
-									TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return false
-	else
-		return true
-	end
-end
-
-function CheckAdjacentUnitsHasntAbility(pUnit, iPlayer, CustomOpInfo, bIsAlly)
-	local abilityToCheckInfo = GameInfo.UnitAbilities[CustomOpInfo.SimpleText]
-	if not abilityToCheckInfo then
-		print('Error in checking adjacent units for Ability for use in CustomOP, couldnt find ability:', CustomOpInfo.SimpleText, CustomOpInfo.OperationType)
-		return false;
-	end
-	local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bEnemyUnitHasAbility
-	local pAbilities
-	local iUnitID
-	local iPlotID
-	local bCondition
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit) then
-				local bUnitHasAbility = nil
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if bIsAlly then
-					bCondition = iOwnerPlayer == iPlayer
-				else
-					bCondition = iOwnerPlayer ~= iPlayer
-				end
-				if bCondition then
-					-- print('unit is at least eligible')
-					pAbilities = pNearUnit:GetAbility():GetAbilities()
-					if (pAbilities and table.count(pAbilities) > 0) then
-						for i,ability in ipairs (pAbilities) do
-							if not bUnitHasAbility then
-								if ability == iAbilityToCheck then							-- GameInfo.UnitAbilities[ability]
-									bUnitHasAbility = true
-								end
-							end
-						end
-						if not bUnitHasAbility then
-							-- print('unit hasnt ability')
-							TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-						end
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		-- print('some units were found without ability')
-		return true
-	else
-		-- print('no units were found without ability')
-		return false
-	end
-end
-
-function GPChecker(pPlayer, iBar)
-	local iGpAmount = 0
-	for _, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
-		if pPlayerUnit:GetGreatPerson():IsGreatPerson() then
-			iGpAmount = iGpAmount + 1
-			if iGpAmount >= iBar then return true end
-		end
-	end
-	return false
-end
-
-function AbilityChecker(pUnit, iAbilityToCheck, iAbilityAltToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
-	local bCanStart
-	local pAbilities = pUnit:GetAbility():GetAbilities()
-	if (pAbilities and table.count(pAbilities) > 0) then
-		if iAbilityAltToCheck then
-			AltAbilityCheck(pUnit, pAbilities, iAbilityToCheck, iAbilityAltToCheck)
-		elseif iAbilityAlsoToCheck then
-			if iAbilityAlsoTwoToCheck then
-				bCanStart = AbilityCheckThrice(pUnit, pAbilities, iAbilityToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
-			else
-				bCanStart = AbilityCheckTwice(pUnit, pAbilities, iAbilityToCheck, iAbilityAlsoToCheck)
-			end
-		else
-			bCanStart = SimpleAbilityCheck(pUnit, pAbilities, iAbilityToCheck)
-		end
-	end
-	return bCanStart
-end
-
-function SimpleAbilityCheck(pUnit, pAbilities, iAbilityToCheck)
-	local bCanStart
-	for i,ability in ipairs (pAbilities) do
-		if not bCanStart then
-			bCanStart = ability == iAbilityToCheck
-		end
-	end
-	return bCanStart
-end
-
-function AltAbilityCheck(pUnit, pAbilities, iAbilityToCheck, iAbilityAltToCheck)
-	local bCanStart
-	for i,ability in ipairs (pAbilities) do
-		if not bCanStart then
-			bCanStart = ability == iAbilityToCheck
-			if not bCanStart then
-				bCanStart = ability == iAbilityAltToCheck
-			end
-		end
-	end
-	return bCanStart
-end
-
-function AbilityCheckTwice(pUnit, pAbilities, iAbilityToCheck, iAbilityAlsoToCheck)
-	local bCanStart
-	local bFirstCheckPassed
-	for i,ability in ipairs (pAbilities) do
-		if not bCanStart then
-			bFirstCheckPassed = ability == iAbilityToCheck
-			if bFirstCheckPassed then
-				bCanStart = ability == iAbilityAlsoToCheck
-			end
-		end
-	end
-	return bCanStart
-end
-
-function AbilityCheckThrice(pUnit, pAbilities, iAbilityToCheck, iAbilityAlsoToCheck, iAbilityAlsoTwoToCheck)
-	local bCanStart
-	local bFirstCheckPassed
-	local bSecondCheckPassed
-	for i,ability in ipairs (pAbilities) do
-		if not bCanStart then
-			bFirstCheckPassed = ability == iAbilityToCheck
-			if bFirstCheckPassed then
-				bSecondCheckPassed = ability == iAbilityAlsoToCheck
-				if bSecondCheckPassed then
-					bCanStart = ability == iAbilityAlsoToCheck
-				end
-			end
-		end
-	end
-	return bCanStart
-end
-
-function CheckAdjacentEnemyUnitsHasPromoClass(pUnit, iPlayer, CustomOpInfo)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-	local sPromoClass = CustomOpInfo.SimpleText
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local unitType
-	local sUnitPromoClass
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit) then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer ~= iPlayer) then
-					unitType = pNearUnit:GetUnitType();
-					sUnitPromoClass = GameInfo.Units[unitType].PromotionClass
-					if sPromoClass == sUnitPromoClass then
-						return true
-					end
-				end
-			end
-		end
-	end
-	return false
-end
-
-function CheckAdjacentAllyUnitTypeMatches(pUnit, iPlayer, CustomOpInfo)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-	local iUnitTypeRequired = GameInfo.Units[CustomOpInfo.SimpleText].Index
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iUnitType
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if pNearUnit then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					iUnitType = pNearUnit:GetUnitType();
-					if iUnitType == iUnitTypeRequired then
-						TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-function CheckAdjacentOwnUnitHasAbility(pUnit, iPlayer, CustomOpInfo)
-	local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bAllyUnitHasAbility
-	local pAbilities
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit) then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					pAbilities = pNearUnit:GetAbility():GetAbilities()
-					if (pAbilities and table.count(pAbilities) > 0) then
-						for i,ability in ipairs (pAbilities) do
-							if not bAllyUnitHasAbility then
-								bAllyUnitHasAbility = ability == iAbilityToCheck
-								if bAllyUnitHasAbility then
-									TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-function CheckAdjacentAllyUnitIsntFullHealth(pUnit, iPlayer, CustomOpInfo)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iDamage
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if pNearUnit then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					iDamage = pNearUnit:GetDamage();
-					if iDamage > 0 then
-						TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-function CheckAdjacentAllyUnitIsntFullHealthAndAbilityMatches(pUnit, iPlayer, CustomOpInfo)
-	local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bAllyUnitHasAbility
-	local pAbilities
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit) then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					if pNearUnit:GetDamage() > 0 then
-						pAbilities = pNearUnit:GetAbility():GetAbilities()
-						if (pAbilities and table.count(pAbilities) > 0) then
-							for i,ability in ipairs (pAbilities) do
-								if not bAllyUnitHasAbility then
-									bAllyUnitHasAbility = ability == iAbilityToCheck
-									if bAllyUnitHasAbility then
-										TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-function CheckAdjacentAllyUnitLevelMatches(pUnit, iPlayer, CustomOpInfo)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-	local iLevelMinimum = GameInfo.Units[CustomOpInfo.SimpleAmount].Index
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iLevel
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if pNearUnit then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					iLevel = pNearUnit:GetExperience():GetLevel();
-					if iLevel >= iLevelMinimum then
-						TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-function CheckAdjacentAllyUnit(pUnit, iPlayer, CustomOpInfo)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if pNearUnit then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-function CheckAdjacentEnemyUnit(pUnit, iPlayer)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iPlotID
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if pNearUnit then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer ~= iPlayer) then
-					TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-function CheckAdjacentCity(pUnit, iPlayer, CustomOpInfo, iSameOwner, iBuildingPrereq)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iPlotID
-	local pCity
-	local bGatingPassed
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		if plot:IsCity() then
-			local iCityX =  plot:GetX()
-    		local iCityY =  plot:GetY()
-			pCity = CityManager.GetCityAt(iCityX, iCityY)
-			local iOwnerPlayer = pCity:GetOwner();
-			if iSameOwner == 1 then
-				bGatingPassed = iOwnerPlayer == iPlayer
-			elseif iSameOwner == 2 then
-				bGatingPassed = true
-			else
-				bGatingPassed = iOwnerPlayer ~= iPlayer
-			end
-			if bGatingPassed then
-				-- print('Adjacent city')
-				if iBuildingPrereq then
-					print('building check on ' .. tostring(iBuildingPrereq))
-					local pBuildings = pCity:GetBuildings()
-					if pBuildings:HasBuilding(iBuildingPrereq) then
-						TrackPlot(plot, pCity, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-						return true
-					end
-				else
-					TrackPlot(plot, pCity, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-					return true
-				end
-			end
-		end
-	end
-	return false
-end
-
-function CheckAdjacentAllyUnitTypeMatchesOrAbilityMatches(pUnit, iPlayer, CustomOpInfo)
-	local iAbilityToCheck = GameInfo.UnitAbilities[CustomOpInfo.SimpleText].Index
-	local iX = pUnit:GetX()
-    local iY = pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bAllyUnitHasAbility
-	local pAbilities
-	local iPlotID
-	local iUnitType
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if (pNearUnit) then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					iUnitType = pNearUnit:GetUnitType();
-					if GameInfo.Units[iUnitType].Domain == 'DOMAIN_IMMOBILE' then
-						TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-					else
-						pAbilities = pNearUnit:GetAbility():GetAbilities()
-						if (pAbilities and table.count(pAbilities) > 0) then
-							for i,ability in ipairs (pAbilities) do
-								if not bAllyUnitHasAbility then
-									bAllyUnitHasAbility = ability == iAbilityToCheck
-									if bAllyUnitHasAbility then
-										TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-function CheckAtWar(iPlayer)
-	local pPlayer = Players[iPlayer];
-    local pDiplo = pPlayer:GetDiplomacy()
-    for iOtherPlayer, _ in ipairs(Players) do
-        if pDiplo:IsAtWarWith(iOtherPlayer) then
-			return true
-        end
-    end
-	return false
-end
-
-local tEquipmentUnits = {
-	[GameInfo.Units['SLTH_EQUIPMENT_ATHAME'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_BLACK_MIRROR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_CROWN_OF_COMMAND'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_DRAGONS_HORDE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_EMPTY_BIER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_GELA'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_GODSLAYER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_GOLDEN_HAMMER'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_HEALING_SALVE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_JADE_TORC'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_NETHER_BLADE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_ORTHUSS_AXE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_POTION_OF_RESTORATION'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_ROD_OF_WINDS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_SCORCHED_STAFF'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_STAFF_OF_SOULS'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_SPELL_STAFF'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_TIMOR_MASK'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_TREASURE'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_TREASURE_ABILITY'].Index,
-	[GameInfo.Units['SLTH_EQUIPMENT_WAR'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index }
-
-local tEquipmentAbilities = {
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_BLACK_MIRROR_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_AKHARIEN_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_CROWN_OF_COMMAND_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_DRAGONS_HORDE_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_EMPTY_BIER_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GELA_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GODSLAYER_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_GOLDEN_HAMMER_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_HEALING_SALVE_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_INFERNAL_GRIMOIRE_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_JADE_TORC_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_MOKKA_CAULDRON_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_NETHER_BLADE_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ORTHUSS_AXE_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_PIECES_OF_BARNAXUS_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_INVISIBILITY_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_POTION_OF_RESTORATION_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_ROD_OF_WINDS_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_SCORCHED_STAFF_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_STAFF_OF_SOULS_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_SYLIVENS_PERFECT_LYRE_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_TIMOR_MASK_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_WAR_ABILITY'].Index] = true,
-[GameInfo.UnitAbilities['SLTH_EQUIPMENT_SPELL_STAFF_ABILITY'].Index] = true}
-
-function GetNearbyEquipment(pUnit, iPlayer, CustomOpInfo)
-	local iX =  pUnit:GetX()
-    local iY =  pUnit:GetY()
-    local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bAllyUnitHasAbility
-	local pAbilities
-	local iPlotID
-	local iUnitType
-	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
-	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
-	for _, plot in ipairs(tNeighborPlots) do
-		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
-			if pNearUnit then
-				local iOwnerPlayer = pNearUnit:GetOwner();
-				if (iOwnerPlayer == iPlayer) then
-					iUnitType = pNearUnit:GetUnitType();
-					if tEquipmentUnits[iUnitType] then
-						TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-					else
-						pAbilities = pNearUnit:GetAbility():GetAbilities()
-						if (pAbilities and table.count(pAbilities) > 0) then
-							for i,iAbilityIndex in ipairs (pAbilities) do
-								if tEquipmentAbilities[iAbilityIndex] then
-									TrackPlot(plot, pNearUnit, tCachedViableActionUnits[CustomOpInfo.OperationType], tCachedViableActionPlots[CustomOpInfo.OperationType])
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-	if table.count(tCachedViableActionPlots[CustomOpInfo.OperationType]) > 0 then
-		return true
-	else
-		return false
-	end
-end
 
 function OnSelectPlot(plotId, plotEdge, boolDown, rButton)
-	--print('plotId, plotEdge, boolDown, rButton', plotId, plotEdge, boolDown, rButton)
+	print('plotId, plotEdge, boolDown, rButton', plotId, plotEdge, boolDown, rButton)
     if not boolDown then
         if rButton then
             QuitWBInterfaceMode(true)
         else
-            -- print('selected plot')
-            local tParameters = {}
-			local iTargetID = tCachedViableActionUnits[m_CachedUnitOperation][plotId]
-			if iTargetID then
-				local pUnit = UI.GetHeadSelectedUnit()
-				local iOwner = pUnit:GetOwner()
-				tParameters.iTargetID = iTargetID
-				tParameters.OnStart = m_CachedUnitOperationCallback;
-				tParameters.iCastingUnit = pUnit:GetID()
-				UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
-			end
+            selectPlot(plotId)
 			QuitWBInterfaceMode(true)
+			-- Refresh(g_selectedPlayerId, g_UnitId)			-- refresh is ideal here, but will likely race the requestOperation getting new abilities
+			local pUnit = UnitManager.GetUnit(g_selectedPlayerId, g_UnitId);
 			UI.DeselectUnit(pUnit);
         end
     end
-end
-
-function QuitWBInterfaceMode(ifChangeInterfaceMode)
-	if ifChangeInterfaceMode then
-		UI.SetInterfaceMode( InterfaceModeTypes.SELECTION )
-	end
-	UILens.ClearLayerHexes(SLTH_HEX_COLORING_MOVEMENT);
-	UILens.ToggleLayerOff(SLTH_HEX_COLORING_MOVEMENT);
-	m_wbInterfaceMode = false
-end
-
-function OnUiModChange(intPara, currentInterfaceMode)
-	if m_wbInterfaceMode and currentInterfaceMode ~= InterfaceModeTypes.WB_SELECT_PLOT then
-		QuitWBInterfaceMode(false)
- 	end
-end
-
-function TrackPlot(pPlot, pNearUnit, tCacheTargets, tCachePlots)
-	iPlotID = pPlot:GetIndex()
-	iUnitID = pNearUnit:GetID()
-	tCacheTargets[iPlotID] = iUnitID
-	table.insert(tCachePlots, iPlotID)
 end
 -- ===========================================================================
 function LateInitialize()
@@ -5512,8 +4389,7 @@ function Initialize()
 
 	LuaEvents.WorldInput_WBSelectPlot.Add(OnSelectPlot)
 	SLTH_HEX_COLORING_MOVEMENT = UILens.CreateLensLayerHash("Hex_Coloring_Movement");
-	-- Events.InterfaceModeChanged.Add(OnUiModChange)
-
+	setColorHex(SLTH_HEX_COLORING_MOVEMENT)
 
 	-- Setup settlement water guide colors
 	local FreshWaterColor:number = UI.GetColorValue("COLOR_BREATHTAKING_APPEAL");

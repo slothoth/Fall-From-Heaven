@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS CustomOperations(OperationType text primary key, Callback text, SimpleText text, SecondText text, PromotionPrereq text,
                                             UnitPrereq text, ActivationPrereq text, AbilityPrereq text, AlternateAbilityPrereq text,
                                             AlsoAbilityPrereq text, AlsoTwoAbilityPrereq text, BuildingPrereq text, DomainPrereq text, FormationPrereq text,
+                                            TechPrereq text,
                                             SimpleAmount integer default 0, SecondAmount integer default 0,
                                             ThirdAmount integer default 0, DontShowOnDisabled default '0');
 
@@ -75,6 +76,18 @@ INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, B
 ('UNITOPERATION_GRANT_SPIDER_PEN', 'SlthOnGrantBuilding', 'SLTH_BUILDING_SPIDER_PEN', 'SLTH_UNIT_GIANT_SPIDER', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
 ('UNITOPERATION_GRANT_TIGER_CAGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_TIGER_CAGE', 'SLTH_UNIT_TIGER', 'SLTH_BUILDING_CARNIVAL', 'OnCityGrantBuilding'),
 ('UNITOPERATION_GRANT_FREAK_SHOW', 'SlthOnGrantBuilding', 'SLTH_BUILDING_FREAK_SHOW', 'SLTH_UNIT_FREAK', NULL, 'OnCityGrantBuilding');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, BuildingPrereq, ActivationPrereq, TechPrereq) VALUES
+('UNITOPERATION_GRANT_AQUEDUCT', 'SlthOnGrantBuilding', 'SLTH_BUILDING_AQUEDUCT', 'SLTH_UNIT_SUPPLIES', NULL, 'OnCityGrantBuilding', 'TECH_SANITATION'),
+('UNITOPERATION_GRANT_ARCHERY_RANGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_ARCHERY_RANGE', 'SLTH_UNIT_SUPPLIES', NULL, 'OnCityGrantBuilding', 'SLTH_TECH_ARCHERY'),
+('UNITOPERATION_GRANT_HUNTING_LODGE', 'SlthOnGrantBuilding', 'SLTH_BUILDING_HUNTING_LODGE', 'SLTH_UNIT_SUPPLIES', NULL, 'OnCityGrantBuilding', 'TECH_HUNTING'),
+('UNITOPERATION_GRANT_LIBRARY', 'SlthOnGrantBuilding', 'BUILDING_LIBRARY', 'SLTH_UNIT_SUPPLIES', NULL, 'OnCityGrantBuilding', 'TECH_WRITING'),                  -- this does need a Campus..
+('UNITOPERATION_GRANT_PALISADE', 'SlthOnGrantBuilding', 'BUILDING_WALLS', 'SLTH_UNIT_SUPPLIES', NULL, 'OnCityGrantBuilding', NULL),
+('UNITOPERATION_GRANT_STABLE', 'SlthOnGrantBuilding', 'BUILDING_STABLE', 'SLTH_UNIT_SUPPLIES', NULL, 'OnCityGrantBuilding', 'TECH_HORSEBACK_RIDING'),
+('UNITOPERATION_GRANT_TRAINING_YARD', 'SlthOnGrantBuilding', 'BUILDING_BARRACKS', 'SLTH_UNIT_SUPPLIES', NULL, 'OnCityGrantBuilding', 'TECH_BRONZE_WORKING');
+
+-- Supplies
+-- Aqueduct, Archery Range, Hunting Lodge, Library, Palisade, Stable, Training Yard
 
 INSERT INTO CustomOperations (OperationType, Callback, SimpleText, UnitPrereq, ActivationPrereq, DontShowOnDisabled) VALUES
 ('UNITOPERATION_GRANT_BURNING_BLOOD', 'SlthOnGrantBuffSelf', 'BUFF_BURNING_BLOOD', 'SLTH_UNIT_MOROI', 'HasntAbility', '1');
@@ -288,7 +301,7 @@ INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SecondText, P
 ('UNITOPERATION_BECOME_LICH', 'SlthOnConvertSelf', 'SLTH_UNIT_LICH', 'ABILITY_UNDEAD', 'DEATH_THREE', 'HasntAbility', '1');
 
 INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq) VALUES
-('UNITOPERATION_SUMMON_BALOR', 'SlthOnSummon', 'SLTH_UNIT_BALOR',  'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_VEIL');
+('UNITOPERATION_SUMMON_BALOR', 'SlthOnSummonPerm', 'SLTH_UNIT_BALOR',  'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_VEIL');
 
 INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq, ActivationPrereq) VALUES
 ('UNITOPERATION_SUMMON_KRAKEN', 'SlthOnSummonPerm', 'SLTH_UNIT_KRAKEN', 'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_OCTOPUS', 'SingleSummonAtSea'),
@@ -300,9 +313,11 @@ INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq
 ('UNITOPERATION_SUMMON_TIGER', 'SlthOnSummonPerm', 'SLTH_UNIT_TIGER', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_LEAVES', 'SingleSummon'),
 ('UNITOPERATION_BLOOM', 'SlthOnMakeFeature', 'FEATURE_FOREST_ANCIENT', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_LEAVES', 'HasntFeature'),
 ('UNITOPERATION_REVELATION', 'SlthOnBespokeSpell', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_EMPYREAN', NULL),
-('UNITOPERATION_GRANT_SHIELD_OF_FAITH', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHIELD_OF_FAITH', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_EMPYREAN', 'AdjacentAllyEligibleAbility'),
-('UNITOPERATION_TSUNAMI', 'SlthOnAoeDamageCoast', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_OCTOPUS', 'AdjacentEnemyUnitAtSea'),
-('UNITOPERATION_RING_OF_FLAMES', 'SlthOnAoeDamage', NULL, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_VEIL', 'AdjacentEnemyUnit');
+('UNITOPERATION_GRANT_SHIELD_OF_FAITH', 'SlthOnGrantBuffAoEAlly', 'BUFF_SHIELD_OF_FAITH', 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_KILMORPH', 'AdjacentAllyEligibleAbility');
+
+INSERT INTO CustomOperations (OperationType, Callback, SimpleAmount, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq, ActivationPrereq) VALUES
+('UNITOPERATION_TSUNAMI', 'SlthOnAoeDamageCoast', 50, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_OCTOPUS', 'AdjacentEnemyUnitAtSea'),
+('UNITOPERATION_RING_OF_FLAMES', 'SlthOnAoeDamage', 30, 'ABILITY_DIVINE', 'ABILITY_CHANNELING2', 'ABILITY_WORSHIPS_VEIL', 'AdjacentEnemyUnit');
 
 
 -- Divine spells (Has abilityPrereq, AlternateAbilityPrereq): CoE steal equipment,

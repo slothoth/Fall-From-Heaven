@@ -322,6 +322,22 @@
         <File>UI/Panels/Slider_Attach_Tracker.lua</File>
         <File>UI/Panels/SliderSupport.lua</File>
     </ImportFiles>
+    <AddUserInterfaces id="FFHDiploInject">
+      <Properties>
+          <Context>InGame</Context>
+          <LoadOrder>900</LoadOrder>
+      </Properties>
+      <Items>
+          <File>UI/Replacements/DiplomacyActionViewInjector.xml</File>
+      </Items>
+    </AddUserInterfaces>
+    <ImportFiles id="FFHDiploInjectImport">
+        <Properties>
+            <LoadOrder>900</LoadOrder>
+        </Properties>
+        <File>UI/Replacements/DiplomacyActionViewInjector.lua</File>
+        <File>UI/Replacements/DiplomacyActionViewInjector.xml</File>
+    </ImportFiles>
     <ReplaceUIScript id="ResearchChooserHideFFH">
       <Properties>
           <LoadOrder>1100</LoadOrder>
@@ -409,20 +425,23 @@
       <Properties>
         <LoadOrder>901</LoadOrder>
       </Properties>
-      <File>UI/UnitPromotionPopup.lua</File>
-      <File>UI/UnitPromotionPopup.xml</File>
       <File>UI/Replacements/CityBannerManager_BarbarianClansMode.lua</File>
-      <File>UI/CityBannerManager.xml</File>
+      <File>UI/Replacements/Civ6Common.lua</File>
+      <File>UI/Replacements/InstanceManager.lua</File>
       <File>UI/Replacements/TreatWithTribePopup.lua</File>
       <File>UI/Replacements/TreatWithTribePopup.xml</File>
-      <File>UI/TechTree.xml</File>
-      <File>UI/TechTreeNode.xml</File>
+      <File>UI/CityBannerManager.xml</File>
       <File>UI/CivicsTree.xml</File>
       <File>UI/CivicsTree.lua</File>
       <File>UI/GovernmentScreen.lua</File>
       <File>UI/GovernmentScreen.xml</File>
       <File>UI/TabSupport.lua</File>
+      <File>UI/TechTree.xml</File>
+      <File>UI/TechTreeNode.xml</File>
       <File>UI/ToolTipHelper_PlayerYields.lua</File>
+      <File>UI/UnitPanelSupportSloth.lua</File>
+      <File>UI/UnitPromotionPopup.lua</File>
+      <File>UI/UnitPromotionPopup.xml</File>
     </ImportFiles>
     <ImportFiles id="XP2WRxmlOverride">
       <Properties>
@@ -704,5 +723,9 @@
     <File>UI/WorldSpell.xml</File>
     <File>UI/WorldSpell.lua</File>
     <File>FallFromHeaven.dep</File>
+    <File>UI/Replacements/InstanceManager.lua</File>
+    <File>UI/Replacements/Civ6Common.lua</File>
+    <File>UI/Replacements/DiplomacyActionViewInjector.lua</File>
+    <File>UI/Replacements/DiplomacyActionViewInjector.xml</File>
   </Files>
 </Mod>
