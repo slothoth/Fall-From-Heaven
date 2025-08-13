@@ -28,7 +28,8 @@ local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTUR
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
 
-
+local iSnowTerrain = GameInfo.Terrains['TERRAIN_SNOW'].Index
+local iSnowTerrainHills = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
 
 local function SetCapitalProperty(iPlayer, tParameters)
     local sPropKey = tParameters.sPropKey;
@@ -325,7 +326,7 @@ local function OnSpellAoeDamage(iPlayer, tParameters)
     end
     pUnit:SetProperty('HasCast', 1)
 end
-
+local iGreatGeneral = GameInfo.Units['UNIT_GREAT_GENERAL'].Index
 local function GrantGoldenAge(iPlayer, tParameters)
     local pPlayer = Players[iPlayer]
     local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
@@ -333,14 +334,27 @@ local function GrantGoldenAge(iPlayer, tParameters)
     -- t_iUnits[1] = tParameters.iCastingUnit                      -- set to just the owner for now
     local iBar = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
     local iGpAmount = 0
+    local tReserveCommanders = {}               -- we dont wanna sacrifice commanders, as they have ongoing effects, unless we HAVE to
 	for iUnitID, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
         if iGpAmount < iBar then
             if pPlayerUnit:GetGreatPerson():GetClass() > -1 then
-                iGpAmount = iGpAmount + 1
-                table.insert(t_iUnits, pPlayerUnit)
+                if pPlayerUnit:GetType() == iGreatGeneral then
+                    table.insert(tReserveCommanders, pPlayerUnit)
+                else
+                    iGpAmount = iGpAmount + 1
+                    table.insert(t_iUnits, pPlayerUnit)
+                end
             end
         end
 	end
+    if iGpAmount < iBar then
+        for _, pGreatGeneralUnit in ipairs(tReserveCommanders) do
+            if iGpAmount < iBar then
+                iGpAmount = iGpAmount + 1
+                table.insert(t_iUnits, pGreatGeneralUnit)
+            end
+        end
+    end
     for iUnitType, pUnit in pairs(t_iUnits) do
         if pUnit then
             print('killing unit...')
@@ -356,7 +370,7 @@ local function GrantGoldenAge(iPlayer, tParameters)
     pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
 end
 
-local tBuildingGrantModiferMap = {
+local tBuildingGrantModifierMap = {
     ['SLTH_BUILDING_CODE_OF_JUNIL'] = 'SLTH_MODIFIER_GRANT_CODE_OF_JUNIL',
     ['BUILDING_ANGKOR_WAT'] = 'SLTH_MODIFIER_GRANT_DIES_DEI',
     ['SLTH_BUILDING_TABLETS_OF_BAMBUR'] = 'SLTH_MODIFIER_GRANT_TABLETS_OF_BAMBUR',
@@ -376,7 +390,16 @@ local tBuildingGrantModiferMap = {
     ['SLTH_BUILDING_DWARF_CAGE'] = 'SLTH_MODIFIER_GRANT_DWARF_CAGE',
     ['SLTH_BUILDING_ELF_CAGE'] = 'SLTH_MODIFIER_GRANT_ELF_CAGE',
     ['SLTH_BUILDING_HUMAN_CAGE'] = 'SLTH_MODIFIER_GRANT_HUMAN_CAGE',
-    ['SLTH_BUILDING_ORC_CAGE'] = 'SLTH_MODIFIER_GRANT_ORC_CAGE'
+    ['SLTH_BUILDING_ORC_CAGE'] = 'SLTH_MODIFIER_GRANT_ORC_CAGE',
+
+    ['SLTH_BUILDING_AQUEDUCT'] = 'SLTH_MODIFIER_GRANT_AQUEDUCT',
+    ['SLTH_BUILDING_ARCHERY_RANGE'] = 'SLTH_MODIFIER_GRANT_ARCHERY_RANGE',
+    ['SLTH_BUILDING_HUNTING_LODGE'] = 'SLTH_MODIFIER_GRANT_HUNTING_LODGE',
+    ['BUILDING_LIBRARY'] = 'SLTH_MODIFIER_GRANT_LIBRARY',
+    ['BUILDING_WALLS'] = 'SLTH_MODIFIER_GRANT_WALLS',
+    ['BUILDING_STABLE'] = 'SLTH_MODIFIER_GRANT_STABLE',
+    ['BUILDING_BARRACKS'] = 'SLTH_MODIFIER_GRANT_TRAINING_YARD'
+
 }
 
 
@@ -384,7 +407,7 @@ local function GrantBuildingFunction(iPlayer, tParameters)
     local iUnit = tParameters.iCastingUnit
     local sUnitOperationType =  tParameters.UnitOperationType
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
-    local sModifierGrant = tBuildingGrantModiferMap[OperationInfo.SimpleText]
+    local sModifierGrant = tBuildingGrantModifierMap[OperationInfo.SimpleText]
     if not sModifierGrant then print('building didnt have a modifier grant mapping, returning..'); return; end
     print(sModifierGrant)
     local pUnit = UnitManager.GetUnit(iPlayer, iUnit);

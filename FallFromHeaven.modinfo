@@ -216,6 +216,7 @@
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
       <File>BarbClans/BarbarianClans.sql</File>
+      <File>BarbClans/Lairs.sql</File>
       <File>Core/Equipment.sql</File>
       <File>Core/Globals.sql</File>
       <File>Core/Victories.sql</File>
@@ -534,6 +535,7 @@
         <LoadOrder>902</LoadOrder>
       </Properties>
       <File>Lua/SpawnSupport.lua</File>
+      <File>Lua/Lairs.lua</File>
   </ImportFiles>
   </InGameActions>
   <Files>
@@ -552,6 +554,7 @@
     <File>Artdefs/WonderMovie.artdef</File>
     <File>BarbClans/BarbarianClans.sql</File>
     <File>BarbClans/frontend.sql</File>
+    <File>BarbClans/Lairs.sql</File>
     <File>Core/Absorb_deletes/Leaning.sql</File>
     <File>Core/Absorb_deletes/Porcelain.sql</File>
     <File>Core/AI/ai.sql</File>
@@ -686,6 +689,7 @@
     <File>Lua/ExtraHeroes.lua</File>
     <File>Lua/Combat.lua</File>
     <File>Lua/Gameplay.lua</File>
+    <File>Lua/Lairs.lua</File>x
     <File>Lua/Maintenance.lua</File>
     <File>Lua/Promotions.lua</File>
     <File>Lua/RequestOperationSupport.lua</File>
