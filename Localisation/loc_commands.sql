@@ -148,4 +148,12 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_TAKE_SYLIVENS_PERFECT_LYRE_NAME', 'Pick up ylivens Perfect Lyre', 'en_US'),
 ('LOC_TAKE_TIMOR_MASK_NAME', 'Pick up Timor Mask', 'en_US'),
 ('LOC_TAKE_TREASURE_NAME', 'Pick up Treasure', 'en_US'),
-('LOC_TAKE_WAR_NAME', 'Pick up War', 'en_US');
+('LOC_TAKE_WAR_NAME', 'Pick up War', 'en_US'),
+('LOC_GRANT_AQUEDUCT_DESCRIPTION', 'Consumes this unit to build a Aqueduct.', 'en_US'),
+('LOC_GRANT_ARCHERY_RANGE_DESCRIPTION', 'Consumes this unit to build an Archery Range.', 'en_US'),
+('LOC_GRANT_HUNTING_LODGE_DESCRIPTION', 'Consumes this unit to build a Hunting Lodge.', 'en_US'),
+('LOC_GRANT_LIBRARY_DESCRIPTION', 'Consumes this unit to build a Library in a city with a Campus District.', 'en_US'),
+('LOC_GRANT_PALISADE_DESCRIPTION', 'Consumes this unit to build a Palisade.', 'en_US'),
+('LOC_GRANT_STABLE_DESCRIPTION', 'Consumes this unit to build a Stable.', 'en_US'),
+('LOC_GRANT_TRAINING_YARD_DESCRIPTION', 'Consumes this unit to build a Training Yard.', 'en_US'),
+('LOC_GRANT_ACADEMY_DESCRIPTION', 'Consumes this unit to build an Academy.', 'en_US');

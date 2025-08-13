@@ -124,7 +124,7 @@ local function AbilityChecker(pUnit, tAbilitiesToCheck, iAbilityChecksNeeded)
 end
 
 function CustomOpCheck(CustomOperationInfo, pUnit, unitType, pUnitExp)
-    local bCanStart, bHasRelevantPromotion, sReqPromo, reqAbility, reqUnitType, failedReq, tIterations
+    local bCanStart, bHasRelevantPromotion, sReqPromo, reqAbility, reqUnitType, failedReq
     local sReqDomain =  CustomOperationInfo.DomainPrereq
     if sReqDomain then
         if GameInfo.Units[unitType].Domain == 'DOMAIN_LAND' then
@@ -189,6 +189,18 @@ function CustomOpCheck(CustomOperationInfo, pUnit, unitType, pUnitExp)
             end
         end
     end
+	if CustomOperationInfo.TechPrereq and not failedReq then
+		local pPlayer = Players[Game.GetLocalPlayer()]
+		local techInfo = GameInfo.Technologies[CustomOperationInfo.TechPrereq]
+		if techInfo then
+			bCanStart = pPlayer:GetTechs():HasTech(techInfo.Index)
+		else
+			local civicInfo = GameInfo.Civics[CustomOperationInfo.TechPrereq]
+			if civicInfo then
+				bCanStart = pPlayer:GetCulture():HasCivic(civicInfo.Index)
+			end
+		end
+	end
     return bCanStart
 end
 
@@ -327,8 +339,10 @@ end
 
 local function GPChecker(pPlayer, iBar)
 	local iGpAmount = 0
+	print('checking golden age people requirements')
 	for _, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
 		if pPlayerUnit:GetGreatPerson():IsGreatPerson() then
+			print('found great person')
 			iGpAmount = iGpAmount + 1
 			if iGpAmount >= iBar then return true end
 		end
