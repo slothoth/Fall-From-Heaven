@@ -19,6 +19,29 @@ if not iGameSpeedMult then
     iGameSpeedMult = 1
 end
 
+local iOrder = GameInfo.Religions["RELIGION_PROTESTANTISM"].Index
+local iEmpyrean = GameInfo.Religions["RELIGION_JUDAISM"].Index
+local iRunes = GameInfo.Religions["RELIGION_CONFUCIANISM"].Index
+local iLeaves = GameInfo.Religions["RELIGION_CATHOLICISM"].Index
+local iOverlords = GameInfo.Religions["RELIGION_HINDUISM"].Index
+local iEsus = GameInfo.Religions["RELIGION_ISLAM"].Index
+local iVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
+local tReligionUnits = {
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index]= iOrder,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index]=iEmpyrean,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index]=iRunes,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index]=iLeaves,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index]=iOverlords,
+[GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index]=iEsus,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index]=iVeil,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index]=iOrder,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index]=iEmpyrean,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index]=iRunes,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index]=iLeaves,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index]=iOverlords,
+[GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index]=iEsus,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index]=iVeil}
+
 -- nicked from Leugi Wildlife++
 function ViableWildernessPlots(bOnlyTundraOrSnow)
     local tNewTable = {}
@@ -109,9 +132,22 @@ function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
             if not tBeforeSummonUnits[iUnitID] then
                 tNewUnits[iUnitID] = pOnTileUnit
             end
+            setReligion(pOnTileUnit)
         end
     end
     return tNewUnits
+end
+
+function setReligion(pUnit)
+    local iUnitIndex = pUnit:GetType()
+    local pReligion = pUnit:GetReligion()
+    if pReligion then
+        local iReligionIndex = tReligionUnits[iUnitIndex]
+        if iReligionIndex then
+            print('found religion of unit')
+            pReligion:SetReligionType(iReligionIndex)
+        end
+    end
 end
 
 function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
@@ -266,5 +302,54 @@ function setCapitalProperties(pPlayer, newCapitalPlot)
         end
     end
 end
+
+function getValidDisplacementPlot(pUnit, iX, iY)
+    local chosenPlot
+    local chosenPlotWater
+    for dx = -1, 1 - 1, 1 do
+		for dy = -1, 1 - 1, 1 do
+            if not chosenPlot then
+                local otherPlot = Map.GetPlotXYWithRangeCheck(iX, iY, dx, dy, 1);
+                if otherPlot then
+                    local iPlotID = otherPlot:GetIndex()
+                    local tPlots = UnitManager.GetMoveToPath( pUnit, iPlotID )
+                    -- print(tPlots)
+                    if (table.count(tPlots) > 1) then            -- broken
+                        if otherPlot:IsWater() then
+                            chosenPlotWater = otherPlot
+                        else
+                            chosenPlot = otherPlot
+                        end
+                    end
+                end
+            end
+		end
+	end
+    if chosenPlot then
+        return chosenPlot
+    else
+        if chosenPlotWater then
+            return chosenPlotWater
+        else
+            return -1
+        end
+    end
+end
+
+function DisplaceUnits(pPlot, pUnit, iX, iY)
+    local chosenPlot = getValidDisplacementPlot(pUnit, iX, iY)
+    if chosenPlot == -1 then
+        print("ERROR, PANIC! no adjacent tile suitable to place units. Not spawning barbarians as safety measure.")
+        return nil
+    end
+    local iNewX = chosenPlot:GetX()
+    local iNewY = chosenPlot:GetY()
+    local tUnitsInPlot = Units.GetUnitsInPlot(pPlot)
+    for _, pTileUnit in ipairs(tUnitsInPlot) do
+        UnitManager.PlaceUnit(pTileUnit, iNewX, iNewY)              -- displace to new tiles
+    end
+    return true
+end
+
 print('initialised spawn support')
 initPropertyTracking()

@@ -357,8 +357,6 @@ end
 function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
     local iReligion = tReligousCivicTrigger[civicIndex]
     if iReligion then
-        local sReligion = GameInfo.Religions[iReligion].ReligionType
-        local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
         local pPlayer = Players[playerID]
         local pPlayerCities = pPlayer:GetCities()
         local tCityReligionFollowers
@@ -388,16 +386,6 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             end
         end
         pLeastReligionsCity:GetReligion():AddReligiousPressure(playerID, iReligion, 1000)
-        if bHolyCityEstablished < 1 then
-            Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)            -- like RELIGION_BUDDHISM
-            local pPlot = pLeastReligionsCity:GetPlot()
-            pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
-            pLeastReligionsCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
-            if iReligion == iReligionVeil then
-                AdjustArmageddonCount(5)
-            end
-            NotifyAllHumans(Locale.Lookup('LOC_RELIGION_FOUNDED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_' .. sReligion .. '_FOUNDED_NOTIFICATION_DESCRIPTION'), pPlot:GetX(), pPlot:GetY())
-        end
     end
     -- if we have hyborem and basium disabled, this dont work and causes weirdness.
     if civicIndex == iINFERNAL_PACT_INDEX then
@@ -455,7 +443,7 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             end
         end
         if iInfernalPlot then
-            local pInfernal = Players[iInfernalPlayerId]
+            local pInfernal = Players[iInfernalPlayerId]                                -- check his treasurey...
             local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
             print('creating hyborem at',iCityMakeX ,iCityMakeY)
             local playerUnits = pInfernal:GetUnits()
@@ -476,6 +464,26 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
         else
             print('not yet implemented random city outside of camps')
         end
+    end
+end
+
+function onNewReligion(playerID, cityID, eVisibility, otherCityID)
+    print('new majority religion!')
+    local pCity = CityManager.GetCity(playerID, cityID)
+    local pCityReligion = pCity:GetReligion()
+    local eMajorityReligion = pCityReligion:GetMajorityReligion()
+    local sReligion = GameInfo.Religions[eMajorityReligion].ReligionType
+    print('religion is', sReligion)
+    local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
+    if bHolyCityEstablished < 1 then
+        Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)            -- like RELIGION_BUDDHISM
+        local pPlot = pCity:GetPlot()
+        pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
+        pCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
+        if eMajorityReligion == iReligionVeil then
+            AdjustArmageddonCount(5)
+        end
+        NotifyAllHumans(Locale.Lookup('LOC_RELIGION_FOUNDED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_' .. sReligion .. '_FOUNDED_NOTIFICATION_DESCRIPTION'), pPlot:GetX(), pPlot:GetY())
     end
 end
 
@@ -611,3 +619,5 @@ LuaEvents.NewGameInitialized.Add(onStart);
 LuaEvents.NewGameInitialized.Add(InitiateReligions);
 Events.CivicCompleted.Add(GrantReligionFromCivicCompleted)
 GameEvents.PolicyChanged.Add(onReligionSwitch)
+Events.CityReligionChanged.Add(onNewReligion)
+

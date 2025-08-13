@@ -503,6 +503,30 @@ local tReligionAlignment = {
     ['RELIGION_CATHOLICISM']=1,
     ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
+
+local iOrder = GameInfo.Religions["RELIGION_PROTESTANTISM"].Index
+local iEmpyrean = GameInfo.Religions["RELIGION_JUDAISM"].Index
+local iRunes = GameInfo.Religions["RELIGION_CONFUCIANISM"].Index
+local iLeaves = GameInfo.Religions["RELIGION_CATHOLICISM"].Index
+local iOverlords = GameInfo.Religions["RELIGION_HINDUISM"].Index
+local iEsus = GameInfo.Religions["RELIGION_ISLAM"].Index
+local iVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
+local tReligionUnits = {
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index]= iOrder,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index]=iEmpyrean,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index]=iRunes,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index]=iLeaves,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index]=iOverlords,
+[GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index]=iEsus,
+[GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index]=iVeil,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index]=iOrder,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index]=iEmpyrean,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index]=iRunes,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index]=iLeaves,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index]=iOverlords,
+[GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index]=iEsus,
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index]=iVeil}
+
 -- TODO why is this not in alignment
 function GrantUnitReligion(pUnit, sReligion)
     local pUnitAbilities = pUnit:GetAbility()
@@ -640,7 +664,16 @@ function onSpawnApplyPromotions(playerID, unitID)
             end
         end
     end
+    local pReligion = pUnit:GetReligion()                   -- set religion if disciple
+    if pReligion then
+        local iReligionIndex = tReligionUnits[iUnitType]
+        if iReligionIndex then
+            print('found religion of unit')
+            pReligion:SetReligionType(iReligionIndex)
+        end
+    end
 end
+
 
 function doComplexUnlocks(pUnitExp, pUnitAbilities, pPlayerTechs, pPlayerCulture)
     for iCheckPromo, tPossiblePromos in pairs(tConditionalUnlocks) do
@@ -800,6 +833,7 @@ local function UpdateResourcePromotion(iPlayer, tParameters)
             if pUnitExp:HasPromotion(iLevel1SpherePromo) then
                 print('has tier 2 channeling, and has t1 of the spell, setting t2', iChanTwoGrant)
                 pUnitExp:SetPromotion(iChanTwoGrant)
+                print('adding', iChanTwoGrant)
                 local sName = GameInfo.UnitPromotions[iChanTwoGrant].Name
                 print('allow tier 2 of type' .. sName)
             end
