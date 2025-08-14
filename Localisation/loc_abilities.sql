@@ -1023,7 +1023,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_BUFF_MORALE_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength from Morale.', 'en_US'),
 ('LOC_MORALE_DESCRIPTION', '+2[ICON_Strength] Combat Strength, doubled when attacking a city. 10% chance of wearing off each turn.', 'en_US'),
 ('LOC_BUFF_MORALE_CITY_ATTACK_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength from Morale City Attack.', 'en_US'),
-('LOC_PROMOTION_RUSTED_DESCRIPTION', '-2[ICON_STRENGTH] Combat Strength from Rusted.', 'en_US'),
+('LOC_RUSTED_DESCRIPTION', '-2[ICON_STRENGTH] Combat Strength from Rusted.', 'en_US'),
 ('MODIFIER_MINOR_WEAK_STRENGTH_LOSS', '-{1_Amount}[ICON_STRENGTH] Combat Strength from Weak.', 'en_US'),
 ('LOC_ABILITY_SUMMONED_STRENGTH_DESCRIPTION', '+{1_Amount}[ICON_STRENGTH] Combat Strength from Summoner Trait.', 'en_US'),
 ('LOC_DISEASED_COMBAT_WEAKNESS_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength from Diseased. Spreads Disease to melee Combatants.', 'en_US'),
@@ -1038,4 +1038,28 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_ABILITY_MITHRIL_WEAPONS_CHECKER_DESCRIPTION', 'Can equip Mithril Weapons if you have a source of Mithril and move to your territory. Same for Iron and Bronze Weapons.', 'en_US'),
 ('LOC_ABILITY_BRONZE_WEAPONS_CHECKER_NAME', 'Bronze Weapons User', 'en_US'),
 ('LOC_ABILITY_IRON_WEAPONS_CHECKER_NAME', 'Iron Weapons User', 'en_US'),
-('LOC_ABILITY_MITHRIL_WEAPONS_CHECKER_NAME', 'Mithril Weapons User', 'en_US');
+('LOC_ABILITY_MITHRIL_WEAPONS_CHECKER_NAME', 'Mithril Weapons User', 'en_US'),
+('LOC_WITHERED_DESCRIPTION', 'Withered: -4 % Healing per Turn. -2 [ICON_Strength]Combat Strength. 50% reduced Experience.', 'en_US'),
+('LOC_PLAGUED_DESCRIPTION', 'Plagued: -4 % Healing per Turn. -12 [ICON_Strength]Combat Strength. Can pass this debuff to other units in Combat.', 'en_US'),
+('LOC_POISONED_DESCRIPTION', 'Poisoned: -3 % Healing per Turn. Removed at full health.', 'en_US'),
+('LOC_BUFF_SPIRIT_GUIDE_DESCRIPTION', 'Spirit Guide: When this unit dies, grant a portion of its experience to the closest friendly unit.*', 'en_US'),
+('LOC_BUFF_MUTATED_DESCRIPTION', 'Mutated: Has been mutated and granted several random promotions and abilities. Cannot be mutated again.', 'en_US'),
+('LOC_BUFF_CRAZED_DESCRIPTION', 'Crazed: Randomly grants the Enraged buff, becoming uncontrollable, seeking out enemy units, but getting +4 [ICON_Strength]Combat Strength and +1[ICON_Movement] Movement. Removed after Combat.', 'en_US'),
+('LOC_BUFF_ENRAGED_DESCRIPTION', 'Enraged: Is uncontrollable, seeking out enemy units, but getting +4 [ICON_Strength]Combat Strength and +1[ICON_Movement] Movement. Removed after Combat.', 'en_US'),
+('LOC_BUFF_ENRAGED_COMBAT_DESCRIPTION', '+4 [ICON_Strength]Combat Strength from Enraged', 'en_US'),
+('LOC_SLTH_ABILITY_CHARISMATIC_MORE_XP_DESCRIPTION', '33% increased Experience.', 'en_US'),
+('LOC_ABILITY_RECON_WILDERNESS_STRENGTH_DESCRIPTION', '+10 [ICON_Strength]Combat Strength against Animals. -4 [ICON_Strength]Combat Strength against Districts.', 'en_US'),
+('LOC_STONESKIN_DESCRIPTION', '+8 [ICON_Strength]Combat Strength on Defense from Stoneskin. Removed after Combat.', 'en_US'),
+('LOC_BUFF_EMPOWER_DESCRIPTION', '+2 [ICON_Strength]Combat Strength from the Summoner''s Strength.', 'en_US'),
+('LOC_DISEASED_COMBAT_DESCRIPTION', '-2[ICON_Strength] Combat Strength from Diseased. Spreads Disease to melee Combatants.', 'en_US'),
+('LOC_ABILITY_VULNERABLE_TO_FIRE_DESCRIPTION', 'Increased weakness to Fire Damage and Fire Spells.', 'en_US'),
+('LOC_ABILITY_CHANNELING1_DESCRIPTION', 'Can learn Tier 1 Spell Spheres, or spells associated with your units Religion if a Disciple.', 'en_US'),
+('LOC_ABILITY_CHANNELING2_DESCRIPTION', 'Can learn Tier 2 Spell Spheres, or spells associated with your units Religion if a Disciple.', 'en_US'),
+('LOC_REGENERATION_DESCRIPTION', '10% Increased Healing. Removed at full HP.', 'en_US'),
+('LOC_ABILITY_IMMUNE_TO_DISEASE_DESCRIPTION', 'Cannot be affected by Disease', 'en_US'),
+('LOC_STONESKIN_PREVIEW_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength on Defense from Stoneskin. Removed after Combat.', 'en_US'),
+('LOC_ABILITY_IMMUNE_TO_DISEASE_DESCRIPTION', 'Cannot be affected by Disease', 'en_US');
+
+
+
+

@@ -13,9 +13,10 @@ local iExplosionDamage = 40
 -- could work with DISEASED_INHERENT, which is Diseased Corpses
 -- Plague Carrier (Mary) covered in CombatBuffs.sql
 
--- could it work with pyre zombie?
--- events.  Combat, Enter City
+-- Cant do it with pyre zombie, as applying ability below 30 health makes unit go into negative health and game crashes
+-- also no check for the HP of a unit owner? wild
 --
+local tRemovePostCombat = {'BUFF_ENRAGED', 'BUFF_SHIELD_OF_FAITH', 'BUFF_STONESKIN'}
 function CombatApplyDebuffs(combatResult)
     local defender = combatResult[CombatResultParameters.DEFENDER]
     local pDefenderID =  defender[CombatResultParameters.ID]
@@ -126,6 +127,22 @@ function CombatApplyDebuffs(combatResult)
             end
         end
     end
+    if bAttHasPlagueCarrier then
+        if not bDefHasPlagued then
+            pDefUnitAbilities:AddAbilityCount('PLAGUED')
+        end
+    end
+
+    for i, sAbility in ipairs(tRemovePostCombat) do                 -- shield of faith and enraged.
+        if pDefUnitAbilities:HasAbility(sAbility) then
+            pDefUnitAbilities:RemoveAbilityCount(sAbility)
+        end
+        if pAttackUnitAbilities:HasAbility(sAbility) then
+            pAttackUnitAbilities:RemoveAbilityCount(sAbility)
+        end
+    end
+
+    -- if either unit has BUFF_ENRAGED, remove it.
 end
 
 function onStart()

@@ -73,11 +73,6 @@ local tImprovementsTurnAmount = {
         [iPIRATE_HARBOR_INDEX]  = 13
 }
 
-local transientBuffKeys = {
-        BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
-        BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
-        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
-    }
 
 local tResourcePropKeys = { 'RESOURCE_MANA_AIR', 'RESOURCE_MANA_BODY', 'RESOURCE_MANA_CHAOS',
     'RESOURCE_MANA_DEATH', 'RESOURCE_MANA_EARTH', 'RESOURCE_MANA_ENCHANTMENT',
@@ -309,6 +304,7 @@ local tTraitPropStrings = {
         SELECTED_SUMMONER='Summoner'
     }
 
+
 function getCurrentTraits(pPlayer)
     local tCurrentTraits = {}
     local tIndexedCurrentTraits = {}
@@ -323,6 +319,8 @@ function getCurrentTraits(pPlayer)
 end
 
 local iGameSpeedMult = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier / 100
+local tTrackBuff = {[GameInfo.UnitAbilities['BUFF_CRAZED'].Index]='BUFF_CRAZED',
+                    [GameInfo.UnitAbilities['BUFF_ENRAGED'].Index]='BUFF_ENRAGED'}
 function onTurnStartGameplay(playerId)
     local pPlayer = Players[playerId];
     local iArcaneLacuna = Game:GetProperty('ARCANE_LACUNA_COUNTDOWN') or 0
@@ -373,6 +371,16 @@ function onTurnStartGameplay(playerId)
                     end
                     AddExperienceIfAble(unit, iXP_portion)
                 end
+            end
+            if pUnitAbilities and pUnitAbilities:HasAbility('BUFF_CRAZED') and not pUnitAbilities:HasAbility('BUFF_ENRAGED') then
+                local iRoll = math.random(100)
+                if iRoll >= 10 then
+                    pUnitAbilities:AddAbilityCount('BUFF_ENRAGED')
+                end
+            end
+            if pUnitAbilities and pUnitAbilities:HasAbility('BUFF_ENRAGED') then
+                -- enraged
+                print('do enraged stuff, move towards nearest enemy, or move into fog of war to find enemies')
             end
         end
     end
@@ -944,8 +952,8 @@ end
 local iABILITY_MUTATED = GameInfo.UnitAbilities['BUFF_MUTATED'].Index
 local iABILITY_HASTE = GameInfo.UnitAbilities['BUFF_HASTE'].Index
 local iABILITY_FAIR_WINDS = GameInfo.UnitAbilities['BUFF_FAIR_WINDS'].Index
-local tMovementBuffAbility = {[iABILITY_HASTE]=1, [iABILITY_FAIR_WINDS]=1}
 
+local tMovementBuffAbility = {[iABILITY_HASTE]=1, [iABILITY_FAIR_WINDS]=1}
 
 local iAMPH_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_AMPHIBIOUS_MELEE'].Index
 local iBLITZ_MELEE_INDEX = GameInfo.UnitPromotions['PROMOTION_BLITZ_MELEE'].Index
@@ -1116,8 +1124,9 @@ local tAbilityMutations = { ['DISEASED'] = true, ['BUFF_EMPOWER'] = true, ['ABIL
 }
 local tFive = {2, 3, 4, 5}
 function onAbilityGained(playerID, unitID, unitAbilityIndex)
-    -- print(unitAbilityIndex)          -- also do the
+    print('adding abilities', unitAbilityIndex)          -- also do the
     if unitAbilityIndex == iABILITY_MUTATED then
+        print('doing mutatation!')
         local pUnit = UnitManager.GetUnit(playerID, unitID)
         local pUnitExp = pUnit:GetExperience()
         local pUnitAbilities = pUnit:GetAbility()
@@ -1150,7 +1159,25 @@ function onAbilityGained(playerID, unitID, unitAbilityIndex)
     end
     if tMovementBuffAbility[unitAbilityIndex] then
         local pUnit = UnitManager.GetUnit(playerID, unitID)
-        UnitManager.ChangeMovesRemaining(pUnit, tMovementBuffAbility[unitAbilityIndex]);
+        local iBar = 0
+        if unitAbilityIndex == iABILITY_FAIR_WINDS then
+            local pPlot = Map.GetPlot(pUnit:GetX(), pUnit:GetY())
+            if pPlot:IsWater() then
+                iBar = 1
+            end
+        else
+            iBar = 1
+        end
+        if iBar > 1 then
+            UnitManager.ChangeMovesRemaining(pUnit, tMovementBuffAbility[unitAbilityIndex]);
+        end
+    end
+    if tTrackBuff[unitAbilityIndex] then
+        local pPlayer = Players[playerID]
+        local sAbilityName = tTrackBuff[unitAbilityIndex] .. '_UNITS'
+        local tTrackedAbility = pPlayer:GetProperty(sAbilityName) or {}
+        tTrackedAbility[unitID] = true
+        pPlayer:SetProperty(sAbilityName, tTrackedAbility)
     end
 end
 

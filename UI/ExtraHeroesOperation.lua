@@ -402,16 +402,6 @@ function OnGrantSuperSpecialistClicked()
 	return;
 end
 
-function OnGrantGoldenAgeClicked()
-    local pUnit = UI.GetHeadSelectedUnit();
-    local iPlayer = pUnit:GetOwner();
-    local iUnit = pUnit:GetID();
-	ExposedMembers.ExtraHeroes.GrantGoldenAge(iPlayer, tGreatPeopleUnitIDs);
-    tGreatPeopleUnitIDs = {}                                -- flush out values
-	UI.DeselectUnit(pUnit);
-	return;
-end
-
 function InitializeSetPolicies(playerID)
     local iGameTurn = Game.GetCurrentGameTurn()
     print('trying to set policies on turn', iGameTurn)

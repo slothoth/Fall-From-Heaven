@@ -33,10 +33,14 @@ function addToTableOrMake(tbl, sText, entry)
     return tbl[sText]
 end
 
+tLairUnitIndices = {}
 tLairUnits = {}
 for row in GameInfo.LairUnits() do
     print(row.UnitType)
-    local iUnitIndex = GameInfo.Units[row.UnitType].Index
+    local unitInfo = GameInfo.Units[row.UnitType]
+    local iUnitIndex = unitInfo.Index
+    tLairUnitIndices[row.UnitType] = unitInfo
+    tLairUnitIndices[iUnitIndex] = unitInfo
     if row.BigBadWaterLeader == 1 then
         tLairUnits['BigBadWaterLeader'] = addToTableOrMake(tLairUnits, 'BigBadWaterLeader',iUnitIndex)
     end
@@ -104,11 +108,16 @@ function getGameSpeed()
     return iGameSpeed
 end
 
+local tUndeadUnits = {}
+for row in GameInfo.UnitsNotAlive() do
+    tUndeadUnits[row.UnitType] = row.Race
+end
+
 function lairRoll(pPlot, pUnit)
     pPlot:SetProperty('DisperseCamp', nil)
     local iFeatureType = pPlot:GetFeatureType()
     local bIsWater = pPlot:IsWater()
-    tribeIndex = pPlot:GetProperty('barbclantype') or 1             -- or logic, unsure why
+    local tribeIndex = pPlot:GetProperty('barbclantype') or 1             -- or logic, unsure why
     local iDiceRoll = math.random(100)
     local iThreshold
     local bGraceFailed
@@ -147,7 +156,7 @@ function lairRoll(pPlot, pUnit)
         local iDestroyLairDiceRoll = math.random(100)
         if iDestroyLairDiceRoll <= iThreshold then
             print('spawning tribe, as failed destroy dice roll')
-            spawnTribeSafe(iPlotID, tribeIndex)
+            spawnTribeSafe(pPlot:GetIndex(), tribeIndex)
         else
             print('not respawning barb camp')
         end
@@ -175,7 +184,7 @@ local function onGrantItem(pUnit, pPlot, sEventInfo)
             local pPlayer = Players[iPlayer]
             local playerUnits = pPlayer:GetUnits()
             local iX, iY = pUnit:GetX(), pUnit:GetY()
-            local iUnitIndex = GameInfo.Units[sEventInfo].Index
+            local iUnitIndex = tLairUnitIndices[sEventInfo].Index
             playerUnits:Create(iUnitIndex, iX, iY); -- spawn the unit version
         else
             pUnitAbilities:AddAbilityCount(sAbility)
@@ -186,7 +195,7 @@ end
 local function onSpawnBarb(pUnit, pPlot, sUnitType)
     local pBarbPlayer = Players[63]
     local barbUnits = pBarbPlayer:GetUnits();
-    local tUnitInfo =  GameInfo.Units[sUnitType]
+    local tUnitInfo =  tLairUnitIndices[sUnitType]
     if not tUnitInfo then
         print('ERROR. No info for :' .. sUnitType)
         return;
@@ -217,8 +226,7 @@ end
 local function onGrantUnit(pUnit, pPlot, sUnitType)
     local iPlayer = pUnit:GetOwner()
     local pPlayer = Players[iPlayer]
-    local playerUnits = pPlayer:GetUnits();
-    local iUnitIndex = GameInfo.Units[sUnitType].Index
+    local iUnitIndex = tLairUnitIndices[sUnitType].Index
     local iX, iY = pUnit:GetX(), pUnit:GetY()
     SimpleSummon(iX, iY, iPlayer, iUnitIndex)
 end
@@ -226,8 +234,7 @@ end
 local function onGrantGreatUnit(pUnit, pPlot, sUnitType)
     local iPlayer = pUnit:GetOwner()
     local pPlayer = Players[iPlayer]
-    local playerUnits = pPlayer:GetUnits();
-    local iUnitIndex = GameInfo.Units[sUnitType].Index
+    local iUnitIndex = tLairUnitIndices[sUnitType].Index
     local iX, iY = pUnit:GetX(), pUnit:GetY()
     SimpleSummon(iX, iY, iPlayer, iUnitIndex)
 end
@@ -249,9 +256,50 @@ local function onLairCollapse(pUnit, pPlot, sEventInfo)
 end
 
 local function onSpawnBadScorpion(pUnit, pPlot, sEventInfo)
-    print('do nothing')
+    local pBarbPlayer = Players[63]
+    local barbUnits = pBarbPlayer:GetUnits();
+    local tUnitInfo =  tLairUnitIndices['SLTH_UNIT_SCORPION'].Index
+    local iUnitIndex = tUnitInfo.Index
+    local iX, iY = pUnit:GetX(), pUnit:GetY()
+    local bSuccess = DisplaceUnits(pPlot, pUnit, iX, iY)
+    if not bSuccess then return; end
+    barbUnits:Create(iUnitIndex, iX, iY);
+    barbUnits:Create(iUnitIndex, iX, iY);
+    barbUnits:Create(iUnitIndex, iX, iY);
 end
 
+local function onLairGoldenAge(pUnit, pPlot, sEventInfo)
+    local playerID = pUnit:GetOwner()
+    GoldenAgeGrant(playerID,10)
+end
+
+local function onLairGrantDemonic(pUnit, pPlot, sEventInfo)
+    local pUnitAbilities = pUnit:GetAbility()
+    pUnitAbilities:AddAbilityCount('BUFF_CRAZED')
+    pUnitAbilities:AddAbilityCount('BUFF_ENRAGED')
+    pUnitAbilities:AddAbilityCount('DEMON_ABILITY_HELL_TERRAIN_STRENGTH')
+end
+
+local function onFarTreasure(pUnit, pPlot, sUnitType)
+    local pBarbPlayer = Players[63]
+    local tUnitInfo =  tLairUnitIndices[sUnitType]
+    if not tUnitInfo then
+        print('ERROR. No info for :' .. sUnitType)
+        return;
+    end
+    local iUnitIndex = tUnitInfo.Index
+    local tEligiblePlots = ViableWildernessPlots()
+    local iNumEligiblePlots = table.count(tEligiblePlots)
+    if iNumEligiblePlots > 0 then
+        local iRandomEligiblePlotsPosition = Game.GetRandNum((iNumEligiblePlots + 1) - 1, 'RNG_barb_placement') + 1
+        local spawnPlot = eligiblePlots[iRandomEligiblePlotsPosition]
+        local iX, iY = spawnPlot:GetX(), spawnPlot:GetY()
+        UnitManager.InitUnitValidAdjacentHex(63, iUnitIndex, iX, iY);
+        local iPlotIndex = Map.GetPlot(iX, iY):GetIndex();
+        local pCurPlayerVisibility = PlayersVisibility[pUnit:GetOwner()]
+        pCurPlayerVisibility:ChangeVisibilityCount(iPlotIndex, 1);          -- grant vision for it
+    end
+end
 
 local function SLTH_Todo(pUnit, pPlot, sEventInfo)
     print('placeholder')
@@ -261,7 +309,8 @@ local tLairEvents = {onLairKill= onLairKill, onLairCollapse= onLairCollapse, onL
                onSpawnBarb = onSpawnBarb, onGrantUnit = onGrantUnit, onGrantGreatUnit = onGrantGreatUnit,
                onGrantItem = onGrantItem, onGrantResource = onGrantResource, onLairNothing = onLairNothing,
                onLairGrantGold = onLairGrantGold, OnLairGrantExperience = OnLairGrantExperience,
-               onLairTreasureVault = onLairTreasureVault, onSpawnBadScorpion = onSpawnBadScorpion}
+               onLairTreasureVault = onLairTreasureVault, onSpawnBadScorpion = onSpawnBadScorpion,
+               onLairGoldenAge=onLairGoldenAge, onLairGrantDemonic=onLairGrantDemonic, onFarTreasure=onFarTreasure}
 local tLairs = {}
 for row in GameInfo.Lairs() do
     row.CallbackString = row.Callback
@@ -270,6 +319,11 @@ for row in GameInfo.Lairs() do
         print('couldnt find lair callback!', row.CallbackString)
     end
     tLairs[row.LairType] = row
+    local unitInfo = GameInfo.Units[row.SimpleText]
+    if unitInfo then
+        tLairUnitIndices[unitInfo.UnitType] = unitInfo
+        tLairUnitIndices[unitInfo.Index] = unitInfo
+    end
 end
 
 
@@ -327,16 +381,12 @@ function BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, iBarbClanType, iFeatureTyp
     if leaderTable then
         iChosenLeaderIndex = math.random(#leaderTable)
         iChosenLeader = leaderTable[iChosenLeaderIndex]
-        print('chosen leader were', iChosenLeader)
-        print('spawning ', GameInfo.Units[iChosenLeader].UnitType)
         playerUnits:Create(iChosenLeader, iX, iY);
     end
 
     if henchTable then
         iChosenHenchIndex = math.random(#henchTable)
         iChosenHench = henchTable[iChosenHenchIndex]
-        print('chosen henchman were', iChosenHench)
-        print('spawning 4', GameInfo.Units[iChosenHenchIndex].UnitType)
         for _=1, 5 do
             playerUnits:Create(iChosenHench, iX, iY);
         end
@@ -363,12 +413,13 @@ function doBad(pPlot, iBarbClanType, pUnit, bIsWater)
             table.insert(tPossible, 'DEATH')
         end
         local iUnitIndex = pUnit:GetType()
-        local sUnitName = GameInfo.Units[iUnitIndex].UnitType
-        if GameInfo.UnitsNotAlive[sUnitName] then
+        local exploringUnitInfo = GameInfo.Units[iUnitIndex]
+        local sUnitName = exploringUnitInfo.UnitType
+        if not tUndeadUnits[sUnitName] then
             tPossible = SlthAppend(tPossible, {'CRAZED', 'DEMONIC_POSSESSION', 'DISEASED', 'ENRAGED',
                                                'PLAGUED', 'POISONED', 'WITHERED'})
         end
-        local sPromoClass = GameInfo.Units[iUnitIndex].PromotionClass
+        local sPromoClass = exploringUnitInfo.PromotionClass
         if sPromoClass == 'PROMOTION_CLASS_MELEE' then
             table.insert(tPossible, 'RUSTED')
         end
@@ -416,9 +467,10 @@ function doNeutral(pPlot, iBarbClanType, pUnit, bIsWater)
     end
     if pUnit then
         local iUnitIndex = pUnit:GetType()
-        local sUnitName = GameInfo.Units[iUnitIndex].UnitType
-        if GameInfo.UnitsNotAlive[sUnitName] then
-            if not pUnitAbilities:HasAbility('BUFF_MUTATED') then           -- todo add buff mutated.
+        local exploringUnitInfo = GameInfo.Units[iUnitIndex]
+        local sUnitName = exploringUnitInfo.UnitType
+        if not tUndeadUnits[sUnitName] then
+            if not pUnit:GetAbility():HasAbility('BUFF_MUTATED') then           -- todo add buff mutated.
                 table.insert(tPossible, 'MUTATED')
             end
         end
@@ -449,11 +501,12 @@ function doGood(pPlot, pUnit, bIsWater)
         iPlayer = pUnit:GetOwner()
         pPlayer = Players[iPlayer]
         local iUnitIndex = pUnit:GetType()
-        local pUnitAbilities = pUnit:GetAbility()
         local tUnitInfos = GameInfo.Units[iUnitIndex]
         local sUnitName = tUnitInfos.UnitType
+        local pUnitAbilities = pUnit:GetAbility()
+        -- local sUnitName = tUnitInfos.UnitType
         local sUnitPromoClass = tUnitInfos.PromotionClass
-        if GameInfo.UnitsNotAlive[sUnitName] then
+        if not tUndeadUnits[sUnitName] then
             if not pUnitAbilities:HasAbility('BUFF_SPIRIT_GUIDE') then          -- todo implement
                 table.insert(tPossible, 'SPIRIT_GUIDE')
             end
@@ -595,8 +648,7 @@ function testLairs(pUnit, pPlot)                        -- just for activating i
         fEvent(pUnit, pPlot, sUnitType)
     end
 end
-local pActualUnit
-local pActualPlot
+local pActualUnit, pActualPlot
 function testLairsRepeat(pUnit, pPlot)                        -- just for activating in console as debug
     print('trying to test lairs')
     if not pActualUnit or pActualPlot then

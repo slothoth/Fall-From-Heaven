@@ -525,7 +525,16 @@ local tReligionUnits = {
 [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index]=iLeaves,
 [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index]=iOverlords,
 [GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index]=iEsus,
-[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index]=iVeil}
+[GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index]=iVeil,
+[GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = iRunes,
+[GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = iOverlords,
+[GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = iEmpyrean,
+[GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = iOrder,
+[GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = iVeil,
+[GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = iLeaves
+}
+
+local iGreatGeneral= GameInfo.Units['UNIT_GREAT_GENERAL'].Index
 
 -- TODO why is this not in alignment
 function GrantUnitReligion(pUnit, sReligion)
@@ -645,13 +654,11 @@ function onSpawnApplyPromotions(playerID, unitID)
     local sInherentReligion = tInherentReligion[iUnitType]
     if sInherentReligion then
         GrantUnitReligion(pUnit, sInherentReligion)
-        return;
-    end
-    local iX, iY = pUnit:GetLocation()
-    local pPlot = Map.GetPlot(iX, iY)
-    local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
-
-    if pCity then
+    else
+        local iX, iY = pUnit:GetLocation()
+        local pPlot = Map.GetPlot(iX, iY)
+        local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
+        if pCity then
         local tiReligions = City:GetReligion():GetReligionsInCity()
         if tiReligions then
             local CHANCE_OF_GRANT_RELIGION = 15                     -- TODO currently this will favour first table entries of religions
@@ -659,11 +666,13 @@ function onSpawnApplyPromotions(playerID, unitID)
                 local iAttempt = math.random(0, 99)
                 if iAttempt > CHANCE_OF_GRANT_RELIGION then
                     GrantUnitReligion(pUnit, val)
-                    return
+                    break
                 end
             end
         end
+        end
     end
+
     local pReligion = pUnit:GetReligion()                   -- set religion if disciple
     if pReligion then
         local iReligionIndex = tReligionUnits[iUnitType]
@@ -672,6 +681,17 @@ function onSpawnApplyPromotions(playerID, unitID)
             pReligion:SetReligionType(iReligionIndex)
         end
     end
+
+    print('is unit great general')
+    if pUnit:GetType() == iGreatGeneral then                    -- grant general
+        print('is great general type')
+        if pUnit:GetGreatPerson():GetClass() == -1 then
+            print('unit doesnt have great person class')
+            pUnitAbilities:AddAbilityCount('GREAT_GENERAL_CUSTOM')
+        end
+    end
+
+    -- cheese
 end
 
 

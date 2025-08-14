@@ -60,7 +60,12 @@ local tManaNodeBuilder = {
 	[GameInfo.Units['SLTH_UNIT_EATER_OF_DREAMS'].Index] = 1,
 	[GameInfo.Units['SLTH_UNIT_GOVANNON'].Index] = 1,
 	[GameInfo.Units['SLTH_UNIT_ILLUSIONIST'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = 1 }
+	[GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = 1
+}
+local tGreatPeople = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]=true,   [GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]=true,
+					  [GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]=true, [GameInfo.Units['UNIT_GREAT_ARTIST'].Index]=true,
+					  [GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]=true,  [GameInfo.Units['UNIT_GREAT_GENERAL'].Index]=true
+}
 
 local tDeserts = {[GameInfo.Terrains['TERRAIN_DESERT_HILLS'].Index]= true,
 			[GameInfo.Terrains['TERRAIN_DESERT'].Index] = true}
@@ -208,9 +213,7 @@ local function CheckAdjacentUnitIsEnemy(pUnit, iPlayer, CustomOpInfo)
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bEnemyUnitFound
-	local iUnitID
-	local iPlotID
+	local bEnemyUnitFound, iUnitID, iPlotID
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -244,10 +247,7 @@ local function CheckAdjacentEnemyUnitsHasAbility(pUnit, iPlayer, CustomOpInfo)
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bEnemyUnitHasAbility
-	local pAbilities
-	local iUnitID
-	local iPlotID
+	local bEnemyUnitHasAbility, pAbilities, iUnitID, iPlotID
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -291,11 +291,7 @@ local function CheckAdjacentUnitsHasntAbility(pUnit, iPlayer, CustomOpInfo, bIsA
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bEnemyUnitHasAbility
-	local pAbilities
-	local iUnitID
-	local iPlotID
-	local bCondition
+	local bEnemyUnitHasAbility, pAbilities, iUnitID, iPlotID, bCondition
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -341,7 +337,7 @@ local function GPChecker(pPlayer, iBar)
 	local iGpAmount = 0
 	print('checking golden age people requirements')
 	for _, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
-		if pPlayerUnit:GetGreatPerson():IsGreatPerson() then
+		if tGreatPeople[pPlayerUnit:GetType()] then
 			print('found great person')
 			iGpAmount = iGpAmount + 1
 			if iGpAmount >= iBar then return true end
@@ -355,8 +351,7 @@ local function CheckAdjacentEnemyUnitsHasPromoClass(pUnit, iPlayer, CustomOpInfo
     local iY =  pUnit:GetY()
 	local sPromoClass = CustomOpInfo.SimpleText
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local unitType
-	local sUnitPromoClass
+	local unitType, sUnitPromoClass
 	for _, plot in ipairs(tNeighborPlots) do
 		for loop, pNearUnit in ipairs(Units.GetUnitsInPlot(plot)) do
 			if (pNearUnit) then
@@ -379,8 +374,7 @@ local function CheckAdjacentAllyUnitTypeMatches(pUnit, iPlayer, CustomOpInfo)
     local iY =  pUnit:GetY()
 	local iUnitTypeRequired = GameInfo.Units[CustomOpInfo.SimpleText].Index
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iUnitType
-	local iPlotID
+	local iUnitType, iPlotID
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -408,9 +402,7 @@ local function CheckAdjacentOwnUnitHasAbility(pUnit, iPlayer, CustomOpInfo)
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bAllyUnitHasAbility
-	local pAbilities
-	local iPlotID
+	local bAllyUnitHasAbility, pAbilities, iPlotID
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -444,8 +436,7 @@ local function CheckAdjacentAllyUnitIsntFullHealth(pUnit, iPlayer, CustomOpInfo)
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iDamage
-	local iPlotID
+	local iDamage, iPlotID
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -473,9 +464,7 @@ local function CheckAdjacentAllyUnitIsntFullHealthAndAbilityMatches(pUnit, iPlay
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bAllyUnitHasAbility
-	local pAbilities
-	local iPlotID
+	local bAllyUnitHasAbility, pAbilities, iPlotID
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -512,8 +501,7 @@ local function CheckAdjacentAllyUnitLevelMatches(pUnit, iPlayer, CustomOpInfo)
     local iY =  pUnit:GetY()
 	local iLevelMinimum = GameInfo.Units[CustomOpInfo.SimpleAmount].Index
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iLevel
-	local iPlotID
+	local iLevel, iPlotID
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -588,9 +576,7 @@ local function CheckAdjacentCity(pUnit, iPlayer, CustomOpInfo, iSameOwner, iBuil
 	local iX =  pUnit:GetX()
     local iY =  pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local iPlotID
-	local pCity
-	local bGatingPassed
+	local iPlotID, pCity, bGatingPassed
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -630,10 +616,7 @@ local function CheckAdjacentAllyUnitTypeMatchesOrAbilityMatches(pUnit, iPlayer, 
 	local iX = pUnit:GetX()
     local iY = pUnit:GetY()
     local tNeighborPlots = Map.GetNeighborPlots(iX, iY, 1);
-	local bAllyUnitHasAbility
-	local pAbilities
-	local iPlotID
-	local iUnitType
+	local bAllyUnitHasAbility, pAbilities, iPlotID, iUnitType
 	tCachedViableActionUnits[CustomOpInfo.OperationType] = {}
 	tCachedViableActionPlots[CustomOpInfo.OperationType] = {}
 	for _, plot in ipairs(tNeighborPlots) do
@@ -926,11 +909,7 @@ function hasCastCheck(CustomOperationInfo, pUnit, bCanStart)
 	return bCanStart, tIterations
 end
 
-
-
 -- end custom ops
-
-
 function populatePromosSkip(unitExperience, kSubjectData)
     local promotionList  = unitExperience:GetPromotions();
 	for i, promotion in ipairs(promotionList) do
@@ -969,8 +948,8 @@ function hideManaImprovements(tBuildActions, data)
     return tBuildActions
 end
 
-function DovielloUpgradeForeignOverride(v,tResults, pUnit, toolTipString, upgradeCost, upgradeUnitInfo, tDovielloUpgradeParams)
-	local bDisabled, bDovielloUpgrade
+function DovielloUpgradeForeignOverride(v,tResults, bDisabled, pUnit, toolTipString, upgradeCost, upgradeUnitInfo, tDovielloUpgradeParams)
+	local bDovielloUpgrade
 	if (v == 'Must be in friendly territory.') and (PlayerConfigurations[pUnit:GetOwner()]:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_DOVIELLO') then
 		if table.count(tResults[UnitOperationResults.FAILURE_REASONS]) == 1 then
 			bDisabled = false

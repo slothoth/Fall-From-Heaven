@@ -472,18 +472,20 @@ function onNewReligion(playerID, cityID, eVisibility, otherCityID)
     local pCity = CityManager.GetCity(playerID, cityID)
     local pCityReligion = pCity:GetReligion()
     local eMajorityReligion = pCityReligion:GetMajorityReligion()
-    local sReligion = GameInfo.Religions[eMajorityReligion].ReligionType
-    print('religion is', sReligion)
-    local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
-    if bHolyCityEstablished < 1 then
-        Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)            -- like RELIGION_BUDDHISM
-        local pPlot = pCity:GetPlot()
-        pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
-        pCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
-        if eMajorityReligion == iReligionVeil then
-            AdjustArmageddonCount(5)
+    if eMajorityReligion then
+        local sReligion = GameInfo.Religions[eMajorityReligion].ReligionType
+        print('religion is', sReligion)
+        local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
+        if bHolyCityEstablished < 1 then
+            Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)            -- like RELIGION_BUDDHISM
+            local pPlot = pCity:GetPlot()
+            pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
+            pCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
+            if eMajorityReligion == iReligionVeil then
+                AdjustArmageddonCount(5)
+            end
+            NotifyAllHumans(Locale.Lookup('LOC_RELIGION_FOUNDED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_' .. sReligion .. '_FOUNDED_NOTIFICATION_DESCRIPTION'), pPlot:GetX(), pPlot:GetY())
         end
-        NotifyAllHumans(Locale.Lookup('LOC_RELIGION_FOUNDED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_' .. sReligion .. '_FOUNDED_NOTIFICATION_DESCRIPTION'), pPlot:GetX(), pPlot:GetY())
     end
 end
 

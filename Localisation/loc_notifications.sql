@@ -210,4 +210,6 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_TITLE', 'Rivers of Blood Cast', 'en_US'),
 ('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_DESCRIPTION', 'The Calabim have cast Rivers of Blood, reducing the population of all other players cities by 2, and increasing their own by 2.', 'en_US'),
 ('LOC_ACHERON_SPAWN_NOTIFICATION_TITLE', 'Acheron Awakens', 'en_US'),
-('LOC_ACHERON_SPAWN_NOTIFICATION_DESCRIPTION', 'Travellers speak of a mighty Dragon, who wants to make {1_city} his lair.', 'en_US');
+('LOC_ACHERON_SPAWN_NOTIFICATION_DESCRIPTION', 'Travellers speak of a mighty Dragon, who wants to make {1_city} his lair.', 'en_US'),
+('LOC_NOTIFICATION_LAIR_BIGBAD_NAME', 'Very bad outcome.', 'en_US'),
+('LOC_NOTIFICATION_LAIR_BIGBAD_DESCRIPTION', 'You had delved too greedily and too deep. An ancient evil awakens.', 'en_US');

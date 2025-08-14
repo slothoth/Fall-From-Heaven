@@ -42,6 +42,12 @@ local tReligionUnits = {
 [GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index]=iEsus,
 [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index]=iVeil}
 
+transientBuffKeys = {
+        BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
+        BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
+        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
+    }                                                                                           -- shared across RequestOpSupport and Gameplay
+
 -- nicked from Leugi Wildlife++
 function ViableWildernessPlots(bOnlyTundraOrSnow)
     local tNewTable = {}
@@ -132,19 +138,18 @@ function SimpleSummon(iX, iY, iPlayer, iUnitIndex)
             if not tBeforeSummonUnits[iUnitID] then
                 tNewUnits[iUnitID] = pOnTileUnit
             end
-            setReligion(pOnTileUnit)
+            -- setReligion(pOnTileUnit)
         end
     end
     return tNewUnits
 end
 
-function setReligion(pUnit)
+function setReligion(pUnit)                 -- unneeded as covered in promotions..
     local iUnitIndex = pUnit:GetType()
     local pReligion = pUnit:GetReligion()
     if pReligion then
         local iReligionIndex = tReligionUnits[iUnitIndex]
         if iReligionIndex then
-            print('found religion of unit')
             pReligion:SetReligionType(iReligionIndex)
         end
     end
@@ -349,6 +354,15 @@ function DisplaceUnits(pPlot, pUnit, iX, iY)
         UnitManager.PlaceUnit(pTileUnit, iNewX, iNewY)              -- displace to new tiles
     end
     return true
+end
+
+function chooseRandomIndexed(tbl)
+    local iNumEligiblePlots = table.count(tbl)
+    if iNumEligiblePlots > 0 then
+        local iRandomEligiblePlotsPosition = Game.GetRandNum((iNumEligiblePlots + 1) - 1, 'RNG_check') + 1
+        local selectedElement = tbl[iRandomEligiblePlotsPosition]
+    end
+    return selectedElement
 end
 
 print('initialised spawn support')

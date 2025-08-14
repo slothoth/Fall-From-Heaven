@@ -11,6 +11,7 @@ include( "Civ6Common" );
 include( "EspionageSupport" );
 include("GameCapabilities");
 
+-- include("UnitPanel")
 print('trying to load new unit support, next line should be nil')
 print(TrackPlot)
 include( "UnitPanelSupportSloth" );
@@ -405,7 +406,6 @@ end
 -- ===========================================================================
 local tDovielloUpgradeParams = {}
 function GetUnitActionsTable( pUnit )
-	print('in custom get Unit Actions table.')
 
 	-- Build action table; holds sub-tables of commands & operations based on UI categories set in DB.
 	-- Also defines order actions show in panel.
@@ -556,7 +556,7 @@ function GetUnitActionsTable( pUnit )
 							if (tResults[UnitOperationResults.FAILURE_REASONS] ~= nil) then
 								-- Add the reason(s) to the tool tip
 								for i,v in ipairs(tResults[UnitOperationResults.FAILURE_REASONS]) do
-									bDisabled, bDovielloUpgrade, toolTipString, tDovielloUpgradeParams = DovielloUpgradeForeignOverride(v,tResults, pUnit, toolTipString, upgradeCost, upgradeUnitInfo, tDovielloUpgradeParams)
+									bDisabled, bDovielloUpgrade, toolTipString, tDovielloUpgradeParams = DovielloUpgradeForeignOverride(v,tResults, bDisabled, pUnit, toolTipString, upgradeCost, upgradeUnitInfo, tDovielloUpgradeParams)
 								end
 							end
 							toolTipString = amendNationalPromoToolTip(toolTipString, bDisabledExperience, bDisabledNational)
@@ -1143,7 +1143,7 @@ function View(data)
 	end
 
 	-- Populate Earned Promotions UI
-	if (not UILens.IsLensActive("Religion") and data.Combat > 0 and data.MaxExperience > 0) then
+	if (data.Combat > 0 and data.MaxExperience > 0) then					-- SLTH: we wanna show xp for religious units
 		Controls.XPArea:SetHide(false);
 		Controls.XPBar:SetPercent( data.UnitExperience / data.MaxExperience );
 		Controls.XPArea:SetToolTipString( Locale.Lookup("LOC_HUD_UNIT_PANEL_XP_TT", data.UnitExperience, data.MaxExperience, data.UnitLevel+1 ) );
@@ -3386,7 +3386,6 @@ end
 --	If mouse/touch is giving focus to a unit flag, that takes precedence over
 --	the hex which may be behind the flag (likey a hex "above" the current one)
 function OnUnitFlagPointerEntered( playerID:number, unitID:number )
-
 	m_isFlagFocused = true;		-- Some flag (could be own) is focused.
 
 	--make sure it's not one of our units

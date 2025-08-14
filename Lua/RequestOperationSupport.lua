@@ -1,24 +1,25 @@
 include "SpawnSupport"
-local transientBuffKeys = {
-        BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
-        BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
-        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
-    }
+local iGreatProphet = GameInfo.Units['UNIT_GREAT_PROPHET'].Index
+local iGreatEngineer = GameInfo.Units['UNIT_GREAT_ENGINEER'].Index
+local iGreatSage =     GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index
+local iGreatArtist =   GameInfo.Units['UNIT_GREAT_ARTIST'].Index
+local iGreatMerchant = GameInfo.Units['UNIT_GREAT_MERCHANT'].Index
+local iGreatCommander = GameInfo.Units['UNIT_GREAT_GENERAL'].Index
 
-local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
+local tSuperSpecialistModifiers = {[iGreatProphet]={
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
-	[GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]={
+	[iGreatEngineer]={
 	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_SCIENCE', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION',
 	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_SIDAR', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_GUILD_OF_HAMMERS'},
-	[GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]={
+	[iGreatSage]={
 		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_PROD', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE',
 		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_SIDAR', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_GREAT_LIB'},
-	[GameInfo.Units['UNIT_GREAT_ARTIST'].Index]={
+	[iGreatArtist]={
 		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_GOLD',
 		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_SIDAR', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_THEATRE_OF_DREAMS'},
-	[GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]={
+	[iGreatMerchant]={
 		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
 		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
 }
@@ -27,6 +28,11 @@ local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTUR
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_CASTE_SYSTEM',
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
+
+local tGreatPeople = { [iGreatProphet]=true, [iGreatEngineer]=true, [iGreatSage]=true, [iGreatArtist]=true,
+                       [iGreatMerchant]=true, [iGreatCommander]=true,
+
+}
 
 local iSnowTerrain = GameInfo.Terrains['TERRAIN_SNOW'].Index
 local iSnowTerrainHills = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
@@ -326,7 +332,7 @@ local function OnSpellAoeDamage(iPlayer, tParameters)
     end
     pUnit:SetProperty('HasCast', 1)
 end
-local iGreatGeneral = GameInfo.Units['UNIT_GREAT_GENERAL'].Index
+
 local function GrantGoldenAge(iPlayer, tParameters)
     local pPlayer = Players[iPlayer]
     local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
@@ -337,8 +343,9 @@ local function GrantGoldenAge(iPlayer, tParameters)
     local tReserveCommanders = {}               -- we dont wanna sacrifice commanders, as they have ongoing effects, unless we HAVE to
 	for iUnitID, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
         if iGpAmount < iBar then
-            if pPlayerUnit:GetGreatPerson():GetClass() > -1 then
-                if pPlayerUnit:GetType() == iGreatGeneral then
+            local iUnitIndex = pPlayerUnit:GetType()
+            if tGreatPeople[iUnitIndex] then
+                if iUnitIndex == iGreatCommander then
                     table.insert(tReserveCommanders, pPlayerUnit)
                 else
                     iGpAmount = iGpAmount + 1
@@ -715,6 +722,46 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
+local tChestOptions = {ITEM_HEALING_SALVE=iUnit, ITEM_JADE_TORC=iUnit,
+                       ITEM_ROD_OF_WINDS=iUnit, ITEM_TIMOR_MASK=iUnit}
+
+local tFuncs = {HIGH_GOLD=HIGH_GOLD, TECH=TECH}
+-- adjacent to friendly chest.
+local function OnOpenChest(iPlayer, tParameters)
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local pPlayer = Players[iPlayer]
+    if math.random(100) < 25 then
+        local sTrap = chooseRandomIndexed({ 'POISON', 'FIRE', 'SPORES' })
+        if sTrap == 'POISON' then
+            local iDamage = math.random(25, 90)
+            pUnit:ChangeDamage(iDamage)
+            local pUnitAbilities = pUnit:GetAbility()
+            pUnitAbilities:AddAbilityCount('POISONED')
+        -- 25 -> 90 damage poison then grant poisoned ability
+        elseif sTrap == 'FIRE' then
+            local iDamage = math.random(50, 90)
+            pUnit:ChangeDamage(iDamage)
+            -- 50 -> 90 damage fire. ring of flames effect?
+        else
+            print('immobilize unit somehow')
+            -- make immobile for 3 turns.
+        end
+    else
+        local lList = { 'EMPTY', 'HIGH_GOLD', 'ITEM_HEALING_SALVE', 'ITEM_JADE_TORC', 'ITEM_ROD_OF_WINDS', 'ITEM_TIMOR_MASK', 'TECH' }
+        local sGoody = chooseRandomIndexed(lList)
+        if tChestOptions[sGoody] then
+            local tNewUnits = BaseSummon(pUnit, iPlayer, tChestOptions[sGoody])
+        elseif tFuncs[sGoody] then
+            if tFuncs[sGoody] == 'HIGH_GOLD' then
+                pPlayer:GetTreasury():ChangeGoldBalance(200)
+            elseif tFuncs[sGoody] == 'TECH' then
+                print('TODO TECH')
+                -- grant tech? or progress towards
+            end
+        end
+    end
+end
+
 -- UnitOperation Works
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
@@ -749,3 +796,5 @@ GameEvents.SlthOnTeleportToCapital.Add(TeleportUnitToCapital)
 GameEvents.SlthOnForcePeace.Add(ForcePeace)
 GameEvents.SlthOnHealSelf.Add(HealSelf)
 GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
+
+GameEvents.SlthOnOpenChest.Add(OnOpenChest)
