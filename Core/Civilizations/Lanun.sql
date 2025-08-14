@@ -82,8 +82,7 @@ INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES
 ('SLTH_UNIT_WAR_TORTOISE', 'SLTH_UNIT_KNIGHT'),
 ('SLTH_UNIT_PIRATE', 'SLTH_UNIT_PRIVATEER');
 
-INSERT INTO Unit_BuildingPrereqs(Unit, PrereqBuilding) VALUES
-('SLTH_UNIT_WAR_TORTOISE', 'SLTH_BUILDING_SIEGE_WORKSHOP');
+
 
 INSERT INTO Resource_Conditions (ResourceType, UnlocksFromEffect) VALUES
 ('RESOURCE_PEARLS', 1);

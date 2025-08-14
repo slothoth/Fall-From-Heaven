@@ -275,11 +275,6 @@ PARAMANDER
 WAR_TORTOISE
  */
 
--- have a modifier that checks you have less than support? AGH SUPPORT CHANGES
--- but say we did nail that down. Check for number of units outside borders, and inside borders.
--- if at or under limit, grant an ability giving each of them +1 gold to offset maintenance.
--- If above limit, dont grant them any ability, instead grant the player gold equal to limit, to offset it.;
-
 INSERT INTO Types(Type, Kind) VALUES
 ('NIGHTMARE_ABILITY_HELL_TERRAIN_STRENGTH', 'KIND_ABILITY'),
 ('ABILITY_BRONZE_WEAPONS', 'KIND_ABILITY'),

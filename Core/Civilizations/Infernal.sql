@@ -105,8 +105,7 @@ INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedComba
 INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion, StrategicResource, ZoneOfControl) VALUES
 ('SLTH_UNIT_DEATH_KNIGHT', 'LOC_SLTH_UNIT_DEATH_KNIGHT_NAME', '2', '3', '39', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '240', '0', 'LOC_SLTH_UNIT_DEATH_KNIGHT_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_DEATH_KNIGHT', '0', 'PROMOTION_CLASS_LIGHT_CAVALRY', 'TECH_WARHORSES', NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', NULL, '1');
 
-INSERT INTO Unit_BuildingPrereqs(Unit, PrereqBuilding) VALUES
-('SLTH_UNIT_DEATH_KNIGHT', 'BUILDING_STABLE');
+
 
 INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES
 ('SLTH_UNIT_IMP', 'SLTH_UNIT_ADEPT'),

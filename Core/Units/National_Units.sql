@@ -1,5 +1,6 @@
 -- template for adding national unit ban. Don't think it covers upgrading sadly.
-
+-- look into Unit_BuildingPrereqs for Archaelogists, maybe you could limit it to 4 there, and have it be on the Palace? Sadly would mean you could only build them in capital.
+-- also not sure it would gate upgrades.
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 ('TRAIT_LEADER_MAJOR_CIV', 'MOD_CANT_BUILD_ANYMORE_KNIGHTS');
 

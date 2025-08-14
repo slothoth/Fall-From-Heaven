@@ -47,7 +47,7 @@ INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedComba
 ('SLTH_UNIT_SON_OF_THE_INFERNO', 'LOC_SLTH_UNIT_SON_OF_THE_INFERNO_NAME', '2', '1', '24', '29', '2', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '240', '1', 'LOC_SLTH_UNIT_SON_OF_THE_INFERNO_DESCRIPTION', '0', 'PROMOTION_CLASS_ADEPT', '0', '1', 'ADVISOR_CONQUEST'),
 ('SLTH_UNIT_DISCIPLE_OF_ACHERON', 'LOC_SLTH_UNIT_DISCIPLE_OF_ACHERON_NAME', '2', '1', '14', '19', '2', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '120', '1', 'LOC_SLTH_UNIT_DISCIPLE_OF_ACHERON_DESCRIPTION', '0', 'PROMOTION_CLASS_ADEPT', '1', '1', 'ADVISOR_CONQUEST');
 
-INSERT INTO Unit_BuildingPrereqs(Unit, PrereqBuilding) VALUES
+INSERT INTO Unit_BuildingPrereqs(Unit, PrereqBuilding) VALUES               -- KEPT as needed for acheron only
 ('SLTH_UNIT_DISCIPLE_OF_ACHERON', 'BUILDING_ACHERONS_LAIR');
 
 INSERT INTO Buildings(BuildingType, Name, Cost, PrereqDistrict, Description, AdvisorType, PurchaseYield, MustPurchase) VALUES

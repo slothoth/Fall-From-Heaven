@@ -638,7 +638,7 @@ INSERT INTO Requirements(RequirementId, RequirementType) VALUES
 ('PLOT_PROP_SPIRITUAL_POSITIVE', 'REQUIREMENT_PLOT_PROPERTY_MATCHES'),
 ('PLOT_PROP_SUMMONER_POSITIVE', 'REQUIREMENT_PLOT_PROPERTY_MATCHES');
 
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES             -- TODO Handle changing these plots in lua
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
 ('PLOT_PROP_AGGRESSIVE_POSITIVE', 'PropertyName', 'SELECTED_AGGRESSIVE'),
 ('PLOT_PROP_ARCANE_POSITIVE', 'PropertyName', 'SELECTED_ARCANE'),
 ('PLOT_PROP_CHARISMATIC_POSITIVE', 'PropertyName', 'SELECTED_CHARISMATIC'),
