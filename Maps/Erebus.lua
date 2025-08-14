@@ -598,7 +598,7 @@ function newInitNWData(self)
 
 	for loop in GameInfo.Features() do
         -- slthLog(loop.FeatureType, GameInfo.NatWonders[loop.FeatureType])
-		if(GameInfo.NatWonders[loop.FeatureType] and excludedWonders[loop.FeatureType] ~= true) then
+		if((GameInfo.NatWonders[loop.FeatureType] or loop.NaturalWonder) and excludedWonders[loop.FeatureType] ~= true) then
             slthLog('added natWon')
 			self.eFeatureType[iCount] = loop.Index;
 			self.aaPossibleLocs[iCount] = {};
