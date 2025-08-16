@@ -40,10 +40,6 @@ INSERT INTO Buildings(BuildingType, Name, PrereqTech, PrereqCivic, Cost, PrereqD
 INSERT INTO Building_GreatPersonPoints(BuildingType, GreatPersonClassType, PointsPerTurn) VALUES
 ('SLTH_BUILDING_RELIQUARY', 'GREAT_PERSON_CLASS_PROPHET', '1');
 
-INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion, ZoneOfControl) VALUES
-('SLTH_UNIT_DEVOUT', 'LOC_SLTH_UNIT_DEVOUT_NAME', '2', '2', '24', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '120', '0', 'LOC_SLTH_UNIT_DEVOUT_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_DEVOUT', '0', 'PROMOTION_CLASS_RECON', 'TECH_POISONS', NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', '1'),
-('SLTH_UNIT_MONK', 'LOC_SLTH_UNIT_MONK_NAME', '2', '2', '29', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '120', '0', 'LOC_SLTH_UNIT_MONK_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_MONK', '0', 'PROMOTION_CLASS_DISCIPLE', NULL, 'CIVIC_PRIESTHOOD', '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_RELIGIOUS', '0', '1'),
-('SLTH_UNIT_CORLINDALE', 'LOC_SLTH_UNIT_CORLINDALE_NAME', '2', '2', '0', '0', '2', 'DOMAIN_LAND', 'FORMATION_CLASS_CIVILIAN', '300', '1', 'LOC_SLTH_UNIT_CORLINDALE_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_CORLINDALE', '0', 'PROMOTION_CLASS_ADEPT', NULL, 'CIVIC_FANATICISM', '1', '1', '0', '0', '0', 'PSEUDOYIELD_UNIT_MAGIC', '0', 'ADVISOR_CONQUEST', '0', '0');
 
 INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES
 ('SLTH_UNIT_DEVOUT', 'SLTH_UNIT_ASSASSIN');

@@ -483,8 +483,6 @@ INSERT INTO PolicyModifiers(PolicyType, ModifierId) VALUES
 ('SLTH_POLICY_STATE_ESUS', 'STATE_ESUS_ALLOW_SHADOW'),
 ('SLTH_POLICY_STATE_ESUS', 'STATE_ESUS_ALLOW_NIGHTWATCH');
 
-INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion, ZoneOfControl) VALUES
-('SLTH_UNIT_ROYAL_GUARD', 'LOC_SLTH_UNIT_ROYAL_GUARD_NAME', '2', '3', '19', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '180', '0', 'LOC_SLTH_UNIT_ROYAL_GUARD_DESCRIPTION', 'SLTH_RELIGION_BAN_TRAIT', '0', 'PROMOTION_CLASS_LIGHT_CAVALRY', NULL, 'CIVIC_FEUDALISM', '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', '1');
 
 INSERT INTO Modifiers(ModifierId, ModifierType) VALUES
 ('STATE_KILMORPH_ALLOW_HIGH_PRIEST', 'MODIFIER_PLAYER_ADJUST_VALID_UNIT_BUILD'),

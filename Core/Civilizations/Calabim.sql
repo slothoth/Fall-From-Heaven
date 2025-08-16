@@ -125,16 +125,6 @@ INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES
 INSERT INTO Modifiers(ModifierId, ModifierType) VALUES ('BREEDING_PIT_GROWTH_RATE', 'MODIFIER_ADJUST_OWNER_CITY_GROWTH');
 INSERT INTO ModifierArguments(ModifierId, Name, Type, Value) VALUES ('BREEDING_PIT_GROWTH_RATE', 'Amount', 'ARGTYPE_IDENTITY', '20');
 
-INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, Stackable, AirSlots, CanTargetAir, PseudoYieldType, IgnoreMoves, AdvisorType, EnabledByReligion, ZoneOfControl) VALUES
-('SLTH_UNIT_LOSHA', 'LOC_SLTH_UNIT_LOSHA_NAME', '2', '1', '34', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '300', '0', 'LOC_SLTH_UNIT_LOSHA_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_LOSHA', '0', 'PROMOTION_CLASS_MELEE', NULL, 'CIVIC_FANATICISM', '1', '1', '0', '0', '0', 'PSEUDOYIELD_UNIT_HERO', '0', 'ADVISOR_CONQUEST', '0', '1'),
-('SLTH_UNIT_MOROI', 'LOC_SLTH_UNIT_MOROI_NAME', '2', '1', '19', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '60', '0', 'LOC_SLTH_UNIT_MOROI_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_MOROI', '0', 'PROMOTION_CLASS_MELEE', 'TECH_BRONZE_WORKING', NULL, '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', '1'),
-('SLTH_UNIT_BRUJAH', 'LOC_SLTH_UNIT_BRUJAH_NAME', '2', '1', '53', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '240', '0', 'LOC_SLTH_UNIT_BRUJAH_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_BRUJAH', '0', 'PROMOTION_CLASS_MELEE', NULL, 'CIVIC_RAGE', '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', '1'),
-('SLTH_UNIT_VAMPIRE', 'LOC_SLTH_UNIT_VAMPIRE_NAME', '2', '1', '24', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '180', '0', 'LOC_SLTH_UNIT_VAMPIRE_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_VAMPIRE', '0', 'PROMOTION_CLASS_MELEE', NULL, 'CIVIC_FEUDALISM', '1', '1', '0', '0', '0', NULL, '0', 'ADVISOR_CONQUEST', '0', '1');
-
-INSERT INTO Units(UnitType, Name, BaseSightRange, BaseMoves, Combat, RangedCombat, Range, Domain, FormationClass, Cost, BuildCharges, Description, TraitType, AllowBarbarians, PromotionClass, PrereqTech, PrereqCivic, CanTrain, Maintenance, PseudoYieldType, AdvisorType, ZoneOfControl) VALUES
-('SLTH_UNIT_VAMPIRE_LORD', 'LOC_SLTH_UNIT_VAMPIRE_LORD_NAME', '2', '1', '43', '0', '0', 'DOMAIN_LAND', 'FORMATION_CLASS_LAND_COMBAT', '240', '0', 'LOC_SLTH_UNIT_VAMPIRE_LORD_DESCRIPTION', 'SLTH_TRAIT_CIVILIZATION_UNIT_VAMPIRE_LORD', '1', 'PROMOTION_CLASS_MELEE', NULL, 'CIVIC_DIVINE_ESSENCE', '0', '1', NULL, 'ADVISOR_CONQUEST', '1');
-
-
 INSERT INTO UnitReplaces(CivUniqueUnitType, ReplacesUnitType) VALUES
 ('SLTH_UNIT_MOROI', 'SLTH_UNIT_SWORDSMAN'),
 ('SLTH_UNIT_BRUJAH', 'SLTH_UNIT_BERSERKER'),
