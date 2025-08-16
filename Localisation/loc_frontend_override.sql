@@ -2,5 +2,3 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_TRAIT_INSANE_DESCRIPTION', 'Start with 3 traits, Arcane, Charismatic and Creative. Will change traits randomly. Have fun!', 'en_US'),
 ('LOC_GAMEMODE_BUILDING_PREREQ_NAME', 'Building Unit Prereqs Mode', 'en_US'),
 ('LOC_GAMEMODE_BUILDING_PREREQ_DESCRIPTION', 'This game mode makes it so advanced units require building prerequisites, like Swordsmen will need Barracks. More similar to the original Fall From Heaven.[NEWLINE][NEWLINE]Due to technical limitations, the downside to this is that when you unlock the Technology to build Swordsmen, you will no longer be able to build Warriors. So a city without a Barracks cannot build either Swordsmen or Warriors.[NEWLINE][NEWLINE]With this mode off, instead Barracks and other prereq buildings increase production by  50% of the units that normally were required, and the units that have requirements cost 1.5* as much.', 'en_US');
-
-
