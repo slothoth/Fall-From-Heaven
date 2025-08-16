@@ -357,12 +357,59 @@ function DisplaceUnits(pPlot, pUnit, iX, iY)
 end
 
 function chooseRandomIndexed(tbl)
+    local selectedElement
     local iNumEligiblePlots = table.count(tbl)
     if iNumEligiblePlots > 0 then
         local iRandomEligiblePlotsPosition = Game.GetRandNum((iNumEligiblePlots + 1) - 1, 'RNG_check') + 1
-        local selectedElement = tbl[iRandomEligiblePlotsPosition]
+        selectedElement = tbl[iRandomEligiblePlotsPosition]
     end
     return selectedElement
+end
+
+-- =============================================
+--      GRID UTILITIES & COORDINATE CONVERSION
+-- =============================================
+
+-- Directions for pointy-topped hex grid in axial coordinates (q, r)
+local axial_directions = {
+    {1, 0}, {1, -1}, {0, -1},
+    {-1, 0}, {-1, 1}, {0, 1}
+}
+local g_iW, g_iH = Map.GetGridSize();
+
+--- Converts a 1D grid index to 2D axial coordinates (q, r).
+local function index_to_axial(index)
+    local col = index % g_iW
+    local row = math.floor(index / g_iW)
+    local q = col - math.floor(row / 2)         -- Offset conversion for pointy-topped hexes
+    local r = row
+    return q, r
+end
+
+--- Converts 2D axial coordinates (q, r) back to a 1D grid index.
+local function axial_to_index(q, r)
+    local col = q + math.floor(r / 2)
+    local row = r
+    if col < 0 or col >= g_iW or row < 0 or row >= g_iH then
+        return nil
+    end
+    return row * g_iW + col
+end
+
+--- Gets the indices of all adjacent tiles for a given tile index.
+function get_neighbors(index)
+    local neighbors = {}
+    print('in neighbor function')
+    local q, r = index_to_axial(index)
+    print('')
+    for _, dir in ipairs(axial_directions) do
+        local nq, nr = q + dir[1], r + dir[2]
+        local neighbor_index = axial_to_index(nq, nr)
+        if neighbor_index then
+            table.insert(neighbors, neighbor_index)
+        end
+    end
+    return neighbors
 end
 
 print('initialised spawn support')

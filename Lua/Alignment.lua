@@ -348,6 +348,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
                 GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
                 local pPlayer = Players[playerID]
                 pPlayer:GetDiplomacy():SetPermanentAlliance(iBasiumPlayerID)
+                NotifyAllHumans(Locale.Lookup('LOC_MERCURIAN_SPAWNED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_MERCURIAN_SPAWNED_NOTIFICATION_DESCRIPTION'))
             end
         end
         AdjustArmageddonCount(5)            -- Compact broken
@@ -369,7 +370,7 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             local iFollowers = 0
             for i in GameInfo.Religions() do
                 iFollowers = iFollowers + pCity:GetReligion():GetNumFollowers(i.Index)
-                print(iFollowers)
+                -- print(iFollowers)
             end
             if iFollowers == 0 then
                 tCityReligionFollowers = 0
@@ -461,8 +462,10 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             GrantTechParity(iInfernalPlayerId, playerID)
             GrantCultureParity(iInfernalPlayerId, playerID)
             Game:SetProperty('infernal_spawned', 1)
+            Game:SetProperty('HELL_TERRAIN_BEGUN', 1)
+            NotifyAllHumans(Locale.Lookup('LOC_INFERNAL_SPAWNED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_INFERNAL_SPAWNED_NOTIFICATION_DESCRIPTION'), iCityMakeX, iCityMakeY)
         else
-            print('not yet implemented random city outside of camps')
+            print('not yet implemented random city outside of camps. Infernal Spawn failed. CRITICAL ERROR')
         end
     end
 end
@@ -472,7 +475,7 @@ function onNewReligion(playerID, cityID, eVisibility, otherCityID)
     local pCity = CityManager.GetCity(playerID, cityID)
     local pCityReligion = pCity:GetReligion()
     local eMajorityReligion = pCityReligion:GetMajorityReligion()
-    if eMajorityReligion then
+    if eMajorityReligion and eMajorityReligion > -1 then
         local sReligion = GameInfo.Religions[eMajorityReligion].ReligionType
         print('religion is', sReligion)
         local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
@@ -589,6 +592,7 @@ function countPlotWithinThreeCoast(pPlot)
     return iWaterCount
 end
 function onStart()
+    local tInfernalPlayers = {}
     for _, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
         local alignment = pPlayer:GetProperty('alignment')
         local sLeaderName = PlayerConfigurations[pPlayer:GetID()]:GetLeaderTypeName()
@@ -602,6 +606,7 @@ function onStart()
         end
         if sLeaderName == 'LEADER_HYBOREM' then
             Game:SetProperty('Infernal', pPlayer:GetID())
+            table.insert(tInfernalPlayers,  pPlayer:GetID())
         end
         if sLeaderName == 'LEADER_BASIUM' then
             Game:SetProperty('Mercurian', pPlayer:GetID())
@@ -612,6 +617,9 @@ function onStart()
     end
     if not Game:GetProperty('Infernal') then          -- initalize armageddon
         Game:SetProperty('infernal_spawned',  1)            -- stop infernals spawning if no hyborem
+    end
+    if #tInfernalPlayers > 0 then
+        Game:SetProperty('InfernalPlayers', tInfernalPlayers)
     end
 end
 

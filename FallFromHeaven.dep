@@ -643,11 +643,15 @@
 		</Element>
 		<Element>
 			<LibraryName text="TerrainElement"/>
-			<PackageDependencies/>
+			<PackageDependencies>
+				<Element text="terrain/TerrainElementSet_Base.blp"/>
+			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="TerrainMaterial"/>
-			<PackageDependencies/>
+			<PackageDependencies>
+				<Element text="terrain/TerrainMaterialSet_Base.blp"/>
+			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="TileBase"/>

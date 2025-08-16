@@ -214,7 +214,7 @@
       <File>Core/Civilizations/BeastRaces/Clan.sql</File>
       <File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File>
       <File>Core/Civilizations/BeastRaces/Barbarians.sql</File>
-      <File>Core/UI_DB/CivPolishing.Sql</File>
+      <File>Core/UI_DB/CivPolishing.sql</File>
       <File>Core/Units/Abilities.sql</File>
       <File>Core/Units/AiInfos.sql</File>
       <File>Core/Units/Affinity.sql</File>
@@ -239,6 +239,7 @@
       <File>Core/Assets_ingame.sql</File>
       <File>BarbClans/BarbarianClans.sql</File>
       <File>BarbClans/Lairs.sql</File>
+      <File>Core/Features.sql</File>
       <File>Core/Globals.sql</File>
       <File>Core/Victories.sql</File>
       <File>Core/ConditionalBuildings.sql</File>
@@ -650,6 +651,7 @@
     <File>Core/UI_DB/CivPolishing.sql</File>
     <File>Core/ConditionalBuildings.sql</File>
     <File>Core/Delete_Update.sql</File>
+    <File>Core/Features.sql</File>
     <File>Core/Globals.sql</File>
     <File>Core/Governments.sql</File>
     <File>Core/Improvements.sql</File>
