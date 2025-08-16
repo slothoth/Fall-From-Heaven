@@ -45,34 +45,35 @@ DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GREAT_PEOPLE_REC
 -- UPDATE GlobalParameters SET Value = '5' WHERE Name = 'PLOT_UNIT_LIMIT';      - i dont want this but? does it worK?
 
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
-('TRAIT_LEADER_MAJOR_CIV', 'SLTH_RIVER_GOLD');
-
-INSERT INTO GameModifiers(ModifierId) VALUES                -- DO AS TRAITMODIFIER, since fails sometimes to update
-('SLTH_RIVER_GOLD');
+('TRAIT_LEADER_MAJOR_CIV', 'SLTH_RIVER_FAITH');
 
 INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
-('SLTH_RIVER_GOLD', 'MODIFIER_PLAYER_ADJUST_PLOT_YIELD', 'RIVER_ADJACENT_AND_NOT_FORESTED_REQS');
+('SLTH_RIVER_FAITH', 'MODIFIER_PLAYER_ADJUST_PLOT_YIELD', 'RIVER_ADJACENT_AND_NOT_FORESTED_REQS');
 
 INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
-('SLTH_RIVER_GOLD', 'YieldType', 'YIELD_FAITH'),
-('SLTH_RIVER_GOLD', 'Amount', '1');
+('SLTH_RIVER_FAITH', 'YieldType', 'YIELD_FAITH'),
+('SLTH_RIVER_FAITH', 'Amount', '1');
 
-INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
-('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS', 'REQUIREMENT_REQUIREMENTSET_IS_MET', '1');
-
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
-('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS', 'RequirementSetId', 'SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS');
-
-INSERT OR IGNORE  INTO RequirementSets(RequirementSetId,	RequirementSetType)
-VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',	'REQUIREMENTSET_TEST_ALL'),
-        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',	'REQUIREMENTSET_TEST_ANY');
+INSERT INTO RequirementSets(RequirementSetId,	RequirementSetType)
+VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',	'REQUIREMENTSET_TEST_ALL');
 
 INSERT INTO RequirementSetRequirements
 		(RequirementSetId,								RequirementId)
-VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS'),
+VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'REQUIREMENT_NOT_FOREST'),
         ('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'REQUIRES_PLOT_ADJACENT_TO_RIVER'),
-        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',     'PLOT_IS_FOREST_REQUIREMENT'),
-        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',     'REQUIRES_PLOT_HAS_JUNGLE');
+        ('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'REQUIREMENT_NOT_JUNGLE');
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('REQUIREMENT_NOT_FOREST', 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES', '1');
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('REQUIREMENT_NOT_FOREST', 'FeatureType', 'FEATURE_FOREST');
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('REQUIREMENT_NOT_JUNGLE', 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES', '1');
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('REQUIREMENT_NOT_JUNGLE', 'FeatureType', 'FEATURE_JUNGLE');
 
 
 -- Settlers have extra movement and sight when you dont have a capital city
@@ -160,7 +161,9 @@ INSERT INTO ModifierArguments(ModifierId, Name, "Value") VALUES
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 ('TRAIT_LEADER_MAJOR_CIV', 'SLTH_LOYALTY_OFF');
 
-
+--  for districts, for now.
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'ALL_DISTRICTS_CULTURE_BOMB');
 /*
 
 -- sadly this sejong/moon project modifier just fails outside of a runonce context. Rtried Repeatable, no such luck
@@ -191,5 +194,5 @@ INSERT INTO CivilopediaSectionExcludes(SectionId) VALUES
 ('MOMENTS'),
 ('GOVERNORS');
 
-DELETE FROM GoodyHuts WHERE GoodyHutType = 'GOODYHUT_DIPLOMACY';            -- no envoys, favour, or governors
+DELETE FROM GoodyHuts WHERE GoodyHutType = 'GOODYHUT_DIPLOMACY' OR GoodyHutType='GOODYHUT_FAITH';            -- no envoys, favour, or governors
 DELETE FROM GoodyHutSubTypes WHERE GoodyHut = 'GOODYHUT_MILITARY' AND GoodyHutSubTypes.SubTypeGoodyHut= 'GOODYHUT_RESOURCES';       -- no accumulating resources

@@ -1241,19 +1241,17 @@ function OnCityProductionChanged( ePlayer, cityID, productionID, objectID)
         local pDistricts = pCity:GetDistricts()
         if pDistricts then
             for DistrictIndex, DistrictType in pairs(tDistricts) do
-                print('checking if city has', DistrictType)
                 local hasDistrict = pDistricts:GetDistrict(DistrictIndex)
-                print('do have?', hasDistrict)
                 if hasDistrict then
                     local isComplete = hasDistrict:IsComplete()
-                    print('is complete?', isComplete)
                     if not isComplete then
                         local pBuildQueue = pCity:GetBuildQueue()
                         local buildCurrent = pBuildQueue:CurrentlyBuilding()
-                        print('currently building', buildCurrent)
                         -- CurrentlyBuilding
                         if DistrictType == buildCurrent then
                             pBuildQueue:FinishProgress()
+                            -- grant extra tile
+
                         end
                     end
                 end

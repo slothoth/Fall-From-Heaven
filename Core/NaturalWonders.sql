@@ -54,7 +54,7 @@ INSERT INTO Improvement_ValidFeatures (ImprovementType, FeatureType) VALUES
 
 DELETE FROM Feature_AdjacentYields;
 DELETE FROM Feature_YieldChanges WHERE FeatureType NOT IN ('FEATURE_FLOODPLAINS', 'FEATURE_JUNGLE', 'FEATURE_FOREST',
-                                                           'FEATURE_OASIS', 'FEATURE_MARSH', 'FEATURE_SHALLOWS',
+                                                           'FEATURE_OASIS', 'FEATURE_MARSH',
                                                            'FEATURE_OBSIDIAN_PLAINS', 'FEATURE_FOREST_ANCIENT', 'FEATURE_REEF');
 
 DELETE FROM Feature_ValidTerrains WHERE FeatureType IN ('FEATURE_FOUNTAIN_OF_YOUTH', 'FEATURE_IKKIL',
@@ -169,8 +169,6 @@ INSERT INTO Feature_ValidTerrains (FeatureType, TerrainType) VALUES
 INSERT INTO Feature_YieldChanges(FeatureType, YieldType, YieldChange) VALUES
 -- i swore FEATURE_FOUNTAIN_OF_YOUTH, i.e. pool of tears gave yields
 ('FEATURE_IKKIL', 'YIELD_PRODUCTION', '3'),
-('FEATURE_NWON_REMNANTS_OF_PATRIA', 'YIELD_PRODUCTION', '3'),
-('FEATURE_NWON_YGGDRASIL', 'YIELD_FOOD', '3'),
 ('FEATURE_EYE_OF_THE_SAHARA', 'YIELD_FAITH', '3');
 -- FEATURE_NWON_YGGDRASIL (3,,) -- also (2,,) after way of forests, (2,,) after commune with nature
 -- FEATURE_EYE_OF_THE_SAHARA (,,3) -- also (,,2) after trade, (,,2) after construction
@@ -180,16 +178,12 @@ INSERT INTO Feature_YieldChanges(FeatureType, YieldType, YieldChange) VALUES
 
 INSERT INTO Feature_YieldChanges(FeatureType, YieldType, YieldChange) VALUES
 -- i swore FEATURE_FOUNTAIN_OF_YOUTH, i.e. pool of tears gave yields
-('FEATURE_IKKIL', 'YIELD_PRODUCTION', '3'),
 ('FEATURE_NWON_REMNANTS_OF_PATRIA', 'YIELD_PRODUCTION', '4'),
 ('FEATURE_NWON_YGGDRASIL', 'YIELD_FOOD', '4'),
-('FEATURE_EYE_OF_THE_SAHARA', 'YIELD_FAITH', '3'),
 
 ('FEATURE_FOUNTAIN_OF_YOUTH',  'YIELD_FOOD', '1'),
 ('FEATURE_FOUNTAIN_OF_YOUTH', 'YIELD_PRODUCTION', '1'),
 --('FEATURE_IKKIL', 'TERRAIN_DESERT'),                            --  none for ik-kil as desert
-('FEATURE_FOUNTAIN_OF_YOUTH',  'YIELD_FOOD', '1'),
-('FEATURE_FOUNTAIN_OF_YOUTH', 'YIELD_PRODUCTION', '1'),
 -- ('FEATURE_MATTERHORN', 'TERRAIN_GRASS'),                    -- none for matterhorn as mountain
 ('FEATURE_TSINGY',  'YIELD_FOOD', '1'),
 ('FEATURE_TSINGY', 'YIELD_PRODUCTION', '1'),
@@ -197,7 +191,6 @@ INSERT INTO Feature_YieldChanges(FeatureType, YieldType, YieldChange) VALUES
 ('FEATURE_NWON_TOMB_OF_SUCELLUS', 'YIELD_PRODUCTION', '1'),
 ('FEATURE_NWON_YGGDRASIL', 'YIELD_PRODUCTION', '1'),
 ('FEATURE_NWON_REMNANTS_OF_PATRIA',  'YIELD_FOOD', '1'),
-('FEATURE_NWON_REMNANTS_OF_PATRIA', 'YIELD_PRODUCTION', '1'),
 ('FEATURE_EYE_OF_THE_SAHARA',  'YIELD_FOOD', '1'),
 ('FEATURE_EYE_OF_THE_SAHARA', 'YIELD_PRODUCTION', '1'),
 ('FEATURE_UBSUNUR_HOLLOW',  'YIELD_FOOD', '1'),

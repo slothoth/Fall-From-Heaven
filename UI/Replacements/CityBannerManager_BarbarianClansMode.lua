@@ -294,15 +294,29 @@ function OnPlayerChangeClosed()
 	end
 end
 
+function InfernalCheck(playerID)
+	local playerConfig = PlayerConfigurations[playerID]
+	local civName = playerConfig:GetCivilizationTypeName()
+	if civName == 'SLTH_CIVILIZATION_INFERNAL' then
+		local isOffMap
+		for i, j in Players[playerID]:GetUnits():Members() do
+			isOffMap = j:GetX() == -9999
+		end
+		if isOffMap then
+			return false
+		end
+	end
+	return true
+end
+
 function PermaBribeBarbarianTrait(playerID)
 	local iBribeCost
 	local iBribeDuration = 20
-	local pPlayer = Players[playerID]
 	local iCurrentTurn = Game.GetCurrentGameTurn()
 	local iBribeTurn = iBribeDuration and math.floor(((iCurrentTurn - 1) / iBribeDuration)) == ((iCurrentTurn - 1) / iBribeDuration)			-- even division
 	if iCurrentTurn == 1 or iBribeTurn then
 		local tGrantGoldParameters = {iYieldIndex=2, iYieldAmount=10, OnStart='SlthOnGrantYield'}
-		if HasTrait("SLTH_TRAIT_BARBARIAN", playerID) then					-- in future we want to gate this behind not being ahead in tech
+		if HasTrait("SLTH_TRAIT_BARBARIAN", playerID) and InfernalCheck(playerID) then					-- in future we want to gate this behind not being ahead in tech
 			for k,barbarianTribeEntry in ipairs(m_BarbarianTribeBanners) do
 				local sTribe = barbarianTribeEntry.BarbarianTribe.TribeType
 				if barbarianTribeEntry.Index and (sTribe == 'TRIBE_CLAN_MELEE_OPEN' or sTribe == 'TRIBE_CLAN_MELEE_FOREST') then
@@ -311,7 +325,7 @@ function PermaBribeBarbarianTrait(playerID)
 					if not bCanStartBribe and tBribeResults and tBribeResults[PlayerOperationResults.FAILURE_REASONS] and tBribeResults[PlayerOperationResults.FAILURE_REASONS][1] == 'Not enough [ICON_Gold] Gold.' then
 						if not iBribeCost then
 							local v = tBribeResults[PlayerOperationResults.ADDITIONAL_DESCRIPTION][1]
-							print('description check', v)
+							print('description check for player', playerID , v)
 							local regexed = v:match("Spend%s+(.-)%s+%[ICON")
 							local comma_subbed = regexed:gsub(",", "")
 							iBribeCost = tonumber(comma_subbed)

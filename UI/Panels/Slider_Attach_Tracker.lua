@@ -69,7 +69,7 @@ function DecreaseCommerceGold()
 end
 
 function UpdateCommerceFromProperty(playerID, iChange)
-	print('was iChange a number', type(iChange) == 'number')
+	-- print('was iChange a number', type(iChange) == 'number')
 	local iScience
 	local iGold
 	if type(iChange) == 'number' then

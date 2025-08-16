@@ -108,8 +108,6 @@ INSERT INTO LairUnits
 ('SLTH_UNIT_STYGIAN_GUARD',  1,               1),
 ('SLTH_UNIT_PIRATE',         1,               1);
 
-INSERT INTO LairUnits( UnitType,            BigBadWaterLeader,BigBadWaterHench,BigBadFailedGraceWaterLeader,BigBadFailedGraceWaterHench, BigBadHench, BigBadFailedGraceHench) VALUES
-                     ('SLTH_UNIT_AZER',     1,                1,               1,                           1,                           1,           1);
 
 INSERT INTO LairUnits
 (UnitType,                  BigBadFailedGraceWaterLeader,BigBadFailedGraceLeader) VALUES

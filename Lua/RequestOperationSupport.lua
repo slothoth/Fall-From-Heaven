@@ -73,7 +73,7 @@ local function SlthGrantYield(iPlayer, tParameters)
     local iYieldIndex = tParameters.iYieldIndex;
     local pPlayer = Players[iPlayer]
     pPlayer:GrantYield(iYieldIndex, iYieldAmount);
-    print('granting yield type', iYieldIndex, 'with amount', iYieldAmount)
+    print('granting yield type', iYieldIndex, 'with amount', iYieldAmount, 'to player', iPlayer)
 end
 
 local function OnSummon(iPlayer, tParameters)

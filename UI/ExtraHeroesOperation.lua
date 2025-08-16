@@ -404,7 +404,7 @@ end
 
 function InitializeSetPolicies(playerID)
     local iGameTurn = Game.GetCurrentGameTurn()
-    print('trying to set policies on turn', iGameTurn)
+    -- print('trying to set policies on turn', iGameTurn)
     if iGameTurn == 1 then
         print('activating policies')
         local pPlayer = Players[playerID]
@@ -498,11 +498,10 @@ end
 -- gameplay esque
 function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
     local iResourceInfo = tMonitoredResources[resourceTypeID]
-    local resourceName = GameInfo.Resources[resourceTypeID].ResourceType
-    print('trying to find if resource is monitored', resourceTypeID, resourceName)
+    -- print('trying to find if resource is monitored', resourceTypeID, resourceName)
     if iResourceInfo then
-        print('it is monitored!')
-        print('trying to update resources on player and resource', ownerPlayerID, resourceTypeID)
+        -- print('it is monitored!')
+        -- print('trying to update resources on player and resource', ownerPlayerID, resourceTypeID)
         local pPlayer = Players[ownerPlayerID];
         local resources = pPlayer:GetResources()
         local iResourceCount = resources:GetResourceAmount(resourceTypeID);
@@ -511,9 +510,9 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
         local pCapitalPlot = Map.GetPlot(pCapitalCity:GetX(), pCapitalCity:GetY())
         local sPropKeyCount = iResourceInfo['name']
         local iPastResource = pCapitalPlot:GetProperty(sPropKeyCount) or 0
-        print('previous: '  .. sPropKeyCount .. ' ' ..tostring(iPastResource))
-        print('new Gameplay: '  .. sPropKeyCount .. ' ' ..tostring(iResourceCount))
-        print('new UI: '  .. sPropKeyCount .. ' ' ..tostring(iResourceCount))
+        -- print('previous: '  .. sPropKeyCount .. ' ' ..tostring(iPastResource))
+        -- print('new Gameplay: '  .. sPropKeyCount .. ' ' ..tostring(iResourceCount))
+        -- print('new UI: '  .. sPropKeyCount .. ' ' ..tostring(iResourceCount))
         if iResourceCount ~= iPastResource then
             local tParameters = {}
             tParameters.sPropKey = sPropKeyCount;
@@ -529,7 +528,7 @@ function UpdateResourceAvailability(ownerPlayerID,resourceTypeID)
                     tParameters.sPropKey = sFullPropKey;
                     tParameters.iPropValue = val;
                     UI.RequestPlayerOperation(ownerPlayerID, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-                    print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
+                    -- print('Setting ' .. sFullPropKey .. ' to ' .. tostring(val))
                 end
                 if iPastResource == 0 then
                     tParameters.OnStart= 'SlthSetResourcePromotions'

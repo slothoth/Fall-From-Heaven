@@ -114,24 +114,17 @@ local tArmageddonUnits = {['SLTH_UNIT_BEAST_OF_AGARES']=1, ['SLTH_UNIT_ROSIER']=
                     ['SLTH_UNIT_WRATH']=3,  ['SLTH_UNIT_MARDERO']=3, ['SLTH_UNIT_MESHABBER']=3,
                     ['SLTH_UNIT_SPHENER']=-3, ['SLTH_UNIT_VALIN']=-2}
 function ArmageddonUnitSpawning(playerID, unitID)
+    print('unit spawned, is it armageddon?')
     local pUnit = UnitManager.GetUnit(playerID, unitID);
     if pUnit then
         local sUnitType = pUnit:GetType()
         local iArmageddonCountRaise = tArmageddonUnits[sUnitType]
         if iArmageddonCountRaise then
             AdjustArmageddonCount(iArmageddonCountRaise)
-        end
-        local bHasProphecyMark = pUnit:GetAbility():HasAbility('ABILITY_PROPHECY_MARK')
-        if bHasProphecyMark then
-            AdjustArmageddonCount(1)
             local pPlayer = Players[playerID]
-            local tProphecyUnits = pPlayer:GetProperty('ProphecyMarkUnits')
-            if tProphecyUnits then
-                tProphecyUnits[unitID] = true
-            else
-                tProphecyUnits = {[unitID] = true}
-            end
-            pPlayer:SetProperty('ProphecyMarkUnits', tProphecyUnits)
+            local tArmaUnits = pPlayer:GetProperty('ArmageddonIncreaserUnits') or {}
+            tArmaUnits[unitID] = iArmageddonCountRaise
+            pPlayer:SetProperty('ProphecyMarkUnits', tArmaUnits)
         end
     end
 end
@@ -146,6 +139,25 @@ function ArmageddonUnitDied(killedPlayerID, killedUnitID, playerID, unitID)
             tProphecyUnits[killedUnitID] = nil
             pPlayer:SetProperty('ProphecyMarkUnits', tProphecyUnits)
         end
+        local tArmaUnits = pPlayer:GetProperty('ArmageddonIncreaserUnits') or {}
+        if tArmaUnits[unitID]  then
+            AdjustArmageddonCount(tArmaUnits[unitID])
+            tArmaUnits[unitID] = nil
+            pPlayer:SetProperty('ProphecyMarkUnits', tArmaUnits)
+        end
+    end
+end
+
+local iProphecyMarkAbility = GameInfo.UnitAbilities['ABILITY_PROPHECY_MARK'].Index
+function onProphecyMarkGainedCheck(playerID, unitID, unitAbilityIndex)
+    print('is it armageddon', unitAbilityIndex)          -- also do the
+    if unitAbilityIndex == iProphecyMarkAbility then
+        print('added prophecy mark unit')
+        AdjustArmageddonCount(1)
+        local pPlayer = Players[playerID]
+        local tProphecyUnits = pPlayer:GetProperty('ProphecyMarkUnits') or {}
+        tProphecyUnits[unitID] = true
+        pPlayer:SetProperty('ProphecyMarkUnits', tProphecyUnits)
     end
 end
 -- building tracker, create increase armageddon, delete decrease
@@ -901,6 +913,7 @@ Events.UnitKilledInCombat.Add(ArmageddonUnitDied)
 GameEvents.BuildingConstructed.Add(ArmageddonBuildingMade)
 Events.CityProjectCompleted.Add(ArmaProjectComplete)
 
+Events.UnitAbilityGained.Add(onProphecyMarkGainedCheck)
 -- hell terrain spread
 GameEvents.OnGameTurnStarted.Add(HellSpread)
 

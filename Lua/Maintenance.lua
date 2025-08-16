@@ -292,19 +292,19 @@ function adjustSliders(playerId, pPlayer, pReligion, iExtraTax)
         local pPlot = pCapitalCity:GetPlot()
         local playerTreasury = pPlayer:GetTreasury()
         local goldYield = playerTreasury:GetGoldYield() - playerTreasury:GetTotalMaintenance() - iExtraTax;
-        print('goldyield is treasuryYield - maintenance - extraTax', playerTreasury:GetGoldYield(), '-', playerTreasury:GetTotalMaintenance(), '-', iExtraTax, '=', goldYield)
+        -- print('goldyield is treasuryYield - maintenance - extraTax', playerTreasury:GetGoldYield(), '-', playerTreasury:GetTotalMaintenance(), '-', iExtraTax, '=', goldYield)
         local goldBalance = math.floor(playerTreasury:GetGoldBalance());
         local iGoldRatio = pPlot:GetProperty(sCommerceGoldConversionKey) or 1
         local faithYield = pReligion:GetFaithYield();
         local iCurrentCommerceGold = faithYield * iGoldRatio /10
         local noCommerceGoldYield = goldYield - iCurrentCommerceGold
-        print('For player:', playerId, 'Commerce', faithYield, 'GoldRatio', iGoldRatio, 'Gold From Commerce', iCurrentCommerceGold, 'Gold without Commerce', noCommerceGoldYield)
+        -- print('For player:', playerId, 'Commerce', faithYield, 'GoldRatio', iGoldRatio, 'Gold From Commerce', iCurrentCommerceGold, 'Gold without Commerce', noCommerceGoldYield)
         local iNewGoldAmount
-        print('is gold yield below 0',goldYield )
-        print('Gold loss',-goldYield, '> ', goldBalance, ' and is 10 >', iGoldRatio)
+        -- print('is gold yield below 0',goldYield )
+        -- print('Gold loss',-goldYield, '> ', goldBalance, ' and is 10 >', iGoldRatio)
         if goldYield < 0 and -goldYield > goldBalance and iGoldRatio < 10 then                  -- in the red, try adjust slider
             iNewGoldAmount = math.ceil((-noCommerceGoldYield * 10) / faithYield)
-            print('We were in the red, changing sliders: commerce/GoldWithoutCommerce/NewGoldRatio', faithYield, noCommerceGoldYield, iNewGoldAmount)
+            -- print('We were in the red, changing sliders: commerce/GoldWithoutCommerce/NewGoldRatio', faithYield, noCommerceGoldYield, iNewGoldAmount)
         else
             -- positive gold. If the yield per turn is more than 10% gold ratio, adjust so
             -- instead get the minimum unit, 10% and adjust so its always 10% more than required.
@@ -312,39 +312,39 @@ function adjustSliders(playerId, pPlayer, pReligion, iExtraTax)
             local bIsManualSliders = pPlayer:GetProperty(sManualSlidersKey) or 0
             if bIsManualSliders == 1 then
                 iNewGoldAmount = iGoldRatio
-                print('player had manually set sliders.')
+                -- print('player had manually set sliders.')
             else
-                print('we were ok gold wise, and no sliders set, see if we wanna adjust gold ratio', iGoldRatio)
+                -- print('we were ok gold wise, and no sliders set, see if we wanna adjust gold ratio', iGoldRatio)
                 if iGoldRatio < 10 then                      -- if all science, dont bother
                     local iGoldPer10 = faithYield/10
                     -- given the noCommerceGoldYield, what number of iGoldPer10 need added to make it at least iGoldPer10 gold
                     -- iGoldPer10 = noCommerceGoldYield + n*iGoldPer10
-                    print('10pct of our commerce is granting', iGoldPer10)
-                    print('aim to get at least 10pct commerce in the black')
-                    print('Without any commerce our gold yield is', noCommerceGoldYield)
-                    print('how many instances of 10pct commerce grant us 10pct gold positive?')
-                    print('assume', iGoldPer10, 'positive gold yield, then we subtract our gold yield from that')
-                    print(iGoldPer10, '-', noCommerceGoldYield, '=', (iGoldPer10 - noCommerceGoldYield))
-                    print('Thats the amount of gold we want to earn from our commerce.',  (iGoldPer10 - noCommerceGoldYield))
-                    print('So how many instances of our 10pct commerce fit into that')
-                    print((iGoldPer10 - noCommerceGoldYield),  '/', iGoldPer10, (iGoldPer10 - noCommerceGoldYield)/iGoldPer10)
+                    -- print('10pct of our commerce is granting', iGoldPer10)
+                    -- print('aim to get at least 10pct commerce in the black')
+                    -- print('Without any commerce our gold yield is', noCommerceGoldYield)
+                    -- print('how many instances of 10pct commerce grant us 10pct gold positive?')
+                    -- print('assume', iGoldPer10, 'positive gold yield, then we subtract our gold yield from that')
+                    -- print(iGoldPer10, '-', noCommerceGoldYield, '=', (iGoldPer10 - noCommerceGoldYield))
+                    -- print('Thats the amount of gold we want to earn from our commerce.',  (iGoldPer10 - noCommerceGoldYield))
+                    -- print('So how many instances of our 10pct commerce fit into that')
+                    -- print((iGoldPer10 - noCommerceGoldYield),  '/', iGoldPer10, (iGoldPer10 - noCommerceGoldYield)/iGoldPer10)
                     iNewGoldAmount = math.ceil((iGoldPer10 - noCommerceGoldYield) / iGoldPer10)
-                    print('then rounded up', iNewGoldAmount)
+                    -- print('then rounded up', iNewGoldAmount)
                 else
                     iNewGoldAmount = iGoldRatio
                 end
             end
         end
-        print('Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
+        -- print('Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
         if iNewGoldAmount > 10 then iNewGoldAmount = 10 end                 -- oh dear, still in the red.
         if iNewGoldAmount < 0 then iNewGoldAmount = 0 end
         local iNewScienceAmount = 10 - iNewGoldAmount
-        print('Post adjust Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
-        print('science ratio', iNewScienceAmount)
+        -- print('Post adjust Old/New commerce into gold ratio:',iGoldRatio, iNewGoldAmount)
+        -- print('science ratio', iNewScienceAmount)
         if iNewGoldAmount ~= iGoldRatio then
             setPlayerPropForRequirements(playerId, sCommerceGoldConversionKey, iNewGoldAmount)
             setPlayerPropForRequirements(playerId, sCommerceScienceConversionKey, iNewScienceAmount)
-            print('updating commerce conversion to Science/Gold', iNewScienceAmount, iNewGoldAmount)
+            -- print('updating commerce conversion to Science/Gold', iNewScienceAmount, iNewGoldAmount)
         end
     end
 end

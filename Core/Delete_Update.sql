@@ -13,7 +13,33 @@ UPDATE Routes_XP2 SET PrereqTech='TECH_EXPLORATION' WHERE RouteType='ROUTE_ANCIE
 
 UPDATE Eras SET TechTreeLayoutMethod='Prereq';
 -- UPDATE DiplomaticActions SET TargetPrereqCivic = 'CIVIC_HONOR', InitiatorPrereqCivic = 'CIVIC_HONOR' WHERE DiplomaticActionType = 'DIPLOACTION_DEFENSIVE_PACT';
--- deleted already in R n F i Believe
+-- these need to be here as otherwise get wiped when techs and civic are.
+UPDATE DiplomaticActions SET TargetPrereqCivic = NULL, InitiatorPrereqCivic = NULL, InitiatorPrereqTech=NULL WHERE DiplomaticActionType = 'DIPLOACTION_OPEN_BORDERS';
+UPDATE DiplomaticActions SET InitiatorObsoleteCivic='CIVIC_HONOR' WHERE DiplomaticActionType = 'DIPLOACTION_DIPLOMATIC_DELEGATION';
+UPDATE DiplomaticActions SET InitiatorPrereqCivic='CIVIC_HONOR' WHERE DiplomaticActionType = 'DIPLOACTION_RESIDENT_EMBASSY';
+
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL WHERE DiplomaticActionType= 'DIPLOACTION_JOINT_WAR';
+
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL WHERE DiplomaticActionType= 'DIPLOACTION_DECLARE_LIBERATION_WAR';
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL WHERE DiplomaticActionType= 'DIPLOACTION_DECLARE_RECONQUEST_WAR';
+
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL WHERE DiplomaticActionType= 'DIPLOACTION_DECLARE_COLONIAL_WAR';
+
+UPDATE DiplomaticActions SET InitiatorPrereqCivic='CIVIC_FANATICISM' WHERE DiplomaticActionType= 'DIPLOACTION_DECLARE_COLONIAL_WAR';
+
+-- alliances
+
+UPDATE DiplomaticActions SET TargetPrereqCivic=NULL WHERE TargetPrereqCivic= 'CIVIC_CIVIL_SERVICE';
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL WHERE InitiatorPrereqCivic= 'CIVIC_CIVIL_SERVICE';
+
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL, InitiatorPrereqTech=NULL WHERE DiplomaticActionType= 'DIPLOACTION_DECLARE_WAR_OF_RETRIBUTION';
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL, InitiatorPrereqTech=NULL WHERE DiplomaticActionType= 'DIPLOACTION_THIRD_PARTY_WAR';
+
+-- DIPLOACTION_DECLARE_LIBERATION_WAR
+
+DELETE FROM DiplomaticActions  WHERE DiplomaticActionType= 'DIPLOACTION_GRANT_INFLUENCE_TOKEN';
+
+
 DELETE FROM Technologies;
 DELETE FROM TechnologyPrereqs;
 DELETE FROM Technologies_XP2;
@@ -94,6 +120,21 @@ DELETE FROM Leaders WHERE InheritFrom= 'LEADER_DEFAULT';
 
 -- fix building woods. If set to null its free, which isnt right.
 UPDATE Features SET AddCivic='CIVIC_DIVINE_ESSENCE' WHERE FeatureType='FEATURE_FOREST';
+
+-- update diplo actions so they dont get wrecked by delete techs and civics
+UPDATE DiplomaticActions SET InitiatorPrereqTech='TECH_CARTOGRAPHY' WHERE DiplomaticActionType = 'DIPLOACTION_OPEN_BORDERS';
+UPDATE DiplomaticActions SET InitiatorPrereqCivic='CIVIC_CODE_OF_LAWS' WHERE DiplomaticActionType= 'DIPLOACTION_JOINT_WAR';
+
+UPDATE DiplomaticActions SET InitiatorPrereqCivic='CIVIC_FEUDALISM' WHERE DiplomaticActionType= 'DIPLOACTION_DECLARE_COLONIAL_WAR';
+
+UPDATE DiplomaticActions SET TargetPrereqCivic='CIVIC_FEUDALISM', InitiatorPrereqCivic='CIVIC_FEUDALISM' WHERE DiplomaticActionType IN ('DIPLOACTION_ALLIANCE', 'DIPLOACTION_ALLIANCE_RESEARCH', 'DIPLOACTION_ALLIANCE_MILITARY',
+                                                                                                                                       'DIPLOACTION_ALLIANCE_ECONOMIC', 'DIPLOACTION_ALLIANCE_CULTURAL', 'DIPLOACTION_ALLIANCE_RELIGIOUS');
+
+
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL, InitiatorPrereqTech='TECH_CARTOGRAPHY' WHERE DiplomaticActionType= 'DIPLOACTION_DECLARE_WAR_OF_RETRIBUTION';
+UPDATE DiplomaticActions SET InitiatorPrereqCivic=NULL, InitiatorPrereqTech='TECH_CARTOGRAPHY' WHERE DiplomaticActionType= 'DIPLOACTION_THIRD_PARTY_WAR';
+
+
 
 -- UPDATE Building_YieldChanges SET YieldChange = 100 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_CULTURE';
 -- UPDATE Building_YieldChanges SET YieldChange = 999 WHERE BuildingType = 'BUILDING_PALACE' AND YieldType = 'YIELD_GOLD';

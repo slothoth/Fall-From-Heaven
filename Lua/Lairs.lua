@@ -36,7 +36,6 @@ end
 tLairUnitIndices = {}
 tLairUnits = {}
 for row in GameInfo.LairUnits() do
-    print(row.UnitType)
     local unitInfo = GameInfo.Units[row.UnitType]
     local iUnitIndex = unitInfo.Index
     tLairUnitIndices[row.UnitType] = unitInfo

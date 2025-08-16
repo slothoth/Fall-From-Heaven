@@ -963,6 +963,8 @@ function DovielloUpgradeForeignOverride(v,tResults, bDisabled, pUnit, toolTipStr
 	return bDisabled, bDovielloUpgrade, toolTipString, tDovielloUpgradeParams
 end
 
+local iPrereqExperience, iPrereqNationalMax
+
 function amendNationalPromoToolTip(toolTipString, bDisabledExperience, bDisabledNational)
 	if bDisabledExperience then
 		toolTipString = toolTipString .. "[NEWLINE]" .. "[COLOR:Red]" .. Locale.Lookup("LOC_UPGRADE_LEVEL_FAILED", iPrereqExperience) .. "[ENDCOLOR]";
@@ -976,8 +978,8 @@ end
 function CustomUpgradeTest(toolTipString, upgradeUnitInfo, pUnit, bDisabled)
 	local bDisabledExperience, bDisabledNational
 	print(toolTipString)
-	local iPrereqExperience = tExperienceUpgrades[upgradeUnitInfo.UnitType]						-- experience and national unit gating, human only sadly
-	local iPrereqNationalMax = tNationalUpgrades[upgradeUnitInfo.UnitType]
+	iPrereqExperience = tExperienceUpgrades[upgradeUnitInfo.UnitType]						-- experience and national unit gating, human only sadly
+	iPrereqNationalMax = tNationalUpgrades[upgradeUnitInfo.UnitType]
 	print('checking if have experience, is prereq/actual', iPrereqExperience, pUnit:GetExperience():GetLevel())
 	if iPrereqExperience and pUnit:GetExperience():GetLevel() < iPrereqExperience then
 		bDisabled = true

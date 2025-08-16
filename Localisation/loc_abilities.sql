@@ -1026,7 +1026,8 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_RUSTED_DESCRIPTION', '-2[ICON_STRENGTH] Combat Strength from Rusted.', 'en_US'),
 ('MODIFIER_MINOR_WEAK_STRENGTH_LOSS', '-{1_Amount}[ICON_STRENGTH] Combat Strength from Weak.', 'en_US'),
 ('LOC_ABILITY_SUMMONED_STRENGTH_DESCRIPTION', '+{1_Amount}[ICON_STRENGTH] Combat Strength from Summoner Trait.', 'en_US'),
-('LOC_DISEASED_COMBAT_WEAKNESS_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength from Diseased. Spreads Disease to melee Combatants.', 'en_US'),
+('LOC_DISEASED_COMBAT_WEAKNESS_DESCRIPTION', '{1_Amount}[ICON_Strength] Combat Strength from Diseased. Spreads Disease to melee Combatants.', 'en_US'),
+('LOC_DISEASED__DESCRIPTION', '-6[ICON_Strength] Combat Strength from Diseased. Spreads Diseased to melee Combatants.', 'en_US'),
 ('LOC_ABILITY_BRONZE_WEAPONS_DESCRIPTION', '+5 [ICON_Strength] Combat Strength from Bronze Weapons.', 'en_US'),
 ('LOC_ABILITY_IRON_WEAPONS_DESCRIPTION', '+10[ICON_Strength] Combat Strength from Iron Weapons', 'en_US'),
 ('LOC_ABILITY_MITHRIL_WEAPONS_DESCRIPTION', '+19[ICON_Strength] Combat Strength from Mithril Weapons.', 'en_US'),
@@ -1058,8 +1059,11 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_REGENERATION_DESCRIPTION', '10% Increased Healing. Removed at full HP.', 'en_US'),
 ('LOC_ABILITY_IMMUNE_TO_DISEASE_DESCRIPTION', 'Cannot be affected by Disease', 'en_US'),
 ('LOC_STONESKIN_PREVIEW_DESCRIPTION', '+{1_Amount}[ICON_Strength] Combat Strength on Defense from Stoneskin. Removed after Combat.', 'en_US'),
-('LOC_ABILITY_IMMUNE_TO_DISEASE_DESCRIPTION', 'Cannot be affected by Disease', 'en_US');
-
+('LOC_ABILITY_IMMUNE_TO_DISEASE_DESCRIPTION', 'Cannot be affected by Disease', 'en_US'),
+('LOC_SLTH_ABILITY_SUMMONER_DESCRIPTION', 'Units Summoned by this unit last an additional turn, and have +2[ICON_Strength] Combat Strength.', 'en_US'),
+('ABILITY_PROPHECY_MARK', '+1[ICON_Movement] Movement while on Hills.', 'en_US'),
+('LOC_ABILITY_PROPHECY_MARK_NAME', 'Prophecy Mark', 'en_US'),
+('LOC_ABILITY_PROPHECY_MARK_DESCRIPTION', '+1[ICON_RESOURCE_MANA_FIRE] to the Armageddon Counter while this unit is alive.', 'en_US');
 
 
 
