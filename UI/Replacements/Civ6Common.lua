@@ -389,7 +389,7 @@ function GetLeaderUniqueTraits( leaderType:string, useFullDescriptions:boolean )
 							end
 						end
 						for propKey, sTraitType in pairs(tTraitPropKeys) do
-							local iTraitActive = pInsanePlayer:GetProperty(propKey)
+							local iTraitActive = pInsanePlayer:GetProperty(propKey)         -- it wont be? or will it.
 							if iTraitActive and iTraitActive > 0 then
 								local varTrait = GameInfo.Traits[sTraitType];
 								table.insert(traits, varTrait);

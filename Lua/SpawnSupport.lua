@@ -399,7 +399,6 @@ end
 --- Gets the indices of all adjacent tiles for a given tile index.
 function get_neighbors(index)
     local neighbors = {}
-    print('in neighbor function')
     local q, r = index_to_axial(index)
     print('')
     for _, dir in ipairs(axial_directions) do

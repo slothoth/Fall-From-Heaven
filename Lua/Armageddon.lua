@@ -1,11 +1,6 @@
--- [ ] Hijack Global Warming panel. We probably just steal the UI design of it.
--- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
- --[ ]  Attach some Projects when armageddon hits 70. To do not unlock, need it to be pPlot:SetProperty() on capital
-
 include('SpawnSupport')
 
-tArmageddonEvents = {[10]=fWarning,[30]=Blight, [40]=ArmaSummonSteph, [50]=ArmaSummonBuboes, [60]=ArmaSummonYersinia,
-                     [70]=ArmaSummonArs,  [90]=ArmaSpawnWrath, [100]=ArmaKillHalf}
+
 -- helper
 function reverse_table(t)
     local reversed = {}
@@ -21,17 +16,14 @@ function AdjustArmageddonCount(iAmount)
     if iArmageddonCount then
         local iNewArmageddonCount = iArmageddonCount + iAmount
         Game.SetProperty('ARMAGEDDON', iNewArmageddonCount)
-        local iArmaEventTracker = Game.GetProperty('ARMAGEDDON_event_count') or 0
-        local doEvent = 0
-        for idx, fEvent in ipairs(tArmageddonEvents) do
-            if doEvent > 0 then
-                Game.SetProperty('ARMAGEDDON_event_count', idx)
-                fEvent()
-                break
-            end
-            if idx < iArmageddonCount and iNewArmageddonCount > idx then
-                if idx > iArmaEventTracker then
-                    doEvent = 1
+        for iArmaRequired, tEventInfo in pairs(tArmageddonEvents) do
+            if iNewArmageddonCount > iArmaRequired then
+                local bEventFiredBefore = Game.GetProperty(tEventInfo.propkey)
+                if not bEventFiredBefore then
+                    local eventFunc = tEventInfo.ifunc
+                    eventFunc()
+                    NotifyAllHumans(tEventInfo.notif_title, tEventInfo.notif_descrip)
+                    Game.SetProperty(tEventInfo.propkey, true)
                 end
             end
         end
@@ -663,6 +655,11 @@ function ArmaSummonArs ()
     SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_ARS'].Index, tEligiblePlots)
 end
 
+function ArmaHellFire ()
+    -- Hellfire nodes spawn randomly on the map. Hellfires can spawn powerful barbarian Demon units, or if in Infernal held lands, spawn Demon Champions.
+    -- continously?
+end
+
 function ArmaSpawnWrath ()
     local tEligiblePlots = ViableWildernessPlots()
     SpawnUnitInWilderness(GameInfo.Units['UNIT_WRATH'].Index, tEligiblePlots)
@@ -671,6 +668,17 @@ end
 function ArmaKillHalf ()
     -- lose half of ALL units, half of all city pop
 end
+
+tArmageddonEvents = {[10]= { ifunc=fWarning, propkey='ArmaWarning', notif_title='LOC_ARMAGEDDON_WARNING_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_WARNING_NOTIFICATION_DESCRIPTION'},
+                     [30]= { ifunc=Blight, propkey='ArmaBlight', notif_title='LOC_ARMAGEDDON_BLIGHT_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_BLIGHT_NOTIFICATION_DESCRIPTION'},
+                     [40]= { ifunc=ArmaSummonSteph, propkey='ArmaStephanos', notif_title='LOC_ARMAGEDDON_STEPHANOS_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_STEPHANOS_NOTIFICATION_DESCRIPTION' },
+                     [50]= { ifunc=ArmaSummonBuboes, propkey='ArmaBuboes', notif_title='LOC_ARMAGEDDON_BUBOES_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_BUBOES_NOTIFICATION_DESCRIPTION'},
+                     [60]= { ifunc=ArmaSummonYersinia, propkey='ArmaYersinia', notif_title='LOC_ARMAGEDDON_YERSINIA_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_YERSINIA_NOTIFICATION_DESCRIPTION'},
+                     [70]= { ifunc=ArmaSummonArs, propkey='ArmaArs', notif_title='LOC_ARMAGEDDON_ARS_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_ARS_NOTIFICATION_DESCRIPTION' },
+                     [80]= { ifunc=ArmaHellFire, propkey='ArmaHellFire', notif_title='LOC_ARMAGEDDON_HELLFIRE_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_HELLFIRE_NOTIFICATION_DESCRIPTION' },
+
+                     [90]= { ifunc=ArmaSpawnWrath , propkey='ArmaWrath', notif_title='LOC_ARMAGEDDON_WRATH_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_WRATH_NOTIFICATION_DESCRIPTION'},
+                     [100]= { ifunc=ArmaKillHalf, propkey='ArmaKillHalf', notif_title='LOC_ARMAGEDDON_SNAP_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_SNAP_NOTIFICATION_DESCRIPTION' }}
 
 local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true,
                         [GameInfo.Terrains['TERRAIN_TUNDRA_HILLS'].Index] = true,
@@ -845,6 +853,7 @@ function SetHellTerrain(pPlot)
             TerrainBuilder.SetFeatureType(pPlot, iNewFeatureIndex)
         end
     end
+    print('setting plot to hell terrain: ', pPlot:GetX(), pPlot:GetY())
     hellTerrainResourceSwap(pPlot)
 end
 
