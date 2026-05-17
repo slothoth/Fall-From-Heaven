@@ -1850,7 +1850,7 @@
 				<m_Fields>
 					<m_Values>
 						<Element class="AssetObjects..BoolValue">
-							<m_bValue>true</m_bValue>
+							<m_bValue>false</m_bValue>
 							<m_ParamName text="FlattenTerrain"/>
 						</Element>
 						<Element class="AssetObjects..StringValue">
@@ -1891,7 +1891,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="TER_Geothermal_Fissure_Decal_LM_01"/>
+										<m_EntryName text="TileBase_BrokenLands"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -1909,9 +1909,31 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="TER_Geothermal_Fissure_Decal_LM_01"/>
+							<m_Name text="TER_BrokenLands_01"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
+					</Element>
+				</m_ChildCollections>
+				<m_Name text="LM_Broken_Lands"/>
+				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+			</Element>
+			<Element>
+				<m_Fields>
+					<m_Values>
+						<Element class="AssetObjects..BoolValue">
+							<m_bValue>false</m_bValue>
+							<m_ParamName text="FlattenTerrain"/>
+						</Element>
+						<Element class="AssetObjects..StringValue">
+							<m_Value text="EVERY_60"/>
+							<m_ParamName text="RotationType"/>
+						</Element>
+					</m_Values>
+				</m_Fields>
+				<m_ChildCollections>
+					<Element>
+						<m_CollectionName text="Eras"/>
+						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 						<Element>
 							<m_Fields>
 								<m_Values>
@@ -1940,7 +1962,7 @@
 										<m_ParamName text="Tag_Appeal"/>
 									</Element>
 									<Element class="AssetObjects..BLPEntryValue">
-										<m_EntryName text="TER_Geothermal_Fissure_Decal_LM_02"/>
+										<m_EntryName text="TileBase_FieldsOfPerdition"/>
 										<m_XLPClass text="TileBase"/>
 										<m_XLPPath text="tilebases.xlp"/>
 										<m_BLPPackage text="landmarks/tilebases"/>
@@ -1958,12 +1980,12 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="TER_Geothermal_Fissure_Decal_LM_01001"/>
+							<m_Name text="TER_FieldsOfPerdition_01"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="FEATURE_BROKEN_LANDS"/>
+				<m_Name text="LM_Fields_Of_Perdition"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>
