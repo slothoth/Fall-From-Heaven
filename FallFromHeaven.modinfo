@@ -101,6 +101,13 @@
             <Value>0</Value>
         </ConfigurationValueMatches>
     </Criteria>
+    <Criteria id="BarbarianClansMode">
+        <ConfigurationValueMatches>
+            <Group>Game</Group>
+            <ConfigurationId>GAMEMODE_BARBARIAN_CLANS</ConfigurationId>
+            <Value>1</Value>
+        </ConfigurationValueMatches>
+    </Criteria>
   </ActionCriteria>
   <FrontEndActions>
     <UpdateDatabase id="config">
@@ -237,8 +244,6 @@
       <File>Core/Specialists/GreatPersons.sql</File>
       <File>Core/Modifier_Support.sql</File>
       <File>Core/Assets_ingame.sql</File>
-      <File>BarbClans/BarbarianClans.sql</File>
-      <File>BarbClans/Lairs.sql</File>
       <File>Core/Features.sql</File>
       <File>Core/Globals.sql</File>
       <File>Core/Victories.sql</File>
@@ -305,6 +310,10 @@
     <UpdateDatabase id="VietnamFallbackFFH" criteria="VietnamNotOn">
       <File>DLC_Compat/vietnam.sql</File>
     </UpdateDatabase>
+    <UpdateDatabase id="FFHBarbarianClans" criteria="BarbarianClansMode">
+      <File>BarbClans/BarbarianClans.sql</File>
+      <File>BarbClans/Lairs.sql</File>
+	</UpdateDatabase>
     <UpdateText id="FFHText">
        <Properties>
         <LoadOrder>500</LoadOrder>
