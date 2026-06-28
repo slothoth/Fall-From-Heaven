@@ -1,0 +1,953 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="10" SoundbankVersion="113">
+	<RootPaths>
+		<ProjectRoot>F:\docker_pass_point\FallFromHeavenMusic\</ProjectRoot>
+		<SourceFilesRoot>F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\</SourceFilesRoot>
+		<SoundBanksRoot>F:\docker_pass_point\FallFromHeavenMusic\GeneratedSoundBanks\Windows\</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>F:\docker_pass_point\FallFromHeavenMusic\GeneratedSoundBanks\Windows\</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<StreamedFiles>
+		<File Id="1819081" Language="SFX">
+			<ShortName>RichDouglas2.wav</ShortName>
+			<Path>SFX\RichDouglas2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="6870636" Language="SFX">
+			<ShortName>Hymn of Absolute Deceit.wav</ShortName>
+			<Path>SFX\Hymn of Absolute Deceit_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="52269306" Language="SFX">
+			<ShortName>Rune1.wav</ShortName>
+			<Path>SFX\Rune1_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="69789600" Language="SFX">
+			<ShortName>AncientSoundtrack2.wav</ShortName>
+			<Path>SFX\AncientSoundtrack2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="71309043" Language="SFX">
+			<ShortName>AnonymousAySantaMaria.wav</ShortName>
+			<Path>SFX\AnonymousAySantaMaria_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="74985453" Language="SFX">
+			<ShortName>Omens.wav</ShortName>
+			<Path>SFX\Omens_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="75019311" Language="SFX">
+			<ShortName>Veil5.wav</ShortName>
+			<Path>SFX\Veil5_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="86436533" Language="SFX">
+			<ShortName>Octo8.wav</ShortName>
+			<Path>SFX\Octo8_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="88913689" Language="SFX">
+			<ShortName>HighlandStorm.wav</ShortName>
+			<Path>SFX\HighlandStorm_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="94007058" Language="SFX">
+			<ShortName>AncientSoundtrack4.wav</ShortName>
+			<Path>SFX\AncientSoundtrack4_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="106951828" Language="SFX">
+			<ShortName>ChristianZeal.wav</ShortName>
+			<Path>SFX\ChristianZeal_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="125078373" Language="SFX">
+			<ShortName>Nocturne.wav</ShortName>
+			<Path>SFX\Nocturne_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="130055884" Language="SFX">
+			<ShortName>WidowsHarbor.wav</ShortName>
+			<Path>SFX\WidowsHarbor_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="130679889" Language="SFX">
+			<ShortName>Innocent Child.wav</ShortName>
+			<Path>SFX\Innocent Child_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="133912637" Language="SFX">
+			<ShortName>TrombaLontana.wav</ShortName>
+			<Path>SFX\TrombaLontana_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="148494688" Language="SFX">
+			<ShortName>PraetoriusVolte.wav</ShortName>
+			<Path>SFX\PraetoriusVolte_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="169280445" Language="SFX">
+			<ShortName>Rune5.wav</ShortName>
+			<Path>SFX\Rune5_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="171580818" Language="SFX">
+			<ShortName>TheSiege.wav</ShortName>
+			<Path>SFX\TheSiege_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="192765785" Language="SFX">
+			<ShortName>Love Eternal.wav</ShortName>
+			<Path>SFX\Love Eternal_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="202606698" Language="SFX">
+			<ShortName>SheppardMediaVita.wav</ShortName>
+			<Path>SFX\SheppardMediaVita_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="204331546" Language="SFX">
+			<ShortName>LassusAlmaRedemptorisMater.wav</ShortName>
+			<Path>SFX\LassusAlmaRedemptorisMater_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="216067834" Language="SFX">
+			<ShortName>Rune3.wav</ShortName>
+			<Path>SFX\Rune3_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="216246112" Language="SFX">
+			<ShortName>PalestrinaCredo.wav</ShortName>
+			<Path>SFX\PalestrinaCredo_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="224382463" Language="SFX">
+			<ShortName>Leaf2.wav</ShortName>
+			<Path>SFX\Leaf2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="234041257" Language="SFX">
+			<ShortName>Leaf1.wav</ShortName>
+			<Path>SFX\Leaf1_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="253281140" Language="SFX">
+			<ShortName>songofthedeadsun.wav</ShortName>
+			<Path>SFX\songofthedeadsun_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="257229580" Language="SFX">
+			<ShortName>Rune6.wav</ShortName>
+			<Path>SFX\Rune6_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="266431511" Language="SFX">
+			<ShortName>Leaf5.wav</ShortName>
+			<Path>SFX\Leaf5_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="279596073" Language="SFX">
+			<ShortName>thevoid.wav</ShortName>
+			<Path>SFX\thevoid_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="293764152" Language="SFX">
+			<ShortName>Brahms3 3.wav</ShortName>
+			<Path>SFX\Brahms3 3_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="302177119" Language="SFX">
+			<ShortName>AncientSoundtrack1.wav</ShortName>
+			<Path>SFX\AncientSoundtrack1_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="316276812" Language="SFX">
+			<ShortName>Crossfire.wav</ShortName>
+			<Path>SFX\Crossfire_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="321486893" Language="SFX">
+			<ShortName>Wings Of The Lost Soul.wav</ShortName>
+			<Path>SFX\Wings Of The Lost Soul_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="327221566" Language="SFX">
+			<ShortName>DeLaTorreAlta.wav</ShortName>
+			<Path>SFX\DeLaTorreAlta_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="330940366" Language="SFX">
+			<ShortName>ChantLaudate.wav</ShortName>
+			<Path>SFX\ChantLaudate_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="371764239" Language="SFX">
+			<ShortName>CrystalForest.wav</ShortName>
+			<Path>SFX\CrystalForest_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="375609768" Language="SFX">
+			<ShortName>leserpentrouge.wav</ShortName>
+			<Path>SFX\leserpentrouge_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="375832524" Language="SFX">
+			<ShortName>DesprezLament.wav</ShortName>
+			<Path>SFX\DesprezLament_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="385228163" Language="SFX">
+			<ShortName>DefendersOfTheRealm.wav</ShortName>
+			<Path>SFX\DefendersOfTheRealm_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="388849913" Language="SFX">
+			<ShortName>The Last Embrace.wav</ShortName>
+			<Path>SFX\The Last Embrace_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="389728841" Language="SFX">
+			<ShortName>The Calm Before The Storm.wav</ShortName>
+			<Path>SFX\The Calm Before The Storm_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="403085916" Language="SFX">
+			<ShortName>DesprezElGrillo.wav</ShortName>
+			<Path>SFX\DesprezElGrillo_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="406109454" Language="SFX">
+			<ShortName>Rune2.wav</ShortName>
+			<Path>SFX\Rune2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="406381401" Language="SFX">
+			<ShortName>The Opening Of The Wound.wav</ShortName>
+			<Path>SFX\The Opening Of The Wound_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="409589539" Language="SFX">
+			<ShortName>Veil6.wav</ShortName>
+			<Path>SFX\Veil6_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="426064341" Language="SFX">
+			<ShortName>Void Of Silence.wav</ShortName>
+			<Path>SFX\Void Of Silence_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="445226214" Language="SFX">
+			<ShortName>Orde4.wav</ShortName>
+			<Path>SFX\Orde4_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="449595019" Language="SFX">
+			<ShortName>OckeghemIntemerata.wav</ShortName>
+			<Path>SFX\OckeghemIntemerata_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="462251060" Language="SFX">
+			<ShortName>AnonymousLaGamba.wav</ShortName>
+			<Path>SFX\AnonymousLaGamba_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="463965762" Language="SFX">
+			<ShortName>enigmaoftheabsolute.wav</ShortName>
+			<Path>SFX\enigmaoftheabsolute_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="464562009" Language="SFX">
+			<ShortName>Dvorak9 2.wav</ShortName>
+			<Path>SFX\Dvorak9 2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="480902899" Language="SFX">
+			<ShortName>Ella Sheena.wav</ShortName>
+			<Path>SFX\Ella Sheena_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="491851568" Language="SFX">
+			<ShortName>Veil9.wav</ShortName>
+			<Path>SFX\Veil9_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="504040921" Language="SFX">
+			<ShortName>Blood Of Angels.wav</ShortName>
+			<Path>SFX\Blood Of Angels_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="506365091" Language="SFX">
+			<ShortName>BlackSpires.wav</ShortName>
+			<Path>SFX\BlackSpires_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="510329626" Language="SFX">
+			<ShortName>Veil2.wav</ShortName>
+			<Path>SFX\Veil2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="516028506" Language="SFX">
+			<ShortName>Octo10.wav</ShortName>
+			<Path>SFX\Octo10_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="517872084" Language="SFX">
+			<ShortName>HymingSlews.wav</ShortName>
+			<Path>SFX\HymingSlews_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="553146565" Language="SFX">
+			<ShortName>The Song Of Preperation.wav</ShortName>
+			<Path>SFX\The Song Of Preperation_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="558110006" Language="SFX">
+			<ShortName>OckeghemKyrie.wav</ShortName>
+			<Path>SFX\OckeghemKyrie_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="558139060" Language="SFX">
+			<ShortName>TheGallowsJig.wav</ShortName>
+			<Path>SFX\TheGallowsJig_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="568128482" Language="SFX">
+			<ShortName>reminiscence.wav</ShortName>
+			<Path>SFX\reminiscence_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="568351328" Language="SFX">
+			<ShortName>ChairmanDances.wav</ShortName>
+			<Path>SFX\ChairmanDances_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="573192550" Language="SFX">
+			<ShortName>ConquestsRoman.wav</ShortName>
+			<Path>SFX\ConquestsRoman_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="580847974" Language="SFX">
+			<ShortName>Ebonshire.wav</ShortName>
+			<Path>SFX\Ebonshire_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="589894469" Language="SFX">
+			<ShortName>ECDemo.wav</ShortName>
+			<Path>SFX\ECDemo_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="632960122" Language="SFX">
+			<ShortName>DarklyEverafter.wav</ShortName>
+			<Path>SFX\DarklyEverafter_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="638811279" Language="SFX">
+			<ShortName>VeniVeniEmannuel.wav</ShortName>
+			<Path>SFX\VeniVeniEmannuel_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="648473643" Language="SFX">
+			<ShortName>My Cold Sea.wav</ShortName>
+			<Path>SFX\My Cold Sea_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="650260436" Language="SFX">
+			<ShortName>Through The Grey Horizon.wav</ShortName>
+			<Path>SFX\Through The Grey Horizon_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="653107435" Language="SFX">
+			<ShortName>OrtizRecercada.wav</ShortName>
+			<Path>SFX\OrtizRecercada_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="655933348" Language="SFX">
+			<ShortName>Veil8.wav</ShortName>
+			<Path>SFX\Veil8_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="707036833" Language="SFX">
+			<ShortName>Octo9.wav</ShortName>
+			<Path>SFX\Octo9_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="709143635" Language="SFX">
+			<ShortName>Rune4.wav</ShortName>
+			<Path>SFX\Rune4_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="721965429" Language="SFX">
+			<ShortName>ChantDeus.wav</ShortName>
+			<Path>SFX\ChantDeus_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="729116565" Language="SFX">
+			<ShortName>AllegriMiserere.wav</ShortName>
+			<Path>SFX\AllegriMiserere_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="739850851" Language="SFX">
+			<ShortName>SkullandCrossbones.wav</ShortName>
+			<Path>SFX\SkullandCrossbones_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="743348248" Language="SFX">
+			<ShortName>Leaf3.wav</ShortName>
+			<Path>SFX\Leaf3_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="748782238" Language="SFX">
+			<ShortName>DarknessImmortal.wav</ShortName>
+			<Path>SFX\DarknessImmortal_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="752353531" Language="SFX">
+			<ShortName>Orde1.wav</ShortName>
+			<Path>SFX\Orde1_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="757015066" Language="SFX">
+			<ShortName>MistLoch.wav</ShortName>
+			<Path>SFX\MistLoch_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="772944104" Language="SFX">
+			<ShortName>Octo11.wav</ShortName>
+			<Path>SFX\Octo11_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="779247831" Language="SFX">
+			<ShortName>ConquestsFantasy1.wav</ShortName>
+			<Path>SFX\ConquestsFantasy1_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="795745704" Language="SFX">
+			<ShortName>ECTheHouse.wav</ShortName>
+			<Path>SFX\ECTheHouse_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="815539279" Language="SFX">
+			<ShortName>LabyrinthOfDreams.wav</ShortName>
+			<Path>SFX\LabyrinthOfDreams_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="815767743" Language="SFX">
+			<ShortName>Orde2.wav</ShortName>
+			<Path>SFX\Orde2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="817594105" Language="SFX">
+			<ShortName>Veil1.wav</ShortName>
+			<Path>SFX\Veil1_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="822016107" Language="SFX">
+			<ShortName>AncientSoundtrack3.wav</ShortName>
+			<Path>SFX\AncientSoundtrack3_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="854229691" Language="SFX">
+			<ShortName>PraetoriusBransle.wav</ShortName>
+			<Path>SFX\PraetoriusBransle_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="860168825" Language="SFX">
+			<ShortName>Veil3.wav</ShortName>
+			<Path>SFX\Veil3_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="865245294" Language="SFX">
+			<ShortName>LoopsAndVerses.wav</ShortName>
+			<Path>SFX\LoopsAndVerses_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="867313325" Language="SFX">
+			<ShortName>Orde3.wav</ShortName>
+			<Path>SFX\Orde3_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="880849003" Language="SFX">
+			<ShortName>Veil4.wav</ShortName>
+			<Path>SFX\Veil4_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="882168889" Language="SFX">
+			<ShortName>Octo5.wav</ShortName>
+			<Path>SFX\Octo5_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="895705239" Language="SFX">
+			<ShortName>Leaf4.wav</ShortName>
+			<Path>SFX\Leaf4_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="896006140" Language="SFX">
+			<ShortName>Octo7.wav</ShortName>
+			<Path>SFX\Octo7_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="899083205" Language="SFX">
+			<ShortName>VeilOfDarkness.wav</ShortName>
+			<Path>SFX\VeilOfDarkness_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="922243687" Language="SFX">
+			<ShortName>Octo3.wav</ShortName>
+			<Path>SFX\Octo3_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="923903951" Language="SFX">
+			<ShortName>Chconne.wav</ShortName>
+			<Path>SFX\Chconne_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="940528618" Language="SFX">
+			<ShortName>Angel Of Sorrow.wav</ShortName>
+			<Path>SFX\Angel Of Sorrow_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="941904999" Language="SFX">
+			<ShortName>Maure.wav</ShortName>
+			<Path>SFX\Maure_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="955497485" Language="SFX">
+			<ShortName>Brahms3 2.wav</ShortName>
+			<Path>SFX\Brahms3 2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="969847910" Language="SFX">
+			<ShortName>AnfortasWound.wav</ShortName>
+			<Path>SFX\AnfortasWound_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="988532498" Language="SFX">
+			<ShortName>Octo2.wav</ShortName>
+			<Path>SFX\Octo2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="988909119" Language="SFX">
+			<ShortName>RichDouglas1.wav</ShortName>
+			<Path>SFX\RichDouglas1_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="999209345" Language="SFX">
+			<ShortName>PalestrinaGloria.wav</ShortName>
+			<Path>SFX\PalestrinaGloria_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1009244506" Language="SFX">
+			<ShortName>ShadowForest.wav</ShortName>
+			<Path>SFX\ShadowForest_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1017820512" Language="SFX">
+			<ShortName>MeisterEckhardt.wav</ShortName>
+			<Path>SFX\MeisterEckhardt_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1026088180" Language="SFX">
+			<ShortName>Alexander.wav</ShortName>
+			<Path>SFX\Alexander_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1029173857" Language="SFX">
+			<ShortName>ThePeopleAreHeroes.wav</ShortName>
+			<Path>SFX\ThePeopleAreHeroes_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1035815169" Language="SFX">
+			<ShortName>ConquestsFantasy2.wav</ShortName>
+			<Path>SFX\ConquestsFantasy2_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1041184898" Language="SFX">
+			<ShortName>Octo6.wav</ShortName>
+			<Path>SFX\Octo6_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1042087563" Language="SFX">
+			<ShortName>Wings Of Gabriel.wav</ShortName>
+			<Path>SFX\Wings Of Gabriel_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1045771201" Language="SFX">
+			<ShortName>BrumelGloria.wav</ShortName>
+			<Path>SFX\BrumelGloria_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1049129748" Language="SFX">
+			<ShortName>Octo4.wav</ShortName>
+			<Path>SFX\Octo4_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1054416388" Language="SFX">
+			<ShortName>Octo1.wav</ShortName>
+			<Path>SFX\Octo1_4B8CC0C5.wem</Path>
+		</File>
+		<File Id="1061815146" Language="SFX">
+			<ShortName>ChantRegen.wav</ShortName>
+			<Path>SFX\ChantRegen_4B8CC0C5.wem</Path>
+		</File>
+	</StreamedFiles>
+	<MediaFilesNotInAnyBank/>
+	<SoundBanks>
+		<SoundBank Id="3087942160" Language="SFX">
+			<ShortName>FFH_Music_Bank</ShortName>
+			<Path>FFH_Music_Bank.bnk</Path>
+			<IncludedEvents>
+				<Event Id="2127344210" Name="Play_Music_FFH_Council"/>
+				<Event Id="73551948" Name="Play_Music_FFH_Empyrean"/>
+				<Event Id="1624942516" Name="Play_Music_FFH_Generic"/>
+				<Event Id="2768762917" Name="Play_Music_FFH_Leaves"/>
+				<Event Id="2102641271" Name="Play_Music_FFH_Order"/>
+				<Event Id="107211613" Name="Play_Music_FFH_Overlords"/>
+				<Event Id="1671365968" Name="Play_Music_FFH_Runes"/>
+				<Event Id="2288644201" Name="Play_Music_FFH_Veil"/>
+				<Event Id="1521991340" Name="Stop_Music_FFH_Council"/>
+				<Event Id="1510920410" Name="Stop_Music_FFH_Empyrean"/>
+				<Event Id="4096983750" Name="Stop_Music_FFH_Generic"/>
+				<Event Id="1442233019" Name="Stop_Music_FFH_Leaves"/>
+				<Event Id="3915463845" Name="Stop_Music_FFH_Order"/>
+				<Event Id="2878259207" Name="Stop_Music_FFH_Overlords"/>
+				<Event Id="2059096134" Name="Stop_Music_FFH_Runes"/>
+				<Event Id="941134195" Name="Stop_Music_FFH_Veil"/>
+			</IncludedEvents>
+			<ReferencedStreamedFiles>
+				<File Id="1819081"/>
+				<File Id="6870636"/>
+				<File Id="52269306"/>
+				<File Id="69789600"/>
+				<File Id="71309043"/>
+				<File Id="74985453"/>
+				<File Id="75019311"/>
+				<File Id="86436533"/>
+				<File Id="88913689"/>
+				<File Id="94007058"/>
+				<File Id="106951828"/>
+				<File Id="125078373"/>
+				<File Id="130055884"/>
+				<File Id="130679889"/>
+				<File Id="133912637"/>
+				<File Id="148494688"/>
+				<File Id="169280445"/>
+				<File Id="171580818"/>
+				<File Id="192765785"/>
+				<File Id="202606698"/>
+				<File Id="204331546"/>
+				<File Id="216067834"/>
+				<File Id="216246112"/>
+				<File Id="224382463"/>
+				<File Id="234041257"/>
+				<File Id="253281140"/>
+				<File Id="257229580"/>
+				<File Id="266431511"/>
+				<File Id="279596073"/>
+				<File Id="293764152"/>
+				<File Id="302177119"/>
+				<File Id="316276812"/>
+				<File Id="321486893"/>
+				<File Id="327221566"/>
+				<File Id="330940366"/>
+				<File Id="371764239"/>
+				<File Id="375609768"/>
+				<File Id="375832524"/>
+				<File Id="385228163"/>
+				<File Id="388849913"/>
+				<File Id="389728841"/>
+				<File Id="403085916"/>
+				<File Id="406109454"/>
+				<File Id="406381401"/>
+				<File Id="409589539"/>
+				<File Id="426064341"/>
+				<File Id="445226214"/>
+				<File Id="449595019"/>
+				<File Id="462251060"/>
+				<File Id="463965762"/>
+				<File Id="464562009"/>
+				<File Id="480902899"/>
+				<File Id="491851568"/>
+				<File Id="504040921"/>
+				<File Id="506365091"/>
+				<File Id="510329626"/>
+				<File Id="516028506"/>
+				<File Id="517872084"/>
+				<File Id="553146565"/>
+				<File Id="558110006"/>
+				<File Id="558139060"/>
+				<File Id="568128482"/>
+				<File Id="568351328"/>
+				<File Id="573192550"/>
+				<File Id="580847974"/>
+				<File Id="589894469"/>
+				<File Id="632960122"/>
+				<File Id="638811279"/>
+				<File Id="648473643"/>
+				<File Id="650260436"/>
+				<File Id="653107435"/>
+				<File Id="655933348"/>
+				<File Id="707036833"/>
+				<File Id="709143635"/>
+				<File Id="721965429"/>
+				<File Id="729116565"/>
+				<File Id="739850851"/>
+				<File Id="743348248"/>
+				<File Id="748782238"/>
+				<File Id="752353531"/>
+				<File Id="757015066"/>
+				<File Id="772944104"/>
+				<File Id="779247831"/>
+				<File Id="795745704"/>
+				<File Id="815539279"/>
+				<File Id="815767743"/>
+				<File Id="817594105"/>
+				<File Id="822016107"/>
+				<File Id="854229691"/>
+				<File Id="860168825"/>
+				<File Id="865245294"/>
+				<File Id="867313325"/>
+				<File Id="880849003"/>
+				<File Id="882168889"/>
+				<File Id="895705239"/>
+				<File Id="896006140"/>
+				<File Id="899083205"/>
+				<File Id="922243687"/>
+				<File Id="923903951"/>
+				<File Id="940528618"/>
+				<File Id="941904999"/>
+				<File Id="955497485"/>
+				<File Id="969847910"/>
+				<File Id="988532498"/>
+				<File Id="988909119"/>
+				<File Id="999209345"/>
+				<File Id="1009244506"/>
+				<File Id="1017820512"/>
+				<File Id="1026088180"/>
+				<File Id="1029173857"/>
+				<File Id="1035815169"/>
+				<File Id="1041184898"/>
+				<File Id="1042087563"/>
+				<File Id="1045771201"/>
+				<File Id="1049129748"/>
+				<File Id="1054416388"/>
+				<File Id="1061815146"/>
+			</ReferencedStreamedFiles>
+		</SoundBank>
+		<SoundBank Id="4045937420" Language="SFX">
+			<ShortName>FFH_SFX_Bank</ShortName>
+			<Path>FFH_SFX_Bank.bnk</Path>
+			<IncludedEvents>
+				<Event Id="3290225309" Name="Play_Airelemental"/>
+				<Event Id="3022338695" Name="Play_Bless"/>
+				<Event Id="2554242731" Name="Play_Bloom"/>
+				<Event Id="2862281988" Name="Play_Breathfire"/>
+				<Event Id="1405415345" Name="Play_Burningblood"/>
+				<Event Id="2402994977" Name="Play_Chaosmarauder"/>
+				<Event Id="6385552" Name="Play_Charmperson"/>
+				<Event Id="3748505988" Name="Play_Commanderjoin"/>
+				<Event Id="4211570972" Name="Play_Commandersplit"/>
+				<Event Id="1493714505" Name="Play_Consumesoul"/>
+				<Event Id="3412849796" Name="Play_Contagion"/>
+				<Event Id="2114383099" Name="Play_Create_Puppet"/>
+				<Event Id="3118857841" Name="Play_Crew"/>
+				<Event Id="1957834805" Name="Play_Curedisease"/>
+				<Event Id="776950229" Name="Play_Defile"/>
+				<Event Id="233362511" Name="Play_Destroyundead"/>
+				<Event Id="3833900518" Name="Play_Dispelmagic"/>
+				<Event Id="2962783794" Name="Play_Domination"/>
+				<Event Id="3891142628" Name="Play_Drown"/>
+				<Event Id="1457225453" Name="Play_Earthelemental"/>
+				<Event Id="3858448649" Name="Play_Earthquake"/>
+				<Event Id="3679029682" Name="Play_Einherjar"/>
+				<Event Id="1034556681" Name="Play_Enchantment"/>
+				<Event Id="125096435" Name="Play_Escape"/>
+				<Event Id="1903292847" Name="Play_Feast"/>
+				<Event Id="2830079482" Name="Play_Feed"/>
+				<Event Id="3015324718" Name="Play_Fire"/>
+				<Event Id="146533081" Name="Play_Fireball"/>
+				<Event Id="4052412245" Name="Play_Fireelemental"/>
+				<Event Id="3372989625" Name="Play_Foundtemple"/>
+				<Event Id="2042132698" Name="Play_Giftvampirism"/>
+				<Event Id="1439396662" Name="Play_Graftflesh"/>
+				<Event Id="3782198531" Name="Play_Haste"/>
+				<Event Id="2639148008" Name="Play_Heal"/>
+				<Event Id="2989800648" Name="Play_Hope"/>
+				<Event Id="133093501" Name="Play_HyboremsWhisper"/>
+				<Event Id="2423929232" Name="Play_Imp"/>
+				<Event Id="1163060616" Name="Play_Inquisition"/>
+				<Event Id="3522352062" Name="Play_Inspiration"/>
+				<Event Id="2888940076" Name="Play_Kraken"/>
+				<Event Id="1689559731" Name="Play_Lightningelemental"/>
+				<Event Id="1291199687" Name="Play_Mutation"/>
+				<Event Id="3581282404" Name="Play_Piratecove"/>
+				<Event Id="3038206758" Name="Play_Pitbeast"/>
+				<Event Id="612499036" Name="Play_Recruit"/>
+				<Event Id="3218577785" Name="Play_Repair"/>
+				<Event Id="2178419156" Name="Play_Resist"/>
+				<Event Id="2251647541" Name="Play_Revelation"/>
+				<Event Id="3920717341" Name="Play_Sacrifice"/>
+				<Event Id="2943793929" Name="Play_Sanctify"/>
+				<Event Id="681191272" Name="Play_Sing1"/>
+				<Event Id="681191275" Name="Play_Sing2"/>
+				<Event Id="681191274" Name="Play_Sing3"/>
+				<Event Id="681191277" Name="Play_Sing4"/>
+				<Event Id="2932198258" Name="Play_Spectre"/>
+				<Event Id="633054225" Name="Play_Spring"/>
+				<Event Id="2236164590" Name="Play_Stoneskin"/>
+				<Event Id="3969687491" Name="Play_Tiger"/>
+				<Event Id="163991396" Name="Play_Train"/>
+				<Event Id="3694953011" Name="Play_Tsunami"/>
+				<Event Id="147831418" Name="Play_UnitFalls"/>
+				<Event Id="1773906046" Name="Play_UnitRises"/>
+				<Event Id="441572235" Name="Play_Water"/>
+				<Event Id="673308595" Name="Play_Wraith"/>
+			</IncludedEvents>
+			<IncludedMemoryFiles>
+				<File Id="7677847" Language="SFX">
+					<ShortName>Spells\Hope.wav</ShortName>
+					<Path>SFX\Spells\Hope_9E69E797.wem</Path>
+				</File>
+				<File Id="14892073" Language="SFX">
+					<ShortName>Spells\Sing2.wav</ShortName>
+					<Path>SFX\Spells\Sing2_9E69E797.wem</Path>
+				</File>
+				<File Id="36415039" Language="SFX">
+					<ShortName>Spells\Create Puppet.wav</ShortName>
+					<Path>SFX\Spells\Create Puppet_9E69E797.wem</Path>
+				</File>
+				<File Id="37283644" Language="SFX">
+					<ShortName>Spells\Domination.wav</ShortName>
+					<Path>SFX\Spells\Domination_9E69E797.wem</Path>
+				</File>
+				<File Id="44555868" Language="SFX">
+					<ShortName>Spells\Tiger.wav</ShortName>
+					<Path>SFX\Spells\Tiger_9E69E797.wem</Path>
+				</File>
+				<File Id="47107977" Language="SFX">
+					<ShortName>Spells\Wraith.wav</ShortName>
+					<Path>SFX\Spells\Wraith_9E69E797.wem</Path>
+				</File>
+				<File Id="47579835" Language="SFX">
+					<ShortName>Spells\Piratecove.wav</ShortName>
+					<Path>SFX\Spells\Piratecove_9E69E797.wem</Path>
+				</File>
+				<File Id="60108953" Language="SFX">
+					<ShortName>Spells\Feed.wav</ShortName>
+					<Path>SFX\Spells\Feed_9E69E797.wem</Path>
+				</File>
+				<File Id="66242761" Language="SFX">
+					<ShortName>Spells\Commanderjoin.wav</ShortName>
+					<Path>SFX\Spells\Commanderjoin_9E69E797.wem</Path>
+				</File>
+				<File Id="71568742" Language="SFX">
+					<ShortName>Spells\Fireball.wav</ShortName>
+					<Path>SFX\Spells\Fireball_9E69E797.wem</Path>
+				</File>
+				<File Id="82523279" Language="SFX">
+					<ShortName>Spells\Haste.wav</ShortName>
+					<Path>SFX\Spells\Haste_9E69E797.wem</Path>
+				</File>
+				<File Id="150620665" Language="SFX">
+					<ShortName>Spells\Chaosmarauder.wav</ShortName>
+					<Path>SFX\Spells\Chaosmarauder_9E69E797.wem</Path>
+				</File>
+				<File Id="161281457" Language="SFX">
+					<ShortName>Spells\Train.wav</ShortName>
+					<Path>SFX\Spells\Train_9E69E797.wem</Path>
+				</File>
+				<File Id="171188445" Language="SFX">
+					<ShortName>Spells\Drown.wav</ShortName>
+					<Path>SFX\Spells\Drown_9E69E797.wem</Path>
+				</File>
+				<File Id="208109439" Language="SFX">
+					<ShortName>Spells\Destroyundead.wav</ShortName>
+					<Path>SFX\Spells\Destroyundead_9E69E797.wem</Path>
+				</File>
+				<File Id="224256781" Language="SFX">
+					<ShortName>Spells\Foundtemple.wav</ShortName>
+					<Path>SFX\Spells\Foundtemple_9E69E797.wem</Path>
+				</File>
+				<File Id="225423886" Language="SFX">
+					<ShortName>Spells\Graftflesh.wav</ShortName>
+					<Path>SFX\Spells\Graftflesh_9E69E797.wem</Path>
+				</File>
+				<File Id="225542300" Language="SFX">
+					<ShortName>Spells\Spring.wav</ShortName>
+					<Path>SFX\Spells\Spring_9E69E797.wem</Path>
+				</File>
+				<File Id="254537143" Language="SFX">
+					<ShortName>Spells\Einherjar.wav</ShortName>
+					<Path>SFX\Spells\Einherjar_9E69E797.wem</Path>
+				</File>
+				<File Id="261218252" Language="SFX">
+					<ShortName>Spells\Contagion.wav</ShortName>
+					<Path>SFX\Spells\Contagion_9E69E797.wem</Path>
+				</File>
+				<File Id="268887751" Language="SFX">
+					<ShortName>Spells\Curedisease.wav</ShortName>
+					<Path>SFX\Spells\Curedisease_9E69E797.wem</Path>
+				</File>
+				<File Id="283117161" Language="SFX">
+					<ShortName>Spells\Burningblood.wav</ShortName>
+					<Path>SFX\Spells\Burningblood_9E69E797.wem</Path>
+				</File>
+				<File Id="319766450" Language="SFX">
+					<ShortName>Spells\Sing1.wav</ShortName>
+					<Path>SFX\Spells\Sing1_9E69E797.wem</Path>
+				</File>
+				<File Id="326637861" Language="SFX">
+					<ShortName>Spells\Enchantment.wav</ShortName>
+					<Path>SFX\Spells\Enchantment_9E69E797.wem</Path>
+				</File>
+				<File Id="328793355" Language="SFX">
+					<ShortName>Spells\Earthelemental.wav</ShortName>
+					<Path>SFX\Spells\Earthelemental_9E69E797.wem</Path>
+				</File>
+				<File Id="394837098" Language="SFX">
+					<ShortName>Spells\Mutation.wav</ShortName>
+					<Path>SFX\Spells\Mutation_9E69E797.wem</Path>
+				</File>
+				<File Id="402382889" Language="SFX">
+					<ShortName>Spells\Earthquake.wav</ShortName>
+					<Path>SFX\Spells\Earthquake_9E69E797.wem</Path>
+				</File>
+				<File Id="411294616" Language="SFX">
+					<ShortName>Spells\Pitbeast.wav</ShortName>
+					<Path>SFX\Spells\Pitbeast_9E69E797.wem</Path>
+				</File>
+				<File Id="492670053" Language="SFX">
+					<ShortName>Spells\Imp.wav</ShortName>
+					<Path>SFX\Spells\Imp_9E69E797.wem</Path>
+				</File>
+				<File Id="509416919" Language="SFX">
+					<ShortName>Spells\Tsunami.wav</ShortName>
+					<Path>SFX\Spells\Tsunami_9E69E797.wem</Path>
+				</File>
+				<File Id="515543277" Language="SFX">
+					<ShortName>Spells\Sacrifice.wav</ShortName>
+					<Path>SFX\Spells\Sacrifice_9E69E797.wem</Path>
+				</File>
+				<File Id="542669843" Language="SFX">
+					<ShortName>Spells\Lightningelemental.wav</ShortName>
+					<Path>SFX\Spells\Lightningelemental_9E69E797.wem</Path>
+				</File>
+				<File Id="543395658" Language="SFX">
+					<ShortName>Spells\Revelation.wav</ShortName>
+					<Path>SFX\Spells\Revelation_9E69E797.wem</Path>
+				</File>
+				<File Id="557475608" Language="SFX">
+					<ShortName>Spells\Breathfire.wav</ShortName>
+					<Path>SFX\Spells\Breathfire_9E69E797.wem</Path>
+				</File>
+				<File Id="560027513" Language="SFX">
+					<ShortName>Spells\HyboremsWhisper.wav</ShortName>
+					<Path>SFX\Spells\HyboremsWhisper_9E69E797.wem</Path>
+				</File>
+				<File Id="634544138" Language="SFX">
+					<ShortName>Spells\Inspiration.wav</ShortName>
+					<Path>SFX\Spells\Inspiration_9E69E797.wem</Path>
+				</File>
+				<File Id="646585260" Language="SFX">
+					<ShortName>Spells\Kraken.wav</ShortName>
+					<Path>SFX\Spells\Kraken_9E69E797.wem</Path>
+				</File>
+				<File Id="651966848" Language="SFX">
+					<ShortName>Spells\Fireelemental.wav</ShortName>
+					<Path>SFX\Spells\Fireelemental_9E69E797.wem</Path>
+				</File>
+				<File Id="656929791" Language="SFX">
+					<ShortName>Spells\Recruit.wav</ShortName>
+					<Path>SFX\Spells\Recruit_9E69E797.wem</Path>
+				</File>
+				<File Id="664403754" Language="SFX">
+					<ShortName>ambient\UnitFalls.wav</ShortName>
+					<Path>SFX\ambient\UnitFalls_9E69E797.wem</Path>
+				</File>
+				<File Id="667377347" Language="SFX">
+					<ShortName>Spells\Charmperson.wav</ShortName>
+					<Path>SFX\Spells\Charmperson_9E69E797.wem</Path>
+				</File>
+				<File Id="688257497" Language="SFX">
+					<ShortName>Spells\Spectre.wav</ShortName>
+					<Path>SFX\Spells\Spectre_9E69E797.wem</Path>
+				</File>
+				<File Id="700121437" Language="SFX">
+					<ShortName>Spells\Feast.wav</ShortName>
+					<Path>SFX\Spells\Feast_9E69E797.wem</Path>
+				</File>
+				<File Id="727676531" Language="SFX">
+					<ShortName>Spells\Inquisition.wav</ShortName>
+					<Path>SFX\Spells\Inquisition_9E69E797.wem</Path>
+				</File>
+				<File Id="737590655" Language="SFX">
+					<ShortName>Spells\Repair.wav</ShortName>
+					<Path>SFX\Spells\Repair_9E69E797.wem</Path>
+				</File>
+				<File Id="752806766" Language="SFX">
+					<ShortName>Spells\Sanctify.wav</ShortName>
+					<Path>SFX\Spells\Sanctify_9E69E797.wem</Path>
+				</File>
+				<File Id="754352182" Language="SFX">
+					<ShortName>Spells\Bless.wav</ShortName>
+					<Path>SFX\Spells\Bless_9E69E797.wem</Path>
+				</File>
+				<File Id="763071211" Language="SFX">
+					<ShortName>Spells\Water.wav</ShortName>
+					<Path>SFX\Spells\Water_9E69E797.wem</Path>
+				</File>
+				<File Id="766061991" Language="SFX">
+					<ShortName>Spells\Commandersplit.wav</ShortName>
+					<Path>SFX\Spells\Commandersplit_9E69E797.wem</Path>
+				</File>
+				<File Id="769909113" Language="SFX">
+					<ShortName>Spells\Resist.wav</ShortName>
+					<Path>SFX\Spells\Resist_9E69E797.wem</Path>
+				</File>
+				<File Id="811551930" Language="SFX">
+					<ShortName>Spells\Escape.wav</ShortName>
+					<Path>SFX\Spells\Escape_9E69E797.wem</Path>
+				</File>
+				<File Id="834058924" Language="SFX">
+					<ShortName>Spells\Stoneskin.wav</ShortName>
+					<Path>SFX\Spells\Stoneskin_9E69E797.wem</Path>
+				</File>
+				<File Id="834429905" Language="SFX">
+					<ShortName>Spells\Dispelmagic.wav</ShortName>
+					<Path>SFX\Spells\Dispelmagic_9E69E797.wem</Path>
+				</File>
+				<File Id="841997019" Language="SFX">
+					<ShortName>Spells\Sing3.wav</ShortName>
+					<Path>SFX\Spells\Sing3_9E69E797.wem</Path>
+				</File>
+				<File Id="846007373" Language="SFX">
+					<ShortName>Spells\Consumesoul.wav</ShortName>
+					<Path>SFX\Spells\Consumesoul_9E69E797.wem</Path>
+				</File>
+				<File Id="853590895" Language="SFX">
+					<ShortName>Spells\Giftvampirism.wav</ShortName>
+					<Path>SFX\Spells\Giftvampirism_9E69E797.wem</Path>
+				</File>
+				<File Id="869164921" Language="SFX">
+					<ShortName>Spells\Heal.wav</ShortName>
+					<Path>SFX\Spells\Heal_9E69E797.wem</Path>
+				</File>
+				<File Id="901982962" Language="SFX">
+					<ShortName>Spells\Airelemental.wav</ShortName>
+					<Path>SFX\Spells\Airelemental_9E69E797.wem</Path>
+				</File>
+				<File Id="904928986" Language="SFX">
+					<ShortName>ambient\UnitRises.wav</ShortName>
+					<Path>SFX\ambient\UnitRises_9E69E797.wem</Path>
+				</File>
+				<File Id="911369691" Language="SFX">
+					<ShortName>Spells\Defile.wav</ShortName>
+					<Path>SFX\Spells\Defile_9E69E797.wem</Path>
+				</File>
+				<File Id="941057338" Language="SFX">
+					<ShortName>ambient\Fire.wav</ShortName>
+					<Path>SFX\ambient\Fire_9E69E797.wem</Path>
+				</File>
+				<File Id="977816481" Language="SFX">
+					<ShortName>Spells\Bloom.wav</ShortName>
+					<Path>SFX\Spells\Bloom_9E69E797.wem</Path>
+				</File>
+				<File Id="1020807614" Language="SFX">
+					<ShortName>Spells\Sing4.wav</ShortName>
+					<Path>SFX\Spells\Sing4_9E69E797.wem</Path>
+				</File>
+				<File Id="1069351979" Language="SFX">
+					<ShortName>Spells\Crew.wav</ShortName>
+					<Path>SFX\Spells\Crew_9E69E797.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>

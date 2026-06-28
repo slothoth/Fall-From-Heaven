@@ -1,0 +1,132 @@
+Event	ID	Name			Wwise Object Path	Notes
+	6385552	Play_Charmperson			\Default Work Unit\Play_Charmperson	
+	125096435	Play_Escape			\Default Work Unit\Play_Escape	
+	133093501	Play_HyboremsWhisper			\Default Work Unit\Play_HyboremsWhisper	
+	146533081	Play_Fireball			\Default Work Unit\Play_Fireball	
+	147831418	Play_UnitFalls			\Default Work Unit\Play_UnitFalls	
+	163991396	Play_Train			\Default Work Unit\Play_Train	
+	233362511	Play_Destroyundead			\Default Work Unit\Play_Destroyundead	
+	441572235	Play_Water			\Default Work Unit\Play_Water	
+	612499036	Play_Recruit			\Default Work Unit\Play_Recruit	
+	633054225	Play_Spring			\Default Work Unit\Play_Spring	
+	673308595	Play_Wraith			\Default Work Unit\Play_Wraith	
+	681191272	Play_Sing1			\Default Work Unit\Play_Sing1	
+	681191274	Play_Sing3			\Default Work Unit\Play_Sing3	
+	681191275	Play_Sing2			\Default Work Unit\Play_Sing2	
+	681191277	Play_Sing4			\Default Work Unit\Play_Sing4	
+	776950229	Play_Defile			\Default Work Unit\Play_Defile	
+	1034556681	Play_Enchantment			\Default Work Unit\Play_Enchantment	
+	1163060616	Play_Inquisition			\Default Work Unit\Play_Inquisition	
+	1291199687	Play_Mutation			\Default Work Unit\Play_Mutation	
+	1405415345	Play_Burningblood			\Default Work Unit\Play_Burningblood	
+	1439396662	Play_Graftflesh			\Default Work Unit\Play_Graftflesh	
+	1457225453	Play_Earthelemental			\Default Work Unit\Play_Earthelemental	
+	1493714505	Play_Consumesoul			\Default Work Unit\Play_Consumesoul	
+	1689559731	Play_Lightningelemental			\Default Work Unit\Play_Lightningelemental	
+	1773906046	Play_UnitRises			\Default Work Unit\Play_UnitRises	
+	1903292847	Play_Feast			\Default Work Unit\Play_Feast	
+	1957834805	Play_Curedisease			\Default Work Unit\Play_Curedisease	
+	2042132698	Play_Giftvampirism			\Default Work Unit\Play_Giftvampirism	
+	2114383099	Play_Create_Puppet			\Default Work Unit\Play_Create_Puppet	
+	2178419156	Play_Resist			\Default Work Unit\Play_Resist	
+	2236164590	Play_Stoneskin			\Default Work Unit\Play_Stoneskin	
+	2251647541	Play_Revelation			\Default Work Unit\Play_Revelation	
+	2402994977	Play_Chaosmarauder			\Default Work Unit\Play_Chaosmarauder	
+	2423929232	Play_Imp			\Default Work Unit\Play_Imp	
+	2554242731	Play_Bloom			\Default Work Unit\Play_Bloom	
+	2639148008	Play_Heal			\Default Work Unit\Play_Heal	
+	2830079482	Play_Feed			\Default Work Unit\Play_Feed	
+	2862281988	Play_Breathfire			\Default Work Unit\Play_Breathfire	
+	2888940076	Play_Kraken			\Default Work Unit\Play_Kraken	
+	2932198258	Play_Spectre			\Default Work Unit\Play_Spectre	
+	2943793929	Play_Sanctify			\Default Work Unit\Play_Sanctify	
+	2962783794	Play_Domination			\Default Work Unit\Play_Domination	
+	2989800648	Play_Hope			\Default Work Unit\Play_Hope	
+	3015324718	Play_Fire			\Default Work Unit\Play_Fire	
+	3022338695	Play_Bless			\Default Work Unit\Play_Bless	
+	3038206758	Play_Pitbeast			\Default Work Unit\Play_Pitbeast	
+	3118857841	Play_Crew			\Default Work Unit\Play_Crew	
+	3218577785	Play_Repair			\Default Work Unit\Play_Repair	
+	3290225309	Play_Airelemental			\Default Work Unit\Play_Airelemental	
+	3372989625	Play_Foundtemple			\Default Work Unit\Play_Foundtemple	
+	3412849796	Play_Contagion			\Default Work Unit\Play_Contagion	
+	3522352062	Play_Inspiration			\Default Work Unit\Play_Inspiration	
+	3581282404	Play_Piratecove			\Default Work Unit\Play_Piratecove	
+	3679029682	Play_Einherjar			\Default Work Unit\Play_Einherjar	
+	3694953011	Play_Tsunami			\Default Work Unit\Play_Tsunami	
+	3748505988	Play_Commanderjoin			\Default Work Unit\Play_Commanderjoin	
+	3782198531	Play_Haste			\Default Work Unit\Play_Haste	
+	3833900518	Play_Dispelmagic			\Default Work Unit\Play_Dispelmagic	
+	3858448649	Play_Earthquake			\Default Work Unit\Play_Earthquake	
+	3891142628	Play_Drown			\Default Work Unit\Play_Drown	
+	3920717341	Play_Sacrifice			\Default Work Unit\Play_Sacrifice	
+	3969687491	Play_Tiger			\Default Work Unit\Play_Tiger	
+	4052412245	Play_Fireelemental			\Default Work Unit\Play_Fireelemental	
+	4211570972	Play_Commandersplit			\Default Work Unit\Play_Commandersplit	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	7677847	Hope	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Hope_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Hope		172090
+	14892073	Sing2	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sing2_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sing2		389768
+	36415039	Create Puppet	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Create Puppet_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Create Puppet		41076
+	37283644	Domination	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Domination_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Domination		485164
+	44555868	Tiger	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Tiger_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Tiger		20106
+	47107977	Wraith	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Wraith_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Wraith		441064
+	47579835	Piratecove	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Piratecove_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Piratecove		186314
+	60108953	Feed	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Feed_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Feed		50514
+	66242761	Commanderjoin	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Commanderjoin_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Commanderjoin		181332
+	71568742	Fireball	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Fireball_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Fireball		76096
+	82523279	Haste	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Haste_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Haste		281800
+	150620665	Chaosmarauder	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Chaosmarauder_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Chaosmarauder		167264
+	161281457	Train	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Train_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Train		99262
+	171188445	Drown	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Drown_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Drown		1422296
+	208109439	Destroyundead	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Destroyundead_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Destroyundead		87084
+	224256781	Foundtemple	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Foundtemple_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Foundtemple		411736
+	225423886	Graftflesh	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Graftflesh_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Graftflesh		269476
+	225542300	Spring	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Spring_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Spring		488168
+	254537143	Einherjar	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Einherjar_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Einherjar		480448
+	261218252	Contagion	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Contagion_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Contagion		485164
+	268887751	Curedisease	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Curedisease_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Curedisease		168202
+	283117161	Burningblood	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Burningblood_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Burningblood		45228
+	319766450	Sing1	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sing1_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sing1		457120
+	326637861	Enchantment	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Enchantment_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Enchantment		56044
+	328793355	Earthelemental	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Earthelemental_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Earthelemental		139238
+	394837098	Mutation	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Mutation_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Mutation		441064
+	402382889	Earthquake	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Earthquake_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Earthquake		173088
+	411294616	Pitbeast	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Pitbeast_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Pitbeast		55282
+	492670053	Imp	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Imp_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Imp		441064
+	509416919	Tsunami	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Tsunami_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Tsunami		707088
+	515543277	Sacrifice	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sacrifice_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sacrifice		61230
+	542669843	Lightningelemental	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Lightningelemental_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Lightningelemental		288078
+	543395658	Revelation	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Revelation_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Revelation		774268
+	557475608	Breathfire	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Breathfire_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Breathfire		485164
+	560027513	HyboremsWhisper	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\HyboremsWhisper_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\HyboremsWhisper		705524
+	634544138	Inspiration	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Inspiration_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Inspiration		223612
+	646585260	Kraken	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Kraken_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Kraken		441064
+	651966848	Fireelemental	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Fireelemental_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Fireelemental		87538
+	656929791	Recruit	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Recruit_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Recruit		141546
+	664403754	UnitFalls	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\ambient\UnitFalls_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\ambient\UnitFalls		191918
+	667377347	Charmperson	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Charmperson_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Charmperson		480064
+	688257497	Spectre	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Spectre_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Spectre		616264
+	700121437	Feast	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Feast_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Feast		417884
+	727676531	Inquisition	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Inquisition_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Inquisition		262996
+	737590655	Repair	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Repair_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Repair		220348
+	752806766	Sanctify	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sanctify_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sanctify		84004
+	754352182	Bless	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Bless_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Bless		178186
+	763071211	Water	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Water_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Water		485164
+	766061991	Commandersplit	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Commandersplit_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Commandersplit		84804
+	769909113	Resist	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Resist_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Resist		63420
+	811551930	Escape	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Escape_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Escape		485164
+	834058924	Stoneskin	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Stoneskin_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Stoneskin		196000
+	834429905	Dispelmagic	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Dispelmagic_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Dispelmagic		111774
+	841997019	Sing3	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sing3_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sing3		567616
+	846007373	Consumesoul	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Consumesoul_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Consumesoul		124652
+	853590895	Giftvampirism	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Giftvampirism_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Giftvampirism		30316
+	869164921	Heal	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Heal_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Heal		200082
+	901982962	Airelemental	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Airelemental_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Airelemental		193580
+	904928986	UnitRises	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\ambient\UnitRises_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\ambient\UnitRises		167426
+	911369691	Defile	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Defile_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Defile		480064
+	941057338	Fire	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\ambient\Fire_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\ambient\Fire		122368
+	977816481	Bloom	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Bloom_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Bloom		177216
+	1020807614	Sing4	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sing4_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sing4		733806
+	1069351979	Crew	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Crew_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Crew		407436
+
