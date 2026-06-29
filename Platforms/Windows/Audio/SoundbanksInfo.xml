@@ -626,16 +626,23 @@
 			<Path>FFH_SFX_Bank.bnk</Path>
 			<IncludedEvents>
 				<Event Id="3290225309" Name="Play_Airelemental"/>
+				<Event Id="1627129986" Name="Play_ArmageddonDecrease"/>
+				<Event Id="3315043986" Name="Play_ArmageddonIncrease"/>
+				<Event Id="232024078" Name="Play_Ashen_Veil"/>
+				<Event Id="1016972910" Name="Play_Ashen_Veil_Full"/>
 				<Event Id="3022338695" Name="Play_Bless"/>
 				<Event Id="2554242731" Name="Play_Bloom"/>
 				<Event Id="2862281988" Name="Play_Breathfire"/>
 				<Event Id="1405415345" Name="Play_Burningblood"/>
+				<Event Id="2053636112" Name="Play_Carnival"/>
 				<Event Id="2402994977" Name="Play_Chaosmarauder"/>
 				<Event Id="6385552" Name="Play_Charmperson"/>
 				<Event Id="3748505988" Name="Play_Commanderjoin"/>
 				<Event Id="4211570972" Name="Play_Commandersplit"/>
 				<Event Id="1493714505" Name="Play_Consumesoul"/>
 				<Event Id="3412849796" Name="Play_Contagion"/>
+				<Event Id="3183866448" Name="Play_Council_of_Esus"/>
+				<Event Id="1572642364" Name="Play_Council_of_Esus_Full"/>
 				<Event Id="2114383099" Name="Play_Create_Puppet"/>
 				<Event Id="3118857841" Name="Play_Crew"/>
 				<Event Id="1957834805" Name="Play_Curedisease"/>
@@ -647,10 +654,14 @@
 				<Event Id="1457225453" Name="Play_Earthelemental"/>
 				<Event Id="3858448649" Name="Play_Earthquake"/>
 				<Event Id="3679029682" Name="Play_Einherjar"/>
+				<Event Id="18810259" Name="Play_Empyrean"/>
+				<Event Id="4005834233" Name="Play_Empyrean_Full"/>
 				<Event Id="1034556681" Name="Play_Enchantment"/>
 				<Event Id="125096435" Name="Play_Escape"/>
 				<Event Id="1903292847" Name="Play_Feast"/>
 				<Event Id="2830079482" Name="Play_Feed"/>
+				<Event Id="2180396786" Name="Play_Fellowship_of_Leaves"/>
+				<Event Id="1231180786" Name="Play_Fellowship_of_Leaves_Full"/>
 				<Event Id="3015324718" Name="Play_Fire"/>
 				<Event Id="146533081" Name="Play_Fireball"/>
 				<Event Id="4052412245" Name="Play_Fireelemental"/>
@@ -665,14 +676,41 @@
 				<Event Id="1163060616" Name="Play_Inquisition"/>
 				<Event Id="3522352062" Name="Play_Inspiration"/>
 				<Event Id="2888940076" Name="Play_Kraken"/>
+				<Event Id="2389395226" Name="Play_Leader_Music_SLTH_CIVILIZATION_AMURITES"/>
+				<Event Id="81975999" Name="Play_Leader_Music_SLTH_CIVILIZATION_BALSERAPHS"/>
+				<Event Id="45120814" Name="Play_Leader_Music_SLTH_CIVILIZATION_BANNOR"/>
+				<Event Id="516419025" Name="Play_Leader_Music_SLTH_CIVILIZATION_CALABIM"/>
+				<Event Id="1200338197" Name="Play_Leader_Music_SLTH_CIVILIZATION_CLAN_OF_EMBERS"/>
+				<Event Id="1611781726" Name="Play_Leader_Music_SLTH_CIVILIZATION_DOVIELLO"/>
+				<Event Id="4166851682" Name="Play_Leader_Music_SLTH_CIVILIZATION_ELOHIM"/>
+				<Event Id="2664330695" Name="Play_Leader_Music_SLTH_CIVILIZATION_GRIGORI"/>
+				<Event Id="253638075" Name="Play_Leader_Music_SLTH_CIVILIZATION_HIPPUS"/>
+				<Event Id="208845916" Name="Play_Leader_Music_SLTH_CIVILIZATION_ILLIANS"/>
+				<Event Id="2429871851" Name="Play_Leader_Music_SLTH_CIVILIZATION_INFERNAL"/>
+				<Event Id="3653758785" Name="Play_Leader_Music_SLTH_CIVILIZATION_KHAZAD"/>
+				<Event Id="2448156819" Name="Play_Leader_Music_SLTH_CIVILIZATION_KURIOTATES"/>
+				<Event Id="384509974" Name="Play_Leader_Music_SLTH_CIVILIZATION_LANUN"/>
+				<Event Id="1808627540" Name="Play_Leader_Music_SLTH_CIVILIZATION_LJOSALFAR"/>
+				<Event Id="1636534262" Name="Play_Leader_Music_SLTH_CIVILIZATION_LUCHUIRP"/>
+				<Event Id="1798222902" Name="Play_Leader_Music_SLTH_CIVILIZATION_MALAKIM"/>
+				<Event Id="3074848591" Name="Play_Leader_Music_SLTH_CIVILIZATION_MERCURIANS"/>
+				<Event Id="194936279" Name="Play_Leader_Music_SLTH_CIVILIZATION_SHEAIM"/>
+				<Event Id="4141905663" Name="Play_Leader_Music_SLTH_CIVILIZATION_SIDAR"/>
+				<Event Id="1489178278" Name="Play_Leader_Music_SLTH_CIVILIZATION_SVARTALFAR"/>
 				<Event Id="1689559731" Name="Play_Lightningelemental"/>
 				<Event Id="1291199687" Name="Play_Mutation"/>
+				<Event Id="1643222806" Name="Play_Octopus_Overlords"/>
+				<Event Id="3585366742" Name="Play_Octopus_Overlords_Full"/>
+				<Event Id="233012730" Name="Play_Order"/>
+				<Event Id="4212301178" Name="Play_Order_Full"/>
 				<Event Id="3581282404" Name="Play_Piratecove"/>
 				<Event Id="3038206758" Name="Play_Pitbeast"/>
 				<Event Id="612499036" Name="Play_Recruit"/>
 				<Event Id="3218577785" Name="Play_Repair"/>
 				<Event Id="2178419156" Name="Play_Resist"/>
 				<Event Id="2251647541" Name="Play_Revelation"/>
+				<Event Id="1818586104" Name="Play_Runes_of_Kilmorph"/>
+				<Event Id="3897950052" Name="Play_Runes_of_Kilmorph_Full"/>
 				<Event Id="3920717341" Name="Play_Sacrifice"/>
 				<Event Id="2943793929" Name="Play_Sanctify"/>
 				<Event Id="681191272" Name="Play_Sing1"/>
@@ -689,8 +727,35 @@
 				<Event Id="1773906046" Name="Play_UnitRises"/>
 				<Event Id="441572235" Name="Play_Water"/>
 				<Event Id="673308595" Name="Play_Wraith"/>
+				<Event Id="2360231208" Name="Stop_Leader_Music_SLTH_CIVILIZATION_AMURITES"/>
+				<Event Id="3906946261" Name="Stop_Leader_Music_SLTH_CIVILIZATION_BALSERAPHS"/>
+				<Event Id="2258386160" Name="Stop_Leader_Music_SLTH_CIVILIZATION_BANNOR"/>
+				<Event Id="1969599242" Name="Stop_Leader_Music_SLTH_CIVILIZATION_BARBARIAN"/>
+				<Event Id="3757057899" Name="Stop_Leader_Music_SLTH_CIVILIZATION_CALABIM"/>
+				<Event Id="209498215" Name="Stop_Leader_Music_SLTH_CIVILIZATION_CLAN_OF_EMBERS"/>
+				<Event Id="1257802080" Name="Stop_Leader_Music_SLTH_CIVILIZATION_DOVIELLO"/>
+				<Event Id="3821270940" Name="Stop_Leader_Music_SLTH_CIVILIZATION_ELOHIM"/>
+				<Event Id="2971940253" Name="Stop_Leader_Music_SLTH_CIVILIZATION_GRIGORI"/>
+				<Event Id="274736437" Name="Stop_Leader_Music_SLTH_CIVILIZATION_HIPPUS"/>
+				<Event Id="2022588230" Name="Stop_Leader_Music_SLTH_CIVILIZATION_ILLIANS"/>
+				<Event Id="1133884273" Name="Stop_Leader_Music_SLTH_CIVILIZATION_INFERNAL"/>
+				<Event Id="3831274063" Name="Stop_Leader_Music_SLTH_CIVILIZATION_KHAZAD"/>
+				<Event Id="2862713057" Name="Stop_Leader_Music_SLTH_CIVILIZATION_KURIOTATES"/>
+				<Event Id="2737854072" Name="Stop_Leader_Music_SLTH_CIVILIZATION_LANUN"/>
+				<Event Id="1055568018" Name="Stop_Leader_Music_SLTH_CIVILIZATION_LJOSALFAR"/>
+				<Event Id="2477356276" Name="Stop_Leader_Music_SLTH_CIVILIZATION_LUCHUIRP"/>
+				<Event Id="3049275292" Name="Stop_Leader_Music_SLTH_CIVILIZATION_MALAKIM"/>
+				<Event Id="3058149049" Name="Stop_Leader_Music_SLTH_CIVILIZATION_MERCURIANS"/>
+				<Event Id="4161835377" Name="Stop_Leader_Music_SLTH_CIVILIZATION_SHEAIM"/>
+				<Event Id="2025865353" Name="Stop_Leader_Music_SLTH_CIVILIZATION_SIDAR"/>
+				<Event Id="2694523632" Name="Stop_Leader_Music_SLTH_CIVILIZATION_SVARTALFAR"/>
+				<Event Id="3231580977" Name="Stop_Leader_Music_SLTH_LEADER_DECIUS"/>
 			</IncludedEvents>
 			<IncludedMemoryFiles>
+				<File Id="7226178" Language="SFX">
+					<ShortName>Religions\Council of Esus Full.wav</ShortName>
+					<Path>SFX\Religions\Council of Esus Full_9E69E797.wem</Path>
+				</File>
 				<File Id="7677847" Language="SFX">
 					<ShortName>Spells\Hope.wav</ShortName>
 					<Path>SFX\Spells\Hope_9E69E797.wem</Path>
@@ -735,6 +800,18 @@
 					<ShortName>Spells\Haste.wav</ShortName>
 					<Path>SFX\Spells\Haste_9E69E797.wem</Path>
 				</File>
+				<File Id="88925729" Language="SFX">
+					<ShortName>Bannor.wav</ShortName>
+					<Path>SFX\Bannor_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="96866844" Language="SFX">
+					<ShortName>Luchuirp.wav</ShortName>
+					<Path>SFX\Luchuirp_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="140869650" Language="SFX">
+					<ShortName>buildings\Carnival.wav</ShortName>
+					<Path>SFX\buildings\Carnival_9E69E797.wem</Path>
+				</File>
 				<File Id="150620665" Language="SFX">
 					<ShortName>Spells\Chaosmarauder.wav</ShortName>
 					<Path>SFX\Spells\Chaosmarauder_9E69E797.wem</Path>
@@ -746,6 +823,26 @@
 				<File Id="171188445" Language="SFX">
 					<ShortName>Spells\Drown.wav</ShortName>
 					<Path>SFX\Spells\Drown_9E69E797.wem</Path>
+				</File>
+				<File Id="172547071" Language="SFX">
+					<ShortName>Doviello.wav</ShortName>
+					<Path>SFX\Doviello_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="177894001" Language="SFX">
+					<ShortName>Religions\Empyrean.wav</ShortName>
+					<Path>SFX\Religions\Empyrean_9E69E797.wem</Path>
+				</File>
+				<File Id="183872478" Language="SFX">
+					<ShortName>Illians.wav</ShortName>
+					<Path>SFX\Illians_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="193043236" Language="SFX">
+					<ShortName>Religions\Order.wav</ShortName>
+					<Path>SFX\Religions\Order_9E69E797.wem</Path>
+				</File>
+				<File Id="200339236" Language="SFX">
+					<ShortName>Religions\Council of Esus.wav</ShortName>
+					<Path>SFX\Religions\Council of Esus_9E69E797.wem</Path>
 				</File>
 				<File Id="208109439" Language="SFX">
 					<ShortName>Spells\Destroyundead.wav</ShortName>
@@ -775,9 +872,21 @@
 					<ShortName>Spells\Curedisease.wav</ShortName>
 					<Path>SFX\Spells\Curedisease_9E69E797.wem</Path>
 				</File>
+				<File Id="279512127" Language="SFX">
+					<ShortName>Religions\Empyrean Full.wav</ShortName>
+					<Path>SFX\Religions\Empyrean Full_9E69E797.wem</Path>
+				</File>
 				<File Id="283117161" Language="SFX">
 					<ShortName>Spells\Burningblood.wav</ShortName>
 					<Path>SFX\Spells\Burningblood_9E69E797.wem</Path>
+				</File>
+				<File Id="291342727" Language="SFX">
+					<ShortName>Religions\Fellowship of Leaves.wav</ShortName>
+					<Path>SFX\Religions\Fellowship of Leaves_9E69E797.wem</Path>
+				</File>
+				<File Id="305711400" Language="SFX">
+					<ShortName>Hippus.wav</ShortName>
+					<Path>SFX\Hippus_4B8CC0C5.wem</Path>
 				</File>
 				<File Id="319766450" Language="SFX">
 					<ShortName>Spells\Sing1.wav</ShortName>
@@ -791,9 +900,21 @@
 					<ShortName>Spells\Earthelemental.wav</ShortName>
 					<Path>SFX\Spells\Earthelemental_9E69E797.wem</Path>
 				</File>
+				<File Id="347500843" Language="SFX">
+					<ShortName>Mercurians.wav</ShortName>
+					<Path>SFX\Mercurians_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="377224936" Language="SFX">
+					<ShortName>Religions\Octopus Overlords Full.wav</ShortName>
+					<Path>SFX\Religions\Octopus Overlords Full_9E69E797.wem</Path>
+				</File>
 				<File Id="394837098" Language="SFX">
 					<ShortName>Spells\Mutation.wav</ShortName>
 					<Path>SFX\Spells\Mutation_9E69E797.wem</Path>
+				</File>
+				<File Id="395280347" Language="SFX">
+					<ShortName>Elohim.wav</ShortName>
+					<Path>SFX\Elohim_4B8CC0C5.wem</Path>
 				</File>
 				<File Id="402382889" Language="SFX">
 					<ShortName>Spells\Earthquake.wav</ShortName>
@@ -803,9 +924,21 @@
 					<ShortName>Spells\Pitbeast.wav</ShortName>
 					<Path>SFX\Spells\Pitbeast_9E69E797.wem</Path>
 				</File>
+				<File Id="453652815" Language="SFX">
+					<ShortName>Religions\Ashen Veil.wav</ShortName>
+					<Path>SFX\Religions\Ashen Veil_9E69E797.wem</Path>
+				</File>
+				<File Id="476635973" Language="SFX">
+					<ShortName>Khazad.wav</ShortName>
+					<Path>SFX\Khazad_4B8CC0C5.wem</Path>
+				</File>
 				<File Id="492670053" Language="SFX">
 					<ShortName>Spells\Imp.wav</ShortName>
 					<Path>SFX\Spells\Imp_9E69E797.wem</Path>
+				</File>
+				<File Id="498133185" Language="SFX">
+					<ShortName>Malakim.wav</ShortName>
+					<Path>SFX\Malakim_4B8CC0C5.wem</Path>
 				</File>
 				<File Id="509416919" Language="SFX">
 					<ShortName>Spells\Tsunami.wav</ShortName>
@@ -814,6 +947,18 @@
 				<File Id="515543277" Language="SFX">
 					<ShortName>Spells\Sacrifice.wav</ShortName>
 					<Path>SFX\Spells\Sacrifice_9E69E797.wem</Path>
+				</File>
+				<File Id="525891965" Language="SFX">
+					<ShortName>Clanofembers.wav</ShortName>
+					<Path>SFX\Clanofembers_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="538849387" Language="SFX">
+					<ShortName>Grigori.wav</ShortName>
+					<Path>SFX\Grigori_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="542557438" Language="SFX">
+					<ShortName>Religions\Runes of Kilmorph Full.wav</ShortName>
+					<Path>SFX\Religions\Runes of Kilmorph Full_9E69E797.wem</Path>
 				</File>
 				<File Id="542669843" Language="SFX">
 					<ShortName>Spells\Lightningelemental.wav</ShortName>
@@ -830,6 +975,10 @@
 				<File Id="560027513" Language="SFX">
 					<ShortName>Spells\HyboremsWhisper.wav</ShortName>
 					<Path>SFX\Spells\HyboremsWhisper_9E69E797.wem</Path>
+				</File>
+				<File Id="591084663" Language="SFX">
+					<ShortName>Lanun.wav</ShortName>
+					<Path>SFX\Lanun_4B8CC0C5.wem</Path>
 				</File>
 				<File Id="634544138" Language="SFX">
 					<ShortName>Spells\Inspiration.wav</ShortName>
@@ -855,6 +1004,14 @@
 					<ShortName>Spells\Charmperson.wav</ShortName>
 					<Path>SFX\Spells\Charmperson_9E69E797.wem</Path>
 				</File>
+				<File Id="670367139" Language="SFX">
+					<ShortName>Kuriotates.wav</ShortName>
+					<Path>SFX\Kuriotates_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="671741095" Language="SFX">
+					<ShortName>Sidar.wav</ShortName>
+					<Path>SFX\Sidar_4B8CC0C5.wem</Path>
+				</File>
 				<File Id="688257497" Language="SFX">
 					<ShortName>Spells\Spectre.wav</ShortName>
 					<Path>SFX\Spells\Spectre_9E69E797.wem</Path>
@@ -862,6 +1019,14 @@
 				<File Id="700121437" Language="SFX">
 					<ShortName>Spells\Feast.wav</ShortName>
 					<Path>SFX\Spells\Feast_9E69E797.wem</Path>
+				</File>
+				<File Id="712297465" Language="SFX">
+					<ShortName>Amurites.wav</ShortName>
+					<Path>SFX\Amurites_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="724914776" Language="SFX">
+					<ShortName>Religions\Fellowship of Leaves Full.wav</ShortName>
+					<Path>SFX\Religions\Fellowship of Leaves Full_9E69E797.wem</Path>
 				</File>
 				<File Id="727676531" Language="SFX">
 					<ShortName>Spells\Inquisition.wav</ShortName>
@@ -891,9 +1056,29 @@
 					<ShortName>Spells\Resist.wav</ShortName>
 					<Path>SFX\Spells\Resist_9E69E797.wem</Path>
 				</File>
+				<File Id="774653947" Language="SFX">
+					<ShortName>Sheaim.wav</ShortName>
+					<Path>SFX\Sheaim_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="801674892" Language="SFX">
+					<ShortName>Religions\Runes of Kilmorph.wav</ShortName>
+					<Path>SFX\Religions\Runes of Kilmorph_9E69E797.wem</Path>
+				</File>
+				<File Id="805741702" Language="SFX">
+					<ShortName>Religions\Order Full.wav</ShortName>
+					<Path>SFX\Religions\Order Full_9E69E797.wem</Path>
+				</File>
 				<File Id="811551930" Language="SFX">
 					<ShortName>Spells\Escape.wav</ShortName>
 					<Path>SFX\Spells\Escape_9E69E797.wem</Path>
+				</File>
+				<File Id="816230135" Language="SFX">
+					<ShortName>Balseraphs.wav</ShortName>
+					<Path>SFX\Balseraphs_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="824533399" Language="SFX">
+					<ShortName>Religions\Ashen Veil Full.wav</ShortName>
+					<Path>SFX\Religions\Ashen Veil Full_9E69E797.wem</Path>
 				</File>
 				<File Id="834058924" Language="SFX">
 					<ShortName>Spells\Stoneskin.wav</ShortName>
@@ -902,6 +1087,10 @@
 				<File Id="834429905" Language="SFX">
 					<ShortName>Spells\Dispelmagic.wav</ShortName>
 					<Path>SFX\Spells\Dispelmagic_9E69E797.wem</Path>
+				</File>
+				<File Id="835823049" Language="SFX">
+					<ShortName>buildings\ArmageddonDecrease.wav</ShortName>
+					<Path>SFX\buildings\ArmageddonDecrease_9E69E797.wem</Path>
 				</File>
 				<File Id="841997019" Language="SFX">
 					<ShortName>Spells\Sing3.wav</ShortName>
@@ -918,6 +1107,10 @@
 				<File Id="869164921" Language="SFX">
 					<ShortName>Spells\Heal.wav</ShortName>
 					<Path>SFX\Spells\Heal_9E69E797.wem</Path>
+				</File>
+				<File Id="872666005" Language="SFX">
+					<ShortName>Religions\Octopus Overlords.wav</ShortName>
+					<Path>SFX\Religions\Octopus Overlords_9E69E797.wem</Path>
 				</File>
 				<File Id="901982962" Language="SFX">
 					<ShortName>Spells\Airelemental.wav</ShortName>
@@ -939,9 +1132,29 @@
 					<ShortName>Spells\Bloom.wav</ShortName>
 					<Path>SFX\Spells\Bloom_9E69E797.wem</Path>
 				</File>
+				<File Id="994811204" Language="SFX">
+					<ShortName>Svartalfar.wav</ShortName>
+					<Path>SFX\Svartalfar_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="997262657" Language="SFX">
+					<ShortName>Calabim.wav</ShortName>
+					<Path>SFX\Calabim_4B8CC0C5.wem</Path>
+				</File>
 				<File Id="1020807614" Language="SFX">
 					<ShortName>Spells\Sing4.wav</ShortName>
 					<Path>SFX\Spells\Sing4_9E69E797.wem</Path>
+				</File>
+				<File Id="1021417371" Language="SFX">
+					<ShortName>Ljosalfar.wav</ShortName>
+					<Path>SFX\Ljosalfar_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="1048642246" Language="SFX">
+					<ShortName>buildings\ArmageddonIncrease.wav</ShortName>
+					<Path>SFX\buildings\ArmageddonIncrease_9E69E797.wem</Path>
+				</File>
+				<File Id="1057202847" Language="SFX">
+					<ShortName>Infernal.wav</ShortName>
+					<Path>SFX\Infernal_4B8CC0C5.wem</Path>
 				</File>
 				<File Id="1069351979" Language="SFX">
 					<ShortName>Spells\Crew.wav</ShortName>

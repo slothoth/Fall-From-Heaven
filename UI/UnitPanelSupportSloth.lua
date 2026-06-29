@@ -1054,6 +1054,8 @@ function noInterfaceCustomOp (CustomOperation, pSelectedUnit)
 	tParameters.OnStart = sOpCallback;
 	print(sOpType .. ', ' .. sOpCallback .. tostring(iUnit).. tostring(iOwner))
 	UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
+    local sSound = GameInfo.UnitOperations[sOpType] and GameInfo.UnitOperations[sOpType].Sound
+	if sSound and sSound ~= "" then UI.PlaySound(sSound) end
 	UI.DeselectUnit(pSelectedUnit);
 end
 
@@ -1115,6 +1117,8 @@ function selectPlot(plotId)
 		end
 		print('params were iTargetID/OnStart/iCastingUnit', iTargetID, CachedUnitOperationCallback, pUnit:GetID())
 		UI.RequestPlayerOperation(iOwner, PlayerOperations.EXECUTE_SCRIPT, tParameters)
+        local sSound = GameInfo.UnitOperations[CachedUnitOperation] and GameInfo.UnitOperations[CachedUnitOperation].Sound
+		if sSound and sSound ~= "" then UI.PlaySound(sSound) end
 	end
 end
 

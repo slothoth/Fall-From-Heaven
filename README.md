@@ -240,7 +240,22 @@ Here is a list of the features that are implemented:
 - [ ] Upgrade system also takes precedence in removing obsolete units even if the replacement is not buildable due to a no BuildingPrereq for example
 - [ ] Use CanTrain = 0 for only upgradable-to-units (todo Immortal?, Eater of Dreams, probably more)
 
+### Leader Art Polish Todos
+- [ ] Smoothing of outlines so not so cut-out
+- [ ] Check to see if we can have different frontend versus in game art.
+- [ ] Amelanchier, too bald on arrows, fuzz in arm hole
+- [ ] Cardith Lorda, too small?
+- [ ] Beeri, facing wrong direction
+- [ ] Faeryl, Never upscaled, though looks good. Problem with elements outside of frame.
+- [ ] Garrim, section of purple arm over top of regular, needs blending. Section under left arm is not cut background.
+- [ ] Sheelba, right eye are a bit messed up, some fuzz and white bits around outline
+- [ ] Tebryn, section of cloak rags should be transparent.
+- [ ] Thessa, facing wrong direction
+- [ ] Valledia, weird repeated hand.
+- [ ] Never upscaled: Kandros, Arturus, Auric, Cardith Lorda, Cassiel, Charadon, Dain, Decius, Flauros, Tasunke, Perpentach, Sabathiel, Hannah, Sandalphon, 
 
+### Audio Polish Todos
+- [ ] Svartalfar music too short, same with clan of embers.
 # Attributions:
 Many icons used from Game-Icons.net
 Lava and Ice material from https://ambientcg.com

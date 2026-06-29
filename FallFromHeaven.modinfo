@@ -267,6 +267,7 @@
             <File>Core/Experimental/GPP_FromSpecialists.sql</File>
             <File>Core/WorldSpellSupport.sql</File>
             <File>Core/Lua_support/Tech_dummies.sql</File>
+            <File>Core/Audio.sql</File>
         </UpdateDatabase>
         <UpdateDatabase id="Gameplay_addon">
             <Properties>
@@ -401,6 +402,13 @@
             <File>UI/Replacements/DiplomacyActionViewInjector.lua</File>
             <File>UI/Replacements/DiplomacyActionViewInjector.xml</File>
         </ImportFiles>
+        <AddUserInterfaces id="UIMusicFFH">
+            <Properties>
+                <Context>InGame</Context>
+            </Properties>
+            <File>UI/FFH_MusicController.xml</File>
+            <File>UI/FFH_MusicController.lua</File>
+        </AddUserInterfaces>
         <ReplaceUIScript id="ResearchChooserHideFFH">
             <Properties>
                 <LoadOrder>1100</LoadOrder>
@@ -694,6 +702,7 @@
         <File>Core/Technologies.sql</File>
         <File>Core/Victories.sql</File>
         <File>Core/WorldSpellSupport.sql</File>
+        <File>Core/Audio.sql</File>
         <File>DLC_Compat/aztec.sql</File>
         <File>DLC_Compat/babylon.sql</File>
         <File>DLC_Compat/ethiopia.sql</File>
@@ -805,6 +814,8 @@
         <File>UI/WorldRankings.xml</File>
         <File>UI/WorldSpell.xml</File>
         <File>UI/WorldSpell.lua</File>
+        <File>UI/FFH_MusicController.xml</File>
+        <File>UI/FFH_MusicController.lua</File>
         <File>FallFromHeaven.dep</File>
         <File>UI/Replacements/InstanceManager.lua</File>
         <File>UI/Replacements/Civ6Common.lua</File>
