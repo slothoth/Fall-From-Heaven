@@ -630,6 +630,7 @@
 				<Event Id="3315043986" Name="Play_ArmageddonIncrease"/>
 				<Event Id="232024078" Name="Play_Ashen_Veil"/>
 				<Event Id="1016972910" Name="Play_Ashen_Veil_Full"/>
+				<Event Id="1046951120" Name="Play_balorSelect"/>
 				<Event Id="3022338695" Name="Play_Bless"/>
 				<Event Id="2554242731" Name="Play_Bloom"/>
 				<Event Id="2862281988" Name="Play_Breathfire"/>
@@ -720,6 +721,7 @@
 				<Event Id="2932198258" Name="Play_Spectre"/>
 				<Event Id="633054225" Name="Play_Spring"/>
 				<Event Id="2236164590" Name="Play_Stoneskin"/>
+				<Event Id="3070835887" Name="Play_Summon_Skeleton"/>
 				<Event Id="3969687491" Name="Play_Tiger"/>
 				<Event Id="163991396" Name="Play_Train"/>
 				<Event Id="3694953011" Name="Play_Tsunami"/>
@@ -759,6 +761,10 @@
 				<File Id="7677847" Language="SFX">
 					<ShortName>Spells\Hope.wav</ShortName>
 					<Path>SFX\Spells\Hope_9E69E797.wem</Path>
+				</File>
+				<File Id="8120021" Language="SFX">
+					<ShortName>units\balorSelect\BalorSelect-002.wav</ShortName>
+					<Path>SFX\units\balorSelect\BalorSelect-002_9E69E797.wem</Path>
 				</File>
 				<File Id="14892073" Language="SFX">
 					<ShortName>Spells\Sing2.wav</ShortName>
@@ -872,6 +878,10 @@
 					<ShortName>Spells\Curedisease.wav</ShortName>
 					<Path>SFX\Spells\Curedisease_9E69E797.wem</Path>
 				</File>
+				<File Id="277646398" Language="SFX">
+					<ShortName>Decius.wav</ShortName>
+					<Path>SFX\Decius_4B8CC0C5.wem</Path>
+				</File>
 				<File Id="279512127" Language="SFX">
 					<ShortName>Religions\Empyrean Full.wav</ShortName>
 					<Path>SFX\Religions\Empyrean Full_9E69E797.wem</Path>
@@ -899,6 +909,10 @@
 				<File Id="328793355" Language="SFX">
 					<ShortName>Spells\Earthelemental.wav</ShortName>
 					<Path>SFX\Spells\Earthelemental_9E69E797.wem</Path>
+				</File>
+				<File Id="342324526" Language="SFX">
+					<ShortName>Barbarian.wav</ShortName>
+					<Path>SFX\Barbarian_4B8CC0C5.wem</Path>
 				</File>
 				<File Id="347500843" Language="SFX">
 					<ShortName>Mercurians.wav</ShortName>
@@ -968,6 +982,10 @@
 					<ShortName>Spells\Revelation.wav</ShortName>
 					<Path>SFX\Spells\Revelation_9E69E797.wem</Path>
 				</File>
+				<File Id="552984265" Language="SFX">
+					<ShortName>units\balorSelect\BalorSelect-000.wav</ShortName>
+					<Path>SFX\units\balorSelect\BalorSelect-000_9E69E797.wem</Path>
+				</File>
 				<File Id="557475608" Language="SFX">
 					<ShortName>Spells\Breathfire.wav</ShortName>
 					<Path>SFX\Spells\Breathfire_9E69E797.wem</Path>
@@ -1015,6 +1033,10 @@
 				<File Id="688257497" Language="SFX">
 					<ShortName>Spells\Spectre.wav</ShortName>
 					<Path>SFX\Spells\Spectre_9E69E797.wem</Path>
+				</File>
+				<File Id="693555051" Language="SFX">
+					<ShortName>units\balorSelect\BalorSelect-001.wav</ShortName>
+					<Path>SFX\units\balorSelect\BalorSelect-001_9E69E797.wem</Path>
 				</File>
 				<File Id="700121437" Language="SFX">
 					<ShortName>Spells\Feast.wav</ShortName>
@@ -1155,6 +1177,10 @@
 				<File Id="1057202847" Language="SFX">
 					<ShortName>Infernal.wav</ShortName>
 					<Path>SFX\Infernal_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="1061058352" Language="SFX">
+					<ShortName>units\skeletonSelect\SkeletonSelect-000.wav</ShortName>
+					<Path>SFX\units\skeletonSelect\SkeletonSelect-000_9E69E797.wem</Path>
 				</File>
 				<File Id="1069351979" Language="SFX">
 					<ShortName>Spells\Crew.wav</ShortName>
