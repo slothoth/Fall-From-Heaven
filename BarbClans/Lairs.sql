@@ -25,23 +25,23 @@ INSERT INTO Lairs(LairType, Callback, LairDestroyChance, SimpleText) VALUES
 ('ENRAGED', 'onLairGrantAbility', '80', 'BUFF_ENRAGED'),
 ('MUTATED', 'onLairGrantAbility', '50', 'BUFF_MUTATED'),
 ('CAGE', 'SLTH_Todo', '0', 'BUFF_HELD'),
-('SPAWN_DROWN', 'onSpawnBarb', '50', 'SLTH_UNIT_DROWN'),
-('SPAWN_SEA_SERPENT', 'onSpawnBarb', '50', 'SLTH_UNIT_SEA_SERPENT'),
-('SPAWN_SPIDER', 'onSpawnBarb', '50', 'SLTH_UNIT_GIANT_SPIDER'),
-('SPAWN_SPECTRE', 'onSpawnBarb', '50', 'SLTH_UNIT_SPECTRE'),
+('SPAWN_DROWN', 'onSpawnBarb', '50', 'UNIT_SLTH_DROWN'),
+('SPAWN_SEA_SERPENT', 'onSpawnBarb', '50', 'UNIT_SLTH_SEA_SERPENT'),
+('SPAWN_SPIDER', 'onSpawnBarb', '50', 'UNIT_SLTH_GIANT_SPIDER'),
+('SPAWN_SPECTRE', 'onSpawnBarb', '50', 'UNIT_SLTH_SPECTRE'),
 ('SPAWN_SCORPION_BAD', 'onSpawnBadScorpion', '50', NULL),
-('SPAWN_SKELETON', 'onSpawnBarb', '50', 'SLTH_UNIT_SKELETON'),
-('SPAWN_LIZARDMAN', 'onSpawnBarb', '50', 'SLTH_UNIT_LIZARDMAN'),
-('SPAWN_FROSTLING', 'onSpawnBarb', '50', 'SLTH_UNIT_FROSTLING'),
-('SPAWN_SCORPION', 'onSpawnBarb', '50', 'SLTH_UNIT_SCORPION'),
-('SUPPLIES', 'onGrantUnit', '100', 'SLTH_UNIT_SUPPLIES'),
-('PRISONER_DISCIPLE_ASHEN', 'onGrantUnit', '100', 'SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'),
-('PRISONER_DISCIPLE_EMPYREAN', 'onGrantUnit', '100', 'SLTH_UNIT_DISCIPLE_EMPYREAN'),
-('PRISONER_DISCIPLE_LEAVES', 'onGrantUnit', '100', 'SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'),
-('PRISONER_DISCIPLE_OVERLORDS', 'onGrantUnit', '100', 'SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'),
-('PRISONER_DISCIPLE_RUNES', 'onGrantUnit', '100', 'SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'),
-('PRISONER_DISCIPLE_ORDER', 'onGrantUnit', '100', 'SLTH_UNIT_DISCIPLE_THE_ORDER'),
-('PRISONER_SEA_SERPENT', 'onGrantUnit', '100', 'SLTH_UNIT_SEA_SERPENT'),
+('SPAWN_SKELETON', 'onSpawnBarb', '50', 'UNIT_SLTH_SKELETON'),
+('SPAWN_LIZARDMAN', 'onSpawnBarb', '50', 'UNIT_SLTH_LIZARDMAN'),
+('SPAWN_FROSTLING', 'onSpawnBarb', '50', 'UNIT_SLTH_FROSTLING'),
+('SPAWN_SCORPION', 'onSpawnBarb', '50', 'UNIT_SLTH_SCORPION'),
+('SUPPLIES', 'onGrantUnit', '100', 'UNIT_SLTH_SUPPLIES'),
+('PRISONER_DISCIPLE_ASHEN', 'onGrantUnit', '100', 'UNIT_SLTH_DISCIPLE_THE_ASHEN_VEIL'),
+('PRISONER_DISCIPLE_EMPYREAN', 'onGrantUnit', '100', 'UNIT_SLTH_DISCIPLE_EMPYREAN'),
+('PRISONER_DISCIPLE_LEAVES', 'onGrantUnit', '100', 'UNIT_SLTH_DISCIPLE_FELLOWSHIP_OF_LEAVES'),
+('PRISONER_DISCIPLE_OVERLORDS', 'onGrantUnit', '100', 'UNIT_SLTH_DISCIPLE_OCTOPUS_OVERLORDS'),
+('PRISONER_DISCIPLE_RUNES', 'onGrantUnit', '100', 'UNIT_SLTH_DISCIPLE_RUNES_OF_KILMORPH'),
+('PRISONER_DISCIPLE_ORDER', 'onGrantUnit', '100', 'UNIT_SLTH_DISCIPLE_THE_ORDER'),
+('PRISONER_SEA_SERPENT', 'onGrantUnit', '100', 'UNIT_SLTH_SEA_SERPENT'),
 ('PRISONER_ADVENTURER', 'onGrantUnit', '100', 'UNIT_GREAT_WRITER'),
 ('PRISONER_ARTIST', 'onGrantGreatUnit', '100', 'UNIT_GREAT_ARTIST'),
 ('PRISONER_COMMANDER', 'onGrantGreatUnit', '100', 'UNIT_GREAT_GENERAL'),
@@ -54,11 +54,11 @@ INSERT INTO Lairs(LairType, Callback, LairDestroyChance, SimpleText) VALUES
 ('ITEM_ROD_OF_WINDS', 'onGrantItem', '100', 'SLTH_EQUIPMENT_ROD_OF_WINDS'),
 ('ITEM_TIMOR_MASK', 'onGrantItem', '100', 'SLTH_EQUIPMENT_TIMOR_MASK'),
 ('SPELLSTAFF', 'onGrantItem', '100', 'SLTH_EQUIPMENT_SPELL_STAFF'),
-('PRISONER_ANGEL', 'onGrantUnit', '100', 'SLTH_UNIT_ANGEL'),
-('PRISONER_MONK', 'onGrantUnit', '100', 'SLTH_UNIT_MONK'),
-('PRISONER_ASSASSIN', 'onGrantUnit', '100', 'SLTH_UNIT_ASSASSIN'),
-('PRISONER_CHAMPION', 'onGrantUnit', '100', 'SLTH_UNIT_CHAMPION'),
-('PRISONER_MAGE', 'onGrantUnit', '100', 'SLTH_UNIT_MAGE'),
+('PRISONER_ANGEL', 'onGrantUnit', '100', 'UNIT_SLTH_ANGEL'),
+('PRISONER_MONK', 'onGrantUnit', '100', 'UNIT_SLTH_MONK'),
+('PRISONER_ASSASSIN', 'onGrantUnit', '100', 'UNIT_SLTH_ASSASSIN'),
+('PRISONER_CHAMPION', 'onGrantUnit', '100', 'UNIT_SLTH_CHAMPION'),
+('PRISONER_MAGE', 'onGrantUnit', '100', 'UNIT_SLTH_MAGE'),
 ('BONUS_CLAM', 'onGrantResource', '100', 'RESOURCE_CLAM'),
 ('BONUS_CRAB', 'onGrantResource', '100', 'RESOURCE_CRABS'),
 ('BONUS_FISH', 'onGrantResource', '100', 'RESOURCE_FISH'),
@@ -100,89 +100,89 @@ CREATE TABLE IF NOT EXISTS LairUnits(
 
 INSERT INTO LairUnits
 (UnitType,                   BigBadWaterLeader,BigBadWaterHench,BigBadFailedGraceWaterLeader,BigBadFailedGraceWaterHench,BigBadHench,BigBadFailedGraceHench) VALUES
-('SLTH_UNIT_AZER',           1,                1,               1,                           1,                          1,          1);
+('UNIT_SLTH_AZER',           1,                1,               1,                           1,                          1,          1);
 
 INSERT INTO LairUnits
 (UnitType,                   BigBadWaterLeader,BigBadFailedGraceWaterLeader) VALUES
-('SLTH_UNIT_SEA_SERPENT',    1,               1),
-('SLTH_UNIT_STYGIAN_GUARD',  1,               1),
-('SLTH_UNIT_PIRATE',         1,               1);
+('UNIT_SLTH_SEA_SERPENT',    1,               1),
+('UNIT_SLTH_STYGIAN_GUARD',  1,               1),
+('UNIT_SLTH_PIRATE',         1,               1);
 
 
 INSERT INTO LairUnits
 (UnitType,                  BigBadFailedGraceWaterLeader,BigBadFailedGraceLeader) VALUES
-('SLTH_UNIT_AIR_ELEMENTAL',  1,                           1);
+('UNIT_SLTH_AIR_ELEMENTAL',  1,                           1);
 
 INSERT INTO LairUnits
 (UnitType,                  BigBadFailedGraceWaterLeader) VALUES
-('SLTH_UNIT_WATER_ELEMENTAL',1),
-('SLTH_UNIT_KRAKEN',         1);
+('UNIT_SLTH_WATER_ELEMENTAL',1),
+('UNIT_SLTH_KRAKEN',         1);
 
 INSERT INTO LairUnits
 (UnitType,                  BigBadWaterHench, BigBadFailedGraceWaterHench, BigBadHench, BigBadFailedGraceHench) VALUES
-('SLTH_UNIT_GRIFFON',1, 1, 1,1);
+('UNIT_SLTH_GRIFFON',1, 1, 1,1);
 
 INSERT INTO LairUnits(UnitType, BigBadFailedGraceWaterHench) VALUES
-('SLTH_UNIT_DROWN',1);
+('UNIT_SLTH_DROWN',1);
 
 INSERT INTO LairUnits(UnitType, BigBadLeader, BigBadFailedGraceLeader, BigBadFailedGraceHench) VALUES
-('SLTH_UNIT_OGRE',1, 1, 1);
+('UNIT_SLTH_OGRE',1, 1, 1);
 
 INSERT INTO LairUnits(UnitType, BigBadLeader, BigBadFailedGraceLeader) VALUES
-('SLTH_UNIT_ASSASSIN',1, 1),
-('SLTH_UNIT_GIANT_SPIDER',1, 1),
-('SLTH_UNIT_HILL_GIANT',1, 1),
-('SLTH_UNIT_SPECTRE',1, 1);
+('UNIT_SLTH_ASSASSIN',1, 1),
+('UNIT_SLTH_GIANT_SPIDER',1, 1),
+('UNIT_SLTH_HILL_GIANT',1, 1),
+('UNIT_SLTH_SPECTRE',1, 1);
 
 INSERT INTO LairUnits(UnitType, BigBadLeader, BigBadHench, BigBadFailedGraceLeader, BigBadFailedGraceHench) VALUES
-('SLTH_UNIT_SCORPION',1, 1, 1, 1);
+('UNIT_SLTH_SCORPION',1, 1, 1, 1);
 
 INSERT INTO LairUnits(UnitType, BigBadHench, BigBadFailedGraceHench) VALUES
-('SLTH_UNIT_SWORDSMAN',1, 1),
-('SLTH_UNIT_WOLF',1, 1),
-('SLTH_UNIT_WOLF_RIDER',1, 1),
-('SLTH_UNIT_CHAOS_MARAUDER',1, 1),
-('SLTH_UNIT_MISTFORM',1, 1),
-('SLTH_UNIT_LION',1, 1),
-('SLTH_UNIT_TIGER',1, 1),
-('SLTH_UNIT_BABY_SPIDER',1, 1),
-('SLTH_UNIT_FAWN',1, 1);
+('UNIT_SLTH_SWORDSMAN',1, 1),
+('UNIT_SLTH_WOLF',1, 1),
+('UNIT_SLTH_WOLF_RIDER',1, 1),
+('UNIT_SLTH_CHAOS_MARAUDER',1, 1),
+('UNIT_SLTH_MISTFORM',1, 1),
+('UNIT_SLTH_LION',1, 1),
+('UNIT_SLTH_TIGER',1, 1),
+('UNIT_SLTH_BABY_SPIDER',1, 1),
+('UNIT_SLTH_FAWN',1, 1);
 
 INSERT INTO LairUnits(UnitType, BigBadFailedGraceLeader) VALUES
-('SLTH_UNIT_EARTH_ELEMENTAL',1),
-('SLTH_UNIT_FIRE_ELEMENTAL',1),
-('SLTH_UNIT_GARGOYLE',1),
-('SLTH_UNIT_VAMPIRE',1),
-('SLTH_UNIT_MYCONID',1),
-('SLTH_UNIT_EIDOLON',1),
-('SLTH_UNIT_LICH',1),
-('SLTH_UNIT_OGRE_WARCHIEF',1),
-('SLTH_UNIT_SATYR',1),
-('SLTH_UNIT_WEREWOLF',1);
+('UNIT_SLTH_EARTH_ELEMENTAL',1),
+('UNIT_SLTH_FIRE_ELEMENTAL',1),
+('UNIT_SLTH_GARGOYLE',1),
+('UNIT_SLTH_VAMPIRE',1),
+('UNIT_SLTH_MYCONID',1),
+('UNIT_SLTH_EIDOLON',1),
+('UNIT_SLTH_LICH',1),
+('UNIT_SLTH_OGRE_WARCHIEF',1),
+('UNIT_SLTH_SATYR',1),
+('UNIT_SLTH_WEREWOLF',1);
 
 INSERT INTO LairUnits
 (UnitType,                ArmaLeaders,ArmaHench) VALUES
-('SLTH_UNIT_PIT_BEAST',   1,          0),
-('SLTH_UNIT_DEATH_KNIGHT',1,          0),
-('UNIT_BALOR',       1,          0),
-('SLTH_UNIT_IMP',         0,          1),
-('SLTH_UNIT_HELLHOUND',   0,          1);
+('UNIT_SLTH_PIT_BEAST',   1,          0),
+('UNIT_SLTH_DEATH_KNIGHT',1,          0),
+('UNIT_SLTH_BALOR',       1,          0),
+('UNIT_SLTH_IMP',         0,          1),
+('UNIT_SLTH_HELLHOUND',   0,          1);
 
 INSERT INTO LairUnits(UnitType,              Barrow) VALUES
-                    ('SLTH_UNIT_SKELETON',   1),
-                    ('SLTH_UNIT_PYRE_ZOMBIE',1);
+                    ('UNIT_SLTH_SKELETON',   1),
+                    ('UNIT_SLTH_PYRE_ZOMBIE',1);
 INSERT INTO LairUnits(UnitType,             Ruins) VALUES
-                     ('SLTH_UNIT_LIZARDMAN',1),
-                     ('SLTH_UNIT_GORILLA',  1);
+                     ('UNIT_SLTH_LIZARDMAN',1),
+                     ('UNIT_SLTH_GORILLA',  1);
 INSERT INTO LairUnits(UnitType,          BarrowFailedGrace) VALUES
-                     ('SLTH_UNIT_WRAITH',1);
+                     ('UNIT_SLTH_WRAITH',1);
 INSERT INTO LairUnits(UnitType,             RuinsFailedGrace) VALUES
-                     ('SLTH_UNIT_MANTICORE',1);
+                     ('UNIT_SLTH_MANTICORE',1);
 
 INSERT INTO LairUnits(UnitType,    SnowHenchMan) VALUES
-('SLTH_UNIT_FROSTLING_ARCHER',     0),
-('SLTH_UNIT_FROSTLING_WOLF_RIDER', 0),
-('SLTH_UNIT_POLAR_BEAR',           0);
+('UNIT_SLTH_FROSTLING_ARCHER',     0),
+('UNIT_SLTH_FROSTLING_WOLF_RIDER', 0),
+('UNIT_SLTH_POLAR_BEAR',           0);
 
 INSERT INTO LairUnits(UnitType, BigBadForestedFailedGraceLeader) VALUES
-                     ('SLTH_UNIT_TREANT',1);
+                     ('UNIT_SLTH_TREANT',1);

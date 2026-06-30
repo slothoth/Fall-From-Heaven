@@ -179,7 +179,7 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
             bIsEvil = 1
         end
     elseif pUnitAbilities:HasAbility('ALIGNMENT_GOOD') then
-        iUnitToGrant = GameInfo.Units['SLTH_UNIT_ANGEL'].Index
+        iUnitToGrant = GameInfo.Units['UNIT_SLTH_ANGEL'].Index
         iPlotSpawnedLocation = Game:GetProperty('MercurianGatePlot')
         iGrantPlayer = Game:GetProperty('Mercurian')
         print('prepping to grant angel')
@@ -448,13 +448,13 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
             print('creating hyborem at',iCityMakeX ,iCityMakeY)
             local playerUnits = pInfernal:GetUnits()
-            local iLongbowMan = GameInfo.Units['SLTH_UNIT_LONGBOWMAN'].Index
-            local iChampion = GameInfo.Units['SLTH_UNIT_CHAMPION'].Index
+            local iLongbowMan = GameInfo.Units['UNIT_SLTH_LONGBOWMAN'].Index
+            local iChampion = GameInfo.Units['UNIT_SLTH_CHAMPION'].Index
             playerUnits:Create(iLongbowMan, iCityMakeX, iCityMakeY);            -- should have mobility eh
             playerUnits:Create(iLongbowMan, iCityMakeX, iCityMakeY);
             playerUnits:Create(iChampion, iCityMakeX, iCityMakeY);
             playerUnits:Create(iChampion, iCityMakeX, iCityMakeY);
-            playerUnits:Create(GameInfo.Units['SLTH_UNIT_IMP'].Index, iCityMakeX, iCityMakeY);
+            playerUnits:Create(GameInfo.Units['UNIT_SLTH_IMP'].Index, iCityMakeX, iCityMakeY);
             playerUnits:Create(GameInfo.Units['UNIT_SETTLER'].Index, iCityMakeX, iCityMakeY);
             playerUnits:Create(GameInfo.Units['UNIT_BUILDER'].Index, iCityMakeX, iCityMakeY);
             -- 3 manes: , probably needs done on city settle

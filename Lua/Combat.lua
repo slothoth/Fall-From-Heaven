@@ -1,4 +1,4 @@
-local PYRE_ZOMBIE_INDEX =  GameInfo.Units['SLTH_UNIT_PYRE_ZOMBIE'].Index
+local PYRE_ZOMBIE_INDEX =  GameInfo.Units['UNIT_SLTH_PYRE_ZOMBIE'].Index
 local bSheaimPresent
 local iExplosionDamage = 40
 

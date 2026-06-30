@@ -4,21 +4,21 @@ include('Lairs')
 
 include("GameCapabilities");                -- NOT SURE IF exists outside of UI
 
-local FreeXPUnits = { SLTH_UNIT_ADEPT = 8, SLTH_UNIT_IMP = 8, SLTH_UNIT_SHAMAN = 8, SLTH_UNIT_ARCHMAGE = 16, SLTH_UNIT_EATER_OF_DREAMS = 16,
-                      SLTH_UNIT_CORLINDALE = 8, SLTH_UNIT_DISCIPLE_OF_ACHERON = 8, SLTH_UNIT_GAELAN = 12, SLTH_UNIT_GIBBON = 8,
-                      SLTH_UNIT_GOVANNON = 8, SLTH_UNIT_HEMAH = 8, SLTH_UNIT_LICH = 16, SLTH_UNIT_ILLUSIONIST = 12, SLTH_UNIT_MAGE = 12,
-                      SLTH_UNIT_WIZARD = 12, SLTH_UNIT_MOBIUS_WITCH = 12, SLTH_UNIT_MOKKA = 12, SLTH_UNIT_SON_OF_THE_INFERNO = 16}
-local iIMP_INDEX = GameInfo.Units['SLTH_UNIT_IMP'].Index
+local FreeXPUnits = { UNIT_SLTH_ADEPT = 8, UNIT_SLTH_IMP = 8, UNIT_SLTH_SHAMAN = 8, UNIT_SLTH_ARCHMAGE = 16, UNIT_SLTH_EATER_OF_DREAMS = 16,
+                      UNIT_SLTH_CORLINDALE = 8, UNIT_SLTH_DISCIPLE_OF_ACHERON = 8, UNIT_SLTH_GAELAN = 12, UNIT_SLTH_GIBBON = 8,
+                      UNIT_SLTH_GOVANNON = 8, UNIT_SLTH_HEMAH = 8, UNIT_SLTH_LICH = 16, UNIT_SLTH_ILLUSIONIST = 12, UNIT_SLTH_MAGE = 12,
+                      UNIT_SLTH_WIZARD = 12, UNIT_SLTH_MOBIUS_WITCH = 12, UNIT_SLTH_MOKKA = 12, UNIT_SLTH_SON_OF_THE_INFERNO = 16}
+local iIMP_INDEX = GameInfo.Units['UNIT_SLTH_IMP'].Index
 local tArcaneUnits = {
-    [GameInfo.Units['SLTH_UNIT_ADEPT'].Index] = true, iIMP_INDEX = true, [GameInfo.Units['SLTH_UNIT_SHAMAN'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_ARCHMAGE'].Index] = true, [GameInfo.Units['SLTH_UNIT_EATER_OF_DREAMS'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_CORLINDALE'].Index] = true, [GameInfo.Units['SLTH_UNIT_DISCIPLE_OF_ACHERON'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GAELAN'].Index] = true, [GameInfo.Units['SLTH_UNIT_GIBBON'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GOVANNON'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = true, [GameInfo.Units['SLTH_UNIT_LICH'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_ILLUSIONIST'].Index] = true, [GameInfo.Units['SLTH_UNIT_MAGE'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = true, [GameInfo.Units['SLTH_UNIT_MOBIUS_WITCH'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_MOKKA'].Index] = true, [GameInfo.Units['SLTH_UNIT_SON_OF_THE_INFERNO'].Index] = true
+    [GameInfo.Units['UNIT_SLTH_ADEPT'].Index] = true, iIMP_INDEX = true, [GameInfo.Units['UNIT_SLTH_SHAMAN'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_ARCHMAGE'].Index] = true, [GameInfo.Units['UNIT_SLTH_EATER_OF_DREAMS'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_CORLINDALE'].Index] = true, [GameInfo.Units['UNIT_SLTH_DISCIPLE_OF_ACHERON'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GAELAN'].Index] = true, [GameInfo.Units['UNIT_SLTH_GIBBON'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GOVANNON'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_HEMAH'].Index] = true, [GameInfo.Units['UNIT_SLTH_LICH'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_ILLUSIONIST'].Index] = true, [GameInfo.Units['UNIT_SLTH_MAGE'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_WIZARD'].Index] = true, [GameInfo.Units['UNIT_SLTH_MOBIUS_WITCH'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_MOKKA'].Index] = true, [GameInfo.Units['UNIT_SLTH_SON_OF_THE_INFERNO'].Index] = true
 }
 local tBinaryMap = {
     ['0']={['8']= 0, ['4']=0, ['2']=0, ['1']=0},
@@ -156,11 +156,11 @@ end
 
 local iHALL_OF_MIRRORS_INDEX = GameInfo.Buildings['SLTH_BUILDING_HALL_OF_MIRRORS'].Index
 local iPLANAR_GATE_INDEX = GameInfo.Buildings['SLTH_BUILDING_PLANAR_GATE'].Index
-local tPlanarBuildingUnitMap = {    [GameInfo.Buildings['SLTH_BUILDING_PUBLIC_BATHS'].Index] = GameInfo.Units['SLTH_UNIT_SUCCUBUS'].Index,
-                                    [GameInfo.Buildings['SLTH_BUILDING_CARNIVAL'].Index] = GameInfo.Units['SLTH_UNIT_CHAOS_MARAUDER'].Index,
-                                    [GameInfo.Buildings['BUILDING_STUPA'].Index] = GameInfo.Units['SLTH_UNIT_TAR_DEMON'].Index,
-                                    [GameInfo.Buildings['SLTH_BUILDING_GAMBLING_HOUSE'].Index] = GameInfo.Units['SLTH_UNIT_REVELERS'].Index,
-                                    [GameInfo.Buildings['BUILDING_MAGE_GUILD'].Index] = GameInfo.Units['SLTH_UNIT_MOBIUS_WITCH'].Index
+local tPlanarBuildingUnitMap = {    [GameInfo.Buildings['SLTH_BUILDING_PUBLIC_BATHS'].Index] = GameInfo.Units['UNIT_SLTH_SUCCUBUS'].Index,
+                                    [GameInfo.Buildings['SLTH_BUILDING_CARNIVAL'].Index] = GameInfo.Units['UNIT_SLTH_CHAOS_MARAUDER'].Index,
+                                    [GameInfo.Buildings['BUILDING_STUPA'].Index] = GameInfo.Units['UNIT_SLTH_TAR_DEMON'].Index,
+                                    [GameInfo.Buildings['SLTH_BUILDING_GAMBLING_HOUSE'].Index] = GameInfo.Units['UNIT_SLTH_REVELERS'].Index,
+                                    [GameInfo.Buildings['BUILDING_MAGE_GUILD'].Index] = GameInfo.Units['UNIT_SLTH_MOBIUS_WITCH'].Index
 }
 local iGOVERNORS_MANOR_INDEX = GameInfo.Buildings['SLTH_BUILDING_GOVERNORS_MANOR'].Index
 local function SpawnAcheron()
@@ -180,7 +180,7 @@ local function SpawnAcheron()
         local iX =  pPlot:GetX()
         local iY =  pPlot:GetY()
         local playerUnits = pChosenCityState:GetUnits();
-        playerUnits:Create(GameInfo.Units['SLTH_UNIT_ACHERON'].Index, iX, iY);      -- spawn acheron for that city state
+        playerUnits:Create(GameInfo.Units['UNIT_SLTH_ACHERON'].Index, iX, iY);      -- spawn acheron for that city state
         pCity:AttachModifierByID('MODIFIER_GRANT_ACHERONS_LAIR')      -- then add a building that allows the disciples of the inferno
         pCity:AttachModifierByID('MODIFIER_GRANT_THE_DRAGONS_HORDE_BUILDING')
     else
@@ -197,7 +197,7 @@ local function SpawnOrthus()
         local iSpawnX = spawnPlot:GetX()
         local iSpawnY = spawnPlot:GetY()
         NotifyAllHumans(Locale.Lookup('LOC_ORTHUS_SPAWN_NOTIFICATION_TITLE'), Locale.Lookup('LOC_ORTHUS_SPAWN_NOTIFICATION_DESCRIPTION'), iSpawnX, iSpawnY)
-        UnitManager.InitUnitValidAdjacentHex(63, GameInfo.Units['SLTH_UNIT_ORTHUS'].Index, iSpawnX, iSpawnY);
+        UnitManager.InitUnitValidAdjacentHex(63, GameInfo.Units['UNIT_SLTH_ORTHUS'].Index, iSpawnX, iSpawnY);
     end
 end
 
@@ -1285,7 +1285,7 @@ end
 -- WORLDSPELLS
 local sWorldSpellPropKey = 'WorldSpellReady'
 
-local iDEMAGOG_INDEX = GameInfo.Units['SLTH_UNIT_DEMAGOG'].Index
+local iDEMAGOG_INDEX = GameInfo.Units['UNIT_SLTH_DEMAGOG'].Index
 local function Rally(iPlayer, tParameters)
 	-- denagog in every city, degrade each town to village and get demagog
 	-- requires crusade TODO
@@ -1340,13 +1340,13 @@ local tReligionMap = {[iESUS_INDEX]=GameInfo.Religions["RELIGION_ISLAM"].Index,
                       [iVEIL_INDEX]=iVEIL_RELIGION_INDEX,
                       [iLEAVES_INDEX]=GameInfo.Religions["RELIGION_CATHOLICISM"].Index
 }
-local tReligionPriests = {[iESUS_INDEX]=GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index,
-                          [iOCTOPUS_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index,
-                          [iEMPYREAN_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index,
-                          [iRUNES_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index,
-                          [iORDER_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index,
-                          [iVEIL_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index,
-                          [iLEAVES_INDEX]=GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index
+local tReligionPriests = {[iESUS_INDEX]=GameInfo.Units['UNIT_SLTH_NIGHTWATCH'].Index,
+                          [iOCTOPUS_INDEX]=GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_OVERLORDS'].Index,
+                          [iEMPYREAN_INDEX]=GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_EMPYREAN'].Index,
+                          [iRUNES_INDEX]=GameInfo.Units['UNIT_SLTH_PRIEST_OF_KILMORPH'].Index,
+                          [iORDER_INDEX]=GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_ORDER'].Index,
+                          [iVEIL_INDEX]=GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_VEIL'].Index,
+                          [iLEAVES_INDEX]=GameInfo.Units['UNIT_SLTH_PRIEST_OF_LEAVES'].Index
 }
 local function ReligiousFervor(iPlayer, tParameters)
     -- Grants one priest of the state religion per city, with experience equal

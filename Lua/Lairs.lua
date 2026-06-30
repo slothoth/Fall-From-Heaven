@@ -21,7 +21,7 @@ iFEATURE_FOREST = GameInfo.Features['FEATURE_FOREST'].Index
 iSnowTerrain = GameInfo.Terrains['TERRAIN_SNOW'].Index
 iSnowTerrainHills = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
 
-iTREANT_INDEX = GameInfo.Units['SLTH_UNIT_TREANT'].Index
+iTREANT_INDEX = GameInfo.Units['UNIT_SLTH_TREANT'].Index
 
 local iNotifType = NotificationTypes.USER_DEFINED_2;                -- TODO make barb one instead?
 
@@ -257,7 +257,7 @@ end
 local function onSpawnBadScorpion(pUnit, pPlot, sEventInfo)
     local pBarbPlayer = Players[63]
     local barbUnits = pBarbPlayer:GetUnits();
-    local tUnitInfo =  tLairUnitIndices['SLTH_UNIT_SCORPION'].Index
+    local tUnitInfo =  tLairUnitIndices['UNIT_SLTH_SCORPION'].Index
     local iUnitIndex = tUnitInfo.Index
     local iX, iY = pUnit:GetX(), pUnit:GetY()
     local bSuccess = DisplaceUnits(pPlot, pUnit, iX, iY)

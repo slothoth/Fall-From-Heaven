@@ -34,6 +34,6 @@
 		<Row Name="ICON_BUILDING_KEEP" Atlas="ICON_ATLAS_BLACKDEATH_SCENARIO_BUILDINGS" Index="4"/>
 	</IconDefinitions>
 	<IconDefinitions>
-    	<Row Name="ICON_SLTH_UNIT_ARCANE_BARGE"  Atlas="ICON_ATLAS_PORTUGAL_UNITS" Index="0"/>
+    	<Row Name="ICON_UNIT_SLTH_ARCANE_BARGE"  Atlas="ICON_ATLAS_PORTUGAL_UNITS" Index="0"/>
 	</IconDefinitions>
 </GameInfo>

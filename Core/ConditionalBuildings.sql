@@ -274,7 +274,7 @@ INSERT INTO Modifiers(ModifierId, ModifierType, RunOnce, Permanent, OwnerRequire
 ('GRANT_THREE_GIANTS', 'MODIFIER_PLAYER_GRANT_UNIT_IN_CAPITAL', '1', '1', 'SLTH_PLAYER_HAS_CAPITAL');
 
 INSERT INTO ModifierArguments(ModifierId, Name, "Value") VALUES
-('GRANT_THREE_GIANTS', 'UnitType', 'SLTH_UNIT_HILL_GIANT'),
+('GRANT_THREE_GIANTS', 'UnitType', 'UNIT_SLTH_HILL_GIANT'),
 ('GRANT_THREE_GIANTS', 'Amount', '3'),
 ('GRANT_THREE_GIANTS', 'AllowUniqueOverride', '0');
 

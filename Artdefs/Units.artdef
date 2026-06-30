@@ -39,7 +39,7 @@
 							<m_ParamName text="EscortFormation"/>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="SLTH_UNIT_ACHERON"/>
+							<m_ElementName text="UNIT_SLTH_ACHERON"/>
 							<m_RootCollectionName text="Units"/>
 							<m_ArtDefPath text="Units.artdef"/>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -136,7 +136,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ACHERON"/>
+				<m_Name text="UNIT_SLTH_ACHERON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -277,7 +277,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ADVENTURER"/>
+				<m_Name text="UNIT_SLTH_ADVENTURER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -418,7 +418,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ARCHER"/>
+				<m_Name text="UNIT_SLTH_ARCHER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -546,7 +546,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MARKSMAN"/>
+				<m_Name text="UNIT_SLTH_MARKSMAN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -687,7 +687,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FROSTLING_ARCHER"/>
+				<m_Name text="UNIT_SLTH_FROSTLING_ARCHER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -828,7 +828,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_GILDEN"/>
+				<m_Name text="UNIT_SLTH_GILDEN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -969,7 +969,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DWARVEN_SLINGER"/>
+				<m_Name text="UNIT_SLTH_DWARVEN_SLINGER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -1110,7 +1110,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ARCHMAGE"/>
+				<m_Name text="UNIT_SLTH_ARCHMAGE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -1251,7 +1251,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DJINN"/>
+				<m_Name text="UNIT_SLTH_DJINN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -1392,7 +1392,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SON_OF_THE_INFERNO"/>
+				<m_Name text="UNIT_SLTH_SON_OF_THE_INFERNO"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -1533,7 +1533,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_EATER_OF_DREAMS"/>
+				<m_Name text="UNIT_SLTH_EATER_OF_DREAMS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -1661,7 +1661,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ARQUEBUS"/>
+				<m_Name text="UNIT_SLTH_ARQUEBUS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -1789,7 +1789,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_TEUTORIX"/>
+				<m_Name text="UNIT_SLTH_TEUTORIX"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -1917,7 +1917,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_GUYBRUSH"/>
+				<m_Name text="UNIT_SLTH_GUYBRUSH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -2058,7 +2058,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ARTIST"/>
+				<m_Name text="UNIT_SLTH_ARTIST"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -2199,7 +2199,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MOROI"/>
+				<m_Name text="UNIT_SLTH_MOROI"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -2340,7 +2340,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SONS_OF_ASENA"/>
+				<m_Name text="UNIT_SLTH_SONS_OF_ASENA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -2481,7 +2481,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SWORDSMAN"/>
+				<m_Name text="UNIT_SLTH_SWORDSMAN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -2622,7 +2622,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BOARDING_PARTY"/>
+				<m_Name text="UNIT_SLTH_BOARDING_PARTY"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -2763,7 +2763,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_RANTINE"/>
+				<m_Name text="UNIT_SLTH_RANTINE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -2904,7 +2904,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_EIDOLON"/>
+				<m_Name text="UNIT_SLTH_EIDOLON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -3045,7 +3045,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PARAMANDER"/>
+				<m_Name text="UNIT_SLTH_PARAMANDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -3186,7 +3186,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MIMIC"/>
+				<m_Name text="UNIT_SLTH_MIMIC"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -3327,7 +3327,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ANGEL"/>
+				<m_Name text="UNIT_SLTH_ANGEL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -3468,7 +3468,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_EINHERJAR"/>
+				<m_Name text="UNIT_SLTH_EINHERJAR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -3609,7 +3609,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_LUONNOTAR"/>
+				<m_Name text="UNIT_SLTH_LUONNOTAR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -3750,7 +3750,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BARNAXUS"/>
+				<m_Name text="UNIT_SLTH_BARNAXUS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -3872,26 +3872,13 @@
 							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Warrior"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="WARRIOR"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CLOCKWORK_GOLEM"/>
+				<m_Name text="UNIT_SLTH_CLOCKWORK_GOLEM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -4013,26 +4000,13 @@
 							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Warrior"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="WARRIOR"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_NULLSTONE_GOLEM"/>
+				<m_Name text="UNIT_SLTH_NULLSTONE_GOLEM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -4154,26 +4128,13 @@
 							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Warrior"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="WARRIOR"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MITHRIL_GOLEM"/>
+				<m_Name text="UNIT_SLTH_MITHRIL_GOLEM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -4301,7 +4262,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BATTERING_RAM"/>
+				<m_Name text="UNIT_SLTH_BATTERING_RAM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -4442,7 +4403,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BERSERKER"/>
+				<m_Name text="UNIT_SLTH_BERSERKER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -4583,7 +4544,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DWARVEN_SOLDIER_RUNES"/>
+				<m_Name text="UNIT_SLTH_DWARVEN_SOLDIER_RUNES"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -4724,7 +4685,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BRUJAH"/>
+				<m_Name text="UNIT_SLTH_BRUJAH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -4865,7 +4826,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CIRCLE_OF_URD"/>
+				<m_Name text="UNIT_SLTH_CIRCLE_OF_URD"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -5006,7 +4967,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CHAOS_MARAUDER"/>
+				<m_Name text="UNIT_SLTH_CHAOS_MARAUDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -5159,7 +5120,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CANNON"/>
+				<m_Name text="UNIT_SLTH_CANNON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -5312,7 +5273,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DWARVEN_CANNON"/>
+				<m_Name text="UNIT_SLTH_DWARVEN_CANNON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -5440,7 +5401,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CARAVEL"/>
+				<m_Name text="UNIT_SLTH_CARAVEL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -5593,7 +5554,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CATAPULT"/>
+				<m_Name text="UNIT_SLTH_CATAPULT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -5721,7 +5682,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BATTLEMASTER"/>
+				<m_Name text="UNIT_SLTH_BATTLEMASTER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -5862,7 +5823,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CHAMPION"/>
+				<m_Name text="UNIT_SLTH_CHAMPION"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -6003,7 +5964,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DRAGON_SLAYER"/>
+				<m_Name text="UNIT_SLTH_DRAGON_SLAYER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -6144,7 +6105,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CHARIOT"/>
+				<m_Name text="UNIT_SLTH_CHARIOT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -6285,7 +6246,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_COMMANDER"/>
+				<m_Name text="UNIT_SLTH_COMMANDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -6426,7 +6387,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_LOKI"/>
+				<m_Name text="UNIT_SLTH_LOKI"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -6567,7 +6528,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PUPPET"/>
+				<m_Name text="UNIT_SLTH_PUPPET"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -6708,7 +6669,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CORLINDALE"/>
+				<m_Name text="UNIT_SLTH_CORLINDALE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -6849,7 +6810,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CROSSBOWMAN"/>
+				<m_Name text="UNIT_SLTH_CROSSBOWMAN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -6990,7 +6951,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ARTHENDAIN"/>
+				<m_Name text="UNIT_SLTH_ARTHENDAIN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -7118,7 +7079,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CRUSADER"/>
+				<m_Name text="UNIT_SLTH_CRUSADER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -7259,7 +7220,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS"/>
+				<m_Name text="UNIT_SLTH_DISCIPLE_OCTOPUS_OVERLORDS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -7400,7 +7361,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DISCIPLE_OF_ACHERON"/>
+				<m_Name text="UNIT_SLTH_DISCIPLE_OF_ACHERON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -7541,7 +7502,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH"/>
+				<m_Name text="UNIT_SLTH_DISCIPLE_RUNES_OF_KILMORPH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -7682,7 +7643,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DISCIPLE_THE_ORDER"/>
+				<m_Name text="UNIT_SLTH_DISCIPLE_THE_ORDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -8092,7 +8053,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FRIGATE"/>
+				<m_Name text="UNIT_SLTH_FRIGATE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -8220,7 +8181,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_GALLEON"/>
+				<m_Name text="UNIT_SLTH_GALLEON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -8348,7 +8309,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_GALLEY"/>
+				<m_Name text="UNIT_SLTH_GALLEY"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -8489,7 +8450,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_GRIGORI_MEDIC"/>
+				<m_Name text="UNIT_SLTH_GRIGORI_MEDIC"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -8617,7 +8578,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_HORSE_ARCHER"/>
+				<m_Name text="UNIT_SLTH_HORSE_ARCHER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -8745,7 +8706,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CAMEL_ARCHER"/>
+				<m_Name text="UNIT_SLTH_CAMEL_ARCHER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -8873,7 +8834,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CENTAUR_ARCHER"/>
+				<m_Name text="UNIT_SLTH_CENTAUR_ARCHER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -9001,7 +8962,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FYRDWELL"/>
+				<m_Name text="UNIT_SLTH_FYRDWELL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -9129,7 +9090,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_NYXKIN"/>
+				<m_Name text="UNIT_SLTH_NYXKIN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -9270,7 +9231,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_HORSEMAN"/>
+				<m_Name text="UNIT_SLTH_HORSEMAN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -9411,7 +9372,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FROSTLING_WOLF_RIDER"/>
+				<m_Name text="UNIT_SLTH_FROSTLING_WOLF_RIDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -9533,26 +9494,13 @@
 							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Horseman"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="HORSEMAN"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_WOLF_RIDER"/>
+				<m_Name text="UNIT_SLTH_WOLF_RIDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -9693,7 +9641,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CENTAUR"/>
+				<m_Name text="UNIT_SLTH_CENTAUR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -9834,7 +9782,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BOAR_RIDER"/>
+				<m_Name text="UNIT_SLTH_BOAR_RIDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -9975,7 +9923,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_HUNTER"/>
+				<m_Name text="UNIT_SLTH_HUNTER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -10116,7 +10064,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SHAMAN"/>
+				<m_Name text="UNIT_SLTH_SHAMAN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -10257,7 +10205,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DIVIDED_SOUL"/>
+				<m_Name text="UNIT_SLTH_DIVIDED_SOUL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -10398,7 +10346,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DEVOUT"/>
+				<m_Name text="UNIT_SLTH_DEVOUT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -10539,7 +10487,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_LIZARDMAN"/>
+				<m_Name text="UNIT_SLTH_LIZARDMAN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -10680,7 +10628,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_HARLEQUIN"/>
+				<m_Name text="UNIT_SLTH_HARLEQUIN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -10821,7 +10769,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FAWN"/>
+				<m_Name text="UNIT_SLTH_FAWN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -10962,7 +10910,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SATYR"/>
+				<m_Name text="UNIT_SLTH_SATYR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -11103,7 +11051,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_YVAIN"/>
+				<m_Name text="UNIT_SLTH_YVAIN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -11244,7 +11192,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MOKKA"/>
+				<m_Name text="UNIT_SLTH_MOKKA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -11385,7 +11333,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_REVELERS"/>
+				<m_Name text="UNIT_SLTH_REVELERS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -11526,7 +11474,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_IMMORTAL"/>
+				<m_Name text="UNIT_SLTH_IMMORTAL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -11654,7 +11602,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DEATH_KNIGHT"/>
+				<m_Name text="UNIT_SLTH_DEATH_KNIGHT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -11795,7 +11743,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FIREBOW"/>
+				<m_Name text="UNIT_SLTH_FIREBOW"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -11936,7 +11884,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_LONGBOWMAN"/>
+				<m_Name text="UNIT_SLTH_LONGBOWMAN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -12077,7 +12025,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ILLUSIONIST"/>
+				<m_Name text="UNIT_SLTH_ILLUSIONIST"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -12218,7 +12166,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MAGE"/>
+				<m_Name text="UNIT_SLTH_MAGE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -12359,7 +12307,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DWARVEN_DRUID"/>
+				<m_Name text="UNIT_SLTH_DWARVEN_DRUID"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -12500,7 +12448,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PRIEST_OF_THE_VEIL"/>
+				<m_Name text="UNIT_SLTH_PRIEST_OF_THE_VEIL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -12641,7 +12589,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_WIZARD"/>
+				<m_Name text="UNIT_SLTH_WIZARD"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -12769,7 +12717,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MAGNADINE"/>
+				<m_Name text="UNIT_SLTH_MAGNADINE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -12985,7 +12933,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MANES"/>
+				<m_Name text="UNIT_SLTH_MANES"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -13179,20 +13127,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Entry"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Builder"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="BUILDER"/>
+							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -13201,7 +13136,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MUD_GOLEM"/>
+				<m_Name text="UNIT_SLTH_MUD_GOLEM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -13329,7 +13264,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MERCENARY_MOUNTED"/>
+				<m_Name text="UNIT_SLTH_MERCENARY_MOUNTED"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -13470,7 +13405,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MERCHANT"/>
+				<m_Name text="UNIT_SLTH_MERCHANT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -13611,7 +13546,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MOBIUS_WITCH"/>
+				<m_Name text="UNIT_SLTH_MOBIUS_WITCH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -13739,7 +13674,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MONK"/>
+				<m_Name text="UNIT_SLTH_MONK"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -13867,7 +13802,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PALADIN"/>
+				<m_Name text="UNIT_SLTH_PALADIN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -13995,7 +13930,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_VERDANDI"/>
+				<m_Name text="UNIT_SLTH_VERDANDI"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -14136,7 +14071,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PRIEST_OF_KILMORPH"/>
+				<m_Name text="UNIT_SLTH_PRIEST_OF_KILMORPH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -14277,7 +14212,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PRIEST_OF_THE_ORDER"/>
+				<m_Name text="UNIT_SLTH_PRIEST_OF_THE_ORDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -14418,7 +14353,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PRIEST_OF_THE_OVERLORDS"/>
+				<m_Name text="UNIT_SLTH_PRIEST_OF_THE_OVERLORDS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -14559,7 +14494,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PRIEST_OF_WINTER"/>
+				<m_Name text="UNIT_SLTH_PRIEST_OF_WINTER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -14687,7 +14622,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PIRATE"/>
+				<m_Name text="UNIT_SLTH_PIRATE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -14815,7 +14750,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PRIVATEER"/>
+				<m_Name text="UNIT_SLTH_PRIVATEER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -14956,7 +14891,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PROPHET"/>
+				<m_Name text="UNIT_SLTH_PROPHET"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -15084,7 +15019,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_AIRSHIP"/>
+				<m_Name text="UNIT_SLTH_AIRSHIP"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -15212,7 +15147,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_QUEEN_OF_THE_LINE"/>
+				<m_Name text="UNIT_SLTH_QUEEN_OF_THE_LINE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -15353,7 +15288,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_RANGER"/>
+				<m_Name text="UNIT_SLTH_RANGER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -15494,7 +15429,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SCIENTIST"/>
+				<m_Name text="UNIT_SLTH_SCIENTIST"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -15660,7 +15595,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SCOUT"/>
+				<m_Name text="UNIT_SLTH_SCOUT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -15807,26 +15742,13 @@
 							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Scout"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="SCOUT"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_GOBLIN"/>
+				<m_Name text="UNIT_SLTH_GOBLIN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -16042,7 +15964,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SLAVE"/>
+				<m_Name text="UNIT_SLTH_SLAVE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -16170,7 +16092,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_TRIREME"/>
+				<m_Name text="UNIT_SLTH_TRIREME"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -16298,7 +16220,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_VALIN"/>
+				<m_Name text="UNIT_SLTH_VALIN"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -16426,7 +16348,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_WAR_ELEPHANT"/>
+				<m_Name text="UNIT_SLTH_WAR_ELEPHANT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -16554,7 +16476,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ELEPHANT"/>
+				<m_Name text="UNIT_SLTH_ELEPHANT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -16682,7 +16604,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_WAR_MACHINE"/>
+				<m_Name text="UNIT_SLTH_WAR_MACHINE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -16823,7 +16745,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_HILL_GIANT"/>
+				<m_Name text="UNIT_SLTH_HILL_GIANT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -16854,7 +16776,7 @@
 							<m_ParamName text="EscortFormation"/>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="UNIT_BALOR"/>
+							<m_ElementName text="UNIT_SLTH_BALOR"/>
 							<m_RootCollectionName text="Units"/>
 							<m_ArtDefPath text="Units.artdef"/>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -16951,7 +16873,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="UNIT_BALOR"/>
+				<m_Name text="UNIT_SLTH_BALOR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -17079,7 +17001,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SPHENER"/>
+				<m_Name text="UNIT_SLTH_SPHENER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -17207,7 +17129,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MARDERO"/>
+				<m_Name text="UNIT_SLTH_MARDERO"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -17329,26 +17251,13 @@
 							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Warrior"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="WARRIOR"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_IRON_GOLEM"/>
+				<m_Name text="UNIT_SLTH_IRON_GOLEM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -17470,26 +17379,13 @@
 							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Warrior"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="WARRIOR"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_WOOD_GOLEM"/>
+				<m_Name text="UNIT_SLTH_WOOD_GOLEM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -17630,7 +17526,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FLESH_GOLEM"/>
+				<m_Name text="UNIT_SLTH_FLESH_GOLEM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -17771,7 +17667,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_OGRE"/>
+				<m_Name text="UNIT_SLTH_OGRE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -17912,7 +17808,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_OGRE_WARCHIEF"/>
+				<m_Name text="UNIT_SLTH_OGRE_WARCHIEF"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -18053,7 +17949,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_STONESKIN_OGRE"/>
+				<m_Name text="UNIT_SLTH_STONESKIN_OGRE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -18194,7 +18090,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_STYGIAN_GUARD"/>
+				<m_Name text="UNIT_SLTH_STYGIAN_GUARD"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -18316,26 +18212,13 @@
 							<m_Name text=""/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..StringValue">
-										<m_Value text="Warrior"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="WARRIOR"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
 					</Element>
 					<Element>
 						<m_CollectionName text="AttachmentVisibility"/>
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_GARGOYLE"/>
+				<m_Name text="UNIT_SLTH_GARGOYLE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -18476,7 +18359,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ADEPT"/>
+				<m_Name text="UNIT_SLTH_ADEPT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -18617,7 +18500,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_IMP"/>
+				<m_Name text="UNIT_SLTH_IMP"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -18745,7 +18628,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SUPPLIES"/>
+				<m_Name text="UNIT_SLTH_SUPPLIES"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -18873,7 +18756,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_KNIGHT"/>
+				<m_Name text="UNIT_SLTH_KNIGHT"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -19001,7 +18884,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CENTAUR_LANCER"/>
+				<m_Name text="UNIT_SLTH_CENTAUR_LANCER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -19142,7 +19025,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_CENTAUR_CHARGER"/>
+				<m_Name text="UNIT_SLTH_CENTAUR_CHARGER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -19270,7 +19153,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_WAR_TORTOISE"/>
+				<m_Name text="UNIT_SLTH_WAR_TORTOISE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -19398,7 +19281,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_HORNGUARD"/>
+				<m_Name text="UNIT_SLTH_HORNGUARD"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -19526,7 +19409,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_TUMTUM"/>
+				<m_Name text="UNIT_SLTH_TUMTUM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -19654,7 +19537,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BISON_RIDER"/>
+				<m_Name text="UNIT_SLTH_BISON_RIDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -19795,7 +19678,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DWARVEN_SHADOW"/>
+				<m_Name text="UNIT_SLTH_DWARVEN_SHADOW"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -19936,7 +19819,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_NIGHTWATCH"/>
+				<m_Name text="UNIT_SLTH_NIGHTWATCH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -20064,7 +19947,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_RATHA"/>
+				<m_Name text="UNIT_SLTH_RATHA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -20192,7 +20075,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SHADOWRIDER"/>
+				<m_Name text="UNIT_SLTH_SHADOWRIDER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -20405,7 +20288,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_AURIC_ASCENDED"/>
+				<m_Name text="UNIT_SLTH_AURIC_ASCENDED"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -20618,7 +20501,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_WRATH"/>
+				<m_Name text="UNIT_SLTH_WRATH"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -20746,7 +20629,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_HERNE"/>
+				<m_Name text="UNIT_SLTH_HERNE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -20777,7 +20660,7 @@
 							<m_ParamName text="EscortFormation"/>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="SLTH_UNIT_ABASHI"/>
+							<m_ElementName text="UNIT_SLTH_ABASHI"/>
 							<m_RootCollectionName text="Units"/>
 							<m_ArtDefPath text="Units.artdef"/>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -20861,7 +20744,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ABASHI"/>
+				<m_Name text="UNIT_SLTH_ABASHI"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -20892,7 +20775,7 @@
 							<m_ParamName text="EscortFormation"/>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="SLTH_UNIT_DRIFA"/>
+							<m_ElementName text="UNIT_SLTH_DRIFA"/>
 							<m_RootCollectionName text="Units"/>
 							<m_ArtDefPath text="Units.artdef"/>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -20976,7 +20859,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DRIFA"/>
+				<m_Name text="UNIT_SLTH_DRIFA"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -21007,7 +20890,7 @@
 							<m_ParamName text="EscortFormation"/>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="SLTH_UNIT_EURABATRES"/>
+							<m_ElementName text="UNIT_SLTH_EURABATRES"/>
 							<m_RootCollectionName text="Units"/>
 							<m_ArtDefPath text="Units.artdef"/>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -21091,7 +20974,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_EURABATRES"/>
+				<m_Name text="UNIT_SLTH_EURABATRES"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -21219,7 +21102,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DRUID"/>
+				<m_Name text="UNIT_SLTH_DRUID"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -21347,7 +21230,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_DEMAGOG"/>
+				<m_Name text="UNIT_SLTH_DEMAGOG"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -21488,7 +21371,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FLURRY"/>
+				<m_Name text="UNIT_SLTH_FLURRY"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -21616,7 +21499,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MAROS"/>
+				<m_Name text="UNIT_SLTH_MAROS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -21744,7 +21627,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_BASIUM"/>
+				<m_Name text="UNIT_SLTH_BASIUM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -21872,7 +21755,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ORTHUS"/>
+				<m_Name text="UNIT_SLTH_ORTHUS"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -22000,7 +21883,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_PYRE_ZOMBIE"/>
+				<m_Name text="UNIT_SLTH_PYRE_ZOMBIE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -22128,7 +22011,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MESHABBER"/>
+				<m_Name text="UNIT_SLTH_MESHABBER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -22159,7 +22042,7 @@
 							<m_ParamName text="EscortFormation"/>
 						</Element>
 						<Element class="AssetObjects..ArtDefReferenceValue">
-							<m_ElementName text="SLTH_UNIT_ABASHI"/>
+							<m_ElementName text="UNIT_SLTH_ABASHI"/>
 							<m_RootCollectionName text="Units"/>
 							<m_ArtDefPath text="Units.artdef"/>
 							<m_CollectionIsLocked>true</m_CollectionIsLocked>
@@ -22243,7 +22126,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_AIR_ELEMENTAL"/>
+				<m_Name text="UNIT_SLTH_AIR_ELEMENTAL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -22371,7 +22254,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_ICE_ELEMENTAL"/>
+				<m_Name text="UNIT_SLTH_ICE_ELEMENTAL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -22499,7 +22382,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FIREBALL"/>
+				<m_Name text="UNIT_SLTH_FIREBALL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -22627,7 +22510,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_FIRE_ELEMENTAL"/>
+				<m_Name text="UNIT_SLTH_FIRE_ELEMENTAL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -22755,7 +22638,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_AZER"/>
+				<m_Name text="UNIT_SLTH_AZER"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -22883,7 +22766,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SEVERED_SOUL"/>
+				<m_Name text="UNIT_SLTH_SEVERED_SOUL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -23011,7 +22894,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_METEOR"/>
+				<m_Name text="UNIT_SLTH_METEOR"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -23139,7 +23022,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_LIGHTNING_ELEMENTAL"/>
+				<m_Name text="UNIT_SLTH_LIGHTNING_ELEMENTAL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -23267,7 +23150,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_MISTFORM"/>
+				<m_Name text="UNIT_SLTH_MISTFORM"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -23395,7 +23278,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_HAWK"/>
+				<m_Name text="UNIT_SLTH_HAWK"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -23523,7 +23406,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_EYE"/>
+				<m_Name text="UNIT_SLTH_EYE"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -26864,7 +26747,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_EARTH_ELEMENTAL"/>
+				<m_Name text="UNIT_SLTH_EARTH_ELEMENTAL"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
             <Element>
@@ -27005,7 +26888,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="SLTH_UNIT_SKELETON"/>
+				<m_Name text="UNIT_SLTH_SKELETON"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>

@@ -753,8 +753,69 @@
 				<Event Id="2025865353" Name="Stop_Leader_Music_SLTH_CIVILIZATION_SIDAR"/>
 				<Event Id="2694523632" Name="Stop_Leader_Music_SLTH_CIVILIZATION_SVARTALFAR"/>
 				<Event Id="3231580977" Name="Stop_Leader_Music_SLTH_LEADER_DECIUS"/>
-				<Event Id="1607748639" Name="Unit_Select_Slth_Balor"/>
 				<Event Id="125284958" Name="Unit_Selected_Balor"/>
+				<Event Id="2596310784" Name="Unit_Selected_Slth_Abashi"/>
+				<Event Id="3622178466" Name="Unit_Selected_Slth_Acheron"/>
+				<Event Id="4175656168" Name="Unit_Selected_Slth_Arthendain"/>
+				<Event Id="2883818384" Name="Unit_Selected_Slth_Baby_Spider"/>
+				<Event Id="2912746186" Name="Unit_Selected_Slth_Balor"/>
+				<Event Id="2690579207" Name="Unit_Selected_Slth_Bambur"/>
+				<Event Id="349337704" Name="Unit_Selected_Slth_Barnaxus"/>
+				<Event Id="1680778013" Name="Unit_Selected_Slth_Boar_Rider"/>
+				<Event Id="3727505775" Name="Unit_Selected_Slth_Bone_Golem"/>
+				<Event Id="1804020394" Name="Unit_Selected_Slth_Brujah"/>
+				<Event Id="840783892" Name="Unit_Selected_Slth_Clockwork_Golem"/>
+				<Event Id="90662749" Name="Unit_Selected_Slth_Diseased_Corpse"/>
+				<Event Id="142430216" Name="Unit_Selected_Slth_Drifa"/>
+				<Event Id="4151295602" Name="Unit_Selected_Slth_Drown"/>
+				<Event Id="3112435096" Name="Unit_Selected_Slth_Dwarven_Druid"/>
+				<Event Id="2455048460" Name="Unit_Selected_Slth_Dwarven_Shadow"/>
+				<Event Id="116370630" Name="Unit_Selected_Slth_Dwarven_Slinger"/>
+				<Event Id="784915276" Name="Unit_Selected_Slth_Dwarven_Soldier_Runes"/>
+				<Event Id="3770242795" Name="Unit_Selected_Slth_Elephant"/>
+				<Event Id="190454352" Name="Unit_Selected_Slth_Eurabatres"/>
+				<Event Id="4132023268" Name="Unit_Selected_Slth_Gargoyle"/>
+				<Event Id="101713633" Name="Unit_Selected_Slth_Giant_Spider"/>
+				<Event Id="969360369" Name="Unit_Selected_Slth_Goblin"/>
+				<Event Id="1820553986" Name="Unit_Selected_Slth_Gorilla"/>
+				<Event Id="488591789" Name="Unit_Selected_Slth_Gurid"/>
+				<Event Id="1509887531" Name="Unit_Selected_Slth_Hawk"/>
+				<Event Id="2755479479" Name="Unit_Selected_Slth_Hill_Giant"/>
+				<Event Id="100400162" Name="Unit_Selected_Slth_Hornguard"/>
+				<Event Id="1144587622" Name="Unit_Selected_Slth_Imp"/>
+				<Event Id="1848143439" Name="Unit_Selected_Slth_Iron_Golem"/>
+				<Event Id="2704998192" Name="Unit_Selected_Slth_Lich"/>
+				<Event Id="2637887842" Name="Unit_Selected_Slth_Lion"/>
+				<Event Id="402525876" Name="Unit_Selected_Slth_Lizardman"/>
+				<Event Id="1909009927" Name="Unit_Selected_Slth_Losha"/>
+				<Event Id="1702312388" Name="Unit_Selected_Slth_Manes"/>
+				<Event Id="1949397492" Name="Unit_Selected_Slth_Manticore"/>
+				<Event Id="4201280931" Name="Unit_Selected_Slth_Margalard"/>
+				<Event Id="1598395146" Name="Unit_Selected_Slth_Maros"/>
+				<Event Id="187595666" Name="Unit_Selected_Slth_Mithril_Golem"/>
+				<Event Id="2216482975" Name="Unit_Selected_Slth_Mud_Golem"/>
+				<Event Id="1720309339" Name="Unit_Selected_Slth_Nullstone_Golem"/>
+				<Event Id="4173365661" Name="Unit_Selected_Slth_Ogre"/>
+				<Event Id="4019085761" Name="Unit_Selected_Slth_Ogre_Warchief"/>
+				<Event Id="3219490643" Name="Unit_Selected_Slth_Orthus"/>
+				<Event Id="3911002397" Name="Unit_Selected_Slth_Rantine"/>
+				<Event Id="4172342951" Name="Unit_Selected_Slth_Sand_Lion"/>
+				<Event Id="3123848158" Name="Unit_Selected_Slth_Saverous"/>
+				<Event Id="3986630813" Name="Unit_Selected_Slth_Sea_Serpent"/>
+				<Event Id="1667727174" Name="Unit_Selected_Slth_Severed_Soul"/>
+				<Event Id="836105713" Name="Unit_Selected_Slth_Skeleton"/>
+				<Event Id="3090998458" Name="Unit_Selected_Slth_Stoneskin_Ogre"/>
+				<Event Id="3931451177" Name="Unit_Selected_Slth_Stygian_Guard"/>
+				<Event Id="3761207375" Name="Unit_Selected_Slth_Succubus"/>
+				<Event Id="627010121" Name="Unit_Selected_Slth_Tiger"/>
+				<Event Id="547322044" Name="Unit_Selected_Slth_TumTum"/>
+				<Event Id="93264798" Name="Unit_Selected_Slth_Vampire"/>
+				<Event Id="3990996452" Name="Unit_Selected_Slth_Vampire_Lord"/>
+				<Event Id="3523927554" Name="Unit_Selected_Slth_War_Elephant"/>
+				<Event Id="446313844" Name="Unit_Selected_Slth_Wolf"/>
+				<Event Id="979345697" Name="Unit_Selected_Slth_Wolf_Rider"/>
+				<Event Id="1700239830" Name="Unit_Selected_Slth_Wood_Golem"/>
+				<Event Id="2283097181" Name="Unit_Selected_Slth_Wraith"/>
 			</IncludedEvents>
 			<IncludedMemoryFiles>
 				<File Id="7226178" Language="SFX">
@@ -769,9 +830,17 @@
 					<ShortName>units\balorSelect\BalorSelect-002.wav</ShortName>
 					<Path>SFX\units\balorSelect\BalorSelect-002_9E69E797.wem</Path>
 				</File>
+				<File Id="13203605" Language="SFX">
+					<ShortName>units\vampireSelect\VampireSelect-001.wav</ShortName>
+					<Path>SFX\units\vampireSelect\VampireSelect-001_9E69E797.wem</Path>
+				</File>
 				<File Id="14892073" Language="SFX">
 					<ShortName>Spells\Sing2.wav</ShortName>
 					<Path>SFX\Spells\Sing2_9E69E797.wem</Path>
+				</File>
+				<File Id="20976050" Language="SFX">
+					<ShortName>units\gorillaSelect\Gorilla-003.wav</ShortName>
+					<Path>SFX\units\gorillaSelect\Gorilla-003_9E69E797.wem</Path>
 				</File>
 				<File Id="22186019" Language="SFX">
 					<ShortName>units\dwarfOrder\DwarfOrder-001.wav</ShortName>
@@ -789,6 +858,10 @@
 					<ShortName>Spells\Tiger.wav</ShortName>
 					<Path>SFX\Spells\Tiger_9E69E797.wem</Path>
 				</File>
+				<File Id="44823469" Language="SFX">
+					<ShortName>units\vampireSelect\VampireSelect-000.wav</ShortName>
+					<Path>SFX\units\vampireSelect\VampireSelect-000_9E69E797.wem</Path>
+				</File>
 				<File Id="47107977" Language="SFX">
 					<ShortName>Spells\Wraith.wav</ShortName>
 					<Path>SFX\Spells\Wraith_9E69E797.wem</Path>
@@ -801,6 +874,10 @@
 					<ShortName>Spells\Feed.wav</ShortName>
 					<Path>SFX\Spells\Feed_9E69E797.wem</Path>
 				</File>
+				<File Id="64909372" Language="SFX">
+					<ShortName>units\goblinSelect\GoblinSelect-004.wav</ShortName>
+					<Path>SFX\units\goblinSelect\GoblinSelect-004_9E69E797.wem</Path>
+				</File>
 				<File Id="66242761" Language="SFX">
 					<ShortName>Spells\Commanderjoin.wav</ShortName>
 					<Path>SFX\Spells\Commanderjoin_9E69E797.wem</Path>
@@ -809,9 +886,17 @@
 					<ShortName>Spells\Fireball.wav</ShortName>
 					<Path>SFX\Spells\Fireball_9E69E797.wem</Path>
 				</File>
+				<File Id="76080992" Language="SFX">
+					<ShortName>units\skeletonSelect\SkeletonSelect-001.wav</ShortName>
+					<Path>SFX\units\skeletonSelect\SkeletonSelect-001_9E69E797.wem</Path>
+				</File>
 				<File Id="76756664" Language="SFX">
 					<ShortName>units\dwarfOrder\DwarfSelect-005.wav</ShortName>
 					<Path>SFX\units\dwarfOrder\DwarfSelect-005_9E69E797.wem</Path>
+				</File>
+				<File Id="79425089" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-003.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-003_9E69E797.wem</Path>
 				</File>
 				<File Id="82523279" Language="SFX">
 					<ShortName>Spells\Haste.wav</ShortName>
@@ -821,21 +906,53 @@
 					<ShortName>Bannor.wav</ShortName>
 					<Path>SFX\Bannor_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="89724139" Language="SFX">
+					<ShortName>units\vampireSelect\VampireSelect-002.wav</ShortName>
+					<Path>SFX\units\vampireSelect\VampireSelect-002_9E69E797.wem</Path>
+				</File>
 				<File Id="96866844" Language="SFX">
 					<ShortName>Luchuirp.wav</ShortName>
 					<Path>SFX\Luchuirp_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="114318752" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-005.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-005_9E69E797.wem</Path>
+				</File>
+				<File Id="125920912" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-006.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-006_9E69E797.wem</Path>
+				</File>
+				<File Id="137238865" Language="SFX">
+					<ShortName>units\elephantSelect\ElephantSelect-002.wav</ShortName>
+					<Path>SFX\units\elephantSelect\ElephantSelect-002_9E69E797.wem</Path>
 				</File>
 				<File Id="140869650" Language="SFX">
 					<ShortName>buildings\Carnival.wav</ShortName>
 					<Path>SFX\buildings\Carnival_9E69E797.wem</Path>
 				</File>
+				<File Id="143715672" Language="SFX">
+					<ShortName>units\goblinSelect\GoblinSelect-002.wav</ShortName>
+					<Path>SFX\units\goblinSelect\GoblinSelect-002_9E69E797.wem</Path>
+				</File>
+				<File Id="144185253" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-004.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-004_9E69E797.wem</Path>
+				</File>
 				<File Id="150620665" Language="SFX">
 					<ShortName>Spells\Chaosmarauder.wav</ShortName>
 					<Path>SFX\Spells\Chaosmarauder_9E69E797.wem</Path>
 				</File>
+				<File Id="155022085" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-000.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-000_9E69E797.wem</Path>
+				</File>
 				<File Id="161281457" Language="SFX">
 					<ShortName>Spells\Train.wav</ShortName>
 					<Path>SFX\Spells\Train_9E69E797.wem</Path>
+				</File>
+				<File Id="166187226" Language="SFX">
+					<ShortName>units\Wolf.wav</ShortName>
+					<Path>SFX\units\Wolf_9E69E797.wem</Path>
 				</File>
 				<File Id="171188445" Language="SFX">
 					<ShortName>Spells\Drown.wav</ShortName>
@@ -853,6 +970,14 @@
 					<ShortName>Illians.wav</ShortName>
 					<Path>SFX\Illians_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="187833295" Language="SFX">
+					<ShortName>units\lizardmanSelect\LizardmanSelect-007.wav</ShortName>
+					<Path>SFX\units\lizardmanSelect\LizardmanSelect-007_9E69E797.wem</Path>
+				</File>
+				<File Id="189391171" Language="SFX">
+					<ShortName>units\lionSelect\LionSelect-003.wav</ShortName>
+					<Path>SFX\units\lionSelect\LionSelect-003_9E69E797.wem</Path>
+				</File>
 				<File Id="193043236" Language="SFX">
 					<ShortName>Religions\Order.wav</ShortName>
 					<Path>SFX\Religions\Order_9E69E797.wem</Path>
@@ -864,6 +989,10 @@
 				<File Id="208109439" Language="SFX">
 					<ShortName>Spells\Destroyundead.wav</ShortName>
 					<Path>SFX\Spells\Destroyundead_9E69E797.wem</Path>
+				</File>
+				<File Id="208492019" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-007.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-007_9E69E797.wem</Path>
 				</File>
 				<File Id="224256781" Language="SFX">
 					<ShortName>Spells\Foundtemple.wav</ShortName>
@@ -877,13 +1006,25 @@
 					<ShortName>Spells\Spring.wav</ShortName>
 					<Path>SFX\Spells\Spring_9E69E797.wem</Path>
 				</File>
+				<File Id="225621445" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-008.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-008_9E69E797.wem</Path>
+				</File>
 				<File Id="254537143" Language="SFX">
 					<ShortName>Spells\Einherjar.wav</ShortName>
 					<Path>SFX\Spells\Einherjar_9E69E797.wem</Path>
 				</File>
+				<File Id="257445660" Language="SFX">
+					<ShortName>units\skeletonSelect\SkeletonSelect-003.wav</ShortName>
+					<Path>SFX\units\skeletonSelect\SkeletonSelect-003_9E69E797.wem</Path>
+				</File>
 				<File Id="261218252" Language="SFX">
 					<ShortName>Spells\Contagion.wav</ShortName>
 					<Path>SFX\Spells\Contagion_9E69E797.wem</Path>
+				</File>
+				<File Id="262691814" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-000.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-000_9E69E797.wem</Path>
 				</File>
 				<File Id="266700506" Language="SFX">
 					<ShortName>units\dwarfOrder\DwarfOrder-002.wav</ShortName>
@@ -905,13 +1046,33 @@
 					<ShortName>Spells\Burningblood.wav</ShortName>
 					<Path>SFX\Spells\Burningblood_9E69E797.wem</Path>
 				</File>
+				<File Id="286695342" Language="SFX">
+					<ShortName>units\Hillgiant.wav</ShortName>
+					<Path>SFX\units\Hillgiant_9E69E797.wem</Path>
+				</File>
 				<File Id="291342727" Language="SFX">
 					<ShortName>Religions\Fellowship of Leaves.wav</ShortName>
 					<Path>SFX\Religions\Fellowship of Leaves_9E69E797.wem</Path>
 				</File>
+				<File Id="299718974" Language="SFX">
+					<ShortName>units\lizardmanSelect\LizardmanSelect-000.wav</ShortName>
+					<Path>SFX\units\lizardmanSelect\LizardmanSelect-000_9E69E797.wem</Path>
+				</File>
+				<File Id="299891243" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-000.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-000_9E69E797.wem</Path>
+				</File>
+				<File Id="300063769" Language="SFX">
+					<ShortName>units\wraithSelect\WraithSelect-000.wav</ShortName>
+					<Path>SFX\units\wraithSelect\WraithSelect-000_9E69E797.wem</Path>
+				</File>
 				<File Id="305711400" Language="SFX">
 					<ShortName>Hippus.wav</ShortName>
 					<Path>SFX\Hippus_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="308920165" Language="SFX">
+					<ShortName>units\golemSelect\GolemSelect-002.wav</ShortName>
+					<Path>SFX\units\golemSelect\GolemSelect-002_9E69E797.wem</Path>
 				</File>
 				<File Id="319766450" Language="SFX">
 					<ShortName>Spells\Sing1.wav</ShortName>
@@ -925,6 +1086,10 @@
 					<ShortName>Spells\Earthelemental.wav</ShortName>
 					<Path>SFX\Spells\Earthelemental_9E69E797.wem</Path>
 				</File>
+				<File Id="338127369" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-001.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-001_9E69E797.wem</Path>
+				</File>
 				<File Id="342324526" Language="SFX">
 					<ShortName>Barbarian.wav</ShortName>
 					<Path>SFX\Barbarian_4B8CC0C5.wem</Path>
@@ -932,6 +1097,10 @@
 				<File Id="347500843" Language="SFX">
 					<ShortName>Mercurians.wav</ShortName>
 					<Path>SFX\Mercurians_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="368626048" Language="SFX">
+					<ShortName>units\lizardmanSelect\LizardmanSelect-006.wav</ShortName>
+					<Path>SFX\units\lizardmanSelect\LizardmanSelect-006_9E69E797.wem</Path>
 				</File>
 				<File Id="377224936" Language="SFX">
 					<ShortName>Religions\Octopus Overlords Full.wav</ShortName>
@@ -945,6 +1114,10 @@
 					<ShortName>Elohim.wav</ShortName>
 					<Path>SFX\Elohim_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="398523107" Language="SFX">
+					<ShortName>units\lizardmanSelect\LizardmanSelect-005.wav</ShortName>
+					<Path>SFX\units\lizardmanSelect\LizardmanSelect-005_9E69E797.wem</Path>
+				</File>
 				<File Id="402382889" Language="SFX">
 					<ShortName>Spells\Earthquake.wav</ShortName>
 					<Path>SFX\Spells\Earthquake_9E69E797.wem</Path>
@@ -953,13 +1126,45 @@
 					<ShortName>Spells\Pitbeast.wav</ShortName>
 					<Path>SFX\Spells\Pitbeast_9E69E797.wem</Path>
 				</File>
+				<File Id="441141166" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-002.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-002_9E69E797.wem</Path>
+				</File>
+				<File Id="449403324" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-006.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-006_9E69E797.wem</Path>
+				</File>
 				<File Id="453652815" Language="SFX">
 					<ShortName>Religions\Ashen Veil.wav</ShortName>
 					<Path>SFX\Religions\Ashen Veil_9E69E797.wem</Path>
 				</File>
+				<File Id="455118402" Language="SFX">
+					<ShortName>units\orcSelect\Orcreadytowork.wav</ShortName>
+					<Path>SFX\units\orcSelect\Orcreadytowork_9E69E797.wem</Path>
+				</File>
+				<File Id="460623315" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-002.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-002_9E69E797.wem</Path>
+				</File>
+				<File Id="464020415" Language="SFX">
+					<ShortName>units\seaSerpent\SeaSerpent-001.wav</ShortName>
+					<Path>SFX\units\seaSerpent\SeaSerpent-001_9E69E797.wem</Path>
+				</File>
 				<File Id="476635973" Language="SFX">
 					<ShortName>Khazad.wav</ShortName>
 					<Path>SFX\Khazad_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="476832163" Language="SFX">
+					<ShortName>units\goblinSelect\GoblinSelect-001.wav</ShortName>
+					<Path>SFX\units\goblinSelect\GoblinSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="479281869" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-005.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-005_9E69E797.wem</Path>
+				</File>
+				<File Id="491358084" Language="SFX">
+					<ShortName>units\skeletonSelect\SkeletonSelect-002.wav</ShortName>
+					<Path>SFX\units\skeletonSelect\SkeletonSelect-002_9E69E797.wem</Path>
 				</File>
 				<File Id="492670053" Language="SFX">
 					<ShortName>Spells\Imp.wav</ShortName>
@@ -968,6 +1173,10 @@
 				<File Id="498133185" Language="SFX">
 					<ShortName>Malakim.wav</ShortName>
 					<Path>SFX\Malakim_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="498630576" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-006.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-006_9E69E797.wem</Path>
 				</File>
 				<File Id="500029087" Language="SFX">
 					<ShortName>units\dwarfOrder\DwarfSelect-007.wav</ShortName>
@@ -1005,9 +1214,21 @@
 					<ShortName>Spells\Revelation.wav</ShortName>
 					<Path>SFX\Spells\Revelation_9E69E797.wem</Path>
 				</File>
+				<File Id="549177869" Language="SFX">
+					<ShortName>units\Spidersilk.wav</ShortName>
+					<Path>SFX\units\Spidersilk_9E69E797.wem</Path>
+				</File>
+				<File Id="551561028" Language="SFX">
+					<ShortName>units\lizardmanSelect\LizardmanSelect-003.wav</ShortName>
+					<Path>SFX\units\lizardmanSelect\LizardmanSelect-003_9E69E797.wem</Path>
+				</File>
 				<File Id="552984265" Language="SFX">
 					<ShortName>units\balorSelect\BalorSelect-000.wav</ShortName>
 					<Path>SFX\units\balorSelect\BalorSelect-000_9E69E797.wem</Path>
+				</File>
+				<File Id="555913947" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-008.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-008_9E69E797.wem</Path>
 				</File>
 				<File Id="557475608" Language="SFX">
 					<ShortName>Spells\Breathfire.wav</ShortName>
@@ -1017,9 +1238,21 @@
 					<ShortName>Spells\HyboremsWhisper.wav</ShortName>
 					<Path>SFX\Spells\HyboremsWhisper_9E69E797.wem</Path>
 				</File>
+				<File Id="564923370" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-002.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-002_9E69E797.wem</Path>
+				</File>
+				<File Id="575853459" Language="SFX">
+					<ShortName>units\skeletonSelect\SkeletonSelect-004.wav</ShortName>
+					<Path>SFX\units\skeletonSelect\SkeletonSelect-004_9E69E797.wem</Path>
+				</File>
 				<File Id="586283520" Language="SFX">
 					<ShortName>units\dwarfOrder\DwarfSelect-004.wav</ShortName>
 					<Path>SFX\units\dwarfOrder\DwarfSelect-004_9E69E797.wem</Path>
+				</File>
+				<File Id="587263619" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-004.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-004_9E69E797.wem</Path>
 				</File>
 				<File Id="587370650" Language="SFX">
 					<ShortName>units\dwarfOrder\DwarfSelect-000.wav</ShortName>
@@ -1028,6 +1261,18 @@
 				<File Id="591084663" Language="SFX">
 					<ShortName>Lanun.wav</ShortName>
 					<Path>SFX\Lanun_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="612882320" Language="SFX">
+					<ShortName>units\goblinSelect\GoblinSelect-005.wav</ShortName>
+					<Path>SFX\units\goblinSelect\GoblinSelect-005_9E69E797.wem</Path>
+				</File>
+				<File Id="620942514" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-001.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="627323332" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-004.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-004_9E69E797.wem</Path>
 				</File>
 				<File Id="634544138" Language="SFX">
 					<ShortName>Spells\Inspiration.wav</ShortName>
@@ -1045,6 +1290,10 @@
 					<ShortName>Spells\Recruit.wav</ShortName>
 					<Path>SFX\Spells\Recruit_9E69E797.wem</Path>
 				</File>
+				<File Id="658627792" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-003.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-003_9E69E797.wem</Path>
+				</File>
 				<File Id="664403754" Language="SFX">
 					<ShortName>ambient\UnitFalls.wav</ShortName>
 					<Path>SFX\ambient\UnitFalls_9E69E797.wem</Path>
@@ -1061,6 +1310,14 @@
 					<ShortName>Sidar.wav</ShortName>
 					<Path>SFX\Sidar_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="678021885" Language="SFX">
+					<ShortName>units\Dragonbreathin.wav</ShortName>
+					<Path>SFX\units\Dragonbreathin_9E69E797.wem</Path>
+				</File>
+				<File Id="685178052" Language="SFX">
+					<ShortName>units\golemSelect\GolemSelect-000.wav</ShortName>
+					<Path>SFX\units\golemSelect\GolemSelect-000_9E69E797.wem</Path>
+				</File>
 				<File Id="688257497" Language="SFX">
 					<ShortName>Spells\Spectre.wav</ShortName>
 					<Path>SFX\Spells\Spectre_9E69E797.wem</Path>
@@ -1068,6 +1325,10 @@
 				<File Id="693555051" Language="SFX">
 					<ShortName>units\balorSelect\BalorSelect-001.wav</ShortName>
 					<Path>SFX\units\balorSelect\BalorSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="696285040" Language="SFX">
+					<ShortName>units\gorillaSelect\Gorilla-002.wav</ShortName>
+					<Path>SFX\units\gorillaSelect\Gorilla-002_9E69E797.wem</Path>
 				</File>
 				<File Id="700121437" Language="SFX">
 					<ShortName>Spells\Feast.wav</ShortName>
@@ -1077,9 +1338,21 @@
 					<ShortName>Amurites.wav</ShortName>
 					<Path>SFX\Amurites_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="715734574" Language="SFX">
+					<ShortName>units\seaSerpent\SeaSerpent-000.wav</ShortName>
+					<Path>SFX\units\seaSerpent\SeaSerpent-000_9E69E797.wem</Path>
+				</File>
+				<File Id="719960161" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-009.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-009_9E69E797.wem</Path>
+				</File>
 				<File Id="724914776" Language="SFX">
 					<ShortName>Religions\Fellowship of Leaves Full.wav</ShortName>
 					<Path>SFX\Religions\Fellowship of Leaves Full_9E69E797.wem</Path>
+				</File>
+				<File Id="727054288" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-005.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-005_9E69E797.wem</Path>
 				</File>
 				<File Id="727676531" Language="SFX">
 					<ShortName>Spells\Inquisition.wav</ShortName>
@@ -1093,6 +1366,14 @@
 					<ShortName>Spells\Repair.wav</ShortName>
 					<Path>SFX\Spells\Repair_9E69E797.wem</Path>
 				</File>
+				<File Id="740800521" Language="SFX">
+					<ShortName>units\wraithSelect\WraithSelect-001.wav</ShortName>
+					<Path>SFX\units\wraithSelect\WraithSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="749100771" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-007.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-007_9E69E797.wem</Path>
+				</File>
 				<File Id="752806766" Language="SFX">
 					<ShortName>Spells\Sanctify.wav</ShortName>
 					<Path>SFX\Spells\Sanctify_9E69E797.wem</Path>
@@ -1100,6 +1381,10 @@
 				<File Id="754352182" Language="SFX">
 					<ShortName>Spells\Bless.wav</ShortName>
 					<Path>SFX\Spells\Bless_9E69E797.wem</Path>
+				</File>
+				<File Id="761301480" Language="SFX">
+					<ShortName>units\lizardmanSelect\LizardmanSelect-002.wav</ShortName>
+					<Path>SFX\units\lizardmanSelect\LizardmanSelect-002_9E69E797.wem</Path>
 				</File>
 				<File Id="763071211" Language="SFX">
 					<ShortName>Spells\Water.wav</ShortName>
@@ -1121,9 +1406,25 @@
 					<ShortName>Sheaim.wav</ShortName>
 					<Path>SFX\Sheaim_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="774822072" Language="SFX">
+					<ShortName>units\elephantSelect\ElephantSelect-000.wav</ShortName>
+					<Path>SFX\units\elephantSelect\ElephantSelect-000_9E69E797.wem</Path>
+				</File>
+				<File Id="780245005" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-009.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-009_9E69E797.wem</Path>
+				</File>
 				<File Id="784387004" Language="SFX">
 					<ShortName>units\dwarfOrder\DwarfSelect-002.wav</ShortName>
 					<Path>SFX\units\dwarfOrder\DwarfSelect-002_9E69E797.wem</Path>
+				</File>
+				<File Id="789883481" Language="SFX">
+					<ShortName>units\SuccubusSelect-001.wav</ShortName>
+					<Path>SFX\units\SuccubusSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="794814097" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-008.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-008_9E69E797.wem</Path>
 				</File>
 				<File Id="801674892" Language="SFX">
 					<ShortName>Religions\Runes of Kilmorph.wav</ShortName>
@@ -1149,9 +1450,17 @@
 					<ShortName>Balseraphs.wav</ShortName>
 					<Path>SFX\Balseraphs_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="823175795" Language="SFX">
+					<ShortName>units\lizardmanSelect\LizardmanSelect-004.wav</ShortName>
+					<Path>SFX\units\lizardmanSelect\LizardmanSelect-004_9E69E797.wem</Path>
+				</File>
 				<File Id="824533399" Language="SFX">
 					<ShortName>Religions\Ashen Veil Full.wav</ShortName>
 					<Path>SFX\Religions\Ashen Veil Full_9E69E797.wem</Path>
+				</File>
+				<File Id="829061356" Language="SFX">
+					<ShortName>units\lionSelect\LionSelect-001.wav</ShortName>
+					<Path>SFX\units\lionSelect\LionSelect-001_9E69E797.wem</Path>
 				</File>
 				<File Id="834058924" Language="SFX">
 					<ShortName>Spells\Stoneskin.wav</ShortName>
@@ -1165,9 +1474,17 @@
 					<ShortName>buildings\ArmageddonDecrease.wav</ShortName>
 					<Path>SFX\buildings\ArmageddonDecrease_9E69E797.wem</Path>
 				</File>
+				<File Id="840091369" Language="SFX">
+					<ShortName>units\seaSerpent\SeaSerpent-002.wav</ShortName>
+					<Path>SFX\units\seaSerpent\SeaSerpent-002_9E69E797.wem</Path>
+				</File>
 				<File Id="841997019" Language="SFX">
 					<ShortName>Spells\Sing3.wav</ShortName>
 					<Path>SFX\Spells\Sing3_9E69E797.wem</Path>
+				</File>
+				<File Id="844722581" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-003.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-003_9E69E797.wem</Path>
 				</File>
 				<File Id="846007373" Language="SFX">
 					<ShortName>Spells\Consumesoul.wav</ShortName>
@@ -1177,6 +1494,18 @@
 					<ShortName>Spells\Giftvampirism.wav</ShortName>
 					<Path>SFX\Spells\Giftvampirism_9E69E797.wem</Path>
 				</File>
+				<File Id="856843154" Language="SFX">
+					<ShortName>units\lionSelect\LionSelect-004.wav</ShortName>
+					<Path>SFX\units\lionSelect\LionSelect-004_9E69E797.wem</Path>
+				</File>
+				<File Id="857266085" Language="SFX">
+					<ShortName>units\lionSelect\LionSelect-002.wav</ShortName>
+					<Path>SFX\units\lionSelect\LionSelect-002_9E69E797.wem</Path>
+				</File>
+				<File Id="865764018" Language="SFX">
+					<ShortName>units\orcSelect\OrcSelect-007.wav</ShortName>
+					<Path>SFX\units\orcSelect\OrcSelect-007_9E69E797.wem</Path>
+				</File>
 				<File Id="869164921" Language="SFX">
 					<ShortName>Spells\Heal.wav</ShortName>
 					<Path>SFX\Spells\Heal_9E69E797.wem</Path>
@@ -1184,6 +1513,30 @@
 				<File Id="872666005" Language="SFX">
 					<ShortName>Religions\Octopus Overlords.wav</ShortName>
 					<Path>SFX\Religions\Octopus Overlords_9E69E797.wem</Path>
+				</File>
+				<File Id="875643624" Language="SFX">
+					<ShortName>units\impSelect\ImpSelect-002.wav</ShortName>
+					<Path>SFX\units\impSelect\ImpSelect-002_9E69E797.wem</Path>
+				</File>
+				<File Id="876922578" Language="SFX">
+					<ShortName>units\golemSelect\GolemSelect-001.wav</ShortName>
+					<Path>SFX\units\golemSelect\GolemSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="880381429" Language="SFX">
+					<ShortName>units\wraithSelect\WraithSelect-002.wav</ShortName>
+					<Path>SFX\units\wraithSelect\WraithSelect-002_9E69E797.wem</Path>
+				</File>
+				<File Id="883827712" Language="SFX">
+					<ShortName>units\golemSelect\GolemSelect-003.wav</ShortName>
+					<Path>SFX\units\golemSelect\GolemSelect-003_9E69E797.wem</Path>
+				</File>
+				<File Id="894831081" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-010.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-010_9E69E797.wem</Path>
+				</File>
+				<File Id="895786123" Language="SFX">
+					<ShortName>units\hawk.wav</ShortName>
+					<Path>SFX\units\hawk_9E69E797.wem</Path>
 				</File>
 				<File Id="901982962" Language="SFX">
 					<ShortName>Spells\Airelemental.wav</ShortName>
@@ -1197,9 +1550,33 @@
 					<ShortName>Spells\Defile.wav</ShortName>
 					<Path>SFX\Spells\Defile_9E69E797.wem</Path>
 				</File>
+				<File Id="912456612" Language="SFX">
+					<ShortName>units\elephantSelect\ElephantSelect-001.wav</ShortName>
+					<Path>SFX\units\elephantSelect\ElephantSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="920280789" Language="SFX">
+					<ShortName>units\impSelect\ImpSelect-000.wav</ShortName>
+					<Path>SFX\units\impSelect\ImpSelect-000_9E69E797.wem</Path>
+				</File>
+				<File Id="920855769" Language="SFX">
+					<ShortName>units\impSelect\ImpSelect-001.wav</ShortName>
+					<Path>SFX\units\impSelect\ImpSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="934905037" Language="SFX">
+					<ShortName>units\goblinSelect\GoblinSelect-000.wav</ShortName>
+					<Path>SFX\units\goblinSelect\GoblinSelect-000_9E69E797.wem</Path>
+				</File>
 				<File Id="941057338" Language="SFX">
 					<ShortName>ambient\Fire.wav</ShortName>
 					<Path>SFX\ambient\Fire_9E69E797.wem</Path>
+				</File>
+				<File Id="944612373" Language="SFX">
+					<ShortName>units\Tigerroar.wav</ShortName>
+					<Path>SFX\units\Tigerroar_9E69E797.wem</Path>
+				</File>
+				<File Id="953282116" Language="SFX">
+					<ShortName>units\loshaSelect\LoshaSelect-001.wav</ShortName>
+					<Path>SFX\units\loshaSelect\LoshaSelect-001_9E69E797.wem</Path>
 				</File>
 				<File Id="977816481" Language="SFX">
 					<ShortName>Spells\Bloom.wav</ShortName>
@@ -1221,6 +1598,18 @@
 					<ShortName>Ljosalfar.wav</ShortName>
 					<Path>SFX\Ljosalfar_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="1031007372" Language="SFX">
+					<ShortName>units\goblinSelect\GoblinSelect-003.wav</ShortName>
+					<Path>SFX\units\goblinSelect\GoblinSelect-003_9E69E797.wem</Path>
+				</File>
+				<File Id="1031150411" Language="SFX">
+					<ShortName>units\gorillaSelect\Gorilla-001.wav</ShortName>
+					<Path>SFX\units\gorillaSelect\Gorilla-001_9E69E797.wem</Path>
+				</File>
+				<File Id="1033086357" Language="SFX">
+					<ShortName>units\undeadSelect\UndeadSelect-009.wav</ShortName>
+					<Path>SFX\units\undeadSelect\UndeadSelect-009_9E69E797.wem</Path>
+				</File>
 				<File Id="1033335067" Language="SFX">
 					<ShortName>units\dwarfOrder\DwarfOrder-003.wav</ShortName>
 					<Path>SFX\units\dwarfOrder\DwarfOrder-003_9E69E797.wem</Path>
@@ -1237,9 +1626,21 @@
 					<ShortName>units\skeletonSelect\SkeletonSelect-000.wav</ShortName>
 					<Path>SFX\units\skeletonSelect\SkeletonSelect-000_9E69E797.wem</Path>
 				</File>
+				<File Id="1061197792" Language="SFX">
+					<ShortName>units\lizardmanSelect\LizardmanSelect-001.wav</ShortName>
+					<Path>SFX\units\lizardmanSelect\LizardmanSelect-001_9E69E797.wem</Path>
+				</File>
+				<File Id="1063847363" Language="SFX">
+					<ShortName>units\Spider.wav</ShortName>
+					<Path>SFX\units\Spider_9E69E797.wem</Path>
+				</File>
 				<File Id="1069351979" Language="SFX">
 					<ShortName>Spells\Crew.wav</ShortName>
 					<Path>SFX\Spells\Crew_9E69E797.wem</Path>
+				</File>
+				<File Id="1071252954" Language="SFX">
+					<ShortName>units\gorillaSelect\Gorilla-000.wav</ShortName>
+					<Path>SFX\units\gorillaSelect\Gorilla-000_9E69E797.wem</Path>
 				</File>
 			</IncludedMemoryFiles>
 		</SoundBank>

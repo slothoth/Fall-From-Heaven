@@ -224,7 +224,7 @@ INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
 ('VampiricAristocracyTechs', 'TECH_CALENDAR', '1');                        -- Agrarianism
 
 INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
-('VampiricAristocracyUnitBuilds', 'SLTH_UNIT_VAMPIRE', '1');                        -- vampires!
+('VampiricAristocracyUnitBuilds', 'UNIT_SLTH_VAMPIRE', '1');                        -- vampires!
 
 -- Clan Bestial Tribes
 -- Friendly with Barbarians. Upset at people who clear them (agenda). Doesnt clear barbs.
@@ -854,7 +854,7 @@ INSERT INTO AiLists(ListType, AgendaType, System) VALUES
 
 INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
 ('DesertNomadsUnits', 'PROMOTION_CLASS_DISCIPLE', '1'),
-('DesertNomadsUnitBuilds', 'SLTH_UNIT_LIGHTBRINGER', '1');
+('DesertNomadsUnitBuilds', 'UNIT_SLTH_LIGHTBRINGER', '1');
 
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
 ('DesertNomadsBuildings', 'SLTH_BUILDING_DESERT_SHRINE', '1');
@@ -946,7 +946,7 @@ INSERT INTO AiLists(ListType, AgendaType, System) VALUES
 ('ArmageddonSeekersUnitBuilds', 'TRAIT_AGENDA_ARMAGEDDON_SEEKERS', 'Units');
 
 INSERT INTO AiFavoredItems(ListType, Item, Value) VALUES
-('ArmageddonSeekersUnitBuilds', 'SLTH_UNIT_PYRE_ZOMBIE', '1');
+('ArmageddonSeekersUnitBuilds', 'UNIT_SLTH_PYRE_ZOMBIE', '1');
 
 INSERT INTO AiFavoredItems(ListType, Item, Favored) VALUES
 ('ArmageddonSeekersBuildings', 'SLTH_BUILDING_PLANAR_GATE', '1'),               -- as doesnt give yields, they wont build

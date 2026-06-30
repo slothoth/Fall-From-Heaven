@@ -68,9 +68,9 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_WARRIOR', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_GOBLIN', 'CLASS_GOBLIN'),
+('UNIT_SLTH_GOBLIN', 'CLASS_GOBLIN'),
 ('UNIT_WARRIOR' , 'CLASS_WARRIOR'),
-('SLTH_UNIT_ARCHER', 'CLASS_GOBLIN_RANGED');
+('UNIT_SLTH_ARCHER', 'CLASS_GOBLIN_RANGED');
 
 
 INSERT INTO BarbarianTribe_MapConditionSets(MapConditionSetType, TribeType, Test, Priority) VALUES
@@ -149,7 +149,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_NULL', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_SKELETON', 'CLASS_SKELETON');
+('UNIT_SLTH_SKELETON', 'CLASS_SKELETON');
 
 
 INSERT INTO BarbarianTribe_MapConditionSets(MapConditionSetType, TribeType, Test, Priority) VALUES
@@ -210,7 +210,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_LIZARDMEN', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_LIZARDMAN', 'CLASS_LIZARDMEN');
+('UNIT_SLTH_LIZARDMAN', 'CLASS_LIZARDMEN');
 
 
 INSERT INTO BarbarianTribe_MapConditionSets(MapConditionSetType, TribeType, Test, Priority) VALUES
@@ -328,7 +328,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_BEAR', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_BEAR', 'CLASS_BEAR');
+('UNIT_SLTH_BEAR', 'CLASS_BEAR');
 -- Bears cant spawn for some reason
 
 
@@ -374,7 +374,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_LION', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_LION', 'CLASS_LION');
+('UNIT_SLTH_LION', 'CLASS_LION');
 
 
 INSERT INTO BarbarianTribe_MapConditions(MapConditionSetType, TerrainType, FeatureType, ResourceType, Range, Invert) VALUES

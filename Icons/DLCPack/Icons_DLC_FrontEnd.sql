@@ -8,9 +8,9 @@ INSERT OR IGNORE INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerCo
 ('ICON_ATLAS_BABYLON_UNITS', '256', '4', '4' , 'Babylon_Units256.dds');
 
 INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES                 -- units
-('ICON_SLTH_UNIT_CHANTER', 'ICON_ATLAS_BABYLON_UNITS' , '0'),
-('ICON_SLTH_UNIT_DEVOUT', 'ICON_ATLAS_BABYLON_UNITS' , '0'),
-('ICON_SLTH_UNIT_BLACK_WIND', 'ICON_ATLAS_BABYLON_UNITS' , '11');
+('ICON_UNIT_SLTH_CHANTER', 'ICON_ATLAS_BABYLON_UNITS' , '0'),
+('ICON_UNIT_SLTH_DEVOUT', 'ICON_ATLAS_BABYLON_UNITS' , '0'),
+('ICON_UNIT_SLTH_BLACK_WIND', 'ICON_ATLAS_BABYLON_UNITS' , '11');
 
 ----------------- BYZANTINE ----------------------------------------
 INSERT OR IGNORE INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, Filename) VALUES
@@ -22,8 +22,8 @@ INSERT OR IGNORE INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerCo
 ('ICON_ATLAS_BYZANTIUM_GAUL_UNITS', '256','4', '1' , 'Gaul_Units256.dds');
 
 INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES                     -- units
-('ICON_SLTH_UNIT_ROYAL_GUARD', 'ICON_ATLAS_BYZANTIUM_GAUL_UNITS' , '1'),
-('ICON_SLTH_UNIT_BEASTMAN', 'ICON_ATLAS_BYZANTIUM_GAUL_UNITS' , '2');
+('ICON_UNIT_SLTH_ROYAL_GUARD', 'ICON_ATLAS_BYZANTIUM_GAUL_UNITS' , '1'),
+('ICON_UNIT_SLTH_BEASTMAN', 'ICON_ATLAS_BYZANTIUM_GAUL_UNITS' , '2');
 
 ----------------- ETHIOPIA ----------------------------------------
 INSERT OR IGNORE INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, Filename) VALUES
@@ -43,8 +43,8 @@ INSERT OR IGNORE INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerCo
 ('ICON_ATLAS_ETHIOPIA_UNITS', '80', '4', '1' , 'Ethiopia_Units80.dds'),
 ('ICON_ATLAS_ETHIOPIA_UNITS', '256','4', '1' , 'Ethiopia_Units256.dds');
 INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES                     -- units
-('ICON_SLTH_UNIT_VAMPIRE', 'ICON_ATLAS_ETHIOPIA_UNITS' , '1'),
-('ICON_SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL', 'ICON_ATLAS_ETHIOPIA_UNITS' , '0');
+('ICON_UNIT_SLTH_VAMPIRE', 'ICON_ATLAS_ETHIOPIA_UNITS' , '1'),
+('ICON_UNIT_SLTH_HIGH_PRIEST_OF_THE_VEIL', 'ICON_ATLAS_ETHIOPIA_UNITS' , '0');
 
 ----------------- KHMER ----------------------------------------
 INSERT OR IGNORE INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerColumn, Filename) VALUES
@@ -64,7 +64,7 @@ INSERT OR IGNORE INTO IconTextureAtlases(Name, IconSize, IconsPerRow, IconsPerCo
 ('ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS', '80', '4', '2' , 'MayaGran_Units80'),
 ('ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS', '256','4', '2' , 'MayaGran_Units256');
 INSERT INTO IconDefinitions(Name, Atlas, 'Index') VALUES                                     -- units
-('ICON_SLTH_UNIT_JAVELIN_THROWER', 'ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS' , '0'),
-('ICON_SLTH_UNIT_TASKMASTER', 'ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS' , '3'),
-('ICON_SLTH_UNIT_SHAMAN', 'ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS' , '4'),
-('ICON_SLTH_UNIT_YERSINIA', 'ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS' , '1');
+('ICON_UNIT_SLTH_JAVELIN_THROWER', 'ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS' , '0'),
+('ICON_UNIT_SLTH_TASKMASTER', 'ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS' , '3'),
+('ICON_UNIT_SLTH_SHAMAN', 'ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS' , '4'),
+('ICON_UNIT_SLTH_YERSINIA', 'ICON_ATLAS_GRAN_COLOMBIA_MAYA_UNITS' , '1');

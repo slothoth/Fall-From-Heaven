@@ -49,18 +49,18 @@ local tSkipPromos = { [GameInfo.UnitPromotions['PROMOTION_IS_UNDEAD'].Index] = 1
 				[GameInfo.UnitPromotions['SHADOW_SPHERE_ALLOWED_3'].Index] = 1 }
 
 local tManaNodeBuilder = {
-	[GameInfo.Units['SLTH_UNIT_ADEPT'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_IMP'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_SHAMAN'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_ARCHMAGE'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_LICH'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_MAGE'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_MOBIUS_WITCH'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_EATER_OF_DREAMS'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_GOVANNON'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_ILLUSIONIST'].Index] = 1,
-	[GameInfo.Units['SLTH_UNIT_WIZARD'].Index] = 1
+	[GameInfo.Units['UNIT_SLTH_ADEPT'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_IMP'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_SHAMAN'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_ARCHMAGE'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_HEMAH'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_LICH'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_MAGE'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_MOBIUS_WITCH'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_EATER_OF_DREAMS'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_GOVANNON'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_ILLUSIONIST'].Index] = 1,
+	[GameInfo.Units['UNIT_SLTH_WIZARD'].Index] = 1
 }
 local tGreatPeople = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]=true,   [GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]=true,
 					  [GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]=true, [GameInfo.Units['UNIT_GREAT_ARTIST'].Index]=true,

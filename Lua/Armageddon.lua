@@ -102,9 +102,9 @@ end
 
 -- unit tracker, create increase armageddon, delete decrease
 -- not doing 'BASIUM:5', 'HYBOREM:5' as covered in spawning civ
-local tArmageddonUnits = {['SLTH_UNIT_BEAST_OF_AGARES']=1, ['SLTH_UNIT_ROSIER']=2, ['SLTH_UNIT_EIDOLON']=1,
-                    ['SLTH_UNIT_WRATH']=3,  ['SLTH_UNIT_MARDERO']=3, ['SLTH_UNIT_MESHABBER']=3,
-                    ['SLTH_UNIT_SPHENER']=-3, ['SLTH_UNIT_VALIN']=-2}
+local tArmageddonUnits = {['UNIT_SLTH_BEAST_OF_AGARES']=1, ['UNIT_SLTH_ROSIER']=2, ['UNIT_SLTH_EIDOLON']=1,
+                    ['UNIT_SLTH_WRATH']=3,  ['UNIT_SLTH_MARDERO']=3, ['UNIT_SLTH_MESHABBER']=3,
+                    ['UNIT_SLTH_SPHENER']=-3, ['UNIT_SLTH_VALIN']=-2}
 function ArmageddonUnitSpawning(playerID, unitID)
     print('unit spawned, is it armageddon?')
     local pUnit = UnitManager.GetUnit(playerID, unitID);
@@ -190,16 +190,16 @@ function selectPercentage(sourceTable, percentage)
 end
 
 local iSamhainUnitSpawnPercent = 10
-local iFROSTLING_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING'].Index
-local iFROSTLING_ARCHER_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING_ARCHER'].Index
-local iFROSTLING_RIDER_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING_WOLF_RIDER'].Index
+local iFROSTLING_INDEX = GameInfo.Units['UNIT_SLTH_FROSTLING'].Index
+local iFROSTLING_ARCHER_INDEX = GameInfo.Units['UNIT_SLTH_FROSTLING_ARCHER'].Index
+local iFROSTLING_RIDER_INDEX = GameInfo.Units['UNIT_SLTH_FROSTLING_WOLF_RIDER'].Index
 local tFrostlingProportions = {iFROSTLING_INDEX, iFROSTLING_ARCHER_INDEX, iFROSTLING_RIDER_INDEX, iFROSTLING_INDEX}
 function Samhain(playerID, cityID, projectID, buildingIndex, x, y)
     -- get number of units to spawn based on viable plots
     local tEligiblePlots = ViableWildernessPlots(true)
 
     local tUsedPlots = selectPercentage(tEligiblePlots, iSamhainUnitSpawnPercent)
-    tUsedPlots = SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_MOKKA'].Index, tEligiblePlots)
+    tUsedPlots = SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_MOKKA'].Index, tEligiblePlots)
     local iLoopIterations = math.floor(#tUsedPlots / # tFrostlingProportions)
     for var=0, iLoopIterations do
         for _, iUnitToSpawnIndex in ipairs(tFrostlingProportions) do
@@ -308,18 +308,18 @@ function Ascension(playerID, cityID, projectID, buildingIndex, x, y)
 end
 
 local tBaneDivineMap = {
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_RUNES_OF_KILMORPH'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['UNIT_SLTH_DISCIPLE_THE_ORDER'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_THE_ASHEN_VEIL'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_EMPYREAN'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_RUNES_OF_KILMORPH'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_EMPYREAN'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['UNIT_SLTH_DISCIPLE_THE_ORDER'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_THE_ASHEN_VEIL'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index
 }     -- All Disciple Units in the world are replaced with Tier 1 Disciples of the same religion
 function BaneDivine(playerID, cityID, projectID, buildingIndex, x, y)
     local pPlayer = Players[playerID]
@@ -374,49 +374,49 @@ function Genesis(playerID, cityID, projectID, buildingIndex, x, y)
     --
 end
 
-local iBEAR_INDEX = GameInfo.Units['SLTH_UNIT_BEAR'].Index
-local iWOLF_INDEX = GameInfo.Units['SLTH_UNIT_WOLF'].Index
-local iLION_INDEX = GameInfo.Units['SLTH_UNIT_LION'].Index
-local iTIGER_INDEX = GameInfo.Units['SLTH_UNIT_TIGER'].Index
+local iBEAR_INDEX = GameInfo.Units['UNIT_SLTH_BEAR'].Index
+local iWOLF_INDEX = GameInfo.Units['UNIT_SLTH_WOLF'].Index
+local iLION_INDEX = GameInfo.Units['UNIT_SLTH_LION'].Index
+local iTIGER_INDEX = GameInfo.Units['UNIT_SLTH_TIGER'].Index
 local tBarbarianAnimalMap = {[GameInfo.Units['UNIT_BUILDER'].Index] = iWOLF_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_GOBLIN'].Index] = iLION_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_ARCHER'].Index] = iLION_INDEX,
+                             [GameInfo.Units['UNIT_SLTH_GOBLIN'].Index] = iLION_INDEX,
+                             [GameInfo.Units['UNIT_SLTH_ARCHER'].Index] = iLION_INDEX,
                              [GameInfo.Units['UNIT_WARRIOR'].Index] = iLION_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = iTIGER_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_SWORDSMAN'].Index] = iBEAR_INDEX
+                             [GameInfo.Units['UNIT_SLTH_LIZARDMAN'].Index] = iTIGER_INDEX,
+                             [GameInfo.Units['UNIT_SLTH_SWORDSMAN'].Index] = iBEAR_INDEX
     }
 local tAnimals = {
-    [GameInfo.Units['SLTH_UNIT_BABY_SPIDER'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_BABY_SPIDER'].Index] = true,
     [iBEAR_INDEX] = true,
-    [GameInfo.Units['SLTH_UNIT_POLAR_BEAR'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_ELEPHANT'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GIANT_SPIDER'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GIANT_TORTOISE'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GORILLA'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GRIFFON'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_POLAR_BEAR'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_ELEPHANT'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GIANT_SPIDER'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GIANT_TORTOISE'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GORILLA'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GRIFFON'].Index] = true,
     [iLION_INDEX] = true,
-    [GameInfo.Units['SLTH_UNIT_SEA_SERPENT'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_SCORPION'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_SEA_SERPENT'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_SCORPION'].Index] = true,
     [iWOLF_INDEX] = true,
     [iTIGER_INDEX] = true
 }
 
 local tExclusionList = {
-                            [GameInfo.Units['SLTH_UNIT_ACHERON'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_ARS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_BUBOES'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_STEPHANOS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_GURID'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_KRAKEN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_LEVIATHAN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_MARGALARD'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_MANTICORE'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_MOKKA'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_ORTHUS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_TUMTUM'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_WRATH'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_YERSINIA'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_AZER'].Index] = true
+                            [GameInfo.Units['UNIT_SLTH_ACHERON'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_ARS'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_BUBOES'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_STEPHANOS'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_GURID'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_KRAKEN'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_LEVIATHAN'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_MARGALARD'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_MANTICORE'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_MOKKA'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_ORTHUS'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_TUMTUM'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_WRATH'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_YERSINIA'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_AZER'].Index] = true
 }
                                     -- we also need to apply this to city states that are actually barbarians
 local tAnimalPromotions = {[1] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_ANIMAL'].Index,
@@ -636,23 +636,23 @@ end
 
 function ArmaSummonSteph ()
     local tEligiblePlots = ViableWildernessPlots()
-    SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_STEPHANOS'].Index, tEligiblePlots)
+    SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_STEPHANOS'].Index, tEligiblePlots)
 end
 
 function ArmaSummonBuboes()
     local tEligiblePlots = ViableWildernessPlots()
-    SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_BUBOES'].Index, tEligiblePlots)
+    SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_BUBOES'].Index, tEligiblePlots)
     -- hell terrain now spreads in all Evil civ terrain
 end
 
 function ArmaSummonYersinia ()
     local tEligiblePlots = ViableWildernessPlots()
-    SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_YERSINIA'].Index, tEligiblePlots)
+    SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_YERSINIA'].Index, tEligiblePlots)
 end
 
 function ArmaSummonArs ()
     local tEligiblePlots = ViableWildernessPlots()
-    SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_ARS'].Index, tEligiblePlots)
+    SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_ARS'].Index, tEligiblePlots)
 end
 
 function ArmaHellFire ()
