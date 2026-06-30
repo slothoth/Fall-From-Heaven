@@ -164,7 +164,7 @@ INSERT INTO LairUnits
 (UnitType,                ArmaLeaders,ArmaHench) VALUES
 ('SLTH_UNIT_PIT_BEAST',   1,          0),
 ('SLTH_UNIT_DEATH_KNIGHT',1,          0),
-('SLTH_UNIT_BALOR',       1,          0),
+('UNIT_BALOR',       1,          0),
 ('SLTH_UNIT_IMP',         0,          1),
 ('SLTH_UNIT_HELLHOUND',   0,          1);
 

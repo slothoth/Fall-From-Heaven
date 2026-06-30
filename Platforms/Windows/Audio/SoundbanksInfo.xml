@@ -729,6 +729,7 @@
 				<Event Id="1773906046" Name="Play_UnitRises"/>
 				<Event Id="441572235" Name="Play_Water"/>
 				<Event Id="673308595" Name="Play_Wraith"/>
+				<Event Id="3713801467" Name="Slth_Unit_Select_Balor"/>
 				<Event Id="2360231208" Name="Stop_Leader_Music_SLTH_CIVILIZATION_AMURITES"/>
 				<Event Id="3906946261" Name="Stop_Leader_Music_SLTH_CIVILIZATION_BALSERAPHS"/>
 				<Event Id="2258386160" Name="Stop_Leader_Music_SLTH_CIVILIZATION_BANNOR"/>
@@ -752,6 +753,8 @@
 				<Event Id="2025865353" Name="Stop_Leader_Music_SLTH_CIVILIZATION_SIDAR"/>
 				<Event Id="2694523632" Name="Stop_Leader_Music_SLTH_CIVILIZATION_SVARTALFAR"/>
 				<Event Id="3231580977" Name="Stop_Leader_Music_SLTH_LEADER_DECIUS"/>
+				<Event Id="1607748639" Name="Unit_Select_Slth_Balor"/>
+				<Event Id="125284958" Name="Unit_Selected_Balor"/>
 			</IncludedEvents>
 			<IncludedMemoryFiles>
 				<File Id="7226178" Language="SFX">
@@ -769,6 +772,10 @@
 				<File Id="14892073" Language="SFX">
 					<ShortName>Spells\Sing2.wav</ShortName>
 					<Path>SFX\Spells\Sing2_9E69E797.wem</Path>
+				</File>
+				<File Id="22186019" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfOrder-001.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfOrder-001_9E69E797.wem</Path>
 				</File>
 				<File Id="36415039" Language="SFX">
 					<ShortName>Spells\Create Puppet.wav</ShortName>
@@ -801,6 +808,10 @@
 				<File Id="71568742" Language="SFX">
 					<ShortName>Spells\Fireball.wav</ShortName>
 					<Path>SFX\Spells\Fireball_9E69E797.wem</Path>
+				</File>
+				<File Id="76756664" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfSelect-005.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfSelect-005_9E69E797.wem</Path>
 				</File>
 				<File Id="82523279" Language="SFX">
 					<ShortName>Spells\Haste.wav</ShortName>
@@ -873,6 +884,10 @@
 				<File Id="261218252" Language="SFX">
 					<ShortName>Spells\Contagion.wav</ShortName>
 					<Path>SFX\Spells\Contagion_9E69E797.wem</Path>
+				</File>
+				<File Id="266700506" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfOrder-002.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfOrder-002_9E69E797.wem</Path>
 				</File>
 				<File Id="268887751" Language="SFX">
 					<ShortName>Spells\Curedisease.wav</ShortName>
@@ -954,6 +969,10 @@
 					<ShortName>Malakim.wav</ShortName>
 					<Path>SFX\Malakim_4B8CC0C5.wem</Path>
 				</File>
+				<File Id="500029087" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfSelect-007.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfSelect-007_9E69E797.wem</Path>
+				</File>
 				<File Id="509416919" Language="SFX">
 					<ShortName>Spells\Tsunami.wav</ShortName>
 					<Path>SFX\Spells\Tsunami_9E69E797.wem</Path>
@@ -969,6 +988,10 @@
 				<File Id="538849387" Language="SFX">
 					<ShortName>Grigori.wav</ShortName>
 					<Path>SFX\Grigori_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="542017523" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfOrder-000.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfOrder-000_9E69E797.wem</Path>
 				</File>
 				<File Id="542557438" Language="SFX">
 					<ShortName>Religions\Runes of Kilmorph Full.wav</ShortName>
@@ -993,6 +1016,14 @@
 				<File Id="560027513" Language="SFX">
 					<ShortName>Spells\HyboremsWhisper.wav</ShortName>
 					<Path>SFX\Spells\HyboremsWhisper_9E69E797.wem</Path>
+				</File>
+				<File Id="586283520" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfSelect-004.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfSelect-004_9E69E797.wem</Path>
+				</File>
+				<File Id="587370650" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfSelect-000.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfSelect-000_9E69E797.wem</Path>
 				</File>
 				<File Id="591084663" Language="SFX">
 					<ShortName>Lanun.wav</ShortName>
@@ -1054,6 +1085,10 @@
 					<ShortName>Spells\Inquisition.wav</ShortName>
 					<Path>SFX\Spells\Inquisition_9E69E797.wem</Path>
 				</File>
+				<File Id="734430978" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfSelect-003.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfSelect-003_9E69E797.wem</Path>
+				</File>
 				<File Id="737590655" Language="SFX">
 					<ShortName>Spells\Repair.wav</ShortName>
 					<Path>SFX\Spells\Repair_9E69E797.wem</Path>
@@ -1078,9 +1113,17 @@
 					<ShortName>Spells\Resist.wav</ShortName>
 					<Path>SFX\Spells\Resist_9E69E797.wem</Path>
 				</File>
+				<File Id="772931025" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfOrder-004.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfOrder-004_9E69E797.wem</Path>
+				</File>
 				<File Id="774653947" Language="SFX">
 					<ShortName>Sheaim.wav</ShortName>
 					<Path>SFX\Sheaim_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="784387004" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfSelect-002.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfSelect-002_9E69E797.wem</Path>
 				</File>
 				<File Id="801674892" Language="SFX">
 					<ShortName>Religions\Runes of Kilmorph.wav</ShortName>
@@ -1090,9 +1133,17 @@
 					<ShortName>Religions\Order Full.wav</ShortName>
 					<Path>SFX\Religions\Order Full_9E69E797.wem</Path>
 				</File>
+				<File Id="808922493" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfSelect-001.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfSelect-001_9E69E797.wem</Path>
+				</File>
 				<File Id="811551930" Language="SFX">
 					<ShortName>Spells\Escape.wav</ShortName>
 					<Path>SFX\Spells\Escape_9E69E797.wem</Path>
+				</File>
+				<File Id="812619584" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfSelect-006.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfSelect-006_9E69E797.wem</Path>
 				</File>
 				<File Id="816230135" Language="SFX">
 					<ShortName>Balseraphs.wav</ShortName>
@@ -1169,6 +1220,10 @@
 				<File Id="1021417371" Language="SFX">
 					<ShortName>Ljosalfar.wav</ShortName>
 					<Path>SFX\Ljosalfar_4B8CC0C5.wem</Path>
+				</File>
+				<File Id="1033335067" Language="SFX">
+					<ShortName>units\dwarfOrder\DwarfOrder-003.wav</ShortName>
+					<Path>SFX\units\dwarfOrder\DwarfOrder-003_9E69E797.wem</Path>
 				</File>
 				<File Id="1048642246" Language="SFX">
 					<ShortName>buildings\ArmageddonIncrease.wav</ShortName>

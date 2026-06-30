@@ -303,7 +303,7 @@ INSERT INTO CustomOperations (OperationType, Callback, SimpleText, SecondText, P
 ('UNITOPERATION_BECOME_LICH', 'SlthOnConvertSelf', 'SLTH_UNIT_LICH', 'ABILITY_UNDEAD', 'DEATH_THREE', 'HasntAbility', '1');
 
 INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq) VALUES
-('UNITOPERATION_SUMMON_BALOR', 'SlthOnSummonPerm', 'SLTH_UNIT_BALOR',  'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_VEIL');
+('UNITOPERATION_SUMMON_BALOR', 'SlthOnSummonPerm', 'UNIT_BALOR',  'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_VEIL');
 
 INSERT INTO CustomOperations (OperationType, Callback, SimpleText, AbilityPrereq, AlsoAbilityPrereq, AlsoTwoAbilityPrereq, ActivationPrereq) VALUES
 ('UNITOPERATION_SUMMON_KRAKEN', 'SlthOnSummonPerm', 'SLTH_UNIT_KRAKEN', 'ABILITY_DIVINE', 'ABILITY_CHANNELING3', 'ABILITY_WORSHIPS_OCTOPUS', 'SingleSummonAtSea'),

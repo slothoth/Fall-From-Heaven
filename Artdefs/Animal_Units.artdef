@@ -146,7 +146,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..StringValue">
-										<m_Value text="Warrior"/>
+										<m_Value text="Apostle"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
 								</m_Values>

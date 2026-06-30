@@ -4,6 +4,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	45120814	Play_Leader_Music_SLTH_CIVILIZATION_BANNOR			\Default Work Unit\Play_Leader_Music_SLTH_CIVILIZATION_BANNOR	
 	81975999	Play_Leader_Music_SLTH_CIVILIZATION_BALSERAPHS			\Default Work Unit\Play_Leader_Music_SLTH_CIVILIZATION_BALSERAPHS	
 	125096435	Play_Escape			\Default Work Unit\Play_Escape	
+	125284958	Unit_Selected_Balor			\Default Work Unit\Unit_Selected_Balor	
 	133093501	Play_HyboremsWhisper			\Default Work Unit\Play_HyboremsWhisper	
 	146533081	Play_Fireball			\Default Work Unit\Play_Fireball	
 	147831418	Play_UnitFalls			\Default Work Unit\Play_UnitFalls	
@@ -43,6 +44,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	1489178278	Play_Leader_Music_SLTH_CIVILIZATION_SVARTALFAR			\Default Work Unit\Play_Leader_Music_SLTH_CIVILIZATION_SVARTALFAR	
 	1493714505	Play_Consumesoul			\Default Work Unit\Play_Consumesoul	
 	1572642364	Play_Council_of_Esus_Full			\Default Work Unit\Play_Council_of_Esus_Full	
+	1607748639	Unit_Select_Slth_Balor			\Default Work Unit\Unit_Select_Slth_Balor	
 	1611781726	Play_Leader_Music_SLTH_CIVILIZATION_DOVIELLO			\Default Work Unit\Play_Leader_Music_SLTH_CIVILIZATION_DOVIELLO	
 	1627129986	Play_ArmageddonDecrease			\Default Work Unit\Play_ArmageddonDecrease	
 	1636534262	Play_Leader_Music_SLTH_CIVILIZATION_LUCHUIRP			\Default Work Unit\Play_Leader_Music_SLTH_CIVILIZATION_LUCHUIRP	
@@ -107,6 +109,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	3653758785	Play_Leader_Music_SLTH_CIVILIZATION_KHAZAD			\Default Work Unit\Play_Leader_Music_SLTH_CIVILIZATION_KHAZAD	
 	3679029682	Play_Einherjar			\Default Work Unit\Play_Einherjar	
 	3694953011	Play_Tsunami			\Default Work Unit\Play_Tsunami	
+	3713801467	Slth_Unit_Select_Balor			\Default Work Unit\Slth_Unit_Select_Balor	
 	3748505988	Play_Commanderjoin			\Default Work Unit\Play_Commanderjoin	
 	3757057899	Stop_Leader_Music_SLTH_CIVILIZATION_CALABIM			\Default Work Unit\Stop_Leader_Music_SLTH_CIVILIZATION_CALABIM	
 	3782198531	Play_Haste			\Default Work Unit\Play_Haste	
@@ -132,6 +135,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	7677847	Hope	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Hope_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Hope		172090
 	8120021	BalorSelect-002	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\balorSelect\BalorSelect-002_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\balorSelect\BalorSelect-002		516364
 	14892073	Sing2	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sing2_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sing2		389768
+	22186019	DwarfOrder-001	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfOrder-001_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfOrder-001		183754
 	36415039	Create Puppet	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Create Puppet_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Create Puppet		41076
 	37283644	Domination	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Domination_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Domination		485164
 	44555868	Tiger	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Tiger_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Tiger		20106
@@ -140,6 +144,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	60108953	Feed	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Feed_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Feed		50514
 	66242761	Commanderjoin	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Commanderjoin_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Commanderjoin		181332
 	71568742	Fireball	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Fireball_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Fireball		76096
+	76756664	DwarfSelect-005	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfSelect-005_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfSelect-005		159262
 	82523279	Haste	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Haste_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Haste		281800
 	88925729	Bannor	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Bannor_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Bannor\Bannor\Bannor		9105472
 	96866844	Luchuirp	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Luchuirp_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Luchuirp\Luchuirp\Luchuirp		2843200
@@ -158,6 +163,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	225542300	Spring	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Spring_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Spring		488168
 	254537143	Einherjar	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Einherjar_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Einherjar		480448
 	261218252	Contagion	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Contagion_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Contagion		485164
+	266700506	DwarfOrder-002	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfOrder-002_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfOrder-002		98032
 	268887751	Curedisease	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Curedisease_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Curedisease		168202
 	277646398	Decius	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Decius_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Decius\Decius\Decius		1135936
 	279512127	Empyrean Full	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Religions\Empyrean Full_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Religions\Empyrean Full		1711936
@@ -178,16 +184,20 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	476635973	Khazad	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Khazad_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Khazad\Khazad\Khazad		4750912
 	492670053	Imp	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Imp_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Imp		441064
 	498133185	Malakim	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Malakim_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Malakim\Malakim\Malakim		2728000
+	500029087	DwarfSelect-007	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfSelect-007_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfSelect-007		130688
 	509416919	Tsunami	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Tsunami_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Tsunami		707088
 	515543277	Sacrifice	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sacrifice_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sacrifice		61230
 	525891965	Clanofembers	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Clanofembers_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Clan_of_Embers\Clanofembers\Clanofembers		2723392
 	538849387	Grigori	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Grigori_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Grigori\Grigori\Grigori		12515392
+	542017523	DwarfOrder-000	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfOrder-000_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfOrder-000		49048
 	542557438	Runes of Kilmorph Full	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Religions\Runes of Kilmorph Full_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Religions\Runes of Kilmorph Full		1999936
 	542669843	Lightningelemental	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Lightningelemental_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Lightningelemental		288078
 	543395658	Revelation	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Revelation_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Revelation		774268
 	552984265	BalorSelect-000	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\balorSelect\BalorSelect-000_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\balorSelect\BalorSelect-000		365408
 	557475608	Breathfire	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Breathfire_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Breathfire		485164
 	560027513	HyboremsWhisper	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\HyboremsWhisper_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\HyboremsWhisper		705524
+	586283520	DwarfSelect-004	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfSelect-004_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfSelect-004		159262
+	587370650	DwarfSelect-000	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfSelect-000_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfSelect-000		118442
 	591084663	Lanun	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Lanun_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Lanun\Lanun\Lanun		10768960
 	634544138	Inspiration	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Inspiration_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Inspiration		223612
 	646585260	Kraken	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Kraken_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Kraken		441064
@@ -203,16 +213,21 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	712297465	Amurites	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Amurites_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Amurites\Amurites\Amurites		4995136
 	724914776	Fellowship of Leaves Full	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Religions\Fellowship of Leaves Full_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Religions\Fellowship of Leaves Full		3741760
 	727676531	Inquisition	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Inquisition_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Inquisition		262996
+	734430978	DwarfSelect-003	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfSelect-003_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfSelect-003		126606
 	737590655	Repair	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Repair_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Repair		220348
 	752806766	Sanctify	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sanctify_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sanctify		84004
 	754352182	Bless	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Bless_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Bless		178186
 	763071211	Water	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Water_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Water		485164
 	766061991	Commandersplit	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Commandersplit_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Commandersplit		84804
 	769909113	Resist	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Resist_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Resist		63420
+	772931025	DwarfOrder-004	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfOrder-004_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfOrder-004		118442
 	774653947	Sheaim	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Sheaim_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Sheaim\Sheaim\Sheaim		3548224
+	784387004	DwarfSelect-002	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfSelect-002_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfSelect-002		53130
 	801674892	Runes of Kilmorph	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Religions\Runes of Kilmorph_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Religions\Runes of Kilmorph		843328
 	805741702	Order Full	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Religions\Order Full_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Religions\Order Full		3119680
+	808922493	DwarfSelect-001	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfSelect-001_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfSelect-001		93950
 	811551930	Escape	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Escape_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Escape		485164
+	812619584	DwarfSelect-006	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfSelect-006_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfSelect-006		61294
 	816230135	Balseraphs	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Balseraphs_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Balseraphs\Balseraphs\Balseraphs		9317440
 	824533399	Ashen Veil Full	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Religions\Ashen Veil Full_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Religions\Ashen Veil Full		2875456
 	834058924	Stoneskin	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Stoneskin_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Stoneskin		196000
@@ -232,6 +247,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	997262657	Calabim	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Calabim_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Calabim\Calabim\Calabim		4432960
 	1020807614	Sing4	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Spells\Sing4_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Sing4		733806
 	1021417371	Ljosalfar	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Ljosalfar_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Ljosalfar\Ljosalfar\Ljosalfar		5939776
+	1033335067	DwarfOrder-003	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\dwarfOrder\DwarfOrder-003_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\units\dwarfOrder\DwarfOrder-003		138852
 	1048642246	ArmageddonIncrease	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\buildings\ArmageddonIncrease_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\buildings\ArmageddonIncrease		972352
 	1057202847	Infernal	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\Infernal_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Diplomacy_Infernal\Infernal\Infernal		4345408
 	1061058352	Summon_Skeleton	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\units\skeletonSelect\SkeletonSelect-000_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\FFH_SFX\Spells\Summon_Skeleton		98032
