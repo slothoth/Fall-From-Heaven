@@ -167,6 +167,15 @@
             <File>Icons/CommandIcons.sql</File>
             <File>Icons/DLCPack/Icons_DLC_FrontEnd.sql</File>
         </UpdateIcons>
+        <UpdateAudio id="UpdateAudioFrontend">
+            <Properties>
+                <LoadOrder>902</LoadOrder>
+            </Properties>
+            <File>Platforms/Windows/Audio/FFH_Frontend_Banks.ini</File>
+            <File>Platforms/Windows/Audio/FFH_Frontend_Bank.bnk</File>
+            <File>Platforms/Windows/Audio/FFH_Frontend_Bank.txt</File>
+            <File>Platforms/Windows/Audio/SoundbanksInfo.xml</File>
+        </UpdateAudio>
     </FrontEndActions>
     <InGameActions>
         <UpdateArt id="FFHArtGameplay">
@@ -598,7 +607,7 @@
             <File>Lua/SpawnSupport.lua</File>
             <File>Lua/Lairs.lua</File>
         </ImportFiles>
-        <UpdateAudio id="UpdateAudioTest">
+        <UpdateAudio id="UpdateAudioIngame">
             <Properties>
                 <LoadOrder>902</LoadOrder>
             </Properties>
@@ -822,10 +831,13 @@
         <File>UI/Replacements/DiplomacyActionViewInjector.lua</File>
         <File>UI/Replacements/DiplomacyActionViewInjector.xml</File>
         <File>Platforms/Windows/Audio/FFH_Banks.ini</File>
+        <File>Platforms/Windows/Audio/FFH_Frontend_Banks.ini</File>
         <File>Platforms/Windows/Audio/FFH_SFX_Bank.bnk</File>
         <File>Platforms/Windows/Audio/FFH_SFX_Bank.txt</File>
         <File>Platforms/Windows/Audio/FFH_Music_Bank.bnk</File>
         <File>Platforms/Windows/Audio/FFH_Music_Bank.txt</File>
+        <File>Platforms/Windows/Audio/FFH_Frontend_Bank.bnk</File>
+        <File>Platforms/Windows/Audio/FFH_Frontend_Bank.txt</File>
         <File>Platforms/Windows/Audio/SoundbanksInfo.xml</File>
         <File>Platforms/Windows/Audio/1819081.wem</File>
         <File>Platforms/Windows/Audio/6870636.wem</File>

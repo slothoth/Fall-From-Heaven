@@ -480,6 +480,20 @@
 	</StreamedFiles>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
+		<SoundBank Id="2234101387" Language="SFX">
+			<ShortName>FFH_Frontend_Bank</ShortName>
+			<Path>FFH_Frontend_Bank.bnk</Path>
+			<IncludedEvents>
+				<Event Id="2228153899" Name="Play_Menu_Music"/>
+				<Event Id="2829915331" Name="Stop_Main_Menu_Music"/>
+			</IncludedEvents>
+			<IncludedMemoryFiles>
+				<File Id="900603112" Language="SFX">
+					<ShortName>OpeningMenu.wav</ShortName>
+					<Path>SFX\OpeningMenu_4B8CC0C5.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
+		</SoundBank>
 		<SoundBank Id="3087942160" Language="SFX">
 			<ShortName>FFH_Music_Bank</ShortName>
 			<Path>FFH_Music_Bank.bnk</Path>
