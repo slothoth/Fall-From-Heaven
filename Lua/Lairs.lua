@@ -291,7 +291,7 @@ local function onFarTreasure(pUnit, pPlot, sUnitType)
     local iNumEligiblePlots = table.count(tEligiblePlots)
     if iNumEligiblePlots > 0 then
         local iRandomEligiblePlotsPosition = Game.GetRandNum((iNumEligiblePlots + 1) - 1, 'RNG_barb_placement') + 1
-        local spawnPlot = eligiblePlots[iRandomEligiblePlotsPosition]
+        local spawnPlot = tEligiblePlots[iRandomEligiblePlotsPosition]
         local iX, iY = spawnPlot:GetX(), spawnPlot:GetY()
         UnitManager.InitUnitValidAdjacentHex(63, iUnitIndex, iX, iY);
         local iPlotIndex = Map.GetPlot(iX, iY):GetIndex();
@@ -343,7 +343,7 @@ function BigBadGroupSpawn(pPlot, pUnit, bGraceFailed, iBarbClanType, iFeatureTyp
     else
         if bGraceFailed then
             leaderTable = tLairUnits['tBigBadFailedGraceLeader']
-            if iFeatureType == g_Feature_FOREST then                             -- maybe should include ancient forest too
+            if iFeatureType == iFEATURE_FOREST then                             -- maybe should include ancient forest too
                 table.insert(leaderTable, iTREANT_INDEX)
             end
             henchTable = tLairUnits['tBigBadFailedGraceHench']
@@ -588,7 +588,7 @@ function doBigGood(pPlot, bGraceFailed, pUnit, bIsWater)
     end
     if bIsWater then
         table.insert(tPossible, 'PRISONER_SEA_SERPENT')
-        if bNoBonusResource then
+        if pPlot:GetResourceType() ~= -1 then
             tPossible = SlthAppend(tPossible, {'BONUS_CLAM', 'BONUS_CRAB', 'BONUS_FISH'})
         end
     else

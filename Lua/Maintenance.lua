@@ -153,6 +153,7 @@ function BuildingTaxPillageStateChange(playerID, cityID, buildingID, isPillaged)
         local pPlayer = Players[playerID];
         local new_prop = nil;
         if not isPillaged then
+            local pCity = CityManager.GetCity(playerID, cityID);
 	        new_prop = {x=pCity:GetX(), y=pCity:GetY()};
         end
         pPlayer:SetProperty(buildingGovern, new_prop);
@@ -211,7 +212,7 @@ end
 
 function GetGovernanceDistances(pPlayer)
     local pCapital = pPlayer:GetCities():GetCapitalCity();
-    if not pCapital then local empty = {empty=True}; return {no_seat=empty}; end
+    if not pCapital then local empty = {empty=true}; return {no_seat=empty}; end
     local cap_x = pCapital:GetX();
     local cap_y = pCapital:GetY();
     local tGovernSeats = {};

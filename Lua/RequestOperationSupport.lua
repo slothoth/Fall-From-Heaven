@@ -722,10 +722,12 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
-local tChestOptions = {ITEM_HEALING_SALVE=iUnit, ITEM_JADE_TORC=iUnit,
-                       ITEM_ROD_OF_WINDS=iUnit, ITEM_TIMOR_MASK=iUnit}
+local tChestOptions = {ITEM_HEALING_SALVE=GameInfo.Units['SLTH_EQUIPMENT_HEALING_SALVE'].Index,
+                       ITEM_JADE_TORC=GameInfo.Units['SLTH_EQUIPMENT_JADE_TORC'].Index,
+                       ITEM_ROD_OF_WINDS=GameInfo.Units['SLTH_EQUIPMENT_ROD_OF_WINDS'].Index,
+                       ITEM_TIMOR_MASK=GameInfo.Units['SLTH_EQUIPMENT_TIMOR_MASK'].Index}
 
-local tFuncs = {HIGH_GOLD=HIGH_GOLD, TECH=TECH}
+local tFuncs = {HIGH_GOLD='HIGH_GOLD', TECH='TECH'}
 -- adjacent to friendly chest.
 local function OnOpenChest(iPlayer, tParameters)
     local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
@@ -760,6 +762,10 @@ local function OnOpenChest(iPlayer, tParameters)
             end
         end
     end
+end
+
+local function OnBespokeSpell(iPlayer, tParameters)
+    print('some bespoke spell that is yet to be implemented!')
 end
 
 -- UnitOperation Works

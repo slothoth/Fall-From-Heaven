@@ -1,4 +1,5 @@
 include('SpawnSupport')
+local iW, iH = Map.GetGridSize();
 local sWorldSpellPropKey = 'WorldSpellReady'
 local iNotifType = NotificationTypes.USER_DEFINED_2;
 function NotifyAllHumansAlt(notificationData, iX, iY)
@@ -13,6 +14,7 @@ function Sanctuary(iPlayer, tParameters)
 	-- force out of borders ugh. Maybe there is an easy way to do this, since borders close push out exists.
     -- but dunno how to enforce it continously
 	print('world spell not implemented')
+    local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -100,6 +102,7 @@ function Ardor(iPlayer, tParameters)
 	-- resets the GreatPeopleCount. Makes no sense in civ vi context.
     -- RWORK: Maybe it grants like 80% refund on great people then 70 after getting one and so on down to 0?
 	print('world spell not implemented')
+    local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 

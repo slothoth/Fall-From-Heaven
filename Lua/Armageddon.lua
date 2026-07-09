@@ -10,6 +10,10 @@ function reverse_table(t)
     return reversed
 end
 
+local tArmageddonBuildings = {[GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index]=4,
+                              [GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index]=5}
+
+
 
 function AdjustArmageddonCount(iAmount)
     local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
@@ -61,7 +65,7 @@ function OnCityRaze(playerID, districtID, icityID, idistrictX, idistrictY, iDist
 		else -- has already been removed this turn
 			print ("city removed for the second(!) time this turn!")
             local bConquerChecker = true
-            local tUnitsInTile = Units.GetUnitsInPlotLayerID(idistrictX, idistrictY, mapLayerAny)
+            local tUnitsInTile = Units.GetUnitsInPlotLayerID(idistrictX, idistrictY, MapLayers.ANY)
             if tUnitsInTile then
                 for k, pUnit in ipairs(tUnitsInTile) do
                     if pUnit:GetType() then
@@ -153,9 +157,6 @@ function onProphecyMarkGainedCheck(playerID, unitID, unitAbilityIndex)
     end
 end
 -- building tracker, create increase armageddon, delete decrease
-local tArmageddonBuildings = {[GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index]=4,
-                              [GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index]=5}
-
 function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)       -- buildingID is hopefully Buildings.Index?
     local iArmaggeddonChange = tArmageddonBuildings[buildingID]
     if iArmaggeddonChange then
@@ -523,8 +524,8 @@ function RitesOghma(playerID, cityID, projectID, buildingIndex, x, y)
     local tValidResourcePlots = {}
     for iX = 0, iW - 1 do
         for iY = 0, iH - 1 do
-            local i = iY * iW + iX;
-            pPlot = Map.GetPlotByIndex(i);
+            local iPlotIndex = iY * iW + iX;
+            pPlot = Map.GetPlotByIndex(iPlotIndex);
             if (pPlot ~= nil) then
                 if (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
                     tValidResourcePlots[iPlotIndex] = true
@@ -938,7 +939,7 @@ function HellSpread()
             end
             if is_adjacent_to_infected and not isProtected then
                 change = 1
-            elseif not sCivName == 'SLTH_CIVILIZATION_INFERNAL' then
+            elseif sCivName ~= 'SLTH_CIVILIZATION_INFERNAL' then
                 change = -1
             end
 

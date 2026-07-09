@@ -157,9 +157,7 @@ function Initialize()
 	if ExposedMembers.ExtraHeroes == nil then
 		ExposedMembers.ExtraHeroes = {}
 	end
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction = GrantBuildingFunction;
 	ExposedMembers.ExtraHeroes.GrantSuperSpecialist = GrantSuperSpecialist;
-	ExposedMembers.ExtraHeroes.GrantGoldenAge = GrantGoldenAge
 	ExposedMembers.ExtraHeroes.ConsumeEquipment = ConsumeEquipment
 	tTimers = {GoldenAges = { sProperty = 'GoldenAgeDuration', callback = FlushGoldenAge}}
 end

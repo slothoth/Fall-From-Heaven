@@ -2,7 +2,36 @@ include('WorldSpellSupport')
 include('SpawnSupport')
 include('Lairs')
 
-include("GameCapabilities");                -- NOT SURE IF exists outside of UI
+-- Gameplay-context replacement for HasTrait: GameCapabilities.lua lives in the UI
+-- VM and is NOT loaded here, so its HasTrait is nil in gameplay scripts. Precompute
+-- a leader/civ -> trait set once at load from the LeaderTraits / CivilizationTraits
+-- DB tables (via GameInfo) so each per-turn call is an O(1) lookup.
+local tTraitsByEntity = {}   -- ["LEADER_x" | "CIVILIZATION_y"] = { [traitType] = true }
+local function registerTrait(sEntityType, sTraitType)
+    if not sEntityType or not sTraitType then return end
+    local tSet = tTraitsByEntity[sEntityType]
+    if not tSet then tSet = {}; tTraitsByEntity[sEntityType] = tSet end
+    tSet[sTraitType] = true
+end
+for row in GameInfo.LeaderTraits() do
+    registerTrait(row.LeaderType, row.TraitType)
+end
+for row in GameInfo.CivilizationTraits() do
+    registerTrait(row.CivilizationType, row.TraitType)
+end
+
+-- Does the player's leader or civilization have the given trait? Mirrors the
+-- semantics of the base-game HasTrait (nil playerId -> local player; -1 -> false).
+function gameplayHasTrait(sTraitType, playerId)
+    if playerId == nil then playerId = Game.GetLocalPlayer() end
+    if playerId == -1 then return false end
+    local pConfig = PlayerConfigurations[playerId]
+    if not pConfig then return false end
+    local tLeaderTraits = tTraitsByEntity[pConfig:GetLeaderTypeName()]
+    if tLeaderTraits and tLeaderTraits[sTraitType] then return true end
+    local tCivTraits = tTraitsByEntity[pConfig:GetCivilizationTypeName()]
+    return tCivTraits ~= nil and tCivTraits[sTraitType] == true
+end
 
 local FreeXPUnits = { UNIT_SLTH_ADEPT = 8, UNIT_SLTH_IMP = 8, UNIT_SLTH_SHAMAN = 8, UNIT_SLTH_ARCHMAGE = 16, UNIT_SLTH_EATER_OF_DREAMS = 16,
                       UNIT_SLTH_CORLINDALE = 8, UNIT_SLTH_DISCIPLE_OF_ACHERON = 8, UNIT_SLTH_GAELAN = 12, UNIT_SLTH_GIBBON = 8,
@@ -10,7 +39,7 @@ local FreeXPUnits = { UNIT_SLTH_ADEPT = 8, UNIT_SLTH_IMP = 8, UNIT_SLTH_SHAMAN =
                       UNIT_SLTH_WIZARD = 12, UNIT_SLTH_MOBIUS_WITCH = 12, UNIT_SLTH_MOKKA = 12, UNIT_SLTH_SON_OF_THE_INFERNO = 16}
 local iIMP_INDEX = GameInfo.Units['UNIT_SLTH_IMP'].Index
 local tArcaneUnits = {
-    [GameInfo.Units['UNIT_SLTH_ADEPT'].Index] = true, iIMP_INDEX = true, [GameInfo.Units['UNIT_SLTH_SHAMAN'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_ADEPT'].Index] = true, [iIMP_INDEX] = true, [GameInfo.Units['UNIT_SLTH_SHAMAN'].Index] = true,
     [GameInfo.Units['UNIT_SLTH_ARCHMAGE'].Index] = true, [GameInfo.Units['UNIT_SLTH_EATER_OF_DREAMS'].Index] = true,
     [GameInfo.Units['UNIT_SLTH_CORLINDALE'].Index] = true, [GameInfo.Units['UNIT_SLTH_DISCIPLE_OF_ACHERON'].Index] = true,
     [GameInfo.Units['UNIT_SLTH_GAELAN'].Index] = true, [GameInfo.Units['UNIT_SLTH_GIBBON'].Index] = true,
@@ -97,6 +126,12 @@ function SlthLog(sMessage)
 end
 
 -- nicked from Leugi Wildlife++
+local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true,
+                        [GameInfo.Terrains['TERRAIN_TUNDRA_HILLS'].Index] = true,
+                        [GameInfo.Terrains['TERRAIN_SNOW'].Index]         = true,
+                        [GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index]   = true
+}
+
 function ViableWildernessPlots(bOnlyTundraOrSnow)
     local tNewTable = {}
     local iCount = 1
@@ -530,7 +565,7 @@ function onTurnStartGameplay(playerId)
             end
         end
     end
-    if HasTrait("SLTH_TRAIT_INSANE", playerId) then
+    if gameplayHasTrait("SLTH_TRAIT_INSANE", playerId) then
         if math.random(100) < 2 then
             print('doing insane change trait')
             local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
@@ -582,7 +617,7 @@ function onTurnStartGameplay(playerId)
             end
         end
     end
-    if HasTrait("SLTH_TRAIT_ADAPTIVE", playerId) then
+    if gameplayHasTrait("SLTH_TRAIT_ADAPTIVE", playerId) then
         local iCurrentTurn = Game.GetCurrentGameTurn()
         if iCurrentTurn == 100 then
             -- offerChangeTrait()
@@ -1213,11 +1248,11 @@ function IntializeVariableTraits()
     if Game.GetCurrentGameTurn() == 1 then
         for playerId, pPlayer in ipairs(Players) do
             if pPlayer:IsMajor() then
-                if HasTrait("SLTH_TRAIT_INSANE", playerId) then
+                if gameplayHasTrait("SLTH_TRAIT_INSANE", playerId) then
                     for _, propKey in ipairs(tStartingTraitsInsane) do
                         setPlayerPropForRequirements(playerId, propKey, 1)
                     end
-                elseif HasTrait("SLTH_TRAIT_ADAPTIVE", playerId) then
+                elseif gameplayHasTrait("SLTH_TRAIT_ADAPTIVE", playerId) then
                     setPlayerPropForRequirements(playerId, 'SELECTED_PHILOSOPHICAL', 1)
                 end
             end
@@ -1523,6 +1558,8 @@ local function ArcaneLacuna(iPlayer, tParameters)
     NotifyAllHumans(Locale.Lookup('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_TITLE'), Locale.Lookup('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_DESCRIPTION'))
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
+
+local iUNIT_WOLF = GameInfo.Units['UNIT_SLTH_WOLF'].Index
 
 function WildHunt(iPlayer, tParameters)
 	-- Grant a wolf for each combat unit you have. Wolf strength proportional to unit strength.
