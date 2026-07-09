@@ -193,10 +193,8 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     if bReincarnate then
         if pUnitKiller:GetAbility():HasAbility('NETHER_BLADE') then
             print('killed by nether blade')                     -- this should also alter resurrection through property
-            bReincarnate = false
         elseif tAnimalBeastSiege[GameInfo.Units[pUnit:GetType()].PromotionClass] then
             print('unit is beast or siege or animal')
-            bReincarnate = false
         elseif GameInfo.UnitsNotAlive[pUnit:GetType()] then
             bReincarnate = false
         else
@@ -557,7 +555,6 @@ function FindPlotsAtRange(tCampTiles, aPlayers, iUniqueRange, bIsEquals)
         local iCampX = pPlot:GetX();
         local iCampY = pPlot:GetY();
         for loop, pPlayer in pairs(aPlayers) do
-            local iPlayer = pPlayer:GetID();
             local pPlayerCities = pPlayer:GetCities();
             for i, pLoopCity in pPlayerCities:Members() do
                 local iDistance = Map.GetPlotDistance(iCampX, iCampY, pLoopCity:GetX(), pLoopCity:GetY());

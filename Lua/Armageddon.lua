@@ -199,7 +199,6 @@ function Samhain(playerID, cityID, projectID, buildingIndex, x, y)
     -- get number of units to spawn based on viable plots
     local tEligiblePlots = ViableWildernessPlots(true)
 
-    local tUsedPlots = selectPercentage(tEligiblePlots, iSamhainUnitSpawnPercent)
     tUsedPlots = SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_MOKKA'].Index, tEligiblePlots)
     local iLoopIterations = math.floor(#tUsedPlots / # tFrostlingProportions)
     for var=0, iLoopIterations do
@@ -257,7 +256,7 @@ function Deepening(playerID, cityID, projectID, buildingIndex, x, y)
             end
         end
     end
-    local tPlotsToChange, iNewTerrainIndex, pPlot
+    local tPlotsToChange, pPlot
     for iInitPlotTerrain, iPostPlotTerrain in pairs(tPlotConversionDeepeningMap) do
         local tPlotTable = tPlotsByTerrainType[iInitPlotTerrain]
         tPlotsToChange = selectPercentage(tPlotTable, iPlotProportionChanged)
@@ -691,7 +690,6 @@ local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true
 function ViableWildernessPlots(bOnlyTundraOrSnow)
     local tNewTable = {}
     local iCount = 1
-    local bViablePlot
     local iW, iH = Map.GetGridSize();
     for x = 0, iW - 1 do
         for y = 0, iH - 1 do

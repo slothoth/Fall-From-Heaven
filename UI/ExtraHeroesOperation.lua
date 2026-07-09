@@ -395,13 +395,6 @@ function OnBespokeUpgradeSix()
 	return;
 end
 
-function OnGrantSuperSpecialistClicked()
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
-	ExposedMembers.ExtraHeroes.GrantSuperSpecialist(iPlayer, iUnit, iX, iY);
-	UI.DeselectUnit(pUnit);
-	return;
-end
-
 function InitializeSetPolicies(playerID)
     local iGameTurn = Game.GetCurrentGameTurn()
     -- print('trying to set policies on turn', iGameTurn)

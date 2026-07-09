@@ -81,7 +81,6 @@ function RagingSeas(iPlayer, tParameters)
                 local iImprovementOwner = pPlot:GetOwner()
                 if iImprovementOwner ~= iPlayer then
                     if (pPlot:IsWater() or (pPlot:IsCoastalLand())) then
-                        local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
                         if pPlot:GetImprovementType() ~= -1 then                -- does this hold
                             ImprovementBuilder.SetImprovementType(pPlot, -1, iImprovementOwner)     -- todo do chance
                         end
@@ -192,7 +191,6 @@ function Stasis(iPlayer, tParameters)
     -- that would be a -100% modifier on culture, science and production.
     -- do this by having a modifier on all player capitals, that needs a plotprop.
     local iNewStasis
-    local iX, iY
     local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
     local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier / 100
     local iDelay = math.floor(20 * iSpeedCostMultiplier)
@@ -254,8 +252,6 @@ function HyboremsWhisper(iPlayer, tParameters)
             if pCities then
                 for _, pCity in pCities:Members() do
                     local pPlot = pCity:GetPlot();
-                    local iX = pPlot:GetX()
-                    local iY = pPlot:GetY()
                     local pCityReligion = pCity:GetReligion()
                     local iNumFollowers = pCityReligion:GetNumFollowers(iVEIL_RELIGION_INDEX)
                     if iNumFollowers > 0 then
@@ -301,10 +297,11 @@ function RiverOfBlood(iPlayer, tParameters)
                     local iCityPop = pCity:GetPopulation()
                     local iReduction = 0
                     if iCityPop == 2 then
-                        iReduction = 1
+                        iReduction = -1
                     elseif iCityPop > 2 then
-                        iReduction = 2
+                        iReduction = -2
                     end
+                    pCity:ChangePopulation(iReduction)
                 end
             end
         end

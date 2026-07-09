@@ -285,7 +285,6 @@ function getUnitCountForeign(playerId, pUnits)
 end
 local sCommerceScienceConversionKey = 'CommIntoScience'
 local sCommerceGoldConversionKey = 'CommIntoGold'
-local iCustomSlidersOffKey = 'CustomSlidersOff'
 local sManualSlidersKey = 'manualSlidersSet'
 function adjustSliders(playerId, pPlayer, pReligion, iExtraTax)
     local pCapitalCity = pPlayer:GetCities():GetCapitalCity()

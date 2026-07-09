@@ -224,7 +224,6 @@ end
 
 local function onGrantUnit(pUnit, pPlot, sUnitType)
     local iPlayer = pUnit:GetOwner()
-    local pPlayer = Players[iPlayer]
     local iUnitIndex = tLairUnitIndices[sUnitType].Index
     local iX, iY = pUnit:GetX(), pUnit:GetY()
     SimpleSummon(iX, iY, iPlayer, iUnitIndex)
@@ -232,7 +231,6 @@ end
 
 local function onGrantGreatUnit(pUnit, pPlot, sUnitType)
     local iPlayer = pUnit:GetOwner()
-    local pPlayer = Players[iPlayer]
     local iUnitIndex = tLairUnitIndices[sUnitType].Index
     local iX, iY = pUnit:GetX(), pUnit:GetY()
     SimpleSummon(iX, iY, iPlayer, iUnitIndex)
@@ -280,7 +278,6 @@ local function onLairGrantDemonic(pUnit, pPlot, sEventInfo)
 end
 
 local function onFarTreasure(pUnit, pPlot, sUnitType)
-    local pBarbPlayer = Players[63]
     local tUnitInfo =  tLairUnitIndices[sUnitType]
     if not tUnitInfo then
         print('ERROR. No info for :' .. sUnitType)

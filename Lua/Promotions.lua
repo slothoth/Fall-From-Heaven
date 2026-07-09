@@ -359,7 +359,7 @@ local tConditionalUnlocks = {
 
 }
 
--- not implemented as reversible
+-- not implemented as reversible, and reversible promotions seemingly not possible. Need to have UI intercept and just accept AI can do it.
 local tPolicyUnlocks ={
     GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ORDER_STATE'].Index ,
     GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index

@@ -1,6 +1,7 @@
 include('WorldSpellSupport')
 include('SpawnSupport')
 include('Lairs')
+include("GameCapabilities")
 
 -- Gameplay-context replacement for HasTrait: GameCapabilities.lua lives in the UI
 -- VM and is NOT loaded here, so its HasTrait is nil in gameplay scripts. Precompute
@@ -135,7 +136,6 @@ local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true
 function ViableWildernessPlots(bOnlyTundraOrSnow)
     local tNewTable = {}
     local iCount = 1
-    local bViablePlot
     local iW, iH = Map.GetGridSize();
     for x = 0, iW - 1 do
         for y = 0, iH - 1 do
@@ -182,7 +182,7 @@ local function ConvertUnitType( iPlayer, tParameters)
     local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
     local pPlayer = Players[iPlayer]
     pPlayer:GetTreasury():ChangeGoldBalance(-iUpgradeCost)
-    local iHealth, iX, iY, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
+    local iHealth, _, _, tPromos, tAbilities = InheritUnitAttributes(iPlayer, iUnitID)
     local tNewUnits = BaseSummon(pUnit, iPlayer, iNewUnitIndex)
     ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
     pUnit:SetDamage(0)
@@ -727,7 +727,6 @@ function RemovedBarbCamp(x, y, owningPlayerID)
     local iPlotOwner = pPlot:GetOwner()
     local tribeIndex = pPlot:GetProperty('barbclantype')
     local pUnit
-    local bIsBarbOccupied = true
     local iPlotID = pPlot:GetIndex()
     local isPartOfCleanup = Game:GetProperty('BarbFree_' .. iPlotID)
     local dontDoLairReveal = Game:GetProperty(sDontDoBarbLairRemoval .. iPlotID)
@@ -1463,7 +1462,6 @@ local function MarchOfTheTrees(iPlayer, tParameters)
             end
         end
     end
-    local tNewUnits
     for id, pUnit in pPlayer:GetUnits():Members() do
         if (not cachedUnits[id]) then
             print('new unit, setting lifespan')
@@ -1484,7 +1482,7 @@ local tFlatlands = {
                         [iSnowTerrain] = iSnowTerrainHills
     }
 local function MotherLode(iPlayer, tParameters)
-	-- he Mother Lode spell provides your empire with 25 gold for each mine in your cultural borders.
+	-- the Mother Lode spell provides your empire with 25 gold for each mine in your cultural borders.
 	-- For each flatlands square you own (Grassland, Plains, Desert, Tundra, Ice), there is a 10% chance of it turning into a hill. This includes Flood Plains.
     local pPlayer = Players[iPlayer]
     local iMineCount = 0
