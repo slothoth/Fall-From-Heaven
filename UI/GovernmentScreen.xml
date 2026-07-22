@@ -4,18 +4,14 @@
 
     <Container ID="Vignette" Style="FullScreenVignetteConsumer" />
 
-    <ScrollPanel Anchor="C,C" Size="parent,768" FullClip="1">
-        <Image ConsumeMouse="1" Anchor="C,C" Size="parent,parent" Texture="Wood_Pattern" StretchMode="Tile">
-            <Grid ConsumeMouse="1" Size="Parent,Parent" Texture="Wood_CarvedBorder" SliceCorner="240,240"
-                  SliceSize="20,20" SliceTextureSize="497,500"/>
-
-            <!-- Main container (full-width, so the centered column stack positions correctly
-                 without the base screen's dynamic Resize()) -->
-            <Container ID="MainContainer" Anchor="C,C" Size="parent,parent" Offset="0,0">
+    <!-- Contained modal: fixed size, centered on screen, so the ModalScreenWide gold frame
+         wraps the content instead of running off the edges of a full-width screen. -->
+    <Container ID="MainContainer" Anchor="C,C" Size="1360,720">
+        <Image ConsumeMouse="1" Anchor="C,C" Size="parent,parent" Texture="Wood_Pattern" StretchMode="Tile"/>
 
                 <!-- FFH single-policy-per-category picker: far-left governments column + confirm,
                      then one column per policy category (title / policy listbox / description). -->
-                <Stack ID="MainColumns" Anchor="C,T" Offset="0,96" StackGrowth="Right" StackPadding="10,0">
+                <Stack ID="MainColumns" Anchor="C,T" Offset="0,56" StackGrowth="Right" StackPadding="10,0">
 
                     <!-- Far-left: Governments list (display-only) + Confirm button -->
                     <Container ID="GovernmentColumn" Size="210,584">
@@ -114,15 +110,11 @@
 
                 </Stack>
 
-                <!-- Modal chrome: gold frame + title bar + close (X) button + yields bar.
-                     Bare (no size override) so it uses the style's Anchor=C,C Size=parent,768
-                     and its title/X render in the visible area (a +size override pushes the
-                     top edge, and the X, off-screen). -->
-                <Container Style="ModalScreenWide"/>
+                <!-- Modal chrome: gold ScreenFrame + title bar + close (X) button + yields bar.
+                     Sized to the modal (parent,parent) so the gold frame wraps the content. -->
+                <Container Style="ModalScreenWide" Size="parent,parent"/>
 
             </Container>
-        </Image>
-    </ScrollPanel>
 
     <!-- ==================================================================	-->
     <!--	Instances                                                       -->
