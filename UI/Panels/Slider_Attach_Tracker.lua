@@ -29,7 +29,7 @@ end
 -- // Panel Control and Checkbox Attach
 -- // ----------------------------------------------------------------------------------------------
 function UpdateCheatPanel(hideCheatPanel)
-	m_hideCheatPanel = hideCheatPanel; 
+	m_hideCheatPanel = hideCheatPanel;
 	Controls.CheatPanel:SetHide(m_hideCheatPanel);
 	Controls.ToggleCheatPanel:SetCheck(not m_hideCheatPanel);
 end

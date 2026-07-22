@@ -659,10 +659,10 @@ function onSpawnApplyPromotions(playerID, unitID)
         local pPlot = Map.GetPlot(iX, iY)
         local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
         if pCity then
-        local tiReligions = City:GetReligion():GetReligionsInCity()
-        if tiReligions then
+        local tReligions = pCity:GetReligion():GetReligionsInCity()
+        if tReligions then
             local CHANCE_OF_GRANT_RELIGION = 15                     -- TODO currently this will favour first table entries of religions
-            for idx, val in ipairs(tiReligions) do                  --TODO needs testing to see what this table contains
+            for idx, val in ipairs(tReligions) do                  --TODO needs testing to see what this table contains
                 local iAttempt = math.random(0, 99)
                 if iAttempt > CHANCE_OF_GRANT_RELIGION then
                     GrantUnitReligion(pUnit, val)

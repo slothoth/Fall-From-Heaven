@@ -19,6 +19,9 @@ function AdjustArmageddonCount(iAmount)
     local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
     if iArmageddonCount then
         local iNewArmageddonCount = iArmageddonCount + iAmount
+        if iAmount > 0 then
+            print('Play_ArmageddonDecrease')
+        end
         Game.SetProperty('ARMAGEDDON', iNewArmageddonCount)
         for iArmaRequired, tEventInfo in pairs(tArmageddonEvents) do
             if iNewArmageddonCount > iArmaRequired then
@@ -32,7 +35,7 @@ function AdjustArmageddonCount(iAmount)
             end
         end
         if (iArmageddonCount < 70) and (iNewArmageddonCount >= 70) then
-            local pFirstPlayer = next(PlayerManager.GetAliveMajors())
+            local _, pFirstPlayer = next(PlayerManager.GetAliveMajors())
             local iHasHitSeventy = pFirstPlayer:GetProperty('ArmageddonAboveSeventy')
             if not iHasHitSeventy then
                 for _, pPlayer in ipairs(PlayerManager.GetAliveMajors()) do

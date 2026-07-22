@@ -6,7 +6,6 @@
 -- Wwise event-name contract (must match the events you built in the FFH_Music_Bank):
 --   Map music  : Play_Music_FFH_<Set>   / Stop_Music_FFH_<Set>
 --   Leader     : Play_Leader_Music_<CIV>/ Stop_Leader_Music_<CIV>   (CIV = code w/o CIVILIZATION_ prefix)
--- where <Set> is one of: Veil, Empy, Leaf, Octo, Orde, Rune, Coun, Generic
 --
 -- PREREQUISITE: native civ music must be suppressed (remove the Civilizations.artdef
 -- Audio link in the mod art) so the engine doesn't play map music under our Lua music.
@@ -52,15 +51,6 @@ local function DesiredSet()
         return set
     end
     return GENERIC_SET
-end
-
--- "CIVILIZATION_BANNOR" -> "BANNOR"
-local function CivCode(playerID)
-    if not playerID or playerID < 0 then return nil end
-    local cfg = PlayerConfigurations[playerID]
-    local civ = cfg and cfg:GetCivilizationTypeName()
-    if not civ then return nil end
-    return (civ:gsub("^CIVILIZATION_", ""))
 end
 
 -- ---- map music ----

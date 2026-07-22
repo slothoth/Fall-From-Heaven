@@ -284,50 +284,6 @@ function FlushButtons(pControl, bHide, sName)
     end
 end
 
-function goldenAgeHide(gridButton, iPlayerID, pPlayer, iUnitID, iUnitIndex)
-    print('attempting golden age hide')
-    local iUniqueGreatPeopleRequirement = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
-    local bRecalculateSacrificeList = false
-    print(table.count(tGreatPeopleUnitIDs))
-    print(iUniqueGreatPeopleRequirement)
-    if table.count(tGreatPeopleUnitIDs) >= iUniqueGreatPeopleRequirement then            -- saves recalculating when golden possible
-        print('check if all still alive and value in index')
-        if tGreatPeopleUnitIDs[iUnitIndex] ~= iUnitID then
-            bRecalculateSacrificeList = true
-        end
-        for iUnitType, iPreDefUnitID in pairs(tGreatPeopleUnitIDs) do             -- still need to check the unit exists
-            if not UnitManager.GetUnit(iPlayerID, iPreDefUnitID) then
-                bRecalculateSacrificeList = true
-                break
-            end
-        end
-    else
-        bRecalculateSacrificeList = true
-        print('build list')
-        print(bRecalculateSacrificeList)
-    end
-    print(bRecalculateSacrificeList)
-    if bRecalculateSacrificeList then
-        print('building list')
-        tGreatPeopleUnitTypes[iUnitIndex] = iUnitID
-        for _, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
-            local unitType = pPlayerUnit:GetType()
-            if tGreatPeopleUnitTypes[unitType] and table.count(tGreatPeopleUnitIDs) < iUniqueGreatPeopleRequirement and not tGreatPeopleUnitIDs[unitType] then
-                tGreatPeopleUnitIDs[unitType] = pPlayerUnit:GetID()
-                print('added great person')
-            end
-        end
-    end
-    print('-------------------------------------------')
-    print(table.count(tGreatPeopleUnitIDs))
-    print(iUniqueGreatPeopleRequirement)
-    if table.count(tGreatPeopleUnitIDs) >= iUniqueGreatPeopleRequirement then
-        gridButton:SetHide(false)
-    else
-        gridButton:SetHide(true)
-    end
-end
-
 
 function OnBespokeUpgradeTwo()
     local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
@@ -357,7 +313,7 @@ function OnBespokeUpgradeThree()
 end
 
 function OnBespokeUpgradeFour()
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
+    local pUnit, _, _ ,iUnit, iPlayer = UnitGatherInfo()
     local tParameters = {}
     tParameters.OnStart= 'SlthOnConvertUnitType'
     tParameters.iUnitID = iUnit
@@ -370,7 +326,7 @@ function OnBespokeUpgradeFour()
 end
 
 function OnBespokeUpgradeFive()
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
+    local pUnit, _, _ ,iUnit, iPlayer = UnitGatherInfo()
     local tParameters = {}
     tParameters.OnStart = 'SlthOnConvertUnitType'
     tParameters.iUnitID = iUnit
@@ -383,7 +339,7 @@ function OnBespokeUpgradeFive()
 end
 
 function OnBespokeUpgradeSix()
-    local pUnit, iX, iY ,iUnit, iPlayer = UnitGatherInfo()
+    local pUnit, _, _ ,iUnit, iPlayer = UnitGatherInfo()
     local tParameters = {}
     tParameters.OnStart = 'SlthOnConvertUnitType'
     tParameters.iUnitID = iUnit
@@ -433,7 +389,7 @@ function UnitGatherInfo()
 end
 
 function SlthLog(sMessage)
-    SLTH_DEBUG_ON = True
+    SLTH_DEBUG_ON = true
     if SLTH_DEBUG_ON then
         print(sMessage)
     end
