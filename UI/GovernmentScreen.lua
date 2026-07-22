@@ -7,7 +7,7 @@ include("Civ6Common");
 include("PopupDialog");
 include("ModalScreen_PlayerYieldsHelper");
 include("GameCapabilities");
-
+print('')
 -- ===========================================================================
 --	DEBUG
 --	Toggle these for temporary debugging help.
@@ -1559,11 +1559,6 @@ function OnConfirmPolicies()
 
 	if Controls.ConfirmPolicies:IsDisabled() then
 		UI.PlaySound("Play_Mouse_Click_Negative");
-		PulseAnim(Controls.MilitaryIconRingAnim);
-		PulseAnim(Controls.EconomicIconRingAnim);
-		PulseAnim(Controls.DiplomacyIconRingAnim);
-		PulseAnim(Controls.SLTHCULIconRingAnim);
-		PulseAnim(Controls.SLTHRELIconRingAnim);
 		return;
 	end
 
@@ -1731,25 +1726,7 @@ function OnOpenGovernmentScreen( screenEnum:number )
 		-- From Civ6_styles: FullScreenVignetteConsumer
 		Controls.ScreenAnimIn:SetToBeginning();
 		Controls.ScreenAnimIn:Play();
-		-- If not explicity screenEnumeration is passed in, use smart logic.
-		if screenEnum == nil then 
-			if IsAbleToChangePolicies() then
-				if table.count(m_kUnlockedGovernments) > 0 then
-					screenEnum = SCREEN_ENUMS.GOVERNMENTS;
-				else
-					screenEnum = SCREEN_ENUMS.POLICIES;
-				end
-			else
-				screenEnum = SCREEN_ENUMS.MY_GOVERNMENT;
-			end
-		end
-		if screenEnum == SCREEN_ENUMS.MY_GOVERNMENT then
-			m_tabs.SelectTab( Controls.ButtonMyGovernment );
-		elseif screenEnum == SCREEN_ENUMS.GOVERNMENTS		then
-			m_tabs.SelectTab( Controls.ButtonGovernments );
-		else
-			m_tabs.SelectTab( Controls.ButtonPolicies );
-		end
+		RealizeAll();
 
 		-- Queue the screen as a popup, but we want it to render at a desired location in the hierarchy, not on top of everything.
 		local kParameters = {};
@@ -1884,7 +1861,7 @@ end
 -- ===========================================================================
 function RefreshAllData()
 	PopulateLivePlayerData( m_ePlayer );
-	RealizeTabs();
+	RealizeAll();
 	-- From ModalScreen_PlayerYieldsHelper
 	if not RefreshYields() then
 		Controls.Vignette:SetSizeY(m_TopPanelConsideredHeight);
@@ -1901,11 +1878,6 @@ end
 function OnGovernmentChanged( playerID:number )
 	if playerID == m_ePlayer and m_ePlayer ~= -1 then
 		RefreshAllData();
-		if ContextPtr:IsVisible() then -- Player is seeing things, we need to update immediately
-			RealizeMyGovernmentPage();
-			RealizeGovernmentsPage();
-			RealizePoliciesPage();
-		end
 		if g_kCurrentGovernment == nil and ContextPtr:IsVisible() then
 			Close();
 		end
@@ -1950,11 +1922,7 @@ end
 -- ===========================================================================
 function OnCivicsUnlocked()
 	if ContextPtr:IsHidden() then return; end		-- Autoplay!
-	if (Controls.SelectPolicies:IsHidden()) then
-		m_tabs.SelectTab( Controls.ButtonGovernments );
-	else
-		m_tabs.SelectTab( Controls.ButtonPolicies );
-	end
+	RefreshAllData();
 end
 
 -- ===========================================================================
@@ -1978,8 +1946,7 @@ end
 -- ===========================================================================
 function OnUpdateUI( type:number, tag:string, iData1:number, iData2:number, strData1:string)
 	if type == SystemUpdateUI.ScreenResize then
-		Resize();
-		SwitchTab( m_tabs.selectedControl, m_tabs.selectedControl, true );
+		if ContextPtr:IsVisible() then RealizeAll(); end
 	end
 end
 
@@ -2666,11 +2633,8 @@ function LateInitialize()
 	m_TopPanelConsideredHeight = Controls.Vignette:GetSizeY() - TOP_PANEL_OFFSET;
 	
 	PopulateStaticData();			-- Obtain unchanging, static data from game core
-	PopulatePolicyFilterData();		-- Filter support
 	
 	m_ePlayer = Game.GetLocalPlayer();
-	RealizeTabs();
-	Resize();
 end
 
 -- ===========================================================================
@@ -2698,18 +2662,6 @@ function OnShutdown()
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenPolicies );
 	LuaEvents.Advisor_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenPolicies );
 
-	-- Cache values for hotloading...
-	local eOpenTabAtInit = nil;
-	if ( ContextPtr:IsVisible() ) then
-		if m_tabs.selectedControl == Controls.ButtonMyGovernment then 
-			eOpenTabAtInit = SCREEN_ENUMS.MY_GOVERNMENT;
-		elseif m_tabs.selectedControl == Controls.ButtonGovernments then 
-			eOpenTabAtInit = SCREEN_ENUMS.GOVERNMENTS;
-		else 
-			eOpenTabAtInit = SCREEN_ENUMS.POLICIES;
-		end
-	end
-	LuaEvents.GameDebug_AddValue("GovernmentScreen", "eOpenTabAtInit", eOpenTabAtInit );
 end
 
 -- ===========================================================================
@@ -2737,7 +2689,7 @@ function OnInputHandler( pInputStruct:table )
 			return true;
 		elseif ( key == Keys.VK_RETURN ) then
 			-- Don't let enter propagate or it will hit action panel which will raise a screen (potentially this one again) tied to the action.
-			if not Controls.SelectPolicies:IsHidden() and IsAbleToChangePolicies() then
+			if IsAbleToChangePolicies() and m_isPoliciesChanged then
 				OnConfirmPolicies();
 			end
 			return true;
@@ -2751,14 +2703,8 @@ end
 -- ===========================================================================
 function Initialize()
 	
-	Controls.LabelMilitary:SetText(Locale.Lookup("{LOC_GOVT_POLICY_TYPE_MILITARY:upper}"));
-	Controls.LabelEconomic:SetText(Locale.Lookup("{LOC_GOVT_POLICY_TYPE_ECONOMIC:upper}"));
-	Controls.LabelDiplomatic:SetText(Locale.Lookup("{LOC_GOVT_POLICY_TYPE_DIPLOMATIC:upper}"));
-	Controls.LabelSLTHCUL:SetText(Locale.Lookup("{LOC_GOVT_POLICY_TYPE_SLTHCUL:upper}"));
-	Controls.LabelSLTHREL:SetText(Locale.Lookup("{LOC_GOVT_POLICY_TYPE_JFD_SLTHREL:upper}"));
 
 
-	Controls.CompletedRibbon:SetText( Locale.Lookup("LOC_GOVT_COMPLETED_THIS_TURN","$SomeCivic$") );
 
 
 	-- Static controls:
@@ -2766,39 +2712,17 @@ function Initialize()
 	ContextPtr:SetInputHandler( OnInputHandler, true );
 	ContextPtr:SetShutdown( OnShutdown );
 
-    Controls.ButtonMyGovernment:RegisterCallback(	Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-    Controls.ButtonPolicies:RegisterCallback(		Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-    Controls.ButtonGovernments:RegisterCallback(	Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
 
-	Controls.BackButton:RegisterCallback(Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-	Controls.BackButton:RegisterCallback(Mouse.eLClick, OnFilterBack);
-	Controls.ForwardButton:RegisterCallback(Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-	Controls.ForwardButton:RegisterCallback(Mouse.eLClick, OnFilterForward);
 
 	Controls.ConfirmPolicies:RegisterCallback(		Mouse.eLClick,	OnConfirmPolicies);
 	Controls.ConfirmPolicies:RegisterCallback(		Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-	Controls.PolicyPanelCheckbox:RegisterCallback(	Mouse.eLClick,	OnTogglePolicyListPanel );
-	Controls.PolicyPanelCheckbox:RegisterCallback(	Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-	Controls.UnlockPolicies:RegisterCallback(		Mouse.eLClick,	OnUnlockPolicies);
-	Controls.UnlockPolicies:RegisterCallback(		Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-	Controls.UnlockGovernments:RegisterCallback(	Mouse.eLClick,	OnUnlockGovernments);
-	Controls.UnlockGovernments:RegisterCallback(	Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
 	
 	-- Hide these after going invisible to prevent input
-	Controls.GovernmentTree:RegisterEndCallback( function()
-			if Controls.GovernmentTree:IsReversing() then
-				Controls.GovernmentTree:SetHide(true);
-			end end );
-	Controls.AlphaAnim:RegisterEndCallback( function()
-			if not Controls.AlphaAnim:IsReversing() then -- "CAN'T TOUCH XML" note: AlphaAnim goes from 1 to 0, thus the "not" here.
-				Controls.AlphaAnim:SetHide(true);
-			end end );
 
 	Controls.ModalScreenTitle:SetText(Locale.ToUpper("LOC_GOVT_GOVERNMENT"));
 	Controls.ModalScreenClose:RegisterCallback(Mouse.eLClick, OnClose);
 	Controls.ModalBG:SetHide(true);
 
-	Controls.PolicyPanelHeaderLabel:SetText(Locale.ToUpper("LOC_TREE_OPTIONS"));
 				
 
 	-- Gamecore	EVENTS
@@ -2821,11 +2745,151 @@ function Initialize()
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
 	LuaEvents.Advisor_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
-	Controls.TabArea:SetHide(true)
-	Controls.FilterStack:SetHide(true)
 end
 if HasCapability("CAPABILITY_GOVERNMENTS_VIEW") then
 	Initialize();
+end
+
+-- ===========================================================================
+-- ===========================================================================
+--	FFH OVERHAUL: single-policy-per-category picker presentation.
+--	Reuses the existing staging model (m_ActivePolicyRows / m_ActivePoliciesBySlot,
+--	SetActivePolicyAtSlotIndex / RemoveActivePolicyAtSlotIndex, m_isPoliciesChanged)
+--	and commit path (OnConfirmPolicies -> RequestPolicyChanges). Only presentation
+--	changes: per category a title + a listbox of policy names + a description panel.
+-- ===========================================================================
+-- ===========================================================================
+
+-- Maps each policy category (ROW_INDEX) to its column control IDs in the new XML.
+local CATEGORY_CONTROLS :table = {};
+CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   titleKey="LOC_GOVT_POLICY_TYPE_MILITARY" };
+CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   titleKey="LOC_GOVT_POLICY_TYPE_ECONOMIC" };
+CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", titleKey="LOC_GOVT_POLICY_TYPE_DIPLOMATIC" };
+CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    titleKey="LOC_SLOT_SLTHCUL_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    titleKey="LOC_SLOT_SLTHREL_NAME" };
+
+-- Return the single slot for a category (FFH grants one slot per category), or nil.
+function GetCategorySlot( nRowIndex:number )
+	local tRow :table = m_ActivePolicyRows[nRowIndex];
+	if tRow == nil then return nil; end
+	return tRow.SlotArray[1];
+end
+
+-- Show the description for the category's currently-staged policy (or blank).
+function RealizeCategoryDescription( nRowIndex:number )
+	local cc :table = CATEGORY_CONTROLS[nRowIndex];
+	local tSlot :table = GetCategorySlot(nRowIndex);
+	local strSelected :string = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
+	if strSelected ~= EMPTY_POLICY_TYPE and m_kPolicyCatalogData[strSelected] ~= nil then
+		Controls[cc.desc]:SetText( m_kPolicyCatalogData[strSelected].Description );
+	else
+		Controls[cc.desc]:SetText( Locale.Lookup("LOC_GOVT_POLICIES_LIST") );
+	end
+end
+
+-- Click a policy in a category listbox: toggle/stage it in the category's slot.
+function OnPolicyItemClicked( nRowIndex:number, strPolicyType:string )
+	if not IsAbleToChangePolicies() then return; end
+	local tSlot :table = GetCategorySlot(nRowIndex);
+	if tSlot == nil then return; end
+	if tSlot.GC_PolicyType == strPolicyType then
+		RemoveActivePolicyAtSlotIndex( tSlot.GC_SlotIndex );	-- clicking the selected one clears it
+	else
+		SetActivePolicyAtSlotIndex( tSlot.GC_SlotIndex, strPolicyType );
+	end
+	UI.PlaySound("Play_UI_Click");
+	RealizeCategoryList( nRowIndex );	-- refresh selection highlight + description
+	RealizeConfirmButton();
+end
+
+-- Build one category's listbox of eligible policy names.
+function RealizeCategoryList( nRowIndex:number )
+	local cc :table = CATEGORY_CONTROLS[nRowIndex];
+	local uiStack :table = Controls[cc.stack];
+	uiStack:DestroyAllChildren();
+
+	Controls[cc.title]:SetText( Locale.ToUpper(cc.titleKey) );
+
+	local tSlot :table = GetCategorySlot(nRowIndex);
+	local strSelected :string = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
+	local strSlotType :string = ROW_SLOT_TYPES[nRowIndex];
+	local canEdit :boolean = (tSlot ~= nil) and IsAbleToChangePolicies();
+
+	for _,strPolicyType in ipairs(m_kPolicyCatalogOrder) do
+		local tPolicy :table = m_kPolicyCatalogData[strPolicyType];
+		if tPolicy.SlotType == strSlotType and m_kUnlockedPolicies[strPolicyType] then
+			local inst :table = {};
+			ContextPtr:BuildInstanceForControl( "PolicyNameItem", inst, uiStack );
+			inst.Name:SetText( tPolicy.Name );
+			inst.Name:SetToolTipString( tPolicy.Name );
+			inst.Highlight:SetHide( strPolicyType ~= strSelected );
+			inst.Hover:SetHide( true );
+
+			-- Hover previews the description; leaving reverts to the staged selection.
+			inst.Button:RegisterCallback( Mouse.eMouseEnter, function()
+				inst.Hover:SetHide(false);
+				Controls[cc.desc]:SetText( tPolicy.Description );
+			end);
+			inst.Button:RegisterCallback( Mouse.eMouseExit, function()
+				inst.Hover:SetHide(true);
+				RealizeCategoryDescription( nRowIndex );
+			end);
+
+			if canEdit then
+				inst.Button:RegisterCallback( Mouse.eLClick, function()
+					OnPolicyItemClicked( nRowIndex, strPolicyType );
+				end);
+			else
+				inst.Button:SetDisabled(true);
+			end
+		end
+	end
+
+	uiStack:CalculateSize();
+	Controls[cc.scroller]:CalculateSize();
+	RealizeCategoryDescription( nRowIndex );
+end
+
+-- Governments list (display-only for now; current government highlighted).
+function RealizeGovernmentsList()
+	Controls.GovernmentListStack:DestroyAllChildren();
+
+	local kOrder :table = {};
+	for strGovType,_ in pairs(g_kGovernments) do
+		table.insert( kOrder, strGovType );
+	end
+	table.sort( kOrder, function(a,b) return g_kGovernments[a].Index < g_kGovernments[b].Index; end );
+
+	for _,strGovType in ipairs(kOrder) do
+		local tGov :table = g_kGovernments[strGovType];
+		local inst :table = {};
+		ContextPtr:BuildInstanceForControl( "GovernmentNameItem", inst, Controls.GovernmentListStack );
+		inst.Name:SetText( Locale.ToUpper(tGov.Name) );
+		local isCurrent :boolean = (g_kCurrentGovernment ~= nil) and (g_kCurrentGovernment.Index == tGov.Index);
+		inst.Highlight:SetHide( not isCurrent );
+	end
+
+	Controls.GovernmentListStack:CalculateSize();
+	Controls.GovernmentListScroller:CalculateSize();
+end
+
+-- Confirm button: visible when editable, enabled only when a change is staged.
+function RealizeConfirmButton()
+	local canEdit :boolean = IsAbleToChangePolicies();
+	Controls.ConfirmPolicies:SetHide( not canEdit );
+	if not canEdit then return; end
+	Controls.ConfirmPolicies:SetDisabled( not m_isPoliciesChanged );
+	Controls.ConfirmPolicies:SetText( m_isPoliciesChanged and TXT_GOV_CONFIRM_POLICIES or TXT_GOV_ASSIGN_POLICIES );
+end
+
+-- Rebuild the whole screen from the staged model.
+function RealizeAll()
+	RealizeGovernmentsList();
+	for nRowIndex = 1, 5 do
+		RealizeCategoryList( nRowIndex );
+	end
+	RealizeConfirmButton();
+	Controls.MainColumns:CalculateSize();	-- re-center the column stack after (re)building
 end
 	
 
