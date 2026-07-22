@@ -26,6 +26,7 @@
 				<Element text="Animal_Unit_Bins.artdef"/>
 				<Element text="Warfare_Units.artdef"/>
 				<Element text="Warfare_Unit_Bins.artdef"/>
+                <Element text="SLTH_Units.artdef"/>
 			</ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="Unit"/>
@@ -280,6 +281,7 @@
 				<Element text="Animal_Unit_Bins.artdef"/>
 				<Element text="Warfare_Units.artdef"/>
 				<Element text="Warfare_Unit_Bins.artdef"/>
+                <Element text="SLTH_Units.artdef"/>
 				<Element text="Civilizations.artdef"/>
 				<Element text="Cultures.artdef"/>
 			</ArtDefDependencyPaths>
@@ -334,6 +336,7 @@
 				<Element text="Animal_Unit_Bins.artdef"/>
 				<Element text="Warfare_Units.artdef"/>
 				<Element text="Warfare_Unit_Bins.artdef"/>
+                <Element text="SLTH_Units.artdef"/>
 				<Element text="Resources.artdef"/>
 				<Element text="Cultures.artdef"/>
 				<Element text="Clutter.artdef"/>
