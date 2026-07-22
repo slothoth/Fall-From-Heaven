@@ -114,8 +114,11 @@
 
                 </Stack>
 
-                <!-- Modal chrome (title bar, close button, yields bar, ScreenAnimIn) -->
-                <Container Style="ModalScreenWide" Size="parent, parent+200"/>
+                <!-- Modal chrome: gold frame + title bar + close (X) button + yields bar.
+                     Bare (no size override) so it uses the style's Anchor=C,C Size=parent,768
+                     and its title/X render in the visible area (a +size override pushes the
+                     top edge, and the X, off-screen). -->
+                <Container Style="ModalScreenWide"/>
 
             </Container>
         </Image>
