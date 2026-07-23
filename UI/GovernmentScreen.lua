@@ -97,6 +97,22 @@ local TXT_GOV_POPUP_PROMPT_POLICIES_CLOSE = Locale.Lookup("LOC_GOVT_POPUP_PROMPT
 ---@type string
 local TXT_GOV_POPUP_PROMPT_POLICIES_CONFIRM = Locale.Lookup("LOC_GOVT_POPUP_PROMPT_POLICIES_CONFIRM");
 
+-- Cross-category policy prerequisites (UI-side gate). A dependent policy may only be
+-- staged while its required policy is BOTH committed (active in gamecore now) AND still
+-- staged in its slot. This mirrors the gameplay bans in Core/Governments.sql, which are
+-- capital-plot-property based and therefore lag a turn: the engine will not grant a
+-- dependent in the same RequestPolicyChanges batch that first slots its prerequisite,
+-- and it auto-drops a dependent once the prerequisite is removed. Enforcing it here stops
+-- the player staging a change the engine would silently reject. See [[civ6-state-religion-bans]].
+-- (Single level only -- religion -> economic; nothing depends on the economic policies.)
+---@type table
+local POLICY_REQUIRES = {
+	["SLTH_POLICY_SACRIFICE_THE_WEAK"] = "SLTH_POLICY_STATE_VEIL",
+	["SLTH_POLICY_GUARDIAN_OF_NATURE"] = "SLTH_POLICY_STATE_LEAVES",
+	["SLTH_POLICY_ARETE"]              = "SLTH_POLICY_STATE_RUNES",
+	["SLTH_POLICY_SOCIAL_ORDER"]       = "SLTH_POLICY_STATE_ORDER",
+};
+
 ---@type number
 local COLOR_GOVT_UNSELECTED	= UI.GetColorValueFromHexLiteral(0xffe9dfc7); -- Background for unselected background (or forground text color on non-selected).
 ---@type number
@@ -1000,6 +1016,47 @@ function GetCategorySlot( nRowIndex )
 	return tRow.SlotArray[1];
 end
 
+-- Is strPolicyType the committed (really-in-effect) policy of any category right now?
+---@param strPolicyType string
+function IsPolicyTypeCommitted( strPolicyType )
+	for nRow = 1, 5 do
+		if m_CommittedPolicyByRow[nRow] == strPolicyType then return true; end
+	end
+	return false;
+end
+
+-- Is strPolicyType currently staged (selected) in any category slot?
+---@param strPolicyType string
+function IsPolicyTypeStaged( strPolicyType )
+	for nRow = 1, 5 do
+		local tSlot = GetCategorySlot(nRow);
+		if tSlot and tSlot.GC_PolicyType == strPolicyType then return true; end
+	end
+	return false;
+end
+
+-- A policy's prerequisite (if any) must be active now AND kept staged. Returns
+-- true (met) for policies with no prerequisite.
+---@param strPolicyType string
+function IsPolicyPrereqMet( strPolicyType )
+	local strReq = POLICY_REQUIRES[strPolicyType];
+	if strReq == nil then return true; end
+	return IsPolicyTypeCommitted(strReq) and IsPolicyTypeStaged(strReq);
+end
+
+-- Drop any staged policy whose prerequisite is no longer satisfied, so the player
+-- cannot confirm a change the engine would immediately undo. One pass suffices while
+-- dependencies are single-level (see POLICY_REQUIRES).
+function EnforcePolicyDependencies()
+	for nRow = 1, 5 do
+		local tSlot = GetCategorySlot(nRow);
+		if tSlot and tSlot.GC_PolicyType ~= EMPTY_POLICY_TYPE
+				and not IsPolicyPrereqMet(tSlot.GC_PolicyType) then
+			RemoveActivePolicyAtSlotIndex( tSlot.GC_SlotIndex );
+		end
+	end
+end
+
 -- Show the description for the category's currently-staged policy (or blank).
 -- Fill a category's description card (title / image / text) for a given policy.
 -- Uses the base slot-type card art for now; swap to per-policy art later.
@@ -1063,10 +1120,14 @@ function OnPolicyItemClicked( nRowIndex, strPolicyType )
 	-- read as a bug on open: there the selection IS the committed policy, so the very first
 	-- click emptied the slot and blanked the description card.
 	if tSlot.GC_PolicyType == strPolicyType then return; end
+	-- Guard: prerequisite-locked policies register no click callback, but stay defensive.
+	if not IsPolicyPrereqMet( strPolicyType ) then return; end
 	SetActivePolicyAtSlotIndex( tSlot.GC_SlotIndex, strPolicyType );
+	-- Staging this may invalidate a dependent in another column (e.g. changing the state
+	-- religion drops Sacrifice the Weak), so resolve dependencies then rebuild every list.
+	EnforcePolicyDependencies();
 	UI.PlaySound("Play_UI_Click");
-	RealizeCategoryList( nRowIndex );	-- refresh selection highlight + description
-	RealizeConfirmButton();
+	RealizeAll();
 end
 
 -- Build one category's listbox of eligible policy names.
@@ -1099,12 +1160,27 @@ function RealizeCategoryList( nRowIndex )
 			-- dimmed and non-selectable: the engine would reject slotting an unlocked policy.
 			---@type boolean
 			local isUnlocked = m_kUnlockedPolicies[strPolicyType] == true;
+			-- Cross-category prerequisite (e.g. Sacrifice the Weak needs the Ashen Veil state
+			-- religion committed). Unmet -> dim + non-selectable, same as not-yet-unlocked.
+			---@type boolean
+			local isPrereqMet = IsPolicyPrereqMet( strPolicyType );
+			---@type boolean
+			local isSelectable = isUnlocked and isPrereqMet;
 			---@type table
 			local inst = {};
 			ContextPtr:BuildInstanceForControl( "PolicyNameItem", inst, uiStack );
 			inst.Name:SetText( tPolicy.Name );
-			inst.Name:SetToolTipString( tPolicy.Name );
-			inst.Name:SetAlpha( isUnlocked and 1.0 or 0.45 );
+			if not isPrereqMet then
+				---@type table
+				local tReq = m_kPolicyCatalogData[ POLICY_REQUIRES[strPolicyType] ];
+				-- Names in the catalog are already Locale.Lookup'd; build a plain note so we
+				-- don't depend on a LOC key. All current prereqs are state religions.
+				inst.Name:SetToolTipString( tPolicy.Name .. "[NEWLINE][COLOR_RED]"
+					.. "Requires: " .. (tReq and tReq.Name or "?") .. "[ENDCOLOR]" );
+			else
+				inst.Name:SetToolTipString( tPolicy.Name );
+			end
+			inst.Name:SetAlpha( isSelectable and 1.0 or 0.45 );
 			---@type boolean
 			local isSelected = (strPolicyType == strSelected);
 			inst.Highlight:SetHide( not isSelected );
@@ -1126,7 +1202,7 @@ function RealizeCategoryList( nRowIndex )
 				RealizeCategoryDescription( nRowIndex );
 			end);
 
-			if canEdit and isUnlocked then
+			if canEdit and isSelectable then
 				inst.Button:RegisterCallback( Mouse.eLClick, function()
 					OnPolicyItemClicked( nRowIndex, strPolicyType );
 				end);
