@@ -15,8 +15,6 @@ print('')
 ---@type boolean
 local m_debugShowAllPolicies = false;		-- (false) When true all policy cards (despite player's progression) will be shown in the catalog
 ---@type boolean
-local m_debugShowPolicyIDs = false;		-- (false) Show the rowids on policy cards
----@type boolean
 local m_debugOutputGovInfo = false;		-- (false) Output to console information about governments
 
 -- ===========================================================================
@@ -25,30 +23,10 @@ local m_debugOutputGovInfo = false;		-- (false) Output to console information ab
 
 -- Toggle these based on the game engine rules.
 ---@type boolean
-local m_isAllowAnythingInWildcardSlot = true;	-- Currently engine doesn't allow because on confirmation Culture::CanSlotPolicy() first checks !IsPolicyActive( ePolicy ), which fails.
----@type boolean
-local m_isAllowWildcardsAnywhere = false;	-- ...
----@type boolean
 local m_isLocalPlayerTurn = true;
 
----@type number
-local m_FilterScrollPos = 0;
----@type number
-local m_FilterStep = 0;
-
----@type number
-local COLOR_GOVT_UNSELECTED = UI.GetColorValueFromHexLiteral(0xffe9dfc7); -- Background for unselected background (or forground text color on non-selected).
----@type number
-local COLOR_GOVT_SELECTED = UI.GetColorValueFromHexLiteral(0xff261407); -- Background for selected background (or forground text color on non-selected).
----@type number
-local COLOR_GOVT_LOCKED = UI.GetColorValueFromHexLiteral(0xffAAAAAA);
 ---@type string
 local DATA_FIELD_CURRENT_FILTER = "_CURRENT_FILTER";
----@type string
-local DATA_FIELD_TOTAL_SLOTS = "_TOTAL_SLOTS";			-- Total slots for a government item in the "tree-like" view
-
----@type number
-local FILTER_BUTTON_WIDTH = 100;	-- Width of PolicyTabButtonInstance in the XML
 
 ---@type table
 local ROW_INDEX = {
@@ -78,28 +56,6 @@ local SLOT_ORDER_IN_CATALOG = {
 ---@type string
 local EMPTY_POLICY_TYPE = "empty";					-- For a policy slot without a type
 ---@type string
-local KEY_POLICY_TYPE = "PolicyType";				-- Key on a catalog UI element that holds the PolicyType; so corresponding data can be found
----@type string
-local KEY_POLICY_SLOT = "PolicySlot";
----@type string
-local KEY_DRAG_TARGET_CONTROL = "DragTargetControl";		-- What control should we be testing against as a drag target?
----@type string
-local KEY_LIFTABLE_CONTROL = "LiftableControl";		-- What control is safe to move without futzing up the dragtarget evaluations?
----@type string
-local KEY_ROW_ID = "RowNum";					-- Key on a row UI element to note which row it came from.
----@type number
-local PADDING_POLICY_ROW_ITEM = 3;
----@type number
-local PADDING_POLICY_LIST_HEADER = 50;
----@type number
-local PADDING_POLICY_LIST_BOTTOM = 20;
----@type number
-local PADDING_POLICY_LIST_ITEM = 20;
----@type number
-local PADDING_POLICY_SCROLL_AREA = 10;
----@type string
-local PIC_CARD_SUFFIX_SMALL = "_Small";
----@type string
 local PIC_CARD_TYPE_DIPLOMACY = "Governments_DiplomacyCard";
 ---@type string
 local PIC_CARD_TYPE_ECONOMIC = "Governments_EconomicCard";
@@ -109,11 +65,6 @@ local PIC_CARD_TYPE_MILITARY = "Governments_MilitaryCard";
 local PIC_CARD_TYPE_SLTHCUL = "Governments_WildcardCard";
 ---@type string
 local PIC_CARD_TYPE_SLTHREL = "Governments_DarkCard";
----@type string
-local PIC_PERCENT_BRIGHT = "Governments_PercentWhite";
----@type string
-local PIC_PERCENT_DARK = "Governments_PercentBlue";
----@type table
 local PICS_SLOT_TYPE_CARD_BGS  = {
 	SLOT_MILITARY		= PIC_CARD_TYPE_MILITARY,
 	SLOT_ECONOMIC		= PIC_CARD_TYPE_ECONOMIC,
@@ -136,52 +87,15 @@ local SCREEN_ENUMS = {
 		GOVERNMENTS		= 2,
 		POLICIES		= 3
 }
----@type number
-local SIZE_TAB_BUTTON_TEXT_PADDING = 50;
----@type number
-local SIZE_HERITAGE_BONUS = 48;
----@type number
-local SIZE_GOV_ITEM_WIDTH = 400;
----@type number
-local SIZE_GOV_ITEM_HEIGHT = 152;	-- 238 minus shadow
----@type number
-local SIZE_GOV_DIVIDER_WIDTH = 75;
----@type number
-local SIZE_POLICY_ROW_MIN = 675;
----@type number
-local SIZE_POLICY_ROW_MAX = 1120; -- Evaluated size when in 1080p. Fits 6 cards nicely.
----@type number
-local SIZE_POLICY_CATALOG_MIN = 512+15; -- Half minspec screen + some extra
----@type number
-local SIZE_POLICY_CATALOG_MAX = 1400; -- Selected by me making up a number because unbounded looks goofy in 4k
----@type number
-local SIZE_POLICY_CARD_X = 140;
----@type number
-local SIZE_POLICY_CARD_Y = 150;
----@type number
 local SIZE_MIN_SPEC_X = 1024;
 ---@type string
 local TXT_GOV_ASSIGN_POLICIES = Locale.Lookup("LOC_GOVT_ASSIGN_ALL_POLICIES");
 ---@type string
 local TXT_GOV_CONFIRM_POLICIES = Locale.Lookup("LOC_GOVT_CONFIRM_POLICIES");
 ---@type string
-local TXT_GOV_CONFIRM_GOVERNMENT = Locale.Lookup("LOC_GOVT_CONFIRM_GOVERNMENT");
----@type string
-local TXT_GOV_POPUP_NO = Locale.Lookup("LOC_GOVT_PROMPT_NO");
----@type string
 local TXT_GOV_POPUP_PROMPT_POLICIES_CLOSE = Locale.Lookup("LOC_GOVT_POPUP_PROMPT_POLICIES_CLOSE");
 ---@type string
 local TXT_GOV_POPUP_PROMPT_POLICIES_CONFIRM = Locale.Lookup("LOC_GOVT_POPUP_PROMPT_POLICIES_CONFIRM");
----@type string
-local TXT_GOV_POPUP_YES = Locale.Lookup("LOC_GOVT_PROMPT_YES");
----@type number
-local MAX_HEIGHT_POLICIES_LIST = 600;
----@type number
-local MAX_HEIGHT_GOVT_DESC = 25;
----@type number
-local MAX_BEFORE_TRUNC_BONUS_TEXT = 219;
----@type number
-local MAX_BEFORE_TRUNC_HERITAGE_BONUS = 225;
 
 -- ===========================================================================
 --	GLOBALS
@@ -209,13 +123,6 @@ m_policyCardTypeIM['SLOT_DIPLOMATIC'] = InstanceManager:new("PolicyCard",					"C
 m_policyCardTypeIM['SLOT_SLTHCUL'] = InstanceManager:new("PolicyCard",					"Content",	Controls.PolicyCatalogCultural);
 m_policyCardTypeIM['SLOT_SLTHREL'] = InstanceManager:new("PolicyCard",					"Content",	Controls.PolicyCatalogReligion);
 
----@type table
-local m_kGovernmentLabelIM = InstanceManager:new("GovernmentEraLabelInstance",	"Top", 		Controls.GovernmentDividers );
----@type table
-local m_kGovernmentItemIM = InstanceManager:new("GovernmentItemInstance",		"Top", 		Controls.GovernmentScroller );
----@type table
-local m_kPolicyTabButtonIM = InstanceManager:new("PolicyTabButtonInstance",		"Button", 	Controls.FilterStack );
-
 ---@type number
 local m_ePlayer	= -1;
 ---@type table
@@ -231,47 +138,15 @@ local m_kPolicyCatalogData	= {};
 ---@type table
 local m_kPolicyCatalogOrder  = {};		-- Track order of policies to display
 ---@type table
-local m_kPolicyFilters	= {};
----@type table
 local m_kPolicyFilterCurrent	= nil;
 ---@type table
 local m_kUnlockedGovernments  = {};
----@type table
-local m_tabs;
----@type table
-local m_uiGovernments  = {};
----@type number
-local m_width	= SIZE_MIN_SPEC_X;	-- Screen Width (default / min spec)
 ---@type string
 local m_currentCivicType	= nil;
 ---@type number
 local m_civicProgress = 0;
 ---@type number
 local m_civicCost	= 0;
----@type boolean
-local m_bShowMyGovtInPolicies = false;
-
--- Used to lerp PolicyRows and PolicyContainer when sliding between MyGovt and Policy tabs
----@type table
-local m_AnimRowSize = {
-	mygovt = 0,
-	policy = 0,
-}
----@type table
-local m_AnimCatalogSize = {
-	mygovt = 0,
-	policy = 0,
-}
----@type table
-local m_AnimCatalogOffset = {
-	mygovt = 0,
-	policy = 0,
-}
----@type table
-local m_AnimMyGovtOffset = {
-	mygovt = 0,
-	policy = 0,
-}
 
 -- An array of arrays of tables. Contains one entry for each member of ROW_INDEX.
 -- m_ActivePolicyRows[ROW_INDEX.MILITARY] is an array of all the slots for the Military row.
@@ -285,17 +160,6 @@ local m_ActivePolicyRows = {};
 local m_ActivePoliciesByType = {}; -- PolicyType string -> SlotData table
 ---@type table
 local m_ActivePoliciesBySlot = {}; -- (GC Slot Index + 1) -> SlotData table
-
----@type table
-local m_ActiveCardInstanceArray = {}; -- (GC Slot Index + 1) -> Card/EmptyCard Instance
-
--- We only track slots so as to not keep instance tables hanging around when they shouldn't.
--- Which slot is currently targetted by a drag & drop?
----@type number
-local m_PrevDropTargetSlot = -1;
--- Which slot is currently hovered? (Stack because multiple things may be moused over, but only one should be on top)
----@type table
-local m_MouseoverStack = {};
 
 -- ===========================================================================
 --	FUNCTIONS
@@ -348,9 +212,6 @@ function GetPolicyBGTexture(policyType)
     return 'GOVERNMENT_AUTOCRACY'
 end
 
--- ===========================================================================
---	Main close function all exit points should call.
--- ===========================================================================
 function Close()
 
 	if ContextPtr:IsHidden() then return; end
@@ -362,8 +223,7 @@ function Close()
 		popup:ShowYesNoDialog( TXT_GOV_POPUP_PROMPT_POLICIES_CLOSE, 
 			function() Controls.ConfirmPolicies:SetDisabled(true); Close() end ); -- no-op on cancel
 	else
-		-- Actual close
-		if not ContextPtr:IsHidden() then
+		if not ContextPtr:IsHidden() then               -- Actual close
 			UI.PlaySound("UI_Screen_Close");
 		end
 		UIManager:DequeuePopup(ContextPtr);
@@ -373,17 +233,10 @@ function Close()
 	end
 end
 
--- ===========================================================================
---	Control close via click
--- ===========================================================================
 function OnClose()
 	Close();
 end
 
--- ===========================================================================
---	LUA Event
---	Close from launchbar control
--- ===========================================================================
 function OnCloseFromLaunchBar()
 	Close();
 end
@@ -442,7 +295,7 @@ end
 
 -- ===========================================================================
 --	LUA Event
---	Called to first open the page.
+--	Called to first open the page.          TODO: This doesnt make sense with a single government screen.
 -- ===========================================================================
 function OnOpenGovernmentScreenMyGovernment()
 	RefreshAllData();
