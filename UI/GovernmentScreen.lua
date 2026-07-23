@@ -963,9 +963,9 @@ end
 -- Maps each policy category (ROW_INDEX) to its column control IDs in the new XML.
 ---@type table
 local CATEGORY_CONTROLS = {};
-CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   descTitle="MilitaryDescTitle",   descImage="MilitaryDescImage",   titleKey="LOC_GOVT_POLICY_TYPE_MILITARY" };
-CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   descTitle="EconomicDescTitle",   descImage="EconomicDescImage",   titleKey="LOC_GOVT_POLICY_TYPE_ECONOMIC" };
-CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", descTitle="DiplomaticDescTitle", descImage="DiplomaticDescImage", titleKey="LOC_GOVT_POLICY_TYPE_DIPLOMATIC" };
+CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   descTitle="MilitaryDescTitle",   descImage="MilitaryDescImage",   titleKey="LOC_SLOT_MILITARY_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   descTitle="EconomicDescTitle",   descImage="EconomicDescImage",   titleKey="LOC_SLOT_ECONOMIC_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", descTitle="DiplomaticDescTitle", descImage="DiplomaticDescImage", titleKey="LOC_SLOT_DIPLOMATIC_NAME" };
 CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    descTitle="SLTHCULDescTitle",    descImage="SLTHCULDescImage",    titleKey="LOC_SLOT_SLTHCUL_NAME" };
 CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    descTitle="SLTHRELDescTitle",    descImage="SLTHRELDescImage",    titleKey="LOC_SLOT_SLTHREL_NAME" };
 

@@ -17,7 +17,7 @@
                     <Container ID="GovernmentColumn" Size="210,584">
                         <Grid ID="GovernmentSlot" Anchor="C,T" Offset="0,0" Size="210,516" Texture="Controls_PanelBlue" SliceCorner="25,28" SliceSize="33,18" SliceTextureSize="83,75">
                             <Label ID="GovernmentColumnTitle" Anchor="C,T" Offset="0,10" Style="FontFlair16" SmallCaps="20"
-                                   String="{LOC_GOVT_VIEW_GOVERNMENTS:upper}" Color0="58,99,131,255" Color1="0,0,0,0"
+                                   String="{LOC_GOVERNMENTS:upper}" Color0="58,99,131,255" Color1="0,0,0,0"
                                    Color2="78,119,151,255"/>
                             <ScrollPanel ID="GovernmentListScroller" Anchor="C,T" Offset="0,44" Size="parent-16,458" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
