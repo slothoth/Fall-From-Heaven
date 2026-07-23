@@ -15,7 +15,9 @@
 
                     <!-- Far-left: Governments list (display-only) + Confirm button -->
                     <Container ID="GovernmentColumn" Size="210,584">
-                        <Grid ID="GovernmentSlot" Anchor="C,T" Offset="0,0" Size="210,516" Texture="Controls_PanelBlue" SliceCorner="25,28" SliceSize="33,18" SliceTextureSize="83,75">
+                        <Image ID="GovParchment" Offset="-25,0" Size="240,665" Texture="Parchment_Pattern" StretchMode="Tile"/>
+
+                        <Grid ID="GovernmentSlot" Anchor="C,T" Offset="0,0" Size="210,516" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="GovernmentColumnTitle" Anchor="C,T" Offset="0,10" Style="FontFlair16" SmallCaps="20"
                                    String="{LOC_GOVERNMENTS:upper}" Color0="58,99,131,255" Color1="0,0,0,0"
                                    Color2="78,119,151,255"/>
@@ -34,10 +36,10 @@
                     <Container ID="MilitaryColumn" Size="210,584">
                         <!-- Decorative slot frame (reused from the old screen's policy-row container)
                              wrapping the category title + its policy listbox. -->
-                        <Grid ID="MilitarySlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Controls_PanelBlue" SliceCorner="25,28" SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="MilitaryTitle" Anchor="C,T" Offset="0,10" Style="FontFlair16" SmallCaps="20"
+                        <Grid ID="MilitarySlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
+                            <Label ID="MilitaryTitle" Anchor="C,T" Offset="0,24" Style="FontFlair16" SmallCaps="20"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <ScrollPanel ID="MilitaryListScroller" Anchor="C,T" Offset="0,44" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="MilitaryListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="MilitaryPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -59,10 +61,10 @@
 
                     <!-- ECONOMIC -->
                     <Container ID="EconomicColumn" Size="210,584">
-                        <Grid ID="EconomicSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Controls_PanelBlue" SliceCorner="25,28" SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="EconomicTitle" Anchor="C,T" Offset="0,10" Style="FontFlair16" SmallCaps="20"
+                        <Grid ID="EconomicSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
+                            <Label ID="EconomicTitle" Anchor="C,T" Offset="0,24" Style="FontFlair16" SmallCaps="20"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <ScrollPanel ID="EconomicListScroller" Anchor="C,T" Offset="0,44" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="EconomicListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="EconomicPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -83,10 +85,10 @@
 
                     <!-- DIPLOMATIC -->
                     <Container ID="DiplomaticColumn" Size="210,584">
-                        <Grid ID="DiplomaticSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Controls_PanelBlue" SliceCorner="25,28" SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="DiplomaticTitle" Anchor="C,T" Offset="0,10" Style="FontFlair16" SmallCaps="20"
+                        <Grid ID="DiplomaticSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
+                            <Label ID="DiplomaticTitle" Anchor="C,T" Offset="0,24" Style="FontFlair16" SmallCaps="20"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <ScrollPanel ID="DiplomaticListScroller" Anchor="C,T" Offset="0,44" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="DiplomaticListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="DiplomaticPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -107,10 +109,10 @@
 
                     <!-- SLTHCUL (Cultural) -->
                     <Container ID="SLTHCULColumn" Size="210,584">
-                        <Grid ID="SLTHCULSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Controls_PanelBlue" SliceCorner="25,28" SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="SLTHCULTitle" Anchor="C,T" Offset="0,10" Style="FontFlair16" SmallCaps="20"
+                        <Grid ID="SLTHCULSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
+                            <Label ID="SLTHCULTitle" Anchor="C,T" Offset="0,24" Style="FontFlair16" SmallCaps="20"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <ScrollPanel ID="SLTHCULListScroller" Anchor="C,T" Offset="0,44" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="SLTHCULListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="SLTHCULPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -131,10 +133,10 @@
 
                     <!-- SLTHREL (Religion) -->
                     <Container ID="SLTHRELColumn" Size="210,584">
-                        <Grid ID="SLTHRELSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Controls_PanelBlue" SliceCorner="25,28" SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="SLTHRELTitle" Anchor="C,T" Offset="0,10" Style="FontFlair16" SmallCaps="20"
+                        <Grid ID="SLTHRELSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
+                            <Label ID="SLTHRELTitle" Anchor="C,T" Offset="0,24" Style="FontFlair16" SmallCaps="20"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <ScrollPanel ID="SLTHRELListScroller" Anchor="C,T" Offset="0,44" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="SLTHRELListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="SLTHRELPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -167,11 +169,11 @@
 
     <!-- A selectable policy name row inside a category listbox -->
     <Instance Name="PolicyNameItem">
-        <GridButton ID="Button" Size="192,28" Texture="Controls_ButtonControl"
+        <GridButton ID="Button" Size="142,28" Texture="Controls_ButtonControl"
                     SliceCorner="12,6" SliceSize="1,1" SliceTextureSize="24,24" StateOffsetIncrement="0,24">
             <Box ID="Highlight" Size="parent,parent" Color="58,99,131,150" Hidden="1"/>
             <Box ID="Hover" Size="parent,parent" Color="78,119,151,90" Hidden="1"/>
-            <Label ID="Name" Anchor="L,C" Offset="10,0" WrapWidth="176" Style="FontNormal14"/>
+            <Label ID="Name" Anchor="C,C" Offset="0,0" WrapWidth="176" Style="FontNormal14"/>
         </GridButton>
     </Instance>
 
