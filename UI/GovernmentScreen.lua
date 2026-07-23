@@ -1044,15 +1044,26 @@ function IsPolicyPrereqMet( strPolicyType )
 	return IsPolicyTypeCommitted(strReq) and IsPolicyTypeStaged(strReq);
 end
 
--- Drop any staged policy whose prerequisite is no longer satisfied, so the player
--- cannot confirm a change the engine would immediately undo. One pass suffices while
--- dependencies are single-level (see POLICY_REQUIRES).
+-- Resolve any staged policy whose prerequisite is no longer satisfied, so the player
+-- cannot confirm a change the engine would immediately undo. Rather than emptying the
+-- slot, restore the policy the player had equipped on open (m_CommittedPolicyByRow) when
+-- that is itself still valid -- so breaking a dependency reverts to your prior choice
+-- instead of leaving you unselected. Only fall back to empty when the committed policy
+-- would also be invalid (e.g. it WAS the dependent). One pass suffices while dependencies
+-- are single-level (see POLICY_REQUIRES).
 function EnforcePolicyDependencies()
 	for nRow = 1, 5 do
 		local tSlot = GetCategorySlot(nRow);
 		if tSlot and tSlot.GC_PolicyType ~= EMPTY_POLICY_TYPE
 				and not IsPolicyPrereqMet(tSlot.GC_PolicyType) then
-			RemoveActivePolicyAtSlotIndex( tSlot.GC_SlotIndex );
+			local strCommitted = m_CommittedPolicyByRow[nRow];
+			if strCommitted and strCommitted ~= EMPTY_POLICY_TYPE
+					and strCommitted ~= tSlot.GC_PolicyType
+					and IsPolicyPrereqMet(strCommitted) then
+				SetActivePolicyAtSlotIndex( tSlot.GC_SlotIndex, strCommitted );
+			else
+				RemoveActivePolicyAtSlotIndex( tSlot.GC_SlotIndex );
+			end
 		end
 	end
 end
@@ -1102,9 +1113,13 @@ function RealizeCategoryDescription( nRowIndex )
 	if strSelected ~= EMPTY_POLICY_TYPE and m_kPolicyCatalogData[strSelected] ~= nil then
 		RealizeDescriptionCard( cc, strSelected );
 	else
-		Controls[cc.descTitle]:SetText( "" );
-		Controls[cc.descImage]:SetHide( true );
-		Controls[cc.desc]:SetText( Locale.Lookup("LOC_GOVT_POLICIES_LIST") );
+		-- Empty slot (nothing staged, e.g. bumped off a policy by a prerequisite change).
+		-- Show a clear "Unselected Policy" state but keep the card image as a populated card
+		-- would (GetPolicyBGTexture is the same call the filled branch uses), not blanked.
+		Controls[cc.descTitle]:SetText( "Unselected Policy" );
+		Controls[cc.descImage]:SetTexture( GetPolicyBGTexture(strSelected) );
+		Controls[cc.descImage]:SetHide( false );
+		Controls[cc.desc]:SetText( "" );
 	end
 end
 
