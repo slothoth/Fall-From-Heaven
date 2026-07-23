@@ -45,12 +45,15 @@
                             </ScrollPanel>
                         </Grid>
                         <!-- Description card: policy title / image / description text (base card art for now). -->
-                        <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
+                        <Grid Anchor="C,T" Offset="0,364" Size="210,300" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
                             <Label ID="MilitaryDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <Image ID="MilitaryDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_MilitaryCard"/>
-                            <Label ID="MilitaryDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
+                            <Container Size="206,93" Anchor="C,T" Offset="0,40">
+                              <Image ID="MilitaryDescImage" Anchor="C,C"  Size="200,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
+                              <Grid ID="MilitaryImageFrame" Anchor="C,C" Offset="0,0" Size="206,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
+                            </Container>
+                            <Label ID="MilitaryDesc" Anchor="L,T" Offset="13,150" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
@@ -66,12 +69,15 @@
                                            Size="8,parent-10"/>
                             </ScrollPanel>
                         </Grid>
-                        <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
+                        <Grid Anchor="C,T" Offset="0,364" Size="210,300" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
                             <Label ID="EconomicDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <Image ID="EconomicDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_EconomicCard"/>
-                            <Label ID="EconomicDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
+                            <Container Size="206,93" Anchor="C,T" Offset="0,40">
+                              <Image ID="EconomicDescImage" Anchor="C,C"  Size="200,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
+                              <Grid ID="EconomicImageFrame" Anchor="C,C" Offset="0,0" Size="206,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
+                            </Container>
+                            <Label ID="EconomicDesc" Anchor="L,T" Offset="13,150" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
@@ -87,12 +93,15 @@
                                            Size="8,parent-10"/>
                             </ScrollPanel>
                         </Grid>
-                        <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
+                        <Grid Anchor="C,T" Offset="0,364" Size="210,300" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
                             <Label ID="DiplomaticDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <Image ID="DiplomaticDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_DiplomacyCard"/>
-                            <Label ID="DiplomaticDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
+                            <Container Size="206,93" Anchor="C,T" Offset="0,40">
+                              <Image ID="DiplomaticDescImage" Anchor="C,C"  Size="200,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
+                              <Grid ID="DiplomaticImageFrame" Anchor="C,C" Offset="0,0" Size="206,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
+                            </Container>
+                            <Label ID="DiplomaticDesc" Anchor="L,T" Offset="13,150" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
@@ -108,12 +117,15 @@
                                            Size="8,parent-10"/>
                             </ScrollPanel>
                         </Grid>
-                        <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
+                        <Grid Anchor="C,T" Offset="0,364" Size="210,300" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
                             <Label ID="SLTHCULDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <Image ID="SLTHCULDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_WildcardCard"/>
-                            <Label ID="SLTHCULDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
+                            <Container Size="206,93" Anchor="C,T" Offset="0,40">
+                              <Image ID="SLTHCULDescImage" Anchor="C,C"  Size="200,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
+                              <Grid ID="SLTHCULImageFrame" Anchor="C,C" Offset="0,0" Size="206,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
+                            </Container>
+                            <Label ID="SLTHCULDesc" Anchor="L,T" Offset="13,150" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
@@ -129,12 +141,15 @@
                                            Size="8,parent-10"/>
                             </ScrollPanel>
                         </Grid>
-                        <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
+                        <Grid Anchor="C,T" Offset="0,364" Size="210,300" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
                             <Label ID="SLTHRELDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
                                    Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
-                            <Image ID="SLTHRELDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="GOVERNMENT_AUTOCRACY"/>
-                            <Label ID="SLTHRELDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
+                            <Container Size="206,93" Anchor="C,T" Offset="0,40">
+                              <Image ID="SLTHRELDescImage" Anchor="C,C"  Size="200,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
+                              <Grid ID="SLTHRELImageFrame" Anchor="C,C" Offset="0,0" Size="206,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
+                            </Container>
+                            <Label ID="SLTHRELDesc" Anchor="L,T" Offset="13,150" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
