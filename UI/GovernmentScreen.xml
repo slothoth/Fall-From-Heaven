@@ -38,6 +38,7 @@
                              wrapping the category title + its policy listbox. -->
                         <Grid ID="MilitarySlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="MilitaryTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
+                            <Image ID="MilitaryWatermark" Anchor="C,T" Offset="0,250" Size="185,81" Texture="Governments_WatermarkMilitary" StretchMode="Fill" Color="GovWaterMark"/>
                             <ScrollPanel ID="MilitaryListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="MilitaryPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
@@ -45,7 +46,6 @@
                                            Size="8,parent-10"/>
                             </ScrollPanel>
                             <Image ID="MilitaryPointer" Anchor="C,T" Offset="0,328"  Size="173,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
-                            <Image ID="MilitaryWatermark" Anchor="C,T" Offset="0,250" Size="185,81" Texture="Governments_WatermarkMilitary" StretchMode="Fill" Color="GovWaterMark"/>
 
                         </Grid>
 
@@ -53,7 +53,7 @@
                         <!-- Description card: policy title / image / description text (base card art for now). -->
                         <Grid ID="MilitaryDescCard" Anchor="C,T" Offset="0,364" Size="210,300" Texture="Governments_Backing" SliceCorner="15,20"
                               SliceSize="322,105" SliceTextureSize="352,145">
-                            <Label ID="MilitaryDescTitle" Anchor="C,T" Offset="0,16" Style="PolicyRowHeader"/>
+                            <Label ID="MilitaryDescTitle" Anchor="C,T" Offset="0,16" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
                             <Container Size="206,93" Anchor="C,T" Offset="0,40">
                               <Image ID="MilitaryDescImage" Anchor="C,C"  Size="194,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
                               <Grid ID="MilitaryImageFrame" Anchor="C,C" Offset="0,0" Size="196,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
@@ -66,18 +66,18 @@
                     <Container ID="EconomicColumn" Size="210,584">
                         <Grid ID="EconomicSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="EconomicTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
+                            <Image ID="EconomicWatermark" Anchor="C,T" Offset="0,265" Size="185,62" Texture="Governments_WatermarkEconomic" StretchMode="Fill" Color="GovWaterMark"/>
                             <ScrollPanel ID="EconomicListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="EconomicPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
                                            Size="8,parent-10"/>
                             </ScrollPanel>
-                            <Image ID="EconomicWatermark" Anchor="C,T" Offset="0,265" Size="185,62" Texture="Governments_WatermarkEconomic" StretchMode="Fill" Color="GovWaterMark"/>
                             <Image ID="EconomicPointer" Anchor="C,T" Offset="0,328"  Size="173,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
                         </Grid>
                         <Grid ID="EconomicDescCard" Anchor="C,T" Offset="0,364" Size="210,300" Texture="Governments_Backing" SliceCorner="15,20"
                               SliceSize="322,105" SliceTextureSize="352,145">
-                            <Label ID="EconomicDescTitle" Anchor="C,T" Offset="0,16" Style="PolicyRowHeader"/>
+                            <Label ID="EconomicDescTitle" Anchor="C,T" Offset="0,16" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
                             <Container Size="206,93" Anchor="C,T" Offset="0,40">
                               <Image ID="EconomicDescImage" Anchor="C,C"  Size="194,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
                               <Grid ID="EconomicImageFrame" Anchor="C,C" Offset="0,0" Size="196,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
@@ -89,19 +89,19 @@
                     <!-- DIPLOMATIC -->
                     <Container ID="DiplomaticColumn" Size="210,584">
                         <Grid ID="DiplomaticSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
-                            <Label ID="DiplomaticTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
+                            <Label ID="DiplomaticTitle" Anchor="C,T" Offset="0,24" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
+                            <Image ID="DiplomaticWatermark" Anchor="C,T" Offset="0,255" Size="185,82" Texture="Governments_WatermarkDiplo" StretchMode="Fill" Color="GovWaterMark"/>
                             <ScrollPanel ID="DiplomaticListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="DiplomaticPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
                                            Size="8,parent-10"/>
                             </ScrollPanel>
-                            <Image ID="DiplomaticWatermark" Anchor="C,T" Offset="0,255" Size="185,82" Texture="Governments_WatermarkDiplo" StretchMode="Fill" Color="GovWaterMark"/>
                             <Image ID="DiploPointer" Anchor="C,T" Offset="0,328"  Size="173,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
                         </Grid>
                         <Grid ID="DiplomaticDescCard" Anchor="C,T" Offset="0,364" Size="210,300" Texture="Governments_Backing" SliceCorner="15,20"
                               SliceSize="322,105" SliceTextureSize="352,145">
-                            <Label ID="DiplomaticDescTitle" Anchor="C,T" Offset="0,16" Style="PolicyRowHeader"/>
+                            <Label ID="DiplomaticDescTitle" Anchor="C,T" Offset="0,16" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
                             <Container Size="206,93" Anchor="C,T" Offset="0,40">
                               <Image ID="DiplomaticDescImage" Anchor="C,C"  Size="194,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
                               <Grid ID="DiplomaticImageFrame" Anchor="C,C" Offset="0,0" Size="196,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
@@ -114,18 +114,18 @@
                     <Container ID="SLTHCULColumn" Size="210,584">
                         <Grid ID="SLTHCULSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="SLTHCULTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
+                            <Image ID="CultureWatermark" Anchor="C,T" Offset="0,275" Size="185,62" Texture="Governments_WatermarkWildcard" StretchMode="Fill" Color="GovWaterMark"/>
                             <ScrollPanel ID="SLTHCULListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="SLTHCULPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
                                            Size="8,parent-10"/>
                             </ScrollPanel>
-                            <Image ID="CultureWatermark" Anchor="C,T" Offset="0,275" Size="185,62" Texture="Governments_WatermarkWildcard" StretchMode="Fill" Color="GovWaterMark"/>
                             <Image ID="CulturePointer" Anchor="C,T" Offset="0,328"  Size="173,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
                         </Grid>
                         <Grid ID="SLTHCULDescCard" Anchor="C,T" Offset="0,364" Size="210,300" Texture="Governments_Backing" SliceCorner="15,20"
                               SliceSize="322,105" SliceTextureSize="352,145">
-                            <Label ID="SLTHCULDescTitle" Anchor="C,T" Offset="0,16" Style="PolicyRowHeader"/>
+                            <Label ID="SLTHCULDescTitle" Anchor="C,T" Offset="0,16" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
                             <Container Size="206,93" Anchor="C,T" Offset="0,40">
                               <Image ID="SLTHCULDescImage" Anchor="C,C"  Size="194,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
                               <Grid ID="SLTHCULImageFrame" Anchor="C,C" Offset="0,0" Size="196,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
@@ -138,19 +138,18 @@
                     <Container ID="SLTHRELColumn" Size="210,584">
                         <Grid ID="SLTHRELSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="SLTHRELTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
-
+                            <Image ID="ReligionWatermark" Anchor="C,T" Offset="0,275" Size="185,62" Texture="Governments_WatermarkWildcard" StretchMode="Fill" Color="GovWaterMark"/>
                             <ScrollPanel ID="SLTHRELListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="SLTHRELPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
                                            Size="8,parent-10"/>
                             </ScrollPanel>
-                            <Image ID="ReligionWatermark" Anchor="C,T" Offset="0,275" Size="185,62" Texture="Governments_WatermarkWildcard" StretchMode="Fill" Color="GovWaterMark"/>
                             <Image ID="ReligionPointer" Anchor="C,T" Offset="0,328"  Size="173,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
                         </Grid>
                         <Grid ID="SLTHRELDescCard" Anchor="C,T" Offset="0,364" Size="210,300" Texture="Governments_Backing" SliceCorner="15,20"
                               SliceSize="322,105" SliceTextureSize="352,145">
-                            <Label ID="SLTHRELDescTitle" Anchor="C,T" Offset="0,16" Style="PolicyRowHeader"/>
+                            <Label ID="SLTHRELDescTitle" Anchor="C,T" Offset="0,16" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
                             <Container Size="206,93" Anchor="C,T" Offset="0,40">
                               <Image ID="SLTHRELDescImage" Anchor="C,C"  Size="194,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
                               <Grid ID="SLTHRELImageFrame" Anchor="C,C" Offset="0,0" Size="196,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
@@ -173,7 +172,10 @@
 
     <!-- A selectable policy name row inside a category listbox -->
     <Instance Name="PolicyNameItem">
-        <GridButton ID="Button" Size="142,28" Texture="Controls_ButtonControl"
+        <!-- DisabledCallbacks: locked policies are SetDisabled(true) so they render greyed and
+             are not selectable, but they must still fire mouse-enter/exit so hovering one
+             previews its description. Without this a disabled button swallows all input. -->
+        <GridButton ID="Button" Size="142,28" Texture="Controls_ButtonControl" DisabledCallbacks="1"
                     SliceCorner="12,6" SliceSize="1,1" SliceTextureSize="24,24" StateOffsetIncrement="0,24">
             <!-- "Active" = the policy actually slotted in-game right now. Drawn under the
                  others; only shown while it is NOT also the staged selection, so the player

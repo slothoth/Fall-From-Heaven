@@ -97,6 +97,13 @@ local TXT_GOV_POPUP_PROMPT_POLICIES_CLOSE = Locale.Lookup("LOC_GOVT_POPUP_PROMPT
 ---@type string
 local TXT_GOV_POPUP_PROMPT_POLICIES_CONFIRM = Locale.Lookup("LOC_GOVT_POPUP_PROMPT_POLICIES_CONFIRM");
 
+---@type number
+local COLOR_GOVT_UNSELECTED	= UI.GetColorValueFromHexLiteral(0xffe9dfc7); -- Background for unselected background (or forground text color on non-selected).
+---@type number
+local COLOR_GOVT_SELECTED	= UI.GetColorValueFromHexLiteral(0xff261407); -- Background for selected background (or forground text color on non-selected).
+---@type number
+local COLOR_GOVT_LOCKED		= UI.GetColorValueFromHexLiteral(0xffAAAAAA)
+
 -- ===========================================================================
 --	GLOBALS
 -- ===========================================================================
@@ -200,7 +207,7 @@ function IsAbleToChangePolicies()
 	local kPlayerCulture = kPlayer:GetCulture();
 	if (kPlayerCulture:CivicCompletedThisTurn() or kPlayerCulture:GetNumPolicySlotsOpen() > 0) and Game.IsAllowStrategicCommands(m_ePlayer) and kPlayerCulture:PolicyChangeMade() == false then
 		return true;
-	end 
+	end
 	return false;
 end
 
@@ -215,12 +222,12 @@ end
 function Close()
 
 	if ContextPtr:IsHidden() then return; end
-	
+
 	if Controls.ConfirmPolicies:IsVisible() and Controls.ConfirmPolicies:IsEnabled() then
 		-- Policies confirmation button is enabled (and showing); warn player changes are not saved!
 		---@type table
 		local popup = PopupDialogInGame:new( "WarnUnsavedChanges" );
-		popup:ShowYesNoDialog( TXT_GOV_POPUP_PROMPT_POLICIES_CLOSE, 
+		popup:ShowYesNoDialog( TXT_GOV_POPUP_PROMPT_POLICIES_CLOSE,
 			function() Controls.ConfirmPolicies:SetDisabled(true); Close() end ); -- no-op on cancel
 	else
 		if not ContextPtr:IsHidden() then               -- Actual close
@@ -326,7 +333,7 @@ function OnOpenGovernmentScreenPolicies()
 		OnOpenGovernmentScreen( SCREEN_ENUMS.GOVERNMENTS );
 	else
 		OnOpenGovernmentScreen( SCREEN_ENUMS.POLICIES );
-	end	
+	end
 end
 
 -- ===========================================================================
@@ -367,7 +374,7 @@ function OnOpenGovernmentScreen( screenEnum )
 end
 
 -- ===========================================================================
---	
+--
 -- ===========================================================================
 function RefreshAllData()
 	PopulateLivePlayerData( m_ePlayer );
@@ -473,10 +480,10 @@ end
 ---@param policyHash number
 function IsPolicyAvailable( kPlayerCulture, policyHash )
 	---@type boolean
-	local isPolicyUnlocked = kPlayerCulture:IsPolicyUnlocked( policyHash ) 
+	local isPolicyUnlocked = kPlayerCulture:IsPolicyUnlocked( policyHash )
 	---@type boolean
 	local isRelevant = not kPlayerCulture:IsPolicyObsolete( policyHash );
-	
+
 	return isPolicyUnlocked and isRelevant;
 end
 
@@ -509,7 +516,7 @@ function PopulateLivePlayerData( ePlayer )
 	else
 		g_kCurrentGovernment = nil;
 	end
-	
+
 	-- Cache which civic was unlocked this turn, so we can determine whether to display new policy icons
 	---@type string
 	local civicCompletedThisTurn;
@@ -520,7 +527,7 @@ function PopulateLivePlayerData( ePlayer )
 			civicCompletedThisTurn = civicInfo.CivicType;
 		end
 	end
-	
+
 	-- Policies: populate unlocked (and not obsolete) ones for the catalog
 	m_kUnlockedPolicies = {};
 	m_kNewPoliciesThisTurn = {};
@@ -532,7 +539,7 @@ function PopulateLivePlayerData( ePlayer )
 		m_kUnlockedPolicies[policyType] = isPolicyAvailable or m_debugShowAllPolicies;
 		m_kNewPoliciesThisTurn[policyType] = civicCompletedThisTurn and civicCompletedThisTurn == row.PrereqCivic;
 	end
-	
+
 	m_ActivePoliciesByType = {};
 	m_ActivePoliciesBySlot = {};
 	m_ActivePolicyRows[ROW_INDEX.MILITARY] = { SlotArray={} };
@@ -540,7 +547,7 @@ function PopulateLivePlayerData( ePlayer )
 	m_ActivePolicyRows[ROW_INDEX.DIPLOMAT] = { SlotArray={} };
 	m_ActivePolicyRows[ROW_INDEX.SLTHCUL] = { SlotArray={} };
 	m_ActivePolicyRows[ROW_INDEX.SLTHREL] = { SlotArray={} };
-	
+
 	---@type number
 	local nPolicySlots = kPlayerCulture:GetNumPolicySlots();
 	for i = 0, nPolicySlots-1, 1 do
@@ -594,14 +601,14 @@ function PopulateLivePlayerData( ePlayer )
 			m_kBonuses[governmentType] = {
 				BonusPercent			= government.BonusFlatAmountPreview
 			}
-		end	
+		end
 	end
-	
+
 	-- Unlocked governments
 	m_kUnlockedGovernments = {};
 	for governmentType,government in pairs(g_kGovernments) do
 		if kPlayerCulture:IsGovernmentUnlocked(government.Hash) then
-			m_kUnlockedGovernments[governmentType] = true;			
+			m_kUnlockedGovernments[governmentType] = true;
 		end
 	end
 
@@ -624,14 +631,14 @@ function DebugOutput()
 				governmentType,
 				government.Index,
 				government.Hash
-			));			
+			));
 		end
 	end
 end
 
 -- ===========================================================================
 --	Save the current data of a player (values that are UI specific that
---	can't be queried and (re-)populated from the game engine when this 
+--	can't be queried and (re-)populated from the game engine when this
 --	player's next turn starts.
 --	Mostly (only?) valid for local multiplayer hotseat.
 -- ===========================================================================
@@ -682,17 +689,17 @@ function PopulateStaticData()
 		---@type string
 		local description = Locale.Lookup(row.Description);
 		--local draftCost			:number = kPlayerCulture:GetEnactPolicyCost(policyTypeHash);	--Move to live data
-	
-		m_kPolicyCatalogData[row.PolicyType] = {			
-			Description = description, 
-			Name		= policyName, 
-			PolicyHash	= policyTypeHash, 
+
+		m_kPolicyCatalogData[row.PolicyType] = {
+			Description = description,
+			Name		= policyName,
+			PolicyHash	= policyTypeHash,
 			SlotType	= slotType,			-- SLOT_MILITARY, SLOT_ECONOMIC, SLOT_DIPLOMATIC, SLOT_SLTHCUL, (SLOT_GREAT_PERSON)
 			UniqueID	= row.Index			-- the row this policy exists in, is guaranteed to be unique (as-is the house, but these are readable. ;) )
 			};
 
 		table.insert(m_kPolicyCatalogOrder, row.PolicyType);
-	end	
+	end
 
 	table.sort(m_kPolicyCatalogOrder, SortPolicies );
 
@@ -834,9 +841,9 @@ end
 -- ===========================================================================
 function LateInitialize()
 	m_TopPanelConsideredHeight = Controls.Vignette:GetSizeY() - TOP_PANEL_OFFSET;
-	
+
 	PopulateStaticData();			-- Obtain unchanging, static data from game core
-	
+
 	m_ePlayer = Game.GetLocalPlayer();
 end
 
@@ -847,8 +854,8 @@ end
 function OnInit( isReload )
 	LateInitialize();
 	if isReload then
-		LuaEvents.GameDebug_GetValues( "GovernmentScreen" );		
-	end	
+		LuaEvents.GameDebug_GetValues( "GovernmentScreen" );
+	end
 end
 
 -- ===========================================================================
@@ -860,8 +867,8 @@ function OnShutdown()
 	LuaEvents.GameDebug_Return.Remove( OnGameDebugReturn );
 	LuaEvents.NotificationPanel_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenGovernments );
 	LuaEvents.NotificationPanel_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenPolicies );
-	LuaEvents.LaunchBar_GovernmentOpenMyGovernment.Remove( OnOpenGovernmentScreenMyGovernment );	
-	LuaEvents.LaunchBar_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenGovernments );	
+	LuaEvents.LaunchBar_GovernmentOpenMyGovernment.Remove( OnOpenGovernmentScreenMyGovernment );
+	LuaEvents.LaunchBar_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenGovernments );
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenGovernments );
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenPolicies );
 	LuaEvents.Advisor_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenPolicies );
@@ -877,7 +884,7 @@ end
 function OnGameDebugReturn( context, contextTable )
 	if context == "GovernmentScreen" and contextTable then
 		---@type number
-		local eOpenTabAtInit = contextTable["eOpenTabAtInit"]; 
+		local eOpenTabAtInit = contextTable["eOpenTabAtInit"];
 		if eOpenTabAtInit ~= nil and OnOpenGovernmentScreen ~= nil then
 			OnOpenGovernmentScreen(eOpenTabAtInit);
 		end
@@ -919,7 +926,7 @@ function Initialize()
 
 	Controls.ConfirmPolicies:RegisterCallback(		Mouse.eLClick,	OnConfirmPolicies);
 	Controls.ConfirmPolicies:RegisterCallback(		Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
-	
+
 	-- Hide these after going invisible to prevent input
 
 	Controls.ModalScreenTitle:SetText(Locale.ToUpper("LOC_GOVT_GOVERNMENT"));
@@ -941,8 +948,8 @@ function Initialize()
 	LuaEvents.GameDebug_Return.Add( OnGameDebugReturn );
 	LuaEvents.NotificationPanel_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );
 	LuaEvents.NotificationPanel_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
-	LuaEvents.LaunchBar_GovernmentOpenMyGovernment.Add( OnOpenGovernmentScreenMyGovernment );	
-	LuaEvents.LaunchBar_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );	
+	LuaEvents.LaunchBar_GovernmentOpenMyGovernment.Add( OnOpenGovernmentScreenMyGovernment );
+	LuaEvents.LaunchBar_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
 	LuaEvents.Advisor_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
@@ -1008,6 +1015,23 @@ function RealizeDescriptionCard( cc, strPolicyType )
 end
 
 ---@param nRowIndex number
+-- Style the description card for a category.
+--   isProposed = this category has a staged, uncommitted change -> "selected" art.
+-- Both textures are 352x145, so the Grid's existing slice params stay valid. The glyph
+-- colour must invert with the art: selected (light) backing needs the dark text and the
+-- unselected (dark) backing the light text. Label:SetColor(c, layer): layer 0 is the main
+-- glyph (Color0); layer 1 is the glow (Color1), left as authored.
+---@param cc table
+---@param isProposed boolean
+function SetDescCardState( cc, isProposed )
+	Controls[cc.descCard]:SetTexture( isProposed
+		and "Governments_BackingSelected" or "Governments_Backing" );
+	---@type number
+	local uiTextColor = isProposed and COLOR_GOVT_SELECTED or COLOR_GOVT_UNSELECTED;
+	Controls[cc.descTitle]:SetColor( uiTextColor, 0 );
+	Controls[cc.desc]:SetColor( uiTextColor );
+end
+
 function RealizeCategoryDescription( nRowIndex )
 	---@type table
 	local cc = CATEGORY_CONTROLS[nRowIndex];
@@ -1015,12 +1039,9 @@ function RealizeCategoryDescription( nRowIndex )
 	local tSlot = GetCategorySlot(nRowIndex);
 	---@type string
 	local strSelected = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
-	-- Card art shows whether this category has a PROPOSED (staged, uncommitted) change.
-	-- Both textures are 352x145, so the Grid's existing slice params stay valid.
 	---@type string
 	local strCommitted = m_CommittedPolicyByRow[nRowIndex] or EMPTY_POLICY_TYPE;
-	Controls[cc.descCard]:SetTexture( strSelected ~= strCommitted
-		and "Governments_BackingSelected" or "Governments_Backing" );
+	SetDescCardState( cc, strSelected ~= strCommitted );
 	if strSelected ~= EMPTY_POLICY_TYPE and m_kPolicyCatalogData[strSelected] ~= nil then
 		RealizeDescriptionCard( cc, strSelected );
 	else
@@ -1038,11 +1059,11 @@ function OnPolicyItemClicked( nRowIndex, strPolicyType )
 	---@type table
 	local tSlot = GetCategorySlot(nRowIndex);
 	if tSlot == nil then return; end
-	if tSlot.GC_PolicyType == strPolicyType then
-		RemoveActivePolicyAtSlotIndex( tSlot.GC_SlotIndex );	-- clicking the selected one clears it
-	else
-		SetActivePolicyAtSlotIndex( tSlot.GC_SlotIndex, strPolicyType );
-	end
+	-- Re-clicking the already-selected policy is a no-op. It used to CLEAR the slot, which
+	-- read as a bug on open: there the selection IS the committed policy, so the very first
+	-- click emptied the slot and blanked the description card.
+	if tSlot.GC_PolicyType == strPolicyType then return; end
+	SetActivePolicyAtSlotIndex( tSlot.GC_SlotIndex, strPolicyType );
 	UI.PlaySound("Play_UI_Click");
 	RealizeCategoryList( nRowIndex );	-- refresh selection highlight + description
 	RealizeConfirmButton();
@@ -1073,12 +1094,17 @@ function RealizeCategoryList( nRowIndex )
 	for _,strPolicyType in ipairs(m_kPolicyCatalogOrder) do
 		---@type table
 		local tPolicy = m_kPolicyCatalogData[strPolicyType];
-		if tPolicy.SlotType == strSlotType and m_kUnlockedPolicies[strPolicyType] then
+		if tPolicy.SlotType == strSlotType then
+			-- Locked policies are listed too (so the player can see what is coming) but are
+			-- dimmed and non-selectable: the engine would reject slotting an unlocked policy.
+			---@type boolean
+			local isUnlocked = m_kUnlockedPolicies[strPolicyType] == true;
 			---@type table
 			local inst = {};
 			ContextPtr:BuildInstanceForControl( "PolicyNameItem", inst, uiStack );
 			inst.Name:SetText( tPolicy.Name );
 			inst.Name:SetToolTipString( tPolicy.Name );
+			inst.Name:SetAlpha( isUnlocked and 1.0 or 0.45 );
 			---@type boolean
 			local isSelected = (strPolicyType == strSelected);
 			inst.Highlight:SetHide( not isSelected );
@@ -1089,6 +1115,10 @@ function RealizeCategoryList( nRowIndex )
 			-- Hover previews the description; leaving reverts to the staged selection.
 			inst.Button:RegisterCallback( Mouse.eMouseEnter, function()
 				inst.Hover:SetHide(false);
+				-- A hover is a preview, not a proposal -> unselected art. EXCEPT when hovering
+				-- the staged policy itself: there the card keeps its true state, so it does not
+				-- flip back to "unselected" as you mouse over your own pending choice.
+				SetDescCardState( cc, strPolicyType == strSelected and strSelected ~= strCommitted );
 				RealizeDescriptionCard( cc, strPolicyType );
 			end);
 			inst.Button:RegisterCallback( Mouse.eMouseExit, function()
@@ -1096,7 +1126,7 @@ function RealizeCategoryList( nRowIndex )
 				RealizeCategoryDescription( nRowIndex );
 			end);
 
-			if canEdit then
+			if canEdit and isUnlocked then
 				inst.Button:RegisterCallback( Mouse.eLClick, function()
 					OnPolicyItemClicked( nRowIndex, strPolicyType );
 				end);
@@ -1157,4 +1187,3 @@ function RealizeAll()
 	RealizeConfirmButton();
 	Controls.MainColumns:CalculateSize();	-- re-center the column stack after (re)building
 end
-	
