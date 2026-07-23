@@ -35,7 +35,7 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_SLTH_POLICY_CITY_STATES_DESCRIPTION', '80% reduced city Maintenance distance. 25% reduced Number of cities Maintenance. -20% [ICON_Culture] Culture in all Cities. Accumulate 25% less war weariness than usual.', 'en_US'),
 ('LOC_SLTH_POLICY_CONQUEST_DESCRIPTION', '+16 experience to trained Units. All military units cost food*', 'en_US'),
 ('LOC_SLTH_POLICY_CONSUMPTION_DESCRIPTION', '20% [ICON_Gold] Gold in all Cities.  Markets, Taverns and Theatres all give +1 [ICON_Amenities] Amenity.', 'en_US'),
-('LOC_SLTH_POLICY_CRUSADE_DESCRIPTION', 'Can build Demagogs. Accumulate -75% less war weariness than usual. Cannot make peace*. +2 [ICON_Amenities] Amenities in cities with your state religion.* 25% Production towards units in Cities with State Religion. Must be at war to slot*.', 'en_US'),
+('LOC_SLTH_POLICY_CRUSADE_DESCRIPTION', 'Can build Demagogs. Accumulate -75% less war weariness than usual. +2 [ICON_Amenities] Amenities in cities with your state religion.* 25% Production towards units in Cities with State Religion*. Only usable when at war.', 'en_US'),
 ('LOC_SLTH_POLICY_DECENTRALIZATION_DESCRIPTION', 'Does nothing', 'en_US'),
 ('LOC_SLTH_POLICY_DESPOTISM_DESCRIPTION', 'Accumulate -50% less war weariness than usual. 25% Increased Number of cities Maintenance.', 'en_US'),
 ('LOC_SLTH_POLICY_FOREIGN_TRADE_DESCRIPTION', '+1 Trade Route Capacity. 20% [ICON_Culture] Culture and -10% [ICON_Gold] Gold in all Cities. +1 Trade Route Capacity per coastal city.', 'en_US'),
