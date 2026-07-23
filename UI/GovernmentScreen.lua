@@ -964,11 +964,11 @@ end
 -- Maps each policy category (ROW_INDEX) to its column control IDs in the new XML.
 ---@type table
 local CATEGORY_CONTROLS = {};
-CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   descTitle="MilitaryDescTitle",   descImage="MilitaryDescImage",   titleKey="LOC_SLOT_MILITARY_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   descTitle="EconomicDescTitle",   descImage="EconomicDescImage",   titleKey="LOC_SLOT_ECONOMIC_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", descTitle="DiplomaticDescTitle", descImage="DiplomaticDescImage", titleKey="LOC_SLOT_DIPLOMATIC_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    descTitle="SLTHCULDescTitle",    descImage="SLTHCULDescImage",    titleKey="LOC_SLOT_SLTHCUL_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    descTitle="SLTHRELDescTitle",    descImage="SLTHRELDescImage",    titleKey="LOC_SLOT_SLTHREL_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   descTitle="MilitaryDescTitle",   descImage="MilitaryDescImage",   descCard="MilitaryDescCard",   titleKey="LOC_SLOT_MILITARY_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   descTitle="EconomicDescTitle",   descImage="EconomicDescImage",   descCard="EconomicDescCard",   titleKey="LOC_SLOT_ECONOMIC_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", descTitle="DiplomaticDescTitle", descImage="DiplomaticDescImage",   descCard="DiplomaticDescCard", titleKey="LOC_SLOT_DIPLOMATIC_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    descTitle="SLTHCULDescTitle",    descImage="SLTHCULDescImage",   descCard="SLTHCULDescCard",    titleKey="LOC_SLOT_SLTHCUL_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    descTitle="SLTHRELDescTitle",    descImage="SLTHRELDescImage",   descCard="SLTHRELDescCard",    titleKey="LOC_SLOT_SLTHREL_NAME" };
 
 -- Return the single slot for a category (FFH grants one slot per category), or nil.
 ---@param nRowIndex number
@@ -1015,6 +1015,12 @@ function RealizeCategoryDescription( nRowIndex )
 	local tSlot = GetCategorySlot(nRowIndex);
 	---@type string
 	local strSelected = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
+	-- Card art shows whether this category has a PROPOSED (staged, uncommitted) change.
+	-- Both textures are 352x145, so the Grid's existing slice params stay valid.
+	---@type string
+	local strCommitted = m_CommittedPolicyByRow[nRowIndex] or EMPTY_POLICY_TYPE;
+	Controls[cc.descCard]:SetTexture( strSelected ~= strCommitted
+		and "Governments_BackingSelected" or "Governments_Backing" );
 	if strSelected ~= EMPTY_POLICY_TYPE and m_kPolicyCatalogData[strSelected] ~= nil then
 		RealizeDescriptionCard( cc, strSelected );
 	else
