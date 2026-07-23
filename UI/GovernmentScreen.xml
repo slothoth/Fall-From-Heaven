@@ -178,6 +178,10 @@
     <Instance Name="PolicyNameItem">
         <GridButton ID="Button" Size="142,28" Texture="Controls_ButtonControl"
                     SliceCorner="12,6" SliceSize="1,1" SliceTextureSize="24,24" StateOffsetIncrement="0,24">
+            <!-- "Active" = the policy actually slotted in-game right now. Drawn under the
+                 others; only shown while it is NOT also the staged selection, so the player
+                 can see what is still in effect after picking something new. -->
+            <Box ID="Active" Size="parent,parent" Color="181,145,66,120" Hidden="1"/>
             <Box ID="Highlight" Size="parent,parent" Color="58,99,131,150" Hidden="1"/>
             <Box ID="Hover" Size="parent,parent" Color="78,119,151,90" Hidden="1"/>
             <Label ID="Name" Anchor="C,C" Offset="0,0" WrapWidth="176" Style="FontNormal14"/>

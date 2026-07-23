@@ -371,6 +371,7 @@ end
 -- ===========================================================================
 function RefreshAllData()
 	PopulateLivePlayerData( m_ePlayer );
+	SnapshotCommittedPolicies();	-- committed state, before any staging
 	RealizeAll();
 	-- From ModalScreen_PlayerYieldsHelper
 	if not RefreshYields() then
@@ -971,6 +972,20 @@ CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLT
 
 -- Return the single slot for a category (FFH grants one slot per category), or nil.
 ---@param nRowIndex number
+-- The policy actually slotted in gamecore as of the last populate, per category.
+-- Snapshotted BEFORE any staging edit, so the "currently active" highlight keeps
+-- showing what is really in effect while the player stages a different pick.
+local m_CommittedPolicyByRow = {};
+
+function SnapshotCommittedPolicies()
+	m_CommittedPolicyByRow = {};
+	for nRowIndex = 1, 5 do
+		---@type table
+		local tSlot = GetCategorySlot(nRowIndex);
+		m_CommittedPolicyByRow[nRowIndex] = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
+	end
+end
+
 function GetCategorySlot( nRowIndex )
 	---@type table
 	local tRow = m_ActivePolicyRows[nRowIndex];
@@ -1043,6 +1058,8 @@ function RealizeCategoryList( nRowIndex )
 	---@type string
 	local strSelected = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
 	---@type string
+	local strCommitted = m_CommittedPolicyByRow[nRowIndex] or EMPTY_POLICY_TYPE;
+	---@type string
 	local strSlotType = ROW_SLOT_TYPES[nRowIndex];
 	---@type boolean
 	local canEdit = (tSlot ~= nil) and IsAbleToChangePolicies();
@@ -1056,7 +1073,11 @@ function RealizeCategoryList( nRowIndex )
 			ContextPtr:BuildInstanceForControl( "PolicyNameItem", inst, uiStack );
 			inst.Name:SetText( tPolicy.Name );
 			inst.Name:SetToolTipString( tPolicy.Name );
-			inst.Highlight:SetHide( strPolicyType ~= strSelected );
+			---@type boolean
+			local isSelected = (strPolicyType == strSelected);
+			inst.Highlight:SetHide( not isSelected );
+			-- Active marker: the committed policy, hidden when it IS the staged selection.
+			inst.Active:SetHide( not (strPolicyType == strCommitted and not isSelected) );
 			inst.Hover:SetHide( true );
 
 			-- Hover previews the description; leaving reverts to the staged selection.
