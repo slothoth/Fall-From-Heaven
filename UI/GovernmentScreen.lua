@@ -3096,7 +3096,7 @@ end
 --	CTOR
 -- ===========================================================================
 function Initialize()
-	
+
 
 
 
@@ -3157,11 +3157,11 @@ end
 -- Maps each policy category (ROW_INDEX) to its column control IDs in the new XML.
 ---@type table
 local CATEGORY_CONTROLS = {};
-CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   titleKey="LOC_GOVT_POLICY_TYPE_MILITARY" };
-CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   titleKey="LOC_GOVT_POLICY_TYPE_ECONOMIC" };
-CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", titleKey="LOC_GOVT_POLICY_TYPE_DIPLOMATIC" };
-CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    titleKey="LOC_SLOT_SLTHCUL_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    titleKey="LOC_SLOT_SLTHREL_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   descTitle="MilitaryDescTitle",   descImage="MilitaryDescImage",   titleKey="LOC_GOVT_POLICY_TYPE_MILITARY" };
+CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   descTitle="EconomicDescTitle",   descImage="EconomicDescImage",   titleKey="LOC_GOVT_POLICY_TYPE_ECONOMIC" };
+CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", descTitle="DiplomaticDescTitle", descImage="DiplomaticDescImage", titleKey="LOC_GOVT_POLICY_TYPE_DIPLOMATIC" };
+CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    descTitle="SLTHCULDescTitle",    descImage="SLTHCULDescImage",    titleKey="LOC_SLOT_SLTHCUL_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    descTitle="SLTHRELDescTitle",    descImage="SLTHRELDescImage",    titleKey="LOC_SLOT_SLTHREL_NAME" };
 
 -- Return the single slot for a category (FFH grants one slot per category), or nil.
 ---@param nRowIndex number
@@ -3173,6 +3173,19 @@ function GetCategorySlot( nRowIndex )
 end
 
 -- Show the description for the category's currently-staged policy (or blank).
+-- Fill a category's description card (title / image / text) for a given policy.
+-- Uses the base slot-type card art for now; swap to per-policy art later.
+---@param cc table
+---@param strPolicyType string
+function RealizeDescriptionCard( cc, strPolicyType )
+	---@type table
+	local tPolicy = m_kPolicyCatalogData[strPolicyType];
+	Controls[cc.descTitle]:SetText( tPolicy.Name );
+	Controls[cc.descImage]:SetTexture( GetPolicyBGTexture(strPolicyType) );
+	Controls[cc.descImage]:SetHide( false );
+	Controls[cc.desc]:SetText( tPolicy.Description );
+end
+
 ---@param nRowIndex number
 function RealizeCategoryDescription( nRowIndex )
 	---@type table
@@ -3182,8 +3195,10 @@ function RealizeCategoryDescription( nRowIndex )
 	---@type string
 	local strSelected = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
 	if strSelected ~= EMPTY_POLICY_TYPE and m_kPolicyCatalogData[strSelected] ~= nil then
-		Controls[cc.desc]:SetText( m_kPolicyCatalogData[strSelected].Description );
+		RealizeDescriptionCard( cc, strSelected );
 	else
+		Controls[cc.descTitle]:SetText( "" );
+		Controls[cc.descImage]:SetHide( true );
 		Controls[cc.desc]:SetText( Locale.Lookup("LOC_GOVT_POLICIES_LIST") );
 	end
 end
@@ -3241,7 +3256,7 @@ function RealizeCategoryList( nRowIndex )
 			-- Hover previews the description; leaving reverts to the staged selection.
 			inst.Button:RegisterCallback( Mouse.eMouseEnter, function()
 				inst.Hover:SetHide(false);
-				Controls[cc.desc]:SetText( tPolicy.Description );
+				RealizeDescriptionCard( cc, strPolicyType );
 			end);
 			inst.Button:RegisterCallback( Mouse.eMouseExit, function()
 				inst.Hover:SetHide(true);

@@ -44,9 +44,13 @@
                                            Size="8,parent-10"/>
                             </ScrollPanel>
                         </Grid>
+                        <!-- Description card: policy title / image / description text (base card art for now). -->
                         <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="MilitaryDesc" Anchor="L,T" Offset="14,14" WrapWidth="180" Style="FontNormal12"/>
+                            <Label ID="MilitaryDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
+                                   Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
+                            <Image ID="MilitaryDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_MilitaryCard"/>
+                            <Label ID="MilitaryDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
@@ -64,7 +68,10 @@
                         </Grid>
                         <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="EconomicDesc" Anchor="L,T" Offset="14,14" WrapWidth="180" Style="FontNormal12"/>
+                            <Label ID="EconomicDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
+                                   Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
+                            <Image ID="EconomicDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_EconomicCard"/>
+                            <Label ID="EconomicDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
@@ -82,7 +89,10 @@
                         </Grid>
                         <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="DiplomaticDesc" Anchor="L,T" Offset="14,14" WrapWidth="180" Style="FontNormal12"/>
+                            <Label ID="DiplomaticDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
+                                   Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
+                            <Image ID="DiplomaticDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_DiplomacyCard"/>
+                            <Label ID="DiplomaticDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
@@ -100,7 +110,10 @@
                         </Grid>
                         <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="SLTHCULDesc" Anchor="L,T" Offset="14,14" WrapWidth="180" Style="FontNormal12"/>
+                            <Label ID="SLTHCULDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
+                                   Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
+                            <Image ID="SLTHCULDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_WildcardCard"/>
+                            <Label ID="SLTHCULDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
@@ -118,7 +131,10 @@
                         </Grid>
                         <Grid Anchor="C,T" Offset="0,364" Size="210,210" Texture="Controls_PanelBlue" SliceCorner="25,28"
                               SliceSize="33,18" SliceTextureSize="83,75">
-                            <Label ID="SLTHRELDesc" Anchor="L,T" Offset="14,14" WrapWidth="180" Style="FontNormal12"/>
+                            <Label ID="SLTHRELDescTitle" Anchor="C,T" Offset="0,10" WrapWidth="184" Style="FontFlair16" SmallCaps="18"
+                                   Color0="58,99,131,255" Color1="0,0,0,0" Color2="78,119,151,255"/>
+                            <Image ID="SLTHRELDescImage" Anchor="C,T" Offset="0,36" Size="80,80" Texture="Governments_DarkCard"/>
+                            <Label ID="SLTHRELDesc" Anchor="L,T" Offset="13,120" WrapWidth="184" Style="FontNormal12"/>
                         </Grid>
                     </Container>
 
