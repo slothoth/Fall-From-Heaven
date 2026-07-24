@@ -9,31 +9,36 @@
     <Container ID="MainContainer" Anchor="C,C" Size="1360,720">
         <Image ConsumeMouse="1" Anchor="C,C" Size="parent,parent" Texture="Wood_Pattern" StretchMode="Tile"/>
 
+                <!-- Columns live in a horizontal scroll panel so they can grow up to the modal
+                     width cap and then scroll instead of overflowing. Its Size is set in Lua
+                     (BuildCategoryColumns width, ApplyUniformColumnHeights height). -->
+                <ScrollPanel ID="ColumnsScroller" Anchor="C,T" Offset="0,0" Size="parent,parent"
+                             Horizontal="1" AutoScrollBar="1" FullClip="1">
                 <!-- FFH single-policy-per-category picker: far-left governments column + confirm,
                      then one column per policy category (title / policy listbox / description). -->
-                <Stack ID="MainColumns" Anchor="C,T" Offset="0,0" StackGrowth="Right" StackPadding="10,0">
+                <Stack ID="MainColumns" Anchor="L,T" Offset="0,0" StackGrowth="Right" StackPadding="10,0">
 
                     <!-- Far-left: Governments list + Confirm button -->
                     <Container ID="GovernmentColumn" Size="210,648">
                         <Image ID="GovParchment" Offset="-25, 0" Size="240,parent+72" Texture="Parchment_Pattern" StretchMode="Tile"/>
 
-                        <Grid ID="GovernmentSlot" Anchor="C,T" Offset="-20,44" Size="210,parent-68" >
+                        <Grid ID="GovernmentSlot" Anchor="C,T" Offset="0,44" Size="210,parent-68" >
                             <ScrollPanel ID="GovernmentListScroller" Anchor="C,T" Offset="0,0" Size="parent,parent-58" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
-                                <Stack ID="GovernmentListStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
+                                <Stack ID="GovernmentListStack" Offset="4,4" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="-16,0" Style="ScrollVerticalBar"
                                            Size="8,parent-10"/>
                             </ScrollPanel>
                         </Grid>
-                        <GridButton ID="ConfirmPolicies" Anchor="C,B" Offset="0,0" Size="200,41" Style="ButtonConfirm"
+                        <GridButton ID="ConfirmPolicies" Anchor="C,B" Offset="4,0" Size="200,41" Style="ButtonConfirm"
                                     DisabledCallbacks="1"/>
                     </Container>
 
-                    <!-- The five policy-category columns (Military/Economic/Diplomatic/Culture/
-                         Religion) are identical in structure, so they are built at runtime from
-                         the PolicyCategoryColumn instance below; see BuildCategoryColumns(). -->
+                    <!-- The policy-category columns are built at runtime -->
 
                 </Stack>
+                    <ScrollBar Style="ScrollHorizontalBar" Anchor="C,B" AnchorSide="I,I" Offset="0,0" Size="parent-20,8"/>
+                </ScrollPanel>
 
                 <!-- Modal chrome: gold ScreenFrame + title bar + close (X) button + yields bar.
                      Sized to the modal (parent,parent) so the gold frame wraps the content. -->
@@ -47,20 +52,20 @@
 
     <!-- One policy category column: decorative slot frame (title + policy listbox +
          selector pointer) above a description card. Built five times by BuildCategoryColumns();
-         the per-category watermark/title/policy-texture are applied in Lua. Single root. -->
+         the per-category watermark/title/policy-texture are applied in Lua. -->
     <Instance Name="PolicyCategoryColumn">
         <Container ID="Root" Size="210,584">
-            <Grid ID="Slot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
+            <Grid ID="Slot" Anchor="C,T" Offset="0,40" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                 <Label ID="Title" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
-                <Image ID="Watermark" Anchor="C,T" Offset="0,250" Size="185,81" Texture="Governments_WatermarkMilitary" StretchMode="Fill" Color="GovWaterMark"/>
-                <ScrollPanel ID="ListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,280" Vertical="1"
+                <Image ID="Watermark" Anchor="C,T" Offset="0,250" Size="parent-25,parent-275" Texture="Governments_WatermarkMilitary" StretchMode="Fill" Color="GovWaterMark"/>
+                <ScrollPanel ID="ListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,parent-76" Vertical="1"
                              AutoScrollBar="1" FullClip="1">
                     <Stack ID="PolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
-                    <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar" Size="8,parent-10"/>
+                    <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="28,0" Style="ScrollVerticalBar" Size="8,parent-10"/>
                 </ScrollPanel>
-                <Image ID="Pointer" Anchor="C,T" Offset="0,328" Size="173,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
+                <Image ID="Pointer" Anchor="C,T" Offset="0,328" Size="parent-38,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
             </Grid>
-            <Grid ID="DescCard" Anchor="C,T" Offset="0,364" Size="210,300" Texture="Governments_Backing" SliceCorner="15,20"
+            <Grid ID="DescCard" Anchor="C,T" Offset="0,400" Size="parent,300" Texture="Governments_Backing" SliceCorner="15,20"
                   SliceSize="322,105" SliceTextureSize="352,145">
                 <Label ID="DescTitle" Anchor="C,T" Offset="0,16" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
                 <Container Size="206,93" Anchor="C,T" Offset="0,40">

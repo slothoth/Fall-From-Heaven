@@ -35,27 +35,12 @@ local ROW_SLOT_TYPES = {};		-- uiRow (1..N) -> slot type string, in GovernmentSl
 ---@type table
 local SLOT_TYPE_TO_ROW = {};	-- slot type string -> uiRow
 ---@type table
-local SLOT_ORDER_IN_CATALOG = {
-	SLOT_MILITARY		= 1,
-	SLOT_ECONOMIC		= 2,
-	SLOT_DIPLOMATIC		= 3,
-	SLOT_GREAT_PERSON	= 4,
-	SLOT_SLTHCUL		= 5,
-	SLOT_SLTHREL		= 6,
-};
+-- slot type -> catalog sort order. Built at runtime from GameInfo.GovernmentSlots (see
+-- PopulateStaticData) so it works for any mod's slot types, not a hardcoded set.
+local SLOT_ORDER_IN_CATALOG = {};
 
 ---@type string
 local EMPTY_POLICY_TYPE = "empty";					-- For a policy slot without a type
----@type string
-local PIC_CARD_TYPE_DIPLOMACY = "Governments_DiplomacyCard";
----@type string
-local PIC_CARD_TYPE_ECONOMIC = "Governments_EconomicCard";
----@type string
-local PIC_CARD_TYPE_MILITARY = "Governments_MilitaryCard";
----@type string
-local PIC_CARD_TYPE_SLTHCUL = "Governments_WildcardCard";
----@type string
-local PIC_CARD_TYPE_SLTHREL = "Governments_DarkCard";
 
 ---@type table
 local SCREEN_ENUMS = {
@@ -64,6 +49,12 @@ local SCREEN_ENUMS = {
 		POLICIES		= 3
 }
 local SIZE_MIN_SPEC_X = 1024;
+-- Hard caps on how big the modal may grow. Past these, the columns scroll horizontally and
+-- the per-column policy lists scroll vertically instead of the modal expanding further.
+---@type number
+local MODAL_MAX_W = 1860;
+---@type number
+local MODAL_MAX_H = 900;
 ---@type string
 local TXT_GOV_ASSIGN_POLICIES = Locale.Lookup("LOC_GOVT_ASSIGN_ALL_POLICIES");
 ---@type string
@@ -86,8 +77,6 @@ local POLICY_REQUIRES = {
 local COLOR_GOVT_UNSELECTED	= UI.GetColorValueFromHexLiteral(0xffe9dfc7); -- Background for unselected background (or forground text color on non-selected).
 ---@type number
 local COLOR_GOVT_SELECTED	= UI.GetColorValueFromHexLiteral(0xff261407); -- Background for selected background (or forground text color on non-selected).
----@type number
-local COLOR_GOVT_LOCKED		= UI.GetColorValueFromHexLiteral(0xffAAAAAA)
 
 -- ===========================================================================
 --	GLOBALS
@@ -107,15 +96,6 @@ m_kNewPoliciesThisTurn = nil;
 
 ---@type number
 local m_TopPanelConsideredHeight = 0;
----@type table
-local m_policyCardIM = InstanceManager:new("PolicyCard",					"Content",	Controls.PolicyCatalog);
-m_policyCardTypeIM = {}
-m_policyCardTypeIM['SLOT_MILITARY'] = InstanceManager:new("PolicyCard",					"Content",	Controls.PolicyCatalogLabor);
-m_policyCardTypeIM['SLOT_ECONOMIC'] = InstanceManager:new("PolicyCard",					"Content",	Controls.PolicyCatalogEconomy);
-m_policyCardTypeIM['SLOT_DIPLOMATIC'] = InstanceManager:new("PolicyCard",					"Content",	Controls.PolicyCatalogGovernment);
-m_policyCardTypeIM['SLOT_SLTHCUL'] = InstanceManager:new("PolicyCard",					"Content",	Controls.PolicyCatalogCultural);
-m_policyCardTypeIM['SLOT_SLTHREL'] = InstanceManager:new("PolicyCard",					"Content",	Controls.PolicyCatalogReligion);
-
 ---@type number
 local m_ePlayer	= -1;
 ---@type table
@@ -697,10 +677,12 @@ function SortPolicies( typeA, typeB )
 	local a = m_kPolicyCatalogData[typeA];
 	---@type table
 	local b = m_kPolicyCatalogData[typeB];
+	-- Default to math.huge so a policy whose slot type is not a current GovernmentSlot
+	-- (e.g. a leftover base-game policy on a deleted slot) sorts last instead of erroring.
 	---@type number
-	local v1 = SLOT_ORDER_IN_CATALOG[a.SlotType];
+	local v1 = SLOT_ORDER_IN_CATALOG[a.SlotType] or math.huge;
 	---@type number
-	local v2 = SLOT_ORDER_IN_CATALOG[b.SlotType];
+	local v2 = SLOT_ORDER_IN_CATALOG[b.SlotType] or math.huge;
 	if v1 == v2 then
 		return typeA < typeB;
 	end
@@ -712,6 +694,13 @@ end
 --	all players when viewing the screen.
 -- ===========================================================================
 function PopulateStaticData()
+
+	-- Catalog sort order per slot type, straight from GovernmentSlots (data-driven, so any
+	-- mod's slot types sort correctly instead of relying on a hardcoded list).
+	SLOT_ORDER_IN_CATALOG = {};
+	for slot in GameInfo.GovernmentSlots() do
+		SLOT_ORDER_IN_CATALOG[slot.GovernmentSlotType] = slot.Index;
+	end
 
 	-- Fill in the complete catalog of policies.
 	for row in GameInfo.Policies() do
@@ -1020,11 +1009,13 @@ end
 -- faint watermark (art + its size/offset). The title comes from the slot's own Name.
 ---@type table
 local CATEGORY_DEF = {
-	[0] = { PolicyTexture="Governments_LaborCard_Compact.dds",      Watermark="Governments_WatermarkMilitary", WatermarkOffsetY=250, WatermarkSizeX=185, WatermarkSizeY=81 },
-	[1] = { PolicyTexture="Governments_EconomicCard_Compact.dds",   Watermark="Governments_WatermarkEconomic", WatermarkOffsetY=265, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[0] = { PolicyTexture="Governments_EconomicCard_Compact.dds",   Watermark="Governments_WatermarkEconomic", WatermarkOffsetY=265, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[1] = { PolicyTexture="Governments_MilitaryCard_Compact.dds",   Watermark="Governments_WatermarkMilitary", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
 	[2] = { PolicyTexture="Governments_DiplomaticCard_Compact.dds", Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 },
-	[3] = { PolicyTexture="Governments_MilitaryCard_Compact.dds",   Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
-	[4] = { PolicyTexture="Governments_ReligiousCard_Compact.dds",  Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[3] = { PolicyTexture="Governments_GreatPersonCard_Compact.dds", Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 },
+    [4] = { PolicyTexture="Governments_LaborCard_Compact.dds",      Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=250, WatermarkSizeX=185, WatermarkSizeY=81 },
+	[5] = { PolicyTexture="Governments_ReligiousCard_Compact.dds",  Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[6] = { PolicyTexture="Governments_AdminCard_Compact.dds",  Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
 };
 
 -- Built columns, uiRow -> the instance table (its controls, plus titleKey/PolicyTexture).
@@ -1039,7 +1030,17 @@ local CATEGORY_CONTROLS = {};
 -- LateInitialize. To add/remove/reorder columns, change the GovernmentSlots table in SQL.
 function BuildCategoryColumns()
 	if #ROW_SLOT_TYPES > 0 then return; end		-- already built (guard re-init)
+
+	-- Which slot types actually have at least one policy in the catalog. Slot types with no
+	-- policies get no column (nothing would ever populate them). Runs after PopulateStaticData.
+	---@type table
+	local slotHasPolicy = {};
+	for _, tPolicy in pairs(m_kPolicyCatalogData) do
+		slotHasPolicy[tPolicy.SlotType] = true;
+	end
+
 	for slot in GameInfo.GovernmentSlots() do
+		if slotHasPolicy[slot.GovernmentSlotType] then
 		---@type number
 		local nRowIndex = #ROW_SLOT_TYPES + 1;
 		ROW_SLOT_TYPES[nRowIndex] = slot.GovernmentSlotType;
@@ -1056,13 +1057,20 @@ function BuildCategoryColumns()
 		inst.titleKey = slot.Name;				-- slot's own display name (a LOC key)
 		inst.PolicyTexture = def.PolicyTexture;	-- consumed by RealizeCategoryList
 		CATEGORY_CONTROLS[nRowIndex] = inst;
+		end
 	end
 
-	-- Grow the modal to fit however many columns were generated (government + N categories),
-	-- so the gold frame wraps the content instead of clipping. Measure the stack rather than
-	-- recomputing widths by hand; 50 = the frame margin (~25px each side).
+	-- Width the modal to fit the generated columns (government + N categories), capped at
+	-- MODAL_MAX_W. Past the cap the ColumnsScroller keeps its capped width and the columns
+	-- scroll horizontally. 50 = frame margin (~25px each side). Measure the stack rather than
+	-- recomputing by hand.
 	Controls.MainColumns:CalculateSize();
-	Controls.MainContainer:SetSizeX( Controls.MainColumns:GetSizeX() + 50 );
+	---@type number
+	local MARGIN_X = 50;
+	---@type number
+	local innerW = math.min( Controls.MainColumns:GetSizeX(), MODAL_MAX_W - MARGIN_X );
+	Controls.ColumnsScroller:SetSizeX( innerW );
+	Controls.MainContainer:SetSizeX( innerW + MARGIN_X );
 end
 
 -- Return the single slot for a category (FFH grants one slot per category), or nil.
@@ -1226,6 +1234,8 @@ function RealizeCategoryList( nRowIndex )
 	local uiStack = cc.PolicyStack;
 	uiStack:DestroyAllChildren();
 
+    print('setting title', cc.titleKey)
+    print('setting loc title', Locale.ToUpper(cc.titleKey))
 	cc.Title:SetText( Locale.ToUpper(cc.titleKey) );
 
 	---@type table
@@ -1446,6 +1456,60 @@ function RealizeConfirmButton()
 	Controls.ConfirmPolicies:SetText( hasChanges and TXT_GOV_CONFIRM_POLICIES or TXT_GOV_ASSIGN_POLICIES );
 end
 
+-- Grow every category column's listbox to fit the tallest policy list (uniform height, so
+-- the description cards stay aligned), then grow the modal to match. Call AFTER all lists are
+-- realized so their stacks have measured. Geometry constants mirror the PolicyCategoryColumn
+-- instance: listbox starts at y=54, has 22px of frame below it; the desc card follows 8px
+-- under the slot. LIST_MIN_H keeps it from shrinking below the authored default.
+function ApplyUniformColumnHeights()
+	---@type number
+	local HEADER_H, SLOT_BOTTOM_PAD, DESC_GAP, DESC_CARD_H = 54, 22, 8, 300;
+	---@type number
+	local POINTER_FROM_SLOT_BOTTOM, MODAL_MARGIN_Y, LIST_MIN_H = 28, 56, 280;
+
+	---@type number
+	local maxListH = LIST_MIN_H;
+	for nRowIndex = 1, #ROW_SLOT_TYPES do
+		---@type number
+		local h = CATEGORY_CONTROLS[nRowIndex].PolicyStack:GetSizeY();
+		if h > maxListH then maxListH = h; end
+	end
+
+	-- Cap the listbox height so the modal never grows past MODAL_MAX_H; past the cap the
+	-- per-column lists scroll (ScrollPanel AutoScrollBar) instead. The cap is whatever list
+	-- height leaves the rest of the column (header/footer/gap/desc card) + margin within the max.
+	---@type number
+	local listH_cap = MODAL_MAX_H - MODAL_MARGIN_Y - DESC_GAP - DESC_CARD_H - HEADER_H - SLOT_BOTTOM_PAD;
+	maxListH = math.min( maxListH, math.max( listH_cap, LIST_MIN_H ) );
+
+	---@type number
+	local slotH = HEADER_H + maxListH + SLOT_BOTTOM_PAD;
+	---@type number
+	local rootH = slotH + DESC_GAP + DESC_CARD_H;
+
+	for nRowIndex = 1, #ROW_SLOT_TYPES do
+		---@type table
+		local cc = CATEGORY_CONTROLS[nRowIndex];
+		cc.ListScroller:SetSizeY( maxListH );
+		cc.ListScroller:CalculateSize();		-- reclamp the scrollbar to the new viewport
+		cc.Slot:SetSizeY( slotH );
+		cc.Pointer:SetOffsetY( slotH - POINTER_FROM_SLOT_BOTTOM );
+		cc.DescCard:SetOffsetY( slotH + DESC_GAP );
+		cc.Root:SetSizeY( rootH );
+	end
+
+	-- Keep the government column (and its bottom-anchored Confirm button) the same height.
+	Controls.GovernmentColumn:SetSizeY( rootH );
+
+	-- Grow the modal to the tallest column (MainColumns:GetSizeY() is the max child height),
+	-- capped via maxListH above. The scroll panel wrapping the columns matches that height.
+	Controls.MainColumns:CalculateSize();
+	---@type number
+	local contentH = Controls.MainColumns:GetSizeY();
+	Controls.ColumnsScroller:SetSizeY( contentH );
+	Controls.MainContainer:SetSizeY( contentH + MODAL_MARGIN_Y );
+end
+
 -- Rebuild the whole screen from the staged model.
 function RealizeAll()
 	RealizeGovernmentsList();
@@ -1453,5 +1517,6 @@ function RealizeAll()
 		RealizeCategoryList( nRowIndex );
 	end
 	RealizeConfirmButton();
+	ApplyUniformColumnHeights();			-- fit columns to the tallest list + grow the modal
 	Controls.MainColumns:CalculateSize();	-- re-center the column stack after (re)building
 end
