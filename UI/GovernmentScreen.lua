@@ -1057,6 +1057,12 @@ function BuildCategoryColumns()
 		inst.PolicyTexture = def.PolicyTexture;	-- consumed by RealizeCategoryList
 		CATEGORY_CONTROLS[nRowIndex] = inst;
 	end
+
+	-- Grow the modal to fit however many columns were generated (government + N categories),
+	-- so the gold frame wraps the content instead of clipping. Measure the stack rather than
+	-- recomputing widths by hand; 50 = the frame margin (~25px each side).
+	Controls.MainColumns:CalculateSize();
+	Controls.MainContainer:SetSizeX( Controls.MainColumns:GetSizeX() + 50 );
 end
 
 -- Return the single slot for a category (FFH grants one slot per category), or nil.
