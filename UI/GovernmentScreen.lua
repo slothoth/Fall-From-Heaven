@@ -65,22 +65,7 @@ local PIC_CARD_TYPE_MILITARY = "Governments_MilitaryCard";
 local PIC_CARD_TYPE_SLTHCUL = "Governments_WildcardCard";
 ---@type string
 local PIC_CARD_TYPE_SLTHREL = "Governments_DarkCard";
-local PICS_SLOT_TYPE_CARD_BGS  = {
-	SLOT_MILITARY		= PIC_CARD_TYPE_MILITARY,
-	SLOT_ECONOMIC		= PIC_CARD_TYPE_ECONOMIC,
-	SLOT_DIPLOMATIC		= PIC_CARD_TYPE_DIPLOMACY,
-	SLOT_SLTHCUL		= PIC_CARD_TYPE_SLTHCUL,
-	SLOT_GREAT_PERSON	= PIC_CARD_TYPE_SLTHCUL, -- Great person is also utilized as a wild card.
-	SLOT_SLTHREL		= PIC_CARD_TYPE_SLTHREL,		-- same as diplo
-};
 
----@type table
-local IMG_POLICYCARD_BY_ROWIDX = {};
-	IMG_POLICYCARD_BY_ROWIDX[ROW_INDEX.MILITARY] = PIC_CARD_TYPE_MILITARY;
-	IMG_POLICYCARD_BY_ROWIDX[ROW_INDEX.ECONOMIC] = PIC_CARD_TYPE_ECONOMIC;
-	IMG_POLICYCARD_BY_ROWIDX[ROW_INDEX.DIPLOMAT] = PIC_CARD_TYPE_DIPLOMACY;
-	IMG_POLICYCARD_BY_ROWIDX[ROW_INDEX.SLTHCUL] = PIC_CARD_TYPE_SLTHCUL;
-	IMG_POLICYCARD_BY_ROWIDX[ROW_INDEX.SLTHREL] = PIC_CARD_TYPE_DIPLOMACY;
 ---@type table
 local SCREEN_ENUMS = {
 		MY_GOVERNMENT	= 1,
@@ -97,14 +82,7 @@ local TXT_GOV_POPUP_PROMPT_POLICIES_CLOSE = Locale.Lookup("LOC_GOVT_POPUP_PROMPT
 ---@type string
 local TXT_GOV_POPUP_PROMPT_POLICIES_CONFIRM = Locale.Lookup("LOC_GOVT_POPUP_PROMPT_POLICIES_CONFIRM");
 
--- Cross-category policy prerequisites (UI-side gate). A dependent policy may only be
--- staged while its required policy is BOTH committed (active in gamecore now) AND still
--- staged in its slot. This mirrors the gameplay bans in Core/Governments.sql, which are
--- capital-plot-property based and therefore lag a turn: the engine will not grant a
--- dependent in the same RequestPolicyChanges batch that first slots its prerequisite,
--- and it auto-drops a dependent once the prerequisite is removed. Enforcing it here stops
--- the player staging a change the engine would silently reject. See [[civ6-state-religion-bans]].
--- (Single level only -- religion -> economic; nothing depends on the economic policies.)
+
 ---@type table
 local POLICY_REQUIRES = {
 	["SLTH_POLICY_SACRIFICE_THE_WEAK"] = "SLTH_POLICY_STATE_VEIL",
@@ -124,6 +102,7 @@ local COLOR_GOVT_LOCKED		= UI.GetColorValueFromHexLiteral(0xffAAAAAA)
 --	GLOBALS
 -- ===========================================================================
 g_kGovernments = {};
+g_kGovernmentTierSorting = {};	-- GovernmentTiers.TierType -> Sorting (built in PopulateStaticData)
 g_kCurrentGovernment = nil;
 g_isMyGovtTabDirty = false;
 g_isGovtTabDirty = false;
@@ -813,12 +792,20 @@ function PopulateStaticData()
 			Hash					= GameInfo.Types[row.GovernmentType].Hash,
 			Index					= row.Index,
 			Name					= row.Name,
+			Tier					= row.Tier,		-- GovernmentTiers.TierType (may be nil -> ungrouped, sorts to top)
 			NumSlotMilitary			= slotMilitary,
 			NumSlotEconomic			= slotEconomic,
 			NumSlotDiplomatic		= slotDiplomatic,
 			NumSlotSLTHCUL			= slotSLTHCUL,
 			NumSlotSLTHREL		= slotSLTHREL
 		}
+	end
+
+	-- GovernmentTiers has no single "tier number" we can read off a Government row, so map
+	-- each TierType to its Sorting here and use that to order/segment the list.
+	g_kGovernmentTierSorting = {};
+	for tierRow in GameInfo.GovernmentTiers() do
+		g_kGovernmentTierSorting[tierRow.TierType] = tierRow.Sorting;
 	end
 end
 
@@ -1042,11 +1029,11 @@ end
 -- Maps each policy category (ROW_INDEX) to its column control IDs in the new XML.
 ---@type table
 local CATEGORY_CONTROLS = {};
-CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   descTitle="MilitaryDescTitle",   descImage="MilitaryDescImage",   descCard="MilitaryDescCard",   titleKey="LOC_SLOT_MILITARY_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   descTitle="EconomicDescTitle",   descImage="EconomicDescImage",   descCard="EconomicDescCard",   titleKey="LOC_SLOT_ECONOMIC_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", descTitle="DiplomaticDescTitle", descImage="DiplomaticDescImage",   descCard="DiplomaticDescCard", titleKey="LOC_SLOT_DIPLOMATIC_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    descTitle="SLTHCULDescTitle",    descImage="SLTHCULDescImage",   descCard="SLTHCULDescCard",    titleKey="LOC_SLOT_SLTHCUL_NAME" };
-CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    descTitle="SLTHRELDescTitle",    descImage="SLTHRELDescImage",   descCard="SLTHRELDescCard",    titleKey="LOC_SLOT_SLTHREL_NAME" };
+CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   descTitle="MilitaryDescTitle",   descImage="MilitaryDescImage",   descCard="MilitaryDescCard",   titleKey="LOC_SLOT_MILITARY_NAME", PolicyTexture="Governments_LaborCard_Compact.dds" };
+CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   descTitle="EconomicDescTitle",   descImage="EconomicDescImage",   descCard="EconomicDescCard",   titleKey="LOC_SLOT_ECONOMIC_NAME", PolicyTexture="Governments_EconomicCard_Compact.dds" };
+CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", descTitle="DiplomaticDescTitle", descImage="DiplomaticDescImage",   descCard="DiplomaticDescCard", titleKey="LOC_SLOT_DIPLOMATIC_NAME", PolicyTexture="Governments_DiplomaticCard_Compact.dds"  };
+CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    descTitle="SLTHCULDescTitle",    descImage="SLTHCULDescImage",   descCard="SLTHCULDescCard",    titleKey="LOC_SLOT_SLTHCUL_NAME", PolicyTexture="Governments_MilitaryCard_Compact.dds"  };
+CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    descTitle="SLTHRELDescTitle",    descImage="SLTHRELDescImage",   descCard="SLTHRELDescCard",    titleKey="LOC_SLOT_SLTHREL_NAME", PolicyTexture="Governments_ReligiousCard_Compact.dds"  };
 
 -- Return the single slot for a category (FFH grants one slot per category), or nil.
 ---@param nRowIndex number
@@ -1240,6 +1227,11 @@ function RealizeCategoryList( nRowIndex )
 			local inst = {};
 			ContextPtr:BuildInstanceForControl( "PolicyNameItem", inst, uiStack );
 			inst.Name:SetText( tPolicy.Name );
+            if isUnlocked then
+                inst.Button:SetTexture(cc.PolicyTexture)
+            else
+                inst.Button:SetTexture("Governments_LockedCard_Compact.dds");
+            end
 			if not isPrereqMet then
 				---@type table
 				local tReq = m_kPolicyCatalogData[ POLICY_REQUIRES[strPolicyType] ];
@@ -1323,19 +1315,53 @@ end
 function RealizeGovernmentsList()
 	Controls.GovernmentListStack:DestroyAllChildren();
 
+	-- Sort key for a government's tier: nil tier -> top (-inf); otherwise the tier's
+	-- Sorting from GovernmentTiers. Governments in the same tier stay contiguous, then
+	-- tie-break by row Index so the segmentation below is clean.
+	---@param strGovType string
+	local function TierSort( strGovType )
+		---@type string
+		local strTier = g_kGovernments[strGovType].Tier;
+		if strTier == nil then return -math.huge; end
+		return g_kGovernmentTierSorting[strTier] or -math.huge;
+	end
+
 	---@type table
 	local kOrder = {};
 	for strGovType,_ in pairs(g_kGovernments) do
 		table.insert( kOrder, strGovType );
 	end
-	table.sort( kOrder, function(a,b) return g_kGovernments[a].Index < g_kGovernments[b].Index; end );
+	table.sort( kOrder, function(a,b)
+		---@type number
+		local sa, sb = TierSort(a), TierSort(b);
+		if sa ~= sb then return sa < sb; end
+		return g_kGovernments[a].Index < g_kGovernments[b].Index;
+	end );
 
 	---@type boolean
 	local canChange = IsAbleToChangeGovernment();
 
+	-- Track the tier we are in so we can drop a divider at each new (non-nil) tier. Null-tier
+	-- governments sit at the very top with no divider.
+	---@type string
+	local strLastTier = nil;
+	---@type number
+	local nTierOrdinal = 0;
+
 	for _,strGovType in ipairs(kOrder) do
 		---@type table
 		local tGov = g_kGovernments[strGovType];
+
+		-- Segment header: entering a new tier group.
+		if tGov.Tier ~= nil and tGov.Tier ~= strLastTier then
+			nTierOrdinal = nTierOrdinal + 1;
+			---@type table
+			local divider = {};
+			ContextPtr:BuildInstanceForControl( "GovernmentTierDivider", divider, Controls.GovernmentListStack );
+			divider.TierLabel:SetText( Locale.ToRomanNumeral(nTierOrdinal) );
+		end
+		strLastTier = tGov.Tier;
+
 		---@type table
 		local inst = {};
 		ContextPtr:BuildInstanceForControl( "GovernmentNameItem", inst, Controls.GovernmentListStack );
@@ -1347,16 +1373,23 @@ function RealizeGovernmentsList()
 		local isUnlocked = m_kUnlockedGovernments[strGovType] == true;
 		inst.Name:SetAlpha( isUnlocked and 1.0 or 0.45 );
 
+		-- Selection is shown by the card art itself (like the policy description card):
+		-- the staged government uses Governments_BackingSelected, all others Backing.
+		-- No hover/highlight overlays.
 		---@type boolean
 		local isStaged = (strGovType == m_StagedGovernment);
-		inst.Highlight:SetHide( not isStaged );
-		-- Active marker: the government in effect now, hidden when it IS the staged pick.
-		inst.Active:SetHide( not (strGovType == m_CommittedGovernment and not isStaged) );
-		inst.Hover:SetHide( true );
-
-		inst.Button:RegisterCallback( Mouse.eMouseEnter, function() inst.Hover:SetHide(false); end );
-		inst.Button:RegisterCallback( Mouse.eMouseExit,  function() inst.Hover:SetHide(true); end );
-
+        if isUnlocked then
+            if isStaged then
+                inst.Name:SetColor( COLOR_GOVT_SELECTED, 0 );
+                inst.Button:SetTexture("Governments_BackingSelected_Card.dds" or "Governments_Backing_Card.dds" );
+            else
+                inst.Name:SetColor( COLOR_GOVT_UNSELECTED, 0 );
+                inst.Button:SetTexture("Governments_Backing_Card.dds" );
+            end
+        else
+            inst.Name:SetColor( COLOR_GOVT_UNSELECTED, 0 );
+            inst.Button:SetTexture("Governments_BackingDisabled_Card.dds" );
+        end
 		if canChange and isUnlocked then
 			inst.Button:RegisterCallback( Mouse.eLClick, function()
 				OnGovernmentClicked( strGovType );

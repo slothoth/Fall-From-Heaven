@@ -11,20 +11,17 @@
 
                 <!-- FFH single-policy-per-category picker: far-left governments column + confirm,
                      then one column per policy category (title / policy listbox / description). -->
-                <Stack ID="MainColumns" Anchor="C,T" Offset="0,56" StackGrowth="Right" StackPadding="10,0">
+                <Stack ID="MainColumns" Anchor="C,T" Offset="0,0" StackGrowth="Right" StackPadding="10,0">
 
-                    <!-- Far-left: Governments list (display-only) + Confirm button -->
-                    <Container ID="GovernmentColumn" Size="210,584">
-                        <Image ID="GovParchment" Offset="-25,0" Size="240,665" Texture="Parchment_Pattern" StretchMode="Tile"/>
+                    <!-- Far-left: Governments list + Confirm button -->
+                    <Container ID="GovernmentColumn" Size="210,648">
+                        <Image ID="GovParchment" Offset="-25, 0" Size="240,parent+72" Texture="Parchment_Pattern" StretchMode="Tile"/>
 
-                        <Grid ID="GovernmentSlot" Anchor="C,T" Offset="0,0" Size="210,516" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
-                            <Label ID="GovernmentColumnTitle" Anchor="C,T" Offset="0,22" Style="FontFlair16" SmallCaps="20"
-                                   String="{LOC_GOVERNMENTS:upper}" Color0="58,99,131,255" Color1="0,0,0,0"
-                                   Color2="78,119,151,255"/>
-                            <ScrollPanel ID="GovernmentListScroller" Anchor="C,T" Offset="0,44" Size="parent-16,458" Vertical="1"
+                        <Grid ID="GovernmentSlot" Anchor="C,T" Offset="-20,44" Size="210,parent-68" >
+                            <ScrollPanel ID="GovernmentListScroller" Anchor="C,T" Offset="0,0" Size="parent,parent-58" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="GovernmentListStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
-                                <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
+                                <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="-16,0" Style="ScrollVerticalBar"
                                            Size="8,parent-10"/>
                             </ScrollPanel>
                         </Grid>
@@ -39,7 +36,7 @@
                         <Grid ID="MilitarySlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="MilitaryTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
                             <Image ID="MilitaryWatermark" Anchor="C,T" Offset="0,250" Size="185,81" Texture="Governments_WatermarkMilitary" StretchMode="Fill" Color="GovWaterMark"/>
-                            <ScrollPanel ID="MilitaryListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="MilitaryListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,280" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="MilitaryPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -67,7 +64,7 @@
                         <Grid ID="EconomicSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="EconomicTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
                             <Image ID="EconomicWatermark" Anchor="C,T" Offset="0,265" Size="185,62" Texture="Governments_WatermarkEconomic" StretchMode="Fill" Color="GovWaterMark"/>
-                            <ScrollPanel ID="EconomicListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="EconomicListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,280" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="EconomicPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -91,7 +88,7 @@
                         <Grid ID="DiplomaticSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="DiplomaticTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
                             <Image ID="DiplomaticWatermark" Anchor="C,T" Offset="0,255" Size="185,82" Texture="Governments_WatermarkDiplo" StretchMode="Fill" Color="GovWaterMark"/>
-                            <ScrollPanel ID="DiplomaticListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="DiplomaticListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,280" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="DiplomaticPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -115,7 +112,7 @@
                         <Grid ID="SLTHCULSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="SLTHCULTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
                             <Image ID="CultureWatermark" Anchor="C,T" Offset="0,275" Size="185,62" Texture="Governments_WatermarkWildcard" StretchMode="Fill" Color="GovWaterMark"/>
-                            <ScrollPanel ID="SLTHCULListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="SLTHCULListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,280" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="SLTHCULPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -139,7 +136,7 @@
                         <Grid ID="SLTHRELSlot" Anchor="C,T" Offset="0,0" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
                             <Label ID="SLTHRELTitle" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
                             <Image ID="ReligionWatermark" Anchor="C,T" Offset="0,275" Size="185,62" Texture="Governments_WatermarkWildcard" StretchMode="Fill" Color="GovWaterMark"/>
-                            <ScrollPanel ID="SLTHRELListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,300" Vertical="1"
+                            <ScrollPanel ID="SLTHRELListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,280" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="SLTHRELPolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                                 <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="0,0" Style="ScrollVerticalBar"
@@ -175,28 +172,40 @@
         <!-- DisabledCallbacks: locked policies are SetDisabled(true) so they render greyed and
              are not selectable, but they must still fire mouse-enter/exit so hovering one
              previews its description. Without this a disabled button swallows all input. -->
-        <GridButton ID="Button" Size="142,28" Texture="Controls_ButtonControl" DisabledCallbacks="1"
-                    SliceCorner="12,6" SliceSize="1,1" SliceTextureSize="24,24" StateOffsetIncrement="0,24">
+        <!-- StateOffsetIncrement MUST be 0,0: the texture is a flat card, not a vertical
+             state atlas. A non-zero offset makes the disabled state (locked policies,
+             SetDisabled(true)) sample off the texture and render blank. -->
+        <GridButton ID="Button" Anchor="C,C" Size="140,39" Texture="Governments_EconomicCard_Compact.dds" DisabledCallbacks="1"
+                    SliceCorner="0,0" SliceSize="0,0" SliceTextureSize="140,39" StateOffsetIncrement="0,0">
             <!-- "Active" = the policy actually slotted in-game right now. Drawn under the
                  others; only shown while it is NOT also the staged selection, so the player
                  can see what is still in effect after picking something new. -->
-            <Box ID="Active" Size="parent,parent" Color="181,145,66,120" Hidden="1"/>
-            <Box ID="Highlight" Size="parent,parent" Color="58,99,131,150" Hidden="1"/>
+            <Image ID="Active" Anchor="C,C" Size="148,44" Texture="Governments_ActiveCard_Small.dds" Hidden="1"/>
+            <Image ID="Highlight" Anchor="C,C" Size="148,44" Texture="Governments_ActiveCard_Small.dds" Hidden="1"/>
             <Box ID="Hover" Size="parent,parent" Color="78,119,151,90" Hidden="1"/>
             <Label ID="Name" Anchor="C,C" Offset="0,0" WrapWidth="176" Style="FontNormal14"/>
         </GridButton>
     </Instance>
 
-    <!-- A selectable government row, styled like PolicyNameItem: Active = the government
-         in effect now, Highlight = the staged pick, Hover = mouse-over. -->
-    <Instance Name="GovernmentNameItem">
-        <GridButton ID="Button" Size="184,28" Texture="Controls_ButtonControl" DisabledCallbacks="1"
-                    SliceCorner="12,6" SliceSize="1,1" SliceTextureSize="24,24" StateOffsetIncrement="0,24">
-            <Box ID="Active" Size="parent,parent" Color="181,145,66,120" Hidden="1"/>
-            <Box ID="Highlight" Size="parent,parent" Color="58,99,131,150" Hidden="1"/>
-            <Box ID="Hover" Size="parent,parent" Color="78,119,151,90" Hidden="1"/>
-            <Label ID="Name" Anchor="C,C" Offset="0,0" WrapWidth="176" Style="FontNormal14"/>
-        </GridButton>
+    <Instance Name="GovernmentTierDivider">
+        <Container ID="Root" Size="208,22">
+            <Label ID="TierLabel" Anchor="C,B" Offset="0,0" Style="TreeEraBigText"/>
+        </Container>
     </Instance>
+
+    <Instance Name="GovernmentNameItem">
+        <Container ID="Root" Size="208,74">
+            <!-- Selection is shown by swapping the button texture (Backing -> BackingSelected) -->
+            <GridButton ID="Button" Anchor="C,T" Size="208,56" Texture="Governments_Backing_Card.dds" DisabledCallbacks="1"
+                SliceCorner="27,27" SliceSize="154,208" SliceTextureSize="208,262">
+                <Label ID="Name" Anchor="C,C" WrapWidth="176"  Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
+                <Container Anchor="L,B" Size="parent,37" Offset="0,5">
+                    <Image ID="ArtLeft" Anchor="L,T" Offset="4,0" Size="31,37" Texture="Governments_Leaf"/>
+                    <Image ID="ArtRight" Anchor="R,T" Offset="4,0" Size="31,37" Texture="Governments_Leaf" FlipX="1"/>
+                </Container>
+            </GridButton>
+        </Container>
+    </Instance>
+
 
 </Context>

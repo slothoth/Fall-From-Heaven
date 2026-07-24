@@ -522,6 +522,25 @@
             <File>UI/UnitPanelSupportSloth.lua</File>
             <File>UI/UnitPromotionPopup.lua</File>
             <File>UI/UnitPromotionPopup.xml</File>
+
+            <File>Textures/Governments_ActiveCard_Small.dds</File>
+            <File>Textures/Governments_AdminCard_Compact.dds</File>
+            <File>Textures/Governments_Backing_Card.dds</File>
+            <File>Textures/Governments_BackingHover_Card.dds</File>
+            <File>Textures/Governments_BackingSelected_Card.dds</File>
+            <File>Textures/Governments_BackingDisabled_Card.dds</File>
+            <File>Textures/Governments_CardSlot_Vertical.dds</File>
+            <File>Textures/Governments_ImageFrame_Small.dds</File>
+            <File>Textures/Governments_SelectedCard_Small.dds</File>
+
+            <File>Textures/Governments_DiplomaticCard_Compact.dds</File>
+            <File>Textures/Governments_EconomicCard_Compact.dds</File>
+            <File>Textures/Governments_GreatPersonCard_Compact.dds</File>
+            <File>Textures/Governments_LaborCard_Compact.dds</File>
+            <File>Textures/Governments_MilitaryCard_Compact.dds</File>
+            <File>Textures/Governments_ReligiousCard_Compact.dds</File>
+            <File>Textures/Governments_LockedCard_Compact.dds</File>
+
         </ImportFiles>
         <ImportFiles id="XP2WRxmlOverride">
             <Properties>
@@ -956,5 +975,22 @@
         <File>Platforms/Windows/Audio/1049129748.wem</File>
         <File>Platforms/Windows/Audio/1054416388.wem</File>
         <File>Platforms/Windows/Audio/1061815146.wem</File>
+        <File>Textures/Governments_ActiveCard_Small.dds</File>
+        <File>Textures/Governments_AdminCard_Compact.dds</File>
+        <File>Textures/Governments_Backing_Card.dds</File>
+        <File>Textures/Governments_BackingHover_Card.dds</File>
+        <File>Textures/Governments_BackingSelected_Card.dds</File>
+        <File>Textures/Governments_CardSlot_Vertical.dds</File>
+        <File>Textures/Governments_ImageFrame_Small.dds</File>
+        <File>Textures/Governments_SelectedCard_Small.dds</File>
+
+        <File>Textures/Governments_DiplomaticCard_Compact.dds</File>
+        <File>Textures/Governments_EconomicCard_Compact.dds</File>
+        <File>Textures/Governments_GreatPersonCard_Compact.dds</File>
+        <File>Textures/Governments_LaborCard_Compact.dds</File>
+        <File>Textures/Governments_MilitaryCard_Compact.dds</File>
+        <File>Textures/Governments_ReligiousCard_Compact.dds</File>
+        <File>Textures/Governments_LockedCard_Compact.dds</File>
+        <File>Textures/Governments_BackingDisabled_Card.dds</File>
     </Files>
 </Mod>
