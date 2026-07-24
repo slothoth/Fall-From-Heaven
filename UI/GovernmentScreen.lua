@@ -13,20 +13,10 @@ print('')
 -- ===========================================================================
 --	CONSTANTS	/ DEFINES
 -- ===========================================================================
-
--- Toggle these based on the game engine rules.
----@type boolean
-local m_isLocalPlayerTurn = true;
-
----@type table
-local SCREEN_ENUMS = { MY_GOVERNMENT	= 1, GOVERNMENTS		= 2, POLICIES		= 3 }
-local SIZE_MIN_SPEC_X = 1024;
 -- Hard caps on how big the modal may grow. Past these, the columns scroll horizontally and
 -- the per-column policy lists scroll vertically instead of the modal expanding further.
 ---@type number
-local MODAL_MAX_W = 1860;
----@type number
-local MODAL_MAX_H = 900;
+local MODAL_MAX_W, MODAL_MAX_H = 1860, 900;
 ---@type string
 local TXT_GOV_ASSIGN_POLICIES = Locale.Lookup("LOC_GOVT_ASSIGN_ALL_POLICIES");
 ---@type string
@@ -35,22 +25,17 @@ local TXT_GOV_CONFIRM_POLICIES = Locale.Lookup("LOC_GOVT_CONFIRM_POLICIES");
 local TXT_GOV_POPUP_PROMPT_POLICIES_CLOSE = Locale.Lookup("LOC_GOVT_POPUP_PROMPT_POLICIES_CLOSE");
 ---@type string
 local TXT_GOV_POPUP_PROMPT_POLICIES_CONFIRM = Locale.Lookup("LOC_GOVT_POPUP_PROMPT_POLICIES_CONFIRM");
-
-
-
 ---@type number
 local COLOR_GOVT_UNSELECTED	= UI.GetColorValueFromHexLiteral(0xffe9dfc7); -- Background for unselected background (or forground text color on non-selected).
 ---@type number
 local COLOR_GOVT_SELECTED	= UI.GetColorValueFromHexLiteral(0xff261407); -- Background for selected background (or forground text color on non-selected).
 
-g_isMyGovtTabDirty = false;
-g_isGovtTabDirty = false;
-g_isPoliciesTabDirty = false;
 
 -- ===========================================================================
 --	VARIABLES
 -- ===========================================================================
-
+---@type boolean
+local m_isLocalPlayerTurn = true;           -- Toggle these based on the game engine rules.
 ---@type number
 local m_TopPanelConsideredHeight = 0;
 ---@type string
@@ -61,27 +46,20 @@ local m_currentCivicType	= nil;
 local m_civicProgress = 0;
 ---@type number
 local m_civicCost	= 0;
-
+---@type boolean
+g_isMyGovtTabDirty, g_isGovtTabDirty, g_isPoliciesTabDirty = false, false, false;
 
 -- ===========================================================================
 --	FUNCTIONS
 -- ===========================================================================
 
-
-
-
--- ===========================================================================
--- Separated into its own function so we wan modify icons in DLC / Expansions
--- ===========================================================================
 function GetPolicyBGTexture(policyType)
 	-- return PICS_SLOT_TYPE_CARD_BGS[GameInfo.Policies[policyType].GovernmentSlotType];
     return 'GOVERNMENT_AUTOCRACY'
 end
 
 function Close()
-
 	if ContextPtr:IsHidden() then return; end
-
 	if Controls.ConfirmPolicies:IsVisible() and Controls.ConfirmPolicies:IsEnabled() then
 		-- Policies confirmation button is enabled (and showing); warn player changes are not saved!
 		---@type table
@@ -104,16 +82,7 @@ function OnClose()
 	Close();
 end
 
-function OnCloseFromLaunchBar()
-	Close();
-end
-
--- ===========================================================================
---	UI Button Callback
---	Solidify the policies which are slotted.
--- ===========================================================================
 function OnConfirmPolicies()
-
 	if Controls.ConfirmPolicies:IsDisabled() then
 		UI.PlaySound("Play_Mouse_Click_Negative");
 		return;
@@ -189,46 +158,14 @@ end
 
 -- ===========================================================================
 --	LUA Event
---	Called to first open the page.          TODO: This doesnt make sense with a single government screen.
--- ===========================================================================
-function OnOpenGovernmentScreenMyGovernment()
-	RefreshAllData();
-	-- Open governments screen by default if player has to select a government
-	if not g_kCurrentGovernment then
-		OnOpenGovernmentScreen( SCREEN_ENUMS.GOVERNMENTS );
-	else
-		OnOpenGovernmentScreen( SCREEN_ENUMS.MY_GOVERNMENT );
-	end
-end
-
--- ===========================================================================
---	LUA Event
 --	Called to first open the page.
 -- ===========================================================================
-function OnOpenGovernmentScreenGovernments()
+function OnOpenGovernmentScreenRefresh()
 	RefreshAllData();
-	OnOpenGovernmentScreen( SCREEN_ENUMS.GOVERNMENTS );
+    OnOpenGovernmentScreen();
 end
 
--- ===========================================================================
---	LUA Event
---	Called to first open the page.
--- ===========================================================================
-function OnOpenGovernmentScreenPolicies()
-	RefreshAllData();
-	if not g_kCurrentGovernment then
-		OnOpenGovernmentScreen( SCREEN_ENUMS.GOVERNMENTS );
-	else
-		OnOpenGovernmentScreen( SCREEN_ENUMS.POLICIES );
-	end
-end
-
--- ===========================================================================
---	LUA Event / DEPRECATED To be called directly (use an open that references the specific screen to see)
---	Called to first open the page.
--- ===========================================================================
----@param screenEnum number
-function OnOpenGovernmentScreen( screenEnum )
+function OnOpenGovernmentScreen()
 	if m_ePlayer ~= -1 then
 
 		UI.PlaySound("UI_Screen_Open");
@@ -244,18 +181,15 @@ function OnOpenGovernmentScreen( screenEnum )
 		else
 			m_currentCivicType = nil;
 		end
-		-- From Civ6_styles: FullScreenVignetteConsumer
 		Controls.ScreenAnimIn:SetToBeginning();
 		Controls.ScreenAnimIn:Play();
 		RealizeAll();
 
-		-- Queue the screen as a popup, but we want it to render at a desired location in the hierarchy, not on top of everything.
 		local kParameters = {};
 		kParameters.RenderAtCurrentParent = true;
 		kParameters.InputAtCurrentParent = true;
 		kParameters.AlwaysVisibleInQueue = true;
 		UIManager:QueuePopup(ContextPtr, PopupPriority.Low, kParameters);
-
 		LuaEvents.Government_OpenGovernment();
 	end
 end
@@ -268,7 +202,6 @@ function RefreshAllData()
 	SnapshotCommittedPolicies();	-- committed state, before any staging
 	SnapshotCommittedGovernment();
 	RealizeAll();
-	-- From ModalScreen_PlayerYieldsHelper
 	if not RefreshYields() then
 		Controls.Vignette:SetSizeY(m_TopPanelConsideredHeight);
 	end
@@ -278,7 +211,7 @@ function RefreshAllData()
 end
 
 -- ===========================================================================
---	Game Engine Event
+--	Game Engine Events
 -- ===========================================================================
 ---@param playerID number
 function OnGovernmentChanged( playerID )
@@ -290,9 +223,6 @@ function OnGovernmentChanged( playerID )
 	end
 end
 
--- ===========================================================================
---	Game Engine Event
--- ===========================================================================
 ---@param playerID number
 function OnGovernmentPolicyChanged( playerID )
 	if ContextPtr:IsVisible() and playerID == m_ePlayer then
@@ -300,9 +230,6 @@ function OnGovernmentPolicyChanged( playerID )
 	end
 end
 
--- ===========================================================================
---	Game Engine Event
--- ===========================================================================
 function OnLocalPlayerTurnBegin()
 	m_isLocalPlayerTurn = true;
 	---@type number
@@ -319,21 +246,16 @@ end
 
 function OnLocalPlayerTurnEnd()
 	m_isLocalPlayerTurn = false;
-
 	if(GameConfiguration.IsHotseat()) then
 		Close();
 	end
 end
 
--- ===========================================================================
 function OnCivicsUnlocked()
 	if ContextPtr:IsHidden() then return; end		-- Autoplay!
 	RefreshAllData();
 end
 
--- ===========================================================================
---	Game Engine Event
--- ===========================================================================
 function OnPhaseBegin()
 	---@type number
 	local ePlayer = Game.GetLocalPlayer();
@@ -347,9 +269,6 @@ function OnPhaseBegin()
 	end
 end
 
--- ===========================================================================
---	Game Engine Event
--- ===========================================================================
 ---@param type number
 ---@param tag string
 ---@param iData1 number
@@ -368,18 +287,15 @@ function ShouldConfirmChanges()
 	return true;
 end
 
--- ===========================================================================
 function LateInitialize()
 	m_TopPanelConsideredHeight = Controls.Vignette:GetSizeY() - TOP_PANEL_OFFSET;
-
 	PopulateStaticData();			-- Obtain unchanging, static data from game core
 	BuildCategoryColumns();			-- Build the 5 category columns from the shared instance
-
 	m_ePlayer = Game.GetLocalPlayer();
 end
 
 -- ===========================================================================
---	UI Event
+--	UI Events
 -- ===========================================================================
 ---@param isReload boolean
 function OnInit( isReload )
@@ -389,20 +305,17 @@ function OnInit( isReload )
 	end
 end
 
--- ===========================================================================
---	UI EVENT
--- ===========================================================================
 function OnShutdown()
 	-- Clear Lua Events
-	LuaEvents.LaunchBar_CloseGovernmentPanel.Remove( OnCloseFromLaunchBar );
+	LuaEvents.LaunchBar_CloseGovernmentPanel.Remove( OnClose );
 	LuaEvents.GameDebug_Return.Remove( OnGameDebugReturn );
-	LuaEvents.NotificationPanel_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenGovernments );
-	LuaEvents.NotificationPanel_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenPolicies );
-	LuaEvents.LaunchBar_GovernmentOpenMyGovernment.Remove( OnOpenGovernmentScreenMyGovernment );
-	LuaEvents.LaunchBar_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenGovernments );
-	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenGovernments );
-	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenPolicies );
-	LuaEvents.Advisor_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenPolicies );
+	LuaEvents.NotificationPanel_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenRefresh );
+	LuaEvents.NotificationPanel_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenRefresh );
+	LuaEvents.LaunchBar_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenRefresh );
+	LuaEvents.LaunchBar_GovernmentOpenMyGovernment.Remove( OnOpenGovernmentScreenRefresh );
+	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenRefresh );
+	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenRefresh );
+	LuaEvents.Advisor_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenRefresh );
 
 end
 
@@ -475,15 +388,15 @@ function Initialize()
 	Events.SystemUpdateUI.Add( OnUpdateUI );
 
 	-- Lua Events
-	LuaEvents.LaunchBar_CloseGovernmentPanel.Add( OnCloseFromLaunchBar );
+	LuaEvents.LaunchBar_CloseGovernmentPanel.Add( OnClose );
 	LuaEvents.GameDebug_Return.Add( OnGameDebugReturn );
-	LuaEvents.NotificationPanel_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );
-	LuaEvents.NotificationPanel_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
-	LuaEvents.LaunchBar_GovernmentOpenMyGovernment.Add( OnOpenGovernmentScreenMyGovernment );
-	LuaEvents.LaunchBar_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );
-	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenGovernments );
-	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
-	LuaEvents.Advisor_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenPolicies );
+	LuaEvents.NotificationPanel_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenRefresh );
+	LuaEvents.NotificationPanel_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenRefresh );
+	LuaEvents.LaunchBar_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenRefresh );
+	LuaEvents.LaunchBar_GovernmentOpenMyGovernment.Add( OnOpenGovernmentScreenRefresh );	-- normal launchbar click
+	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Add( OnOpenGovernmentScreenRefresh );
+	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenRefresh );
+	LuaEvents.Advisor_GovernmentOpenPolicies.Add( OnOpenGovernmentScreenRefresh );
 end
 if HasCapability("CAPABILITY_GOVERNMENTS_VIEW") then
 	Initialize();

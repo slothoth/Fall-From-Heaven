@@ -22,7 +22,7 @@
                     <Container ID="GovernmentColumn" Size="210,648">
                         <Image ID="GovParchment" Offset="-25, 0" Size="240,parent+72" Texture="Parchment_Pattern" StretchMode="Tile"/>
 
-                        <Grid ID="GovernmentSlot" Anchor="C,T" Offset="0,44" Size="210,parent-68" >
+                        <Grid ID="GovernmentSlot" Anchor="C,T" Offset="0,44" Size="210,parent-28" >
                             <ScrollPanel ID="GovernmentListScroller" Anchor="C,T" Offset="0,0" Size="parent,parent-58" Vertical="1"
                                          AutoScrollBar="1" FullClip="1">
                                 <Stack ID="GovernmentListStack" Offset="4,4" StackGrowth="Down" StackPadding="0,2"/>
