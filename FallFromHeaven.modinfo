@@ -513,6 +513,7 @@
             <File>UI/CityBannerManager.xml</File>
             <File>UI/CivicsTree.xml</File>
             <File>UI/CivicsTree.lua</File>
+            <File>UI/GovernmentScreen_Model.lua</File>
             <File>UI/GovernmentScreen.lua</File>
             <File>UI/GovernmentScreen.xml</File>
             <File>UI/TabSupport.lua</File>
@@ -823,6 +824,7 @@
         <File>UI/FFH_TopPanel_XP2.lua</File>
         <File>UI/GovernmentScreen.lua</File>
         <File>UI/GovernmentScreen.xml</File>
+        <File>UI/GovernmentScreen_Model.lua</File>
         <File>UI/ModalScreen_PlayerYieldsHelper.lua</File>
         <File>UI/ReportScreen.lua</File>
         <File>UI/ResearchChooser_overrides.lua</File>
