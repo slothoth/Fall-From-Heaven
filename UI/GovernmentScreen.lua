@@ -901,6 +901,7 @@ function LateInitialize()
 	m_TopPanelConsideredHeight = Controls.Vignette:GetSizeY() - TOP_PANEL_OFFSET;
 
 	PopulateStaticData();			-- Obtain unchanging, static data from game core
+	BuildCategoryColumns();			-- Build the 5 category columns from the shared instance
 
 	m_ePlayer = Game.GetLocalPlayer();
 end
@@ -1026,14 +1027,40 @@ end
 -- ===========================================================================
 -- ===========================================================================
 
--- Maps each policy category (ROW_INDEX) to its column control IDs in the new XML.
+-- Per-category configuration for the columns built from the PolicyCategoryColumn instance.
+-- The columns are structurally identical, so only what differs lives here: the title, the
+-- policy-row texture, and the faint watermark (art + its size/offset in the slot frame).
+---@type table
+local CATEGORY_DEF = {};
+CATEGORY_DEF[ROW_INDEX.MILITARY] = { titleKey="LOC_SLOT_MILITARY_NAME",   PolicyTexture="Governments_LaborCard_Compact.dds",      Watermark="Governments_WatermarkMilitary", WatermarkOffsetY=250, WatermarkSizeX=185, WatermarkSizeY=81 };
+CATEGORY_DEF[ROW_INDEX.ECONOMIC] = { titleKey="LOC_SLOT_ECONOMIC_NAME",   PolicyTexture="Governments_EconomicCard_Compact.dds",   Watermark="Governments_WatermarkEconomic", WatermarkOffsetY=265, WatermarkSizeX=185, WatermarkSizeY=62 };
+CATEGORY_DEF[ROW_INDEX.DIPLOMAT] = { titleKey="LOC_SLOT_DIPLOMATIC_NAME", PolicyTexture="Governments_DiplomaticCard_Compact.dds", Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 };
+CATEGORY_DEF[ROW_INDEX.SLTHCUL]  = { titleKey="LOC_SLOT_SLTHCUL_NAME",    PolicyTexture="Governments_MilitaryCard_Compact.dds",   Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 };
+CATEGORY_DEF[ROW_INDEX.SLTHREL]  = { titleKey="LOC_SLOT_SLTHREL_NAME",    PolicyTexture="Governments_ReligiousCard_Compact.dds",  Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 };
+
+-- Built columns, ROW_INDEX -> the instance table (its controls, plus titleKey/PolicyTexture
+-- copied from CATEGORY_DEF). Populated by BuildCategoryColumns.
 ---@type table
 local CATEGORY_CONTROLS = {};
-CATEGORY_CONTROLS[ROW_INDEX.MILITARY] = { title="MilitaryTitle",   scroller="MilitaryListScroller",   stack="MilitaryPolicyStack",   desc="MilitaryDesc",   descTitle="MilitaryDescTitle",   descImage="MilitaryDescImage",   descCard="MilitaryDescCard",   titleKey="LOC_SLOT_MILITARY_NAME", PolicyTexture="Governments_LaborCard_Compact.dds" };
-CATEGORY_CONTROLS[ROW_INDEX.ECONOMIC] = { title="EconomicTitle",   scroller="EconomicListScroller",   stack="EconomicPolicyStack",   desc="EconomicDesc",   descTitle="EconomicDescTitle",   descImage="EconomicDescImage",   descCard="EconomicDescCard",   titleKey="LOC_SLOT_ECONOMIC_NAME", PolicyTexture="Governments_EconomicCard_Compact.dds" };
-CATEGORY_CONTROLS[ROW_INDEX.DIPLOMAT] = { title="DiplomaticTitle", scroller="DiplomaticListScroller", stack="DiplomaticPolicyStack", desc="DiplomaticDesc", descTitle="DiplomaticDescTitle", descImage="DiplomaticDescImage",   descCard="DiplomaticDescCard", titleKey="LOC_SLOT_DIPLOMATIC_NAME", PolicyTexture="Governments_DiplomaticCard_Compact.dds"  };
-CATEGORY_CONTROLS[ROW_INDEX.SLTHCUL]  = { title="SLTHCULTitle",    scroller="SLTHCULListScroller",    stack="SLTHCULPolicyStack",    desc="SLTHCULDesc",    descTitle="SLTHCULDescTitle",    descImage="SLTHCULDescImage",   descCard="SLTHCULDescCard",    titleKey="LOC_SLOT_SLTHCUL_NAME", PolicyTexture="Governments_MilitaryCard_Compact.dds"  };
-CATEGORY_CONTROLS[ROW_INDEX.SLTHREL]  = { title="SLTHRELTitle",    scroller="SLTHRELListScroller",    stack="SLTHRELPolicyStack",    desc="SLTHRELDesc",    descTitle="SLTHRELDescTitle",    descImage="SLTHRELDescImage",   descCard="SLTHRELDescCard",    titleKey="LOC_SLOT_SLTHREL_NAME", PolicyTexture="Governments_ReligiousCard_Compact.dds"  };
+
+-- Build the five category columns from the PolicyCategoryColumn instance into MainColumns
+-- (after the government column, which is authored in XML). Called once from LateInitialize.
+function BuildCategoryColumns()
+	if CATEGORY_CONTROLS[ROW_INDEX.MILITARY] ~= nil then return; end	-- already built (guard re-init)
+	for nRowIndex = 1, 5 do
+		---@type table
+		local def = CATEGORY_DEF[nRowIndex];
+		---@type table
+		local inst = {};
+		ContextPtr:BuildInstanceForControl( "PolicyCategoryColumn", inst, Controls.MainColumns );
+		inst.Watermark:SetTexture( def.Watermark );
+		inst.Watermark:SetSizeVal( def.WatermarkSizeX, def.WatermarkSizeY );
+		inst.Watermark:SetOffsetVal( 0, def.WatermarkOffsetY );
+		inst.titleKey = def.titleKey;			-- consumed by RealizeCategoryList
+		inst.PolicyTexture = def.PolicyTexture;	-- consumed by RealizeCategoryList
+		CATEGORY_CONTROLS[nRowIndex] = inst;
+	end
+end
 
 -- Return the single slot for a category (FFH grants one slot per category), or nil.
 ---@param nRowIndex number
@@ -1118,10 +1145,10 @@ end
 function RealizeDescriptionCard( cc, strPolicyType )
 	---@type table
 	local tPolicy = m_kPolicyCatalogData[strPolicyType];
-	Controls[cc.descTitle]:SetText( tPolicy.Name );
-	Controls[cc.descImage]:SetTexture( GetPolicyBGTexture(strPolicyType) );
-	Controls[cc.descImage]:SetHide( false );
-	Controls[cc.desc]:SetText( tPolicy.Description );
+	cc.DescTitle:SetText( tPolicy.Name );
+	cc.DescImage:SetTexture( GetPolicyBGTexture(strPolicyType) );
+	cc.DescImage:SetHide( false );
+	cc.Desc:SetText( tPolicy.Description );
 end
 
 ---@param nRowIndex number
@@ -1134,12 +1161,12 @@ end
 ---@param cc table
 ---@param isProposed boolean
 function SetDescCardState( cc, isProposed )
-	Controls[cc.descCard]:SetTexture( isProposed
+	cc.DescCard:SetTexture( isProposed
 		and "Governments_BackingSelected" or "Governments_Backing" );
 	---@type number
 	local uiTextColor = isProposed and COLOR_GOVT_SELECTED or COLOR_GOVT_UNSELECTED;
-	Controls[cc.descTitle]:SetColor( uiTextColor, 0 );
-	Controls[cc.desc]:SetColor( uiTextColor );
+	cc.DescTitle:SetColor( uiTextColor, 0 );
+	cc.Desc:SetColor( uiTextColor );
 end
 
 function RealizeCategoryDescription( nRowIndex )
@@ -1158,10 +1185,10 @@ function RealizeCategoryDescription( nRowIndex )
 		-- Empty slot (nothing staged, e.g. bumped off a policy by a prerequisite change).
 		-- Show a clear "Unselected Policy" state but keep the card image as a populated card
 		-- would (GetPolicyBGTexture is the same call the filled branch uses), not blanked.
-		Controls[cc.descTitle]:SetText( "Unselected Policy" );
-		Controls[cc.descImage]:SetTexture( GetPolicyBGTexture(strSelected) );
-		Controls[cc.descImage]:SetHide( false );
-		Controls[cc.desc]:SetText( "" );
+		cc.DescTitle:SetText( "Unselected Policy" );
+		cc.DescImage:SetTexture( GetPolicyBGTexture(strSelected) );
+		cc.DescImage:SetHide( false );
+		cc.Desc:SetText( "" );
 	end
 end
 
@@ -1193,10 +1220,10 @@ function RealizeCategoryList( nRowIndex )
 	---@type table
 	local cc = CATEGORY_CONTROLS[nRowIndex];
 	---@type table
-	local uiStack = Controls[cc.stack];
+	local uiStack = cc.PolicyStack;
 	uiStack:DestroyAllChildren();
 
-	Controls[cc.title]:SetText( Locale.ToUpper(cc.titleKey) );
+	cc.Title:SetText( Locale.ToUpper(cc.titleKey) );
 
 	---@type table
 	local tSlot = GetCategorySlot(nRowIndex);
@@ -1275,7 +1302,7 @@ function RealizeCategoryList( nRowIndex )
 	end
 
 	uiStack:CalculateSize();
-	Controls[cc.scroller]:CalculateSize();
+	cc.ListScroller:CalculateSize();
 	RealizeCategoryDescription( nRowIndex );
 end
 

@@ -975,6 +975,7 @@
         <File>Platforms/Windows/Audio/1049129748.wem</File>
         <File>Platforms/Windows/Audio/1054416388.wem</File>
         <File>Platforms/Windows/Audio/1061815146.wem</File>
+        <File>test_govs.xml</File>
         <File>Textures/Governments_ActiveCard_Small.dds</File>
         <File>Textures/Governments_AdminCard_Compact.dds</File>
         <File>Textures/Governments_Backing_Card.dds</File>
