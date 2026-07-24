@@ -28,21 +28,12 @@ local m_isLocalPlayerTurn = true;
 ---@type string
 local DATA_FIELD_CURRENT_FILTER = "_CURRENT_FILTER";
 
+-- Category rows/columns are derived at runtime from GameInfo.GovernmentSlots (one column
+-- per slot type) by BuildCategoryColumns, so nothing here is tied to a specific slot type.
 ---@type table
-local ROW_INDEX = {
-	MILITARY = 1,
-	ECONOMIC = 2,
-	DIPLOMAT = 3, -- yes this is to make the names line up. also required for matching with gamecore.
-	SLTHCUL = 4,
-	SLTHREL = 5,
-};
+local ROW_SLOT_TYPES = {};		-- uiRow (1..N) -> slot type string, in GovernmentSlots order
 ---@type table
-local ROW_SLOT_TYPES = {};
-	ROW_SLOT_TYPES[ROW_INDEX.MILITARY]	= "SLOT_MILITARY";
-	ROW_SLOT_TYPES[ROW_INDEX.ECONOMIC]	= "SLOT_ECONOMIC";
-	ROW_SLOT_TYPES[ROW_INDEX.DIPLOMAT]	= "SLOT_DIPLOMATIC";
-	ROW_SLOT_TYPES[ROW_INDEX.SLTHCUL]	= "SLOT_SLTHCUL";
-	ROW_SLOT_TYPES[ROW_INDEX.SLTHREL]	= "SLOT_SLTHREL";
+local SLOT_TYPE_TO_ROW = {};	-- slot type string -> uiRow
 ---@type table
 local SLOT_ORDER_IN_CATALOG = {
 	SLOT_MILITARY		= 1,
@@ -156,10 +147,10 @@ local m_civicProgress = 0;
 ---@type number
 local m_civicCost	= 0;
 
--- An array of arrays of tables. Contains one entry for each member of ROW_INDEX.
--- m_ActivePolicyRows[ROW_INDEX.MILITARY] is an array of all the slots for the Military row.
+-- An array of arrays of tables. Contains one entry per UI row (1..#ROW_SLOT_TYPES).
+-- m_ActivePolicyRows[nRowIndex] is an array of all the slots for that category row.
 -- Each slot is a "SlotData" table containing UI_RowIndex, GC_SlotIndex, and GC_PolicyType.
--- UI_RowIndex is a value from ROW_INDEX matching the row this slot is in. This should not change.
+-- UI_RowIndex is the row (1..N) this slot is in, per SLOT_TYPE_TO_ROW. This should not change.
 -- GC_SlotIndex is the corresponding GameCore slot index for this slot. This should not change.
 -- GC_PolicyType is the string type of the policy card currently in the slot. It is EMPTY_POLICY_TYPE by default.
 ---@type table
@@ -592,11 +583,9 @@ function PopulateLivePlayerData( ePlayer )
 
 	m_ActivePoliciesByType = {};
 	m_ActivePoliciesBySlot = {};
-	m_ActivePolicyRows[ROW_INDEX.MILITARY] = { SlotArray={} };
-	m_ActivePolicyRows[ROW_INDEX.ECONOMIC] = { SlotArray={} };
-	m_ActivePolicyRows[ROW_INDEX.DIPLOMAT] = { SlotArray={} };
-	m_ActivePolicyRows[ROW_INDEX.SLTHCUL] = { SlotArray={} };
-	m_ActivePolicyRows[ROW_INDEX.SLTHREL] = { SlotArray={} };
+	for nRowIndex = 1, #ROW_SLOT_TYPES do
+		m_ActivePolicyRows[nRowIndex] = { SlotArray={} };
+	end
 
 	---@type number
 	local nPolicySlots = kPlayerCulture:GetNumPolicySlots();
@@ -608,34 +597,32 @@ function PopulateLivePlayerData( ePlayer )
 
 		---@type string
 		local strSlotType = GameInfo.GovernmentSlots[iSlotType].GovernmentSlotType
-		-- strSlotType is of the form SLOT_##NAME##, and we want only the first 8 chars of ##NAME##
-		---@type string
-		local strRowKey = string.sub( strSlotType, 6, 13 );
+		-- Map the gamecore slot to its UI row via the type-> row table built from
+		-- GovernmentSlots. Every slot type has a column, so this should always resolve.
 		---@type number
-		local nRowIndex = ROW_INDEX[strRowKey];
+		local nRowIndex = SLOT_TYPE_TO_ROW[strSlotType];
 
 		if ( nRowIndex == nil ) then
-				assert( false );
-			UI.DataError("On initialization; slot type '"..strSlotType.."' requires key '"..strRowKey.."'");
+			UI.DataError("Government slot type '"..strSlotType.."' has no column (not in GovernmentSlots?)");
+		else
+			---@type table
+			local tSlotData = {
+				-- Static members
+				UI_RowIndex		= nRowIndex,
+				GC_SlotIndex	= i,
+
+				-- Dynamic members
+				GC_PolicyType	= EMPTY_POLICY_TYPE
+			};
+
+			if ( iPolicyID ~= -1 ) then
+				tSlotData.GC_PolicyType = GameInfo.Policies[iPolicyID].PolicyType;
+				m_ActivePoliciesByType[tSlotData.GC_PolicyType] = tSlotData;
+			end
+
+			table.insert( m_ActivePolicyRows[nRowIndex].SlotArray, tSlotData );
+			m_ActivePoliciesBySlot[i+1] = tSlotData;
 		end
-
-		---@type table
-		local tSlotData = {
-			-- Static members
-			UI_RowIndex		= nRowIndex,
-			GC_SlotIndex	= i,
-
-			-- Dynamic members
-			GC_PolicyType	= EMPTY_POLICY_TYPE
-		};
-
-		if ( iPolicyID ~= -1 ) then
-			tSlotData.GC_PolicyType = GameInfo.Policies[iPolicyID].PolicyType;
-			m_ActivePoliciesByType[tSlotData.GC_PolicyType] = tSlotData;
-		end
-
-		table.insert( m_ActivePolicyRows[nRowIndex].SlotArray, tSlotData );
-		m_ActivePoliciesBySlot[i+1] = tSlotData;
 	end
 
 	m_kBonuses = {};
@@ -1027,36 +1014,46 @@ end
 -- ===========================================================================
 -- ===========================================================================
 
--- Per-category configuration for the columns built from the PolicyCategoryColumn instance.
--- The columns are structurally identical, so only what differs lives here: the title, the
--- policy-row texture, and the faint watermark (art + its size/offset in the slot frame).
+-- Generic column "styles", indexed 0..4 (NOT tied to a slot type). Each government slot
+-- picks a style by its GameInfo index; anything past the last defined style falls back to
+-- style 0. Only what differs between columns lives here: the policy-row texture and the
+-- faint watermark (art + its size/offset). The title comes from the slot's own Name.
 ---@type table
-local CATEGORY_DEF = {};
-CATEGORY_DEF[ROW_INDEX.MILITARY] = { titleKey="LOC_SLOT_MILITARY_NAME",   PolicyTexture="Governments_LaborCard_Compact.dds",      Watermark="Governments_WatermarkMilitary", WatermarkOffsetY=250, WatermarkSizeX=185, WatermarkSizeY=81 };
-CATEGORY_DEF[ROW_INDEX.ECONOMIC] = { titleKey="LOC_SLOT_ECONOMIC_NAME",   PolicyTexture="Governments_EconomicCard_Compact.dds",   Watermark="Governments_WatermarkEconomic", WatermarkOffsetY=265, WatermarkSizeX=185, WatermarkSizeY=62 };
-CATEGORY_DEF[ROW_INDEX.DIPLOMAT] = { titleKey="LOC_SLOT_DIPLOMATIC_NAME", PolicyTexture="Governments_DiplomaticCard_Compact.dds", Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 };
-CATEGORY_DEF[ROW_INDEX.SLTHCUL]  = { titleKey="LOC_SLOT_SLTHCUL_NAME",    PolicyTexture="Governments_MilitaryCard_Compact.dds",   Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 };
-CATEGORY_DEF[ROW_INDEX.SLTHREL]  = { titleKey="LOC_SLOT_SLTHREL_NAME",    PolicyTexture="Governments_ReligiousCard_Compact.dds",  Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 };
+local CATEGORY_DEF = {
+	[0] = { PolicyTexture="Governments_LaborCard_Compact.dds",      Watermark="Governments_WatermarkMilitary", WatermarkOffsetY=250, WatermarkSizeX=185, WatermarkSizeY=81 },
+	[1] = { PolicyTexture="Governments_EconomicCard_Compact.dds",   Watermark="Governments_WatermarkEconomic", WatermarkOffsetY=265, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[2] = { PolicyTexture="Governments_DiplomaticCard_Compact.dds", Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 },
+	[3] = { PolicyTexture="Governments_MilitaryCard_Compact.dds",   Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[4] = { PolicyTexture="Governments_ReligiousCard_Compact.dds",  Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
+};
 
--- Built columns, ROW_INDEX -> the instance table (its controls, plus titleKey/PolicyTexture
--- copied from CATEGORY_DEF). Populated by BuildCategoryColumns.
+-- Built columns, uiRow -> the instance table (its controls, plus titleKey/PolicyTexture).
+-- Populated by BuildCategoryColumns.
 ---@type table
 local CATEGORY_CONTROLS = {};
 
--- Build the five category columns from the PolicyCategoryColumn instance into MainColumns
--- (after the government column, which is authored in XML). Called once from LateInitialize.
+-- Build one category column per GameInfo.GovernmentSlots row, into MainColumns (after the
+-- government column authored in XML). This is the single source of the row model: it fills
+-- ROW_SLOT_TYPES / SLOT_TYPE_TO_ROW as it goes. Each slot picks a style from CATEGORY_DEF by
+-- its .Index (default style 0 when the index exceeds the defined styles). Called once from
+-- LateInitialize. To add/remove/reorder columns, change the GovernmentSlots table in SQL.
 function BuildCategoryColumns()
-	if CATEGORY_CONTROLS[ROW_INDEX.MILITARY] ~= nil then return; end	-- already built (guard re-init)
-	for nRowIndex = 1, 5 do
+	if #ROW_SLOT_TYPES > 0 then return; end		-- already built (guard re-init)
+	for slot in GameInfo.GovernmentSlots() do
+		---@type number
+		local nRowIndex = #ROW_SLOT_TYPES + 1;
+		ROW_SLOT_TYPES[nRowIndex] = slot.GovernmentSlotType;
+		SLOT_TYPE_TO_ROW[slot.GovernmentSlotType] = nRowIndex;
+
 		---@type table
-		local def = CATEGORY_DEF[nRowIndex];
+		local def = CATEGORY_DEF[slot.Index] or CATEGORY_DEF[0];
 		---@type table
 		local inst = {};
 		ContextPtr:BuildInstanceForControl( "PolicyCategoryColumn", inst, Controls.MainColumns );
 		inst.Watermark:SetTexture( def.Watermark );
 		inst.Watermark:SetSizeVal( def.WatermarkSizeX, def.WatermarkSizeY );
 		inst.Watermark:SetOffsetVal( 0, def.WatermarkOffsetY );
-		inst.titleKey = def.titleKey;			-- consumed by RealizeCategoryList
+		inst.titleKey = slot.Name;				-- slot's own display name (a LOC key)
 		inst.PolicyTexture = def.PolicyTexture;	-- consumed by RealizeCategoryList
 		CATEGORY_CONTROLS[nRowIndex] = inst;
 	end
@@ -1071,7 +1068,7 @@ local m_CommittedPolicyByRow = {};
 
 function SnapshotCommittedPolicies()
 	m_CommittedPolicyByRow = {};
-	for nRowIndex = 1, 5 do
+	for nRowIndex = 1, #ROW_SLOT_TYPES do
 		---@type table
 		local tSlot = GetCategorySlot(nRowIndex);
 		m_CommittedPolicyByRow[nRowIndex] = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
@@ -1446,7 +1443,7 @@ end
 -- Rebuild the whole screen from the staged model.
 function RealizeAll()
 	RealizeGovernmentsList();
-	for nRowIndex = 1, 5 do
+	for nRowIndex = 1, #ROW_SLOT_TYPES do
 		RealizeCategoryList( nRowIndex );
 	end
 	RealizeConfirmButton();
