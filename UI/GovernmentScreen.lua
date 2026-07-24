@@ -17,6 +17,8 @@ print('')
 -- the per-column policy lists scroll vertically instead of the modal expanding further.
 ---@type number
 local MODAL_MAX_W, MODAL_MAX_H = 1860, 900;
+---@type boolean
+local FFH_EXISTS = (GameInfo.Leaders["LEADER_CAPRIA"] ~= nil);
 ---@type string
 local TXT_GOV_ASSIGN_POLICIES = Locale.Lookup("LOC_GOVT_ASSIGN_ALL_POLICIES");
 ---@type string
@@ -291,6 +293,9 @@ function LateInitialize()
 	m_TopPanelConsideredHeight = Controls.Vignette:GetSizeY() - TOP_PANEL_OFFSET;
 	PopulateStaticData();			-- Obtain unchanging, static data from game core
 	BuildCategoryColumns();			-- Build the 5 category columns from the shared instance
+	if FFH_EXISTS then
+		ApplyFFHNoGovernmentLayout();	-- drop the Governments column, relocate Confirm
+	end
 	m_ePlayer = Game.GetLocalPlayer();
 end
 
@@ -469,10 +474,16 @@ function BuildCategoryColumns()
 		end
 	end
 
-	-- Width the modal to fit the generated columns (government + N categories), capped at
-	-- MODAL_MAX_W. Past the cap the ColumnsScroller keeps its capped width and the columns
-	-- scroll horizontally. 50 = frame margin (~25px each side). Measure the stack rather than
-	-- recomputing by hand.
+	-- Width the modal to fit the generated columns (government + N categories).
+	FitModalWidth();
+end
+
+-- Width the modal to fit whichever columns are currently visible, capped at MODAL_MAX_W (past the
+-- cap the ColumnsScroller keeps its capped width and the columns scroll horizontally). 50 = frame
+-- margin (~25px each side). Measures the stack rather than recomputing by hand, so it stays correct
+-- after columns are added or hidden (e.g. the Capria no-government layout). CalculateSize skips
+-- hidden children, so a hidden GovernmentColumn drops out of the measured width automatically.
+function FitModalWidth()
 	Controls.MainColumns:CalculateSize();
 	---@type number
 	local MARGIN_X = 50;
@@ -480,6 +491,18 @@ function BuildCategoryColumns()
 	local innerW = math.min( Controls.MainColumns:GetSizeX(), MODAL_MAX_W - MARGIN_X );
 	Controls.ColumnsScroller:SetSizeX( innerW );
 	Controls.MainContainer:SetSizeX( innerW + MARGIN_X );
+end
+
+-- FFH has no governments beyond chiefdom, shows only the policy categories. The Confirm
+-- button is authored inside GovernmentColumn and also commits policy changes, so reparent it onto
+-- the modal itself first -- it keeps its C,B anchor, so it settles into the modal's bottom-centre
+-- margin -- then hide the whole column. Without the reparent the button would vanish with the
+-- column and players would have no way to commit. Runs once, right after the columns are built.
+function ApplyFFHNoGovernmentLayout()
+	Controls.ConfirmPolicies:ChangeParent( Controls.MainContainer );
+	Controls.ConfirmPolicies:SetOffsetVal( 0, 8 );		-- nudge up off the very bottom edge; tune to taste
+	Controls.GovernmentColumn:SetHide( true );
+	FitModalWidth();									-- reclaim the freed column width
 end
 
 
@@ -618,8 +641,7 @@ function RealizeCategoryList( nRowIndex )
 				local tReq = m_kPolicyCatalogData[ POLICY_REQUIRES[strPolicyType] ];
 				-- Names in the catalog are already Locale.Lookup'd; build a plain note so we
 				-- don't depend on a LOC key. All current prereqs are state religions.
-				inst.Name:SetToolTipString( tPolicy.Name .. "[NEWLINE][COLOR_RED]"
-					.. "Requires: " .. (tReq and tReq.Name or "?") .. "[ENDCOLOR]" );
+				inst.Name:SetToolTipString( Locale.Lookup('LOC_POLICY_LOCKED_REASON', tPolicy.Name, (tReq and tReq.Name or "?")));
 			else
 				inst.Name:SetToolTipString( tPolicy.Name );
 			end
@@ -627,16 +649,14 @@ function RealizeCategoryList( nRowIndex )
 			---@type boolean
 			local isSelected = (strPolicyType == strSelected);
 			inst.Highlight:SetHide( not isSelected );
-			-- Active marker: the committed policy, hidden when it IS the staged selection.
+			-- Active marker: the committed policy, hidden when is the staged selection.
 			inst.Active:SetHide( not (strPolicyType == strCommitted and not isSelected) );
 			inst.Hover:SetHide( true );
 
 			-- Hover previews the description; leaving reverts to the staged selection.
 			inst.Button:RegisterCallback( Mouse.eMouseEnter, function()
 				inst.Hover:SetHide(false);
-				-- A hover is a preview, not a proposal -> unselected art. EXCEPT when hovering
-				-- the staged policy itself: there the card keeps its true state, so it does not
-				-- flip back to "unselected" as you mouse over your own pending choice.
+                -- hovers keep unselected art, except if hovering the staged policy
 				SetDescCardState( cc, strPolicyType == strSelected and strSelected ~= strCommitted );
 				RealizeDescriptionCard( cc, strPolicyType );
 			end);
@@ -678,11 +698,9 @@ end
 -- Highlight = staged pick, Hover = mouse-over. Rows are only clickable when the player
 -- may actually switch this turn (IsAbleToChangeGovernment).
 function RealizeGovernmentsList()
+	if IS_CAPRIA then return; end		-- no Governments column for Capria
 	Controls.GovernmentListStack:DestroyAllChildren();
 
-	-- Sort key for a government's tier: nil tier -> top (-inf); otherwise the tier's
-	-- Sorting from GovernmentTiers. Governments in the same tier stay contiguous, then
-	-- tie-break by row Index so the segmentation below is clean.
 	---@param strGovType string
 	local function TierSort( strGovType )
 		---@type string
@@ -706,8 +724,7 @@ function RealizeGovernmentsList()
 	---@type boolean
 	local canChange = IsAbleToChangeGovernment();
 
-	-- Track the tier we are in so we can drop a divider at each new (non-nil) tier. Null-tier
-	-- governments sit at the very top with no divider.
+	-- Track the tier of gov in so we can drop a divider at each new tier. Null-tier governments first with no divider.
 	---@type string
 	local strLastTier = nil;
 	---@type number
@@ -769,7 +786,7 @@ function RealizeGovernmentsList()
 end
 
 -- Confirm button: visible when the player may change policies OR government, enabled only
--- when either is actually staged. One button commits both (see OnConfirmPolicies_Yes).
+-- when either is actually staged. One button commits both.
 function RealizeConfirmButton()
 	---@type boolean
 	local canEdit = IsAbleToChangePolicies() or IsAbleToChangeGovernment();
@@ -782,13 +799,10 @@ function RealizeConfirmButton()
 end
 
 -- Grow every category column's listbox to fit the tallest policy list (uniform height, so
--- the description cards stay aligned), then grow the modal to match. Call AFTER all lists are
--- realized so their stacks have measured. Geometry constants mirror the PolicyCategoryColumn
--- instance: listbox starts at y=54, has 22px of frame below it; the desc card follows 8px
--- under the slot. LIST_MIN_H keeps it from shrinking below the authored default.
+-- the description cards stay aligned), then grow the modal to match.
+-- LIST_MIN_H keeps it from shrinking below default.
 -- Measure the tallest wrapped description among a column's policies, using the column's own
--- Desc label so WrapWidth/font match exactly. Clobbers the label text (the caller restores).
--- Result is cached on cc.MaxDescTextH since the catalog's descriptions never change.
+-- Desc label so WrapWidth/font match exactly. Result is cached on cc.MaxDescTextH.
 ---@param cc table
 ---@param strSlotType string
 function MeasureMaxDescTextH( cc, strSlotType )
@@ -810,17 +824,12 @@ end
 function ApplyUniformColumnHeights()
 	---@type number
 	local HEADER_H, SLOT_BOTTOM_PAD, DESC_GAP = 54, 22, 8;
-	-- The Slot grid is authored at Offset y=40 inside Root (see XML). DescCard is anchored to
-	-- Root's top as well, so its offset and rootH must both include this or the card rides 40px
-	-- too high and the bottom of the policy list overlaps it once the list is full.
 	---@type number
 	local SLOT_TOP = 40;
 	---@type number
 	local POINTER_FROM_SLOT_BOTTOM, MODAL_MARGIN_Y, LIST_MIN_H = 28, 56, 280;
 	-- DescCard = a fixed top region (title + image + the offset down to the Desc label at
-	-- y=DESC_TEXT_OFFSET) plus the wrapped description text plus a bottom pad. Sized to the
-	-- TALLEST description in the column so it never clips whichever policy is shown, and so
-	-- the layout below reserves exactly enough for it (no overlap with the slot above).
+	-- y=DESC_TEXT_OFFSET) plus the wrapped description text plus a bottom pad.
 	---@type number
 	local DESC_TEXT_OFFSET, DESC_BOTTOM_PAD = 150, 16;
 
@@ -838,7 +847,7 @@ function ApplyUniformColumnHeights()
 		end
 		descCardH = math.max( descCardH, DESC_TEXT_OFFSET + cc.MaxDescTextH + DESC_BOTTOM_PAD );
 	end
-	if measured then	-- measuring clobbered the visible Desc labels; put the real ones back
+	if measured then	-- measuring messes content of visible Desc labels, so refresh
 		for nRowIndex = 1, #ROW_SLOT_TYPES do RealizeCategoryDescription( nRowIndex ); end
 	end
 
@@ -852,7 +861,7 @@ function ApplyUniformColumnHeights()
 
 	-- Cap the listbox height so the whole column (list + gap + desc card) + margin stays within
 	-- MODAL_MAX_H; past the cap the per-column lists scroll (ScrollPanel AutoScrollBar) instead.
-	-- descCardH is subtracted here so a taller card automatically shrinks the list, never overlaps.
+	-- descCardH is subtracted so a taller card automatically shrinks the list to prevent overlap
 	---@type number
 	local listH_cap = MODAL_MAX_H - MODAL_MARGIN_Y - SLOT_TOP - DESC_GAP - descCardH - HEADER_H - SLOT_BOTTOM_PAD;
 	maxListH = math.min( maxListH, math.max( listH_cap, LIST_MIN_H ) );
@@ -875,7 +884,9 @@ function ApplyUniformColumnHeights()
 	end
 
 	-- Keep the government column (and its bottom-anchored Confirm button) the same height.
-	Controls.GovernmentColumn:SetSizeY( rootH );
+	if not IS_CAPRIA then
+		Controls.GovernmentColumn:SetSizeY( rootH );
+	end
 
 	-- Grow the modal to the tallest column (MainColumns:GetSizeY() is the max child height),
 	-- capped via maxListH above. The scroll panel wrapping the columns matches that height.

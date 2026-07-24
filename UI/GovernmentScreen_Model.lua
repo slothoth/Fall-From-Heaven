@@ -17,8 +17,7 @@ m_debugOutputGovInfo = false;		-- (false) Output to console information about go
 ---@type string
 DATA_FIELD_CURRENT_FILTER = "_CURRENT_FILTER";
 
--- Category rows/columns are derived at runtime from GameInfo.GovernmentSlots (one column
--- per slot type) by BuildCategoryColumns, so nothing here is tied to a specific slot type.
+-- Built from GameInfo.GovernmentSlots
 ---@type table
 ROW_SLOT_TYPES = {};		-- uiRow (1..N) -> slot type string, in GovernmentSlots order
 
@@ -26,8 +25,7 @@ ROW_SLOT_TYPES = {};		-- uiRow (1..N) -> slot type string, in GovernmentSlots or
 SLOT_TYPE_TO_ROW = {};	-- slot type string -> uiRow
 
 ---@type table
--- slot type -> catalog sort order. Built at runtime from GameInfo.GovernmentSlots (see
--- PopulateStaticData) so it works for any mod's slot types, not a hardcoded set.
+--  Built from GameInfo.GovernmentSlots
 SLOT_ORDER_IN_CATALOG = {};
 
 ---@type string
@@ -87,12 +85,6 @@ m_kPolicyFilterCurrent	= nil;
 ---@type table
 m_kUnlockedGovernments  = {};
 
--- An array of arrays of tables. Contains one entry per UI row (1..#ROW_SLOT_TYPES).
--- m_ActivePolicyRows[nRowIndex] is an array of all the slots for that category row.
--- Each slot is a "SlotData" table containing UI_RowIndex, GC_SlotIndex, and GC_PolicyType.
--- UI_RowIndex is the row (1..N) this slot is in, per SLOT_TYPE_TO_ROW. This should not change.
--- GC_SlotIndex is the corresponding GameCore slot index for this slot. This should not change.
--- GC_PolicyType is the string type of the policy card currently in the slot. It is EMPTY_POLICY_TYPE by default.
 ---@type table
 m_ActivePolicyRows = {};
 
@@ -143,9 +135,7 @@ function IsAbleToChangePolicies()
 end
 
 -- ===========================================================================
---	Whether the player may switch government this turn. Mirrors the base-game rule:
---	you may change on the turn you have no government yet, or the turn you complete a
---	civic; and only once per turn.
+--	Whether the player may switch government this turn.
 -- ===========================================================================
 function IsAbleToChangeGovernment()
 	if m_ePlayer == -1 then
@@ -206,7 +196,7 @@ function PopulateLivePlayerData( ePlayer )
 		g_kCurrentGovernment = nil;
 	end
 
-	-- Cache which civic was unlocked this turn, so we can determine whether to display new policy icons
+	-- Cache which civic was unlocked this turn, so can determine whether to display new policy icons
 	---@type string
 	local civicCompletedThisTurn;
 	if kPlayerCulture:CivicCompletedThisTurn() then
@@ -217,7 +207,7 @@ function PopulateLivePlayerData( ePlayer )
 		end
 	end
 
-	-- Policies: populate unlocked (and not obsolete) ones for the catalog
+	-- Policies: populate unlocked (and not obsolete) ones for catalog
 	m_kUnlockedPolicies = {};
 	m_kNewPoliciesThisTurn = {};
 	for row in GameInfo.Policies() do
@@ -245,8 +235,7 @@ function PopulateLivePlayerData( ePlayer )
 
 		---@type string
 		local strSlotType = GameInfo.GovernmentSlots[iSlotType].GovernmentSlotType
-		-- Map the gamecore slot to its UI row via the type-> row table built from
-		-- GovernmentSlots. Every slot type has a column, so this should always resolve.
+		-- Map the gamecore slot to its UI row via the type-> row table built from GovernmentSlots.
 		---@type number
 		local nRowIndex = SLOT_TYPE_TO_ROW[strSlotType];
 
@@ -589,8 +578,7 @@ end
 -- slot, restore the policy the player had equipped on open (m_CommittedPolicyByRow) when
 -- that is itself still valid -- so breaking a dependency reverts to your prior choice
 -- instead of leaving you unselected. Only fall back to empty when the committed policy
--- would also be invalid (e.g. it WAS the dependent). One pass suffices while dependencies
--- are single-level (see POLICY_REQUIRES).
+-- would also be invalid (e.g. it WAS the dependent).
 function EnforcePolicyDependencies()
 	for nRow = 1, 5 do
 		local tSlot = GetCategorySlot(nRow);
@@ -623,4 +611,5 @@ function SnapshotCommittedGovernment()
 	end
 	m_StagedGovernment = m_CommittedGovernment;
 	m_isGovernmentChanged = false;
-end
+end
+
