@@ -786,11 +786,61 @@ end
 -- realized so their stacks have measured. Geometry constants mirror the PolicyCategoryColumn
 -- instance: listbox starts at y=54, has 22px of frame below it; the desc card follows 8px
 -- under the slot. LIST_MIN_H keeps it from shrinking below the authored default.
+-- Measure the tallest wrapped description among a column's policies, using the column's own
+-- Desc label so WrapWidth/font match exactly. Clobbers the label text (the caller restores).
+-- Result is cached on cc.MaxDescTextH since the catalog's descriptions never change.
+---@param cc table
+---@param strSlotType string
+function MeasureMaxDescTextH( cc, strSlotType )
+	---@type number
+	local maxH = 0;
+	for _,strPolicyType in ipairs(m_kPolicyCatalogOrder) do
+		---@type table
+		local tPolicy = m_kPolicyCatalogData[strPolicyType];
+		if tPolicy.SlotType == strSlotType then
+			cc.Desc:SetText( tPolicy.Description );
+			---@type number
+			local h = cc.Desc:GetSizeY();
+			if h > maxH then maxH = h; end
+		end
+	end
+	return maxH;
+end
+
 function ApplyUniformColumnHeights()
 	---@type number
-	local HEADER_H, SLOT_BOTTOM_PAD, DESC_GAP, DESC_CARD_H = 54, 22, 8, 300;
+	local HEADER_H, SLOT_BOTTOM_PAD, DESC_GAP = 54, 22, 8;
+	-- The Slot grid is authored at Offset y=40 inside Root (see XML). DescCard is anchored to
+	-- Root's top as well, so its offset and rootH must both include this or the card rides 40px
+	-- too high and the bottom of the policy list overlaps it once the list is full.
+	---@type number
+	local SLOT_TOP = 40;
 	---@type number
 	local POINTER_FROM_SLOT_BOTTOM, MODAL_MARGIN_Y, LIST_MIN_H = 28, 56, 280;
+	-- DescCard = a fixed top region (title + image + the offset down to the Desc label at
+	-- y=DESC_TEXT_OFFSET) plus the wrapped description text plus a bottom pad. Sized to the
+	-- TALLEST description in the column so it never clips whichever policy is shown, and so
+	-- the layout below reserves exactly enough for it (no overlap with the slot above).
+	---@type number
+	local DESC_TEXT_OFFSET, DESC_BOTTOM_PAD = 150, 16;
+
+	-- Desc-card height needed = fixed floor, grown to fit the longest description in any column.
+	---@type number
+	local descCardH = DESC_TEXT_OFFSET + DESC_BOTTOM_PAD;
+	---@type boolean
+	local measured = false;
+	for nRowIndex = 1, #ROW_SLOT_TYPES do
+		---@type table
+		local cc = CATEGORY_CONTROLS[nRowIndex];
+		if cc.MaxDescTextH == nil then
+			cc.MaxDescTextH = MeasureMaxDescTextH( cc, ROW_SLOT_TYPES[nRowIndex] );
+			measured = true;
+		end
+		descCardH = math.max( descCardH, DESC_TEXT_OFFSET + cc.MaxDescTextH + DESC_BOTTOM_PAD );
+	end
+	if measured then	-- measuring clobbered the visible Desc labels; put the real ones back
+		for nRowIndex = 1, #ROW_SLOT_TYPES do RealizeCategoryDescription( nRowIndex ); end
+	end
 
 	---@type number
 	local maxListH = LIST_MIN_H;
@@ -800,17 +850,17 @@ function ApplyUniformColumnHeights()
 		if h > maxListH then maxListH = h; end
 	end
 
-	-- Cap the listbox height so the modal never grows past MODAL_MAX_H; past the cap the
-	-- per-column lists scroll (ScrollPanel AutoScrollBar) instead. The cap is whatever list
-	-- height leaves the rest of the column (header/footer/gap/desc card) + margin within the max.
+	-- Cap the listbox height so the whole column (list + gap + desc card) + margin stays within
+	-- MODAL_MAX_H; past the cap the per-column lists scroll (ScrollPanel AutoScrollBar) instead.
+	-- descCardH is subtracted here so a taller card automatically shrinks the list, never overlaps.
 	---@type number
-	local listH_cap = MODAL_MAX_H - MODAL_MARGIN_Y - DESC_GAP - DESC_CARD_H - HEADER_H - SLOT_BOTTOM_PAD;
+	local listH_cap = MODAL_MAX_H - MODAL_MARGIN_Y - SLOT_TOP - DESC_GAP - descCardH - HEADER_H - SLOT_BOTTOM_PAD;
 	maxListH = math.min( maxListH, math.max( listH_cap, LIST_MIN_H ) );
 
 	---@type number
 	local slotH = HEADER_H + maxListH + SLOT_BOTTOM_PAD;
 	---@type number
-	local rootH = slotH + DESC_GAP + DESC_CARD_H;
+	local rootH = SLOT_TOP + slotH + DESC_GAP + descCardH;
 
 	for nRowIndex = 1, #ROW_SLOT_TYPES do
 		---@type table
@@ -819,7 +869,8 @@ function ApplyUniformColumnHeights()
 		cc.ListScroller:CalculateSize();		-- reclamp the scrollbar to the new viewport
 		cc.Slot:SetSizeY( slotH );
 		cc.Pointer:SetOffsetY( slotH - POINTER_FROM_SLOT_BOTTOM );
-		cc.DescCard:SetOffsetY( slotH + DESC_GAP );
+		cc.DescCard:SetOffsetY( SLOT_TOP + slotH + DESC_GAP );
+		cc.DescCard:SetSizeY( descCardH );		-- fit the card to the description (no clip/overlap)
 		cc.Root:SetSizeY( rootH );
 	end
 
