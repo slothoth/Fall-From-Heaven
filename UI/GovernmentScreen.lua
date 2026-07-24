@@ -156,6 +156,12 @@ local m_kBonuses	= {}
 local m_governmentChangeType = "";		-- The government type proposed being changed to.
 ---@type boolean
 local m_isPoliciesChanged= false;
+---@type string
+local m_CommittedGovernment = nil;		-- Government actually in effect, snapshotted on refresh.
+---@type string
+local m_StagedGovernment = nil;			-- Government the player has staged (defaults to committed).
+---@type boolean
+local m_isGovernmentChanged = false;	-- A different government is staged, awaiting Confirm.
 ---@type table
 local m_kPolicyCatalogData	= {};
 ---@type table
@@ -228,6 +234,26 @@ function IsAbleToChangePolicies()
 end
 
 -- ===========================================================================
+--	Whether the player may switch government this turn. Mirrors the base-game rule:
+--	you may change on the turn you have no government yet, or the turn you complete a
+--	civic; and only once per turn.
+-- ===========================================================================
+function IsAbleToChangeGovernment()
+	if m_ePlayer == -1 then
+		return false;
+	end
+	---@type table
+	local kPlayerCulture = Players[m_ePlayer]:GetCulture();
+	if kPlayerCulture:CanChangeGovernmentAtAll()
+			and not kPlayerCulture:GovernmentChangeMade()
+			and Game.IsAllowStrategicCommands(m_ePlayer)
+			and (g_kCurrentGovernment == nil or kPlayerCulture:CivicCompletedThisTurn()) then
+		return true;
+	end
+	return false;
+end
+
+-- ===========================================================================
 -- Separated into its own function so we wan modify icons in DLC / Expansions
 -- ===========================================================================
 function GetPolicyBGTexture(policyType)
@@ -252,6 +278,7 @@ function Close()
 		UIManager:DequeuePopup(ContextPtr);
 		m_governmentChangeType	= "";
 		m_isPoliciesChanged		= false;
+		m_isGovernmentChanged	= false;
 		LuaEvents.Government_CloseGovernment();
 	end
 end
@@ -302,7 +329,20 @@ function OnConfirmPolicies()
 
 		pPlayerCulture:RequestPolicyChanges(clearList, addList);
 
+		-- Commit a staged government change through the same button. RequestChangeGovernment
+		-- may put the player into anarchy (which itself clears policy slots); the player was
+		-- warned in the confirm prompt below.
+		if m_isGovernmentChanged and m_StagedGovernment ~= nil
+				and m_StagedGovernment ~= m_CommittedGovernment then
+			---@type table
+			local tGov = g_kGovernments[m_StagedGovernment];
+			if tGov ~= nil then
+				pPlayerCulture:RequestChangeGovernment( tGov.Hash );
+			end
+		end
+
 		m_isPoliciesChanged	= false;
+		m_isGovernmentChanged = false;
 		Controls.ConfirmPolicies:SetDisabled( true );
 		Close();
 	end
@@ -310,7 +350,21 @@ function OnConfirmPolicies()
 	if(ShouldConfirmChanges())then
 		---@type table
 		local popup = PopupDialogInGame:new( "ConfirmPolicies" );
-		popup:ShowYesNoDialog(TXT_GOV_POPUP_PROMPT_POLICIES_CONFIRM, OnConfirmPolicies_Yes);
+		---@type string
+		local strPrompt = TXT_GOV_POPUP_PROMPT_POLICIES_CONFIRM;
+		-- A staged government change that causes anarchy gets the explicit anarchy warning.
+		if m_isGovernmentChanged and m_StagedGovernment ~= nil
+				and m_StagedGovernment ~= m_CommittedGovernment then
+			---@type number
+			local eGovIndex = GameInfo.Governments[m_StagedGovernment].Index;
+			---@type number
+			local iAnarchyTurns = Players[m_ePlayer]:GetCulture():GetAnarchyTurns( eGovIndex );
+			if iAnarchyTurns ~= nil and iAnarchyTurns > 0 then
+				strPrompt = Locale.Lookup( "LOC_GOVT_CONFIRM_ANARCHY",
+					g_kGovernments[m_StagedGovernment].Name, iAnarchyTurns );
+			end
+		end
+		popup:ShowYesNoDialog(strPrompt, OnConfirmPolicies_Yes);
 	else
 		OnConfirmPolicies_Yes();
 	end
@@ -395,6 +449,7 @@ end
 function RefreshAllData()
 	PopulateLivePlayerData( m_ePlayer );
 	SnapshotCommittedPolicies();	-- committed state, before any staging
+	SnapshotCommittedGovernment();
 	RealizeAll();
 	-- From ModalScreen_PlayerYieldsHelper
 	if not RefreshYields() then
@@ -1233,6 +1288,38 @@ function RealizeCategoryList( nRowIndex )
 end
 
 -- Governments list (display-only for now; current government highlighted).
+-- Snapshot the government actually in effect (before any staging), and reset the staged
+-- selection to it. Mirrors SnapshotCommittedPolicies; called from RefreshAllData.
+function SnapshotCommittedGovernment()
+	m_CommittedGovernment = nil;
+	if g_kCurrentGovernment ~= nil then
+		for strGovType, tGov in pairs(g_kGovernments) do
+			if tGov.Index == g_kCurrentGovernment.Index then
+				m_CommittedGovernment = strGovType;
+				break;
+			end
+		end
+	end
+	m_StagedGovernment = m_CommittedGovernment;
+	m_isGovernmentChanged = false;
+end
+
+-- Click a government row: stage it (commit happens via the shared Confirm button).
+---@param strGovType string
+function OnGovernmentClicked( strGovType )
+	if not IsAbleToChangeGovernment() then return; end
+	if m_kUnlockedGovernments[strGovType] ~= true then return; end	-- can't stage a locked govt
+	if m_StagedGovernment == strGovType then return; end	-- re-click is a no-op
+	m_StagedGovernment = strGovType;
+	m_isGovernmentChanged = (strGovType ~= m_CommittedGovernment);
+	UI.PlaySound("UI_Policies_Click_Government");
+	RealizeGovernmentsList();
+	RealizeConfirmButton();
+end
+
+-- Governments listbox: one selectable row per government. Active = in effect now,
+-- Highlight = staged pick, Hover = mouse-over. Rows are only clickable when the player
+-- may actually switch this turn (IsAbleToChangeGovernment).
 function RealizeGovernmentsList()
 	Controls.GovernmentListStack:DestroyAllChildren();
 
@@ -1243,6 +1330,9 @@ function RealizeGovernmentsList()
 	end
 	table.sort( kOrder, function(a,b) return g_kGovernments[a].Index < g_kGovernments[b].Index; end );
 
+	---@type boolean
+	local canChange = IsAbleToChangeGovernment();
+
 	for _,strGovType in ipairs(kOrder) do
 		---@type table
 		local tGov = g_kGovernments[strGovType];
@@ -1250,23 +1340,47 @@ function RealizeGovernmentsList()
 		local inst = {};
 		ContextPtr:BuildInstanceForControl( "GovernmentNameItem", inst, Controls.GovernmentListStack );
 		inst.Name:SetText( Locale.ToUpper(tGov.Name) );
+		inst.Name:SetToolTipString( tGov.StatsTooltip or tGov.Name );
+		-- Locked governments are listed but dimmed and non-selectable: the engine would
+		-- reject switching to one the player has not unlocked (m_kUnlockedGovernments).
 		---@type boolean
-		local isCurrent = (g_kCurrentGovernment ~= nil) and (g_kCurrentGovernment.Index == tGov.Index);
-		inst.Highlight:SetHide( not isCurrent );
+		local isUnlocked = m_kUnlockedGovernments[strGovType] == true;
+		inst.Name:SetAlpha( isUnlocked and 1.0 or 0.45 );
+
+		---@type boolean
+		local isStaged = (strGovType == m_StagedGovernment);
+		inst.Highlight:SetHide( not isStaged );
+		-- Active marker: the government in effect now, hidden when it IS the staged pick.
+		inst.Active:SetHide( not (strGovType == m_CommittedGovernment and not isStaged) );
+		inst.Hover:SetHide( true );
+
+		inst.Button:RegisterCallback( Mouse.eMouseEnter, function() inst.Hover:SetHide(false); end );
+		inst.Button:RegisterCallback( Mouse.eMouseExit,  function() inst.Hover:SetHide(true); end );
+
+		if canChange and isUnlocked then
+			inst.Button:RegisterCallback( Mouse.eLClick, function()
+				OnGovernmentClicked( strGovType );
+			end);
+		else
+			inst.Button:SetDisabled( true );
+		end
 	end
 
 	Controls.GovernmentListStack:CalculateSize();
 	Controls.GovernmentListScroller:CalculateSize();
 end
 
--- Confirm button: visible when editable, enabled only when a change is staged.
+-- Confirm button: visible when the player may change policies OR government, enabled only
+-- when either is actually staged. One button commits both (see OnConfirmPolicies_Yes).
 function RealizeConfirmButton()
 	---@type boolean
-	local canEdit = IsAbleToChangePolicies();
+	local canEdit = IsAbleToChangePolicies() or IsAbleToChangeGovernment();
 	Controls.ConfirmPolicies:SetHide( not canEdit );
 	if not canEdit then return; end
-	Controls.ConfirmPolicies:SetDisabled( not m_isPoliciesChanged );
-	Controls.ConfirmPolicies:SetText( m_isPoliciesChanged and TXT_GOV_CONFIRM_POLICIES or TXT_GOV_ASSIGN_POLICIES );
+	---@type boolean
+	local hasChanges = m_isPoliciesChanged or m_isGovernmentChanged;
+	Controls.ConfirmPolicies:SetDisabled( not hasChanges );
+	Controls.ConfirmPolicies:SetText( hasChanges and TXT_GOV_CONFIRM_POLICIES or TXT_GOV_ASSIGN_POLICIES );
 end
 
 -- Rebuild the whole screen from the staged model.
