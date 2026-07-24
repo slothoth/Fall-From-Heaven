@@ -68,6 +68,10 @@ function SeedStateReligionProperties(iPlayerID, iCityID, iBuildingID, iPlotID, i
 	for eStatePolicyIndex, sPropKey in pairs(m_tStateReligionPolicies) do
 		setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sPropKey, 0)
 	end
+	-- Also seed the '<SHORT>_CITIES' gate props to an explicit 0.
+	for eReligionIndex, sCitiesKey in pairs(m_tReligionCityProps) do
+		setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sCitiesKey, 0)
+	end
 	-- 'STATE_RELIGION' is deliberately left unset: nil means 'none chosen yet',
 	-- which is what its readers (Armageddon.lua, DiplomacyActionViewInjector.lua) expect.
 	pPlayer:SetProperty(m_sStateRelSeededKey, 1)
