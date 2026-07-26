@@ -61,13 +61,10 @@ m_kBonuses	= {}
 m_isPoliciesChanged= false;
 
 ---@type string
-m_CommittedGovernment = nil;		-- Government actually in effect, snapshotted on refresh.
-
----@type string
-m_StagedGovernment = nil;			-- Government the player has staged (defaults to committed).
-
----@type boolean
-m_isGovernmentChanged = false;	-- A different government is staged, awaiting Confirm.
+-- Government actually in effect, snapshotted on refresh. There is no staged counterpart:
+-- picking a government commits it immediately (OnGovernmentClicked), because the government
+-- decides which policies are on offer and so cannot sit buffered behind Confirm.
+m_CommittedGovernment = nil;
 
 ---@type table
 m_kPolicyCatalogData	= {};
@@ -382,6 +379,32 @@ function PopulateStaticData()
 
 	table.sort(m_kPolicyCatalogOrder, SortPolicies );
 
+	-- Government-restricted policies (XP2 table; guarded because it does not exist without the
+	-- expansion). A policy with no row here is unrestricted. Consumed by GetCategoryPolicyList.
+	POLICY_GOVERNMENT_EXCLUSIVE = {};
+	if GameInfo.Policy_GovernmentExclusives_XP2 ~= nil then
+		for row in GameInfo.Policy_GovernmentExclusives_XP2() do
+			if POLICY_GOVERNMENT_EXCLUSIVE[row.PolicyType] == nil then
+				POLICY_GOVERNMENT_EXCLUSIVE[row.PolicyType] = {};
+			end
+			POLICY_GOVERNMENT_EXCLUSIVE[row.PolicyType][row.GovernmentType] = true;
+		end
+	end
+
+	-- Civilization-restricted policies. Same deal, but the table is authored by this mod rather
+	-- than the expansion, so it is looked up by name and skipped entirely when absent.
+	POLICY_CIV_EXCLUSIVE = {};
+	---@type table
+	local kCivExclusives = GameInfo[POLICY_CIV_EXCLUSIVE_TABLE];
+	if kCivExclusives ~= nil then
+		for row in kCivExclusives() do
+			if POLICY_CIV_EXCLUSIVE[row.PolicyType] == nil then
+				POLICY_CIV_EXCLUSIVE[row.PolicyType] = {};
+			end
+			POLICY_CIV_EXCLUSIVE[row.PolicyType][row.CivilizationType] = true;
+		end
+	end
+
 	-- Fill in governments
 	g_kGovernments = {};
 	for row in GameInfo.Governments() do
@@ -518,6 +541,121 @@ function GetGovernmentStatsTooltip(governmentType)
 	return text;
 end
 
+-- ===========================================================================
+--	WHICH POLICIES A CATEGORY COLUMN OFFERS
+-- ===========================================================================
+
+-- "None" policies: the explicit do-nothing option that used to sit at the top of a category
+-- (e.g. the no-state-religion pick). They are hidden from the picker -- an empty slot already
+-- reads as "none" through the description card's Unselected state -- while staying in the
+-- database so the engine still has something valid to put in a slot. List any further ones
+-- here; the pattern match below covers the "<CATEGORY>_00_DEFAULT" naming convention.
+---@type table
+POLICY_NONE_TYPES = {
+	["SLTH_POLICY_NO_STATE_RELIGION"] = true,
+};
+
+---@param strPolicyType string
+---@return boolean
+function IsNonePolicy( strPolicyType )
+	if strPolicyType == nil then return false; end
+	if POLICY_NONE_TYPES[strPolicyType] then return true; end
+	return string.match( strPolicyType, "_00_DEFAULT$" ) ~= nil;
+end
+
+-- Normalise a slot's policy for display. A "none" policy IS the empty selection, so it must read
+-- as one: it is hidden from the list, and showing its name on the description card would point at
+-- a row the player cannot see.
+---@param strPolicyType string
+---@return string
+function DisplayPolicyType( strPolicyType )
+	if strPolicyType == nil or IsNonePolicy( strPolicyType ) then return EMPTY_POLICY_TYPE; end
+	return strPolicyType;
+end
+
+-- policyType -> { [governmentType] = true }, for policies restricted to particular governments.
+-- Built by PopulateStaticData from Policy_GovernmentExclusives_XP2. A policy ABSENT from this
+-- table is unrestricted and offered under every government.
+---@type table
+POLICY_GOVERNMENT_EXCLUSIVE = {};
+
+---@param strPolicyType string
+---@param strGovType string
+---@return boolean
+function IsPolicyAllowedByGovernment( strPolicyType, strGovType )
+	---@type table
+	local kGovs = POLICY_GOVERNMENT_EXCLUSIVE[strPolicyType];
+	if kGovs == nil then return true; end			-- not government-restricted
+	if strGovType == nil then return false; end		-- restricted, and the player has no government
+	return kGovs[strGovType] == true;
+end
+
+-- Civilization-restricted policies, same shape and same semantics as the government table above:
+-- policyType -> { [civilizationType] = true }, and a policy with no row is unrestricted.
+--
+-- The SQL table is authored separately. Only its NAME and the two column names are assumed here,
+-- so if you call them something else, change POLICY_CIV_EXCLUSIVE_TABLE / the two field reads in
+-- PopulateStaticData and nothing else has to move. The lookup is guarded, so until the table
+-- exists every policy simply counts as unrestricted and the screen behaves as it does today.
+---@type string
+POLICY_CIV_EXCLUSIVE_TABLE = "Policy_CivilizationExclusives";
+
+---@type table
+POLICY_CIV_EXCLUSIVE = {};
+
+---@param strPolicyType string
+---@param strCivType string
+---@return boolean
+function IsPolicyAllowedByCivilization( strPolicyType, strCivType )
+	---@type table
+	local kCivs = POLICY_CIV_EXCLUSIVE[strPolicyType];
+	if kCivs == nil then return true; end			-- not civ-restricted
+	if strCivType == nil then return false; end		-- restricted, and we cannot tell who this is
+	return kCivs[strCivType] == true;
+end
+
+-- The local player's civilization ("CIVILIZATION_ROME"), or nil before a player is known.
+---@return string
+function GetPlayerCivilizationType()
+	if m_ePlayer == -1 then return nil; end
+	---@type table
+	local pConfig = PlayerConfigurations[m_ePlayer];
+	if pConfig == nil then return nil; end
+	return pConfig:GetCivilizationTypeName();
+end
+
+-- The ordered list of policy types a category column offers right now.
+--
+-- THIS IS THE SINGLE PLACE that decides a column's contents: RealizeCategoryList and
+-- MeasureMaxDescTextH both go through it, so any further filtering (civilization-specific
+-- variants, capping the column at a fixed number of rows, ...) only has to be added here and
+-- the display half picks it up for free.
+---@param nRowIndex number
+---@return table
+function GetCategoryPolicyList( nRowIndex )
+	---@type string
+	local strSlotType = ROW_SLOT_TYPES[nRowIndex];
+	-- Filter against the government actually in effect: government changes commit immediately,
+	-- so there is never a staged-but-uncommitted government to consider here.
+	---@type string
+	local strGovType = m_CommittedGovernment;
+	---@type string
+	local strCivType = GetPlayerCivilizationType();
+	---@type table
+	local kList = {};
+	for _,strPolicyType in ipairs(m_kPolicyCatalogOrder) do
+		---@type table
+		local tPolicy = m_kPolicyCatalogData[strPolicyType];
+		if tPolicy.SlotType == strSlotType
+				and not IsNonePolicy( strPolicyType )
+				and IsPolicyAllowedByGovernment( strPolicyType, strGovType )
+				and IsPolicyAllowedByCivilization( strPolicyType, strCivType ) then
+			table.insert( kList, strPolicyType );
+		end
+	end
+	return kList;
+end
+
 -- Return the single slot for a category (FFH grants one slot per category), or nil.
 ---@param nRowIndex number
 -- The policy actually slotted in gamecore as of the last populate, per category.
@@ -592,9 +730,9 @@ function EnforcePolicyDependencies()
 	end
 end
 
--- Governments list (display-only for now; current government highlighted).
--- Snapshot the government actually in effect (before any staging), and reset the staged
--- selection to it. Mirrors SnapshotCommittedPolicies; called from RefreshAllData.
+-- Resolve the government actually in effect to its GovernmentType, for the list highlight and
+-- for the per-government policy filter (GetCategoryPolicyList). Mirrors SnapshotCommittedPolicies;
+-- called from RefreshAllData.
 function SnapshotCommittedGovernment()
 	m_CommittedGovernment = nil;
 	if g_kCurrentGovernment ~= nil then
@@ -605,6 +743,4 @@ function SnapshotCommittedGovernment()
 			end
 		end
 	end
-	m_StagedGovernment = m_CommittedGovernment;
-	m_isGovernmentChanged = false;
 end
