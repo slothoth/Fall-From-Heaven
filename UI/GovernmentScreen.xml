@@ -6,21 +6,22 @@
 
     <!-- Contained modal: fixed size, centered on screen, so the ModalScreenWide gold frame
          wraps the content instead of running off the edges of a full-width screen. -->
-    <Container ID="MainContainer" Anchor="C,C" Size="1360,720">
-        <Image ConsumeMouse="1" Anchor="C,C" Size="parent,parent" Texture="Wood_Pattern" StretchMode="Tile"/>
+	<Container ID="MainContainer" Anchor="C,C" Size="parent,768">
+        <Image ConsumeMouse="1" Anchor="L,B" Size="parent,parent" Texture="Wood_Pattern" StretchMode="Tile"/>
+		<Grid ConsumeMouse="1" Size="Parent-368,Parent-40" Offset="368, 40" Texture="Wood_CarvedBorder" SliceCorner="240,240" SliceSize="20,20" SliceTextureSize="497,500"/>
 
                 <!-- Columns live in a horizontal scroll panel so they can grow up to the modal
                      width cap and then scroll instead of overflowing. Its Size is set in Lua
                      (BuildCategoryColumns width, ApplyUniformColumnHeights height). -->
-                <ScrollPanel ID="ColumnsScroller" Anchor="C,T" Offset="0,0" Size="parent,parent"
+                <ScrollPanel ID="ColumnsScroller" Anchor="C,B" Offset="0,0" Size="parent,parent"
                              Horizontal="1" AutoScrollBar="1" FullClip="1">
                 <!-- FFH single-policy-per-category picker: far-left governments column + confirm,
                      then one column per policy category (title / policy listbox / description). -->
                 <Stack ID="MainColumns" Anchor="L,T" Offset="0,0" StackGrowth="Right" StackPadding="10,0">
 
                     <!-- Far-left: Governments list + Confirm button -->
-                    <Container ID="GovernmentColumn" Size="210,648">
-                        <Image ID="GovParchment" Offset="-25, 0" Size="240,parent+72" Texture="Parchment_Pattern" StretchMode="Tile"/>
+                    <Container ID="GovernmentColumn" Size="368,768">
+                        <Image ID="GovParchment" Offset="0, 0" Size="368,768" Texture="Parchment_Pattern" StretchMode="Tile"/>
 
                         <Grid ID="GovernmentSlot" Anchor="C,T" Offset="0,44" Size="210,parent-28" >
                             <ScrollPanel ID="GovernmentListScroller" Anchor="C,T" Offset="0,0" Size="parent,parent-58" Vertical="1"
@@ -44,7 +45,7 @@
                      Sized to the modal (parent,parent) so the gold frame wraps the content. -->
                 <Container Style="ModalScreenWide" Size="parent,parent"/>
 
-            </Container>
+	</Container>
 
     <!-- ==================================================================	-->
     <!--	Instances                                                       -->
@@ -54,26 +55,28 @@
          selector pointer) above a description card. Built five times by BuildCategoryColumns();
          the per-category watermark/title/policy-texture are applied in Lua. -->
     <Instance Name="PolicyCategoryColumn">
-        <Container ID="Root" Size="210,584">
-            <Grid ID="Slot" Anchor="C,T" Offset="0,40" Size="210,356" Texture="Governments_CardSlot" SliceCorner="30,50" SliceSize="615,89" SliceTextureSize="675,189">
+        <Container ID="Root" Size="208,584">
+            <Image ID="Slot" Anchor="C,T" Offset="0,40" Texture="Governments_CardSlot_Vertical.dds">
                 <Label ID="Title" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
-                <Image ID="Watermark" Anchor="C,T" Offset="0,250" Size="parent-25,parent-275" Texture="Governments_WatermarkMilitary" StretchMode="Fill" Color="GovWaterMark"/>
+    <!--        <Image ID="Watermark" Anchor="C,T" Offset="0,250" Size="parent-25,parent-275" Texture="Governments_WatermarkMilitary" StretchMode="Fill" Color="GovWaterMark"/> -->
                 <ScrollPanel ID="ListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,parent-76" Vertical="1"
                              AutoScrollBar="1" FullClip="1">
                     <Stack ID="PolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                     <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="28,0" Style="ScrollVerticalBar" Size="8,parent-10"/>
                 </ScrollPanel>
-                <Image ID="Pointer" Anchor="C,T" Offset="0,328" Size="parent-38,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
-            </Grid>
-            <Grid ID="DescCard" Anchor="C,T" Offset="0,400" Size="parent,300" Texture="Governments_Backing" SliceCorner="15,20"
-                  SliceSize="322,105" SliceTextureSize="352,145">
-                <Label ID="DescTitle" Anchor="C,T" Offset="0,16" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
+                <Image ID="Pointer" Anchor="C,T" Offset="0,401" Size="parent-20,31" Texture="Governments_PolicyCategorySelector" StretchMode="Fill" Rotate="90"/>
+            </Image>
+            <Image ID="DescCard" Anchor="C,T" Offset="0,489" Texture="Governments_Backing_Card.dds">
+                <Label ID="DescTitle" Anchor="C,T" Offset="0,18" Style="FontFlair20" FontSize="14" SmallCaps="18" FontStyle="glow" Color0="9,46,75,255" Color1="16,43,67,100" TruncateWidth="200" TruncatedTooltip="1"/>
                 <Container Size="206,93" Anchor="C,T" Offset="0,40">
-                    <Image ID="DescImage" Anchor="C,C" Size="194,83" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,80"/>
-                    <Grid ID="ImageFrame" Anchor="C,C" Offset="0,0" Size="196,93" Texture="Governments_ImageFrame" SliceCorner="20,20" SliceSize="296,51" SliceTextureSize="336,91"/>
+                    <Image ID="DescImage" Anchor="C,C" Size="174,78" Texture="GOVERNMENT_AUTOCRACY" TextureOffset="0,0"/>
+                    <Image ID="ImageFrame" Anchor="C,C" Offset="0,0" Texture="Governments_ImageFrame_Small.dds"/>
                 </Container>
-                <Label ID="Desc" Anchor="C,T" Offset="0,150" WrapWidth="184" Style="FontNormal12"/>
-            </Grid>
+				<Grid ID="DescBonusBacking" Anchor="C,T" Offset="0,138" Size="166,100" Texture="Controls_SubContainer2" SliceCorner="17,17" SliceSize="1,1" SliceTextureSize="36,35" Color="GovBonusDark" MinSize="36,35" AutoSizePadding="0,3">
+					 <Label ID="Desc" Anchor="C,C" Offset="0,0" WrapWidth="156" Style="FontNormal12"/>
+				</Grid>
+
+            </Image>
         </Container>
     </Instance>
 
@@ -85,15 +88,15 @@
         <!-- StateOffsetIncrement MUST be 0,0: the texture is a flat card, not a vertical
              state atlas. A non-zero offset makes the disabled state (locked policies,
              SetDisabled(true)) sample off the texture and render blank. -->
-        <GridButton ID="Button" Anchor="C,C" Size="140,39" Texture="Governments_EconomicCard_Compact.dds" DisabledCallbacks="1"
+        <GridButton ID="Button" Anchor="C,C" Size="140,39" Offset="3,3" Texture="Governments_EconomicCard_Compact.dds" DisabledCallbacks="1"
                     SliceCorner="0,0" SliceSize="0,0" SliceTextureSize="140,39" StateOffsetIncrement="0,0">
             <!-- "Active" = the policy actually slotted in-game right now. Drawn under the
                  others; only shown while it is NOT also the staged selection, so the player
                  can see what is still in effect after picking something new. -->
-            <Image ID="Active" Anchor="C,C" Size="148,44" Texture="Governments_ActiveCard_Small.dds" Hidden="1"/>
-            <Image ID="Highlight" Anchor="C,C" Size="148,44" Texture="Governments_ActiveCard_Small.dds" Hidden="1"/>
-            <Box ID="Hover" Size="parent,parent" Color="78,119,151,90" Hidden="1"/>
-            <Label ID="Name" Anchor="C,C" Offset="0,0" WrapWidth="176" Style="FontNormal14"/>
+            <Image ID="Active" Anchor="C,C" Size="148,44" Offset="2,0" Texture="Governments_ActiveCard_Small.dds" Hidden="1"/>
+            <Image ID="Highlight" Anchor="C,C" Size="148,44" Offset="2,0" Texture="Governments_SelectedCard_Small.dds" Hidden="1"/>
+            <Box ID="Hover" Size="parent,parent" Color="78,119,151,90" Offset="2,0" Hidden="1"/>
+            <Label ID="Name" Anchor="C,C" Offset="1,-1" WrapWidth="176" Style="FontNormal12"/>
         </GridButton>
     </Instance>
 

@@ -56,8 +56,7 @@ g_isMyGovtTabDirty, g_isGovtTabDirty, g_isPoliciesTabDirty = false, false, false
 -- ===========================================================================
 
 function GetPolicyBGTexture(policyType)
-	-- return PICS_SLOT_TYPE_CARD_BGS[GameInfo.Policies[policyType].GovernmentSlotType];
-    return 'GOVERNMENT_AUTOCRACY'
+    return policyType .. "_SCENE.dds"
 end
 
 function Close()
@@ -423,13 +422,13 @@ end
 -- faint watermark (art + its size/offset). The title comes from the slot's own Name.
 ---@type table
 local CATEGORY_DEF = {
-	[0] = { PolicyTexture="Governments_EconomicCard_Compact.dds",   Watermark="Governments_WatermarkEconomic", WatermarkOffsetY=265, WatermarkSizeX=185, WatermarkSizeY=62 },
-	[1] = { PolicyTexture="Governments_MilitaryCard_Compact.dds",   Watermark="Governments_WatermarkMilitary", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
-	[2] = { PolicyTexture="Governments_DiplomaticCard_Compact.dds", Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 },
-	[3] = { PolicyTexture="Governments_GreatPersonCard_Compact.dds", Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 },
-    [4] = { PolicyTexture="Governments_LaborCard_Compact.dds",      Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=250, WatermarkSizeX=185, WatermarkSizeY=81 },
-	[5] = { PolicyTexture="Governments_ReligiousCard_Compact.dds",  Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
-	[6] = { PolicyTexture="Governments_AdminCard_Compact.dds",  Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[0] = { PolicyTexture="Governments_AdminCard_Compact.dds",			Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[1] = { PolicyTexture="Governments_LaborCard_Compact.dds",			Watermark="Governments_WatermarkEconomic", WatermarkOffsetY=250, WatermarkSizeX=185, WatermarkSizeY=81 },
+	[2] = { PolicyTexture="Governments_EconomicCard_Compact.dds",		Watermark="Governments_WatermarkEconomic", WatermarkOffsetY=265, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[3] = { PolicyTexture="Governments_DiplomaticCard_Compact.dds",		Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 },
+	[4] = { PolicyTexture="Governments_ReligiousCard_Compact.dds",		Watermark="Governments_WatermarkMilitary", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[5] = { PolicyTexture="Governments_MilitaryCard_Compact.dds",		Watermark="Governments_WatermarkMilitary", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
+	[6] = { PolicyTexture="Governments_GreatPersonCard_Compact.dds",	Watermark="Governments_WatermarkDiplo",    WatermarkOffsetY=255, WatermarkSizeX=185, WatermarkSizeY=82 },
 };
 
 -- Built columns, uiRow -> the instance table (its controls, plus titleKey/PolicyTexture).
@@ -465,25 +464,19 @@ function BuildCategoryColumns()
 		---@type table
 		local inst = {};
 		ContextPtr:BuildInstanceForControl( "PolicyCategoryColumn", inst, Controls.MainColumns );
-		inst.Watermark:SetTexture( def.Watermark );
-		inst.Watermark:SetSizeVal( def.WatermarkSizeX, def.WatermarkSizeY );
-		inst.Watermark:SetOffsetVal( 0, def.WatermarkOffsetY );
+--		inst.Watermark:SetTexture( def.Watermark );
+--		inst.Watermark:SetSizeVal( def.WatermarkSizeX, def.WatermarkSizeY );
+--		inst.Watermark:SetOffsetVal( 0, def.WatermarkOffsetY );
 		inst.titleKey = slot.Name;				-- slot's own display name (a LOC key)
 		inst.PolicyTexture = def.PolicyTexture;	-- consumed by RealizeCategoryList
 		CATEGORY_CONTROLS[nRowIndex] = inst;
 		end
 	end
 
-	-- Width the modal to fit the generated columns (government + N categories).
-	FitModalWidth();
-end
-
--- Width the modal to fit whichever columns are currently visible, capped at MODAL_MAX_W (past the
--- cap the ColumnsScroller keeps its capped width and the columns scroll horizontally). 50 = frame
--- margin (~25px each side). Measures the stack rather than recomputing by hand, so it stays correct
--- after columns are added or hidden (e.g. the Capria no-government layout). CalculateSize skips
--- hidden children, so a hidden GovernmentColumn drops out of the measured width automatically.
-function FitModalWidth()
+	-- Width the modal to fit the generated columns (government + N categories), capped at
+	-- MODAL_MAX_W. Past the cap the ColumnsScroller keeps its capped width and the columns
+	-- scroll horizontally. 50 = frame margin (~25px each side). Measure the stack rather than
+	-- recomputing by hand.
 	Controls.MainColumns:CalculateSize();
 	---@type number
 	local MARGIN_X = 50;
@@ -517,10 +510,11 @@ end
 -- Uses the base slot-type card art for now; swap to per-policy art later.
 ---@param cc table
 ---@param strPolicyType string
+
 function RealizeDescriptionCard( cc, strPolicyType )
 	---@type table
 	local tPolicy = m_kPolicyCatalogData[strPolicyType];
-	cc.DescTitle:SetText( tPolicy.Name );
+	cc.DescTitle:SetText( Locale.ToUpper(tPolicy.Name) );
 	cc.DescImage:SetTexture( GetPolicyBGTexture(strPolicyType) );
 	cc.DescImage:SetHide( false );
 	cc.Desc:SetText( tPolicy.Description );
@@ -535,9 +529,19 @@ end
 -- glyph (Color0); layer 1 is the glow (Color1), left as authored.
 ---@param cc table
 ---@param isProposed boolean
-function SetDescCardState( cc, isProposed )
-	cc.DescCard:SetTexture( isProposed
-		and "Governments_BackingSelected" or "Governments_Backing" );
+
+function SetDescCardState( cc, isProposed, isHover )
+	if not isHover then
+		cc.DescCard:SetTexture( isProposed
+			and "Governments_BackingSelected_Card.dds" or "Governments_Backing_Card.dds" );
+		cc.DescBonusBacking:SetColorByName( isProposed
+			and "GovBonusSelected" or "GovBonusDark" );
+	else
+		cc.DescCard:SetTexture( isProposed
+			and "Governments_BackingSelected_Card.dds" or "Governments_BackingHover_Card.dds" );
+		cc.DescBonusBacking:SetColorByName( isProposed
+			and "GovBonusSelected" or "ScienceDark" );
+	end
 	---@type number
 	local uiTextColor = isProposed and COLOR_GOVT_SELECTED or COLOR_GOVT_UNSELECTED;
 	cc.DescTitle:SetColor( uiTextColor, 0 );
@@ -553,14 +557,14 @@ function RealizeCategoryDescription( nRowIndex )
 	local strSelected = tSlot and tSlot.GC_PolicyType or EMPTY_POLICY_TYPE;
 	---@type string
 	local strCommitted = m_CommittedPolicyByRow[nRowIndex] or EMPTY_POLICY_TYPE;
-	SetDescCardState( cc, strSelected ~= strCommitted );
+	SetDescCardState( cc, strSelected ~= strCommitted, false );
 	if strSelected ~= EMPTY_POLICY_TYPE and m_kPolicyCatalogData[strSelected] ~= nil then
 		RealizeDescriptionCard( cc, strSelected );
 	else
 		-- Empty slot (nothing staged, e.g. bumped off a policy by a prerequisite change).
 		-- Show a clear "Unselected Policy" state but keep the card image as a populated card
 		-- would (GetPolicyBGTexture is the same call the filled branch uses), not blanked.
-		cc.DescTitle:SetText( "Unselected Policy" );
+		cc.DescTitle:SetText( Locale.ToUpper("LOC_POLICY_JNR_UNSELECTED") );
 		cc.DescImage:SetTexture( GetPolicyBGTexture(strSelected) );
 		cc.DescImage:SetHide( false );
 		cc.Desc:SetText( "" );
@@ -648,16 +652,17 @@ function RealizeCategoryList( nRowIndex )
 			inst.Name:SetAlpha( isSelectable and 1.0 or 0.45 );
 			---@type boolean
 			local isSelected = (strPolicyType == strSelected);
-			inst.Highlight:SetHide( not isSelected );
+			local isCommitted = (strPolicyType == strCommitted);
+			inst.Highlight:SetHide( not (isSelected and not isCommitted) );
 			-- Active marker: the committed policy, hidden when is the staged selection.
-			inst.Active:SetHide( not (strPolicyType == strCommitted and not isSelected) );
+			inst.Active:SetHide( not isCommitted);
 			inst.Hover:SetHide( true );
 
 			-- Hover previews the description; leaving reverts to the staged selection.
 			inst.Button:RegisterCallback( Mouse.eMouseEnter, function()
 				inst.Hover:SetHide(false);
                 -- hovers keep unselected art, except if hovering the staged policy
-				SetDescCardState( cc, strPolicyType == strSelected and strSelected ~= strCommitted );
+				SetDescCardState( cc, strPolicyType == strSelected and strSelected ~= strCommitted, true );
 				RealizeDescriptionCard( cc, strPolicyType );
 			end);
 			inst.Button:RegisterCallback( Mouse.eMouseExit, function()
@@ -876,16 +881,16 @@ function ApplyUniformColumnHeights()
 		local cc = CATEGORY_CONTROLS[nRowIndex];
 		cc.ListScroller:SetSizeY( maxListH );
 		cc.ListScroller:CalculateSize();		-- reclamp the scrollbar to the new viewport
-		cc.Slot:SetSizeY( slotH );
-		cc.Pointer:SetOffsetY( slotH - POINTER_FROM_SLOT_BOTTOM );
-		cc.DescCard:SetOffsetY( SLOT_TOP + slotH + DESC_GAP );
-		cc.DescCard:SetSizeY( descCardH );		-- fit the card to the description (no clip/overlap)
+--		cc.Slot:SetSizeY( slotH );
+--		cc.Pointer:SetOffsetY( slotH - POINTER_FROM_SLOT_BOTTOM );
+--		cc.DescCard:SetOffsetY( SLOT_TOP + slotH + DESC_GAP );
+--		cc.DescCard:SetSizeY( descCardH );		-- fit the card to the description (no clip/overlap)
 		cc.Root:SetSizeY( rootH );
 	end
 
 	-- Keep the government column (and its bottom-anchored Confirm button) the same height.
 	if not IS_CAPRIA then
-		Controls.GovernmentColumn:SetSizeY( rootH );
+	Controls.GovernmentColumn:SetSizeY( rootH );
 	end
 
 	-- Grow the modal to the tallest column (MainColumns:GetSizeY() is the max child height),
@@ -893,8 +898,8 @@ function ApplyUniformColumnHeights()
 	Controls.MainColumns:CalculateSize();
 	---@type number
 	local contentH = Controls.MainColumns:GetSizeY();
-	Controls.ColumnsScroller:SetSizeY( contentH );
-	Controls.MainContainer:SetSizeY( contentH + MODAL_MARGIN_Y );
+--	Controls.ColumnsScroller:SetSizeY( contentH );
+--	Controls.MainContainer:SetSizeY( contentH + MODAL_MARGIN_Y );
 end
 
 -- Rebuild the whole screen from the staged model.

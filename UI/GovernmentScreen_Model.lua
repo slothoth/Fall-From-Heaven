@@ -43,13 +43,9 @@ POLICY_REQUIRES = {
 --	GLOBALS
 -- ===========================================================================
 g_kGovernments = {};
-
 g_kGovernmentTierSorting = {};	-- GovernmentTiers.TierType -> Sorting (built in PopulateStaticData)
-
 g_kCurrentGovernment = nil;
-
 m_kUnlockedPolicies = nil;
-
 m_kNewPoliciesThisTurn = nil;
 
 ---@type number
@@ -612,4 +608,3 @@ function SnapshotCommittedGovernment()
 	m_StagedGovernment = m_CommittedGovernment;
 	m_isGovernmentChanged = false;
 end
-
