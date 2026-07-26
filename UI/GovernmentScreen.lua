@@ -18,7 +18,7 @@ print('')
 ---@type number
 local MODAL_MAX_W, MODAL_MAX_H = 1860, 900;
 ---@type boolean
-local FFH_EXISTS = (GameInfo.Leaders["LEADER_CAPRIA"] ~= nil);
+local FFH_EXISTS = false -- (GameInfo.Leaders["LEADER_CAPRIA"] ~= nil);
 ---@type string
 local TXT_GOV_ASSIGN_POLICIES = Locale.Lookup("LOC_GOVT_ASSIGN_ALL_POLICIES");
 ---@type string
@@ -472,11 +472,22 @@ function BuildCategoryColumns()
 		CATEGORY_CONTROLS[nRowIndex] = inst;
 		end
 	end
+    FitModalWidth()
 
 	-- Width the modal to fit the generated columns (government + N categories), capped at
 	-- MODAL_MAX_W. Past the cap the ColumnsScroller keeps its capped width and the columns
 	-- scroll horizontally. 50 = frame margin (~25px each side). Measure the stack rather than
 	-- recomputing by hand.
+	Controls.MainColumns:CalculateSize();
+	---@type number
+	local MARGIN_X = 50;
+	---@type number
+	local innerW = math.min( Controls.MainColumns:GetSizeX(), MODAL_MAX_W - MARGIN_X );
+	Controls.ColumnsScroller:SetSizeX( innerW );
+	Controls.MainContainer:SetSizeX( innerW + MARGIN_X );
+end
+
+function FitModalWidth()
 	Controls.MainColumns:CalculateSize();
 	---@type number
 	local MARGIN_X = 50;
@@ -703,7 +714,7 @@ end
 -- Highlight = staged pick, Hover = mouse-over. Rows are only clickable when the player
 -- may actually switch this turn (IsAbleToChangeGovernment).
 function RealizeGovernmentsList()
-	if IS_CAPRIA then return; end		-- no Governments column for Capria
+	if FFH_EXISTS then return; end		-- no Governments column
 	Controls.GovernmentListStack:DestroyAllChildren();
 
 	---@param strGovType string
@@ -889,8 +900,8 @@ function ApplyUniformColumnHeights()
 	end
 
 	-- Keep the government column (and its bottom-anchored Confirm button) the same height.
-	if not IS_CAPRIA then
-	Controls.GovernmentColumn:SetSizeY( rootH );
+	if not FFH_EXISTS then
+	    Controls.GovernmentColumn:SetSizeY( rootH );
 	end
 
 	-- Grow the modal to the tallest column (MainColumns:GetSizeY() is the max child height),
