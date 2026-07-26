@@ -73,6 +73,9 @@ m_kPolicyCatalogData	= {};
 m_kPolicyCatalogOrder  = {};		-- Track order of policies to display
 
 ---@type table
+m_kFlavoredPolicyNames  = {};		-- Lists policies which have an alternative name for the local player's civilization
+
+---@type table
 m_kPolicyFilterCurrent	= nil;
 
 ---@type table
@@ -352,29 +355,62 @@ function PopulateStaticData()
 		SLOT_ORDER_IN_CATALOG[slot.GovernmentSlotType] = slot.Index;
 	end
 
-	-- Fill in the complete catalog of policies.
+	-- Create a table of policies to be hidden, including:
+	-- a. generic policies replaced by a unique of the local player's civilization
+	-- b. unique policies of civilizations other than the local player's
+	-- Annotated with ---@type rather than the inline "local x : table" form used elsewhere in the
+	-- base-game files: the inline annotations are valid in the game's Lua but luacheck and
+	-- lua-language-server cannot parse them, and one such line silently invalidates the whole file
+	-- for the linter (which then reports every global in here as undefined).
+	---@type number
+	local localPlayerID = Game.GetLocalPlayer();
+	---@type table
+	local pPlayerConfig = PlayerConfigurations[localPlayerID];
+	---@type table
+	local tListOfHiddenPolicies = {};
+	for row in GameInfo.PolicyReplaces_JNR() do
+		if row.CivilizationType == pPlayerConfig:GetCivilizationTypeName() then
+			tListOfHiddenPolicies[row.ReplacesPolicyType] = 1;
+		else
+			tListOfHiddenPolicies[row.CivUniquePolicyType] = 1;
+		end
+	end
+
+	-- Some policies get alternative names for certain civilizations.
+	-- These can be toggled ad-hoc by the player, so we need to pass them to the main script and process them there.
+	for row in GameInfo.Policies_AlternateNames_JNR() do
+		if row.CivilizationType == pPlayerConfig:GetCivilizationTypeName() then
+			m_kFlavoredPolicyNames[row.PolicyType] = row.Name;
+		end
+	end
+
+	-- Fill in the complete catalog of policies. Civ-replaced policies are filtered out HERE, at
+	-- the catalog level, so they never reach any consumer -- which is why GetCategoryPolicyList
+	-- below only has to worry about the government filter and the "none" policies.
 	for row in GameInfo.Policies() do
-		---@type table
-		local policyTypeRow	= GameInfo.Types[row.PolicyType];
-		---@type string
-		local policyName = Locale.Lookup(row.Name);
-		---@type number
-		local policyTypeHash = policyTypeRow.Hash;
-		---@type string
-		local slotType = row.GovernmentSlotType;
-		---@type string
-		local description = Locale.Lookup(row.Description);
-		--local draftCost			:number = kPlayerCulture:GetEnactPolicyCost(policyTypeHash);	--Move to live data
+		if not tListOfHiddenPolicies[row.PolicyType] then
+			---@type table
+			local policyTypeRow	= GameInfo.Types[row.PolicyType];
+			---@type string
+			local policyName = Locale.Lookup(row.Name);
+			---@type number
+			local policyTypeHash = policyTypeRow.Hash;
+			---@type string
+			local slotType = row.GovernmentSlotType;
+			---@type string
+			local description = Locale.Lookup(row.Description);
+			--local draftCost			:number = kPlayerCulture:GetEnactPolicyCost(policyTypeHash);	--Move to live data
 
-		m_kPolicyCatalogData[row.PolicyType] = {
-			Description = description,
-			Name		= policyName,
-			PolicyHash	= policyTypeHash,
-			SlotType	= slotType,			-- SLOT_MILITARY, SLOT_ECONOMIC, SLOT_DIPLOMATIC, SLOT_SLTHCUL, (SLOT_GREAT_PERSON)
-			UniqueID	= row.Index			-- the row this policy exists in, is guaranteed to be unique (as-is the house, but these are readable. ;) )
-			};
+			m_kPolicyCatalogData[row.PolicyType] = {
+				Description = description,
+				Name		= policyName,
+				PolicyHash	= policyTypeHash,
+				SlotType	= slotType,			-- SLOT_MILITARY, SLOT_ECONOMIC, SLOT_DIPLOMATIC, SLOT_SLTHCUL, (SLOT_GREAT_PERSON)
+				UniqueID	= row.Index			-- the row this policy exists in, is guaranteed to be unique (as-is the house, but these are readable. ;) )
+				};
 
-		table.insert(m_kPolicyCatalogOrder, row.PolicyType);
+			table.insert(m_kPolicyCatalogOrder, row.PolicyType);
+		end
 	end
 
 	table.sort(m_kPolicyCatalogOrder, SortPolicies );
@@ -391,19 +427,8 @@ function PopulateStaticData()
 		end
 	end
 
-	-- Civilization-restricted policies. Same deal, but the table is authored by this mod rather
-	-- than the expansion, so it is looked up by name and skipped entirely when absent.
-	POLICY_CIV_EXCLUSIVE = {};
-	---@type table
-	local kCivExclusives = GameInfo[POLICY_CIV_EXCLUSIVE_TABLE];
-	if kCivExclusives ~= nil then
-		for row in kCivExclusives() do
-			if POLICY_CIV_EXCLUSIVE[row.PolicyType] == nil then
-				POLICY_CIV_EXCLUSIVE[row.PolicyType] = {};
-			end
-			POLICY_CIV_EXCLUSIVE[row.PolicyType][row.CivilizationType] = true;
-		end
-	end
+	-- NOTE: there is deliberately no civilization filter here. Civ-unique policies and the generics
+	-- they replace are resolved further up via PolicyReplaces_JNR, before the catalog is built.
 
 	-- Fill in governments
 	g_kGovernments = {};
@@ -590,46 +615,29 @@ function IsPolicyAllowedByGovernment( strPolicyType, strGovType )
 	return kGovs[strGovType] == true;
 end
 
--- Civilization-restricted policies, same shape and same semantics as the government table above:
--- policyType -> { [civilizationType] = true }, and a policy with no row is unrestricted.
---
--- The SQL table is authored separately. Only its NAME and the two column names are assumed here,
--- so if you call them something else, change POLICY_CIV_EXCLUSIVE_TABLE / the two field reads in
--- PopulateStaticData and nothing else has to move. The lookup is guarded, so until the table
--- exists every policy simply counts as unrestricted and the screen behaves as it does today.
----@type string
-POLICY_CIV_EXCLUSIVE_TABLE = "Policy_CivilizationExclusives";
-
----@type table
-POLICY_CIV_EXCLUSIVE = {};
-
+-- The name to show for a policy: the local civilization's alternate name when it has one
+-- (Policies_AlternateNames_JNR -> m_kFlavoredPolicyNames), otherwise the catalog name.
+-- Alternate names arrive as raw LOC keys; catalog names are already looked up.
 ---@param strPolicyType string
----@param strCivType string
----@return boolean
-function IsPolicyAllowedByCivilization( strPolicyType, strCivType )
-	---@type table
-	local kCivs = POLICY_CIV_EXCLUSIVE[strPolicyType];
-	if kCivs == nil then return true; end			-- not civ-restricted
-	if strCivType == nil then return false; end		-- restricted, and we cannot tell who this is
-	return kCivs[strCivType] == true;
-end
-
--- The local player's civilization ("CIVILIZATION_ROME"), or nil before a player is known.
 ---@return string
-function GetPlayerCivilizationType()
-	if m_ePlayer == -1 then return nil; end
+function GetPolicyDisplayName( strPolicyType )
+	if m_kFlavoredPolicyNames[strPolicyType] ~= nil then
+		return Locale.Lookup( m_kFlavoredPolicyNames[strPolicyType] );
+	end
 	---@type table
-	local pConfig = PlayerConfigurations[m_ePlayer];
-	if pConfig == nil then return nil; end
-	return pConfig:GetCivilizationTypeName();
+	local tPolicy = m_kPolicyCatalogData[strPolicyType];
+	return tPolicy and tPolicy.Name or strPolicyType;
 end
 
 -- The ordered list of policy types a category column offers right now.
 --
 -- THIS IS THE SINGLE PLACE that decides a column's contents: RealizeCategoryList and
--- MeasureMaxDescTextH both go through it, so any further filtering (civilization-specific
--- variants, capping the column at a fixed number of rows, ...) only has to be added here and
--- the display half picks it up for free.
+-- MeasureMaxDescTextH both go through it, so any further filtering (capping the column at a fixed
+-- number of rows, ...) only has to be added here and the display half picks it up for free.
+--
+-- There is no civilization filter here on purpose: PopulateStaticData already resolves civ-unique
+-- policies against the generics they replace (PolicyReplaces_JNR) before the catalog is built, so
+-- anything reaching m_kPolicyCatalogOrder is already correct for the local player's civ.
 ---@param nRowIndex number
 ---@return table
 function GetCategoryPolicyList( nRowIndex )
@@ -639,8 +647,6 @@ function GetCategoryPolicyList( nRowIndex )
 	-- so there is never a staged-but-uncommitted government to consider here.
 	---@type string
 	local strGovType = m_CommittedGovernment;
-	---@type string
-	local strCivType = GetPlayerCivilizationType();
 	---@type table
 	local kList = {};
 	for _,strPolicyType in ipairs(m_kPolicyCatalogOrder) do
@@ -648,8 +654,7 @@ function GetCategoryPolicyList( nRowIndex )
 		local tPolicy = m_kPolicyCatalogData[strPolicyType];
 		if tPolicy.SlotType == strSlotType
 				and not IsNonePolicy( strPolicyType )
-				and IsPolicyAllowedByGovernment( strPolicyType, strGovType )
-				and IsPolicyAllowedByCivilization( strPolicyType, strCivType ) then
+				and IsPolicyAllowedByGovernment( strPolicyType, strGovType ) then
 			table.insert( kList, strPolicyType );
 		end
 	end

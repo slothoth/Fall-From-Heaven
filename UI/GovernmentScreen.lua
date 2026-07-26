@@ -533,7 +533,8 @@ end
 function RealizeDescriptionCard( cc, strPolicyType )
 	---@type table
 	local tPolicy = m_kPolicyCatalogData[strPolicyType];
-	cc.DescTitle:SetText( Locale.ToUpper(tPolicy.Name) );
+	-- GetPolicyDisplayName so a civ-renamed policy's card title matches its row in the list.
+	cc.DescTitle:SetText( Locale.ToUpper( GetPolicyDisplayName(strPolicyType) ) );
 	cc.DescImage:SetTexture( GetPolicyBGTexture(strPolicyType) );
 	cc.DescImage:SetHide( false );
 	cc.Desc:SetText( tPolicy.Description );
@@ -672,7 +673,11 @@ function RealizeCategoryList( nRowIndex )
 			---@type table
 			local inst = {};
 			ContextPtr:BuildInstanceForControl( "PolicyNameItem", inst, uiStack );
-			inst.Name:SetText( tPolicy.Name );
+			-- GetPolicyDisplayName, not tPolicy.Name: some civilizations rename a policy without
+			-- otherwise changing it (Policies_AlternateNames_JNR).
+			---@type string
+			local strPolicyName = GetPolicyDisplayName( strPolicyType );
+			inst.Name:SetText( strPolicyName );
             -- CardArt is the hover-scaled copy of the card, so it must carry the same texture.
             if isUnlocked then
                 inst.Button:SetTexture(cc.PolicyTexture)
@@ -686,9 +691,9 @@ function RealizeCategoryList( nRowIndex )
 				local tReq = m_kPolicyCatalogData[ POLICY_REQUIRES[strPolicyType] ];
 				-- Names in the catalog are already Locale.Lookup'd; build a plain note so we
 				-- don't depend on a LOC key. All current prereqs are state religions.
-				inst.Name:SetToolTipString( Locale.Lookup('LOC_POLICY_LOCKED_REASON', tPolicy.Name, (tReq and tReq.Name or "?")));
+				inst.Name:SetToolTipString( Locale.Lookup('LOC_POLICY_LOCKED_REASON', strPolicyName, (tReq and tReq.Name or "?")));
 			else
-				inst.Name:SetToolTipString( tPolicy.Name );
+				inst.Name:SetToolTipString( strPolicyName );
 			end
 			inst.Name:SetAlpha( isSelectable and 1.0 or 0.45 );
 			---@type boolean
