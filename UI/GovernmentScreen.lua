@@ -1,5 +1,3 @@
--- Copyright 2018, Firaxis Games
-
 include("InstanceManager");
 include("SupportFunctions");	-- Clamp
 include("TabSupport");
@@ -38,24 +36,19 @@ local COLOR_GOVT_UNSELECTED	= UI.GetColorValueFromHexLiteral(0xffe9dfc7); -- Bac
 ---@type number
 local COLOR_GOVT_SELECTED	= UI.GetColorValueFromHexLiteral(0xff261407); -- Background for selected background (or forground text color on non-selected).
 
--- Width of the fixed government column. MUST match GovernmentColumn's Size in the XML and the
--- X offset of the Wood_CarvedBorder backing Grid: the policy scroller starts where it ends.
+-- Width of the fixed government column. Matches GovernmentColumn's Size in  XML and
+-- X offset of Wood_CarvedBorder backing Grid. policy scroller starts where it ends.
 ---@type number
 local GOV_COLUMN_W = 368;
--- Height of the modal's blue title bar (from the ModalScreenWide chrome). Used to measure the
--- gap below the header when centring the policy columns vertically -- tune here if the chrome
--- style changes.
+-- Height of the modal's blue title bar from the ModalScreenWide.
+-- measures gap below the header when centring the policy columns vertically
 ---@type number
 local HEADER_BAR_H = 40;
--- Policy card sizes: resting, and grown-on-hover. The hover "pop" replaces the old flat blue
--- Hover box. The PolicyNameItem Root cell stays at the RESTING size, so growing a card overlaps
--- its neighbours instead of reflowing the list.
+-- Policy card sizes: resting, and grown-on-hover.
 ---@type number
 local CARD_W, CARD_H = 140, 39;
 ---@type number
 local CARD_HOVER_W, CARD_HOVER_H = 152, 43;
--- The Active/Highlight frame art is drawn slightly proud of the card; keep that margin when the
--- card grows so the frames stay aligned to it.
 ---@type number
 local CARD_OVERLAY_PAD_W, CARD_OVERLAY_PAD_H = 8, 5;
 
@@ -64,7 +57,7 @@ local CARD_OVERLAY_PAD_W, CARD_OVERLAY_PAD_H = 8, 5;
 --	VARIABLES
 -- ===========================================================================
 ---@type boolean
-local m_isLocalPlayerTurn = true;           -- Toggle these based on the game engine rules.
+local m_isLocalPlayerTurn = true;
 ---@type number
 local m_TopPanelConsideredHeight = 0;
 ---@type string
@@ -124,7 +117,7 @@ function OnConfirmPolicies()
 		local pPlayerCulture = kPlayer:GetCulture();
 
 		-- Perform in two passes, with removals done first, otherwise "swapping"
-		-- may fail between rows becaues the engine will think a policy is still
+		-- may fail between rows becau the engine will think a policy is still
 		-- active in its slot.
 
 		---@type table
@@ -142,10 +135,6 @@ function OnConfirmPolicies()
 
 		pPlayerCulture:RequestPolicyChanges(clearList, addList);
 
-		-- NOTE: this button commits POLICIES ONLY. Government changes are committed immediately
-		-- from OnGovernmentClicked (see the comment there), because the chosen government decides
-		-- which policies are on offer and so cannot wait behind the same Confirm.
-
 		m_isPoliciesChanged	= false;
 		Controls.ConfirmPolicies:SetDisabled( true );
 		Close();
@@ -154,7 +143,6 @@ function OnConfirmPolicies()
 	if(ShouldConfirmChanges())then
 		---@type table
 		local popup = PopupDialogInGame:new( "ConfirmPolicies" );
-		-- Policies only; the anarchy warning now lives on the government click (OnGovernmentClicked).
 		popup:ShowYesNoDialog(TXT_GOV_POPUP_PROMPT_POLICIES_CONFIRM, OnConfirmPolicies_Yes);
 	else
 		OnConfirmPolicies_Yes();
@@ -324,7 +312,6 @@ function OnShutdown()
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenGovernments.Remove( OnOpenGovernmentScreenRefresh );
 	LuaEvents.TechCivicCompletedPopup_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenRefresh );
 	LuaEvents.Advisor_GovernmentOpenPolicies.Remove( OnOpenGovernmentScreenRefresh );
-
 end
 
 -- ===========================================================================
@@ -410,20 +397,9 @@ if HasCapability("CAPABILITY_GOVERNMENTS_VIEW") then
 	Initialize();
 end
 
--- ===========================================================================
--- ===========================================================================
---	FFH OVERHAUL: single-policy-per-category picker presentation.
---	Reuses the existing staging model (m_ActivePolicyRows / m_ActivePoliciesBySlot,
---	SetActivePolicyAtSlotIndex / RemoveActivePolicyAtSlotIndex, m_isPoliciesChanged)
---	and commit path (OnConfirmPolicies -> RequestPolicyChanges). Only presentation
---	changes: per category a title + a listbox of policy names + a description panel.
--- ===========================================================================
--- ===========================================================================
 
--- Generic column "styles", indexed 0..4 (NOT tied to a slot type). Each government slot
--- picks a style by its GameInfo index; anything past the last defined style falls back to
--- style 0. Only what differs between columns lives here: the policy-row texture and the
--- faint watermark (art + its size/offset). The title comes from the slot's own Name.
+--	NEW NOT VANILLA STUFF
+-- Column styles, go up to 7, using GameInfo SlotType Index. Any after 7 use 0's style.
 ---@type table
 local CATEGORY_DEF = {
 	[0] = { PolicyTexture="Governments_AdminCard_Compact.dds",			Watermark="Governments_WatermarkWildcard", WatermarkOffsetY=275, WatermarkSizeX=185, WatermarkSizeY=62 },
@@ -440,16 +416,11 @@ local CATEGORY_DEF = {
 ---@type table
 local CATEGORY_CONTROLS = {};
 
--- Build one category column per GameInfo.GovernmentSlots row, into MainColumns (after the
--- government column authored in XML). This is the single source of the row model: it fills
--- ROW_SLOT_TYPES / SLOT_TYPE_TO_ROW as it goes. Each slot picks a style from CATEGORY_DEF by
--- its .Index (default style 0 when the index exceeds the defined styles). Called once from
--- LateInitialize. To add/remove/reorder columns, change the GovernmentSlots table in SQL.
+-- builds category columns for each GovernmentSlots entry into MainColumns. Fills policy cards for each.
 function BuildCategoryColumns()
-	if #ROW_SLOT_TYPES > 0 then return; end		-- already built (guard re-init)
+	if #ROW_SLOT_TYPES > 0 then return; end
 
-	-- Which slot types actually have at least one policy in the catalog. Slot types with no
-	-- policies get no column (nothing would ever populate them). Runs after PopulateStaticData.
+	-- skip slot types with no entries
 	---@type table
 	local slotHasPolicy = {};
 	for _, tPolicy in pairs(m_kPolicyCatalogData) do
@@ -486,18 +457,15 @@ function GetPolicyAreaLeft()
 	return Controls.GovernmentColumn:IsHidden() and 0 or GOV_COLUMN_W;
 end
 
--- Width the modal to fit the fixed government column PLUS the generated policy columns, capped
+-- Width the modal to fit the fixed government column plus generated policy columns, capped
 -- at MODAL_MAX_W. Past the cap the ColumnsScroller keeps its capped width and the columns scroll
--- horizontally inside it. 50 = frame margin (~25px each side). Measure the stack rather than
--- recomputing by hand.
+-- horizontally inside it. 50 = frame margin (~25px each side).
 function FitModalWidth()
 	Controls.MainColumns:CalculateSize();
 	---@type number
 	local MARGIN_X = 50;
 	---@type number
 	local nLeft = GetPolicyAreaLeft();
-	-- The scroller spans only the area right of the government column, so the cap has to leave
-	-- room for that column as well as the frame margin.
 	---@type number
 	local policyW = math.min( Controls.MainColumns:GetSizeX(), MODAL_MAX_W - MARGIN_X - nLeft );
 	Controls.ColumnsScroller:SetOffsetX( nLeft );
@@ -505,11 +473,7 @@ function FitModalWidth()
 	Controls.MainContainer:SetSizeX( nLeft + policyW + MARGIN_X );
 end
 
--- FFH has no governments beyond chiefdom, shows only the policy categories. The Confirm
--- button is authored inside GovernmentColumn and also commits policy changes, so reparent it onto
--- the modal itself first -- it keeps its C,B anchor, so it settles into the modal's bottom-centre
--- margin -- then hide the whole column. Without the reparent the button would vanish with the
--- column and players would have no way to commit. Runs once, right after the columns are built.
+-- FFH only moving the confirm policies so in centre
 function ApplyFFHNoGovernmentLayout()
 	Controls.ConfirmPolicies:ChangeParent( Controls.MainContainer );
 	Controls.ConfirmPolicies:SetOffsetVal( 0, 8 );		-- nudge up off the very bottom edge; tune to taste
@@ -517,16 +481,8 @@ function ApplyFFHNoGovernmentLayout()
 	FitModalWidth();									-- reclaim the freed column width
 end
 
-
-
-
-
-
-
-
 -- Show the description for the category's currently-staged policy (or blank).
 -- Fill a category's description card (title / image / text) for a given policy.
--- Uses the base slot-type card art for now; swap to per-policy art later.
 ---@param cc table
 ---@param strPolicyType string
 
@@ -543,10 +499,10 @@ end
 ---@param nRowIndex number
 -- Style the description card for a category.
 --   isProposed = this category has a staged, uncommitted change -> "selected" art.
--- Both textures are 352x145, so the Grid's existing slice params stay valid. The glyph
--- colour must invert with the art: selected (light) backing needs the dark text and the
--- unselected (dark) backing the light text. Label:SetColor(c, layer): layer 0 is the main
--- glyph (Color0); layer 1 is the glow (Color1), left as authored.
+-- glyph colour inverts with the art: selected backing needs dark text
+-- unselected (dark) backing needs light text.
+-- Label:SetColor(c, layer): layer 0 is the main
+-- glyph (Color0); layer 1 is the glow (Color1)
 ---@param cc table
 ---@param isProposed boolean
 
@@ -581,9 +537,7 @@ function RealizeCategoryDescription( nRowIndex )
 	if strSelected ~= EMPTY_POLICY_TYPE and m_kPolicyCatalogData[strSelected] ~= nil then
 		RealizeDescriptionCard( cc, strSelected );
 	else
-		-- Empty slot (nothing staged, e.g. bumped off a policy by a prerequisite change).
-		-- Show a clear "Unselected Policy" state but keep the card image as a populated card
-		-- would (GetPolicyBGTexture is the same call the filled branch uses), not blanked.
+		-- Empty slot shows a clear "Unselected Policy" but keeps card image
 		cc.DescTitle:SetText( Locale.ToUpper("LOC_POLICY_JNR_UNSELECTED") );
 		cc.DescImage:SetTexture( GetPolicyBGTexture(strSelected) );
 		cc.DescImage:SetHide( false );
@@ -599,24 +553,19 @@ function OnPolicyItemClicked( nRowIndex, strPolicyType )
 	---@type table
 	local tSlot = GetCategorySlot(nRowIndex);
 	if tSlot == nil then return; end
-	-- Re-clicking the already-selected policy is a no-op. It used to CLEAR the slot, which
-	-- read as a bug on open: there the selection IS the committed policy, so the very first
-	-- click emptied the slot and blanked the description card.
 	if tSlot.GC_PolicyType == strPolicyType then return; end
 	-- Guard: prerequisite-locked policies register no click callback, but stay defensive.
 	if not IsPolicyPrereqMet( strPolicyType ) then return; end
 	SetActivePolicyAtSlotIndex( tSlot.GC_SlotIndex, strPolicyType );
-	-- Staging this may invalidate a dependent in another column (e.g. changing the state
-	-- religion drops Sacrifice the Weak), so resolve dependencies then rebuild every list.
+	-- Staging a policy may invalidate a dependent policy in another column so resolve dependencies then rebuild every list.
 	EnforcePolicyDependencies();
 	UI.PlaySound("Play_UI_Click");
 	RealizeAll();
 end
 
--- Hover feedback for a policy card: grow the card itself rather than tinting it with an overlay
--- box. The PolicyNameItem Root cell keeps the RESTING size, so a grown card pops out over its
--- neighbours instead of pushing the rest of the list around. The Active/Highlight frame art is
--- drawn slightly proud of the card, so it has to grow by the same amount to stay registered.
+-- Hover feedback for a policy card: grow the card.
+-- The PolicyNameItem Root cell keeps the RESTING size, so a grown card pops out over its
+-- neighbours instead of pushing the rest of the list around.
 ---@param inst table
 ---@param isHover boolean
 function SetPolicyCardSize( inst, isHover )
@@ -624,10 +573,6 @@ function SetPolicyCardSize( inst, isHover )
 	local w = isHover and CARD_HOVER_W or CARD_W;
 	---@type number
 	local h = isHover and CARD_HOVER_H or CARD_H;
-	-- Do NOT resize inst.Button. Its texture is an unsliced Grid and will not scale with the
-	-- control, so resizing it just shifted the art about; and a hit area that grows under the
-	-- cursor causes hover flicker. The enlarged card is the CardArt Image laid over the button
-	-- (it scales properly, and being larger it fully hides the un-scaled button art).
 	inst.CardArt:SetSizeVal( w, h );
 	inst.CardArt:SetHide( not isHover );
 	inst.Active:SetSizeVal( w + CARD_OVERLAY_PAD_W, h + CARD_OVERLAY_PAD_H );
@@ -660,12 +605,10 @@ function RealizeCategoryList( nRowIndex )
 		---@type table
 		local tPolicy = m_kPolicyCatalogData[strPolicyType];
 		do
-			-- Locked policies are listed too (so the player can see what is coming) but are
-			-- dimmed and non-selectable: the engine would reject slotting an unlocked policy.
+			-- Locked policies are listed but dimmed and non-selectable.
 			---@type boolean
 			local isUnlocked = m_kUnlockedPolicies[strPolicyType] == true;
-			-- Cross-category prerequisite (e.g. Sacrifice the Weak needs the Ashen Veil state
-			-- religion committed). Unmet -> dim + non-selectable, same as not-yet-unlocked.
+			-- Cross-category prerequisite are the same, for now.
 			---@type boolean
 			local isPrereqMet = IsPolicyPrereqMet( strPolicyType );
 			---@type boolean
@@ -673,12 +616,11 @@ function RealizeCategoryList( nRowIndex )
 			---@type table
 			local inst = {};
 			ContextPtr:BuildInstanceForControl( "PolicyNameItem", inst, uiStack );
-			-- GetPolicyDisplayName, not tPolicy.Name: some civilizations rename a policy without
-			-- otherwise changing it (Policies_AlternateNames_JNR).
+            -- ensure we get right name, as fancy rename Policies_AlternateNames_JNR
 			---@type string
 			local strPolicyName = GetPolicyDisplayName( strPolicyType );
 			inst.Name:SetText( strPolicyName );
-            -- CardArt is the hover-scaled copy of the card, so it must carry the same texture.
+            -- CardArt is the hover-scaled copy so same texture.
             if isUnlocked then
                 inst.Button:SetTexture(cc.PolicyTexture)
                 inst.CardArt:SetTexture(cc.PolicyTexture)
@@ -689,8 +631,7 @@ function RealizeCategoryList( nRowIndex )
 			if not isPrereqMet then
 				---@type table
 				local tReq = m_kPolicyCatalogData[ POLICY_REQUIRES[strPolicyType] ];
-				-- Names in the catalog are already Locale.Lookup'd; build a plain note so we
-				-- don't depend on a LOC key. All current prereqs are state religions.
+				-- Names in the catalog are already Locale.Lookup'd; build a plain note so don't depend on a LOC key.
 				inst.Name:SetToolTipString( Locale.Lookup('LOC_POLICY_LOCKED_REASON', strPolicyName, (tReq and tReq.Name or "?")));
 			else
 				inst.Name:SetToolTipString( strPolicyName );
@@ -733,10 +674,8 @@ function RealizeCategoryList( nRowIndex )
 end
 
 
--- Click a government row. Governments are deliberately NOT buffered behind the Confirm button:
--- the government determines which policies are available, so it has to take effect BEFORE the
--- player picks policies. Clicking one therefore commits immediately, behind the same confirmation
--- dialogue the old government panel used (anarchy warning included).
+-- Click a government row, commits immediately, behind the same confirmation
+-- dialogue of old government panel and anarchy warning
 ---@param strGovType string
 function OnGovernmentClicked( strGovType )
 	if not IsAbleToChangeGovernment() then return; end
@@ -769,10 +708,6 @@ function OnGovernmentClicked( strGovType )
 end
 
 -- Commit the government change the player just confirmed.
---   isAnarchy = the switch drops the player into anarchy, which clears every policy slot, so the
---   screen has nothing meaningful left to show and closes (matching the old panel). Otherwise the
---   GovernmentChanged event refreshes the policy columns in place against the new government --
---   which is the entire point of committing immediately instead of buffering.
 ---@param strGovType string
 ---@param isAnarchy boolean
 function OnAcceptGovernmentChange( strGovType, isAnarchy )
@@ -845,16 +780,12 @@ function RealizeGovernmentsList()
 		ContextPtr:BuildInstanceForControl( "GovernmentNameItem", inst, Controls.GovernmentListStack );
 		inst.Name:SetText( Locale.ToUpper(tGov.Name) );
 		inst.Name:SetToolTipString( tGov.StatsTooltip or tGov.Name );
-		-- Locked governments are listed but dimmed and non-selectable: the engine would
-		-- reject switching to one the player has not unlocked (m_kUnlockedGovernments).
+		-- Locked governments are listed but dimmed and non-selectable
 		---@type boolean
 		local isUnlocked = m_kUnlockedGovernments[strGovType] == true;
 		inst.Name:SetAlpha( isUnlocked and 1.0 or 0.45 );
 
-		-- Selection is shown by the card art itself (like the policy description card): the
-		-- government actually in effect uses Governments_BackingSelected, all others Backing.
-		-- There is no "staged" government any more -- clicking one commits it -- so this tracks
-		-- the committed government directly. No hover/highlight overlays.
+		-- Selection is shown by the card art itself Governments_BackingSelected, Backing.
 		---@type boolean
 		local isStaged = (strGovType == m_CommittedGovernment);
         if isUnlocked then
@@ -882,8 +813,7 @@ function RealizeGovernmentsList()
 	Controls.GovernmentListScroller:CalculateSize();
 end
 
--- Confirm button: POLICIES only. Government changes bypass it entirely (they commit straight from
--- OnGovernmentClicked), so it is shown and enabled purely on the policy staging state.
+-- Confirm Policies button
 function RealizeConfirmButton()
 	---@type boolean
 	local canEdit = IsAbleToChangePolicies();
@@ -893,13 +823,11 @@ function RealizeConfirmButton()
 	Controls.ConfirmPolicies:SetText( m_isPoliciesChanged and TXT_GOV_CONFIRM_POLICIES or TXT_GOV_ASSIGN_POLICIES );
 end
 
--- Grow every category column's listbox to fit the tallest policy list (uniform height, so
--- the description cards stay aligned), then grow the modal to match.
+-- Grow every category column's listbox to fit the tallest policy list, then grow the modal to match.
 -- LIST_MIN_H keeps it from shrinking below default.
 -- Measure the tallest wrapped description among a column's policies, using the column's own
 -- Desc label so WrapWidth/font match exactly. Result is cached on cc.MaxDescTextH.
--- Walks the SAME filtered list the column displays (GetCategoryPolicyList), so hidden policies
--- cannot inflate the card height.
+-- has handling so hidden policies dont inflate it, could take that out.
 ---@param cc table
 ---@param nRowIndex number
 function MeasureMaxDescTextH( cc, nRowIndex )
@@ -921,9 +849,6 @@ function ApplyUniformColumnHeights()
 	local SLOT_TOP = 40;
 	---@type number
 	local POINTER_FROM_SLOT_BOTTOM, LIST_MIN_H = 28, 280;
-	-- Equal padding above and below the policy columns: the gap under the blue header bar and the
-	-- gap above the modal's bottom edge. Both the modal height and the scroller offset derive from
-	-- it, so this single number controls the vertical framing.
 	---@type number
 	local CONTENT_PAD_Y = 24;
 	-- DescCard = a fixed top region (title + image + the offset down to the Desc label at
@@ -941,7 +866,7 @@ function ApplyUniformColumnHeights()
 		local cc = CATEGORY_CONTROLS[nRowIndex];
 		-- Re-measure when the government changes: the column's policy list is filtered by
 		-- government (GetCategoryPolicyList), so a cached height from another government can be
-		-- for a different set of descriptions entirely.
+		-- for a different set of descriptions entirely. Or should we just bite the bullet and handle all?
 		if cc.MaxDescTextH == nil or cc.MaxDescGovType ~= m_CommittedGovernment then
 			cc.MaxDescTextH = MeasureMaxDescTextH( cc, nRowIndex );
 			cc.MaxDescGovType = m_CommittedGovernment;
@@ -961,10 +886,7 @@ function ApplyUniformColumnHeights()
 		if h > maxListH then maxListH = h; end
 	end
 
-	-- The ceiling for the whole modal. MODAL_MAX_H is a design cap, not a promise that the display
-	-- can show it (1366x768 is still common), and the modal is centred, so anything taller than the
-	-- screen would hang off both ends. Vignette is the full-screen consumer, so its height is the
-	-- screen height.
+    -- runtime max size height from other UI element.
 	---@type number
 	local nMaxModalH = math.min( MODAL_MAX_H, Controls.Vignette:GetSizeY() );
 
@@ -994,28 +916,13 @@ function ApplyUniformColumnHeights()
 		cc.Root:SetSizeY( rootH );
 	end
 
-	-- Grow the modal to the column content. It is NOT a fixed 768 any more: rootH is driven by the
-	-- longest description, and nothing previously bounded it to the container, so tall cards simply
-	-- overflowed the bottom edge.
-	--
-	-- A column's Root carries SLOT_TOP of empty space above its blue Slot art, so the VISIBLE
-	-- content runs from (nTop + SLOT_TOP) down to (nTop + rootH) -- that is (rootH - SLOT_TOP) tall:
-	--     nModalH = HEADER_BAR_H + CONTENT_PAD_Y + (rootH - SLOT_TOP) + CONTENT_PAD_Y
-	-- listH_cap above guarantees this lands within MODAL_MAX_H except in the degenerate case where
-	-- LIST_MIN_H forces the list taller than the cap allows, hence the min().
+	-- Grow the modal to the column content.
 	---@type number
 	local nModalH = math.min( nMaxModalH,
 		HEADER_BAR_H + (2 * CONTENT_PAD_Y) + rootH - SLOT_TOP );
 	Controls.MainContainer:SetSizeY( nModalH );
 
 	-- Vertical framing: balance the gap under the header bar against the gap above the bottom edge.
-	--     gapTop    = (nTop + SLOT_TOP) - HEADER_BAR_H
-	--     gapBottom = nModalH - (nTop + rootH)
-	-- Setting those equal and solving gives the expression below, which resolves to exactly
-	-- CONTENT_PAD_Y whenever nModalH was not clamped. The floor is (HEADER_BAR_H - SLOT_TOP), not
-	-- HEADER_BAR_H: it is the VISIBLE top (nTop + SLOT_TOP) that must clear the header bar, and
-	-- clamping nTop itself to HEADER_BAR_H would override the balanced value and push the columns
-	-- down by a whole SLOT_TOP.
 	---@type number
 	local nTop = math.max( 0, HEADER_BAR_H - SLOT_TOP,
 		math.floor( (nModalH - rootH + HEADER_BAR_H - SLOT_TOP) / 2 ) );
@@ -1028,13 +935,10 @@ function ApplyUniformColumnHeights()
 	if not Controls.GovernmentColumn:IsHidden() then
 		---@type number
 		local CONFIRM_H, CONFIRM_GAP, LIST_PAD = 41, 8, 8;
-		-- Match the policy columns' bottom gap, so the Confirm button and the bottom of the
-		-- government list line up with the bottom of the description cards.
 		---@type number
 		local nGapBottom = math.max( 0, nModalH - (nTop + rootH) );
 		Controls.ConfirmPolicies:SetOffsetY( nGapBottom );
 		Controls.GovernmentSlot:SetOffsetY( nGapBottom + CONFIRM_H + CONFIRM_GAP );
-		-- Grow the list box UPWARD off the button to fit its content, never past the header bar.
 		---@type number
 		local nMaxListH = (nTop + rootH) - HEADER_BAR_H - CONFIRM_H - CONFIRM_GAP;
 		---@type number

@@ -10,16 +10,14 @@
         <Image ConsumeMouse="1" Anchor="L,B" Size="parent,parent" Texture="Wood_Pattern" StretchMode="Tile"/>
 		<Grid ConsumeMouse="1" Size="Parent-368,Parent-40" Offset="368, 40" Texture="Wood_CarvedBorder" SliceCorner="240,240" SliceSize="20,20" SliceTextureSize="497,500"/>
 
-                <!-- Far-left: Governments list + Confirm button. Deliberately a DIRECT child of
-                     MainContainer and NOT inside ColumnsScroller: the government column is fixed
-                     and must never scroll sideways with the policy columns. Its width must stay
+                <!-- Far-left: Governments list + Confirm button. A child of MainContainer so the government column is fixed
+                     and doesnt scroll sideways with the policy columns. Its width must stay
                      in sync with GOV_COLUMN_W in Lua and with the Grid backing offset above. -->
                 <Container ID="GovernmentColumn" Anchor="L,T" Offset="0,0" Size="368,parent">
                     <Image ID="GovParchment" Anchor="L,T" Offset="0,0" Size="parent,parent" Texture="Parchment_Pattern" StretchMode="Tile"/>
 
-                    <!-- Bottom-anchored (C,B) so the list grows UPWARD off the Confirm button and
-                         leaves the top of the column free for options. Offset Y clears the button
-                         (41) plus a gap; the height is fitted to the list content in
+                    <!-- Bottom-anchored (C,B) so the list grows up off the Confirm button and
+                         leaves the top of the column free for options. the height is fitted to the list content in
                          RealizeGovernmentsList, capped at GOV_LIST_MAX_H. -->
                     <Grid ID="GovernmentSlot" Anchor="C,B" Offset="0,49" Size="210,parent-104">
                         <ScrollPanel ID="GovernmentListScroller" Anchor="C,T" Offset="0,0" Size="parent,parent" Vertical="1"
@@ -33,10 +31,8 @@
                                 DisabledCallbacks="1"/>
                 </Container>
 
-                <!-- Policy columns live in a horizontal scroll panel that occupies ONLY the space
-                     to the RIGHT of the fixed government column. Offset/Size are recomputed in Lua
-                     (FitModalWidth for X, ApplyUniformColumnHeights for the vertical framing);
-                     the values here are the static fallback. -->
+                <!-- Offset/Size are recomputed in Lua, these are just  static fallback
+                     (FitModalWidth for X, ApplyUniformColumnHeights for the vertical framing) -->
                 <ScrollPanel ID="ColumnsScroller" Anchor="L,T" Offset="368,40" Size="parent-368,parent-40"
                              Horizontal="1" AutoScrollBar="1" FullClip="1">
                 <!-- One column per policy category (title / policy listbox / description card),
@@ -45,7 +41,7 @@
                     <ScrollBar Style="ScrollHorizontalBar" Anchor="C,B" AnchorSide="I,I" Offset="0,0" Size="parent-20,8"/>
                 </ScrollPanel>
 
-                <!-- Modal chrome: gold ScreenFrame + title bar + close (X) button + yields bar.
+                <!-- Modal: gold ScreenFrame + title bar + close (X) button + yields bar.
                      Sized to the modal (parent,parent) so the gold frame wraps the content. -->
                 <Container Style="ModalScreenWide" Size="parent,parent"/>
 
@@ -57,7 +53,7 @@
 
     <!-- One policy category column: decorative slot frame (title + policy listbox +
          selector pointer) above a description card. Built once per policy slot type by
-         BuildCategoryColumns(); the per-category watermark/title/policy-texture are applied in Lua. -->
+         BuildCategoryColumns(); the per-category title/policy-texture are applied in Lua. -->
     <Instance Name="PolicyCategoryColumn">
         <Container ID="Root" Size="208,584">
             <Image ID="Slot" Anchor="C,T" Offset="0,40" Texture="Governments_CardSlot_Vertical.dds">
@@ -86,33 +82,23 @@
 
     <!-- A selectable policy name row inside a category listbox.
 
-         Root is a fixed-size cell matching the card's RESTING size, so the stack spacing never
+         Root is a fixed-size cell matching the card's resting size, so the stack spacing never
          changes and a hovered card pops out over its neighbours instead of reflowing the list.
 
-         The Button itself NEVER resizes. Two reasons: its texture is an unsliced Grid
-         (SliceCorner/SliceSize 0,0), which does not stretch with the control, so resizing it only
-         moved the art around instead of scaling it; and a hit area that grows under the cursor
-         makes hover flicker. The grown card is therefore drawn by the CardArt Image, which does
+         The Button itself doesnt resize. TThe grown card is therefore drawn by the CardArt Image, which does
          scale. See SetPolicyCardSize in Lua. -->
     <Instance Name="PolicyNameItem">
         <Container ID="Root" Size="140,39">
             <!-- DisabledCallbacks: locked policies are SetDisabled(true) so they render greyed and
                  are not selectable, but they must still fire mouse-enter/exit so hovering one
-                 previews its description. Without this a disabled button swallows all input. -->
-            <!-- StateOffsetIncrement MUST be 0,0: the texture is a flat card, not a vertical
-                 state atlas. A non-zero offset makes the disabled state (locked policies,
-                 SetDisabled(true)) sample off the texture and render blank. -->
+                 previews its description.  -->
             <GridButton ID="Button" Anchor="C,C" Size="140,39" Offset="3,3" Texture="Governments_EconomicCard_Compact.dds" DisabledCallbacks="1"
                         SliceCorner="0,0" SliceSize="0,0" SliceTextureSize="140,39" StateOffsetIncrement="0,0">
                 <!-- The enlarged card art, shown only while hovered. Carries the same texture as
                      the Button and is bigger than it, so it completely covers the un-scaled
-                     button art. Declared FIRST so the Active/Highlight frames and the label still
+                     button art. Declared first so the Active/Highlight frames and the label still
                      draw on top of it. -->
                 <Image ID="CardArt" Anchor="C,C" Size="152,43" StretchMode="Fill" Hidden="1"/>
-                <!-- "Active" = the policy actually slotted in-game right now. Drawn under the
-                     others; only shown while it is NOT also the staged selection, so the player
-                     can see what is still in effect after picking something new.
-                     Active/Highlight are resized alongside the card by SetPolicyCardSize. -->
                 <Image ID="Active" Anchor="C,C" Size="148,44" Offset="0,0" Texture="Governments_ActiveCard_Small.dds" Hidden="1"/>
                 <Image ID="Highlight" Anchor="C,C" Size="148,44" Offset="2,0" Texture="Governments_SelectedCard_Small.dds" Hidden="1"/>
                 <Label ID="Name" Anchor="C,C" Offset="1,-1" WrapWidth="176" Style="FontNormal12"/>

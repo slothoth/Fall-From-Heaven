@@ -1,8 +1,7 @@
 -- GovernmentScreen_Model.lua
--- The underlying model for the FFH government/policies screen: policy & government data,
--- the per-slot row model, staging state, and all Controls-free queries/mutators. Included by
--- GovernmentScreen.lua (the display/controller half) via include("GovernmentScreen_Model"),
--- so it runs in the SAME Lua state -- everything here is GLOBAL so the display half can see it.
+-- The underlying model for the One Policy Slot Government Screen: policy & government data,
+-- the per-slot row model, staging state, and all Controls-free queries/mutators.
+--  GLOBAL so the display half can see it.
 
 -- ===========================================================================
 --	DEBUG
@@ -31,7 +30,7 @@ SLOT_ORDER_IN_CATALOG = {};
 ---@type string
 EMPTY_POLICY_TYPE = "empty";					-- For a policy slot without a type
 
----@type table
+---@type table              -- will cut these soon
 POLICY_REQUIRES = {
 	["SLTH_POLICY_SACRIFICE_THE_WEAK"] = "SLTH_POLICY_STATE_VEIL",
 	["SLTH_POLICY_GUARDIAN_OF_NATURE"] = "SLTH_POLICY_STATE_LEAVES",
@@ -61,9 +60,7 @@ m_kBonuses	= {}
 m_isPoliciesChanged= false;
 
 ---@type string
--- Government actually in effect, snapshotted on refresh. There is no staged counterpart:
--- picking a government commits it immediately (OnGovernmentClicked), because the government
--- decides which policies are on offer and so cannot sit buffered behind Confirm.
+-- Government actually in effect, snapshotted on refresh.
 m_CommittedGovernment = nil;
 
 ---@type table
@@ -356,12 +353,8 @@ function PopulateStaticData()
 	end
 
 	-- Create a table of policies to be hidden, including:
-	-- a. generic policies replaced by a unique of the local player's civilization
-	-- b. unique policies of civilizations other than the local player's
-	-- Annotated with ---@type rather than the inline "local x : table" form used elsewhere in the
-	-- base-game files: the inline annotations are valid in the game's Lua but luacheck and
-	-- lua-language-server cannot parse them, and one such line silently invalidates the whole file
-	-- for the linter (which then reports every global in here as undefined).
+	--  generic policies replaced by a unique of the local player's civilization
+	--  unique policies of civilizations other than the local player's
 	---@type number
 	local localPlayerID = Game.GetLocalPlayer();
 	---@type table
@@ -377,14 +370,14 @@ function PopulateStaticData()
 	end
 
 	-- Some policies get alternative names for certain civilizations.
-	-- These can be toggled ad-hoc by the player, so we need to pass them to the main script and process them there.
+	-- These can be toggled by the player, so we need to pass them to the main script and process them there.
 	for row in GameInfo.Policies_AlternateNames_JNR() do
 		if row.CivilizationType == pPlayerConfig:GetCivilizationTypeName() then
 			m_kFlavoredPolicyNames[row.PolicyType] = row.Name;
 		end
 	end
 
-	-- Fill in the complete catalog of policies. Civ-replaced policies are filtered out HERE, at
+	-- Fill in the complete catalog of policies. Civ-replaced policies are filtered out here, at
 	-- the catalog level, so they never reach any consumer -- which is why GetCategoryPolicyList
 	-- below only has to worry about the government filter and the "none" policies.
 	for row in GameInfo.Policies() do
@@ -405,7 +398,7 @@ function PopulateStaticData()
 				Description = description,
 				Name		= policyName,
 				PolicyHash	= policyTypeHash,
-				SlotType	= slotType,			-- SLOT_MILITARY, SLOT_ECONOMIC, SLOT_DIPLOMATIC, SLOT_SLTHCUL, (SLOT_GREAT_PERSON)
+				SlotType	= slotType,
 				UniqueID	= row.Index			-- the row this policy exists in, is guaranteed to be unique (as-is the house, but these are readable. ;) )
 				};
 
@@ -427,11 +420,9 @@ function PopulateStaticData()
 		end
 	end
 
-	-- NOTE: there is deliberately no civilization filter here. Civ-unique policies and the generics
-	-- they replace are resolved further up via PolicyReplaces_JNR, before the catalog is built.
-
 	-- Fill in governments
 	g_kGovernments = {};
+    -- somehow this is still using my hardcoded stuff but works... troubling...
 	for row in GameInfo.Governments() do
 		---@type number
 		local slotMilitary = 0;
@@ -571,10 +562,8 @@ end
 -- ===========================================================================
 
 -- "None" policies: the explicit do-nothing option that used to sit at the top of a category
--- (e.g. the no-state-religion pick). They are hidden from the picker -- an empty slot already
--- reads as "none" through the description card's Unselected state -- while staying in the
--- database so the engine still has something valid to put in a slot. List any further ones
--- here; the pattern match below covers the "<CATEGORY>_00_DEFAULT" naming convention.
+-- . They are hidden from the picker, we are using a table, maybe a SQL table later?
+-- the pattern match below covers the "<CATEGORY>_00_DEFAULT" naming convention.
 ---@type table
 POLICY_NONE_TYPES = {
 	["SLTH_POLICY_NO_STATE_RELIGION"] = true,
@@ -588,9 +577,7 @@ function IsNonePolicy( strPolicyType )
 	return string.match( strPolicyType, "_00_DEFAULT$" ) ~= nil;
 end
 
--- Normalise a slot's policy for display. A "none" policy IS the empty selection, so it must read
--- as one: it is hidden from the list, and showing its name on the description card would point at
--- a row the player cannot see.
+-- Normalise a slot's policy for display.
 ---@param strPolicyType string
 ---@return string
 function DisplayPolicyType( strPolicyType )
@@ -599,7 +586,7 @@ function DisplayPolicyType( strPolicyType )
 end
 
 -- policyType -> { [governmentType] = true }, for policies restricted to particular governments.
--- Built by PopulateStaticData from Policy_GovernmentExclusives_XP2. A policy ABSENT from this
+-- Built by PopulateStaticData from Policy_GovernmentExclusives_XP2. A policy absent from this
 -- table is unrestricted and offered under every government.
 ---@type table
 POLICY_GOVERNMENT_EXCLUSIVE = {};
@@ -629,13 +616,9 @@ function GetPolicyDisplayName( strPolicyType )
 	return tPolicy and tPolicy.Name or strPolicyType;
 end
 
--- The ordered list of policy types a category column offers right now.
---
--- THIS IS THE SINGLE PLACE that decides a column's contents: RealizeCategoryList and
--- MeasureMaxDescTextH both go through it, so any further filtering (capping the column at a fixed
--- number of rows, ...) only has to be added here and the display half picks it up for free.
---
--- There is no civilization filter here on purpose: PopulateStaticData already resolves civ-unique
+-- The ordered list of policy types a category column offers right now. Decides a columns content, used by
+-- RealizeCategoryList, MeasureMaxDescTextH
+-- no civilization filter here on purpose as PopulateStaticData resolves civ-unique
 -- policies against the generics they replace (PolicyReplaces_JNR) before the catalog is built, so
 -- anything reaching m_kPolicyCatalogOrder is already correct for the local player's civ.
 ---@param nRowIndex number
@@ -643,8 +626,6 @@ end
 function GetCategoryPolicyList( nRowIndex )
 	---@type string
 	local strSlotType = ROW_SLOT_TYPES[nRowIndex];
-	-- Filter against the government actually in effect: government changes commit immediately,
-	-- so there is never a staged-but-uncommitted government to consider here.
 	---@type string
 	local strGovType = m_CommittedGovernment;
 	---@type table
@@ -661,11 +642,8 @@ function GetCategoryPolicyList( nRowIndex )
 	return kList;
 end
 
--- Return the single slot for a category (FFH grants one slot per category), or nil.
+-- Return the single slot for a category, or nil.
 ---@param nRowIndex number
--- The policy actually slotted in gamecore as of the last populate, per category.
--- Snapshotted BEFORE any staging edit, so the "currently active" highlight keeps
--- showing what is really in effect while the player stages a different pick.
 m_CommittedPolicyByRow = {};
 
 function SnapshotCommittedPolicies()
@@ -715,9 +693,9 @@ end
 -- Resolve any staged policy whose prerequisite is no longer satisfied, so the player
 -- cannot confirm a change the engine would immediately undo. Rather than emptying the
 -- slot, restore the policy the player had equipped on open (m_CommittedPolicyByRow) when
--- that is itself still valid -- so breaking a dependency reverts to your prior choice
+-- that is itself still valid. so breaking a dependency reverts to your prior choice
 -- instead of leaving you unselected. Only fall back to empty when the committed policy
--- would also be invalid (e.g. it WAS the dependent).
+-- would also be invalid.
 function EnforcePolicyDependencies()
 	for nRow = 1, 5 do
 		local tSlot = GetCategorySlot(nRow);
