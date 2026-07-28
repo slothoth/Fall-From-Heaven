@@ -366,70 +366,6 @@ INSERT INTO TypeTags(Type, Tag) VALUES
 ('GRANT_EXPERIENCE_SMALL_ABILITY_CONQUEST', 'CLASS_ALL_UNITS'),
 ('GRANT_EXPERIENCE_SMALL_ABILITY_THEOCRACY', 'CLASS_ALL_UNITS');
 
--- Policy banning
-
-INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_SACRIFICE_THE_WEAK_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_GUARDIAN_OF_NATURE_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_ARETE_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_SOCIAL_ORDER_ATTACH_CAP_CITY');
-
-INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
-('BAN_SACRIFICE_THE_WEAK_ATTACH_CAP_CITY', 'MODIFIER_ATTACH_MODIFIER_PLAYER_CAPITAL', 'NOT_VEIL_STATE_RELIGION_REQS'),
-('BAN_GUARDIAN_OF_NATURE_ATTACH_CAP_CITY', 'MODIFIER_ATTACH_MODIFIER_PLAYER_CAPITAL', 'NOT_LEAVES_STATE_RELIGION_REQS'),
-('BAN_ARETE_ATTACH_CAP_CITY', 'MODIFIER_ATTACH_MODIFIER_PLAYER_CAPITAL', 'NOT_RUNES_STATE_RELIGION_REQS'),
-('BAN_SOCIAL_ORDER_ATTACH_CAP_CITY', 'MODIFIER_ATTACH_MODIFIER_PLAYER_CAPITAL', 'NOT_ORDER_STATE_RELIGION_REQS');
-
-INSERT INTO Modifiers(ModifierId, ModifierType) VALUES
-('BAN_SACRIFICE_THE_WEAK', 'MODIFIER_BAN_POLICY_OWNER'),
-('BAN_GUARDIAN_OF_NATURE', 'MODIFIER_BAN_POLICY_OWNER'),
-('BAN_ARETE', 'MODIFIER_BAN_POLICY_OWNER'),
-('BAN_SOCIAL_ORDER', 'MODIFIER_BAN_POLICY_OWNER'),
-
-('BAN_SACRIFICE_THE_WEAK_ATTACH_PLAYER', 'MODIFIER_ATTACH_MODIFIER_TO_OWNER_PLAYER'),
-('BAN_GUARDIAN_OF_NATURE_ATTACH_PLAYER', 'MODIFIER_ATTACH_MODIFIER_TO_OWNER_PLAYER'),
-('BAN_ARETE_ATTACH_PLAYER', 'MODIFIER_ATTACH_MODIFIER_TO_OWNER_PLAYER'),
-('BAN_SOCIAL_ORDER_ATTACH_PLAYER', 'MODIFIER_ATTACH_MODIFIER_TO_OWNER_PLAYER');
-
-
-INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
-('BAN_SACRIFICE_THE_WEAK_ATTACH_CAP_CITY', 'ModifierId', 'BAN_SACRIFICE_THE_WEAK_ATTACH_PLAYER'),
-('BAN_GUARDIAN_OF_NATURE_ATTACH_CAP_CITY', 'ModifierId', 'BAN_GUARDIAN_OF_NATURE_ATTACH_PLAYER'),
-('BAN_ARETE_ATTACH_CAP_CITY', 'ModifierId', 'BAN_ARETE_ATTACH_PLAYER'),
-('BAN_SOCIAL_ORDER_ATTACH_CAP_CITY', 'ModifierId', 'BAN_SOCIAL_ORDER_ATTACH_PLAYER'),
-('BAN_SACRIFICE_THE_WEAK_ATTACH_PLAYER', 'ModifierId', 'BAN_SACRIFICE_THE_WEAK'),
-('BAN_GUARDIAN_OF_NATURE_ATTACH_PLAYER', 'ModifierId', 'BAN_GUARDIAN_OF_NATURE'),
-('BAN_ARETE_ATTACH_PLAYER', 'ModifierId', 'BAN_ARETE'),
-('BAN_SOCIAL_ORDER_ATTACH_PLAYER', 'ModifierId', 'BAN_SOCIAL_ORDER'),
-('BAN_SACRIFICE_THE_WEAK', 'PolicyType', 'SLTH_POLICY_SACRIFICE_THE_WEAK'),
-('BAN_GUARDIAN_OF_NATURE', 'PolicyType', 'SLTH_POLICY_GUARDIAN_OF_NATURE'),
-('BAN_ARETE', 'PolicyType', 'SLTH_POLICY_ARETE'),
-('BAN_SOCIAL_ORDER', 'PolicyType', 'SLTH_POLICY_SOCIAL_ORDER');
-
-INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_VEIL_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ALL');
-INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_VEIL_STATE_RELIGION_REQS', 'NOT_VEIL_STATE_RELIGION');
-INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_VEIL_STATE_RELIGION', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_VEIL_STATE_RELIGION', 'PropertyName', 'VEIL_STATE_REL');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_VEIL_STATE_RELIGION', 'PropertyMinimum', '1');
-
-INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_LEAVES_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ALL');
-INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_LEAVES_STATE_RELIGION_REQS', 'NOT_LEAVES_STATE_RELIGION');
-INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_LEAVES_STATE_RELIGION', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_LEAVES_STATE_RELIGION', 'PropertyName', 'LEAVES_STATE_REL');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_LEAVES_STATE_RELIGION', 'PropertyMinimum', '1');
-
-INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_RUNES_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ALL');
-INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_RUNES_STATE_RELIGION_REQS', 'NOT_RUNES_STATE_RELIGION');
-INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_RUNES_STATE_RELIGION', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_RUNES_STATE_RELIGION', 'PropertyName', 'RUNES_STATE_REL');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_RUNES_STATE_RELIGION', 'PropertyMinimum', '1');
-
-INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_ORDER_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ALL');
-INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES ('NOT_ORDER_STATE_RELIGION_REQS', 'NOT_ORDER_STATE_RELIGION');
-INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES ('NOT_ORDER_STATE_RELIGION', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyName', 'ORDER_STATE_REL');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('NOT_ORDER_STATE_RELIGION', 'PropertyMinimum', '1');
-
 -- religion policies, initially banned
 INSERT INTO Policies(PolicyType, Description, PrereqCivic, Name, GovernmentSlotType) VALUES
 ('SLTH_POLICY_NO_STATE_RELIGION', 'LOC_SLTH_POLICY_NO_STATE_RELIGION_DESCRIPTION', NULL, 'LOC_SLTH_POLICY_NO_STATE_RELIGION_NAME', 'SLOT_SLTHREL'),
@@ -737,148 +673,6 @@ INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
 -- also need to adjust valid buildings too
 -- also let people do techs lol, like Infernal Pact
 
-INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_VEIL_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_LEAVES_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_RUNES_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_ORDER_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_OCTOPUS_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_ESUS_ATTACH_CAP_CITY'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_EMPYREAN_WHACKAMOLE'),
-('TRAIT_LEADER_MAJOR_CIV','BAN_VEIL_FALLBACK_NO_CAPITAL'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_LEAVES_FALLBACK_NO_CAPITAL'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_RUNES_FALLBACK_NO_CAPITAL'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_ORDER_FALLBACK_NO_CAPITAL'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_OCTOPUS_FALLBACK_NO_CAPITAL'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_EMPYREAN_FALLBACK_NO_CAPITAL'),
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_ESUS_FALLBACK_NO_CAPITAL');
-
--- BAN_EMPYREAN_ATTACH_CAP_CITY somehow doesnt work, genuienly hash collision or something cursed
-
-INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
-('BAN_VEIL_ATTACH_CAP_CITY', 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', 'CAN_VEIL_STATE_RELIGION_REQS'),
-('BAN_LEAVES_ATTACH_CAP_CITY', 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', 'CAN_LEAVES_STATE_RELIGION_REQS'),
-('BAN_RUNES_ATTACH_CAP_CITY', 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', 'CAN_RUNES_STATE_RELIGION_REQS'),
-('BAN_ORDER_ATTACH_CAP_CITY', 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', 'CAN_ORDER_STATE_RELIGION_REQS'),
-('BAN_OCTOPUS_ATTACH_CAP_CITY', 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', 'CAN_OCTOPUS_STATE_RELIGION_REQS'),
-('BAN_EMPYREAN_WHACKAMOLE', 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', 'CAN_EMPYREAN_STATE_RELIGION_REQS'),
-('BAN_ESUS_ATTACH_CAP_CITY', 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', 'CAN_ESUS_STATE_RELIGION_REQS');
-
-INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
-('BAN_VEIL_ATTACH_CAP_CITY', 'PolicyType','SLTH_POLICY_STATE_VEIL'),
-('BAN_LEAVES_ATTACH_CAP_CITY', 'PolicyType','SLTH_POLICY_STATE_LEAVES'),
-('BAN_RUNES_ATTACH_CAP_CITY', 'PolicyType','SLTH_POLICY_STATE_RUNES'),
-('BAN_ORDER_ATTACH_CAP_CITY', 'PolicyType','SLTH_POLICY_STATE_ORDER'),
-('BAN_OCTOPUS_ATTACH_CAP_CITY', 'PolicyType','SLTH_POLICY_STATE_OCTOPUS'),
-('BAN_EMPYREAN_WHACKAMOLE', 'PolicyType','SLTH_POLICY_STATE_EMPYREAN'),
-('BAN_ESUS_ATTACH_CAP_CITY', 'PolicyType','SLTH_POLICY_STATE_ESUS');
-
--- use Lua to set how many cities we have of each religion, stored in capital.
-INSERT INTO Requirements(RequirementId, RequirementType) VALUES
-('PLAYER_IS_GRIGORI', 'REQUIREMENT_PLAYER_TYPE_MATCHES'),
-('PLAYER_IS_ILLIAN', 'REQUIREMENT_PLAYER_TYPE_MATCHES');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
-('PLAYER_IS_GRIGORI', 'CivilizationType', 'SLTH_CIVILIZATION_GRIGORI'),
-('PLAYER_IS_ILLIAN', 'CivilizationType', 'SLTH_CIVILIZATION_ILLIANS');
-
-INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES
-('CAN_VEIL_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY'),
-('CAN_LEAVES_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY'),
-('CAN_RUNES_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY'),
-('CAN_ORDER_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY'),
-('CAN_OCTOPUS_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY'),
-('CAN_EMPYREAN_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY'),
-('CAN_ESUS_STATE_RELIGION_REQS', 'REQUIREMENTSET_TEST_ANY');
-
-INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
-('CAN_VEIL_STATE_RELIGION_REQS', 'HAS_NO_CITIES_WITH_VEIL'),
-('CAN_VEIL_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
-('CAN_VEIL_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN'),
-('CAN_LEAVES_STATE_RELIGION_REQS', 'HAS_NO_CITIES_WITH_LEAVES'),
-('CAN_LEAVES_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
-('CAN_LEAVES_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN'),
-('CAN_RUNES_STATE_RELIGION_REQS', 'HAS_NO_CITIES_WITH_RUNES'),
-('CAN_RUNES_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
-('CAN_RUNES_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN'),
-('CAN_ORDER_STATE_RELIGION_REQS', 'HAS_NO_CITIES_WITH_ORDER'),
-('CAN_ORDER_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
-('CAN_ORDER_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN'),
-('CAN_OCTOPUS_STATE_RELIGION_REQS', 'HAS_NO_CITIES_WITH_OCTOPUS'),
-('CAN_OCTOPUS_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
-('CAN_OCTOPUS_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN'),
-('CAN_EMPYREAN_STATE_RELIGION_REQS', 'HAS_NO_CITIES_WITH_EMPYREAN'),
-('CAN_EMPYREAN_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
-('CAN_EMPYREAN_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN'),
-('CAN_ESUS_STATE_RELIGION_REQS', 'HAS_NO_CITIES_WITH_ESUS'),
-('CAN_ESUS_STATE_RELIGION_REQS', 'PLAYER_IS_GRIGORI'),
-('CAN_ESUS_STATE_RELIGION_REQS', 'PLAYER_IS_ILLIAN');
-
-INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
-('HAS_NO_CITIES_WITH_VEIL', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1'),
-('HAS_NO_CITIES_WITH_LEAVES', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1'),
-('HAS_NO_CITIES_WITH_RUNES', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1'),
-('HAS_NO_CITIES_WITH_ORDER', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1'),
-('HAS_NO_CITIES_WITH_OCTOPUS', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1'),
-('HAS_NO_CITIES_WITH_EMPYREAN', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1'),
-('HAS_NO_CITIES_WITH_ESUS', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1');
-
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
-('HAS_NO_CITIES_WITH_VEIL', 'PropertyName', 'VEIL_CITIES'),
-('HAS_NO_CITIES_WITH_VEIL', 'PropertyMinimum', '1'),
-('HAS_NO_CITIES_WITH_LEAVES', 'PropertyName', 'LEAVES_CITIES'),
-('HAS_NO_CITIES_WITH_LEAVES', 'PropertyMinimum', '1'),
-('HAS_NO_CITIES_WITH_RUNES', 'PropertyName', 'RUNES_CITIES'),
-('HAS_NO_CITIES_WITH_RUNES', 'PropertyMinimum', '1'),
-('HAS_NO_CITIES_WITH_ORDER', 'PropertyName', 'ORDER_CITIES'),
-('HAS_NO_CITIES_WITH_ORDER', 'PropertyMinimum', '1'),
-('HAS_NO_CITIES_WITH_OCTOPUS', 'PropertyName', 'OCTOPUS_CITIES'),
-('HAS_NO_CITIES_WITH_OCTOPUS', 'PropertyMinimum', '1'),
-('HAS_NO_CITIES_WITH_EMPYREAN', 'PropertyName', 'EMPYREAN_CITIES'),
-('HAS_NO_CITIES_WITH_EMPYREAN', 'PropertyMinimum', '1'),
-('HAS_NO_CITIES_WITH_ESUS', 'PropertyName', 'ESUS_CITIES'),
-('HAS_NO_CITIES_WITH_ESUS', 'PropertyMinimum', '1');
-
--- fallback if they have no capital
-INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
-('BAN_VEIL_FALLBACK_NO_CAPITAL', 'MODIFIER_BAN_POLICY_OWNER', 'SLTH_PLAYER_HAS_NO_CAPITAL'),
-('BAN_LEAVES_FALLBACK_NO_CAPITAL', 'MODIFIER_BAN_POLICY_OWNER', 'SLTH_PLAYER_HAS_NO_CAPITAL'),
-('BAN_RUNES_FALLBACK_NO_CAPITAL', 'MODIFIER_BAN_POLICY_OWNER', 'SLTH_PLAYER_HAS_NO_CAPITAL'),
-('BAN_ORDER_FALLBACK_NO_CAPITAL', 'MODIFIER_BAN_POLICY_OWNER', 'SLTH_PLAYER_HAS_NO_CAPITAL'),
-('BAN_OCTOPUS_FALLBACK_NO_CAPITAL', 'MODIFIER_BAN_POLICY_OWNER', 'SLTH_PLAYER_HAS_NO_CAPITAL'),
-('BAN_EMPYREAN_FALLBACK_NO_CAPITAL', 'MODIFIER_BAN_POLICY_OWNER', 'SLTH_PLAYER_HAS_NO_CAPITAL'),
-('BAN_ESUS_FALLBACK_NO_CAPITAL', 'MODIFIER_BAN_POLICY_OWNER', 'SLTH_PLAYER_HAS_NO_CAPITAL');
-
-INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
-('BAN_VEIL_FALLBACK_NO_CAPITAL', 'PolicyType','SLTH_POLICY_STATE_VEIL'),
-('BAN_LEAVES_FALLBACK_NO_CAPITAL', 'PolicyType','SLTH_POLICY_STATE_LEAVES'),
-('BAN_RUNES_FALLBACK_NO_CAPITAL', 'PolicyType','SLTH_POLICY_STATE_RUNES'),
-('BAN_ORDER_FALLBACK_NO_CAPITAL', 'PolicyType','SLTH_POLICY_STATE_ORDER'),
-('BAN_OCTOPUS_FALLBACK_NO_CAPITAL', 'PolicyType','SLTH_POLICY_STATE_OCTOPUS'),
-('BAN_EMPYREAN_FALLBACK_NO_CAPITAL', 'PolicyType','SLTH_POLICY_STATE_EMPYREAN'),
-('BAN_ESUS_FALLBACK_NO_CAPITAL', 'PolicyType','SLTH_POLICY_STATE_ESUS');
-
-
--- civ level bans: Bannor only one allowed
-INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
-('BAN_CRUSADE', 'MODIFIER_BAN_POLICY_OWNER', 'NOT_BANNOR_REQUIREMENTS');
-
-INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
-('BAN_CRUSADE', 'PolicyType', 'SLTH_POLICY_CRUSADE');
-
-INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
-('TRAIT_LEADER_MAJOR_CIV', 'BAN_CRUSADE');
-
-INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_BANNOR_REQUIREMENTS', 'REQUIREMENTSET_TEST_ANY');
-INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
-('NOT_BANNOR_REQUIREMENTS', 'PLAYER_IS_NOT_BANNOR'),
-('NOT_BANNOR_REQUIREMENTS', 'REQUIRE_PLAYER_NOT_AT_WAR');
-
-INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
-('PLAYER_IS_NOT_BANNOR', 'REQUIREMENT_PLAYER_TYPE_MATCHES', '1'),
-('REQUIRE_PLAYER_NOT_AT_WAR', 'REQUIREMENT_PLAYER_IS_AT_WAR', '1');
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES ('PLAYER_IS_NOT_BANNOR', 'CivilizationType', 'SLTH_CIVILIZATION_BANNOR');
-
-
 INSERT INTO Types(Type, Kind) VALUES
 ('GRANT_EXPERIENCE_SMALL_ABILITY_APPRENTICESHIP', 'KIND_ABILITY'),
 ('GRANT_EXPERIENCE_SMALL_ABILITY_CONQUEST', 'KIND_ABILITY'),
@@ -931,6 +725,248 @@ INSERT INTO Types(Type, Kind) VALUES
 ('SLTH_POLICY_STATE_EMPYREAN', 'KIND_POLICY'),
 ('SLTH_POLICY_STATE_ESUS', 'KIND_POLICY'),
 ('SLTH_POLICY_NO_STATE_RELIGION', 'KIND_POLICY');
+
+CREATE TABLE IF NOT EXISTS PolicyReplaces_JNR (
+	CivUniquePolicyType	TEXT NOT NULL,
+	ReplacesPolicyType	TEXT NOT NULL,
+	CivilizationType	TEXT NOT NULL,
+	PRIMARY KEY (
+		CivUniquePolicyType
+	),
+	FOREIGN KEY (
+		CivUniquePolicyType
+	)
+	REFERENCES Policies (PolicyType)	ON DELETE CASCADE
+										ON UPDATE CASCADE,
+	FOREIGN KEY (
+		ReplacesPolicyType
+	)
+	REFERENCES Policies (PolicyType)	ON DELETE CASCADE
+										ON UPDATE CASCADE,
+	FOREIGN KEY (
+		CivilizationType
+	)
+	REFERENCES Civilizations (CivilizationType)	ON DELETE CASCADE
+												ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Policies_AlternateNames_JNR (
+	PolicyType			TEXT NOT NULL,
+	CivilizationType	TEXT NOT NULL,
+	Name				TEXT NOT NULL,
+	PRIMARY KEY (
+		PolicyType,
+		CivilizationType
+	),
+	FOREIGN KEY (
+		PolicyType
+	)
+	REFERENCES Policies (PolicyType)	ON DELETE CASCADE
+										ON UPDATE CASCADE,
+	FOREIGN KEY (
+		CivilizationType
+	)
+	REFERENCES Civilizations (CivilizationType)	ON DELETE CASCADE
+												ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Policy_GovernmentBans_JNR (
+	PolicyType		TEXT NOT NULL,
+	GovernmentType	TEXT NOT NULL,
+	PRIMARY KEY (
+		PolicyType,
+		GovernmentType
+	),
+	FOREIGN KEY (
+		PolicyType
+	)
+	REFERENCES Policies (PolicyType)	ON DELETE CASCADE
+										ON UPDATE CASCADE,
+	FOREIGN KEY (
+		GovernmentType
+	)
+	REFERENCES Governments (GovernmentType)	ON DELETE CASCADE
+											ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS PolicyGatedPolicies (
+    PolicyType		    TEXT,
+	UnlockedPolicyType	TEXT NOT NULL,
+	PropertyKey     	TEXT NOT NULL,
+    ToolTip             TEXT,
+    Icon             TEXT,
+	PRIMARY KEY (UnlockedPolicyType),
+	FOREIGN KEY (
+		PolicyType
+	)
+	REFERENCES Policies (PolicyType)	ON DELETE CASCADE
+										ON UPDATE CASCADE,
+	FOREIGN KEY (
+		UnlockedPolicyType
+	)
+	REFERENCES Policies (PolicyType)	ON DELETE CASCADE
+										ON UPDATE CASCADE
+);
+
+INSERT INTO PolicyGatedPolicies(PolicyType, UnlockedPolicyType, PropertyKey, ToolTip, Icon) VALUES
+('SLTH_POLICY_STATE_VEIL', 'SLTH_POLICY_SACRIFICE_THE_WEAK', 'VEIL_STATE_REL', 'LOC_UNLOCK_SACRIFICE_THE_WEAK', 'ICON_RELIGION_BUDDHISM'),
+('SLTH_POLICY_STATE_LEAVES', 'SLTH_POLICY_GUARDIAN_OF_NATURE', 'LEAVES_STATE_REL', 'LOC_UNLOCK_GUARDIANS_OF_NATURE', 'ICON_RELIGION_CATHOLICISM'),
+('SLTH_POLICY_STATE_RUNES', 'SLTH_POLICY_ARETE', 'RUNES_STATE_REL', 'LOC_UNLOCK_ARETE', 'ICON_RELIGION_CONFUCIANISM'),
+('SLTH_POLICY_STATE_ORDER', 'SLTH_POLICY_SOCIAL_ORDER',  'ORDER_STATE_REL', 'LOC_UNLOCK_SOCIAL_ORDER', 'ICON_RELIGION_PROTESTANTISM');
+
+CREATE TEMP TABLE StateReligionGatedPolicies(ModifierUnlock, ReqSetId, ReqId, UnlockedPolicyType, PropertyKey);
+
+INSERT INTO StateReligionGatedPolicies(ModifierUnlock, ReqSetId, ReqId, UnlockedPolicyType, PropertyKey) SELECT
+'BAN_' || UnlockedPolicyType || '_ATTACH_CAP_CITY', 'NOT_' || PolicyType || '_REQS', 'REQUIRES_UNSLOTTED_' || PolicyType, UnlockedPolicyType, PropertyKey
+FROM PolicyGatedPolicies;
+
+INSERT INTO TraitModifiers(TraitType, ModifierId) SELECT
+'TRAIT_LEADER_MAJOR_CIV', ModifierUnlock
+FROM StateReligionGatedPolicies;
+
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) SELECT
+ModifierUnlock, 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', ReqSetId
+FROM StateReligionGatedPolicies;
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) SELECT
+ModifierUnlock, 'PolicyType', UnlockedPolicyType
+FROM StateReligionGatedPolicies;
+
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) SELECT
+ReqSetId, 'REQUIREMENTSET_TEST_ALL'
+FROM StateReligionGatedPolicies;
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) SELECT
+ReqSetId, ReqId
+FROM StateReligionGatedPolicies;
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse)
+SELECT ReqId, 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1'
+FROM StateReligionGatedPolicies;
+INSERT INTO RequirementArguments(RequirementId, Name, Value) SELECT
+ReqId, 'PropertyName', PropertyKey
+FROM StateReligionGatedPolicies;
+INSERT INTO RequirementArguments(RequirementId, Name, Value) SELECT
+ReqId, 'PropertyMinimum', '1'
+FROM StateReligionGatedPolicies;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ----------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO PolicyGatedPolicies(UnlockedPolicyType, PropertyKey, ToolTip, Icon) VALUES
+('SLTH_POLICY_STATE_VEIL',   'VEIL_CITIES', 'LOC_UNLOCK_RELIGION_VEIL', 'ICON_RELIGION_BUDDHISM'),
+('SLTH_POLICY_STATE_LEAVES', 'LEAVES_CITIES', 'LOC_UNLOCK_RELIGION_LEAVES', 'ICON_RELIGION_CATHOLICISM'),
+('SLTH_POLICY_STATE_RUNES',  'RUNES_CITIES', 'LOC_UNLOCK_RELIGION_KILMORPH', 'ICON_RELIGION_CONFUCIANISM'),
+('SLTH_POLICY_STATE_ORDER',  'ORDER_CITIES', 'LOC_UNLOCK_RELIGION_THE_ORDER', 'ICON_RELIGION_PROTESTANTISM'),
+('SLTH_POLICY_STATE_OCTOPUS','OCTOPUS_CITIES', 'LOC_UNLOCK_RELIGION_OVERLORDS', 'ICON_RELIGION_HINDUISM'),
+('SLTH_POLICY_STATE_EMPYREAN','EMPYREAN_CITIES', 'LOC_UNLOCK_RELIGION_EMPYREAN', 'ICON_RELIGION_JUDAISM'),
+('SLTH_POLICY_STATE_ESUS',  'ESUS_CITIES', 'LOC_UNLOCK_RELIGION_ESUS', 'ICON_RELIGION_ISLAM');
+
+-- always have these banned for atheism
+INSERT INTO Requirements(RequirementId, RequirementType) VALUES
+('PLAYER_IS_GRIGORI', 'REQUIREMENT_PLAYER_TYPE_MATCHES'),
+('PLAYER_IS_ILLIAN', 'REQUIREMENT_PLAYER_TYPE_MATCHES');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('PLAYER_IS_GRIGORI', 'CivilizationType', 'SLTH_CIVILIZATION_GRIGORI'),
+('PLAYER_IS_ILLIAN', 'CivilizationType', 'SLTH_CIVILIZATION_ILLIANS');
+
+CREATE TEMP TABLE StateReligionRequirements(ModifierUnlock, ReqSetId, ReqId, UnlockedPolicyType, PropertyKey, ModifierCapitalUnlock);
+
+INSERT INTO StateReligionRequirements(ModifierUnlock, ReqSetId, ReqId, UnlockedPolicyType, PropertyKey, ModifierCapitalUnlock) SELECT
+'BAN_' || UnlockedPolicyType || '_NAME_CHANGED_AS_COLLISION', 'NO_PLOT_PROP_' || PropertyKey || '_REQS', 'REQUIRES_' || PropertyKey, UnlockedPolicyType, PropertyKey,'BAN_' || UnlockedPolicyType || '_FALLBACK_NO_CAPITAL'
+FROM PolicyGatedPolicies WHERE PolicyType is NULL;
+
+INSERT INTO TraitModifiers(TraitType, ModifierId) SELECT
+'TRAIT_LEADER_MAJOR_CIV', ModifierUnlock
+FROM StateReligionRequirements;
+
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) SELECT
+ModifierUnlock, 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', ReqSetId
+FROM StateReligionRequirements;
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) SELECT
+ModifierUnlock, 'PolicyType', UnlockedPolicyType
+FROM StateReligionRequirements;
+
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) SELECT
+ReqSetId, 'REQUIREMENTSET_TEST_ANY'
+FROM StateReligionRequirements;
+
+-- use Lua to set how many cities we have of each religion, stored in capital.
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) SELECT
+ReqSetId, ReqId
+FROM StateReligionRequirements;
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) SELECT
+ReqId, 'REQUIREMENT_PLOT_PROPERTY_MATCHES', '1'
+FROM StateReligionRequirements;
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) SELECT
+ReqId, 'PropertyName', PropertyKey
+FROM StateReligionRequirements;
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) SELECT
+ReqId, 'PropertyMinimum', '1'
+FROM StateReligionRequirements;
+
+-- athiests
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) SELECT
+ReqSetId, 'PLAYER_IS_GRIGORI'
+FROM StateReligionRequirements;
+
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) SELECT
+ReqSetId, 'PLAYER_IS_ILLIAN'
+FROM StateReligionRequirements;
+
+
+-- fallback if they have no capital. cant do as part of req as we attach to capital
+INSERT INTO TraitModifiers(TraitType, ModifierId) SELECT
+'TRAIT_LEADER_MAJOR_CIV', ModifierCapitalUnlock
+FROM StateReligionRequirements;
+
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) SELECT
+ModifierCapitalUnlock, 'MODIFIER_BAN_POLICY_OWNER', 'SLTH_PLAYER_HAS_NO_CAPITAL'
+FROM StateReligionRequirements;
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) SELECT
+ModifierCapitalUnlock, 'PolicyType', UnlockedPolicyType
+FROM StateReligionRequirements;
+
+DROP TABLE StateReligionRequirements;
+
+--------------------------------------------------------------------------------------------------------------------
+------------------------- civ level bans: Bannor only allowed crusade, and only when at war
+--------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
+('BAN_CRUSADE', 'MODIFIER_BAN_POLICY_OWNER', 'NOT_BANNOR_REQUIREMENTS');
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
+('BAN_CRUSADE', 'PolicyType', 'SLTH_POLICY_CRUSADE');
+
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'BAN_CRUSADE');
+
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('NOT_BANNOR_REQUIREMENTS', 'REQUIREMENTSET_TEST_ANY');
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
+('NOT_BANNOR_REQUIREMENTS', 'PLAYER_IS_NOT_BANNOR'),
+('NOT_BANNOR_REQUIREMENTS', 'REQUIRE_PLAYER_NOT_AT_WAR');
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('PLAYER_IS_NOT_BANNOR', 'REQUIREMENT_PLAYER_TYPE_MATCHES', '1'),
+('REQUIRE_PLAYER_NOT_AT_WAR', 'REQUIREMENT_PLAYER_IS_AT_WAR', '1');
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('PLAYER_IS_NOT_BANNOR', 'CivilizationType', 'SLTH_CIVILIZATION_BANNOR');
+
+--------------------------------------------------------------------------------------------------------------------
+------------------------- Slavery banned to good and neutral leaders. Not working :(
+--------------------------------------------------------------------------------------------------------------------
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'BAN_SLAVERY');
+
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
+('BAN_SLAVERY', 'MODIFIER_BAN_POLICY_CAPITAL_CONTEXT', 'ALIGNMENT_GOOD_REQS');
+
+INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
+('BAN_SLAVERY', 'PolicyType', 'SLTH_POLICY_SLAVERY');
 
 -- bannor crusade stops peace deals. Sort of cheating, as its actually banning diplomacy with all bannor players on the propose peace deal but whatever.
 -- Doesnt work with DIPLOACTION_PROPOSE_PEACE_DEAL SADGE
