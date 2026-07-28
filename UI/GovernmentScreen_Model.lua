@@ -567,9 +567,9 @@ end
 -- . They are hidden from the picker, we are using a table, maybe a SQL table later?
 -- the pattern match below covers the "<CATEGORY>_00_DEFAULT" naming convention.
 ---@type table
-POLICY_NONE_TYPES = {
-	["SLTH_POLICY_NO_STATE_RELIGION"] = true,
-};
+ POLICY_NONE_TYPES = {}
+-- 	["SLTH_POLICY_NO_STATE_RELIGION"] = true,
+-- };
 
 ---@param strPolicyType string
 ---@return boolean

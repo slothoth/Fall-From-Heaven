@@ -641,7 +641,6 @@ local function FillBadgeStack( uiStack, kBadges, isVisible )
 	uiStack:CalculateSize();
 	return nShown;
 end
-
 function RealizePolicyUnlockBadges( inst, strPolicyType )
 	---@type table
 	local kBadges = GetPolicyUnlockBadges( strPolicyType );
