@@ -15,7 +15,7 @@ include("GovernmentScreen_Model");
 ---@type number
 local MODAL_MAX_W, MODAL_MAX_H = 1860, 900;
 ---@type boolean
-local FFH_EXISTS = false -- (GameInfo.Leaders["LEADER_CAPRIA"] ~= nil);
+local FFH_EXISTS = (GameInfo.Leaders["LEADER_CAPRIA"] ~= nil);
 ---@type string
 local TXT_GOV_ASSIGN_POLICIES = Locale.Lookup("LOC_GOVT_ASSIGN_ALL_POLICIES");
 ---@type string
@@ -51,6 +51,9 @@ local CARD_W, CARD_H = 140, 39;
 local CARD_HOVER_W, CARD_HOVER_H = 152, 43;
 ---@type number
 local CARD_OVERLAY_PAD_W, CARD_OVERLAY_PAD_H = 8, 5;
+-- atlas sizes to try
+---@type table
+local BADGE_ATLAS_SIZES = { 22, 30, 36, 38, 42 };
 
 
 -- ===========================================================================
@@ -282,6 +285,7 @@ end
 
 function LateInitialize()
 	m_TopPanelConsideredHeight = Controls.Vignette:GetSizeY() - TOP_PANEL_OFFSET;
+	LoadDisplayOptions();			-- restore the options panel's toggles before anything renders
 	PopulateStaticData();			-- Obtain unchanging, static data from game core
 	BuildCategoryColumns();			-- Build the 5 category columns from the shared instance
 	if FFH_EXISTS then
@@ -289,7 +293,7 @@ function LateInitialize()
 	end
 	m_ePlayer = Game.GetLocalPlayer();
 end
-
+print('ssss')
 -- ===========================================================================
 --	UI Events
 -- ===========================================================================
@@ -365,6 +369,8 @@ function Initialize()
 
 	Controls.ConfirmPolicies:RegisterCallback(		Mouse.eLClick,	OnConfirmPolicies);
 	Controls.ConfirmPolicies:RegisterCallback(		Mouse.eMouseEnter, function() UI.PlaySound("Main_Menu_Mouse_Over"); end);
+	Controls.ToggleFlavoredNamesButton:RegisterCallback( Mouse.eLClick, function() OnToggleFlavoredNames(); end );
+	Controls.ToggleUnlockBadgesButton:RegisterCallback(  Mouse.eLClick, function() OnToggleUnlockBadges(); end );
 
 	-- Hide these after going invisible to prevent input
 
@@ -544,6 +550,7 @@ function RealizeCategoryDescription( nRowIndex )
 		cc.Desc:SetText( "" );
 	end
 end
+print('')
 
 -- Click a policy in a category listbox: toggle/stage it in the category's slot.
 ---@param nRowIndex number
@@ -577,6 +584,69 @@ function SetPolicyCardSize( inst, isHover )
 	inst.CardArt:SetHide( not isHover );
 	inst.Active:SetSizeVal( w + CARD_OVERLAY_PAD_W, h + CARD_OVERLAY_PAD_H );
 	inst.Highlight:SetSizeVal( w + CARD_OVERLAY_PAD_W, h + CARD_OVERLAY_PAD_H );
+end
+
+-- Resolve a badge icon, trying each source resolution in BADGE_ATLAS_SIZES
+---@param strIcon string
+---@return number
+local function FindBadgeIconAtlas( strIcon )
+	for _,nSize in ipairs( BADGE_ATLAS_SIZES ) do
+		---@type number
+		local x, y, sheet = IconManager:FindIconAtlas( strIcon, nSize );
+		if x ~= nil then return x, y, sheet, nSize; end
+	end
+	return nil;
+end
+
+-- Fill one badge stack. Returns how many badges actually rendered. a badge whose icon is not
+-- registered in any atlas is skipped
+---@param uiStack table
+---@param kBadges table
+---@param isVisible boolean
+local function FillBadgeStack( uiStack, kBadges, isVisible )
+	uiStack:DestroyAllChildren();
+	if not isVisible then
+		uiStack:SetHide( true );
+		return 0;
+	end
+
+	---@type number
+	local nShown = 0;
+	for _,tBadge in ipairs( kBadges ) do
+		---@type table
+		local uiBadge = nil;
+		if tBadge.Texture ~= nil then
+			uiBadge = {};
+			ContextPtr:BuildInstanceForControl( "PolicyUnlockBadge", uiBadge, uiStack );
+			uiBadge.Icon:SetTexture( tBadge.Texture );
+		elseif tBadge.Icon ~= nil then
+			---@type number
+			local x, y, sheet, nSize = FindBadgeIconAtlas( tBadge.Icon );
+			if x ~= nil then
+				uiBadge = {};
+				ContextPtr:BuildInstanceForControl( "PolicyUnlockBadge", uiBadge, uiStack );
+				uiBadge.Icon:SetTexture( x, y, sheet );
+				uiBadge.Icon:SetSizeVal( nSize, nSize );
+			end
+		end
+		if uiBadge ~= nil then
+			if tBadge.Tooltip ~= nil then
+				uiBadge.Icon:SetToolTipString( Locale.Lookup(tBadge.Tooltip) );
+			end
+			nShown = nShown + 1;
+		end
+	end
+
+	uiStack:SetHide( nShown == 0 );
+	uiStack:CalculateSize();
+	return nShown;
+end
+
+function RealizePolicyUnlockBadges( inst, strPolicyType, isUnlocked, isSelectable )
+	---@type table
+	local kBadges = GetPolicyUnlockBadges( strPolicyType );
+	FillBadgeStack( inst.BadgeStackLeft,  kBadges.Primary,   m_isShowUnlockBadges and not isUnlocked );
+	FillBadgeStack( inst.BadgeStackRight, kBadges.Secondary, m_isShowUnlockBadges and not isSelectable );
 end
 
 -- Build one category's listbox of eligible policy names.
@@ -657,6 +727,9 @@ function RealizeCategoryList( nRowIndex )
 				SetPolicyCardSize( inst, false );
 				RealizeCategoryDescription( nRowIndex );
 			end);
+
+			-- What the player still needs before this one becomes available.
+			RealizePolicyUnlockBadges( inst, strPolicyType, isUnlocked, isSelectable );
 
 			if canEdit and isSelectable then
 				inst.Button:RegisterCallback( Mouse.eLClick, function()
@@ -814,6 +887,30 @@ function RealizeGovernmentsList()
 end
 
 -- Confirm Policies button
+-- Options panel: push the current option state onto the two check buttons. The label flips with
+-- the state the way the tree's toggles do (Show <-> Hide), and SetSelected drives the tick art.
+function RealizeOptionsPanel()
+	Controls.ToggleFlavoredNamesButton:SetSelected( m_isShowFlavoredNames );
+	Controls.ToggleFlavoredNamesButton:SetText( Locale.Lookup( m_isShowFlavoredNames
+		and "LOC_GOVT_OPTION_FLAVORED_NAMES_ON" or "LOC_GOVT_OPTION_FLAVORED_NAMES_OFF" ) );
+	Controls.ToggleUnlockBadgesButton:SetSelected( m_isShowUnlockBadges );
+	Controls.ToggleUnlockBadgesButton:SetText( Locale.Lookup( m_isShowUnlockBadges
+		and "LOC_GOVT_OPTION_UNLOCK_BADGES_ON" or "LOC_GOVT_OPTION_UNLOCK_BADGES_OFF" ) );
+end
+
+function OnToggleFlavoredNames()
+	SetShowFlavoredNames( not m_isShowFlavoredNames );
+	UI.PlaySound("Play_UI_Click");
+	InvalidateColumnMeasurements();
+	RealizeAll();
+end
+
+function OnToggleUnlockBadges()
+	SetShowUnlockBadges( not m_isShowUnlockBadges );
+	UI.PlaySound("Play_UI_Click");
+	RealizeAll();
+end
+
 function RealizeConfirmButton()
 	---@type boolean
 	local canEdit = IsAbleToChangePolicies();
@@ -830,6 +927,17 @@ end
 -- has handling so hidden policies dont inflate it, could take that out.
 ---@param cc table
 ---@param nRowIndex number
+-- Drop every column's cached description height so ApplyUniformColumnHeights re-measures. Needed
+-- whenever something changes the TEXT the cards will hold, since the cache is otherwise only
+-- invalidated by a government change.
+function InvalidateColumnMeasurements()
+	for nRowIndex = 1, #ROW_SLOT_TYPES do
+		---@type table
+		local cc = CATEGORY_CONTROLS[nRowIndex];
+		if cc ~= nil then cc.MaxDescTextH = nil; end
+	end
+end
+
 function MeasureMaxDescTextH( cc, nRowIndex )
 	---@type number
 	local maxH = 0;
@@ -936,11 +1044,13 @@ function ApplyUniformColumnHeights()
 		---@type number
 		local CONFIRM_H, CONFIRM_GAP, LIST_PAD = 41, 8, 8;
 		---@type number
+		local OPTIONS_PANEL_H = 52 + 94 + 12;
+		---@type number
 		local nGapBottom = math.max( 0, nModalH - (nTop + rootH) );
 		Controls.ConfirmPolicies:SetOffsetY( nGapBottom );
 		Controls.GovernmentSlot:SetOffsetY( nGapBottom + CONFIRM_H + CONFIRM_GAP );
 		---@type number
-		local nMaxListH = (nTop + rootH) - HEADER_BAR_H - CONFIRM_H - CONFIRM_GAP;
+		local nMaxListH = (nTop + rootH) - OPTIONS_PANEL_H - CONFIRM_H - CONFIRM_GAP;
 		---@type number
 		local nListH = math.min( Controls.GovernmentListStack:GetSizeY() + LIST_PAD, nMaxListH );
 		Controls.GovernmentSlot:SetSizeY( math.max( nListH, 0 ) );
@@ -956,6 +1066,7 @@ function RealizeAll()
 	for nRowIndex = 1, #ROW_SLOT_TYPES do
 		RealizeCategoryList( nRowIndex );
 	end
+	RealizeOptionsPanel();
 	RealizeConfirmButton();
 	ApplyUniformColumnHeights();			-- fit columns to the tallest list + grow the modal
 	Controls.MainColumns:CalculateSize();	-- re-center the column stack after (re)building

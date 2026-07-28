@@ -573,19 +573,43 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_ARMAGEDDON_SNAP_NOTIFICATION_DESCRIPTION', '...finally, if all the previous portents have gone unheeded by those amongst men who still had the power to stop the decline of the world, the apocalypse shall strike the world. The sky shall rain fire, the seas shall boil, the sun shall be eclipsed by eternal darkness and plants, animals and people shall perish in greater numbers than ever before...[NEWLINE]...those who follow the darkness shall revel in the suffering of the world, while the righteous who tried in vain to prevent it shall weep and howl with despair as they lose all hope and dreams, as they forget the very nature of life and light, and as they finally are forever lost in darkness, their souls doomed to wander ethereal pathways throughout eternity, tormented with bitter regret, even as their bodies are consumed by flames...[NEWLINE]...thus Hell shall be merged with Erebus, and thus Erebus shall become Hell...', 'en_US');
 
 
+INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
+('LOC_UNLOCK_CRUSADE', 'Only usable by the Bannor, when at war.', 'en_US'),
+('LOC_GENERIC_UNLOCK_BY_CIVIC', 'Unlocked by {1_Civic}', 'en_US'),
+('LOC_LOC_UNLOCK_EVIL', 'Unlocked by not being Good Alignment. Changing State Religion towards an Evil Religion such as the Ashen Veil, Overlords, or Esus will change your alignment from Good.', 'en_US'),
+('LOC_UNLOCK_RELIGION_THE_ORDER', 'Only usable when you have a settlement with the Order Religion.', 'en_US'),
+('LOC_UNLOCK_RELIGION_EMPYREAN', 'Only usable when you have a settlement with the Empyrean Religion.', 'en_US'),
+('LOC_UNLOCK_RELIGION_KILMORPH', 'Only usable when you have a settlement with the Runes of Kilmorph Religion.', 'en_US'),
+('LOC_UNLOCK_RELIGION_LEAVES', 'Only usable when you have a settlement with the Fellowship of the Leaves Religion.', 'en_US'),
+('LOC_UNLOCK_RELIGION_OVERLORDS', 'Only usable when you have a settlement with the Octopus Overlords Religion.', 'en_US'),
+('LOC_UNLOCK_RELIGION_ESUS', 'Only usable when you have a settlement with the Council of Esus Religion.', 'en_US'),
+('LOC_UNLOCK_RELIGION_VEIL', 'Only usable when you have a settlement with the Ashen Veil Religion.', 'en_US'),
+
+('LOC_UNLOCK_ARETE', 'Only usable when you adopt the Runes of Kilmorph State Religion.', 'en_US'),
+('LOC_UNLOCK_SACRIFICE_THE_WEAK', 'Only usable when you adopt the Ashen Veil State Religion.', 'en_US'),
+('LOC_UNLOCK_GUARDIANS_OF_NATURE', 'Only usable when you adopt the Fellowship of Leaves State Religion.', 'en_US'),
+('LOC_UNLOCK_SOCIAL_ORDER', 'Only usable when you adopt the Order State Religion.', 'en_US'),
+('LOC_UNLOCK_SLAVERY', 'Only usable when you have an Evil Alignment.', 'en_US'),
+('LOC_UNLOCK_CRUSADE', 'Only usable by the Bannor when they are at war.', 'en_US');
+
+INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
+('LOC_SANDS_FIRE_CONTINUED_DESC', '{FertilityAdded} {FertilityAdded : plural 1?fire has; other?fires have;} ended. The tiles are now safe for traversal, but the trees will take time to regrow.', 'en_US');
 
 -- Statecraft_Text
--- Author: JNR
---------------------------------------------------------------
-
--- English
---------------------------------------------------------------
 INSERT OR REPLACE INTO LocalizedText
 		(Language,	Tag,															Text)
 VALUES	('en_US',	'LOC_SLOT_LABOR_NAME',											'Labor'),
 		('en_US',	'LOC_SLOT_RELIGIOUS_NAME',										'Religious'),
 		('en_US',	'LOC_SLOT_ADMIN_NAME',											'Administration'),
 		('en_US',	'LOC_SLOT_GREAT_PERSON_NAME',									'Patronage'),
+
+		-- Government screen options panel. Each toggle's label states what clicking it will DO,
+		-- flipping with the current state, the way the civics/tech tree Show/Hide toggles read.
+		('en_US',	'LOC_GOVT_OPTION_FLAVORED_NAMES_ON',							'Flavourful Names'),
+		('en_US',	'LOC_GOVT_OPTION_FLAVORED_NAMES_OFF',							'Standard Names'),
+		('en_US',	'LOC_GOVT_OPTION_UNLOCK_BADGES_ON',								'Hide Unlock Icons'),
+		('en_US',	'LOC_GOVT_OPTION_UNLOCK_BADGES_OFF',							'Show Unlock Icons'),
+
 
 		('en_US',	'LOC_GOVT_INHERENT_BONUS_CHIEFDOM_JNR',							'None'),
 		('en_US',	'LOC_GOVT_ACCUMULATED_BONUS_BRIEF_CHIEFDOM_JNR',				'None'),

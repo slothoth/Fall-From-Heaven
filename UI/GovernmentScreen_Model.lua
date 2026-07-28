@@ -399,6 +399,8 @@ function PopulateStaticData()
 				Name		= policyName,
 				PolicyHash	= policyTypeHash,
 				SlotType	= slotType,
+				PrereqCivic	= row.PrereqCivic,	-- what unlocks it; drives the unlock badges (may be nil)
+				PrereqTech	= row.PrereqTech,	-- ditto, for the few gated on a tech instead
 				UniqueID	= row.Index			-- the row this policy exists in, is guaranteed to be unique (as-is the house, but these are readable. ;) )
 				};
 
@@ -602,13 +604,140 @@ function IsPolicyAllowedByGovernment( strPolicyType, strGovType )
 	return kGovs[strGovType] == true;
 end
 
+-- ===========================================================================
+--	DISPLAY OPTIONS
+--	Toggled from the screen's options panel, persisted per user (not per save,
+--	and not per player) via UserConfiguration, which takes arbitrary string keys.
+-- ===========================================================================
+
+---@type string
+OPTION_KEY_FLAVORED_NAMES = "GovScreenFlavoredNames";
+---@type string
+OPTION_KEY_UNLOCK_BADGES  = "GovScreenUnlockBadges";
+
+---@type boolean
+m_isShowFlavoredNames = true;
+---@type boolean
+m_isShowUnlockBadges  = true;
+
+---@param strKey string
+---@param isDefault boolean
+---@return boolean
+local function ReadBoolOption( strKey, isDefault )
+	---@type any
+	local value = UserConfiguration.GetValue( strKey );
+	if value == nil then return isDefault; end
+	return value ~= false and value ~= 0;
+end
+
+function LoadDisplayOptions()
+	m_isShowFlavoredNames = ReadBoolOption( OPTION_KEY_FLAVORED_NAMES, true );
+	m_isShowUnlockBadges  = ReadBoolOption( OPTION_KEY_UNLOCK_BADGES,  true );
+end
+
+---@param isOn boolean
+function SetShowFlavoredNames( isOn )
+	m_isShowFlavoredNames = isOn;
+	UserConfiguration.SetValue( OPTION_KEY_FLAVORED_NAMES, isOn );
+end
+
+---@param isOn boolean
+function SetShowUnlockBadges( isOn )
+	m_isShowUnlockBadges = isOn;
+	UserConfiguration.SetValue( OPTION_KEY_UNLOCK_BADGES, isOn );
+end
+
+-- ===========================================================================
+--	UNLOCK BADGES
+--	Small icons shown beside a still-locked policy saying what will unlock it.
+-- ===========================================================================
+
+-- Badges come in two groups, rendered on opposite sides of the policy card. Left is civic research lock
+--  Right is every other condition: being a particular civilization, being at war,
+--                     having another policy equipped, having a certain government
+--
+-- A badge is { Icon = <atlas icon name>, Texture = <direct .dds>, Tooltip = <LOC key or text> }.
+-- in future maybe this would be in gameInfo
+---@type table
+POLICY_EXTRA_UNLOCK_BADGES = {
+	-- Crusade: Bannor-only, and only while at war.
+	["SLTH_POLICY_CRUSADE"] = {
+		{ Icon = "ICON_SLTH_CIVILIZATION_BANNOR", Tooltip = "LOC_UNLOCK_CRUSADE" }
+	},
+    ["SLTH_POLICY_SLAVERY"] = {
+		{ Icon = "ICON_BARBARIAN_CLAN_SKELETON_2", Tooltip = "LOC_UNLOCK_EVIL" },
+	},
+};
+for row in GameInfo.PolicyGatedPolicies() do
+    print('for row', row.PolicyType, row.UnlockedPolicyType, row.Icon, row.ToolTip)
+    POLICY_EXTRA_UNLOCK_BADGES[row.UnlockedPolicyType] = {
+        { Icon = row.Icon, Tooltip = row.ToolTip}
+    }
+end
+
+
+-- One badge descriptor from a game type, or nil when the type is absent.
+---@param strPrefixType string
+---@param kInfoTable table
+---@return table
+local function MakeTypeBadge( strPrefixType, kInfoTable )
+	if strPrefixType == nil then return nil; end
+	---@type table
+    local tRow = kInfoTable[strPrefixType];
+    print('trying to make new badge', strPrefixType, tRow.Name)
+    local tooltip = (tRow ~= nil) and tRow.Name or strPrefixType
+	return { Icon = "ICON_" .. strPrefixType, Tooltip = Locale.Lookup('LOC_GENERIC_UNLOCK_BY_CIVIC', Locale.Lookup(tooltip)) };
+end
+
+-- What unlocks this policy, split into the two side groups:
+--   { Primary = { badge, ... }, Secondary = { badge, ... } }
+-- Either list may be empty.
+---@param strPolicyType string
+---@return table
+function GetPolicyUnlockBadges( strPolicyType )
+	---@type table
+	local kResult = { Primary = {}, Secondary = {} };
+
+	---@type table
+	local tPolicy = m_kPolicyCatalogData[strPolicyType];
+	if tPolicy == nil then return kResult; end
+
+	-- Primary: what to research.
+	---@type table
+	local tCivic = MakeTypeBadge( tPolicy.PrereqCivic, GameInfo.Civics );
+	if tCivic ~= nil then table.insert( kResult.Primary, tCivic ); end
+	---@type table
+	local tTech = MakeTypeBadge( tPolicy.PrereqTech, GameInfo.Technologies );
+	if tTech ~= nil then table.insert( kResult.Primary, tTech ); end
+
+	-- Secondary: everything else.
+	---@type table
+	local kExtra = POLICY_EXTRA_UNLOCK_BADGES[strPolicyType];
+	if kExtra ~= nil then
+		for _,tBadge in ipairs(kExtra) do table.insert( kResult.Secondary, tBadge ); end
+	else
+		---@type string
+		local strRequired = POLICY_REQUIRES[strPolicyType];
+		if strRequired ~= nil then
+			---@type table
+			local tRequired = m_kPolicyCatalogData[strRequired];
+			table.insert( kResult.Secondary, {
+				Icon    = "ICON_" .. strRequired,
+				Tooltip = (tRequired ~= nil) and tRequired.Name or strRequired,
+			} );
+		end
+	end
+
+	return kResult;
+end
+
 -- The name to show for a policy: the local civilization's alternate name when it has one
 -- (Policies_AlternateNames_JNR -> m_kFlavoredPolicyNames), otherwise the catalog name.
 -- Alternate names arrive as raw LOC keys; catalog names are already looked up.
 ---@param strPolicyType string
 ---@return string
 function GetPolicyDisplayName( strPolicyType )
-	if m_kFlavoredPolicyNames[strPolicyType] ~= nil then
+	if m_isShowFlavoredNames and m_kFlavoredPolicyNames[strPolicyType] ~= nil then
 		return Locale.Lookup( m_kFlavoredPolicyNames[strPolicyType] );
 	end
 	---@type table

@@ -16,6 +16,20 @@
                 <Container ID="GovernmentColumn" Anchor="L,T" Offset="0,0" Size="368,parent">
                     <Image ID="GovParchment" Anchor="L,T" Offset="0,0" Size="parent,parent" Texture="Parchment_Pattern" StretchMode="Tile"/>
 
+                    <Grid ID="OptionsPanel" ConsumeAllMouse="1" Anchor="C,T" Offset="0,94" Size="210,64"
+                          Texture="Controls_OptionPanel" SliceCorner="3,3" SliceSize="10,52" SliceTextureSize="16,64">
+                        <Image Anchor="C,T" Offset="0,-30" Size="240,59" Texture="Controls_HeaderBanner">
+                            <Label Anchor="C,T" Offset="0,8" Style="FontFlair16" Color0="38,39,32,255"
+                                   String="LOC_TREE_OPTIONS" SmallCaps="20" SmallCapsType="EveryWord"/>
+                        </Image>
+                        <GridButton ID="ToggleFlavoredNamesButton" Anchor="C,T" Offset="0,0" Size="194,26" TextOffset="32,6" Style="TreeOptionText">
+                            <GridData Texture="Controls_CheckButton2" StateOffsetIncrement="0,26" SliceCorner="30,14" SliceSize="1,1" SliceTextureSize="41,26"/>
+                        </GridButton>
+                        <GridButton ID="ToggleUnlockBadgesButton" Anchor="C,T" Offset="0,22" Size="194,26" TextOffset="32,6" Style="TreeOptionText">
+                            <GridData Texture="Controls_CheckButton2" StateOffsetIncrement="0,26" SliceCorner="30,14" SliceSize="1,1" SliceTextureSize="41,26"/>
+                        </GridButton>
+                    </Grid>
+
                     <!-- Bottom-anchored (C,B) so the list grows up off the Confirm button and
                          leaves the top of the column free for options. the height is fitted to the list content in
                          RealizeGovernmentsList, capped at GOV_LIST_MAX_H. -->
@@ -59,7 +73,7 @@
             <Image ID="Slot" Anchor="C,T" Offset="0,40" Texture="Governments_CardSlot_Vertical.dds">
                 <Label ID="Title" Anchor="C,T" Offset="0,24" Style="PolicyRowHeader"/>
     <!--        <Image ID="Watermark" Anchor="C,T" Offset="0,250" Size="parent-25,parent-275" Texture="Governments_WatermarkMilitary" StretchMode="Fill" Color="GovWaterMark"/> -->
-                <ScrollPanel ID="ListScroller" Anchor="C,T" Offset="20,54" Size="parent-16,parent-76" Vertical="1"
+                <ScrollPanel ID="ListScroller" Anchor="C,T" Offset="-3,54" Size="parent-16,parent-76" Vertical="1"
                              AutoScrollBar="1" FullClip="1">
                     <Stack ID="PolicyStack" Offset="4,0" StackGrowth="Down" StackPadding="0,2"/>
                     <ScrollBar Anchor="R,T" AnchorSide="I,I" Offset="28,0" Style="ScrollVerticalBar" Size="8,parent-10"/>
@@ -88,11 +102,11 @@
          The Button itself doesnt resize. TThe grown card is therefore drawn by the CardArt Image, which does
          scale. See SetPolicyCardSize in Lua. -->
     <Instance Name="PolicyNameItem">
-        <Container ID="Root" Size="140,39">
+        <Container ID="Root" Size="192,39">
             <!-- DisabledCallbacks: locked policies are SetDisabled(true) so they render greyed and
                  are not selectable, but they must still fire mouse-enter/exit so hovering one
                  previews its description.  -->
-            <GridButton ID="Button" Anchor="C,C" Size="140,39" Offset="3,3" Texture="Governments_EconomicCard_Compact.dds" DisabledCallbacks="1"
+            <GridButton ID="Button" Anchor="L,C" Size="140,39" Offset="26,3" Texture="Governments_EconomicCard_Compact.dds" DisabledCallbacks="1"
                         SliceCorner="0,0" SliceSize="0,0" SliceTextureSize="140,39" StateOffsetIncrement="0,0">
                 <!-- The enlarged card art, shown only while hovered. Carries the same texture as
                      the Button and is bigger than it, so it completely covers the un-scaled
@@ -103,7 +117,14 @@
                 <Image ID="Highlight" Anchor="C,C" Size="148,44" Offset="2,0" Texture="Governments_SelectedCard_Small.dds" Hidden="1"/>
                 <Label ID="Name" Anchor="C,C" Offset="1,-1" WrapWidth="176" Style="FontNormal12"/>
             </GridButton>
+            <Stack ID="BadgeStackLeft"  Anchor="L,C" Offset="-8,3"   StackGrowth="Down" StackPadding="0,2" Hidden="1"/>
+            <Stack ID="BadgeStackRight" Anchor="L,C" Offset="170,3" StackGrowth="Down" StackPadding="0,2" Hidden="1"/>
         </Container>
+    </Instance>
+
+    <!-- One unlock-requirement icon inside a PolicyNameItem badge stack. -->
+    <Instance Name="PolicyUnlockBadge">
+        <Image ID="Icon" Anchor="L,T" Size="38,38"/>
     </Instance>
 
     <Instance Name="GovernmentTierDivider">

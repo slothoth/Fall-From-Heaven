@@ -36,25 +36,26 @@ Here is a list of the features that are implemented:
 - Natural Wonders. Still have some art to do, so some appear to occupy more than one tile, or look like a geothermal vent, for now.
 - Racial abilities. Khazad built units will be Dwarven, with bonuses on hills. Ljosalfar Elven etc. With exceptions on units where ethnicity is specified or not relevant (like say, Hill Giants).
 - Unit and City Maintenance. Unit and City maintenance behaves as it does in civ IV. Cities require more maintenance the more distant they are from the capital, and for the number of cities. Units have a free amount of support, alongside a quarter of your civs population. Exceed that amount of units, and you will pay 1 gold per turn for each. Varies based on difficulty. Units also cost some more if they are in foreign territory.
+- Music. The soundtracks have been ported into the game, and change based on your current religion.
+- Alignment. Civs change alignment on changing State Religions, and start with a default alignment. Druids, Eidolons and Paladins are limited by alignment. There is diplomatic penalties for different alignments.
 ## Partly Implemented
 - Magic Combat Strength. Units have magic combat strength bonuses as they should. However resistance or vulnerability to that combat strength is limited to a unit level. I.e. a Wood Golem is Vulnerable to Fire, so takes more damage from Fire Combat Strength. But there is no way currently to make the Fire Resistance promotion reduce Fire Combat Strength.
 - Commerce and Sliders: Commerce is implemented as the Faith yield. Which is converted in cities to Science, Culture and Gold. Currently its split into thirds, but once I''ve built the UI for it, you can adjust the conversion with sliders.
 - Specialists. VI had far less emphasis on Specialists, and placed them in Districts. To allow the AI to interact with Specialists, I have elected to do the same. As a result, buildings that allow slotting a specialist will be housed in that district. Campus=Sage, Industrial Zone=Engineer, Theatre Square=Bard, Commercial Hub=Merchant, Holy Site=Priest. So to slot a Priest, you would slot a population into that district. Wonders and policies that allow extra specialists are implemented using a script so dont need this.
 - National Units. Units that are only buildable when you have less than 4. Unfortunately, this is not respected for upgrading.
 - Erebus map script. Ported from Python to Lua, with many headaches along the way. It works, but is a bit slow to generate maps, and has a tendency to make the same maps.
-- Tech Tree Disconnects: Some technologies/civics are easier to access, because the prerequisite now lives in the Civic/Tech tree, and cannot be a prerequisite. This is most aggregious with Feral Bond being accessible turn 1. There is a plan to fix this with dummy prerequisites however.
+- Tech Tree Disconnects: Some technologies/civics are easier to access, because the prerequisite now lives in the Civic/Tech tree, and cannot be a prerequisite. This is most egregious with Feral Bond being accessible turn 1. There is a plan to fix this with dummy prerequisites however.
 - Magic promotions on non-magic units, like Vampirism granting up to Death II, Shadow II and Body II. As is, Vampirism just grants Shadow I and Body I and Death I. Similarly, units like the Brujah or Chalid cannot gain promotions with spells. As each would need a custom promotion class.
-- Alignment. Civs change alignment on changing State Religions, and start with a default alignment. Druids, Eidolons and Paladins are limited by alignment. Howver, there is no diplomatic relation loss from differing alignments.
 - Armageddon Counter. Contributions and reductions to the Armageddon Counter all works. However, there is no UI to display it currently. Events from the Armageddon counter should work, however Hell terrain is not yet implemented.
 - Acheron city spawning. Acheron will spawn, but is not held and will go roam about!
 - Promotion gated upgrades. So for example, Adepts only upgrading to Mages once they are level 4. This is implemented for human players, but the AI bypasses it, otherwise they couldnt ever get it. This would require serious DLL work to fix.
+- Unit SFX: Units have the custom selections from FFH, but not the ones from the base game. I think these were always a bit odd. But Losha and Orcs have their voices! Not currently implemented 3d sound like idle dragon breathing.
 ## Not currently Implemented:
 - First strikes. As a Stop-gap, units get Combat Strength instead.
 - Great People recruitment per city. Currently it is done as a global amount, as in VI.
 - Adaptive and Insane traits. Planned soon.
 - World spells. Interface built, but each spell not yet built.
 - Overcouncil/Undercouncil. Currently do not have a way to exclude civs from world congress, or call it earlier. Also was causing CTDs.
-- Music system. Music in VI is implemented on a per civ level, and also requires quite a lot of work to even implement like that. Whereas FFH has different music based on civ alignment, religion, or war status.
 - Illusion units that cannot kill units, only damage them. Seems relatively impossible in VI without DLL work
 - Animal units spawning in the Wilderness, making Dens
 - Events system (like the governor assassinated event)
