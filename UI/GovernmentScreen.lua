@@ -642,11 +642,14 @@ local function FillBadgeStack( uiStack, kBadges, isVisible )
 	return nShown;
 end
 
-function RealizePolicyUnlockBadges( inst, strPolicyType, isUnlocked, isSelectable )
+function RealizePolicyUnlockBadges( inst, strPolicyType )
 	---@type table
 	local kBadges = GetPolicyUnlockBadges( strPolicyType );
-	FillBadgeStack( inst.BadgeStackLeft,  kBadges.Primary,   m_isShowUnlockBadges and not isUnlocked );
-	FillBadgeStack( inst.BadgeStackRight, kBadges.Secondary, m_isShowUnlockBadges and not isSelectable );
+
+
+	FillBadgeStack( inst.BadgeStackLeft, kBadges.Primary,
+		m_isShowUnlockBadges and not ArePolicyPrereqsResearched( strPolicyType ) );
+	FillBadgeStack( inst.BadgeStackRight, kBadges.Secondary, m_isShowUnlockBadges );
 end
 
 -- Build one category's listbox of eligible policy names.
@@ -729,7 +732,7 @@ function RealizeCategoryList( nRowIndex )
 			end);
 
 			-- What the player still needs before this one becomes available.
-			RealizePolicyUnlockBadges( inst, strPolicyType, isUnlocked, isSelectable );
+			RealizePolicyUnlockBadges( inst, strPolicyType );
 
 			if canEdit and isSelectable then
 				inst.Button:RegisterCallback( Mouse.eLClick, function()

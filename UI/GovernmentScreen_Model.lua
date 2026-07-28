@@ -694,6 +694,34 @@ end
 -- Either list may be empty.
 ---@param strPolicyType string
 ---@return table
+
+---@param strPolicyType string
+---@return boolean
+function ArePolicyPrereqsResearched( strPolicyType )
+	---@type table
+	local tPolicy = m_kPolicyCatalogData[strPolicyType];
+	if tPolicy == nil then return true; end
+	if m_ePlayer == -1 then return false; end
+	---@type table
+	local pPlayer = Players[m_ePlayer];
+
+	if tPolicy.PrereqCivic ~= nil then
+		---@type table
+		local tCivic = GameInfo.Civics[tPolicy.PrereqCivic];
+		if tCivic ~= nil and not pPlayer:GetCulture():HasCivic( tCivic.Index ) then
+			return false;
+		end
+	end
+	if tPolicy.PrereqTech ~= nil then
+		---@type table
+		local tTech = GameInfo.Technologies[tPolicy.PrereqTech];
+		if tTech ~= nil and not pPlayer:GetTechs():HasTech( tTech.Index ) then
+			return false;
+		end
+	end
+	return true;
+end
+
 function GetPolicyUnlockBadges( strPolicyType )
 	---@type table
 	local kResult = { Primary = {}, Secondary = {} };
