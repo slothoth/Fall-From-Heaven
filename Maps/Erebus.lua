@@ -709,22 +709,22 @@ function ApplyTerrain(plotTypes, terrainTypes)
 end
 
 function ConvertToFiraxisFormSimple(erebus_hex_grid, mapper)
+    -- Walk the plot indices in order. This used to iterate with pairs() and
+    -- append with table.insert, which gave an undefined ordering and a 1-based
+    -- result, while ApplyTerrain reads it 0-based -- so tiles could land on the
+    -- wrong plots entirely.
     local loc_plotTypes = {}
-    for idx, plot_info in pairs(erebus_hex_grid) do
-        if plot_info then
-            local converted_val = mapper[plot_info]
-            if converted_val then
-                table.insert(loc_plotTypes, converted_val)
-            else
-                slthLog('MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. plot_info .. '$ WITH index: ' .. idx)
-                if idx == 0 then
-                    slthLog('stopped insert in 0')
-                else
-                    slthLog('would inserting grass instead: ' .. g_TERRAIN_TYPE_GRASS)
-                    table.insert(loc_plotTypes, g_TERRAIN_TYPE_GRASS)
-                end
+    for i = 0, (g_iW * g_iH) - 1 do
+        local plot_info = erebus_hex_grid[i]
+        local converted_val = plot_info ~= nil and mapper[plot_info] or nil
+        if converted_val == nil then
+            if plot_info ~= nil then
+                slthLog('MAPPER COULDNT FIND CONVERSION FOR ITEM: $' .. tostring(plot_info)
+                        .. '$ WITH index: ' .. i)
             end
+            converted_val = g_TERRAIN_TYPE_GRASS
         end
+        loc_plotTypes[i] = converted_val
     end
     return loc_plotTypes
 end

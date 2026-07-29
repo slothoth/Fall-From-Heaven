@@ -45,28 +45,227 @@ local rxYMap = {[NE]= 0, [NW] = 0, [SE] = -1, [SW] = -1}
 local highestRegionAltitude = 0
 local OCEAN, LAND,HILLS,PEAK = 0,1,2,3
 
--- ---------------------------------------------------------------------------
--- CORNER ("rx") GEOMETRY ADAPTER
---
--- The river layer does not work on tiles, it works on tile CORNERS -- "rx"
--- cells, short for river crossing. A river runs corner to corner, so each flow
--- step traverses exactly one tile edge. Gates (and therefore mountain passes)
--- are corners where two regions meet.
---
--- The constants below are the ONLY place the square-grid assumption lives:
---   * 4 tiles meet at a corner, so corners form a (W+1) x (H+1) lattice
---   * each corner has 4 cardinal corner-neighbours
---
--- Civ VI is hexagonal, where this is different: 3 tiles meet at a vertex, there
--- are 2 vertices per hex rather than 1 corner per tile, and each vertex has 3
--- vertex-neighbours. To move this layer onto true hex vertices, replace these
--- constants, plotFromRx/rxFromPlot, and shouldFlattenRiverPeak. The gate,
--- height and flow logic is written against this adapter and is geometry
--- agnostic -- it does not need to change.
--- ---------------------------------------------------------------------------
+-- Square corner adapter, still used by the gate / height / flow code below.
+-- The hex vertex lattice further down is built and verified but NOT yet wired
+-- in -- the in-progress rebase lives in PythonConversion.HEX_WIP.lua.
 local RX_CORNER_PLOT_DIRS = {NE, NW, SE, SW}  -- plots that share a corner
 local RX_STEP_DIRS        = {N, S, E, W}      -- corner -> adjacent corner
 local RX_REGIONS_AT_GATE  = 2                 -- a gate corner spans exactly 2 regions
+
+-- ===========================================================================
+-- HEX VERTEX LATTICE
+--
+-- The river layer works on tile CORNERS, not tiles: a river runs corner to
+-- corner, so every flow step traverses exactly one tile edge, and a gate (hence
+-- a mountain pass) is a corner where two regions meet.
+--
+-- This used to model corners as a square (W+1)x(H+1) grid, 4 tiles per corner,
+-- 4 corner-neighbours. Civ VI is hexagonal and that is simply a different
+-- lattice:
+--
+--     * 3 tiles meet at a vertex, not 4
+--     * there are 2 vertices per hex, not 1 corner per tile
+--     * each vertex has exactly 3 vertex-neighbours, not 4
+--
+-- The 3-valence is what matters most. Civ VI requires a river to turn +/-60
+-- degrees on EVERY step (see TurnLeft/TurnRightFlowDirections in the base game's
+-- RiversLakes.lua) -- it may never run straight. On a 3-valent vertex graph that
+-- is automatic: arriving along one edge, the other two are exactly the +/-60
+-- turns, and the third option is reverse, which downhill flow already excludes.
+-- On the old square lattice half of all junctions were illegal, which is why
+-- rivers rendered as doubled lines and source caps.
+--
+-- Vertices are identified by the SORTED TRIPLE of plot indices touching them,
+-- and adjacency is derived from that (two vertices are adjacent exactly when
+-- they share two plots -- those two plots name the edge between them). Deriving
+-- it this way rather than hand-rolling offset algebra means the lattice cannot
+-- silently disagree with the game's own idea of adjacency.
+--
+-- Every hex owns two vertices: its TOP (north) corner, shared with its NW and NE
+-- neighbours, and its BOT (south) corner, shared with its SW and SE neighbours.
+-- Those two families tile every vertex exactly once.
+-- ===========================================================================
+
+-- Pointy-top offset neighbours. This is the single place the parity convention
+-- lives; verifyHexLattice() below checks it against Map.GetAdjacentPlot.
+local HEX_E, HEX_W, HEX_NE, HEX_NW, HEX_SE, HEX_SW = 1, 2, 3, 4, 5, 6
+local HEX_DIRS = {HEX_E, HEX_W, HEX_NE, HEX_NW, HEX_SE, HEX_SW}
+local HEX_OPPOSITE = {[HEX_E]=HEX_W, [HEX_W]=HEX_E, [HEX_NE]=HEX_SW,
+                      [HEX_SW]=HEX_NE, [HEX_NW]=HEX_SE, [HEX_SE]=HEX_NW}
+
+local function hexNeighbourXY(x, y, dir)
+    local odd = (y % 2 == 1)
+    local dx, dy
+    if     dir == HEX_E  then dx, dy = 1, 0
+    elseif dir == HEX_W  then dx, dy = -1, 0
+    elseif dir == HEX_NE then dx, dy = (odd and 1 or 0), 1
+    elseif dir == HEX_NW then dx, dy = (odd and 0 or -1), 1
+    elseif dir == HEX_SE then dx, dy = (odd and 1 or 0), -1
+    elseif dir == HEX_SW then dx, dy = (odd and 0 or -1), -1
+    else return nil, nil end
+    local nx, ny = x + dx, y + dy
+    if nx < 0 or nx >= g_iW or ny < 0 or ny >= g_iH then return nil, nil end
+    return nx, ny
+end
+
+local function hexNeighbourIndex(x, y, dir)
+    local nx, ny = hexNeighbourXY(x, y, dir)
+    if not nx then return -1 end
+    return ny * g_iW + nx
+end
+
+function plotXY(i)
+    local y = math.floor(i / g_iW)
+    return i - y * g_iW, y
+end
+
+-- Approximate screen position, used only to name a flow direction from a step.
+local function plotPos(i)
+    local x, y = plotXY(i)
+    return x + (y % 2) * 0.5, y * 0.8660254
+end
+
+-- The lattice itself, built once per map.
+local vertexPlots       = {}   -- vertexID -> {plotA, plotB, plotC} sorted
+local vertexNeighbours  = {}   -- vertexID -> { {v=otherID, a=plot, b=plot}, ... }
+local vertexPos         = {}   -- vertexID -> {fx, fy}
+local vertexOfPlotTop   = {}   -- plotIndex -> vertexID
+local vertexOfPlotBot   = {}
+local plotVertices      = {}   -- plotIndex -> { vertexID, ... } (its 6 corners)
+local vertexCount       = 0
+
+-- Accessors. Everything downstream goes through these, so the lattice can be
+-- swapped without touching gate / height / flow logic.
+function hexVertexCount()          return vertexCount end
+function hexVertexPlots(id)        return vertexPlots[id] end
+function hexVertexNeighbours(id)   return vertexNeighbours[id] or {} end
+function hexVertexPos(id)          return vertexPos[id] end
+function hexPlotVertices(i)        return plotVertices[i] or {} end
+
+local function tripleKey(a, b, c)
+    local t = {a, b, c}
+    table.sort(t)
+    return t[1] .. "_" .. t[2] .. "_" .. t[3], t
+end
+
+function buildHexLattice()
+    vertexPlots, vertexNeighbours, vertexPos = {}, {}, {}
+    vertexOfPlotTop, vertexOfPlotBot, vertexCount = {}, {}, 0
+    plotVertices = {}
+    local byKey = {}
+
+    local function makeVertex(pa, pb, pc)
+        local key, t = tripleKey(pa, pb, pc)
+        local id = byKey[key]
+        if not id then
+            vertexCount = vertexCount + 1
+            id = vertexCount
+            byKey[key] = id
+            vertexPlots[id] = t
+            local fx, fy = 0, 0
+            for _, p in ipairs(t) do
+                local px, py = plotPos(p)
+                fx, fy = fx + px / 3, fy + py / 3
+            end
+            vertexPos[id] = {fx, fy}
+        end
+        return id
+    end
+
+    -- Only vertices whose three plots are all on the map are usable; a vertex
+    -- hanging off the edge has no well-defined region set.
+    for y = 0, g_iH - 1 do
+        for x = 0, g_iW - 1 do
+            local i = y * g_iW + x
+            local nw, ne = hexNeighbourIndex(x, y, HEX_NW), hexNeighbourIndex(x, y, HEX_NE)
+            if nw ~= -1 and ne ~= -1 then
+                vertexOfPlotTop[i] = makeVertex(i, nw, ne)
+            end
+            local sw, se = hexNeighbourIndex(x, y, HEX_SW), hexNeighbourIndex(x, y, HEX_SE)
+            if sw ~= -1 and se ~= -1 then
+                vertexOfPlotBot[i] = makeVertex(i, sw, se)
+            end
+        end
+    end
+
+    -- Adjacency: two vertices are neighbours exactly when they share two plots.
+    local byPair = {}
+    for id, t in ipairs(vertexPlots) do
+        for m = 1, 3 do
+            for n = m + 1, 3 do
+                local pk = t[m] .. "_" .. t[n]
+                byPair[pk] = byPair[pk] or {}
+                table.insert(byPair[pk], id)
+            end
+        end
+    end
+    for id, t in ipairs(vertexPlots) do
+        for _, p in ipairs(t) do
+            plotVertices[p] = plotVertices[p] or {}
+            table.insert(plotVertices[p], id)
+        end
+    end
+
+    for id = 1, vertexCount do vertexNeighbours[id] = {} end
+    for pk, list in pairs(byPair) do
+        if #list == 2 then
+            local a, b = pk:match("^(%d+)_(%d+)$")
+            a, b = tonumber(a), tonumber(b)
+            table.insert(vertexNeighbours[list[1]], {v = list[2], a = a, b = b})
+            table.insert(vertexNeighbours[list[2]], {v = list[1], a = a, b = b})
+        end
+    end
+    return vertexCount
+end
+
+-- Sanity check the parity convention against the game's own adjacency, and the
+-- lattice invariants. Cheap, and catches a flipped offset immediately instead of
+-- letting it produce a subtly wrong map.
+function verifyHexLattice()
+    local problems = {}
+    if Map and Map.GetAdjacentPlot and DirectionTypes then
+        local mapping = {
+            [HEX_E]  = DirectionTypes.DIRECTION_EAST,
+            [HEX_W]  = DirectionTypes.DIRECTION_WEST,
+            [HEX_NE] = DirectionTypes.DIRECTION_NORTHEAST,
+            [HEX_NW] = DirectionTypes.DIRECTION_NORTHWEST,
+            [HEX_SE] = DirectionTypes.DIRECTION_SOUTHEAST,
+            [HEX_SW] = DirectionTypes.DIRECTION_SOUTHWEST,
+        }
+        local checked, mismatch = 0, 0
+        for y = 1, g_iH - 2, 7 do
+            for x = 1, g_iW - 2, 7 do
+                for dir, gameDir in pairs(mapping) do
+                    local nx, ny = hexNeighbourXY(x, y, dir)
+                    local p = Map.GetAdjacentPlot(x, y, gameDir)
+                    checked = checked + 1
+                    if p and nx then
+                        if p:GetX() ~= nx or p:GetY() ~= ny then mismatch = mismatch + 1 end
+                    elseif p or nx then
+                        mismatch = mismatch + 1
+                    end
+                end
+            end
+        end
+        if mismatch > 0 then
+            problems[#problems+1] = string.format(
+                "hex parity disagrees with Map.GetAdjacentPlot on %d of %d samples", mismatch, checked)
+        end
+    end
+    local badPlots, badNbrs = 0, 0
+    for id = 1, vertexCount do
+        if #vertexPlots[id] ~= 3 then badPlots = badPlots + 1 end
+        local n = #vertexNeighbours[id]
+        if n > 3 then badNbrs = badNbrs + 1 end
+    end
+    if badPlots > 0 then problems[#problems+1] = badPlots .. " vertices not touching exactly 3 plots" end
+    if badNbrs  > 0 then problems[#problems+1] = badNbrs  .. " vertices with more than 3 neighbours" end
+    if #problems > 0 then
+        print("Erebus: HEX LATTICE PROBLEMS -- " .. table.concat(problems, "; "))
+        return false
+    end
+    return true
+end
 
 g_iW, g_iH = Map.GetGridSize();
 
@@ -213,7 +412,9 @@ if WrapX or WrapY then
     end
 else
     function GetIndex(x, y)
-        if x < 0 or x > g_iW or y < 0 or y > g_iH then
+        -- Strict upper bound. x == g_iW used to be accepted and wrapped into the
+        -- next row; every plot loop is 0-based now so that can be rejected.
+        if x < 0 or x >= g_iW or y < 0 or y >= g_iH then
             return -1
         else
             return  y * g_iW + x
@@ -243,16 +444,16 @@ end
 local function buildNeighbourTable(width, height)
     local neighboursTable = {}
     local nCounts = {0,0,0,0,0,0,0,0}
-    for y = 1, height do
-        for x = 1, width do
+    for y = 0, height - 1 do
+        for x = 0, width - 1 do
             local i = GetIndex(x, y)
             local neighbours = {}
             for dy = -1, 1 do
                 local ny = y + dy
-                if ny >= 1 and ny <= height then
+                if ny >= 0 and ny <= height - 1 then
                     for dx = -1, 1 do
                         local nx = x + dx
-                        if not (dx == 0 and dy == 0) and nx >= 1 and nx <= width then
+                        if not (dx == 0 and dy == 0) and nx >= 0 and nx <= width - 1 then
                             table.insert(neighbours, GetIndex(nx, ny))
                         end
                     end
@@ -266,7 +467,7 @@ local function buildNeighbourTable(width, height)
 end
 
 local function seedRegions()
-    for i = 1, numTiles do regionMap[i] = -1 end
+    for i = 0, numTiles - 1 do regionMap[i] = -1 end
     for i = 1, numRx do regionRxMap[i] = -1 end
     local numRegions = math.floor(tonumber(numTiles) * RegionsPerPlot)
     slthLog('number of regions!: ', numRegions)
@@ -356,8 +557,8 @@ end
 
 local function convertRxToRegion()          -- TODO we are getting spots that arent converted in RegionMap?
     simpleSquareGridPrint(flipVertical(regionRxMap), 'rxMap', {}, true, true)
-    for y=1, g_iH do                        -- This may be intentional
-        for x=1, g_iW do
+    for y=0, g_iH do
+        for x=0, g_iW do
             local i = GetRxIndex(x, y)
             local regionID = regionRxMap[i]
             if regionID and regionID ~= -1 then
@@ -385,7 +586,7 @@ local function convertRxToRegion()          -- TODO we are getting spots that ar
             not_perimeter[index] = true
         end
     end
-    for i=1, numTiles do
+    for i=0, numTiles - 1 do
         if not_perimeter[i] and regionMap[i] and regionMap[i] == -1 then
             local nbors = regionNeighbours[i]
             local nbor_regions = {[-1]=0}
@@ -526,41 +727,48 @@ end
 
 -- needs gate stuff defined first
 
--- Hot path: called several times per corner per pass, so no logging here.
-local function getRiverIndex(x, y)
-    if x < 0 or x >= g_iW + 1 then return -1 end
-    if y < 0 or y >= g_iH + 1 then return -1 end
-    return y * (g_iW + 1) + x
-end
+-- ---------------------------------------------------------------------------
+-- VERTEX-SPACE PRIMITIVES
+--
+-- A vertex is a single integer id from the hex lattice above. heightMap,
+-- flowMap and riverMap are all keyed by it, and flowMap[v] holds the NEXT
+-- VERTEX ID rather than a compass direction -- on a 3-valent lattice the
+-- direction is implied by which neighbour you moved to, and storing the target
+-- directly is what makes river placement exact.
+-- ---------------------------------------------------------------------------
 
-local function isRxInRegion(x, y, regionID)
-    -- Rxs on the border are not in region. All plots touching rx must
-    -- be in region
-    for direction=5, 8 do
-        local xx, yy = plotFromRx(x, y, direction)
-        local i = GetIndex(xx, yy)
-        if i == -1 or regionMap[i] ~= regionID then
-            return false
-        end
+local function isVertexInRegion(v, regionID)
+    -- All three tiles touching the vertex must be in the region. A vertex on a
+    -- region border is deliberately NOT "in" either region.
+    local t = vertexPlots[v]
+    if not t then return false end
+    for k = 1, 3 do
+        if regionMap[t[k]] ~= regionID then return false end
     end
     return true
 end
 
-local function isValidHalfGate(regionID, rxX, rxY)
-    -- A valid half gate is a CORNER that:
-    --   * has a region on every tile that touches it,
-    --   * spans exactly RX_REGIONS_AT_GATE regions (so it sits on a two-region
-    --     border, not at a three-way junction),
+local function isVertexTouchingRegion(v, regionID)
+    local t = vertexPlots[v]
+    if not t then return false end
+    for k = 1, 3 do
+        if regionMap[t[k]] == regionID then return true end
+    end
+    return false
+end
+
+local function isValidHalfGate(regionID, v)
+    -- A valid half gate is a VERTEX that:
+    --   * has a region on every tile touching it,
+    --   * spans exactly RX_REGIONS_AT_GATE regions (a two-region border, not a
+    --     three-way junction),
     --   * is not itself fully inside regionID, and
-    --   * is adjacent to a corner that IS fully inside regionID.
-    -- Note this is a question about the corner and the tiles around it, NOT
-    -- about any single tile -- do not reintroduce plot-space lookups here.
+    --   * is adjacent to a vertex that IS fully inside regionID.
+    local t = vertexPlots[v]
+    if not t then return false end
     local seen, nRegions = {}, 0
-    for _, direction in ipairs(RX_CORNER_PLOT_DIRS) do
-        local px, py = plotFromRx(rxX, rxY, direction)
-        local i = GetIndex(px, py)
-        if i == -1 then return false end
-        local plotRegion = regionMap[i]
+    for k = 1, 3 do
+        local plotRegion = regionMap[t[k]]
         if plotRegion == nil or plotRegion == -1 then return false end
         if not seen[plotRegion] then
             seen[plotRegion] = true
@@ -568,51 +776,37 @@ local function isValidHalfGate(regionID, rxX, rxY)
         end
     end
     if nRegions ~= RX_REGIONS_AT_GATE then return false end
-    if isRxInRegion(rxX, rxY, regionID) then return false end
-    for _, direction in ipairs(RX_STEP_DIRS) do
-        if isRxInRegion(rxX + directionXmap[direction],
-                        rxY + directionYmap[direction], regionID) then
-            return true
+    if isVertexInRegion(v, regionID) then return false end
+    for _, e in ipairs(vertexNeighbours[v] or {}) do
+        if isVertexInRegion(e.v, regionID) then return true end
+    end
+    return false
+end
+
+local function isValidFullGate(regionID, v)
+    -- A full gate is a half gate for this region that also sits on the border
+    -- with a real neighbour region, so a river can cross out of here.
+    --
+    -- The square version asked the OTHER region to be a half gate too. That is
+    -- unsatisfiable on a hex lattice: a two-region vertex splits its three tiles
+    -- 2/1, and the minority region can never have a neighbouring vertex wholly
+    -- inside it (any neighbour shares two of this vertex's tiles, at most one of
+    -- which is the minority one). Asking instead that the far side simply BE an
+    -- adjacent region keeps the intent -- water can cross here -- without the
+    -- impossible symmetry.
+    if not isValidHalfGate(regionID, v) then return false end
+    local region = tRegionIdMap[regionID]
+    if not region then return false end
+    local t = vertexPlots[v]
+    for k = 1, 3 do
+        local other = regionMap[t[k]]
+        if other and other ~= -1 and other ~= regionID then
+            for _, nRegionID in ipairs(region.neighborList) do
+                if nRegionID == other then return true end
+            end
         end
     end
     return false
-end
-
-local function isValidFullGate(regionID, rxX, rxY)
-    -- A full gate is a corner that is a half gate for this region AND for one
-    -- of its neighbours -- i.e. a river can actually cross here.
-    if not isValidHalfGate(regionID, rxX, rxY) then return false end
-    local region = tRegionIdMap[regionID]
-    if not region then return false end
-    for _, nRegionID in ipairs(region.neighborList) do
-        if isValidHalfGate(nRegionID, rxX, rxY) then return true end
-    end
-    return false
-end
-
-local function isRxTouchingRegion(x, y, regionID)
-    -- Check all four plots
-
-    local plotX, plotY = plotFromRx(x, y, NW)
-    local i = GetIndex(plotX, plotY)
-    if i and i ~= -1 and regionMap[i] == regionID then
-        return true
-    end
-    plotX, plotY = plotFromRx(x, y, NE)
-    i = GetIndex(plotX, plotY)
-    if i and i ~= -1 and regionMap[i] == regionID then
-        return true
-    end
-    plotX, plotY = plotFromRx(x, y, SW)
-    i = GetIndex(plotX, plotY)
-    if i and i ~= -1 and regionMap[i] == regionID then
-        return true
-    end
-    plotX, plotY = plotFromRx(x, y, SE)
-    i = GetIndex(plotX, plotY)
-    if i and i ~= -1 and regionMap[i] == regionID then
-        return true
-    end
 end
 
 Region = {}
@@ -626,7 +820,7 @@ function Region.new(ID, seedX, seedY)
     self.isGrowing = true
     self.neighborList = {}
     self.gateRegion = -1
-    self.gatePlot = nil
+    self.gateVertex = nil
     self.plotList = {}
     self.isWater = false
     self.isTouchingNeighbor = false
@@ -686,7 +880,7 @@ end
 function Region:getGateListToNeighbor(neighborID)
     local gateListToNeighbor = {}
     for _, rPlot in pairs(self.gateList) do
-        if isRxTouchingRegion(rPlot.x, rPlot.y, neighborID) then
+        if isVertexTouchingRegion(rPlot, neighborID) then
             table.insert(gateListToNeighbor, rPlot)
         end
     end
@@ -695,21 +889,16 @@ function Region:getGateListToNeighbor(neighborID)
 end
 
 function Region:defineValidGateList()
-    -- Compile every corner this region could drain through. Candidates are
-    -- enumerated over the CORNER lattice (0..g_iW, 0..g_iH), not over the
-    -- region's tiles -- a gate is a corner, and walking the tile list produced
-    -- plot coordinates that were then read as corner coordinates.
+    -- Every vertex this region could drain through. Gates are vertices, so this
+    -- walks the vertex lattice, not the region's tiles.
     self.gateList = {}
-    for rxY = 0, g_iH do
-        for rxX = 0, g_iW do
-            if isRxTouchingRegion(rxX, rxY, self.ID)
-               and isValidFullGate(self.ID, rxX, rxY) then
-                table.insert(self.gateList,
-                             {x = rxX, y = rxY, direction = -1, regionID = self.ID})
-            end
+    for v = 1, hexVertexCount() do
+        if isVertexTouchingRegion(v, self.ID) and isValidFullGate(self.ID, v) then
+            table.insert(self.gateList, v)
         end
     end
 end
+
 function Region:expandWaterRegion()
     local expanded = false
     for plotID, plot in pairs(self.plotList) do
@@ -797,10 +986,8 @@ local function defineGates()
     for i, v in ipairs(regionMap) do gateMap[i] = v end
     for _, region in ipairs(regionList) do
         for _, gate in ipairs(region.gateList) do
-            for _, direction in ipairs(RX_CORNER_PLOT_DIRS) do
-                local px, py = plotFromRx(gate.x, gate.y, direction)
-                local i = GetIndex(px, py)
-                if i ~= -1 then gateMap[i] = 100 end
+            for _, p in ipairs(hexVertexPlots(gate) or {}) do
+                gateMap[p] = 100
             end
         end
     end
@@ -874,404 +1061,194 @@ local function placeGates()
     end
 end
 
-local function getPossiblePaths(rxX, rxY)
-    -- Every direction here points STRICTLY DOWNHILL. That is the invariant
-    -- that makes following the flow field terminate -- a cycle would require
-    -- h(a) > h(b) > ... > h(a). Do not relax the < comparison.
-    local possiblePaths = {}
-    local regionID = getRegion(rxX, rxY)
-    if regionID == -1 then return possiblePaths end
-    local region = tRegionIdMap[regionID]
-    if not region or region.isWater or not region.gatePlot then return possiblePaths end
-    local rxI = getRiverIndex(rxX, rxY)
-    if rxI == -1 then return possiblePaths end
-    local altitude = heightMap[rxI]
-    if altitude == nil then return possiblePaths end
-
-    -- If exactly one in-region neighbour is uphill, avoid doubling straight
-    -- back past it; if several are, there is no single direction to reject.
-    local rejectedDirection = L
-    for _, direction in ipairs(RX_STEP_DIRS) do
-        local x = rxX + directionXmap[direction]
-        local y = rxY + directionYmap[direction]
-        local i = getRiverIndex(x, y)
-        if i ~= -1 and heightMap[i] and isRxInRegion(x, y, regionID)
-           and heightMap[i] > altitude then
-            if rejectedDirection == L then
-                rejectedDirection = getOppositeDirection(direction)
-            else
-                rejectedDirection = L
-            end
+local function getPossiblePaths(v)
+    -- Every returned neighbour is STRICTLY LOWER. Heights are globally monotone
+    -- away from the sea (region band from the gate forest, plus a rise that
+    -- stays inside the band), so this one rule covers movement within a region
+    -- AND across a gate. A cycle would need h(a) > h(b) > ... > h(a), so it
+    -- cannot occur -- do not relax the < comparison.
+    local paths = {}
+    local altitude = heightMap[v]
+    if altitude == nil or altitude < 0 then return paths end
+    for _, e in ipairs(vertexNeighbours[v] or {}) do
+        local h = heightMap[e.v]
+        if h and h >= 0 and h < altitude then
+            paths[#paths+1] = e.v
         end
     end
-
-    for _, direction in ipairs(RX_STEP_DIRS) do
-        local x = rxX + directionXmap[direction]
-        local y = rxY + directionYmap[direction]
-        local i = getRiverIndex(x, y)
-        if i ~= -1 and heightMap[i]
-           and (isRxInRegion(x, y, regionID)
-                or (x == region.gatePlot.x and y == region.gatePlot.y))
-           and heightMap[i] < altitude then
-            table.insert(possiblePaths, direction)
-        end
-    end
-
-    if #possiblePaths > 1 and rejectedDirection ~= L then
-        for n = 1, #possiblePaths do
-            if possiblePaths[n] == rejectedDirection then
-                table.remove(possiblePaths, n)
-                break
-            end
-        end
-    end
-    return possiblePaths
+    return paths
 end
 
 local function initFlowMap()
-    -- Indexed by getRiverIndex, which is 0-based and runs to (H+1)*(W+1)-1.
-    -- table.insert would start at 1 and leave index 0 nil.
-    for i = 0, ((g_iH + 1) * (g_iW + 1)) - 1 do
-        flowMap[i]   = -1
-        heightMap[i] = -1.0
+    flowMap, heightMap = {}, {}
+    for v = 1, hexVertexCount() do
+        flowMap[v]   = 0        -- 0 = no outflow (terminates a river)
+        heightMap[v] = -1.0
     end
 end
 
 local function setFlow()
-    -- Pick each land region's outflow corner and point it out of the region.
-    -- That corner is the region's low point (height 0.01) and the sink every
-    -- river inside the region eventually descends to.
+    -- Pick each land region's outflow vertex and point it out of the region.
+    -- That vertex is the region's low point and the sink every river inside the
+    -- region descends to.
     for _, region in ipairs(regionList) do
         if not region.isWater and region.gateRegion ~= -1 then
             local validGateList = region:getGateListToNeighbor(region.gateRegion)
             if #validGateList == 0 then
-                -- placeGates only assigns a gateRegion when a gate exists, so
-                -- this means the two disagree; skip rather than half-build.
                 print(string.format("Erebus: region %d drains to %d but has no gate to it",
                                     region.ID, region.gateRegion))
             else
-                region.gatePlot = validGateList[math.random(1, #validGateList)]
-                local rxX, rxY = region.gatePlot.x, region.gatePlot.y
-                local rxI = getRiverIndex(rxX, rxY)
-                if rxI ~= -1 then
-                    heightMap[rxI] = 0.01
-                    local gateRegion = tRegionIdMap[region.gateRegion]
-                    if gateRegion and gateRegion.isWater then
-                        flowMap[rxI] = L                    -- reached the sea, stop
-                    else
-                        -- Enumerate the steps that land inside the downstream
-                        -- region and pick one, rather than guessing at random
-                        -- until a cap is hit.
-                        local outflows = {}
-                        for _, direction in ipairs(RX_STEP_DIRS) do
-                            if isRxInRegion(rxX + directionXmap[direction],
-                                            rxY + directionYmap[direction],
-                                            region.gateRegion) then
-                                outflows[#outflows+1] = direction
-                            end
-                        end
-                        if #outflows > 0 then
-                            flowMap[rxI] = outflows[math.random(1, #outflows)]
-                        else
-                            flowMap[rxI] = L
-                        end
-                    end
-                end
+                local gv = validGateList[math.random(1, #validGateList)]
+                region.gateVertex = gv
+                -- Base the gate at the region's depth in the gate forest, so
+                -- height rises globally with distance from the sea. Every region
+                -- used to start at 0.01, which made a gate LOWER than the region
+                -- it drains into -- water then flowed straight back and cycled.
+                heightMap[gv] = region.altitude
+                -- No explicit outflow direction here any more. setFlow used to
+                -- point the gate at an arbitrary neighbour touching the
+                -- downstream region without comparing heights -- an uphill step,
+                -- and exactly what made the flow field cycle. With a globally
+                -- monotone field, the gate's downhill neighbour is just found by
+                -- makeFlowPaths like every other step.
             end
         end
     end
 end
 
-local function makeHeightMap()              --- Rewritten makeHeightMap with a more efficient queueing system.
-    -- Now create heightmap. Start from each gate and increase altitude of
-    -- neighbors by a random percentage, and then place each neighbor on a
-    -- queue for similar processing. Randomize the queue order for each pass.
-    -- This method should avoid lakes.
-    local currentPlots = {}         -- Place all gates on queue.
+local function makeHeightMap()
+    -- Rise outward from each gate, every step strictly higher than its parent.
+    -- That strictness is what makes the downhill flow field acyclic.
+    local current = {}
     for _, region in ipairs(regionList) do
-        if region.gatePlot then
-            table.insert(currentPlots, {x=region.gatePlot.x, y=region.gatePlot.y, direction=0,  regionID=region.ID})
+        if region.gateVertex then
+            current[#current+1] = {v = region.gateVertex, regionID = region.ID,
+                                   ceiling = region.altitude + 1}
         end
     end
     local filled = 0
-    while #currentPlots > 0 do
-        local nextPlots = {}        -- Create a table to hold the plots for the *next* iteration.
-        for _, thisPlot in ipairs(currentPlots) do
-            local rxI = getRiverIndex(thisPlot.x, thisPlot.y)
-            if rxI ~= -1 then                                    -- processed altitude tile
-                local altitude = heightMap[rxI]
-                for _, direction in ipairs(RX_STEP_DIRS) do
-                    local x, y = thisPlot.x + directionXmap[direction], thisPlot.y + directionYmap[direction]
-                    local rxII = getRiverIndex(x, y)
-                    -- Un-processed, and fully inside THIS region. The region
-                    -- must be checked against thisPlot.regionID: a precomputed
-                    -- "is fully in its own region" flag lets the BFS leak into
-                    -- neighbours, and it was keyed by plot index while being
-                    -- read with a corner index.
-                    if rxII ~= -1 and heightMap[rxII] == -1.0
-                       and isRxInRegion(x, y, thisPlot.regionID) then
-                        -- Strictly greater than the parent, which is what makes
-                        -- the downhill flow field acyclic.
-                        local randomScaler = 1.0 + math.random(1, 20) / 100.0
-                        heightMap[rxII] = altitude * randomScaler
-                        filled = filled + 1
-                        table.insert(nextPlots, {x=x, y=y, regionID=thisPlot.regionID})
-                    end
+    while #current > 0 do
+        local nextWave = {}
+        for _, cur in ipairs(current) do
+            local altitude = heightMap[cur.v]
+            for _, e in ipairs(vertexNeighbours[cur.v] or {}) do
+                if heightMap[e.v] == -1.0 and isVertexTouchingRegion(e.v, cur.regionID) then
+                    -- Rise toward, but never reach, the next band up. This keeps
+                    -- each region inside [altitude, altitude+1) so bands never
+                    -- overlap and the field stays globally monotone.
+                    heightMap[e.v] = altitude
+                                     + (cur.ceiling - altitude) * (math.random(1, 20) / 100.0)
+                    filled = filled + 1
+                    nextWave[#nextWave+1] = {v = e.v, regionID = cur.regionID,
+                                             ceiling = cur.ceiling}
                 end
             end
         end
-        currentPlots = ShuffleList(nextPlots)       -- The next iteration will process the plots we just generated.
-    end                                             -- The list is shuffled to maintain the random propagation pattern.
-    print(string.format('Erebus: height map filled %d corners from %d gates.',
+        current = ShuffleList(nextWave)
+    end
+    print(string.format('Erebus: height map filled %d vertices from %d gates.',
                         filled, #regionList))
 end
 
-local function makeFlowPaths()      -- Create flow map
-    simpleSquareGridPrint(flowMap, 'FlowMap_1', {[0]='red'})
-    -- first time we need riverRegion stuff
+local function makeFlowPaths()
     buildRiverRegionLookupTable()
-    -- Over the whole CORNER lattice, 0..g_iW / 0..g_iH inclusive. Starting at
-    -- 1 and stopping at g_iW/g_iH leaves the outer corners without flow.
-    for y = 0, g_iH do
-        for x = 0, g_iW do
-            local paths = getPossiblePaths(x, y)
-            if #paths > 0 then
-                local i = getRiverIndex(x, y)
-                if i ~= -1 then
-                    flowMap[i] = paths[math.random(1, #paths)]
-                end
-            end
+    for v = 1, hexVertexCount() do
+        local paths = getPossiblePaths(v)
+        if #paths > 0 then
+            flowMap[v] = paths[math.random(1, #paths)]
         end
     end
-    simpleSquareGridPrint(flowMap, 'FlowMap_2', {[0]='red'}, nil, true)
 end
 
--- Dryness should be calculated by getting the highest altitude
--- region and making it's base the wettest region. Then eliminate
--- those regions from the list. Then get the highest of the remaining
--- regions and make it's base the dryest region.
+-- Dryness should be calculated by getting the highest altitude region and
+-- making its base the wettest region.
 local function calculateWetAndDry()
-    -- Follow the gate chain down from the highest region to the one that drains
-    -- straight into water (altitude 1); its outlet is the wettest spot, and
-    -- moisture falls off with distance from there.
-    local local_regionList = {}
-    for _, region in ipairs(regionList) do
-        table.insert(local_regionList, region)
-    end
-    table.sort(local_regionList, function(a, b)     -- sorted by altitude, reversed
-            return a.altitude > b.altitude
-        end)
-    local region = local_regionList[1]          -- start at highest altitude
-    local wetSpotX, wetSpotY = 0, 0
-    -- The gate graph is a forest rooted at water, so this descent terminates;
-    -- the visited set is a tripwire in case that ever stops being true.
+    local sorted = {}
+    for _, region in ipairs(regionList) do sorted[#sorted+1] = region end
+    table.sort(sorted, function(a, b) return a.altitude > b.altitude end)
+
+    local region = sorted[1]
+    local wetX, wetY = 0, 0
     local visited = {}
     while region and region.altitude > 0 and not visited[region.ID] do
         visited[region.ID] = true
-        if region.altitude == 1 and region.gatePlot then
-            wetSpotX, wetSpotY = plotFromRx(region.gatePlot.x, region.gatePlot.y, SW)
-            if wetSpotX == -1 then wetSpotX, wetSpotY = region.gatePlot.x, region.gatePlot.y end
+        if region.altitude == 1 and region.gateVertex then
+            local pos = hexVertexPos(region.gateVertex)
+            if pos then wetX, wetY = pos[1], pos[2] end
             break
         end
-        if region.gateRegion == -1 then break end   -- stranded region, no chain to follow
+        if region.gateRegion == -1 then break end
         region = tRegionIdMap[region.gateRegion]
     end
-    -- Now calculate moisture for each region
+
     local minMoisture = 1.0
     for _, pRegion in ipairs(regionList) do
-        local gate = pRegion.gatePlot
-        if gate then
-            local distance = math.sqrt(math.abs(((gate.x - wetSpotX) * (gate.x - wetSpotX)) + ((gate.y - wetSpotY) * (gate.y - wetSpotY))))
-            -- print('region moisture changed from', pRegion.moisture, 'to', 1.0 - distance / g_iW)
-            pRegion.moisture = 1.0 - distance / g_iW
-            minMoisture = math.min(pRegion.moisture, minMoisture)
+        if pRegion.gateVertex then
+            local pos = hexVertexPos(pRegion.gateVertex)
+            if pos then
+                local dx, dy = pos[1] - wetX, pos[2] - wetY
+                pRegion.moisture = 1.0 - math.sqrt(dx*dx + dy*dy) / g_iW
+                minMoisture = math.min(pRegion.moisture, minMoisture)
+            end
         end
     end
     local scaler = 1.0 / (1.0 - minMoisture)
--- print('min moisture', minMoisture, 'scaler value', scaler)
     for _, pRegion in ipairs(regionList) do
-        -- print('region moisture scaled from', pRegion.moisture, 'to',(pRegion.moisture - minMoisture) * scaler)
         pRegion.moisture = (pRegion.moisture - minMoisture) * scaler
     end
 end
 
 local function initRiverMap()
     riverMap = {}
-    for i = 0, ((g_iH + 1) * (g_iW + 1)) - 1 do     -- 0-based, matching getRiverIndex
-        riverMap[i] = 0
-    end
+    for v = 1, hexVertexCount() do riverMap[v] = 0 end
 end
 
-local function printAltitudes()
-    local tCounts = {}
-    for iPlotIndex, altitude in pairs(heightMap) do
-        if not tCounts[altitude] then
-            tCounts[altitude] = 1
-        else
-            tCounts[altitude] = tCounts[altitude] + 1
-        end
-    end
-    for iAltitude, count in pairs(tCounts) do
-        print('altitude', iAltitude, 'count:', count)
-    end
-end
-
--- (An earlier non-optimised applyRiverMap lived here. It was dead code kept
--- alive by `iter < 3` and `i < 2000` caps that hid the walk never terminating;
--- applyRiverMapOptimized below is the real one.)
-
--- (getRegionOptimized / precomputeAllRegions were removed here. They cached
--- corner->region the same way buildRiverRegionLookupTable already does, but
--- keyed the cache with `y * g_iW + x` while indexing it with corner
--- coordinates, so lookups drifted a column per row. applyRiverMapOptimized now
--- uses getRegion, which reads the corner-indexed table.)
-
-local function applyRiverMapOptimized()
-    -- Walk downhill from every corner, accumulating drainage along the way.
-    -- Termination rests on the flow field being strictly downhill (see
-    -- getPossiblePaths) and the gate graph being a forest rooted at water (see
-    -- placeGates). The step cap below is a tripwire, not the mechanism: if it
-    -- ever fires, one of those two invariants has been broken.
-    local maxSteps = (g_iW + 1) * (g_iH + 1)
+local function applyRiverMap()
+    -- Walk downhill from every vertex, accumulating drainage. Termination rests
+    -- on the flow field being strictly downhill and the gate graph being a
+    -- forest rooted at water. The step cap is a tripwire, not the mechanism.
+    local maxSteps = hexVertexCount()
     local runaway = 0
-    for y = 0, g_iH do
-        for x = 0, g_iW do
-            local i = getRiverIndex(x, y)
-            local regionID = getRegion(x, y)
-            if i ~= -1 and regionID ~= -1 then
-                local region = tRegionIdMap[regionID]
-                if region then
-                    local direction = flowMap[i]
-                    local xx, yy, steps = x, y, 0
-                    while direction and direction ~= -1 and direction ~= L do
-                        steps = steps + 1
-                        if steps > maxSteps then
-                            runaway = runaway + 1
-                            break
-                        end
-                        xx = xx + directionXmap[direction]
-                        yy = yy + directionYmap[direction]
-                        local ii = getRiverIndex(xx, yy)
-                        if ii == -1 then break end      -- ran off the corner lattice
-                        riverMap[ii] = (riverMap[ii] or 0)
-                                       + MinRainfall + (1.0 - MinRainfall) * region.moisture
-                        direction = flowMap[ii]
-                    end
+    for v = 1, hexVertexCount() do
+        local regionID = getRegion(v)
+        if regionID ~= -1 then
+            local region = tRegionIdMap[regionID]
+            if region then
+                local contribution = MinRainfall + (1.0 - MinRainfall) * region.moisture
+                local cur, steps = flowMap[v], 0
+                while cur and cur ~= 0 do
+                    steps = steps + 1
+                    if steps > maxSteps then runaway = runaway + 1 break end
+                    riverMap[cur] = (riverMap[cur] or 0) + contribution
+                    cur = flowMap[cur]
                 end
             end
         end
     end
     if runaway > 0 then
         print(string.format(
-            "Erebus: WARNING %d flow walks exceeded map size -- the flow field has a cycle",
+            "Erebus: WARNING %d flow walks exceeded lattice size -- flow field has a cycle",
             runaway))
     end
 end
 
 function createRiverMap()
-    -- Start with an outflow from the region, then randomly decide which neighbors
-    -- will flow into this square by how many choices that neighbor has. If the
-    -- neighbor has only one choice, then the chance is 100 percent. At least
-    -- one neighbor must be chosen unless it is not possible, otherwise the
-    -- process might end before each tile is set. Then put each chosen neighbor
-    -- on the stack to be processed the same way.
-    heightMap = {}
-    flowMap = {}
+    buildHexLattice()
+    verifyHexLattice()
     initFlowMap()
     defineGates()
     placeGates()
-
     setFlow()
-    printAltitudes()
     makeHeightMap()
     makeFlowPaths()
     calculateWetAndDry()
     initRiverMap()
-    applyRiverMapOptimized()
-    simpleGridPrint(riverMap, 'rivermap', {[1]='blue', [0]='green'}, nil, nil, true)         -- BEWARE: IF YOU HAVE TONS OF VALUES THIS DIES
-    simpleGridPrint(flowMap, 'flowmap', {[1]='blue', [0]='green'}, nil, nil, true)
+    applyRiverMap()
 end
 
-local function rxFromPlot(plotX, plotY, direction)
-    local x, y
-    if direction == SW then
-        x = plotX
-        y = plotY
-    elseif direction == SE then
-        x = plotX + 1
-        y = plotY
-    elseif direction == NW then
-        x = plotX
-        y = plotY + 1
-    else  -- NE
-        x = plotX + 1
-        y = plotY + 1
-    end
-    -- check for validity
-    if x < 0 or x >= g_iW + 1 then
-        return -1, -1
-    end
-    if y < 0 or y >= g_iH + 1 then
-        return -1, -1
-    end
-    return x, y
-end
+-- (rxFromPlot / fillInLake / isLake / isOutFlowGate removed: square-corner
+-- helpers, all unused, superseded by the hex vertex lattice.)
 
-
--- deprecated for now?
-local function fillInLake(rxX, rxY)
-    local rxI = getRiverIndex(rxX, rxY)
-    local altitude = heightMap[rxI]
-    local regionID = getRegion(rxX, rxY)
-    local lowestNeighbor = 1.0
-    for direction=1, 4 do
-        local x = rxX + directionXmap[direction]
-        local y = rxY + directionYmap[direction]
-        local i = getRiverIndex(x, y)
-        if isRxInRegion(x, y, regionID) then
-            if heightMap[i] < lowestNeighbor then
-                lowestNeighbor = heightMap[i]
-            end
-        end
-    end
-    if altitude < lowestNeighbor then
-        heightMap[rxI] = altitude + ((lowestNeighbor - altitude) / 2.0)
-    else
-        heightMap[rxI] = altitude * 1.05
-    end
-end
-local function isLake(rxX, rxY)                 -- deprecated
-    local rxI = getRiverIndex(rxX, rxY)
-    local altitude = heightMap[rxI]
-    local regionID = getRegion(rxX, rxY)
-    local lowestNeighbor = 1.0
-    for direction=1, 4 do
-        local x = rxX + directionXmap[direction]
-        local y = rxY + directionYmap[direction]
-        local i = getRiverIndex(x, y)
-        if isRxInRegion(x, y, regionID) then
-            if heightMap[i] < lowestNeighbor then
-                lowestNeighbor = heightMap[i]
-            end
-        end
-    end
-    if lowestNeighbor >= altitude then
-        return true
-    end
-end
-
--- deprecated? Feels like it shouldnt be...
-local function isOutFlowGate(rxX, rxY)
-    for region in regionList do
-        if not region.isWater then
-            local gateRxX, gateRxY = rxFromPlot(region.gatePlot.x, region.gatePlot.y, SW)
-            if gateRxX == rxX and gateRxY == rxY then
-                return true
-            end
-        end
-    end
-end
--- used in assignStarts
 function getOppositeDirection(direction)
     local opposite = L
     if direction == N then
@@ -1286,159 +1263,65 @@ function getOppositeDirection(direction)
     return opposite
 end
 
-local function calculateRegion(x, y)            -- Used in AssignStartPlots      -- renamed from GetRegion, overriden
-    -- Rxs on the border are not in region. All plots touching rx must
-    -- be in region, unless this is the gate for that region
-    local xx, yy = plotFromRx(x, y, SW)
-    local i = GetIndex(xx, yy)
-    local regionID = regionMap[i]
-    local invalidRegion = false
-    for direction=5, 8 do
-        xx, yy = plotFromRx(x, y, direction)
-        i = GetIndex(xx, yy)
-        local nRegionID = regionMap[i]
-        if nRegionID and nRegionID ~= -1 then
-            local nRegion = tRegionIdMap[nRegionID]
-            if nRegion.gatePlot and x == nRegion.gatePlot.x and y == nRegion.gatePlot.y then
-                return nRegionID
-            end
-            if nRegionID ~= regionID then
-                invalidRegion = true
-            end
-        end
-    end
-
-    if invalidRegion or not regionID then
-        return -1
-    else
-        return regionID
-    end
+-- Region a vertex belongs to. Border vertices belong to no region, except the
+-- vertex that is a region's own gate.
+local function calculateRegion(v)
+    -- Majority of the three tiles. A border vertex used to resolve to -1, which
+    -- meant it contributed no drainage and rivers could not run along or across
+    -- a region boundary at all.
+    local t = vertexPlots[v]
+    if not t then return -1 end
+    local a, b, c = regionMap[t[1]], regionMap[t[2]], regionMap[t[3]]
+    if a ~= nil and a ~= -1 and (a == b or a == c) then return a end
+    if b ~= nil and b ~= -1 and b == c then return b end
+    if a ~= nil and a ~= -1 then return a end
+    if b ~= nil and b ~= -1 then return b end
+    if c ~= nil and c ~= -1 then return c end
+    return -1
 end
 
--- x,y here are CORNER coordinates, so the table must be keyed by the corner
--- index (stride g_iW + 1), not the plot index (stride g_iW).
-function getRegion(x, y)
-    local i = getRiverIndex(x, y)
-    if i == -1 then return -1 end
-    return riverRegionLookupTable[i] or -1
+function getRegion(v)
+    return riverRegionLookupTable[v] or -1
 end
 
 function buildRiverRegionLookupTable()
     riverRegionLookupTable = {}
-    for y = 0, g_iH do
-        for x = 0, g_iW do
-            local index = getRiverIndex(x, y)
-            if index ~= -1 then
-                riverRegionLookupTable[index] = calculateRegion(x, y)
-            end
-        end
+    for v = 1, hexVertexCount() do
+        riverRegionLookupTable[v] = calculateRegion(v)
     end
 end
 
-
-function PrintFlowMap()
-    slthLog("Flow Map")
-    local lineString
-    for y=g_iH, -1, -1 do
-        lineString = ""
-        for x=1, g_iW do
-            local mapLoc = flowMap[getRiverIndex(x, y)]
-            if mapLoc == -1 then
-                lineString = lineString .. "X"
-            elseif mapLoc == N then
-                lineString = lineString .. "N"
-            elseif mapLoc == S then
-                lineString = lineString .. "S"
-            elseif mapLoc == E then
-                lineString = lineString .. "E"
-            elseif mapLoc == W then
-                lineString = lineString .. "W"
-            else
-                lineString = lineString .. "X"
-            end
-        end
-        slthLog(lineString)
-    end
-end
--- Deprecated
-local function getRiverRegionByID(x,y)
-    -- Rxs on the border are not in region. All plots touching rx must
-    -- be in region, unless this is the gate for that region
-    local xx,yy = plotFromRx(x,y, SW)
-    local i = GetIndex(xx,yy)
-    local regionID = regionMap[i]
-    local invalidRegion = false
-    for direction=5,8  do
-        xx,yy = plotFromRx(x,y,direction)
-        i = GetIndex(xx,yy)
-        local nRegionID = regionMap[i]
-        if nRegionID ~= -1 then
-            -- test if this main plot is gate for this region
-            local nRegion = tRegionIdMap[nRegionID]
-            if nRegion.gatePlot and x == nRegion.gatePlot.x and y == nRegion.gatePlot.y then
-                return nRegionID
-            end
-            if nRegionID ~= regionID then
-                invalidRegion = true
-            end
-        end
-    end
-    if invalidRegion then
-        return -1
-    else
-        return regionID
-    end
-end
+-- (getRiverRegionByID removed: deprecated square-corner duplicate of
+-- calculateRegion, and the last reader of the old gatePlot field.)
 
 ---- PLOT MAP -----------
 --- Locals
-local function flattenPeakSubFunc(x, y, rxI, pDir, direction_2, direction_3, direction_2_change, direction_3_change)
-    if riverMap[rxI] and riverMap[rxI] > RiverThreshold then            -- again TODO on fail forward with RiverMap finds
-        local xx = x + directionXmap[pDir]
-        local yy = y + directionYmap[pDir]
-        local ii = GetIndex(xx,yy)
-        if plotMap[ii] == PEAK then
-            return true
-        end
-        if flowMap[rxI] == direction_2 then
-            xx = x + directionXmap[direction_2_change]
-            yy = y + directionYmap[direction_2_change]
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
-        if flowMap[rxI] == direction_3 then
-            xx = x + directionXmap[direction_3_change]
-            yy = y + directionYmap[direction_3_change]
-            ii = GetIndex(xx,yy)
-            if plotMap[ii] == PEAK then
-                return true
-            end
-        end
+-- A river must not run between two mountains: that would wall the pass shut
+-- again. If a river runs along any of this tile's corners and a neighbouring
+-- tile is also a peak, this one gets flattened so the water -- and the pass --
+-- stays open.
+local function shouldFlattenRiverPeak(x, y)
+    local i = GetIndex(x, y)
+    if i == -1 then return false end
+    local onRiver = false
+    for _, v in ipairs(hexPlotVertices(i)) do
+        if (riverMap[v] or 0) > RiverThreshold then onRiver = true break end
     end
-end
-
-local function shouldFlattenRiverPeak(x,y)
-    local directions = {{NW, E, S, N, W}, { NE, W, S, N, E },
-                        { SE, W, N, S, E }, { SW, E, N, S, W }}
-    for _, dList in ipairs(directions) do
-        local rxX,rxY = rxFromPlot(x, y, dList[1])
-        local rxI = getRiverIndex(rxX,rxY)
-        if flattenPeakSubFunc(x, y, rxI, dList[1], dList[2], dList[3], dList[4], dList[5]) then
-            return true
-        end
+    if not onRiver then return false end
+    for _, dir in ipairs(HEX_DIRS) do
+        local n = hexNeighbourIndex(x, y, dir)
+        if n ~= -1 and plotMap[n] == PEAK then return true end
     end
+    return false
 end
 
 local function IsPlotTouchingRiver(x, y)
-    for direction=5, 8 do
-        local rxX, rxY = rxFromPlot(x, y, direction)
-        local rxI = getRiverIndex(rxX, rxY)             -- its fine we dont get rivers as some directions go outside map
-        if riverMap[rxI] and riverMap[rxI] > RiverThreshold then
-            return true
-        end
+    local i = GetIndex(x, y)
+    if i == -1 then return false end
+    for _, v in ipairs(hexPlotVertices(i)) do
+        if (riverMap[v] or 0) > RiverThreshold then return true end
     end
+    return false
 end
 
 local function IsPlotSurroundedByOcean(x, y)
@@ -1574,15 +1457,13 @@ local function getBorders(x, y)
 end
 
 local function GetRiverSize(x, y)
-    local riverAverage = 0.0
-    for direction=5, 8 do
-        local rxX, rxY = rxFromPlot(x, y, direction)
-        local rxI = getRiverIndex(rxX, rxY)
-        local riverVal = riverMap[rxI] or 0
-        riverAverage = riverAverage + riverVal             -- sometimes we arent getting these
-    end
-    riverAverage = riverAverage / 4.0
-    return riverAverage
+    local i = GetIndex(x, y)
+    if i == -1 then return 0.0 end
+    local verts = hexPlotVertices(i)
+    if #verts == 0 then return 0.0 end
+    local total = 0.0
+    for _, v in ipairs(verts) do total = total + (riverMap[v] or 0) end
+    return total / #verts
 end
 
 function GetPlotAltitude(x, y)      -- calculate highest region altitude if necessary and save it for later. Used in main script.
@@ -1618,9 +1499,9 @@ end
 local function initOceanPlots()
     local scrambledPlotList = {}
     local plot_total = 0
-    for y=1, g_iH do
-        for x=1, g_iW do
-            table.insert(plotMap, OCEAN)
+    for y=0, g_iH - 1 do
+        for x=0, g_iW - 1 do
+            plotMap[GetIndex(x, y)] = OCEAN      -- keyed by GetIndex, not append order
             table.insert(scrambledPlotList, {x,y})
             plot_total = plot_total+1
         end
@@ -1742,16 +1623,13 @@ local function setPeaksLandHills(scrambledPlotList)
     end
 end
 
-local function fixBottomEdge()
-    for i = 1, g_iW do
-        slthLog('From/To: ', plotMap[i], plotMap[i + g_iW])
-        plotMap[i] = plotMap[i + g_iW]
-    end
-end
+-- (fixBottomEdge removed. It overwrote row 0 with row 1 to paper over the old
+-- 1-based plot loops never generating row 0. The loops are 0-based now, so row 0
+-- is real data and copying over it would discard it.)
 
 local function softenPeaks()
-    for y=1,g_iH do
-        for x= 1,g_iW do
+    for y=0,g_iH - 1 do
+        for x= 0,g_iW - 1 do
             local i = GetIndex(x,y)
             if plotMap[i] == PEAK then
                 if SoftenPeakPercent >= math.random() then
@@ -1763,7 +1641,7 @@ local function softenPeaks()
 end
 
 local function applyAreaChanges(areaMap)
-    for i=1, g_iW*g_iH do
+    for i=0, g_iW*g_iH - 1 do
         if areaMap.areaMap[i] == 0 then
             if plotMap[i] ~= PEAK then
                 slthLog('changing plot ', i)
@@ -1784,7 +1662,7 @@ local function applyNewAreaChanges(area_region)
     -- if a lot of land is being sacrificed here, gates are not producing
     -- passes and the map is a mountain maze.
     local sealed, totalLand = 0, 0
-    for i=1, g_iW*g_iH do
+    for i=0, g_iW*g_iH - 1 do
         if plotMap[i] == LAND or plotMap[i] == HILLS then totalLand = totalLand + 1 end
         if area_region[i] and area_region[i] > 0 and area_region[i] ~= largest_region then
             if plotMap[i] ~= PEAK then
@@ -1819,7 +1697,6 @@ function createPlotMap()
 
     resettingRegions(scrambledPlotList)             -- last instance of changing regions, redo regionMap lookup?
     setPeaksLandHills(scrambledPlotList)
-    fixBottomEdge()         -- fix silly bottom row.
 
     if SoftenPeakPercent > 0 then
         softenPeaks()
@@ -1949,12 +1826,10 @@ function newAreaMap:get_grid_regions(grid, blockers)
             end
         end
     else
-        local idx = 1
         for y = 1, g_iH do
             new_grid[y] = {}
             for x = 1, g_iW do
-                new_grid[y][x] = grid[idx]
-                idx = idx + 1
+                new_grid[y][x] = grid[GetIndex(x - 1, y - 1)]
             end
         end
     end
@@ -2014,8 +1889,7 @@ function newAreaMap:get_grid_regions(grid, blockers)
         slthLog('expected total', #self.absorbed_into_region * #self.absorbed_into_region[2])
         for y = 1, self.num_rows do
             for x = 1, self.row_lengths[y] do
-                final_grid[idx] = self.absorbed_into_region[y][x]
-                idx = idx + 1
+                final_grid[GetIndex(x - 1, y - 1)] = self.absorbed_into_region[y][x]
             end
         end
         slthLog('final idx is', idx)
@@ -2062,9 +1936,9 @@ function createTerrainMap()
     local MARSH = 9
     terrainMap = {}
     --  initialize terrainMap with OCEAN
-    for y=1, g_iH do
-        for x=1, g_iW do
-            table.insert(terrainMap, OCEAN_TERRAIN)
+    for y=0, g_iH - 1 do
+        for x=0, g_iW - 1 do
+            terrainMap[GetIndex(x, y)] = OCEAN_TERRAIN
         end
     end
     slthLog('terrain_total is:', #terrainMap)
@@ -2088,8 +1962,8 @@ function createTerrainMap()
     slthLog('terrain_total is:', #terrainMap)
     simpleGridPrint(terrainMap, 'post_terrain_init_ocean', {[4]='green', [6]='yellow', [7]='blue'})
 
-    for y=1, g_iH-1 do
-        for x=1, g_iW-1 do
+    for y=0, g_iH-1 do
+        for x=0, g_iW-1 do
             local i = GetIndex(x, y)
             if plotMap[i] ~= OCEAN then
                 slthLog('doing x/y', x, y)
@@ -2128,8 +2002,8 @@ function createTerrainMap()
             [TUNDRA]='cream'})
     -- clean up desert peaks to avoid burning peaks all over the map
 
-    for y=1,g_iH -1 do
-        for x=1, g_iW-1 do
+    for y=0,g_iH-1 do
+        for x=0, g_iW-1 do
             local i = GetIndex(x, y)
             if plotMap[i] == PEAK then
                 addTerrain(i, TUNDRA)
@@ -2178,130 +2052,127 @@ end
 -- Rebasing the rx layer on real hex vertices (see the geometry adapter near the
 -- top of this file) is what removes the approximation.
 -- ---------------------------------------------------------------------------
-
-local function adjacentPlot(pPlot, eDirection)
-    if not pPlot then return nil end
-    return Map.GetAdjacentPlot(pPlot:GetX(), pPlot:GetY(), eDirection)
-end
-
--- Paint one hex edge. startPlot anchors the vertex (its SE corner).
-local function setRiverEdge(startPlot, eFlow, iRiverID)
-    if not startPlot then return false end
-    local FD = FlowDirectionTypes
-    local DT = DirectionTypes
-    local pPlot, setter
-
-    if eFlow == FD.FLOWDIRECTION_NORTH then
-        pPlot, setter = startPlot, TerrainBuilder.SetWOfRiver
-    elseif eFlow == FD.FLOWDIRECTION_SOUTH then
-        pPlot, setter = adjacentPlot(startPlot, DT.DIRECTION_SOUTHWEST), TerrainBuilder.SetWOfRiver
-    elseif eFlow == FD.FLOWDIRECTION_NORTHEAST or eFlow == FD.FLOWDIRECTION_SOUTHWEST then
-        pPlot, setter = startPlot, TerrainBuilder.SetNWOfRiver
-    elseif eFlow == FD.FLOWDIRECTION_NORTHWEST then
-        pPlot, setter = startPlot, TerrainBuilder.SetNEOfRiver
-    elseif eFlow == FD.FLOWDIRECTION_SOUTHEAST then
-        pPlot, setter = adjacentPlot(startPlot, DT.DIRECTION_EAST), TerrainBuilder.SetNEOfRiver
-    else
-        return false
-    end
-
-    if not pPlot or pPlot:IsWater() then return false end
-    setter(pPlot, true, eFlow, iRiverID)
-    return true
-end
-
--- Our square N/S/E/W step -> the closest Civ VI hex flow direction.
+-- RIVER PLACEMENT
 --
--- Vertical steps map exactly (hexes have a true N/S edge pair). Horizontal ones
--- do not: a pointy-top hex grid has no due-east or due-west edge, and travelling
--- due east means alternating NE and SE steps. Alternating on (x+y) parity makes
--- consecutive steps of a horizontal run zig-zag the way a hex river actually
--- would, and keeps all three edge families in use -- picking a single diagonal
--- leaves NW-of-river never set and skews every river the same way.
-local function erebusFlowToHexFlow(direction, rxX, rxY)
-    local FD = FlowDirectionTypes
-    local zag = ((rxX + rxY) % 2 == 0)
-    if direction == N then return FD.FLOWDIRECTION_NORTH end
-    if direction == S then return FD.FLOWDIRECTION_SOUTH end
-    if direction == E then
-        return zag and FD.FLOWDIRECTION_SOUTHEAST or FD.FLOWDIRECTION_NORTHEAST
+-- Now a direct 1:1 map. A flow step v -> v' traverses exactly one hex edge, and
+-- that edge is named by the two tiles the vertices share (e.a, e.b). Because
+-- the lattice is 3-valent, consecutive steps automatically satisfy Civ VI's
+-- rule that a river must turn +/-60 degrees every step -- there is no way to
+-- express a straight run, so the doubled lines and source caps that the old
+-- square lattice produced cannot occur.
+-- ---------------------------------------------------------------------------
+
+-- Which of the three setters owns the edge between adjacent tiles a and b, and
+-- which plot to call it on. Each hex owns only its W, NW and NE edges.
+local function edgeSetterFor(a, b)
+    local ax, ay = plotXY(a)
+    for _, dir in ipairs({HEX_W, HEX_NW, HEX_NE}) do
+        if hexNeighbourIndex(ax, ay, dir) == b then
+            if dir == HEX_W  then return a, TerrainBuilder.SetWOfRiver  end
+            if dir == HEX_NW then return a, TerrainBuilder.SetNWOfRiver end
+            return a, TerrainBuilder.SetNEOfRiver
+        end
     end
-    if direction == W then
-        return zag and FD.FLOWDIRECTION_NORTHWEST or FD.FLOWDIRECTION_SOUTHWEST
+    -- b owns the edge instead
+    local bx, by = plotXY(b)
+    for _, dir in ipairs({HEX_W, HEX_NW, HEX_NE}) do
+        if hexNeighbourIndex(bx, by, dir) == a then
+            if dir == HEX_W  then return b, TerrainBuilder.SetWOfRiver  end
+            if dir == HEX_NW then return b, TerrainBuilder.SetNWOfRiver end
+            return b, TerrainBuilder.SetNEOfRiver
+        end
     end
-    return nil
+    return nil, nil
 end
 
--- Group corners into river systems so each chain shares one river ID. Civ VI
--- uses the ID for river naming and adjacency, so every edge of one river must
--- carry the same value.
+-- Name the flow direction from the actual movement between the two vertices.
+local FLOW_VECTORS = nil
+local function flowDirectionFor(vFrom, vTo)
+    if not FLOW_VECTORS then
+        local FD = FlowDirectionTypes
+        FLOW_VECTORS = {
+            {FD.FLOWDIRECTION_NORTH,      0.0,  1.0},
+            {FD.FLOWDIRECTION_NORTHEAST,  0.866,  0.5},
+            {FD.FLOWDIRECTION_SOUTHEAST,  0.866, -0.5},
+            {FD.FLOWDIRECTION_SOUTH,      0.0, -1.0},
+            {FD.FLOWDIRECTION_SOUTHWEST, -0.866, -0.5},
+            {FD.FLOWDIRECTION_NORTHWEST, -0.866,  0.5},
+        }
+    end
+    local a, b = hexVertexPos(vFrom), hexVertexPos(vTo)
+    if not a or not b then return nil end
+    local dx, dy = b[1] - a[1], b[2] - a[2]
+    local best, bestDot = nil, -math.huge
+    for _, fv in ipairs(FLOW_VECTORS) do
+        local dot = dx * fv[2] + dy * fv[3]
+        if dot > bestDot then bestDot, best = dot, fv[1] end
+    end
+    return best
+end
+
+-- Group vertices into river systems so each chain shares one river ID. Civ VI
+-- uses the ID for river naming and adjacency.
 local function buildRiverIds()
     local parent = {}
     local function find(a)
         while parent[a] and parent[a] ~= a do a = parent[a] end
         return a
     end
-    local function union(a, b)
-        local ra, rb = find(a), find(b)
-        if ra and rb and ra ~= rb then parent[ra] = rb end
+    local function flowing(v)
+        return (riverMap[v] or 0) > RiverThreshold and (flowMap[v] or 0) ~= 0
     end
-
-    local function flowing(i)
-        local v, d = riverMap[i], flowMap[i]
-        return v and d and v > RiverThreshold and d ~= L and d ~= -1
-    end
-
-    for y = 0, g_iH do
-        for x = 0, g_iW do
-            local i = getRiverIndex(x, y)
-            if i ~= -1 and flowing(i) then
-                if not parent[i] then parent[i] = i end
-                local j = getRiverIndex(x + directionXmap[flowMap[i]],
-                                        y + directionYmap[flowMap[i]])
-                if j ~= -1 and flowing(j) then
-                    if not parent[j] then parent[j] = j end
-                    union(i, j)
-                end
+    for v = 1, hexVertexCount() do
+        if flowing(v) then
+            parent[v] = parent[v] or v
+            local nxt = flowMap[v]
+            if flowing(nxt) or (riverMap[nxt] or 0) > RiverThreshold then
+                parent[nxt] = parent[nxt] or nxt
+                local ra, rb = find(v), find(nxt)
+                if ra ~= rb then parent[ra] = rb end
             end
         end
     end
-
     local ids, nextId, count = {}, 0, 0
-    for i in pairs(parent) do
-        local root = find(i)
-        if ids[root] == nil then
-            ids[root] = nextId
-            nextId = nextId + 1
-            count = count + 1
-        end
-        ids[i] = ids[root]
+    for v in pairs(parent) do
+        local root = find(v)
+        if ids[root] == nil then ids[root] = nextId; nextId = nextId + 1; count = count + 1 end
+        ids[v] = ids[root]
     end
     return ids, count
 end
 
 function makeErebusRivers()
-    -- Paint the flow map onto the hex grid directly. This deliberately does NOT
-    -- go through TryStartRiver: that is the coastal seeder, which grows its own
-    -- procedural river and rejects anything next to a mountain -- which would
-    -- throw away precisely the mountain-pass rivers this map is built around.
+    -- Paint the flow map straight onto hex edges. Deliberately does NOT go via
+    -- TryStartRiver: that is the coastal seeder, which grows its own procedural
+    -- river and rejects anything beside a mountain -- discarding exactly the
+    -- mountain-pass rivers this map is built around.
     local riverIds, nRivers = buildRiverIds()
     local placed, skipped = 0, 0
 
-    for y = 0, g_iH do
-        for x = 0, g_iW do
-            local i = getRiverIndex(x, y)
-            if i ~= -1 and riverIds[i] then
-                local eFlow = erebusFlowToHexFlow(flowMap[i], x, y)
-                if eFlow then
-                    -- Corner (x,y) is the SE corner of plot (x-1, y).
-                    local pPlot = (x - 1 >= 0 and y >= 0 and x - 1 < g_iW and y < g_iH)
-                                  and Map.GetPlot(x - 1, y) or nil
-                    if pPlot and setRiverEdge(pPlot, eFlow, riverIds[i]) then
+    for v = 1, hexVertexCount() do
+        local nxt = flowMap[v]
+        if riverIds[v] and nxt and nxt ~= 0 then
+            local edge = nil
+            for _, e in ipairs(hexVertexNeighbours(v)) do
+                if e.v == nxt then edge = e break end
+            end
+            if edge then
+                local anchor, setter = edgeSetterFor(edge.a, edge.b)
+                local eFlow = flowDirectionFor(v, nxt)
+                if anchor and setter and eFlow then
+                    local ax, ay = plotXY(anchor)
+                    local pPlot = Map.GetPlot(ax, ay)
+                    if pPlot and not pPlot:IsWater() then
+                        setter(pPlot, true, eFlow, riverIds[v])
                         placed = placed + 1
                     else
                         skipped = skipped + 1
                     end
+                else
+                    skipped = skipped + 1
                 end
+            else
+                skipped = skipped + 1
             end
         end
     end
