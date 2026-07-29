@@ -684,7 +684,7 @@ local function MakeTypeBadge( strPrefixType, kInfoTable )
 	if strPrefixType == nil then return nil; end
 	---@type table
     local tRow = kInfoTable[strPrefixType];
-    print('trying to make new badge', strPrefixType, tRow.Name)
+    -- print('trying to make new badge', strPrefixType, tRow.Name)
     local tooltip = (tRow ~= nil) and tRow.Name or strPrefixType
 	return { Icon = "ICON_" .. strPrefixType, Tooltip = Locale.Lookup('LOC_GENERIC_UNLOCK_BY_CIVIC', Locale.Lookup(tooltip)) };
 end

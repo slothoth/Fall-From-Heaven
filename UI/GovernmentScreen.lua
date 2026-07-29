@@ -660,8 +660,8 @@ function RealizeCategoryList( nRowIndex )
 	local uiStack = cc.PolicyStack;
 	uiStack:DestroyAllChildren();
 
-    print('setting title', cc.titleKey)
-    print('setting loc title', Locale.ToUpper(cc.titleKey))
+    -- print('setting title', cc.titleKey)
+    -- print('setting loc title', Locale.ToUpper(cc.titleKey))
 	cc.Title:SetText( Locale.ToUpper(cc.titleKey) );
 
 	---@type table
