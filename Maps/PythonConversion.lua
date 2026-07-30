@@ -1072,17 +1072,22 @@ local function placeGates()
 end
 
 local function getPossiblePaths(v)
-    -- Every returned neighbour is STRICTLY LOWER. Heights are globally monotone
-    -- away from the sea (region band from the gate forest, plus a rise that
-    -- stays inside the band), so this one rule covers movement within a region
-    -- AND across a gate. A cycle would need h(a) > h(b) > ... > h(a), so it
-    -- cannot occur -- do not relax the < comparison.
+    -- Strictly downhill, and confined to this region plus its own gate. The
+    -- confinement is deliberate: it forces all cross-region water through the
+    -- single gate, which is what makes that gate a mountain pass. Allowing any
+    -- lower neighbour lets rivers cross a border wherever the terrain dips, which
+    -- dissolves the pass mechanism.
     local paths = {}
+    local regionID = getRegion(v)
+    if regionID == -1 then return paths end
+    local region = tRegionIdMap[regionID]
+    if not region or region.isWater or not region.gateVertex then return paths end
     local altitude = heightMap[v]
     if altitude == nil or altitude < 0 then return paths end
     for _, e in ipairs(vertexNeighbours[v] or {}) do
         local h = heightMap[e.v]
-        if h and h >= 0 and h < altitude then
+        if h and h >= 0 and h < altitude
+           and (isVertexInRegion(e.v, regionID) or e.v == region.gateVertex) then
             paths[#paths+1] = e.v
         end
     end
@@ -1098,9 +1103,16 @@ local function initFlowMap()
 end
 
 local function setFlow()
-    -- Pick each land region's outflow vertex and point it out of the region.
-    -- That vertex is the region's low point and the sink every river inside the
-    -- region descends to.
+    -- Pick each land region's outflow vertex and point it OUT of the region.
+    -- The gate is the region's low point (every river inside descends to it) and
+    -- its outflow is set explicitly here, bridging into the downstream region.
+    --
+    -- This bridge is what guarantees rivers reach the sea, exactly as the Civ IV
+    -- original did: region -> gate -> next region -> ... -> water, following the
+    -- gate forest. It is also what makes the gate the ONLY place a region border
+    -- is crossed, which is the whole mountain-pass premise. It is cycle-free
+    -- because each bridge steps strictly down the forest, and within a region
+    -- flow is strictly downhill.
     for _, region in ipairs(regionList) do
         if not region.isWater and region.gateRegion ~= -1 then
             local validGateList = region:getGateListToNeighbor(region.gateRegion)
@@ -1110,98 +1122,97 @@ local function setFlow()
             else
                 local gv = validGateList[math.random(1, #validGateList)]
                 region.gateVertex = gv
-                -- Base the gate at the region's depth in the gate forest, so
-                -- height rises globally with distance from the sea. Every region
-                -- used to start at 0.01, which made a gate LOWER than the region
-                -- it drains into -- water then flowed straight back and cycled.
-                heightMap[gv] = region.altitude
-                -- No explicit outflow direction here any more. setFlow used to
-                -- point the gate at an arbitrary neighbour touching the
-                -- downstream region without comparing heights -- an uphill step,
-                -- and exactly what made the flow field cycle. With a globally
-                -- monotone field, the gate's downhill neighbour is just found by
-                -- makeFlowPaths like every other step.
-            end
-        end
-    end
-end
-
--- Seed every vertex touching a water region at height 0 -- the sea is the floor
--- of the whole height field. Without this, land bands started at altitude 1 and
--- nothing was lower, so flow stopped at the last land vertex: rivers ended
--- wherever the descent ran out rather than at a mouth. That produced many short
--- landlocked systems instead of a few long ones, which is the root of both the
--- pockmarked spring-heads and the fragmentation.
-local function seedOceanSinks()
-    local seeded = 0
-    for v = 1, hexVertexCount() do
-        if heightMap[v] == -1.0 then
-            for _, plot in ipairs(hexVertexPlots(v) or {}) do
-                local rid = regionMap[plot]
-                local region = rid and rid ~= -1 and tRegionIdMap[rid]
-                if region and region.isWater then
-                    heightMap[v] = 0.0
-                    seeded = seeded + 1
-                    break
-                end
-            end
-        end
-    end
-    print(string.format("Erebus: seeded %d ocean-adjacent vertices as river mouths", seeded))
-end
-
-local function makeHeightMap()
-    -- Rise outward from each gate, every step strictly higher than its parent.
-    -- That strictness is what makes the downhill flow field acyclic.
-    --
-    -- Regions are filled in ASCENDING ALTITUDE order, lowest (nearest the sea)
-    -- first. Border vertices touch two regions and are claimed by whichever
-    -- wavefront reaches them first; when every region grew at once the upstream
-    -- region usually won, so all three neighbours of a gate ended up in the
-    -- UPSTREAM band -- higher than the gate. The river then reached the pass and
-    -- had nowhere lower to go, and every inland river terminated exactly at its
-    -- own gate. Filling low bands first means a gate always has a downstream
-    -- neighbour below it, so water crosses the pass and carries on to the sea.
-    local ordered = {}
-    for _, region in ipairs(regionList) do
-        if region.gateVertex then ordered[#ordered+1] = region end
-    end
-    table.sort(ordered, function(a, b) return a.altitude < b.altitude end)
-
-    local filled = 0
-    for _, region in ipairs(ordered) do
-        local current = {{v = region.gateVertex, regionID = region.ID,
-                          ceiling = region.altitude + 1}}
-        while #current > 0 do
-            local nextWave = {}
-            for _, cur in ipairs(current) do
-                local altitude = heightMap[cur.v]
-                for _, e in ipairs(vertexNeighbours[cur.v] or {}) do
-                    if heightMap[e.v] == -1.0 and isVertexTouchingRegion(e.v, cur.regionID) then
-                        -- Rise toward, but never reach, the next band up, so each
-                        -- region stays inside [altitude, altitude+1) and the field
-                        -- remains globally monotone.
-                        heightMap[e.v] = altitude
-                                         + (cur.ceiling - altitude) * (math.random(1, 20) / 100.0)
-                        filled = filled + 1
-                        nextWave[#nextWave+1] = {v = e.v, regionID = cur.regionID,
-                                                 ceiling = cur.ceiling}
+                heightMap[gv] = 0.01          -- per-region cone base, as in the original
+                local gateRegion = tRegionIdMap[region.gateRegion]
+                if gateRegion and gateRegion.isWater then
+                    flowMap[gv] = 0           -- reached the sea; this gate is the mouth
+                else
+                    -- TWO-step bridge, not one. A gate holds 2 tiles of this
+                    -- region and 1 of the downstream one, and every neighbour
+                    -- shares 2 of the gate's tiles -- so no neighbour of a gate is
+                    -- ever strictly inside the downstream region. A single step
+                    -- (which is what the square-lattice original could do, on a
+                    -- 2/2 split) lands on a border vertex, and border vertices
+                    -- carry no height, so the river died one step past the gate.
+                    -- Hop gate -> border vertex -> downstream interior, setting
+                    -- both explicitly; makeFlowPaths leaves them alone because a
+                    -- heightless vertex yields no candidate paths.
+                    local bridges = {}
+                    for _, e in ipairs(vertexNeighbours[gv] or {}) do
+                        if not isVertexInRegion(e.v, region.ID)
+                           and isVertexTouchingRegion(e.v, region.gateRegion) then
+                            for _, e2 in ipairs(vertexNeighbours[e.v] or {}) do
+                                if isVertexInRegion(e2.v, region.gateRegion) then
+                                    bridges[#bridges+1] = {e.v, e2.v}
+                                end
+                            end
+                        end
+                    end
+                    if #bridges > 0 then
+                        local b = bridges[math.random(1, #bridges)]
+                        flowMap[gv]   = b[1]
+                        flowMap[b[1]] = b[2]
+                    else
+                        flowMap[gv] = 0
                     end
                 end
             end
-            current = ShuffleList(nextWave)
         end
     end
+end
+
+local function makeHeightMap()
+    -- Rise outward from each gate, every step strictly higher than its parent,
+    -- so a region has exactly one low point -- its gate -- and no interior local
+    -- minimum. (The original's comment for this: "This method should avoid
+    -- lakes." Erebus generates no lakes at all; addLakes/normalizeAddLakes are
+    -- stubbed out in the Civ IV script.)
+    --
+    -- Per-region cones from a common small base, NOT global altitude bands. Flow
+    -- never compares heights across regions -- crossing happens only via the
+    -- explicit gate bridge in setFlow -- so the cones need not be commensurable.
+    local current = {}
+    for _, region in ipairs(regionList) do
+        if region.gateVertex then
+            current[#current+1] = {v = region.gateVertex, regionID = region.ID}
+        end
+    end
+    local filled = 0
+    while #current > 0 do
+        local nextWave = {}
+        for _, cur in ipairs(current) do
+            local altitude = heightMap[cur.v]
+            for _, e in ipairs(vertexNeighbours[cur.v] or {}) do
+                -- Strictly INSIDE the region (all three tiles). A border vertex
+                -- belongs to no region's interior and carries no height, which is
+                -- what confines rivers to region interiors.
+                if heightMap[e.v] == -1.0 and isVertexInRegion(e.v, cur.regionID) then
+                    heightMap[e.v] = altitude * (1.0 + math.random(1, 20) / 100.0)
+                    filled = filled + 1
+                    nextWave[#nextWave+1] = {v = e.v, regionID = cur.regionID}
+                end
+            end
+        end
+        current = ShuffleList(nextWave)
+    end
     print(string.format('Erebus: height map filled %d vertices from %d gates.',
-                        filled, #ordered))
+                        filled, #regionList))
 end
 
 local function makeFlowPaths()
     buildRiverRegionLookupTable()
+    local isGate = {}
+    for _, region in ipairs(regionList) do
+        if region.gateVertex then isGate[region.gateVertex] = true end
+    end
     for v = 1, hexVertexCount() do
-        local paths = getPossiblePaths(v)
-        if #paths > 0 then
-            flowMap[v] = paths[math.random(1, #paths)]
+        -- Gates keep the outflow setFlow gave them; that bridge is the only way
+        -- across a region border and must not be recomputed from heights.
+        if not isGate[v] then
+            local paths = getPossiblePaths(v)
+            if #paths > 0 then
+                flowMap[v] = paths[math.random(1, #paths)]
+            end
         end
     end
 end
@@ -1285,7 +1296,6 @@ function createRiverMap()
     defineGates()
     placeGates()
     setFlow()
-    seedOceanSinks()
     makeHeightMap()
     makeFlowPaths()
     calculateWetAndDry()
@@ -2280,6 +2290,78 @@ end
 -- edges on it, so the cap punched holes in chains and shattered the network into
 -- 145 fragments of which the engine built only 27. Crowding was a symptom of too
 -- many short systems, not the cause.)
+
+-- Give landlocked rivers a mouth by putting a lake at their terminus.
+--
+-- Erebus generates no lakes otherwise (the Civ IV original stubs out addLakes
+-- and shapes its height field so no local minimum can form). A handful of rivers
+-- still end inland: a gate with no valid two-step bridge, or one that drained to
+-- a region that was water when the river map was built but became land by the
+-- time plots were decided. Rather than delete those rivers, terminate them in
+-- water.
+--
+-- A terminus vertex touches three tiles and its final river edge uses two of
+-- them, so the THIRD tile is converted. That keeps the last edge land-to-land,
+-- which matters because a river edge sitting on a land/water boundary is what
+-- WorldBuilder rejects as INVALID_LOCATION.
+--
+-- Must run after createPlotMap (plotMap has to exist) and before
+-- createTerrainMap (which reads plotMap to pick terrain).
+function addRiverTerminusLakes()
+    local edges = collectRiverEdges()
+    if #edges == 0 then return 0 end
+
+    local parent = {}
+    local function find(x)
+        while parent[x] and parent[x] ~= x do x = parent[x] end
+        return x
+    end
+    local firstAt, hasOut = {}, {}
+    for n, e in ipairs(edges) do
+        parent[n] = n
+        hasOut[e.a] = true
+        for _, v in ipairs({e.a, e.b}) do
+            if firstAt[v] then
+                local ra, rb = find(n), find(firstAt[v])
+                if ra ~= rb then parent[ra] = rb end
+            else
+                firstAt[v] = n
+            end
+        end
+    end
+
+    local function touchesWater(v)
+        for _, plot in ipairs(hexVertexPlots(v) or {}) do
+            if plotMap[plot] == OCEAN then return true end
+        end
+        return false
+    end
+
+    -- which components already reach water, and where each one ends
+    local reaches, terminus = {}, {}
+    for n, e in ipairs(edges) do
+        local root = find(n)
+        if touchesWater(e.a) or touchesWater(e.b) then reaches[root] = true end
+        if not hasOut[e.b] then terminus[root] = e end   -- no edge leads onward
+    end
+
+    local placed = 0
+    for root, e in pairs(terminus) do
+        if not reaches[root] then
+            -- the tile at the terminus that the final edge does NOT use
+            for _, plot in ipairs(hexVertexPlots(e.b) or {}) do
+                if plot ~= e.edgeA and plot ~= e.edgeB
+                   and plotMap[plot] ~= OCEAN then
+                    plotMap[plot] = OCEAN
+                    placed = placed + 1
+                    break
+                end
+            end
+        end
+    end
+    print(string.format("Erebus: placed %d lakes at landlocked river mouths", placed))
+    return placed
+end
 
 function makeErebusRivers()
     -- Paint the flow map straight onto hex edges. Deliberately does NOT go via

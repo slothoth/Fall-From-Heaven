@@ -125,6 +125,7 @@ function GenerateMap()
     createRegions()
     createRiverMap()
     createPlotMap()
+    addRiverTerminusLakes()   -- lakes for rivers that never reach the sea
     createTerrainMap()
 
     local terrainMap_out_plots = {}
