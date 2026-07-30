@@ -1153,35 +1153,47 @@ end
 local function makeHeightMap()
     -- Rise outward from each gate, every step strictly higher than its parent.
     -- That strictness is what makes the downhill flow field acyclic.
-    local current = {}
+    --
+    -- Regions are filled in ASCENDING ALTITUDE order, lowest (nearest the sea)
+    -- first. Border vertices touch two regions and are claimed by whichever
+    -- wavefront reaches them first; when every region grew at once the upstream
+    -- region usually won, so all three neighbours of a gate ended up in the
+    -- UPSTREAM band -- higher than the gate. The river then reached the pass and
+    -- had nowhere lower to go, and every inland river terminated exactly at its
+    -- own gate. Filling low bands first means a gate always has a downstream
+    -- neighbour below it, so water crosses the pass and carries on to the sea.
+    local ordered = {}
     for _, region in ipairs(regionList) do
-        if region.gateVertex then
-            current[#current+1] = {v = region.gateVertex, regionID = region.ID,
-                                   ceiling = region.altitude + 1}
-        end
+        if region.gateVertex then ordered[#ordered+1] = region end
     end
+    table.sort(ordered, function(a, b) return a.altitude < b.altitude end)
+
     local filled = 0
-    while #current > 0 do
-        local nextWave = {}
-        for _, cur in ipairs(current) do
-            local altitude = heightMap[cur.v]
-            for _, e in ipairs(vertexNeighbours[cur.v] or {}) do
-                if heightMap[e.v] == -1.0 and isVertexTouchingRegion(e.v, cur.regionID) then
-                    -- Rise toward, but never reach, the next band up. This keeps
-                    -- each region inside [altitude, altitude+1) so bands never
-                    -- overlap and the field stays globally monotone.
-                    heightMap[e.v] = altitude
-                                     + (cur.ceiling - altitude) * (math.random(1, 20) / 100.0)
-                    filled = filled + 1
-                    nextWave[#nextWave+1] = {v = e.v, regionID = cur.regionID,
-                                             ceiling = cur.ceiling}
+    for _, region in ipairs(ordered) do
+        local current = {{v = region.gateVertex, regionID = region.ID,
+                          ceiling = region.altitude + 1}}
+        while #current > 0 do
+            local nextWave = {}
+            for _, cur in ipairs(current) do
+                local altitude = heightMap[cur.v]
+                for _, e in ipairs(vertexNeighbours[cur.v] or {}) do
+                    if heightMap[e.v] == -1.0 and isVertexTouchingRegion(e.v, cur.regionID) then
+                        -- Rise toward, but never reach, the next band up, so each
+                        -- region stays inside [altitude, altitude+1) and the field
+                        -- remains globally monotone.
+                        heightMap[e.v] = altitude
+                                         + (cur.ceiling - altitude) * (math.random(1, 20) / 100.0)
+                        filled = filled + 1
+                        nextWave[#nextWave+1] = {v = e.v, regionID = cur.regionID,
+                                                 ceiling = cur.ceiling}
+                    end
                 end
             end
+            current = ShuffleList(nextWave)
         end
-        current = ShuffleList(nextWave)
     end
     print(string.format('Erebus: height map filled %d vertices from %d gates.',
-                        filled, #regionList))
+                        filled, #ordered))
 end
 
 local function makeFlowPaths()
