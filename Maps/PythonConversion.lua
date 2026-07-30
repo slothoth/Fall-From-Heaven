@@ -3,7 +3,15 @@ if not Game then
 end
 
 local SoftenPeakPercent = 0.0           -- percentage of peaks into hills in order to break up the worlds valleys.
-local RiverThreshold = 5.0      -- how many tiles of drainage is needed to create a river
+local RiverThreshold = 5.0      -- drainage needed before water shapes the terrain
+-- Drainage needed before a river is actually DRAWN. Deliberately separate from
+-- RiverThreshold: the terrain rules (pass carving, rainfall, altitude) want to
+-- know whether any water runs here at all, while rendering only wants channels
+-- big enough to look like rivers. Driving both off one number forces a choice
+-- between waterlogged maps and mountain mazes -- at a shared 40.0 the rivers
+-- look right but 30 pct of the land ends up walled off.
+local RiverDrawThreshold = 20.0
+
 local MinRainfall = .25     --  The amount of rainfall in the dryest desert. Must be between 1.0 and 0.0
 local RiverFactorFlattensAll = 10.0     -- factor on RiverThreshold to determine when a river
                                         -- is large enough to have a 100% chance to flatten nearby hills and peaks.
@@ -701,8 +709,10 @@ function createRegions()
     --on a map (regionRxMap) that corresponds to rivers rather than
     --map tiles. This ensures rivers have a path from region to
     --region.
-    -- math.randomseed(1)
-    math.randomseed(os.time())
+    -- PRNG is seeded once in GenerateMap from Civ's map seed. It used to be
+    -- reseeded here from os.time(), which meant the same map seed produced a
+    -- different map every run (and two runs inside the same second produced the
+    -- same one) -- so Civ's "Map Seed = N" never actually controlled anything.
     currentRegion = -99
     g_IV_iW = g_iW
     g_IV_iH = g_iH + 1
@@ -1116,6 +1126,30 @@ local function setFlow()
     end
 end
 
+-- Seed every vertex touching a water region at height 0 -- the sea is the floor
+-- of the whole height field. Without this, land bands started at altitude 1 and
+-- nothing was lower, so flow stopped at the last land vertex: rivers ended
+-- wherever the descent ran out rather than at a mouth. That produced many short
+-- landlocked systems instead of a few long ones, which is the root of both the
+-- pockmarked spring-heads and the fragmentation.
+local function seedOceanSinks()
+    local seeded = 0
+    for v = 1, hexVertexCount() do
+        if heightMap[v] == -1.0 then
+            for _, plot in ipairs(hexVertexPlots(v) or {}) do
+                local rid = regionMap[plot]
+                local region = rid and rid ~= -1 and tRegionIdMap[rid]
+                if region and region.isWater then
+                    heightMap[v] = 0.0
+                    seeded = seeded + 1
+                    break
+                end
+            end
+        end
+    end
+    print(string.format("Erebus: seeded %d ocean-adjacent vertices as river mouths", seeded))
+end
+
 local function makeHeightMap()
     -- Rise outward from each gate, every step strictly higher than its parent.
     -- That strictness is what makes the downhill flow field acyclic.
@@ -1239,6 +1273,7 @@ function createRiverMap()
     defineGates()
     placeGates()
     setFlow()
+    seedOceanSinks()
     makeHeightMap()
     makeFlowPaths()
     calculateWetAndDry()
@@ -2063,27 +2098,64 @@ end
 -- ---------------------------------------------------------------------------
 
 -- Which of the three setters owns the edge between adjacent tiles a and b, and
--- which plot to call it on. Each hex owns only its W, NW and NE edges.
-local function edgeSetterFor(a, b)
-    local ax, ay = plotXY(a)
-    for _, dir in ipairs({HEX_W, HEX_NW, HEX_NE}) do
-        if hexNeighbourIndex(ax, ay, dir) == b then
-            if dir == HEX_W  then return a, TerrainBuilder.SetWOfRiver  end
-            if dir == HEX_NW then return a, TerrainBuilder.SetNWOfRiver end
-            return a, TerrainBuilder.SetNEOfRiver
+-- which plot to call it on.
+--
+-- The flag names are stated relative to the RIVER, not to the tile.
+-- IsWOfRiver(P) means "P lies west OF the river", so the river is on P's EAST
+-- edge. The engine's own paired getters spell this out -- the flag set by
+-- SetWOfRiver is read back through GetRiverEFlowDirection, SetNWOfRiver through
+-- GetRiverSEFlowDirection, SetNEOfRiver through GetRiverSWFlowDirection. So each
+-- hex owns its E, SE and SW edges, NOT its W, NW and NE edges.
+--
+-- Verified in WorldBuilder by diffing whole-map river state around EditRiver
+-- (the editor's own river brush) in all six directions. Each call changed
+-- exactly one plot, and the pairs agree on the same edge from either side:
+--     EditRiver(P,E)  -> P     gets W-flag     EditRiver(P,W)  -> W(P)  gets W-flag
+--     EditRiver(P,SE) -> P     gets NW-flag    EditRiver(P,NW) -> NW(P) gets NW-flag
+--     EditRiver(P,SW) -> P     gets NE-flag    EditRiver(P,NE) -> NE(P) gets NE-flag
+--
+-- Reading it backwards anchored every edge on the opposite side of its tile, and
+-- because the offset differs per edge type (E vs SE vs SW) the displacement is
+-- not a rigid translation -- it tears the network apart. Measured on one 74x46
+-- map: the same 537 edges that form 28 rivers with 456 clean junctions under the
+-- intended reading are seen by the engine as 230 fragments with 501 loose ends
+-- and 22 illegal forks. That was the "rivers do not connect" artifact.
+local function edgeSetterOwnedBy(owner, other)
+    local ox, oy = plotXY(owner)
+    for _, dir in ipairs({HEX_E, HEX_SE, HEX_SW}) do
+        if hexNeighbourIndex(ox, oy, dir) == other then
+            if dir == HEX_E  then return owner, TerrainBuilder.SetWOfRiver,  dir end
+            if dir == HEX_SE then return owner, TerrainBuilder.SetNWOfRiver, dir end
+            return owner, TerrainBuilder.SetNEOfRiver, dir
         end
     end
-    -- b owns the edge instead
-    local bx, by = plotXY(b)
-    for _, dir in ipairs({HEX_W, HEX_NW, HEX_NE}) do
-        if hexNeighbourIndex(bx, by, dir) == a then
-            if dir == HEX_W  then return b, TerrainBuilder.SetWOfRiver  end
-            if dir == HEX_NW then return b, TerrainBuilder.SetNWOfRiver end
-            return b, TerrainBuilder.SetNEOfRiver
-        end
-    end
-    return nil, nil
+    return nil, nil, nil
 end
+
+local function edgeSetterFor(a, b)
+    -- Exactly one of the two tiles owns any given edge (if b is a's E/SE/SW
+    -- neighbour then a is b's W/NW/NE neighbour, and only the first list owns
+    -- edges), so at most one of these two lookups can succeed. Both are still
+    -- tried, and a non-water anchor preferred, purely as belt and braces --
+    -- collectRiverEdges already rejects any edge with a water tile on either
+    -- side, because the engine refuses those outright (EditRiver answers
+    -- INVALID_LOCATION for every direction facing water; verified in WorldBuilder).
+    local pa, sa, da = edgeSetterOwnedBy(a, b)
+    if pa then
+        local x, y = plotXY(pa)
+        local pl = Map.GetPlot(x, y)
+        if pl and not pl:IsWater() then return pa, sa, da end
+    end
+    local pb, sb, db = edgeSetterOwnedBy(b, a)
+    if pb then
+        local x, y = plotXY(pb)
+        local pl = Map.GetPlot(x, y)
+        if pl and not pl:IsWater() then return pb, sb, db end
+    end
+    return pa or pb, sa or sb, da or db
+end
+
+
 
 -- Name the flow direction from the actual movement between the two vertices.
 local FLOW_VECTORS = nil
@@ -2110,73 +2182,159 @@ local function flowDirectionFor(vFrom, vTo)
     return best
 end
 
--- Group vertices into river systems so each chain shares one river ID. Civ VI
--- uses the ID for river naming and adjacency.
-local function buildRiverIds()
-    local parent = {}
-    local function find(a)
-        while parent[a] and parent[a] ~= a do a = parent[a] end
-        return a
-    end
-    local function flowing(v)
-        return (riverMap[v] or 0) > RiverThreshold and (flowMap[v] or 0) ~= 0
-    end
+-- Assign river IDs from GEOMETRIC connectivity of the edges we actually paint.
+--
+-- This must happen after deciding which edges get painted, not before. IDs used
+-- to come from the flow chains, but an edge mid-chain can fail to paint (anchor
+-- off-map, or the owning tile is water), which splits the chain in two while
+-- both halves keep the same ID. Civ VI then sees one river ID in two
+-- disconnected places, fails to build a river object for it, and the whole thing
+-- renders as nothing -- 55 pct of painted edges were orphaned that way, with
+-- only 8 of 24 IDs becoming real named rivers.
+--
+-- Grouping by shared endpoint vertex instead makes one ID == one connected
+-- river, which is what the game expects.
+local function collectRiverEdges()
+    local edges = {}
     for v = 1, hexVertexCount() do
-        if flowing(v) then
-            parent[v] = parent[v] or v
-            local nxt = flowMap[v]
-            if flowing(nxt) or (riverMap[nxt] or 0) > RiverThreshold then
-                parent[nxt] = parent[nxt] or nxt
-                local ra, rb = find(v), find(nxt)
-                if ra ~= rb then parent[ra] = rb end
+        local nxt = flowMap[v]
+        if nxt and nxt ~= 0
+           and (riverMap[v] or 0) > RiverDrawThreshold
+           and (riverMap[nxt] or 0) > RiverDrawThreshold then
+            local edge
+            for _, e in ipairs(hexVertexNeighbours(v)) do
+                if e.v == nxt then edge = e break end
+            end
+            if edge then
+                local anchor, setter, hexDir = edgeSetterFor(edge.a, edge.b)
+                local eFlow = flowDirectionFor(v, nxt)
+                if anchor and setter and eFlow then
+                    local ax, ay = plotXY(anchor)
+                    local pPlot = Map.GetPlot(ax, ay)
+                    -- RULE 1 (probed live in WorldBuilder): a river edge may not
+                    -- sit on a land/water boundary -- EditRiver answers
+                    -- INVALID_LOCATION. BOTH tiles must be land, so a river stops
+                    -- at the last land-land edge rather than running into the sea.
+                    local oax, oay = plotXY(edge.a == anchor and edge.b or edge.a)
+                    local otherPlot = Map.GetPlot(oax, oay)
+                    if pPlot and not pPlot:IsWater()
+                       and otherPlot and not otherPlot:IsWater() then
+                        edges[#edges+1] = {a = v, b = nxt, plot = pPlot,
+                                           setter = setter, flow = eFlow,
+                                           hexDir = hexDir,
+                                           edgeA = edge.a, edgeB = edge.b}
+                    end
+                end
             end
         end
     end
-    local ids, nextId, count = {}, 0, 0
-    for v in pairs(parent) do
-        local root = find(v)
-        if ids[root] == nil then ids[root] = nextId; nextId = nextId + 1; count = count + 1 end
-        ids[v] = ids[root]
-    end
-    return ids, count
+    return edges
 end
+
+local function groupRiverEdges(edges)
+    local parent = {}
+    local function find(x)
+        while parent[x] and parent[x] ~= x do x = parent[x] end
+        return x
+    end
+    local function union(x, y)
+        local rx, ry = find(x), find(y)
+        if rx and ry and rx ~= ry then parent[rx] = ry end
+    end
+    local firstAtVertex = {}
+    for n, e in ipairs(edges) do
+        parent[n] = n
+        for _, v in ipairs({e.a, e.b}) do
+            if firstAtVertex[v] then union(n, firstAtVertex[v]) else firstAtVertex[v] = n end
+        end
+    end
+    -- No landlocked filtering here. Dropping systems with no ocean mouth cost
+    -- 45-60 pct of all edges and did not fix the reported artifacts: in-game the
+    -- rendering and non-rendering tiles turned out to be the SAME river (type 3),
+    -- sea-connected, so the mouth was never the discriminator. Crowding was.
+    local ids, nextId = {}, 0
+    local kept = {}
+    for n = 1, #edges do
+        local root = find(n)
+        if ids[root] == nil then ids[root] = nextId; nextId = nextId + 1 end
+        edges[n].id = ids[root]
+        kept[#kept+1] = edges[n]
+    end
+    return nextId, kept, 0
+end
+
+-- (Braid suppression removed. Capping edges-per-tile at 2 looked right against
+-- the stock histogram but a river routing AROUND a tile legitimately needs three
+-- edges on it, so the cap punched holes in chains and shattered the network into
+-- 145 fragments of which the engine built only 27. Crowding was a symptom of too
+-- many short systems, not the cause.)
 
 function makeErebusRivers()
     -- Paint the flow map straight onto hex edges. Deliberately does NOT go via
     -- TryStartRiver: that is the coastal seeder, which grows its own procedural
     -- river and rejects anything beside a mountain -- discarding exactly the
     -- mountain-pass rivers this map is built around.
-    local riverIds, nRivers = buildRiverIds()
-    local placed, skipped = 0, 0
+    local candidates = collectRiverEdges()
+    local nRivers, edges = groupRiverEdges(candidates)
 
-    for v = 1, hexVertexCount() do
-        local nxt = flowMap[v]
-        if riverIds[v] and nxt and nxt ~= 0 then
-            local edge = nil
-            for _, e in ipairs(hexVertexNeighbours(v)) do
-                if e.v == nxt then edge = e break end
-            end
-            if edge then
-                local anchor, setter = edgeSetterFor(edge.a, edge.b)
-                local eFlow = flowDirectionFor(v, nxt)
-                if anchor and setter and eFlow then
-                    local ax, ay = plotXY(anchor)
-                    local pPlot = Map.GetPlot(ax, ay)
-                    if pPlot and not pPlot:IsWater() then
-                        setter(pPlot, true, eFlow, riverIds[v])
-                        placed = placed + 1
-                    else
-                        skipped = skipped + 1
-                    end
-                else
-                    skipped = skipped + 1
-                end
-            else
-                skipped = skipped + 1
+    -- Emit mouth-first, walking upstream, one river at a time. This mirrors the
+    -- base game: TryStartRiver seeds on coastal land and DoRiver walks inland.
+    -- (That claim was once dismissed because EditRiver looked like it addressed
+    -- a different edge than the one asked for. It does not -- the flag names are
+    -- relative to the river, see edgeSetterOwnedBy. WorldBuilder's brush really
+    -- does enforce four rules, which it reports as INVALID_LOCATION (edge faces
+    -- water), NOT_NEAR_RIVER_OR_WATER (new edge is isolated), SPLITTING_RIVER
+    -- (would fork a river, also blocks removing a mid-chain edge) and
+    -- JOINING_RIVERS (would merge two rivers). Only the water rule is filtered
+    -- on here: those are the *editor's* validity rules, and TerrainBuilder does
+    -- not enforce them at generation time, so whether the renderer needs the
+    -- other three is still unmeasured. Note we do emit confluences, which the
+    -- editor would reject as JOINING_RIVERS -- suspect if artifacts remain.)
+    local upstreamOf, hasDownstream, emitted = {}, {}, {}
+    for n, e in ipairs(edges) do
+        upstreamOf[e.b] = upstreamOf[e.b] or {}
+        table.insert(upstreamOf[e.b], n)
+        hasDownstream[e.a] = true
+    end
+
+    local order = {}
+    local function walkUpstream(v)
+        for _, n in ipairs(upstreamOf[v] or {}) do
+            if not emitted[n] then
+                emitted[n] = true
+                order[#order+1] = edges[n]
+                walkUpstream(edges[n].a)      -- keep going away from the sea
             end
         end
     end
-    print(string.format("Erebus: placed %d river edges across %d river systems (%d skipped)",
-                        placed, nRivers, skipped))
-end
+    -- Mouths first: an edge whose downstream vertex has no further edge.
+    for _, e in ipairs(edges) do
+        if not hasDownstream[e.b] then walkUpstream(e.b) end
+    end
+    for n, e in ipairs(edges) do              -- anything left (loops, orphans)
+        if not emitted[n] then
+            emitted[n] = true
+            order[#order+1] = e
+            walkUpstream(e.a)
+        end
+    end
 
+    -- DO NOT call WorldBuilder.MapManager():EditRiver here. It exists in the
+    -- map-generation state but hard-crashes the game with
+    -- EXCEPTION_INT_DIVIDE_BY_ZERO -- WorldBuilder is not initialised during
+    -- generation (WorldBuilder.IsActive() is false), so its internals divide by a
+    -- zero it never set up. Verified the hard way.
+    --
+    -- Pass the river id (4-arg form). Dropping it so the engine could allocate
+    -- one registers NO river object at all: GetNumRivers fell to 0, while a
+    -- vanilla map of the same size reports 32. GetNumRivers tracks the ids we
+    -- supply exactly (26 components -> 26), and the base game's DoRiver passes an
+    -- id on every call too.
+    for _, e in ipairs(order) do
+        e.setter(e.plot, true, e.flow, e.id)
+    end
+    print(string.format("Erebus: placed %d river edges across %d rivers", #order, nRivers))
+    print(string.format(
+        "Erebus: placed %d river edges across %d rivers (emitted %d in chain order)",
+        #edges, nRivers, #order))
+end

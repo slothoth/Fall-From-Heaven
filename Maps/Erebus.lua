@@ -28,6 +28,13 @@ local LeafyAltitude = 0.3
 
 local OCEAN, LAND, HILLS, PEAK = 0, 1, 2, 3
 
+-- Set this to a number to replay one exact map, e.g. while debugging a bad
+-- generation; leave nil for normal play. The seed used is printed to Lua.log as
+-- "Erebus: Lua PRNG seed = N", so a map can be reproduced by copying that value
+-- here. Every part of the generator draws from math.random, so this pins the
+-- entire map: terrain, rivers, everything.
+EREBUS_FORCED_SEED = nil
+
 local plotErebusFxsMapper = {[OCEAN] = g_PLOT_TYPE_OCEAN, [LAND] = g_PLOT_TYPE_LAND,
                                 [HILLS] = g_PLOT_TYPE_HILLS, [PEAK] = g_PLOT_TYPE_MOUNTAIN,
                                 ["O"] = g_PLOT_TYPE_OCEAN, ["L"] = g_PLOT_TYPE_LAND,
@@ -102,6 +109,18 @@ end
 -- ENTRY POINT
 function GenerateMap()
     g_iW, g_iH = Map.GetGridSize();
+
+    -- Seed Lua's PRNG from Civ's own RNG, which the engine seeds from the map
+    -- seed. Every part of this generator draws from math.random (23 call sites,
+    -- none use TerrainBuilder.GetRandomNumber), so without this the map is not
+    -- reproducible from its seed at all. Logged so a map can be reproduced.
+    local luaSeed = EREBUS_FORCED_SEED
+                    or TerrainBuilder.GetRandomNumber(2147483647, "Erebus Lua PRNG seed")
+    math.randomseed(luaSeed)
+    for _ = 1, 8 do math.random() end   -- discard: srand's first draws barely
+                                        -- differ between nearby seeds
+    print("Erebus: Lua PRNG seed = " .. tostring(luaSeed))
+
     mapVarsSetup()
     createRegions()
     createRiverMap()
@@ -152,6 +171,15 @@ function GenerateMap()
 
 	makeErebusRivers()
 	--AddRiversInlandLake()
+
+    -- Hand the painted river edges to the engine so it builds actual river
+    -- OBJECTS from them (types, names, floodplains). Without this the edges are
+    -- just raw flags: RiverManager reported 0 tiles with a river type and only
+    -- ~7 of 27 rivers registered, so most stretches had no art and rendered as
+    -- nothing. Base FeatureGenerator:AddFeatures calls this FIRST, before any
+    -- feature placement -- Erebus overrides AddFeatures and the call was lost.
+    local bRiversStartInland = true      -- Erebus rivers rise at drainage divides
+    TerrainBuilder.GenerateFloodplains(bRiversStartInland, 4, 10)
     -- Lakes would interfere with rivers, causing them to stop and not reach the ocean, if placed any sooner.
     local numLargeLakes = GameInfo.Maps[Map.GetMapSize()].Continents;
     AddLakesToPresentAreas(numLargeLakes);
