@@ -1057,7 +1057,7 @@ function PopulateNode(uiNode, playerTechData)
 					uiNode.ExtraPrereq:SetTexture( textureOffsetX, textureOffsetY, textureSheet );
 				end
 			end
-			uiNode.ExtraPrereq:SetHide(sExtraPrereq == nil)
+			uiNode.ExtraPrereq:SetHide(sExtraPrereq == nil)       -- this bugs if there is a gov unlock.
 		end
 	end
 
