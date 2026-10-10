@@ -71,6 +71,12 @@ local tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL
 local iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
 local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 
+local tReligiousBuildings = {   [GameInfo.Buildings['BUILDING_MOSQUE'].Index] ='SLTH_POLICY_STATE_OCTOPUS',
+                                [GameInfo.Buildings['BUILDING_GURDWARA'].Index]= 'SLTH_POLICY_STATE_EMPYREAN',
+                                [GameInfo.Buildings['BUILDING_WAT'].Index]='SLTH_POLICY_STATE_RUNES',
+                                [GameInfo.Buildings['BUILDING_CATHEDRAL'].Index]='SLTH_POLICY_STATE_ORDER',
+                                [GameInfo.Buildings['BUILDING_STUPA'].Index]='SLTH_POLICY_STATE_VEIL',
+                                [GameInfo.Buildings['BUILDING_SANCTUARY'].Index] = 'SLTH_POLICY_STATE_LEAVES'}
 
 function onReligionSwitch(playerID, policyID, wasEnacted)
     if not wasEnacted then return; end

@@ -2,7 +2,7 @@
 
 -- DESERT HELL: Burning Sands
 
--- DESERT Can also have burning flames on it
+-- DESERT Can also have burning flames on it. Use the natural disasters burning forest.
 
 -- obsidian plains: Desert floodplains
 
@@ -199,3 +199,40 @@ INSERT INTO Types(Type, Kind) VALUES
 ('FEATURE_BROKEN_LANDS', 'KIND_FEATURE'),
 ('FEATURE_FIELDS_OF_PERDITION', 'KIND_FEATURE'),
 ('FEATURE_FOREST_ANCIENT', 'KIND_FEATURE');
+
+-- adjust the burning numbers
+INSERT INTO Features_XP2(FeatureType, ValidForReplacement) VALUES
+('FEATURE_BURNING_FLAME_SANDS', '1');
+
+INSERT INTO RandomEvent_Features(RandomEventType, FeatureType) VALUES
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'FEATURE_BURNING_FLAME_SANDS');
+
+INSERT INTO RandomEvents(RandomEventType, Name, Description, EffectString, EffectOperatorType, Severity, Hexes, Duration, ChanceIncreasePerDegree, IconLarge, IconSmall) VALUES
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'LOC_RANDOM_EVENT_BURNING_SANDS_NAME', 'LOC_RANDOM_EVENT_BURNING_SANDS_DESCRIPTION', 'LOC_RANDOM_EVENT_FIRE_EFFECT_DESCRIPTION', 'FIRE', 1, 1, 5, 0, 'ClimateEvent_ForestFire', 'ClimateEventStat_ForestFire');
+
+INSERT INTO RandomEvent_Notifications(RandomEventType, NotificationType, Title, Summary, MinTurn, MaxTurn, CompilationRadius) VALUES
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'NOTIFICATION_FIRE_STARTS', 'LOC_FIRE_STARTED_DESC', 'LOC_FIRE_STARTED_DESC', NULL,0, '4'),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'NOTIFICATION_FIRE_ENDS', 'LOC_FIRE_CONTINUED', 'LOC_SANDS_FIRE_CONTINUED_DESC', 0, 2, '4'),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'NOTIFICATION_JUNGLE_REGROWS', 'LOC_FIRE_JUNGLE_OVER', 'LOC_FIRE_JUNGLE_OVER_DESC', 8, 8, '4');
+
+INSERT INTO RandomEvent_Frequencies(RandomEventType, RealismSettingType, OccurrencesPerGame) VALUES
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'REALISM_SETTING_MINIMAL', 3),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'REALISM_SETTING_LIGHT', 4),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'REALISM_SETTING_MODERATE', 6),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'REALISM_SETTING_HEAVY', 10),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'REALISM_SETTING_HYPERREAL', 15);
+
+INSERT INTO RandomEvent_Damages(RandomEventType, DamageType, Percentage, MinHP, MaxHP, MinTurn, MaxTurn) VALUES
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'UNIT_KILLED_CIVILIAN', 101, 0, 0, 0, 2),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'UNIT_DAMAGE_LAND', 101, 50, 101, 0, 2),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'SPREAD', 50, 0, 0, 0, 2),
+('RANDOM_EVENT_BURNING_SANDS_FIRE', 'UNIT_DAMAGE_LAND', 101, 50, 101, 0, 2);
+
+-- burning forest and jungle is lower percentage to spread and doesnt remove pop, and grants less yields
+-- needed as FFH has a LOT more woods
+UPDATE RandomEvent_Damages SET Percentage=20 WHERE DamageType='SPREAD' AND RandomEventType IN ('RANDOM_EVENT_JUNGLE_FIRE', 'RANDOM_EVENT_FOREST_FIRE');
+DELETE FROM RandomEvent_Damages WHERE DamageType='POPULATION_LOSS' AND RandomEventType IN ('RANDOM_EVENT_JUNGLE_FIRE', 'RANDOM_EVENT_FOREST_FIRE');
+
+UPDATE RandomEvent_Yields SET Percentage=20 WHERE FeatureType IN ('FEATURE_BURNT_JUNGLE', 'FEATURE_JUNGLE', 'FEATURE_BURNT_FOREST', 'FEATURE_FOREST');
+
+-- Could we make a RandomEvent that converts forest to AncientForest?
