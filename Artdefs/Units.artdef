@@ -8720,9 +8720,9 @@
 										<m_ParamName text="Count"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="MalonRaider"/>
+										<m_ElementName text="MalonRaider_Skeleton"/>
 										<m_RootCollectionName text="UnitMemberTypes"/>
-										<m_ArtDefPath text="Units.artdef"/>
+										<m_ArtDefPath text="SLTH_Units.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
 										<m_TemplateName text="Units"/>
 										<m_ParamName text="Type"/>
