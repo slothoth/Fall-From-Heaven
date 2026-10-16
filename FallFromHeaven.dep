@@ -209,7 +209,9 @@
 		</Element>
 		<Element>
 			<ConsumerName text="VFX"/>
-			<ArtDefDependencyPaths/>
+			<ArtDefDependencyPaths>
+                <Element text="SLTH_VFX.artdef"/>
+            </ArtDefDependencyPaths>
 			<LibraryDependencies>
 				<Element text="VFX"/>
 				<Element text="Light"/>
@@ -684,8 +686,10 @@
 		<Element>
 			<LibraryName text="VFX"/>
 			<PackageDependencies>
-				<Element text="VFX_FireFX.blp"/>
-				<Element text="VFX.blp"/>
+                <Element text="FKFX_VFX.blp"/>
+                <Element text="VFX_FireFX.blp"/>
+                <Element text="VFX.blp"/>
+                <Element text="FireFX.blp"/>
 			</PackageDependencies>
 		</Element>
 		<Element>

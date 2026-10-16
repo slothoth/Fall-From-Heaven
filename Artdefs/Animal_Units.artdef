@@ -2939,7 +2939,7 @@
 																	<m_Values/>
 																</m_Fields>
 																<m_ChildCollections/>
-																<m_Name text="Unit/Lion"/>		<!--Unit/SandLion but desert scaling makes vfx huge-->
+																<m_Name text="Unit/SandLionFX"/>		<!--particle sand lion (SLTH_SandLion). Was Unit/Lion; Unit/SandLion = old desert-scaled version-->
 																<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 															</Element>
 														</Element>

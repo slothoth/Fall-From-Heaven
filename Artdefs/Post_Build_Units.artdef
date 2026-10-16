@@ -12790,7 +12790,7 @@
 																	<m_Values/>
 																</m_Fields>
 																<m_ChildCollections/>
-																<m_Name text="BaseMale_Heads/Heads"/>
+																<m_Name text="Armor/SpectreSmogHead"/>
 																<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 															</Element>
 														</Element>
@@ -12824,7 +12824,7 @@
 																	<m_Values/>
 																</m_Fields>
 																<m_ChildCollections/>
-																<m_Name text="BaseMale_Bodies/Torso"/>
+																<m_Name text="Armor/SpectreSmogBody"/>
 																<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 															</Element>
 														</Element>
