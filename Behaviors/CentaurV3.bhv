@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..BehaviorInstance>
+	<m_BehaviorData>
+		<m_behaviorDataSets>
+			<m_animationBindings>
+				<m_Bindings>
+					<Element>
+						<m_SlotName text="ATTACK_1"/>
+						<m_AnimationName text="Centaur_JoustDefendA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="ATTACK_A"/>
+						<m_AnimationName text="Centaur_JoustDefendA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="BACKWARD_A"/>
+						<m_AnimationName text="Centaur_CombatIdleA"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_1"/>
+						<m_AnimationName text="Centaur_HorseJoustDeathA"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_10"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_11"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_12"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_13"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_14"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_15"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_16"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_17"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_18"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_19"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_2"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_20"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_3"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_4"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_5"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_6"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_7"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_8"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_9"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_A"/>
+						<m_AnimationName text="Centaur_MountedDeathC_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEFEND_1"/>
+						<m_AnimationName text="Centaur_JoustDefendA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEFEND_A"/>
+						<m_AnimationName text="Centaur_JoustDefendA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DODGE_A"/>
+						<m_AnimationName text="Centaur_DodgeA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="FORWARD_A"/>
+						<m_AnimationName text="Centaur_CombatIdleA"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_A"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_B"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_C"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_COMBAT_A"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_COMBAT_B"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_COMBAT_C"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_COMBAT_D"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_D"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_A"/>
+						<m_AnimationName text="Centaur_DodgeA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_RANGED_A"/>
+						<m_AnimationName text="Centaur_DodgeA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_RANGED_B"/>
+						<m_AnimationName text="Centaur_DodgeA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_RANGED_C"/>
+						<m_AnimationName text="Centaur_DodgeA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_RANGED_D"/>
+						<m_AnimationName text="Centaur_DodgeA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_A"/>
+						<m_AnimationName text="RunDwdBRepeat2_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_COMBAT"/>
+						<m_AnimationName text="RunDwdBRepeat2_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_COMBAT_STOP"/>
+						<m_AnimationName text="CentaurIdleARedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_STOP"/>
+						<m_AnimationName text="Centaur_RunStopD_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_STOP_B"/>
+						<m_AnimationName text="Centaur_RunStopD_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_STOP_C"/>
+						<m_AnimationName text="Centaur_RunStopD_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_STOP_D"/>
+						<m_AnimationName text="Centaur_RunStopD_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="SPAWN"/>
+						<m_AnimationName text="Centaur_Spawn_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="TURN_L"/>
+						<m_AnimationName text="Centaur_LeftA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="TURN_R"/>
+						<m_AnimationName text="Centaur_RightA_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="VICTORY"/>
+						<m_AnimationName text="CentaurVictory_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="BREATHING_A"/>
+						<m_AnimationName text="CentaurBreathingRedo_anim"/>
+					</Element>
+					<Element>
+						<m_SlotName text="BREATHING_COMBAT_A"/>
+						<m_AnimationName text="CentaurBreathingRedo_anim"/>
+					</Element>
+				</m_Bindings>
+			</m_animationBindings>
+			<m_timelineBindings>
+				<m_Bindings/>
+			</m_timelineBindings>
+			<m_timelines>
+				<m_Timelines/>
+			</m_timelines>
+			<m_attachmentPoints>
+				<m_Points>
+					<Element>
+						<m_CookParams>
+							<m_Values/>
+						</m_CookParams>
+						<m_position>
+							<x>0.000000</x>
+							<y>0.000000</y>
+							<z>0.000000</z>
+						</m_position>
+						<m_orientation>
+							<x>0.000000</x>
+							<y>0.000000</y>
+							<z>0.000000</z>
+						</m_orientation>
+						<m_Name text="Root"/>
+						<m_BoneName text="skin_root"/>
+						<m_ModelInstanceName text="skin_root"/>
+						<m_scale>1.000000</m_scale>
+					</Element>
+					<Element>
+						<m_CookParams>
+							<m_Values/>
+						</m_CookParams>
+						<m_position>
+							<x>0.000000</x>
+							<y>0.000000</y>
+							<z>0.000000</z>
+						</m_position>
+						<m_orientation>
+							<x>1.570796</x>
+							<y>0.000000</y>
+							<z>0.000000</z>
+						</m_orientation>
+						<m_Name text="WeaponPrimary"/>
+						<m_BoneName text="Inven_R_Hand"/>
+						<m_ModelInstanceName text=""/>
+						<m_scale>1.000000</m_scale>
+					</Element>
+					<Element>
+						<m_CookParams>
+							<m_Values/>
+						</m_CookParams>
+						<m_position>
+							<x>0.000000</x>
+							<y>0.000000</y>
+							<z>0.000000</z>
+						</m_position>
+						<m_orientation>
+							<x>0.000000</x>
+							<y>0.000000</y>
+							<z>0.000000</z>
+						</m_orientation>
+						<m_Name text="Hat"/>
+						<m_BoneName text="Head"/>
+						<m_ModelInstanceName text=""/>
+						<m_scale>1.000000</m_scale>
+					</Element>
+					<Element>
+						<m_CookParams>
+							<m_Values/>
+						</m_CookParams>
+						<m_position>
+							<x>-12.174753</x>
+							<y>-0.517974</y>
+							<z>-0.177292</z>
+						</m_position>
+						<m_orientation>
+							<x>1.557586</x>
+							<y>-0.031905</y>
+							<z>-1.571218</z>
+						</m_orientation>
+						<m_Name text="Head"/>
+						<m_BoneName text="Head"/>
+						<m_ModelInstanceName text="skin_root"/>
+						<m_scale>1.000000</m_scale>
+					</Element>
+				</m_Points>
+			</m_attachmentPoints>
+			<m_stateSet/>
+		</m_behaviorDataSets>
+		<m_behaviorInstances/>
+		<m_dsgName text="potential_any_graph"/>
+		<m_referenceGeometryNames>
+			<Element text="CentaurArms"/>
+		</m_referenceGeometryNames>
+	</m_BehaviorData>
+	<m_CookParams>
+		<m_Values/>
+	</m_CookParams>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="Unit"/>
+	<m_DataFiles/>
+	<m_Name text="CentaurV3"/>
+	<m_Description text=""/>
+	<m_Tags/>
+</AssetObjects..BehaviorInstance>
+

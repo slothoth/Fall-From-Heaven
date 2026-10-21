@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..ParticleEffectInstance>
+	<m_CookParams>
+		<m_Values>
+			<Element class="AssetObjects..ObjectValue">
+				<m_ObjectName text="FKFX_SandLionDust"/>
+				<m_eObjectType>FIREFX</m_eObjectType>
+				<m_ParamName text="FireFX Reference"/>
+			</Element>
+			<Element class="AssetObjects..StringValue">
+				<m_Value text="FKFX_SandLionDust::SLG_neck"/>
+				<m_ParamName text="Root Emitter"/>
+			</Element>
+		</m_Values>
+	</m_CookParams>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_SourceFilePath text=""/>
+	<m_SourceObjectName text=""/>
+	<m_ImportedTime>0</m_ImportedTime>
+	<m_ExportedTime>0</m_ExportedTime>
+	<m_ClassName text="FireFXParticle"/>
+	<m_DataFiles/>
+	<m_Name text="FKFX_SandLionDust_neck"/>
+	<m_Description text=""/>
+	<m_Tags/>
+</AssetObjects..ParticleEffectInstance>

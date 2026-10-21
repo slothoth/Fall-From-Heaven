@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..BehaviorInstance>
+	<m_BehaviorData>
+		<m_behaviorDataSets>
+			<m_animationBindings>
+				<m_Bindings>
+					<Element>
+						<m_SlotName text="BREATHING_A"/>
+						<m_AnimationName text="Balrog_Breathing"/>
+					</Element>
+					<Element>
+						<m_SlotName text="BREATHING_COMBAT_A"/>
+						<m_AnimationName text="Balrog_Breathing"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_1"/>
+						<m_AnimationName text="Balrog_Death"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEATH_A"/>
+						<m_AnimationName text="Balrog_Death"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_COMBAT"/>
+						<m_AnimationName text="Balrog_Combat_Walk_Forward"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_A"/>
+						<m_AnimationName text="Balrog_Combat_Walk_Forward"/>
+					</Element>
+					<Element>
+						<m_SlotName text="SPAWN"/>
+						<m_AnimationName text="Balrog_Spawn_Roar2Rev"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEFEND_A"/>
+						<m_AnimationName text="Balrog_Def_Inf"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DODGE_A"/>
+						<m_AnimationName text="Balrog_Attack_Vehicle"/>
+					</Element>
+					<Element>
+						<m_SlotName text="FORWARD_A"/>
+						<m_AnimationName text="Balrog_Combat_Walk_Forward"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_RANGED_A"/>
+						<m_AnimationName text="Balrog_BR_RightShoulderHitReact_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_RANGED_B"/>
+						<m_AnimationName text="Balrog_BR_LeftShoulderHitReact_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_RANGED_C"/>
+						<m_AnimationName text="Balrog_BR_RightShoulderHitReact_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_RANGED_D"/>
+						<m_AnimationName text="Balrog_BR_LeftShoulderHitReact_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="REACT_A"/>
+						<m_AnimationName text="Balrog_BR_LeftShoulderHitReact_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="TURN_R"/>
+						<m_AnimationName text="Balrog_Combat_Walk_Turn_Right"/>
+					</Element>
+					<Element>
+						<m_SlotName text="TURN_L"/>
+						<m_AnimationName text="Balrog_Combat_Walk_Turn_Left"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_COMBAT_STOP"/>
+						<m_AnimationName text="Balrog_BR_AS_SadKick"/>
+					</Element>
+					<Element>
+						<m_SlotName text="ATTACK_A"/>
+						<m_AnimationName text="Balrog_BR_TwoHandSmash_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="ATTACK_1"/>
+						<m_AnimationName text="Balrog_BR_TwoHandSmash_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="ATTACK_2"/>
+						<m_AnimationName text="Balrog_BR_RightStrike_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="ATTACK_3"/>
+						<m_AnimationName text="Balrog_BR_LeftStrike_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="JUMP_IDLE"/>
+						<m_AnimationName text="Balrog_Jump_Middle_Loop"/>
+					</Element>
+					<Element>
+						<m_SlotName text="JUMP_START"/>
+						<m_AnimationName text="Balrog_Jump_Start"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_COMBAT_A"/>
+						<m_AnimationName text="Balrog_Idle_Roar"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_COMBAT_B"/>
+						<m_AnimationName text="Balrog_Idle_Roar"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_COMBAT_C"/>
+						<m_AnimationName text="Balrog_Idle_Roar2"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_COMBAT_D"/>
+						<m_AnimationName text="Balrog_Idle_Roar2"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_A"/>
+						<m_AnimationName text="Balrog_Idle_1"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_B"/>
+						<m_AnimationName text="Balrog_Idle_2"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_C"/>
+						<m_AnimationName text="Balrog_Idle_2"/>
+					</Element>
+					<Element>
+						<m_SlotName text="IDLE_D"/>
+						<m_AnimationName text="Balrog_Idle_Roar2"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEFEND_1"/>
+						<m_AnimationName text="Balrog_Def_AA"/>
+					</Element>
+					<Element>
+						<m_SlotName text="JUMP_STOP"/>
+						<m_AnimationName text="Balrog_Jump_End"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_STOP"/>
+						<m_AnimationName text="Balrog_Idle_1"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEFEND_3"/>
+						<m_AnimationName text="Balrog_BR_TwoHandSmash_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="DEFEND_2"/>
+						<m_AnimationName text="Balrog_Attack_Ships"/>
+					</Element>
+				</m_Bindings>
+			</m_animationBindings>
+			<m_timelineBindings>
+				<m_Bindings/>
+			</m_timelineBindings>
+			<m_timelines>
+				<m_Timelines/>
+			</m_timelines>
+			<m_attachmentPoints>
+				<m_Points/>
+			</m_attachmentPoints>
+			<m_stateSet/>
+		</m_behaviorDataSets>
+		<m_behaviorInstances/>
+		<m_dsgName text="potential_any_graph_with_jump"/>
+		<m_referenceGeometryNames>
+			<Element text="Balrog"/>
+		</m_referenceGeometryNames>
+	</m_BehaviorData>
+	<m_CookParams>
+		<m_Values/>
+	</m_CookParams>
+	<m_Version>
+		<major>4</major>
+		<minor>0</minor>
+		<build>358</build>
+		<revision>265</revision>
+	</m_Version>
+	<m_ClassName text="Unit"/>
+	<m_DataFiles/>
+	<m_Name text="SLTH_Balrog"/>
+	<m_Description text="Shared animation bindings for Balrog, Balrog_Upper and Balrog_Whip"/>
+	<m_Tags/>
+</AssetObjects..BehaviorInstance>

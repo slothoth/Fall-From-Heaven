@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="LeaderFallback"/>
+	<m_PackageName text="LeaderFallbacks"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_ARENDEL"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_ARENDEL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_AURIC"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_AURIC"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_BASIUM"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_BASIUM"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_CAPRIA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_CAPRIA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_CARDITH"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_CARDITH"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_CASSIEL"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_CASSIEL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_CHARADON"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_CHARADON"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_DAIN"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_DAIN"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_DECIUS"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_DECIUS"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_ETHNE"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_ETHNE"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_FAERYL"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_FAERYL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_FALAMAR"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_FALAMAR"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_FLAUROS"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_FLAUROS"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_GARRIM"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_GARRIM"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_HANNAH"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_HANNAH"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_HYBOREM"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_HYBOREM"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_KANDROS"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_KANDROS"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_OSGABELLA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_OSGABELLA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_RHOANNA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_RHOANNA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_SABATHIEL"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_SABATHIEL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_SANDALPHON"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_SANDALPHON"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_SHEELBA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_SHEELBA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_TASUNKE"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_TASUNKE"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_TEBRYN"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_TEBRYN"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_THESSA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_THESSA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_THESSALONICA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_THESSALONICA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_VALLEDIA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_VALLEDIA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_VARN"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_VARN"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_FALLBACK_NEUTRAL_LEADER_ALEXIS_ALT"/>
+			<m_ObjectName text="LEADER_FALLBACK_NEUTRAL_LEADER_ALEXIS_ALT"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_ARTURUS"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_ARTURUS"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_BEERI"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_BEERI"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_DECIUS_BANNOR"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_DECIUS_BANNOR"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_DECIUS_CALABIM"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_DECIUS_CALABIM"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_DECIUS_MALAKIM"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_DECIUS_MALAKIM"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_EINION"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_EINION"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_PERPENTACH"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_PERPENTACH"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_JONAS"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_JONAS"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_KEELYN"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_KEELYN"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_OS_GABELLA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_OS_GABELLA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_AMELANCHIER1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_AMELANCHIER"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_ARENDEL1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_ARENDEL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_BEERI1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_BEERI"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_CAPRIA1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_CAPRIA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_ETHNE1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_ETHNE"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_FALAMAR1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_FALAMAR"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_GARRIM1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_GARRIM"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_JONAS1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_JONAS"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_KEELYN1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_KEELYN"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_OSGABELLA1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_OSGABELLA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_RHOANNA1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_RHOANNA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_SHEELBA1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_SHEELBA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_VALLEDIA1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_VALLEDIA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_VARN1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_VARN"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_TEBRYN1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_TEBRYN"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_THESSA1"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_THESSA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_AMELANCHIER"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_AMELANCHIER"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALLBACK_NEUTRAL_LEADER_MAHALA"/>
+			<m_ObjectName text="FALLBACK_NEUTRAL_LEADER_MAHALA"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>LINUX</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

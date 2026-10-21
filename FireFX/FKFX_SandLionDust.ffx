@@ -1,0 +1,3163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..FireFXInstance>
+	<m_CookParams>
+		<m_Values>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>MATERIAL</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_root"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_root"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_pelvis"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_pelvis"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_lefthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_lefthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_lowerback"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_lowerback"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_righthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_righthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_tail01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_tail01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_chest"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_chest"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_leftknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_leftknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_rightknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_rightknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_tail02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_tail02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_chest1"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_chest1"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_leftankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_leftankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_rightankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_rightankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_tail03"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_tail03"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_chest2"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_chest2"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_lefttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_lefttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_righttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_righttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_spine01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_spine01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_tail05"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_tail05"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_leftcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_leftcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_neck"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_neck"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_rightcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_rightcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_tail06"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_tail06"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_leftshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_leftshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_neck01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_neck01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_rightshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_rightshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_head"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_head"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_leftelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_leftelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_rightelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_rightelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_rightwrist"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_rightwrist"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_jaw02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_jaw02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_leftfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_leftfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_rightfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_rightfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SL_tongue01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="SLG_tongue01"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="EmitterMaterials"/>
+			</Element>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>GEOMETRY</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_root"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_root"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_pelvis"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_pelvis"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_lefthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_lefthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_lowerback"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_lowerback"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_righthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_righthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_tail01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_tail01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_chest"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_chest"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_leftknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_leftknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_rightknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_rightknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_tail02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_tail02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_chest1"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_chest1"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_leftankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_leftankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_rightankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_rightankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_tail03"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_tail03"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_chest2"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_chest2"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_lefttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_lefttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_righttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_righttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_spine01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_spine01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_tail05"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_tail05"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_leftcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_leftcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_neck"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_neck"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_rightcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_rightcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_tail06"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_tail06"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_leftshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_leftshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_neck01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_neck01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_rightshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_rightshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_head"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_head"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_leftelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_leftelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_rightelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_rightelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_rightwrist"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_rightwrist"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_jaw02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_jaw02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_leftfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_leftfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_rightfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_rightfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SL_tongue01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="SLG_tongue01"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="EmitterGeometries"/>
+			</Element>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_root"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_root"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_pelvis"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_pelvis"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_lefthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_lefthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_lowerback"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_lowerback"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_righthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_righthip"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_tail01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_tail01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_chest"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_chest"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_leftknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_leftknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_rightknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_rightknee"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_tail02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_tail02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_chest1"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_chest1"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_leftankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_leftankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_rightankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_rightankle"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_tail03"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_tail03"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_chest2"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_chest2"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_lefttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_lefttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_righttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_righttoe01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_spine01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_spine01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_tail05"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_tail05"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_leftcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_leftcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_neck"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_neck"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_rightcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_rightcollar"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_tail06"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_tail06"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_leftshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_leftshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_neck01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_neck01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_rightshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_rightshoulder"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_head"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_head"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_leftelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_leftelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_rightelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_rightelbow"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_rightwrist"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_rightwrist"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_jaw02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_jaw02"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_leftfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_leftfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_rightfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_rightfinger01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SL_tongue01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="SLG_tongue01"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="EmitterLights"/>
+			</Element>
+		</m_Values>
+	</m_CookParams>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_dataPtr>00005288F65256BD</m_dataPtr>
+	<m_ClassName text="FireFXScript"/>
+	<m_DataFiles>
+		<Element>
+			<m_ID text="FireFX"/>
+			<m_RelativePath text="FKFX_SandLionDust.FireFX"/>
+		</Element>
+	</m_DataFiles>
+	<m_Name text="FKFX_SandLionDust"/>
+	<m_Description text="Bone-attached volume dust (mesh2firefx.py)"/>
+	<m_Tags/>
+</AssetObjects..FireFXInstance>
+<Instances>
+	<00005288F65256BD Type="AssetObjects::FireFXScriptData">
+		<m_script text='// FKFX_SandLionDust: generated by civ6/fx_tools/mesh2firefx.py from Lion.cn6
+// One emitter + group per bone; each group is the Root Emitter of that bone&apos;s .ptl, played from an
+// attachment point on the bone, so particles (exported bone-local) ride the unit&apos;s animation.
+
+// ---- tuning: lengths in model units, converted by SD_SCALE (FX units = 0.1 x model units, measured) ----
+#define SD_SCALE 0.1            // model units -&gt; FX units (positions + sizes)
+#define SD_DENSITY 1.0          // puff count multiplier (performance knob)
+#define SD_RATE 0.35            // puffs per second per volume point (before DENSITY)
+#define SD_LIFE_MIN 1.2
+#define SD_LIFE_MAX 2.4
+#define SD_SIZE 1.98            // puff size at birth
+#define SD_GROW 0.8             // extra size gained over a life (x SD_SIZE)
+#define SD_JITTER 0.76          // random spawn offset around the volume point
+#define SD_SWIRL_RADIUS 0.61   // swirl circle radius
+#define SD_SWIRL_TURNS 0.5      // swirl turns over a life
+#define SD_SPIN 0.6             // puff texture spin (radians per second)
+#define SD_ALPHA 0.25
+#define SD_COLOR float3(0.78, 0.62, 0.40)
+#define SD_DISTORT 0.05         // texture distortion strength (as the base game&apos;s rollingClouds)
+
+emitter SL_root
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 8.0);	// one of this bone&apos;s 8 interior points
+		p_base = ((k &lt; 4) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(-1.0104, -0.1250, -0.7374) : float3(-0.8792, -0.0722, -0.9621)) : ((k &lt; 3) ? float3(-1.1317, -1.4012, 0.1124) : float3(-0.8919, -1.2898, -0.0309))) : ((k &lt; 6) ? ((k &lt; 5) ? float3(-0.9000, -0.0010, -0.7270) : float3(-0.4758, 0.9114, -1.6786)) : ((k &lt; 7) ? float3(0.1242, -0.1547, -0.9795) : float3(-0.6727, -2.6602, -0.4781)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_root
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_root", 8.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_pelvis
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 11.0);	// one of this bone&apos;s 11 interior points
+		p_base = ((k &lt; 5) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(-1.4113, -0.1958, 1.0393) : float3(-1.5451, 0.9041, 0.6184)) : ((k &lt; 3) ? float3(0.9754, 1.3171, -0.9438) : ((k &lt; 4) ? float3(0.6323, 1.7188, -0.2583) : float3(-0.2848, 1.2651, -1.0256)))) : ((k &lt; 8) ? ((k &lt; 6) ? float3(-2.8935, 0.8707, -2.8684) : ((k &lt; 7) ? float3(-0.3007, 1.0795, 0.2566) : float3(0.9187, 0.3513, -1.6970))) : ((k &lt; 9) ? float3(0.4181, 1.4234, -0.9948) : ((k &lt; 10) ? float3(-1.9789, 0.0428, 0.4393) : float3(0.0187, 1.8343, 0.1075))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_pelvis
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_pelvis", 11.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_lefthip
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 31.0);	// one of this bone&apos;s 31 interior points
+		p_base = ((k &lt; 15) ? ((k &lt; 7) ? ((k &lt; 3) ? ((k &lt; 1) ? float3(1.9520, -1.0119, 0.6196) : ((k &lt; 2) ? float3(1.6011, 1.0441, -0.1291) : float3(2.6188, -0.9542, -0.7404))) : ((k &lt; 5) ? ((k &lt; 4) ? float3(2.9433, -0.4881, 0.1158) : float3(1.7197, -0.4287, -0.7791)) : ((k &lt; 6) ? float3(3.6162, -0.3361, -0.7428) : float3(3.9492, -0.4290, 1.1788)))) : ((k &lt; 11) ? ((k &lt; 9) ? ((k &lt; 8) ? float3(1.6832, 1.5119, -0.7645) : float3(3.3917, -1.7684, 0.6351)) : ((k &lt; 10) ? float3(1.3244, -0.4641, 0.0431) : float3(3.0058, 0.7536, -1.6768))) : ((k &lt; 13) ? ((k &lt; 12) ? float3(1.0733, -0.0357, 0.9581) : float3(2.6155, -0.7471, -1.2257)) : ((k &lt; 14) ? float3(3.4072, 0.8937, -0.8341) : float3(4.4091, 1.4385, 0.2576))))) : ((k &lt; 23) ? ((k &lt; 19) ? ((k &lt; 17) ? ((k &lt; 16) ? float3(3.6562, 0.6671, 0.6555) : float3(2.3604, 0.2625, -1.0939)) : ((k &lt; 18) ? float3(3.6450, -0.6752, 0.8865) : float3(3.8815, 1.4543, -0.1292))) : ((k &lt; 21) ? ((k &lt; 20) ? float3(1.6051, 0.8032, -0.7666) : float3(2.7609, 0.2762, -0.5338)) : ((k &lt; 22) ? float3(2.3048, 1.2840, -0.9820) : float3(1.3922, 1.0399, -0.2142)))) : ((k &lt; 27) ? ((k &lt; 25) ? ((k &lt; 24) ? float3(2.7788, 0.1125, 1.0981) : float3(3.0339, 0.7597, -1.1011)) : ((k &lt; 26) ? float3(2.6007, -0.7495, -1.0783) : float3(2.0948, -1.3469, 1.5894))) : ((k &lt; 29) ? ((k &lt; 28) ? float3(3.9971, 1.3092, -0.0218) : float3(3.5816, 1.3214, -0.0569)) : ((k &lt; 30) ? float3(4.3969, 1.0807, -0.9122) : float3(4.6407, -2.0673, 0.1486)))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_lefthip
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_lefthip", 31.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_lowerback
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 10.0);	// one of this bone&apos;s 10 interior points
+		p_base = ((k &lt; 5) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(0.9104, -1.5208, -1.0578) : float3(0.9940, 1.1050, 0.0331)) : ((k &lt; 3) ? float3(1.5828, -1.2743, -3.2502) : ((k &lt; 4) ? float3(1.7890, 1.3566, -2.8577) : float3(1.4513, 1.5144, -0.2089)))) : ((k &lt; 7) ? ((k &lt; 6) ? float3(1.6721, -0.4571, -2.7917) : float3(1.3582, -0.4906, 0.0167)) : ((k &lt; 8) ? float3(1.5579, -0.7641, -3.6762) : ((k &lt; 9) ? float3(2.2985, 0.0428, -0.2085) : float3(0.8917, -0.7520, -0.7467))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_lowerback
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_lowerback", 10.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_righthip
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 35.0);	// one of this bone&apos;s 35 interior points
+		p_base = ((k &lt; 17) ? ((k &lt; 8) ? ((k &lt; 4) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(2.3293, 1.3955, -0.6866) : float3(1.5154, -1.2740, 0.2172)) : ((k &lt; 3) ? float3(2.2244, -0.4610, -0.5213) : float3(2.2129, 0.4394, 1.6448))) : ((k &lt; 6) ? ((k &lt; 5) ? float3(3.9040, 1.7978, -0.2441) : float3(3.0635, 1.2073, 0.0438)) : ((k &lt; 7) ? float3(2.1187, 1.3468, 0.7072) : float3(2.7637, 0.8942, 0.7810)))) : ((k &lt; 12) ? ((k &lt; 10) ? ((k &lt; 9) ? float3(4.5501, -0.6543, -0.4489) : float3(2.6773, -0.5612, -0.5381)) : ((k &lt; 11) ? float3(2.0016, -0.9821, -0.5338) : float3(3.5055, 0.3874, -1.1618))) : ((k &lt; 14) ? ((k &lt; 13) ? float3(4.8634, 1.2335, -0.0652) : float3(3.0703, 1.6345, 0.5052)) : ((k &lt; 15) ? float3(3.4476, 1.2088, -0.6473) : ((k &lt; 16) ? float3(1.3246, -0.3269, -0.0776) : float3(3.2748, 0.9268, -0.9973)))))) : ((k &lt; 26) ? ((k &lt; 21) ? ((k &lt; 19) ? ((k &lt; 18) ? float3(2.1876, 1.7598, -0.1196) : float3(2.5343, 0.4458, -1.2128)) : ((k &lt; 20) ? float3(0.8766, -0.2233, -0.6117) : float3(4.3797, 0.6490, -0.6397))) : ((k &lt; 23) ? ((k &lt; 22) ? float3(1.6461, 2.1190, 0.5097) : float3(4.2571, -0.4876, -0.3774)) : ((k &lt; 24) ? float3(3.7717, 0.9067, -0.2834) : ((k &lt; 25) ? float3(2.8581, -1.5065, -0.0769) : float3(3.2339, -0.2127, -0.0111))))) : ((k &lt; 30) ? ((k &lt; 28) ? ((k &lt; 27) ? float3(4.3123, 1.3817, 1.0466) : float3(2.0581, 1.8884, -1.0640)) : ((k &lt; 29) ? float3(2.0906, -1.8811, 0.6282) : float3(1.1417, -0.5197, 0.1138))) : ((k &lt; 32) ? ((k &lt; 31) ? float3(4.8207, 0.7318, 0.2404) : float3(4.7460, 0.7266, -0.7521)) : ((k &lt; 33) ? float3(3.5908, -1.5050, 1.0262) : ((k &lt; 34) ? float3(3.1765, 0.0654, 1.1396) : float3(3.1548, -0.8162, 2.4447))))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_righthip
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_righthip", 35.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_tail01
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 2.0);	// one of this bone&apos;s 2 interior points
+		p_base = ((k &lt; 1) ? float3(0.9565, -0.1329, -0.0701) : float3(0.5930, -0.7542, 0.5680)) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_tail01
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_tail01", 2.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_chest
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 54.0);	// one of this bone&apos;s 54 interior points
+		p_base = ((k &lt; 27) ? ((k &lt; 13) ? ((k &lt; 6) ? ((k &lt; 3) ? ((k &lt; 1) ? float3(1.8925, 0.6384, -0.3983) : ((k &lt; 2) ? float3(0.9851, -0.7887, -1.0455) : float3(0.5606, -0.0347, 0.6424))) : ((k &lt; 4) ? float3(2.5357, 1.4599, -1.7926) : ((k &lt; 5) ? float3(1.6434, -1.4522, -0.7142) : float3(1.3815, 0.8896, -2.5793)))) : ((k &lt; 9) ? ((k &lt; 7) ? float3(0.6839, 2.2007, -1.2107) : ((k &lt; 8) ? float3(1.3573, 0.8830, 0.8646) : float3(2.5445, 0.8637, -2.7261))) : ((k &lt; 11) ? ((k &lt; 10) ? float3(1.8516, -0.5489, -1.5616) : float3(0.5487, 0.6424, 1.1950)) : ((k &lt; 12) ? float3(0.3404, 1.1832, 0.6103) : float3(2.1096, -1.7333, -0.9223))))) : ((k &lt; 20) ? ((k &lt; 16) ? ((k &lt; 14) ? float3(2.5386, -1.0766, -1.4148) : ((k &lt; 15) ? float3(1.8800, -0.5412, -1.7610) : float3(2.1108, -1.4040, -1.6001))) : ((k &lt; 18) ? ((k &lt; 17) ? float3(1.7011, 1.2219, 0.9688) : float3(1.4848, 1.6008, -1.2375)) : ((k &lt; 19) ? float3(0.4670, 1.4432, -0.2807) : float3(1.6486, 0.1785, -1.2873)))) : ((k &lt; 23) ? ((k &lt; 21) ? float3(0.4175, -0.9427, -2.9103) : ((k &lt; 22) ? float3(2.0823, 1.9884, -2.4901) : float3(2.7067, -0.3971, 1.2103))) : ((k &lt; 25) ? ((k &lt; 24) ? float3(2.9856, 0.2507, 0.3822) : float3(2.2151, 1.0755, 0.8533)) : ((k &lt; 26) ? float3(0.7107, 0.9737, -1.5727) : float3(0.0139, 1.8187, -2.4013)))))) : ((k &lt; 40) ? ((k &lt; 33) ? ((k &lt; 30) ? ((k &lt; 28) ? float3(0.2891, 0.9311, 0.7733) : ((k &lt; 29) ? float3(0.6686, -0.8736, 0.6264) : float3(2.6883, 2.0044, -0.4698))) : ((k &lt; 31) ? float3(2.7301, 1.0626, -2.5492) : ((k &lt; 32) ? float3(0.5373, 0.4264, -0.1177) : float3(2.6907, -0.3434, 1.0200)))) : ((k &lt; 36) ? ((k &lt; 34) ? float3(1.6310, -0.1881, 1.3886) : ((k &lt; 35) ? float3(-0.9358, 0.6285, -0.5807) : float3(3.0261, -1.6259, -0.8988))) : ((k &lt; 38) ? ((k &lt; 37) ? float3(2.0270, 1.1384, -1.2794) : float3(1.4537, 0.3563, -1.1946)) : ((k &lt; 39) ? float3(0.8648, -0.8176, -1.2291) : float3(2.1034, -0.3424, -3.8750))))) : ((k &lt; 47) ? ((k &lt; 43) ? ((k &lt; 41) ? float3(2.0996, -1.5374, 0.3652) : ((k &lt; 42) ? float3(2.3527, 1.0940, -2.5910) : float3(1.1645, 1.3712, 0.4814))) : ((k &lt; 45) ? ((k &lt; 44) ? float3(0.3787, 0.7337, -0.7702) : float3(-0.0662, 0.9050, 0.2801)) : ((k &lt; 46) ? float3(1.5669, -1.4445, -2.6336) : float3(0.7210, -0.9604, 0.3072)))) : ((k &lt; 50) ? ((k &lt; 48) ? float3(0.6300, -0.6853, -2.3133) : ((k &lt; 49) ? float3(3.1099, 0.2614, -1.5200) : float3(0.0578, -0.3204, 0.8002))) : ((k &lt; 52) ? ((k &lt; 51) ? float3(1.6554, 0.4548, 0.5614) : float3(2.1392, -0.2593, -3.9935)) : ((k &lt; 53) ? float3(1.9825, -0.5761, -2.9121) : float3(1.0857, 1.1715, -0.0277))))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_chest
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_chest", 54.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_leftknee
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 8.0);	// one of this bone&apos;s 8 interior points
+		p_base = ((k &lt; 4) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(2.8571, 0.0805, -0.3055) : float3(2.8388, 0.3683, 0.5203)) : ((k &lt; 3) ? float3(2.8837, 0.2630, 0.0627) : float3(2.1654, 0.0202, 0.4676))) : ((k &lt; 6) ? ((k &lt; 5) ? float3(1.2980, 0.0901, 0.8466) : float3(3.3825, 0.0743, -0.0285)) : ((k &lt; 7) ? float3(2.5760, 0.1819, 0.6735) : float3(1.1918, -0.5840, -0.0480)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_leftknee
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_leftknee", 8.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_rightknee
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 5.0);	// one of this bone&apos;s 5 interior points
+		p_base = ((k &lt; 2) ? ((k &lt; 1) ? float3(3.1199, 0.3722, 0.2742) : float3(1.5669, -0.4442, 0.2175)) : ((k &lt; 3) ? float3(2.5089, 0.6478, 0.5229) : ((k &lt; 4) ? float3(3.1536, 0.6925, 0.7695) : float3(1.1556, 0.0289, 0.3759)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_rightknee
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_rightknee", 5.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_tail02
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 2.0);	// one of this bone&apos;s 2 interior points
+		p_base = ((k &lt; 1) ? float3(2.9296, -0.4504, -0.2465) : float3(1.0903, -0.1097, -0.4095)) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_tail02
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_tail02", 2.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_chest1
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 34.0);	// one of this bone&apos;s 34 interior points
+		p_base = ((k &lt; 17) ? ((k &lt; 8) ? ((k &lt; 4) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(2.0816, -1.8972, -0.3763) : float3(1.1592, 1.1193, -0.3398)) : ((k &lt; 3) ? float3(2.4147, -0.3292, -4.6262) : float3(1.8116, 1.1543, -2.6007))) : ((k &lt; 6) ? ((k &lt; 5) ? float3(1.0504, -1.0712, -2.6983) : float3(1.4363, -1.0440, 0.2675)) : ((k &lt; 7) ? float3(2.3684, 2.0823, -1.1855) : float3(3.0133, 1.2111, -4.3470)))) : ((k &lt; 12) ? ((k &lt; 10) ? ((k &lt; 9) ? float3(3.6360, -1.0230, -4.0033) : float3(1.8995, 0.8720, -0.8575)) : ((k &lt; 11) ? float3(0.9730, -1.2780, -1.4401) : float3(1.6588, -1.4395, 0.5165))) : ((k &lt; 14) ? ((k &lt; 13) ? float3(0.8387, 2.6515, -1.6461) : float3(1.0726, 2.6709, -1.2441)) : ((k &lt; 15) ? float3(2.4449, -0.6183, -0.9337) : ((k &lt; 16) ? float3(0.7388, -0.8895, -2.2468) : float3(0.4675, 1.7120, -3.4590)))))) : ((k &lt; 25) ? ((k &lt; 21) ? ((k &lt; 19) ? ((k &lt; 18) ? float3(0.6953, 1.6759, -2.3238) : float3(0.5354, 2.0431, -1.1105)) : ((k &lt; 20) ? float3(0.3425, 1.2873, -4.0796) : float3(1.5990, 1.3119, -3.5226))) : ((k &lt; 23) ? ((k &lt; 22) ? float3(2.1282, -0.8239, -0.8120) : float3(1.1053, -1.0456, -0.0473)) : ((k &lt; 24) ? float3(2.0652, -0.3369, -4.4024) : float3(0.5121, 0.6993, -3.5053)))) : ((k &lt; 29) ? ((k &lt; 27) ? ((k &lt; 26) ? float3(2.1805, 1.6414, -1.2073) : float3(3.5800, 1.4483, -3.7483)) : ((k &lt; 28) ? float3(3.8646, -0.1672, -3.4819) : float3(3.3108, 0.2526, -2.5462))) : ((k &lt; 31) ? ((k &lt; 30) ? float3(2.0351, 0.9464, -3.6013) : float3(3.0236, 0.4068, -1.9026)) : ((k &lt; 32) ? float3(1.5058, 0.3731, -3.9456) : ((k &lt; 33) ? float3(3.2718, 0.8534, -4.5561) : float3(0.5741, 1.6873, -3.8189))))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_chest1
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_chest1", 34.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_leftankle
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 7.0);	// one of this bone&apos;s 7 interior points
+		p_base = ((k &lt; 3) ? ((k &lt; 1) ? float3(1.3325, -0.3718, 0.2729) : ((k &lt; 2) ? float3(0.8669, 0.3869, 0.1091) : float3(1.7012, -0.3157, 0.2424))) : ((k &lt; 5) ? ((k &lt; 4) ? float3(-0.5493, 0.1549, -0.2553) : float3(1.6848, 0.5459, 0.0971)) : ((k &lt; 6) ? float3(1.2932, 0.0248, 0.0695) : float3(0.8906, 0.8475, 0.2388)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_leftankle
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_leftankle", 7.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_rightankle
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 7.0);	// one of this bone&apos;s 7 interior points
+		p_base = ((k &lt; 3) ? ((k &lt; 1) ? float3(0.9735, 0.2388, 0.5754) : ((k &lt; 2) ? float3(0.7435, 0.9122, -0.4163) : float3(1.7051, 0.4472, 0.0257))) : ((k &lt; 5) ? ((k &lt; 4) ? float3(-0.5404, -0.1730, -0.6124) : float3(0.6709, -0.5276, 0.3974)) : ((k &lt; 6) ? float3(-1.0370, -0.1268, -0.3050) : float3(1.8249, 0.8119, 0.6365)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_rightankle
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_rightankle", 7.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_tail03
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 1.0);	// one of this bone&apos;s 1 interior points
+		p_base = float3(1.3775, 0.3606, -0.0151) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_tail03
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_tail03", 1.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_chest2
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 46.0);	// one of this bone&apos;s 46 interior points
+		p_base = ((k &lt; 23) ? ((k &lt; 11) ? ((k &lt; 5) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(0.8411, -1.7328, -3.6962) : float3(1.1263, -1.0722, -1.8359)) : ((k &lt; 3) ? float3(1.6202, -0.1792, 1.1955) : ((k &lt; 4) ? float3(1.4144, 1.0909, 1.1813) : float3(0.3933, 0.5192, -0.9356)))) : ((k &lt; 8) ? ((k &lt; 6) ? float3(-1.1116, 0.3836, 0.7971) : ((k &lt; 7) ? float3(0.2012, 2.7052, -2.6054) : float3(0.3655, 1.3525, -1.5943))) : ((k &lt; 9) ? float3(1.7697, 2.4385, -2.3597) : ((k &lt; 10) ? float3(0.2613, -0.3321, 0.2534) : float3(0.1888, -0.5783, 0.3528))))) : ((k &lt; 17) ? ((k &lt; 14) ? ((k &lt; 12) ? float3(1.2868, -0.6300, -0.6824) : ((k &lt; 13) ? float3(0.7521, 2.4915, -2.7259) : float3(0.5856, -1.7675, 0.2125))) : ((k &lt; 15) ? float3(1.4235, 1.7897, -3.3635) : ((k &lt; 16) ? float3(0.8739, -1.3879, -2.7766) : float3(0.3579, -2.2062, -2.9090)))) : ((k &lt; 20) ? ((k &lt; 18) ? float3(2.0110, 2.6436, -2.2127) : ((k &lt; 19) ? float3(0.4524, -1.7260, -2.5354) : float3(1.6806, 1.6495, -3.5875))) : ((k &lt; 21) ? float3(0.3233, -1.1794, 1.0094) : ((k &lt; 22) ? float3(1.4629, 1.8922, -1.4334) : float3(1.9016, -0.5722, -1.3628)))))) : ((k &lt; 34) ? ((k &lt; 28) ? ((k &lt; 25) ? ((k &lt; 24) ? float3(2.4020, 1.7262, -3.4496) : float3(1.4331, -0.9689, -2.2094)) : ((k &lt; 26) ? float3(0.9318, 0.1599, -1.2930) : ((k &lt; 27) ? float3(0.9458, 1.5226, 0.5595) : float3(-0.2890, -1.2341, -2.0746)))) : ((k &lt; 31) ? ((k &lt; 29) ? float3(0.5439, 0.5359, -1.9469) : ((k &lt; 30) ? float3(2.0829, 2.5771, -2.8498) : float3(2.2715, -1.0830, -4.1999))) : ((k &lt; 32) ? float3(0.2241, -1.9901, -2.3526) : ((k &lt; 33) ? float3(1.1708, -1.7209, -0.3741) : float3(0.2746, -1.3646, 1.1923))))) : ((k &lt; 40) ? ((k &lt; 37) ? ((k &lt; 35) ? float3(1.0992, 1.9767, -0.4562) : ((k &lt; 36) ? float3(1.1522, 0.2614, 0.6806) : float3(1.5996, 2.0095, -2.1546))) : ((k &lt; 38) ? float3(0.8661, -2.4546, -0.9878) : ((k &lt; 39) ? float3(1.3242, -1.2993, -3.7557) : float3(-0.3624, 1.0527, 1.4364)))) : ((k &lt; 43) ? ((k &lt; 41) ? float3(0.5805, 2.4168, -2.0754) : ((k &lt; 42) ? float3(1.2816, 0.7930, -0.1413) : float3(1.3482, 0.0339, 1.5343))) : ((k &lt; 44) ? float3(1.7734, 1.5262, -3.0004) : ((k &lt; 45) ? float3(1.2327, -0.6339, 0.6234) : float3(1.7277, 2.3183, -0.6920))))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_chest2
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_chest2", 46.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_lefttoe01
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 1.0);	// one of this bone&apos;s 1 interior points
+		p_base = float3(0.7488, -1.5777, -0.4441) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_lefttoe01
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_lefttoe01", 1.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_righttoe01
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 6.0);	// one of this bone&apos;s 6 interior points
+		p_base = ((k &lt; 3) ? ((k &lt; 1) ? float3(0.4372, -1.0422, -0.2630) : ((k &lt; 2) ? float3(-0.5251, -0.0043, -0.6984) : float3(0.6864, -1.3925, 0.1341))) : ((k &lt; 4) ? float3(0.2367, -0.2899, -0.7295) : ((k &lt; 5) ? float3(0.8540, -0.7603, -0.7154) : float3(0.5219, 0.6068, -0.8381)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_righttoe01
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_righttoe01", 6.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_spine01
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 10.0);	// one of this bone&apos;s 10 interior points
+		p_base = ((k &lt; 5) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(-0.3305, -2.9266, -2.6609) : float3(-1.4164, -1.7923, -2.5682)) : ((k &lt; 3) ? float3(-0.9626, -1.4788, -3.7501) : ((k &lt; 4) ? float3(-0.2807, -2.7608, -2.0784) : float3(1.1451, 0.5806, 0.9039)))) : ((k &lt; 7) ? ((k &lt; 6) ? float3(1.6158, -3.5487, -2.4064) : float3(-0.8273, -1.6452, -2.7401)) : ((k &lt; 8) ? float3(-2.2537, -2.3788, -3.1376) : ((k &lt; 9) ? float3(-1.3062, -3.1815, -2.4578) : float3(0.5887, -1.7957, -2.1803))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_spine01
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_spine01", 10.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_tail05
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 1.0);	// one of this bone&apos;s 1 interior points
+		p_base = float3(1.1454, -0.4441, -0.1532) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_tail05
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_tail05", 1.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_leftcollar
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 29.0);	// one of this bone&apos;s 29 interior points
+		p_base = ((k &lt; 14) ? ((k &lt; 7) ? ((k &lt; 3) ? ((k &lt; 1) ? float3(2.0931, 0.4838, -1.9851) : ((k &lt; 2) ? float3(0.5429, 0.3359, -0.9885) : float3(1.2637, 0.9758, -1.9640))) : ((k &lt; 5) ? ((k &lt; 4) ? float3(1.9253, -0.5170, -0.6637) : float3(0.3784, 0.2325, -1.5355)) : ((k &lt; 6) ? float3(2.0632, 1.4504, -1.0006) : float3(-0.7996, 1.4827, -0.5782)))) : ((k &lt; 10) ? ((k &lt; 8) ? float3(0.1898, -0.4818, 0.3965) : ((k &lt; 9) ? float3(1.2144, 0.8099, -1.8823) : float3(2.2304, -0.1410, -1.0292))) : ((k &lt; 12) ? ((k &lt; 11) ? float3(1.6750, -0.3306, -0.1727) : float3(2.4228, -0.5165, -0.8520)) : ((k &lt; 13) ? float3(-0.7254, 1.5633, -0.9036) : float3(2.8516, 0.4293, -1.2488))))) : ((k &lt; 21) ? ((k &lt; 17) ? ((k &lt; 15) ? float3(1.0340, 2.7127, -0.8928) : ((k &lt; 16) ? float3(2.4234, 1.3372, -0.4027) : float3(-0.0632, 0.7187, -1.7164))) : ((k &lt; 19) ? ((k &lt; 18) ? float3(-0.2469, 0.5112, -1.1188) : float3(1.0023, 1.7123, -3.0254)) : ((k &lt; 20) ? float3(2.4142, 0.9321, 0.2728) : float3(2.2987, 0.2688, 0.3107)))) : ((k &lt; 25) ? ((k &lt; 23) ? ((k &lt; 22) ? float3(2.4655, -0.5093, -1.0039) : float3(1.2855, 1.3159, -2.2650)) : ((k &lt; 24) ? float3(2.1378, -0.7909, -0.4244) : float3(2.4501, 0.0757, 0.5159))) : ((k &lt; 27) ? ((k &lt; 26) ? float3(0.5172, 1.6638, -1.2117) : float3(0.2161, 0.4094, -1.4718)) : ((k &lt; 28) ? float3(1.9871, 0.0577, 0.5586) : float3(0.0796, -0.5772, -0.3352)))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_leftcollar
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_leftcollar", 29.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_neck
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 40.0);	// one of this bone&apos;s 40 interior points
+		p_base = ((k &lt; 20) ? ((k &lt; 10) ? ((k &lt; 5) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(1.5012, -0.1200, -0.2012) : float3(1.4895, 0.4265, -1.2844)) : ((k &lt; 3) ? float3(-0.4584, -0.3847, -1.4155) : ((k &lt; 4) ? float3(0.0271, 0.3381, -0.2633) : float3(1.1352, -0.2679, 0.7564)))) : ((k &lt; 7) ? ((k &lt; 6) ? float3(0.1246, 0.1517, 0.3447) : float3(1.3085, -1.8890, -2.3405)) : ((k &lt; 8) ? float3(0.6022, -1.5148, -2.8126) : ((k &lt; 9) ? float3(0.3460, -2.0806, -2.4407) : float3(0.7837, -0.5014, -3.4255))))) : ((k &lt; 15) ? ((k &lt; 12) ? ((k &lt; 11) ? float3(1.5746, 0.1631, -0.8600) : float3(1.5022, -0.1543, 1.2911)) : ((k &lt; 13) ? float3(2.1621, -0.9458, -0.2842) : ((k &lt; 14) ? float3(1.5825, 0.3968, 0.2992) : float3(1.5337, 0.5274, -0.5973)))) : ((k &lt; 17) ? ((k &lt; 16) ? float3(0.9403, -0.1708, -3.5252) : float3(1.4087, 1.3396, -1.9370)) : ((k &lt; 18) ? float3(-0.2644, -2.1380, -3.0897) : ((k &lt; 19) ? float3(2.3123, -2.0966, -0.5814) : float3(-0.4725, -0.1100, -0.2411)))))) : ((k &lt; 30) ? ((k &lt; 25) ? ((k &lt; 22) ? ((k &lt; 21) ? float3(-1.4453, -2.8810, -3.5920) : float3(2.4163, 1.4859, -0.0731)) : ((k &lt; 23) ? float3(0.8115, -0.3271, -3.3698) : ((k &lt; 24) ? float3(0.9469, -0.6851, -3.3320) : float3(1.9646, 0.0218, 1.4292)))) : ((k &lt; 27) ? ((k &lt; 26) ? float3(1.6136, 0.2871, 0.9512) : float3(0.6053, 1.0352, 1.2724)) : ((k &lt; 28) ? float3(1.7811, 0.2181, 1.4422) : ((k &lt; 29) ? float3(0.0017, 0.4249, 0.4614) : float3(2.2441, 1.1625, -1.8598))))) : ((k &lt; 35) ? ((k &lt; 32) ? ((k &lt; 31) ? float3(2.2181, -1.5521, 0.6386) : float3(1.7042, -2.1660, -1.4185)) : ((k &lt; 33) ? float3(0.7339, 0.8612, 0.6545) : ((k &lt; 34) ? float3(1.8556, 1.4053, -0.3945) : float3(0.4768, -0.6832, -2.6146)))) : ((k &lt; 37) ? ((k &lt; 36) ? float3(1.0802, -0.0618, 1.2226) : float3(1.0260, -0.6590, -0.8697)) : ((k &lt; 38) ? float3(-0.2255, 0.1984, 0.5769) : ((k &lt; 39) ? float3(0.4295, -0.6513, -1.7510) : float3(-0.1496, -1.2826, -3.0939))))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_neck
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_neck", 40.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_rightcollar
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 17.0);	// one of this bone&apos;s 17 interior points
+		p_base = ((k &lt; 8) ? ((k &lt; 4) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(-0.1110, 1.5496, -1.2302) : float3(1.6995, -0.3918, 1.2812)) : ((k &lt; 3) ? float3(-0.1802, -0.2113, 0.0292) : float3(1.3974, 0.8593, 0.5886))) : ((k &lt; 6) ? ((k &lt; 5) ? float3(-0.0744, 1.4495, -1.0500) : float3(2.5930, 0.5998, -0.4594)) : ((k &lt; 7) ? float3(2.3776, -0.2393, -0.2437) : float3(1.3043, 1.8059, 0.2983)))) : ((k &lt; 12) ? ((k &lt; 10) ? ((k &lt; 9) ? float3(1.5664, 0.0249, -0.1008) : float3(2.4101, 0.5587, -0.5389)) : ((k &lt; 11) ? float3(-0.1303, 1.6162, -1.3844) : float3(2.4337, 0.2575, -0.2432))) : ((k &lt; 14) ? ((k &lt; 13) ? float3(1.6131, -0.3392, -0.9381) : float3(0.4822, 2.5754, -1.3118)) : ((k &lt; 15) ? float3(0.8772, -0.4639, 1.0438) : ((k &lt; 16) ? float3(-0.1510, -0.4809, 0.4618) : float3(0.0022, 0.3745, -0.9836)))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_rightcollar
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_rightcollar", 17.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_tail06
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 8.0);	// one of this bone&apos;s 8 interior points
+		p_base = ((k &lt; 4) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(0.6112, -0.0882, 0.6705) : float3(0.4379, -0.3501, 0.0692)) : ((k &lt; 3) ? float3(1.9919, 0.3177, 0.0319) : float3(1.5435, 0.1788, 0.4579))) : ((k &lt; 6) ? ((k &lt; 5) ? float3(0.8483, 0.8307, -0.2269) : float3(0.8522, 0.8917, -0.3029)) : ((k &lt; 7) ? float3(1.5546, 0.8227, 0.7185) : float3(2.1199, 0.3065, 0.3736)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_tail06
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_tail06", 8.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_leftshoulder
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 12.0);	// one of this bone&apos;s 12 interior points
+		p_base = ((k &lt; 6) ? ((k &lt; 3) ? ((k &lt; 1) ? float3(3.0559, 1.0144, -0.3175) : ((k &lt; 2) ? float3(1.9261, 1.4253, -0.3557) : float3(2.5385, 1.5576, 0.8205))) : ((k &lt; 4) ? float3(1.2429, -0.4527, -0.4045) : ((k &lt; 5) ? float3(1.1529, 0.3076, -0.3596) : float3(2.5091, 0.4608, 0.3676)))) : ((k &lt; 9) ? ((k &lt; 7) ? float3(3.9571, 0.1724, 0.7511) : ((k &lt; 8) ? float3(2.5729, -0.9929, 0.1599) : float3(1.6152, -0.5917, -0.1297))) : ((k &lt; 10) ? float3(3.0190, 0.6557, -0.0571) : ((k &lt; 11) ? float3(1.4094, -0.6721, -0.0821) : float3(2.7330, 0.8898, 0.4187))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_leftshoulder
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_leftshoulder", 12.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_neck01
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 26.0);	// one of this bone&apos;s 26 interior points
+		p_base = ((k &lt; 13) ? ((k &lt; 6) ? ((k &lt; 3) ? ((k &lt; 1) ? float3(0.6252, -2.0016, -0.5898) : ((k &lt; 2) ? float3(0.0521, -0.1643, -2.1501) : float3(0.9121, -2.1719, 0.1732))) : ((k &lt; 4) ? float3(0.0122, 1.4309, 0.1445) : ((k &lt; 5) ? float3(-0.3300, -2.1432, -0.9736) : float3(0.4463, 1.2932, 0.1012)))) : ((k &lt; 9) ? ((k &lt; 7) ? float3(1.0944, 1.4323, -0.9406) : ((k &lt; 8) ? float3(0.5357, -0.3523, -2.2687) : float3(0.5454, 0.4296, 1.0614))) : ((k &lt; 11) ? ((k &lt; 10) ? float3(1.3959, 0.9758, -1.0872) : float3(1.0791, 0.9094, -1.4773)) : ((k &lt; 12) ? float3(-0.6484, -1.3214, -2.0698) : float3(2.5360, 0.0942, 0.6540))))) : ((k &lt; 19) ? ((k &lt; 16) ? ((k &lt; 14) ? float3(2.2439, -0.1432, 0.1964) : ((k &lt; 15) ? float3(2.1220, -0.8059, 0.7685) : float3(2.0977, -0.1611, 0.8948))) : ((k &lt; 17) ? float3(0.6683, -0.9744, -2.4544) : ((k &lt; 18) ? float3(0.6699, 1.4066, -0.8755) : float3(1.0817, 0.0458, -0.4836)))) : ((k &lt; 22) ? ((k &lt; 20) ? float3(1.2230, -1.5527, 0.3096) : ((k &lt; 21) ? float3(2.3037, -0.9094, 1.2486) : float3(-0.1576, -1.3550, -0.5986))) : ((k &lt; 24) ? ((k &lt; 23) ? float3(0.2439, -1.1308, -1.4406) : float3(-0.2951, -1.0583, -1.7273)) : ((k &lt; 25) ? float3(1.3463, -0.9805, 0.1835) : float3(0.5769, -0.2445, -2.8581)))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_neck01
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_neck01", 26.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_rightshoulder
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 21.0);	// one of this bone&apos;s 21 interior points
+		p_base = ((k &lt; 10) ? ((k &lt; 5) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(2.0998, 0.3349, 1.3950) : float3(3.5804, 1.1667, -0.0485)) : ((k &lt; 3) ? float3(1.6106, 1.9005, 0.4078) : ((k &lt; 4) ? float3(2.0377, 1.7018, 0.8347) : float3(3.0306, 1.8393, 1.3199)))) : ((k &lt; 7) ? ((k &lt; 6) ? float3(0.2780, -0.4919, 0.0997) : float3(1.4165, -0.3394, -0.5956)) : ((k &lt; 8) ? float3(0.7818, 0.0379, 0.1625) : ((k &lt; 9) ? float3(2.4014, 0.5281, -0.3541) : float3(1.8149, 1.3127, 0.6145))))) : ((k &lt; 15) ? ((k &lt; 12) ? ((k &lt; 11) ? float3(2.0736, 0.9425, -0.5471) : float3(3.3440, 0.4659, -0.2553)) : ((k &lt; 13) ? float3(0.7367, 0.0047, 1.1763) : ((k &lt; 14) ? float3(1.7214, 0.6795, 0.5102) : float3(1.8134, 0.4710, 2.0515)))) : ((k &lt; 18) ? ((k &lt; 16) ? float3(1.1285, -0.3810, 0.6879) : ((k &lt; 17) ? float3(1.1704, 0.4572, -0.2291) : float3(1.5382, 1.3988, 0.4016))) : ((k &lt; 19) ? float3(1.4724, 0.9868, 1.4282) : ((k &lt; 20) ? float3(1.8011, -0.6402, -0.8893) : float3(1.7759, 0.4831, 1.9727)))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_rightshoulder
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_rightshoulder", 21.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_head
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 18.0);	// one of this bone&apos;s 18 interior points
+		p_base = ((k &lt; 9) ? ((k &lt; 4) ? ((k &lt; 2) ? ((k &lt; 1) ? float3(0.1452, 0.0367, 1.1537) : float3(2.2831, 0.2137, -0.3811)) : ((k &lt; 3) ? float3(1.0896, 1.2628, 0.8054) : float3(1.4351, -1.0399, -2.4015))) : ((k &lt; 6) ? ((k &lt; 5) ? float3(0.7502, -1.0815, -2.2455) : float3(0.4341, -1.0567, 0.7018)) : ((k &lt; 7) ? float3(2.4325, 0.0699, 0.3995) : ((k &lt; 8) ? float3(2.0826, 1.0049, -0.5399) : float3(0.5965, 1.1256, 0.2991))))) : ((k &lt; 13) ? ((k &lt; 11) ? ((k &lt; 10) ? float3(0.9658, 1.1472, 0.2101) : float3(1.9111, 1.0859, -0.6921)) : ((k &lt; 12) ? float3(1.2709, 0.4851, 0.0640) : float3(1.5485, -1.3894, -1.1484))) : ((k &lt; 15) ? ((k &lt; 14) ? float3(0.4412, -1.4200, -1.1260) : float3(0.7296, -1.2551, -1.9789)) : ((k &lt; 16) ? float3(1.7635, -0.9111, -2.6047) : ((k &lt; 17) ? float3(0.4324, 1.4697, 1.2459) : float3(0.1437, 0.7814, 1.1960)))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_head
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_head", 18.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_leftelbow
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 12.0);	// one of this bone&apos;s 12 interior points
+		p_base = ((k &lt; 6) ? ((k &lt; 3) ? ((k &lt; 1) ? float3(0.7957, 0.2921, 0.1995) : ((k &lt; 2) ? float3(0.5421, -0.5158, -0.2697) : float3(2.4523, 0.1201, -0.6940))) : ((k &lt; 4) ? float3(1.7366, -0.1324, -0.2867) : ((k &lt; 5) ? float3(0.6670, -0.5209, -0.4956) : float3(3.1104, 0.2535, 0.7759)))) : ((k &lt; 9) ? ((k &lt; 7) ? float3(-1.0354, 1.4013, -2.0314) : ((k &lt; 8) ? float3(1.5671, -0.5191, -0.6585) : float3(3.7489, -0.1169, 0.3725))) : ((k &lt; 10) ? float3(1.5025, 0.5730, -0.0027) : ((k &lt; 11) ? float3(0.5952, -0.9589, -0.5703) : float3(-0.3745, 1.4430, -1.0459))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_leftelbow
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_leftelbow", 12.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_rightelbow
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 15.0);	// one of this bone&apos;s 15 interior points
+		p_base = ((k &lt; 7) ? ((k &lt; 3) ? ((k &lt; 1) ? float3(1.6695, -0.1100, 0.6200) : ((k &lt; 2) ? float3(3.1499, -0.4628, -0.5252) : float3(1.6787, 0.1741, 0.5459))) : ((k &lt; 5) ? ((k &lt; 4) ? float3(-0.0098, 1.7366, 0.9895) : float3(0.8345, -0.7042, 0.6958)) : ((k &lt; 6) ? float3(1.6602, -0.4360, 0.0771) : float3(-0.4901, -1.3360, 0.3764)))) : ((k &lt; 11) ? ((k &lt; 9) ? ((k &lt; 8) ? float3(-0.7279, 1.5243, 0.8210) : float3(-0.3728, 2.3150, 1.1015)) : ((k &lt; 10) ? float3(1.1760, -0.6072, 0.5724) : float3(-0.2554, 1.5615, 1.4134))) : ((k &lt; 13) ? ((k &lt; 12) ? float3(-1.3271, 1.7428, 1.3733) : float3(3.2198, -0.1290, -0.1804)) : ((k &lt; 14) ? float3(1.1321, -0.4125, 0.8693) : float3(3.3583, -0.1793, -0.5788))))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_rightelbow
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_rightelbow", 15.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_rightwrist
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 7.0);	// one of this bone&apos;s 7 interior points
+		p_base = ((k &lt; 3) ? ((k &lt; 1) ? float3(0.7377, 0.2937, -0.3746) : ((k &lt; 2) ? float3(0.7933, -0.2478, -0.4409) : float3(0.7271, -0.1602, 0.5249))) : ((k &lt; 5) ? ((k &lt; 4) ? float3(1.1344, 0.0696, -0.8987) : float3(0.9741, -0.0384, 0.4457)) : ((k &lt; 6) ? float3(0.5261, -0.2506, -0.0664) : float3(0.5501, 0.3822, 0.7607)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_rightwrist
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_rightwrist", 7.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_jaw02
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 3.0);	// one of this bone&apos;s 3 interior points
+		p_base = ((k &lt; 1) ? float3(1.5527, 0.5867, 0.4586) : ((k &lt; 2) ? float3(1.7929, -0.7238, -0.5963) : float3(1.1552, -0.5716, -1.0005))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_jaw02
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_jaw02", 3.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_leftfinger01
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 1.0);	// one of this bone&apos;s 1 interior points
+		p_base = float3(1.2250, -0.4222, -0.6047) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_leftfinger01
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_leftfinger01", 1.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_rightfinger01
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 5.0);	// one of this bone&apos;s 5 interior points
+		p_base = ((k &lt; 2) ? ((k &lt; 1) ? float3(0.2152, 0.5131, -0.9357) : float3(0.9066, -0.1673, -0.8528)) : ((k &lt; 3) ? float3(0.3797, 0.1168, -0.1108) : ((k &lt; 4) ? float3(1.0918, 0.0530, -0.2810) : float3(1.0361, -1.1153, -0.5202)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_rightfinger01
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_rightfinger01", 5.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+
+emitter SL_tongue01
+{
+	varying float3 p_base;
+	varying number p_age;
+	varying number p_inv_life;
+	varying number p_phase;
+	varying number p_size;
+	SPAWN(number in_time = 0)
+	{
+		local number k = floor(random() * 7.0);	// one of this bone&apos;s 7 interior points
+		p_base = ((k &lt; 3) ? ((k &lt; 1) ? float3(-0.5521, -0.5864, 0.3046) : ((k &lt; 2) ? float3(-0.7702, 0.3744, 0.1077) : float3(-0.1290, -0.6519, 0.6238))) : ((k &lt; 5) ? ((k &lt; 4) ? float3(-0.7674, 0.3753, -0.1423) : float3(-0.3448, 0.7853, 0.0285)) : ((k &lt; 6) ? float3(0.0086, -0.3517, 0.0418) : float3(-0.6634, 0.3220, -0.7241)))) + float3(random() - 0.5, random() - 0.5, random() - 0.5) * (2 * SD_JITTER);
+		p_inv_life = 1.0 / mix(SD_LIFE_MIN, SD_LIFE_MAX, random());
+		p_age = 0;
+		p_phase = random() * 6.2831853;
+		p_size = mix(0.7, 1.3, random());
+	}
+	SIM
+	{
+		p_age = p_age + delta_time() * p_inv_life;
+		kill(p_age &gt; 1);
+	}
+	property geometry_type = quad_rotated;
+	property material_type = quad_unlit_distorted;
+	property blend_type = alpha;
+	property shadows = false;	// FireFX default is true: puffs/ribbons cast shadows
+	property normalmap = true;
+	property distorted = true;
+	property material_lighting = directional;
+	RENDER
+	{
+		local number sw = p_phase + p_age * SD_SWIRL_TURNS * 6.2831853;
+		local float3 swirl = float3(cos(sw), sin(sw), sin(sw * 0.7 + p_phase) * 0.5) * SD_SWIRL_RADIUS;
+		local number a = 4 * p_age * (1 - p_age);
+		local number t = p_phase + p_age / p_inv_life;
+		export("POSITION", (p_base + swirl) * SD_SCALE);	// bone-local: rides the animation
+		export("SCALE", point2d(1, 1) * (SD_SIZE * p_size * (1 + SD_GROW * p_age) * SD_SCALE));
+		export("TANGENT", float3(-sin(sw), cos(sw), 0));
+		export("ROTATION", t * SD_SPIN);
+		export("BASECOLOR_UV", float4(0, 0, 1, 1));
+		export("NORMALMAP_UV", float4(0, 0, 1, 1));
+		export("DISTORTION_UV", float4(0, 0, 1, 1) * 0.5 + float4(t, t, t, t) * -0.15);
+		export("DISTORTION_SCALE", SD_DISTORT);
+		export("COLOR", SD_COLOR * (a * SD_ALPHA));	// premultiplied
+		export("ALPHA", a * SD_ALPHA);
+	}
+}
+
+group SLG_tongue01
+{
+	varying number p_time;
+	SPAWN
+	{
+		p_time = 0;
+	}
+	SIM
+	{
+		p_time = p_time + delta_time();
+		emit_rate("SL_tongue01", 7.0 * SD_RATE * SD_DENSITY) { export("in_time", p_time); };
+	}
+}
+'/>
+	</00005288F65256BD>
+</Instances>

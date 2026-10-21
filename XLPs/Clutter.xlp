@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="Landmark"/>
+	<m_PackageName text="environment/clutter"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="RES_Body_01"/>
+			<m_ObjectName text="RES_Body_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_Body_02"/>
+			<m_ObjectName text="RES_Body_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_Body_03"/>
+			<m_ObjectName text="RES_Body_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_Body_04"/>
+			<m_ObjectName text="RES_Body_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_FIRE_01"/>
+			<m_ObjectName text="RES_FIRE_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_FIRE_02"/>
+			<m_ObjectName text="RES_FIRE_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_FIRE_03"/>
+			<m_ObjectName text="RES_FIRE_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_FIRE_04"/>
+			<m_ObjectName text="RES_FIRE_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_Lime_Green_01"/>
+			<m_ObjectName text="RES_Lime_Green_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_Lime_Green_02"/>
+			<m_ObjectName text="RES_Lime_Green_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_Lime_Green_03"/>
+			<m_ObjectName text="RES_Lime_Green_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_Lime_Green_04"/>
+			<m_ObjectName text="RES_Lime_Green_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_PALEBLUE_01"/>
+			<m_ObjectName text="RES_PALEBLUE_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_PALEBLUE_02"/>
+			<m_ObjectName text="RES_PALEBLUE_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_PALEBLUE_03"/>
+			<m_ObjectName text="RES_PALEBLUE_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_PALEBLUE_04"/>
+			<m_ObjectName text="RES_PALEBLUE_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_PALEBLUE_TRANSPARENT_01"/>
+			<m_ObjectName text="RES_PALEBLUE_TRANSPARENT_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_PALEBLUE_TRANSPARENT_02"/>
+			<m_ObjectName text="RES_PALEBLUE_TRANSPARENT_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_PALEBLUE_TRANSPARENT_03"/>
+			<m_ObjectName text="RES_PALEBLUE_TRANSPARENT_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_PALEBLUE_TRANSPARENT_04"/>
+			<m_ObjectName text="RES_PALEBLUE_TRANSPARENT_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_WASHED_01"/>
+			<m_ObjectName text="RES_WASHED_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_WASHED_02"/>
+			<m_ObjectName text="RES_WASHED_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_WASHED_03"/>
+			<m_ObjectName text="RES_WASHED_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_WASHED_04"/>
+			<m_ObjectName text="RES_WASHED_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_DEEPRED_01"/>
+			<m_ObjectName text="RES_DEEPRED_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_DEEPRED_02"/>
+			<m_ObjectName text="RES_DEEPRED_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_DEEPRED_03"/>
+			<m_ObjectName text="RES_DEEPRED_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_DEEPRED_04"/>
+			<m_ObjectName text="RES_DEEPRED_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_BLACK_01"/>
+			<m_ObjectName text="RES_BLACK_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_BLACK_02"/>
+			<m_ObjectName text="RES_BLACK_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_BLACK_03"/>
+			<m_ObjectName text="RES_BLACK_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_BLACK_04"/>
+			<m_ObjectName text="RES_BLACK_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_WEAKPURPLE_01"/>
+			<m_ObjectName text="RES_WEAKPURPLE_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_WEAKPURPLE_02"/>
+			<m_ObjectName text="RES_WEAKPURPLE_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_WEAKPURPLE_03"/>
+			<m_ObjectName text="RES_WEAKPURPLE_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_WEAKPURPLE_04"/>
+			<m_ObjectName text="RES_WEAKPURPLE_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_FULLGREY_01"/>
+			<m_ObjectName text="RES_FULLGREY_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_FULLGREY_02"/>
+			<m_ObjectName text="RES_FULLGREY_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_FULLGREY_03"/>
+			<m_ObjectName text="RES_FULLGREY_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_FULLGREY_04"/>
+			<m_ObjectName text="RES_FULLGREY_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_EARTH_01"/>
+			<m_ObjectName text="RES_EARTH_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_EARTH_02"/>
+			<m_ObjectName text="RES_EARTH_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_EARTH_03"/>
+			<m_ObjectName text="RES_EARTH_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_EARTH_04"/>
+			<m_ObjectName text="RES_EARTH_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_SPIRIT_01"/>
+			<m_ObjectName text="RES_SPIRIT_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_SPIRIT_02"/>
+			<m_ObjectName text="RES_SPIRIT_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_SPIRIT_03"/>
+			<m_ObjectName text="RES_SPIRIT_03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RES_SPIRIT_04"/>
+			<m_ObjectName text="RES_SPIRIT_04"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Feature_BurningSands_Decal_001"/>
+			<m_ObjectName text="Feature_BurningSand_Decal_001"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Feature_BurningSands_Decal_002"/>
+			<m_ObjectName text="Feature_BurningSands_Decal_002"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Feature_BurningSands_Decal_003"/>
+			<m_ObjectName text="Feature_BurningSands_Decal_003"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Feature_BurningSands_Decal_004"/>
+			<m_ObjectName text="Feature_BurningSands_Decal_004"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Feature_FieldsOfPerdition_Decal_001"/>
+			<m_ObjectName text="Feature_FieldsOfPerdition_Decal_001"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Feature_BrokenLands_Decal_001"/>
+			<m_ObjectName text="Feature_BrokenLands_Decal_001"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>LINUX</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..FireFXInstance>
+	<m_CookParams>
+		<m_Values>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>MATERIAL</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Rain_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="Rain_Particles"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Cloud_Material"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="FX_CloudTrails"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="Hurricane_Cat4"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Hurricane_Material_Unlit"/>
+						<m_eObjectType>MATERIAL</m_eObjectType>
+						<m_ParamName text="FX_CloudTrails_Center"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="EmitterMaterials"/>
+			</Element>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>GEOMETRY</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="Rain_Particles"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="FX_CloudTrails"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="Hurricane_Cat4"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>GEOMETRY</m_eObjectType>
+						<m_ParamName text="FX_CloudTrails_Center"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="EmitterGeometries"/>
+			</Element>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="FX_CloudTrails"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="FX_CloudTrails_Center"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="Rain_Particles"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text=""/>
+						<m_eObjectType>ANALYTIC_LIGHT</m_eObjectType>
+						<m_ParamName text="Hurricane_Cat4"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="EmitterLights"/>
+			</Element>
+		</m_Values>
+	</m_CookParams>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_dataPtr>00000140017835C0</m_dataPtr>
+	<m_ClassName text="FireFXScript"/>
+	<m_DataFiles>
+		<Element>
+			<m_ID text="FireFX"/>
+			<m_RelativePath text="FireFX_WaterElemental_slth.FireFX"/>
+		</Element>
+	</m_DataFiles>
+	<m_Name text="FireFX_WaterElemental_slth"/>
+	<m_Description text=""/>
+	<m_Tags/>
+</AssetObjects..FireFXInstance>
+<Instances>
+	<00000140017835C0 Type="AssetObjects::FireFXScriptData">
+		<m_script text='#include "Noise.FXH"
+#include "EulerRotations.FXH"
+#include "Spline.FXH"
+#include "Sampling.FXH"
+#include "Math.FXH"
+#include "Tweening.FXH"
+#include "Transform.FXH"
+#include "Flipbook.FXH"
+
+#define PI 3.14159265359
+#define WATER_VISCOSITY 1.2
+#define MINIMUM_SIZE_FACTOR 0.002
+#define BODY_HEIGHT 2.0
+#define BODY_WIDTH 1.0
+#define IDLE_WAVE_SPEED 1.0
+
+emitter FX_CloudTrails_Center
+{
+	varying point3d p_position;
+    varying point3d p_previous_root;
+    varying float p_rotation;
+	varying point3d p_acceleration;
+	varying point3d p_velocity;
+	varying point3d p_in_pos;
+    varying point3d p_initial_tangent;
+    varying number p_lighting_duration;
+    varying number p_lighting_age;
+    varying number p_time_to_lightning;
+    //varying point3d p_initial_bitangent;
+	varying number p_age;
+    varying number p_time;
+    varying number p_path_time;
+	varying number p_inv_lifetime;
+    varying number p_spin_speed;
+    varying number p_UV_Offset;
+    varying number p_cloud_scale;
+
+    varying number p_layer;
+    varying point3d p_initial_position;
+    varying color p_color;
+    varying number p_size;
+    varying number p_wave_offset;
+
+	SPAWN(  point3d in_pos,
+            float in_time,
+            float in_size,
+
+            float3 in_spawn_position = float3(0,0,0),
+            float3 in_spawn_volume = float3(1,1,2),
+            color in_color = color(0.2, 0.4, 0.8),
+            number in_lifetime = 10
+    )
+	{
+        p_layer = floor(random() * 3);
+        local number height_factor = random();
+        local number angle = random() * 2 * PI;
+        local number radius = mix(0.3, 1.0, random()) * 
+            (1.0 - 0.3 * pow(abs(2.0 * height_factor - 1.0), 2));
+
+        p_initial_position = point3d(
+            cos(angle) * radius * in_spawn_volume.x,
+            sin(angle) * radius * in_spawn_volume.y,
+            height_factor * in_spawn_volume.z
+        );
+        p_position = p_initial_position + in_spawn_position;
+        p_velocity = point3d(0, 0, 0);
+        p_color = mix(in_color * 1.5, in_color * 0.8, p_layer / 2.0);
+        p_inv_lifetime = 1.0 / in_lifetime;
+        p_age = 0.0;
+        p_size = in_size * mix(1.2, 0.8, p_layer / 2.0);
+        p_wave_offset = random() * 2 * PI;
+
+        local number randomValue = (random() * 2 * PI);
+        local float center_radius = 30;
+        p_path_time = (random()) * 0.4;
+        local float2 startPos = SampleUnitCircle(0) * (5 * random() + center_radius ) ;
+		p_position = float3(startPos.x, startPos.y, random() * -20 * (1- p_path_time)) ;
+		p_position = p_position + in_pos;
+
+		// Velocity
+		local number lifetime = mix( 1, 2, random() );
+        //lifetime = lifetime * 0.5;
+		p_inv_lifetime = 1.0 / lifetime;
+		p_age = 0.0;
+
+		//p_size = mix( 5, 10, random() );
+		p_spin_speed = 0.0751;
+
+
+        local float vortex_size = in_size;
+        p_cloud_scale = 20;
+
+        p_position.y = p_path_time * vortex_size;
+
+        p_position.x = -p_path_time * p_path_time * vortex_size;
+        p_position = p_position + float3(startPos.x, startPos.y, 0);
+        local float random_orientation = floor(random() * 9);
+        p_position = EulerRotateVectorZ (p_position, random_orientation- in_time * p_spin_speed - 5*( 1 - (p_path_time ) )) ;
+        p_initial_tangent = EulerRotateVectorZ (float3(1,0,0), random_orientation - in_time * p_spin_speed - 5*( 1 - (p_path_time ) ));
+        //p_initial_bitangent = EulerRotateVectorZ (p_initial_tangent, PI *.5);
+        local number spawn_x = 5;
+		local number spawn_y = 5;
+        local number spawn_z = 5;
+		p_position = p_position + point3d(mix( -spawn_x/2, spawn_x/2, random() ), mix( -spawn_y/2, spawn_y/2, random() ), mix( -spawn_z/2, spawn_z/2, random() ));
+        p_time = 0;
+	}
+
+	SIM
+	{
+        p_time = p_time + delta_time();
+        // Idle animation - gentle undulation and circulation
+        local number wave = sin(p_time * IDLE_WAVE_SPEED + p_wave_offset);
+        local number height_factor = p_initial_position.z / BODY_HEIGHT;
+
+        // Core particles stay more stable, surface particles move more
+        local number layer_movement = mix(0.2, 1.0, p_layer / 2.0);
+
+        // Circular motion based on height
+        local number circle_speed = 0.5 * (1.0 - abs(height_factor - 0.5));
+        local number circle_radius = 0.1 * layer_movement;
+        local number circle_phase = p_time * circle_speed + p_wave_offset;
+
+        // Calculate new position with combined motion
+        p_position = p_initial_position + point3d(
+            cos(circle_phase) * circle_radius,
+            sin(circle_phase) * circle_radius,
+            wave * 0.1 * layer_movement
+        );
+    
+        
+        p_age = p_age + delta_time() * p_inv_lifetime;      // TODO remove?
+        
+		//Advance age, and kill if necesary
+		p_age =  p_age + delta_time() * p_inv_lifetime * is_orphan();
+        p_time = p_time + delta_time();
+	}
+
+    property geometry_type = quad_aligned;
+	property material_type = quad_unlit;
+	property blend_type = alpha;
+	property priority = 2;
+    property material_lighting = non_directional;
+    property masked = true;
+    property shadows = false;
+
+    property layer = transparent;
+    property sort_order = back_to_front;
+
+	RENDER
+    {
+        local float3 camera_pos = import( float3, "CameraPos");
+        local float depth_fade = length(camera_pos - Apply(root_position(), p_position)) / 10.0;
+
+        local number alpha = .5 * (1-p_age);
+        local number p_UVX_Rate = 0.05;
+		local number offset = p_time * p_UVX_Rate + p_UV_Offset;
+        export("BASECOLOR_UV", float4(0,0,1,1));
+        export("DISTORTION_UV", float4(0,0,1,1) * 0.2 + float4(p_time, p_time, 0, 0) * 0.1);
+        export("DISTORTION_SCALE", 0.2 * (p_layer + 1) / 3.0);
+        export("SCALE", point2d(p_size, p_size));
+        export( "POSITION", p_position );
+        export("COLOR", p_color * (1.0 - depth_fade * 0.3));
+        export("ALPHA", 0.6 * (1.0 - depth_fade * 0.5));
+
+        export( "NORMALMAP_UV", float4(0, 0, 1,1 ) );
+        export( "MASK_UV", float4(0, 0, 1,1 ) );
+        
+        export( "TANGENT", p_initial_tangent );
+    }
+}
+
+emitter Rain_Particles
+{
+	varying point3d p_position;
+	varying point3d p_acceleration;
+	varying point3d p_velocity;
+	varying number p_age;
+	varying number p_inv_lifetime;
+
+
+	SPAWN(point3d in_pos)
+	{
+		// Box Volume Emission
+		// Spawn position occurrs within a volume, with velocity pointing up plus a cone volume of angle variance
+		local number spawn_x = 10;
+		local number spawn_y = 10;
+		local number spawn_z = 1;
+		p_position = point3d(mix( -spawn_x/2, spawn_x/2, random() ), mix( -spawn_y/2, spawn_y/2, random() ), mix( -spawn_z/2, spawn_z/2, random() ));
+		p_position = float3(p_position.x, p_position.y, 0) ;
+		p_position = p_position + in_pos;
+
+		p_velocity = float3(1.5,0,-10);
+
+		p_acceleration = point3d(0,0,0); // This is gravity, currently not used
+
+		local number lifetime = 3;
+		p_inv_lifetime = 1.0 / lifetime;
+		p_age = 0.0;
+	}
+
+	SIM
+	{
+		local point3d p_total_force = p_acceleration; // Need to add up all forces here
+		p_velocity = p_velocity + (p_total_force) * delta_time();
+		p_position = p_position + p_velocity * delta_time();
+
+		//Advance age, and kill if necesary
+		p_age =  p_age + delta_time() * p_inv_lifetime;
+		kill(p_age &gt; 1);
+	}
+
+    property geometry_type = quad_aligned;
+	property material_type = quad_unlit;
+	property blend_type = alpha;
+	property priority = 1;
+
+	RENDER
+    {
+        local number alpha = 0.3;
+		export( "BASECOLOR_UV", float4( 0, 0, 1, 1 ) );
+		export( "SCALE", point2d(.65,.15) );
+		export( "TANGENT", p_velocity);
+		export( "ROTATION", 0 );
+        export( "POSITION", p_position );
+		export( "COLOR", color(.25,.25,.25)  *alpha * p_age);
+		export( "ALPHA", alpha  * p_age);
+    }
+}
+
+emitter FX_Water_Mist
+{
+    varying point3d p_position;
+    varying point3d p_velocity;
+    varying color p_color;
+    varying number p_age;
+    varying number p_inv_lifetime;
+    varying number p_size;
+
+    SPAWN(
+        float3 in_spawn_position = float3(0,0,0),
+        float3 in_velocity = float3(0,0,0),
+        number in_lifetime = 1,
+        number in_size = 0.5,
+        color in_color = color(0.2, 0.4, 0.8))
+    {
+        p_position = in_spawn_position;
+        p_velocity = in_velocity;
+        p_color = in_color;
+        p_inv_lifetime = 1.0 / in_lifetime;
+        p_age = 0.0;
+        p_size = in_size * mix(0.8, 1.2, random());
+    }
+
+    SIM
+    {
+        p_velocity = p_velocity + point3d(0, 0, -0.1) * delta_time(); // Slight gravity
+        p_position = p_position + p_velocity * delta_time();
+
+        p_age = p_age + delta_time() * p_inv_lifetime;
+        kill(p_age &gt; 1);
+    }
+
+    property geometry_type = quad_aligned;
+    property material_type = quad_unlit_distorted;
+    property blend_type = alpha;
+    property layer = transparent;
+
+    RENDER
+    {
+        local float fade = 1.0 - p_age;
+        local float size_pulse = 1.0 + sin(p_age * PI * 2) * 0.2;
+
+        export("BASECOLOR_UV", float4(0,0,1,1));
+        export("DISTORTION_UV", float4(0,0,1,1) * 0.1);
+        export("DISTORTION_SCALE", 0.1);
+        export("SCALE", point2d(p_size * size_pulse, p_size * size_pulse));
+        export("POSITION", p_position);
+        export("COLOR", p_color * fade);
+        export("ALPHA", 0.3 * fade);
+    }
+}
+
+group Hurricane_Cat4
+{
+	varying number p_time;
+    varying float3 p_previous_root;
+
+    SPAWN
+    {
+        p_time = 0;
+        p_previous_root = root_position();
+        emit_count( "FX_CloudTrails_Center", 90 )
+		{
+			export( "in_pos", float3(0,0,0) );
+            export( "in_time", p_time );
+            export( "in_size", 30 );
+		};
+    }
+}
+'/>
+	</00000140017835C0>
+</Instances>
+

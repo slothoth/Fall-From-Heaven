@@ -1,0 +1,7 @@
+Event	ID	Name			Wwise Object Path	Notes
+	2228153899	Play_Menu_Music			\Default Work Unit\Play_Menu_Music	
+	2829915331	Stop_Main_Menu_Music			\Default Work Unit\Stop_Main_Menu_Music	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	900603112	OpeningMenu	F:\docker_pass_point\FallFromHeavenMusic\.cache\Windows\SFX\OpeningMenu_4B8CC0C5.wem		\Interactive Music Hierarchy\Default Work Unit\Music\Main_Menu_Music_Slth\OpeningMenu\OpeningMenu		18809920
+

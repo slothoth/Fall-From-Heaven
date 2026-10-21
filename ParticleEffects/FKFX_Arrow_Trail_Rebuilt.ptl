@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..ParticleEffectInstance>
+	<m_CookParams>
+		<m_Values>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>TEXTURE</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_TrailWhite_01"/>
+						<m_eObjectType>TEXTURE</m_eObjectType>
+						<m_ParamName text="FX_TrailWhite_01"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="ParticleTextures"/>
+			</Element>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>ASSET</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FXm_FKFX_Arrow_Rebuilt"/>
+						<m_eObjectType>ASSET</m_eObjectType>
+						<m_ParamName text="FXm_FKFX_Arrow_Rebuilt"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="ParticleModels"/>
+			</Element>
+		</m_Values>
+	</m_CookParams>
+	<m_Version>
+		<major>3</major>
+		<minor>0</minor>
+		<build>177</build>
+		<revision>821</revision>
+	</m_Version>
+	<m_SourceFilePath text="//civ6/main/ArtDev/Effects/Library/Workspaces/Projectile/FX_Archer_Arrow_trail.peb"/>
+	<m_SourceObjectName text=""/>
+	<m_ImportedTime>0</m_ImportedTime>
+	<m_ExportedTime>0</m_ExportedTime>
+	<m_ClassName text="VFXParticle"/>
+	<m_DataFiles>
+		<Element>
+			<m_ID text="PSB"/>
+			<m_RelativePath text="FKFX_Arrow_Trail_Rebuilt.psb"/>
+		</Element>
+	</m_DataFiles>
+	<m_Name text="FKFX_Arrow_Trail_Rebuilt"/>
+	<m_Description text=""/>
+	<m_Tags>
+		<Element text="VFXParticle"/>
+	</m_Tags>
+	<m_Groups/>
+</AssetObjects..ParticleEffectInstance>
+
