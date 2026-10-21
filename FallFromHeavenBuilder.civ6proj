@@ -32,8 +32,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="ArtDefs\" />
+    <Folder Include="BarbClans\" />
+    <Folder Include="Core\" />
+    <Folder Include="Core\Absorb_deletes\" />
+    <Folder Include="Core\AI\" />
+    <Folder Include="Core\Civilizations\" />
+    <Folder Include="Core\Civilizations\BeastRaces\" />
+    <Folder Include="Core\Civilizations\Dwarves\" />
+    <Folder Include="Core\Civilizations\Elves\" />
+    <Folder Include="Core\Civilizations\Winterborn\" />
+    <Folder Include="Core\Experimental\" />
+    <Folder Include="Core\Lua_support\" />
+    <Folder Include="Core\Specialists\" />
+    <Folder Include="Core\UI_DB\" />
+    <Folder Include="Core\Units\" />
+    <Folder Include="DLC_Compat\" />
+    <Folder Include="Frontend\" />
     <Folder Include="Geometries\" />
+    <Folder Include="Icons\" />
+    <Folder Include="Icons\DLCPack\" />
+    <Folder Include="Icons\Frontend\" />
+    <Folder Include="Localisation\" />
+    <Folder Include="Lua\" />
+    <Folder Include="Maps\" />
     <Folder Include="Materials\" />
+    <Folder Include="UI\" />
+    <Folder Include="UI\Panels\" />
+    <Folder Include="UI\Replacements\" />
     <Folder Include="XLPs" />
     <Folder Include="Textures" />
     <Folder Include="Platforms" />
@@ -1134,72 +1159,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="FallFromHeavenBuilder.Art.xml">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_128.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_128.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_200.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_200.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_22.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_22.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_256.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_256.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_30.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_30.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_36.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_36.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_44.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_44.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_48.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_48.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_50.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_50.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_64.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_64.tex">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_80.dds">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Textures\Slth_Civ_Atlas_0_80.tex">
       <SubType>Content</SubType>
     </Content>
     <XLP Include="Textures\ICON_LEADER_ALEXIS_256.dds">
