@@ -19,7 +19,7 @@
 		<m_behaviorInstances>
 			<Element text="SLTH_Balrog"/>
 		</m_behaviorInstances>
-		<m_dsgName text="potential_any_graph_with_jump"/>
+		<m_dsgName text="SLTH_Balrog_graph"/>
 		<m_referenceGeometryNames/>
 	</m_BehaviorData>
 	<m_GeometrySet>

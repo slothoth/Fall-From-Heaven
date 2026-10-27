@@ -7,3 +7,22 @@ INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES                 -- units
 
 INSERT INTO IconDefinitions(Name, Atlas, 'Index')VALUES                 -- improvements
 ('ICON_IMPROVEMENT_WORKSHOP', 'ICON_ATLAS_BABYLON_UNIT_ACTIONS', 12);
+
+-- Unit portraits borrowed from the base/DLC unit that shares the unit's member type.
+-- Rows marked 'placeholder art' reuse stand-in art and need a portrait of their own later.
+INSERT OR REPLACE INTO IconDefinitions(Name, Atlas, 'Index') VALUES
+('ICON_UNIT_SLTH_BAMBUR_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '3'),	-- UNIT_HERO_BEOWULF (Babylon)
+('ICON_UNIT_SLTH_BLACK_WIND_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '11'),	-- UNIT_HERO_SINBAD (Babylon)  -- placeholder art: needs its own portrait
+('ICON_UNIT_SLTH_CHALID_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '10'),	-- UNIT_HERO_OYA (Babylon)  -- placeholder art: needs its own portrait
+('ICON_UNIT_SLTH_CHANTER_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '0'),	-- UNIT_BABYLONIAN_SABUM_KIBITTUM (Babylon)
+('ICON_UNIT_SLTH_DUIN_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '4'),	-- UNIT_HERO_HERCULES (Babylon)
+('ICON_UNIT_SLTH_GAELAN_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '10'),	-- UNIT_HERO_OYA (Babylon)  -- placeholder art: needs its own portrait
+('ICON_UNIT_SLTH_GIBBON_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '10'),	-- UNIT_HERO_OYA (Babylon)  -- placeholder art: needs its own portrait
+('ICON_UNIT_SLTH_GOVANNON_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '10'),	-- UNIT_HERO_OYA (Babylon)  -- placeholder art: needs its own portrait
+('ICON_UNIT_SLTH_HEMAH_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '10'),	-- UNIT_HERO_OYA (Babylon)  -- placeholder art: needs its own portrait
+('ICON_UNIT_SLTH_KITHRA_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '9'),	-- UNIT_HERO_MULAN (Babylon)
+('ICON_UNIT_SLTH_LICH_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '10'),	-- UNIT_HERO_OYA (Babylon)  -- placeholder art: needs its own portrait
+('ICON_UNIT_SLTH_LUCIAN_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '3'),	-- UNIT_HERO_BEOWULF (Babylon)
+('ICON_UNIT_SLTH_ROSIER_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '2'),	-- UNIT_HERO_ARTHUR (Babylon)
+('ICON_UNIT_SLTH_STEPHANOS_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '2'),	-- UNIT_HERO_ARTHUR (Babylon)
+('ICON_UNIT_SLTH_WILBOMAN_PORTRAIT', 'ICON_ATLAS_BABYLON_UNIT_PORTRAITS', '4');	-- UNIT_HERO_HERCULES (Babylon)

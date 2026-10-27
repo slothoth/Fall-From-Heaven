@@ -2534,9 +2534,9 @@
 										<m_ParamName text="Count"/>
 									</Element>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Swordsman"/>
+										<m_ElementName text="SLTH_Angel"/>
 										<m_RootCollectionName text="UnitMemberTypes"/>
-										<m_ArtDefPath text="Units.artdef"/>
+										<m_ArtDefPath text="SLTH_Units.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
 										<m_TemplateName text=""/>
 										<m_ParamName text="Type"/>

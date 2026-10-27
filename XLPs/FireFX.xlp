@@ -533,6 +533,210 @@
 			<m_EntryID text="FKFX_SpectreHeadSmog_Head"/>
 			<m_ObjectName text="FKFX_SpectreHeadSmog_Head"/>
 		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogRift_spine_upper"/>
+			<m_ObjectName text="FKFX_BalrogRift_spine_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogSurge_spine_upper"/>
+			<m_ObjectName text="FKFX_BalrogSurge_spine_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogRift_head_neck_lower"/>
+			<m_ObjectName text="FKFX_BalrogRift_head_neck_lower"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogSurge_head_neck_lower"/>
+			<m_ObjectName text="FKFX_BalrogSurge_head_neck_lower"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogRift_head_neck_middle"/>
+			<m_ObjectName text="FKFX_BalrogRift_head_neck_middle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogSurge_head_neck_middle"/>
+			<m_ObjectName text="FKFX_BalrogSurge_head_neck_middle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogRift_head_neck_upper"/>
+			<m_ObjectName text="FKFX_BalrogRift_head_neck_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogSurge_head_neck_upper"/>
+			<m_ObjectName text="FKFX_BalrogSurge_head_neck_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_pelvis"/>
+			<m_ObjectName text="FKFX_BalrogFlare_pelvis"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_leg_right_thigh"/>
+			<m_ObjectName text="FKFX_BalrogFlare_leg_right_thigh"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_spine_upper"/>
+			<m_ObjectName text="FKFX_BalrogFlare_spine_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_leg_left_thigh"/>
+			<m_ObjectName text="FKFX_BalrogFlare_leg_left_thigh"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_leg_right_knee"/>
+			<m_ObjectName text="FKFX_BalrogFlare_leg_right_knee"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_leg_left_knee"/>
+			<m_ObjectName text="FKFX_BalrogFlare_leg_left_knee"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_head_neck_middle"/>
+			<m_ObjectName text="FKFX_BalrogFlare_head_neck_middle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_right_shoulder_2"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_right_shoulder_2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_left_elbow"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_left_elbow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_right_wrist"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_right_wrist"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_right_elbow"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_right_elbow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_left_wrist"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_left_wrist"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_head_neck_lower"/>
+			<m_ObjectName text="FKFX_BalrogFlare_head_neck_lower"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_left_shoulder_2"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_left_shoulder_2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_DarkWreath_Large"/>
+			<m_ObjectName text="FKFX_DarkWreath_Large"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_DarkWreath_Small"/>
+			<m_ObjectName text="FKFX_DarkWreath_Small"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_DarkAura"/>
+			<m_ObjectName text="FKFX_DarkAura"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireVortex"/>
+			<m_ObjectName text="FKFX_FireVortex"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_Pelvis"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_Pelvis"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_Spine1"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_Spine1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_Ribcage"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_Ribcage"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LShoulder"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LShoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LArm"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LArm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LForearm"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LForearm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LHand"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LHand"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RShoulder"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RShoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RArm"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RArm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RForearm"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RForearm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RHand"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RHand"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LForearmTwist01"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LForearmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LArmTwist01"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LArmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RForearmTwist02"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RForearmTwist02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RForearmTwist01"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RForearmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RArmTwist01"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RArmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_Neck"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_Neck"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LFinger31"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LFinger31"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RFinger31"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RFinger31"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RFinger11"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RFinger11"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LFinger11"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LFinger11"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LFinger32"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LFinger32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RFinger32"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RFinger32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LFinger22"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LFinger22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RFinger22"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RFinger22"/>
+		</Element>
 	</m_Entries>
 	<m_AllowedPlatforms>
 		<Element>WINDOWS</Element>

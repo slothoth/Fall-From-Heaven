@@ -25,6 +25,10 @@
 			<m_EntryID text="FKFX_Religion_Hit_NoClouds"/>
 			<m_ObjectName text="FKFX_Religion_Hit_NoClouds"/>
 		</Element>
+		<Element>
+			<m_EntryID text="SLTH_AngelWings"/>
+			<m_ObjectName text="SLTH_AngelWings"/>
+		</Element>
 	</m_Entries>
 	<m_AllowedPlatforms>
 		<Element>WINDOWS</Element>

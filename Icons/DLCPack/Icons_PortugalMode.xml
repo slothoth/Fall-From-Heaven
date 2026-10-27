@@ -36,4 +36,7 @@
 	<IconDefinitions>
     	<Row Name="ICON_UNIT_SLTH_ARCANE_BARGE"  Atlas="ICON_ATLAS_PORTUGAL_UNITS" Index="0"/>
 	</IconDefinitions>
+	<IconDefinitions>	<!-- unit portraits borrowed from the base unit sharing the member -->
+		<Row Name="ICON_UNIT_SLTH_ARCANE_BARGE_PORTRAIT" Atlas="ICON_ATLAS_PORTUGAL_UNIT_PORTRAITS" Index="0"/>	<!-- UNIT_PORTUGUESE_NAU (Portugal) -->
+	</IconDefinitions>
 </GameInfo>

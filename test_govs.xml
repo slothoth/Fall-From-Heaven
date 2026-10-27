@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameInfo>
+	<Governments>
+		<Row GovernmentType="GOVERNMENT_AUTOCRACY" Name="LOC_GOVERNMENT_AUTOCRACY_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_AUTOCRACY" BonusType="GOVERNMENTBONUS_WONDER_CONSTRUCTION" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_AUTOCRACY" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_AUTOCRACY" PrereqCivic="CIVIC_POLITICAL_PHILOSOPHY" OtherGovernmentIntolerance="-2" InfluencePointsPerTurn="3" InfluencePointsThreshold="100" InfluenceTokensPerThreshold="1" Tier="Tier1"/>
+		<Row GovernmentType="GOVERNMENT_OLIGARCHY" Name="LOC_GOVERNMENT_OLIGARCHY_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_OLIGARCHY" BonusType="GOVERNMENTBONUS_COMBAT_EXPERIENCE" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_OLIGARCHY" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_OLIGARCHY" PrereqCivic="CIVIC_POLITICAL_PHILOSOPHY" OtherGovernmentIntolerance="-2" InfluencePointsPerTurn="3" InfluencePointsThreshold="100" InfluenceTokensPerThreshold="1" Tier="Tier1"/>
+		<Row GovernmentType="GOVERNMENT_CLASSICAL_REPUBLIC" Name="LOC_GOVERNMENT_CLASSICAL_REPUBLIC_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_CLASSREP" BonusType="GOVERNMENTBONUS_GREAT_PEOPLE" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_CLASSREP" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_CLASSREP" PrereqCivic="CIVIC_POLITICAL_PHILOSOPHY" OtherGovernmentIntolerance="-1" InfluencePointsPerTurn="3" InfluencePointsThreshold="100" InfluenceTokensPerThreshold="1" Tier="Tier1"/>
+		<Row GovernmentType="GOVERNMENT_MONARCHY" Name="LOC_GOVERNMENT_MONARCHY_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_MONARCHY" BonusType="GOVERNMENTBONUS_ENVOYS" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_MONARCHY" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_MONARCHY" PrereqCivic="CIVIC_FANATICISM" OtherGovernmentIntolerance="-3" InfluencePointsPerTurn="5" InfluencePointsThreshold="150" InfluenceTokensPerThreshold="2" Tier="Tier2"/>
+		<Row GovernmentType="GOVERNMENT_THEOCRACY" Name="LOC_GOVERNMENT_THEOCRACY_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_THEOCRACY" BonusType="GOVERNMENTBONUS_FAITH_PURCHASES" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_THEOCRACY" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_THEOCRACY" PrereqCivic="CIVIC_PRIESTHOOD" OtherGovernmentIntolerance="-4" InfluencePointsPerTurn="5" InfluencePointsThreshold="150" InfluenceTokensPerThreshold="2" Tier="Tier2"/>
+		<Row GovernmentType="GOVERNMENT_MERCHANT_REPUBLIC" Name="LOC_GOVERNMENT_MERCHANT_REPUBLIC_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_MERCHREP" BonusType="GOVERNMENTBONUS_GOLD_PURCHASES" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_MERCHREP" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_MERCHREP" PrereqCivic="CIVIC_CURRENCY" OtherGovernmentIntolerance="-2" InfluencePointsPerTurn="5" InfluencePointsThreshold="150" InfluenceTokensPerThreshold="2" Tier="Tier2"/>
+		<Row GovernmentType="GOVERNMENT_FASCISM" Name="LOC_GOVERNMENT_FASCISM_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_FASCISM" BonusType="GOVERNMENTBONUS_UNIT_PRODUCTION" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_FASCISM" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_FASCISM" PrereqCivic="CIVIC_WAY_OF_THE_WISE" OtherGovernmentIntolerance="-5" InfluencePointsPerTurn="7" InfluencePointsThreshold="200" InfluenceTokensPerThreshold="3" Tier="Tier3"/>
+		<Row GovernmentType="GOVERNMENT_COMMUNISM" Name="LOC_GOVERNMENT_COMMUNISM_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_COMMUNISM" BonusType="GOVERNMENTBONUS_OVERALL_PRODUCTION" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_COMMUNISM" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_COMMUNISM" PrereqCivic="CIVIC_TAXATION" OtherGovernmentIntolerance="-6" InfluencePointsPerTurn="7" InfluencePointsThreshold="200" InfluenceTokensPerThreshold="3" Tier="Tier3"/>
+		<Row GovernmentType="GOVERNMENT_DEMOCRACY" Name="LOC_GOVERNMENT_DEMOCRACY_NAME" InherentBonusDesc="LOC_GOVT_INHERENT_BONUS_DEMOCRACY" BonusType="GOVERNMENTBONUS_DISTRICT_PROJECTS" AccumulatedBonusShortDesc="LOC_GOVT_ACCUMULATED_BONUS_BRIEF_DEMOCRACY" AccumulatedBonusDesc="LOC_GOVT_ACCUMULATED_BONUS_DEMOCRACY" PrereqCivic="CIVIC_DRAMA_POETRY" OtherGovernmentIntolerance="-3" InfluencePointsPerTurn="7" InfluencePointsThreshold="200" InfluenceTokensPerThreshold="3" Tier="Tier3"/>
+	</Governments>
+	<Government_SlotCounts>
+		<Row GovernmentType="GOVERNMENT_AUTOCRACY" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_AUTOCRACY" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_AUTOCRACY" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_AUTOCRACY" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_AUTOCRACY" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+
+        <Row GovernmentType="GOVERNMENT_OLIGARCHY" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_OLIGARCHY" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_OLIGARCHY" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_OLIGARCHY" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_OLIGARCHY" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+
+        <Row GovernmentType="GOVERNMENT_CLASSICAL_REPUBLIC" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_CLASSICAL_REPUBLIC" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_CLASSICAL_REPUBLIC" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_CLASSICAL_REPUBLIC" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_CLASSICAL_REPUBLIC" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+
+        <Row GovernmentType="GOVERNMENT_MONARCHY" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_MONARCHY" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_MONARCHY" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_MONARCHY" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_MONARCHY" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+
+        <Row GovernmentType="GOVERNMENT_THEOCRACY" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_THEOCRACY" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_THEOCRACY" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_THEOCRACY" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_THEOCRACY" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+
+        <Row GovernmentType="GOVERNMENT_MERCHANT_REPUBLIC" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_MERCHANT_REPUBLIC" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_MERCHANT_REPUBLIC" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_MERCHANT_REPUBLIC" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_MERCHANT_REPUBLIC" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+
+        <Row GovernmentType="GOVERNMENT_FASCISM" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_FASCISM" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_FASCISM" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_FASCISM" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_FASCISM" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+
+        <Row GovernmentType="GOVERNMENT_COMMUNISM" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_COMMUNISM" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_COMMUNISM" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_COMMUNISM" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_COMMUNISM" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+
+        <Row GovernmentType="GOVERNMENT_DEMOCRACY" GovernmentSlotType="SLOT_MILITARY" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_DEMOCRACY" GovernmentSlotType="SLOT_ECONOMIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_DEMOCRACY" GovernmentSlotType="SLOT_DIPLOMATIC" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_DEMOCRACY" GovernmentSlotType="SLOT_SLTHREL" NumSlots="1"/>
+		<Row GovernmentType="GOVERNMENT_DEMOCRACY" GovernmentSlotType="SLOT_SLTHCUL" NumSlots="1"/>
+	</Government_SlotCounts>
+</GameInfo>

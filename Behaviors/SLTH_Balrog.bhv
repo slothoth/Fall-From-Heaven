@@ -78,11 +78,11 @@
 					</Element>
 					<Element>
 						<m_SlotName text="ATTACK_A"/>
-						<m_AnimationName text="Balrog_BR_TwoHandSmash_NoLimits"/>
+						<m_AnimationName text="Balrog_BR_LeftStrike_NoLimits"/>
 					</Element>
 					<Element>
 						<m_SlotName text="ATTACK_1"/>
-						<m_AnimationName text="Balrog_BR_TwoHandSmash_NoLimits"/>
+						<m_AnimationName text="Balrog_BR_RightStrike_NoLimits"/>
 					</Element>
 					<Element>
 						<m_SlotName text="ATTACK_2"/>
@@ -102,35 +102,35 @@
 					</Element>
 					<Element>
 						<m_SlotName text="IDLE_COMBAT_A"/>
-						<m_AnimationName text="Balrog_Idle_Roar"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="IDLE_COMBAT_B"/>
-						<m_AnimationName text="Balrog_Idle_Roar"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="IDLE_COMBAT_C"/>
-						<m_AnimationName text="Balrog_Idle_Roar2"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="IDLE_COMBAT_D"/>
-						<m_AnimationName text="Balrog_Idle_Roar2"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="IDLE_A"/>
-						<m_AnimationName text="Balrog_Idle_1"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="IDLE_B"/>
-						<m_AnimationName text="Balrog_Idle_2"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="IDLE_C"/>
-						<m_AnimationName text="Balrog_Idle_2"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="IDLE_D"/>
-						<m_AnimationName text="Balrog_Idle_Roar2"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="DEFEND_1"/>
@@ -142,7 +142,7 @@
 					</Element>
 					<Element>
 						<m_SlotName text="RUN_STOP"/>
-						<m_AnimationName text="Balrog_Idle_1"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 					<Element>
 						<m_SlotName text="DEFEND_3"/>
@@ -151,6 +151,22 @@
 					<Element>
 						<m_SlotName text="DEFEND_2"/>
 						<m_AnimationName text="Balrog_Attack_Ships"/>
+					</Element>
+					<Element>
+						<m_SlotName text="HERO_A"/>
+						<m_AnimationName text="Balrog_BR_TwoHandSmash_NoLimits"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_STOP_B"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_STOP_C"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
+					</Element>
+					<Element>
+						<m_SlotName text="RUN_STOP_D"/>
+						<m_AnimationName text="Balrog_Idle_Roar2_stance"/>
 					</Element>
 				</m_Bindings>
 			</m_animationBindings>
@@ -166,7 +182,7 @@
 			<m_stateSet/>
 		</m_behaviorDataSets>
 		<m_behaviorInstances/>
-		<m_dsgName text="potential_any_graph_with_jump"/>
+		<m_dsgName text="SLTH_Balrog_graph"/>
 		<m_referenceGeometryNames>
 			<Element text="Balrog"/>
 		</m_referenceGeometryNames>

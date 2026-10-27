@@ -298,6 +298,26 @@
 			<m_ObjectName text="Balrog_Whip"/>
 		</Element>
 		<Element>
+			<m_EntryID text="EarthGolem"/>
+			<m_ObjectName text="EarthGolem"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EarthGolem_Hands"/>
+			<m_ObjectName text="EarthGolem_Hands"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EarthGolem_Knuckles"/>
+			<m_ObjectName text="EarthGolem_Knuckles"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EarthGolem_Knuckles_Hands"/>
+			<m_ObjectName text="EarthGolem_Knuckles_Hands"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Balrog_Sword"/>
+			<m_ObjectName text="Balrog_Sword"/>
+		</Element>
+		<Element>
 			<m_EntryID text="Horse_Skeleton_BodyA"/>
 			<m_ObjectName text="Horse_Skeleton_BodyA"/>
 		</Element>
@@ -364,6 +384,34 @@
 		<Element>
 			<m_EntryID text="SLTH_Carrier_LightningCaster"/>
 			<m_ObjectName text="SLTH_Carrier_LightningCaster"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_Swordsman_Armor_Winged"/>
+			<m_ObjectName text="SLTH_Swordsman_Armor_Winged"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_Meshabber"/>
+			<m_ObjectName text="SLTH_Meshabber"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_Meshabber_BoneWreath"/>
+			<m_ObjectName text="SLTH_Meshabber_BoneWreath"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_FireElemental"/>
+			<m_ObjectName text="SLTH_FireElemental"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_FireElementalTorso"/>
+			<m_ObjectName text="SLTH_FireElementalTorso"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_WaterElemental"/>
+			<m_ObjectName text="SLTH_WaterElemental"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WaterElementalHead"/>
+			<m_ObjectName text="WaterElementalHead"/>
 		</Element>
 	</m_Entries>
 	<m_AllowedPlatforms>

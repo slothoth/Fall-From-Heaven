@@ -29,6 +29,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
     <OutputPath>.</OutputPath>
     <KeepRawArtDefs>true</KeepRawArtDefs>
+    <HotloadBuild>true</HotloadBuild>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="ArtDefs\" />
@@ -2370,6 +2371,51 @@
     <XLP Include="Textures\Hyborem_Wing_n.tex">
       <SubType>Content</SubType>
     </XLP>
+    <XLP Include="Geometries\EarthGolem_Hands.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\EarthGolem_Hands.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\EarthGolem.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\EarthGolem.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\EarthGolem.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_ao.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_ao.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
     <XLP Include="Geometries\Balrog.fgx">
       <SubType>Content</SubType>
     </XLP>
@@ -2386,6 +2432,72 @@
       <SubType>Content</SubType>
     </XLP>
     <XLP Include="Geometries\Balrog_Whip.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\SLTH_AngelWings.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\SLTH_AngelWings.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\SLTH_AngelWings_Mat.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_AngelWings_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_AngelWings_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_AngelWings_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_AngelWings_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog_Sword.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog_Sword.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Balrog_Sword.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_ao.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_e.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_ao.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_e.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_n.tex">
       <SubType>Content</SubType>
     </XLP>
     <XLP Include="Materials\Balrog_Body.mtl">
@@ -2545,6 +2657,39 @@
       <SubType>Content</SubType>
     </XLP>
     <XLP Include="Geometries\SkeletonRider_Body.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\SLTH_Water_Material.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_t.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_t.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_m.tex">
       <SubType>Content</SubType>
     </XLP>
   </ItemGroup>
