@@ -42,25 +42,15 @@ Here is a list of the features that are implemented:
 - Magic Combat Strength. Units have magic combat strength bonuses as they should. However resistance or vulnerability to that combat strength is limited to a unit level. I.e. a Wood Golem is Vulnerable to Fire, so takes more damage from Fire Combat Strength. But there is no way currently to make the Fire Resistance promotion reduce Fire Combat Strength.
 - Commerce and Sliders: Commerce is implemented as the Faith yield. Which is converted in cities to Science, Culture and Gold. Currently its split into thirds, but once I''ve built the UI for it, you can adjust the conversion with sliders.
 - Specialists. VI had far less emphasis on Specialists, and placed them in Districts. To allow the AI to interact with Specialists, I have elected to do the same. As a result, buildings that allow slotting a specialist will be housed in that district. Campus=Sage, Industrial Zone=Engineer, Theatre Square=Bard, Commercial Hub=Merchant, Holy Site=Priest. So to slot a Priest, you would slot a population into that district. Wonders and policies that allow extra specialists are implemented using a script so dont need this.
-- National Units. Units that are only buildable when you have less than 4. Unfortunately, this is not respected for upgrading.
-- Erebus map script. Ported from Python to Lua, with many headaches along the way. It works, but is a bit slow to generate maps, and has a tendency to make the same maps.
-- Tech Tree Disconnects: Some technologies/civics are easier to access, because the prerequisite now lives in the Civic/Tech tree, and cannot be a prerequisite. This is most egregious with Feral Bond being accessible turn 1. There is a plan to fix this with dummy prerequisites however.
-- Magic promotions on non-magic units, like Vampirism granting up to Death II, Shadow II and Body II. As is, Vampirism just grants Shadow I and Body I and Death I. Similarly, units like the Brujah or Chalid cannot gain promotions with spells. As each would need a custom promotion class.
-- Armageddon Counter. Contributions and reductions to the Armageddon Counter all works. However, there is no UI to display it currently. Events from the Armageddon counter should work, however Hell terrain is not yet implemented.
+- Magic promotions on non-magic units, like Vampirism granting up to Death II, Shadow II and Body II. As is, Vampirism just grants Shadow I and Body I and Death I. Similarly, units like the Brujah or Chalid cannot gain promotions with spells. As each would need a custom promotion class. We could just do that tbf.
 - Acheron city spawning. Acheron will spawn, but is not held and will go roam about!
-- Promotion gated upgrades. So for example, Adepts only upgrading to Mages once they are level 4. This is implemented for human players, but the AI bypasses it, otherwise they couldnt ever get it. This would require serious DLL work to fix.
 - Unit SFX: Units have the custom selections from FFH, but not the ones from the base game. I think these were always a bit odd. But Losha and Orcs have their voices! Not currently implemented 3d sound like idle dragon breathing.
 ## Not currently Implemented:
 - First strikes. As a Stop-gap, units get Combat Strength instead.
-- Great People recruitment per city. Currently it is done as a global amount, as in VI.
-- Adaptive and Insane traits. Planned soon.
+- Adaptive trait. Planned soon.
 - World spells. Interface built, but each spell not yet built.
-- Overcouncil/Undercouncil. Currently do not have a way to exclude civs from world congress, or call it earlier. Also was causing CTDs.
-- Illusion units that cannot kill units, only damage them. Seems relatively impossible in VI without DLL work
 - Animal units spawning in the Wilderness, making Dens
 - Events system (like the governor assassinated event)
-- Tolerant Trait of Elohim. While there are some examples of this done like the Civ Conquer mod, that is on a player level, not per city.
-- Doviello scavenging prod for nearby city on killing unit. I thought I needed to do this, but I think this is from a Modmod.
 - Health/Sickness/Happiness. Currently we are using the VI system of Housing/Amenities. Anything that gave Health grants Housing, Sickness now grants negative Housing, and Happiness is Amenities. This isnt perfect. In addition, currently the Health/Sickness from features, i.e Jungle/Floodplains Sickness and Forest health is not implemented.
 - Tech Bulbing. Should be possible, but can't seem to find the full lists of the logic of which techs to grant, and how much.
 ## Makes no Sense in VI
@@ -70,11 +60,29 @@ Here is a list of the features that are implemented:
 ## Little Quirks
 - [ ] We use hidden promotions to allow different spell sphere promotions, or promotions unlocked by techs like Scourge. As a result, the number of promotions your unit has will look a lot higher than it is.
 - [ ] You win a Domination Victory the same way as in VI, by controlling all original capitals. This does raise a problem when Hyborem and Basium have not spawned, as you will need to summon, then conquer Hyborems capital. If you summon Basium, your permanent ally status means you will not need to conquer him.
-## Larger Issues
-- [ ] Building Prereqs, like Swordsman requiring the Training yard, mean when you get Swordsmen, the previous unit, Warriors, are no longer trainable. And if you dont have a training yard, you couldn't train any melee class unit. This is a big problem, and will require DLL level work to fix.
+
 ## Known Bugs
 - Sometimes doesn't release instance correctly on clearing barb camp, so the barb banner stays.
 
+## DLL level stuff:
+- Specialists without Districts?
+- [x] Unit Buildability. Units being buildable even if their replacement unit upgrade is buildable. A problem because of unit upgrades only achievable via promoted units. 
+- Elohim Tolerant trait buildable units and buildings on per city basis.
+- Unit upgrades being gated by national unit limit or promotion level.
+- Plural upgrade pathways
+- Over/UnderCouncil working as separate voluntary congresses. Congress working genereally with Hybo/Basium.
+- Illusion units cant kill, just reduce to 1 health.
+- Summoning of civs into the game proper, not just the dummy system.
+- Great People recruitment per city. Currently it is done as a global amount, as in VI.
+- Tech/Civic Prerequisites from the opposing tree.
+- Tech/Civic unlockables as modifiers, like being able to make cottages in forest. This could just be done as improvements tbf.
+- True Stealth
+- Privateer hidden nationality.
+- Player switching, the Basium/Hyborem effect.
+- Purchase dependent on Modifiers, for Arete, and other civics. Whipping purchase too?
+- Resource dependent unit building? Actually might be doable already
+- Stored production for banned buildings (tower of mastery)
+- HIGHEST PRIO, specialists without districts, tech civic prerequisites from other tree. Possibly from modifier unlocking civic?
 ## Some things on the Todo List:
 ### Armageddon Counter:
 - [ ] Hijack Global Warming panel. We probably just steal the UI design of it.  
@@ -170,10 +178,10 @@ Here is a list of the features that are implemented:
 - [ ] Valkyrie
 - [ ] Einherjar (alpha channel variant. impossible)
 - [ ] Imp
-- [L] Balor
+- [X] Balor
 - [ ] Chaos Marauder
 - [ ] Mardero
-- [L] Meshabber
+- [X] Meshabber
 - [L] Ogre
 - [L] Ogre Warchief
 - [ ] Yvain
@@ -188,7 +196,7 @@ Here is a list of the features that are implemented:
 - [ ] Buboes
 - [ ] Yersinia
 - [ ] Ars Moriendi
-- [ ] Hyborem
+- [X] Hyborem
 - [ ] Dwarven Druid
 #### Custom Model
 - [ ] Hawk
@@ -225,7 +233,7 @@ Here is a list of the features that are implemented:
 - [L] Mistform
 #### Partial VFX
 - [ ] Ira
-- [ ] SandLion
+- [X] SandLion
 - [ ] Shade
 - [L] Pyre Zombie
 #### Unsure
