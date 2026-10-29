@@ -9,8 +9,6 @@ db_storer.py
 python_gen/data/foreign_keys.json
 /python_gen/data/loc.csv
 /python_gen/data/frontend_tables
-# audio streams are huge; banks/ini/txt/SoundbanksInfo stay tracked
-/Platforms/**/*.wem
 /python_gen/data/Debug*
 
 /python_gen/build_utils/FallFromHeaven.Mod.art.xml
