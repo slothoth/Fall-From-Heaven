@@ -17,6 +17,11 @@ UPDATE MapSizes SET MinPlayers=MinPlayers+2;
 UPDATE MapSizes SET DefaultPlayers=DefaultPlayers+2;
 UPDATE MapSizes SET MaxPlayers=MaxPlayers+2;
 
+UPDATE MapSizes SET DefaultPlayers=DefaultPlayers+1 WHERE MapSizeType='MAPSIZE_SMALL' OR MapSizeType='MAPSIZE_STANDARD';
+UPDATE MapSizes SET MaxPlayers=MaxPlayers+1 WHERE MapSizeType='MAPSIZE_SMALL' OR MapSizeType='MAPSIZE_STANDARD';
+
+-- also need to do some more size increases to deal with different map wilderness due to no city states.
+
 INSERT INTO Maps(Domain, File, Name, Description, Image, SortIndex) VALUES
 ('StandardMaps', 'Erebus.lua', 'LOC_MAP_SLTH_EREBUS_NAME', 'LOC_MAP_SLTH_EREBUS_DESCRIPTION', 'Map_Highlands', 130);
 
@@ -65,3 +70,16 @@ UPDATE NaturalWonders SET Name='LOC_FEATURE_MAENALUS_NAME', Description='LOC_FEA
 UPDATE NaturalWonders SET Name='LOC_FEATURE_ODIO_NAME', Description='LOC_FEATURE_ODIO_DESCRIPTION' WHERE FeatureType='FEATURE_DEVILSTOWER';
 UPDATE NaturalWonders SET FeatureType= 'FEATURE_NWON_SEVEN_PINES', Name='LOC_FEATURE_PINES_NAME', Description='LOC_FEATURE_PINES_DESCRIPTION' WHERE FeatureType='FEATURE_CHOCOLATEHILLS';
 UPDATE NaturalWonders SET Name='LOC_FEATURE_CARCER_NAME', Description='LOC_FEATURE_CARCER_DESCRIPTION' WHERE FeatureType='FEATURE_TORRES_DEL_PAINE';
+
+INSERT INTO Parameters(ParameterId,                Name,                                Description,                                Domain, DefaultValue, ConfigurationGroup, ConfigurationId,                  NameArrayConfigurationId,  GroupId,     SortIndex) VALUES
+                      ('GameMode_BuildingUnitPrereqs', 'LOC_GAMEMODE_BUILDING_PREREQ_NAME', 'LOC_GAMEMODE_BUILDING_PREREQ_DESCRIPTION', 'bool', '0',          'Game',             'GAMEMODE_UNIT_BUILDING_PREREQS', 'GAMEMODES_ENABLED_NAMES', 'GameModes', '110');
+
+INSERT INTO ParameterCriteria(ParameterId,                ConfigurationGroup, ConfigurationId,   Operator,    ConfigurationValue) VALUES
+                             ('GameMode_BuildingUnitPrereqs', 'Game',             'GAMEMODE_RANDOM', 'NotEquals', '1');
+
+INSERT INTO ParameterDependencies(ParameterId,                ConfigurationGroup, ConfigurationId,   Operator,    ConfigurationValue) VALUES
+                                 ('GameMode_BuildingUnitPrereqs', 'Game',             'RULESET',         'Exists',    'RULESET_EXPANSION_2'),
+                                 ('GameMode_BuildingUnitPrereqs', 'Game',             'WORLD_BUILDER',   'NotEquals', '1');
+
+INSERT INTO GameModeItems(GameModeType,               Name,                                 Description,                                Portrait,                          Background,                           Icon,                            SortIndex) VALUES
+                         ('GameMode_BuildingUnitPrereqs', 'LOC_GAMEMODE_BUILDING_PREREQ_NAME',  'LOC_GAMEMODE_BUILDING_PREREQ_DESCRIPTION', 'GAMEMODE_SECRETSOCIETIES_NEUTRAL','GAMEMODE_SECRETSOCIETIES_BACKGROUND','ICON_GAMEMODE_SECRETSOCIETIES', '20'         );

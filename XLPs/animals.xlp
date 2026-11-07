@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="Unit"/>
+	<m_PackageName text="animals"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="Lioness"/>
+			<m_ObjectName text="Lioness"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Lion"/>
+			<m_ObjectName text="Lion"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Wolf"/>
+			<m_ObjectName text="Wolf"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Tiger"/>
+			<m_ObjectName text="Tiger"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Panther"/>
+			<m_ObjectName text="Panther"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Gorilla"/>
+			<m_ObjectName text="Gorilla"/>
+		</Element>
+		<Element>
+			<m_EntryID text="GrizzlyBear"/>
+			<m_ObjectName text="GrizzlyBear"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Kraken"/>
+			<m_ObjectName text="Kraken"/>
+		</Element>
+		<Element>
+			<m_EntryID text="HumpbackWhale"/>
+			<m_ObjectName text="HumpbackWhale"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+		<Element>LINUX</Element>
+		<Element>XBONE</Element>
+		<Element>PS4</Element>
+		<Element>SWITCH</Element>
+		<Element>STADIA</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

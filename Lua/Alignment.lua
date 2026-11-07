@@ -71,6 +71,12 @@ local tAnimalBeastSiege = {['PROMOTION_CLASS_BEAST']=1, ['PROMOTION_CLASS_ANIMAL
 local iINFERNAL_PACT_INDEX = GameInfo.Civics["CIVIC_INFERNAL_PACT"].Index
 local iReligionVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
 
+local tReligiousBuildings = {   [GameInfo.Buildings['BUILDING_MOSQUE'].Index] ='SLTH_POLICY_STATE_OCTOPUS',
+                                [GameInfo.Buildings['BUILDING_GURDWARA'].Index]= 'SLTH_POLICY_STATE_EMPYREAN',
+                                [GameInfo.Buildings['BUILDING_WAT'].Index]='SLTH_POLICY_STATE_RUNES',
+                                [GameInfo.Buildings['BUILDING_CATHEDRAL'].Index]='SLTH_POLICY_STATE_ORDER',
+                                [GameInfo.Buildings['BUILDING_STUPA'].Index]='SLTH_POLICY_STATE_VEIL',
+                                [GameInfo.Buildings['BUILDING_SANCTUARY'].Index] = 'SLTH_POLICY_STATE_LEAVES'}
 
 function onReligionSwitch(playerID, policyID, wasEnacted)
     if not wasEnacted then return; end
@@ -86,20 +92,24 @@ function onReligionSwitch(playerID, policyID, wasEnacted)
             iNewAlignment = tReligionFromEvil[sReligion]
         end
     end
-    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-    if pCapitalCity then
-        local pPlot = pCapitalCity:GetPlot()
-        if iNewAlignment then
-            pPlayer:SetProperty('alignment', iNewAlignment)
-            pPlot:SetProperty(tAlignmentPropKeys[iNewAlignment], 1)
-            pPlot:SetProperty(tAlignmentPropKeys[iCurrentAlignment], 0)
-            print('Setting alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]))
-        end
-        for idx, sReligionPropKey in ipairs(tReligionNames) do
-            if sReligionPropKey == sReligion then
-                pPlot:SetProperty(sReligionPropKey, 1)
-            else
-                pPlot:SetProperty(sReligionPropKey, 0)
+
+    local pCities = pPlayer:GetCities()
+    if pCities then
+        local pCapitalCity = pCities:GetCapitalCity()
+        if pCapitalCity then
+            local pCapitalPlot = pCapitalCity:GetPlot()
+            if iNewAlignment then
+                setPlayerPropForRequirements(playerID, 'alignment', iNewAlignment)
+                setPlayerPropForRequirements(playerID, tAlignmentPropKeys[iNewAlignment], 1)
+                setPlayerPropForRequirements(playerID, tAlignmentPropKeys[iCurrentAlignment], 0)
+                print('Updating alignment on capital plot to ' .. tostring(tAlignmentPropKeys[iNewAlignment]) .. ' for ' .. PlayerConfigurations[playerID]:GetLeaderTypeName())
+            end
+            for _, sReligionPropKey in ipairs(tReligionNames) do
+                if sReligionPropKey == sReligion then
+                    setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sReligionPropKey, 1)
+                else
+                    setPlayerPropForRequirementsCapital(pPlayer, pCapitalPlot, sReligionPropKey, 0)
+                end
             end
         end
     end
@@ -175,7 +185,7 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
             bIsEvil = 1
         end
     elseif pUnitAbilities:HasAbility('ALIGNMENT_GOOD') then
-        iUnitToGrant = GameInfo.Units['SLTH_UNIT_ANGEL'].Index
+        iUnitToGrant = GameInfo.Units['UNIT_SLTH_ANGEL'].Index
         iPlotSpawnedLocation = Game:GetProperty('MercurianGatePlot')
         iGrantPlayer = Game:GetProperty('Mercurian')
         print('prepping to grant angel')
@@ -189,10 +199,8 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     if bReincarnate then
         if pUnitKiller:GetAbility():HasAbility('NETHER_BLADE') then
             print('killed by nether blade')                     -- this should also alter resurrection through property
-            bReincarnate = false
         elseif tAnimalBeastSiege[GameInfo.Units[pUnit:GetType()].PromotionClass] then
             print('unit is beast or siege or animal')
-            bReincarnate = false
         elseif GameInfo.UnitsNotAlive[pUnit:GetType()] then
             bReincarnate = false
         else
@@ -256,24 +264,55 @@ function alignmentDeath(killedPlayerID, killedUnitID, playerID, unitID)
     end
 end
 local iBuildingPalace = GameInfo.Buildings['BUILDING_PALACE'].Index
+local sCapitalXPropKey = 'capitalX'
+local sCapitalYPropKey = 'capitalY'
 function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstruction)
     if buildingID == iBuildingPalace then
         local pPlayer = Players[playerID]
+        -- first we need to do palace migrations, as all propkey stuff leads from that
+        local iCapitalPlotX = pPlayer:GetProperty(sCapitalXPropKey)
+        local iCapitalPlotY = pPlayer:GetProperty(sCapitalYPropKey)
+        local pPlot = Map.GetPlotByIndex(plotID)
+        local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
+        if iCapitalPlotX and (iCapitalPlotX ~= iPlotX or iCapitalPlotY ~= iPlotY) then
+            pPlayer:SetProperty(sCapitalXPropKey, iPlotX)
+            pPlayer:SetProperty(sCapitalYPropKey, iPlotY)
+            local oldCapitalPlot = Map.GetPlot(iCapitalPlotX, iCapitalPlotY)
+            migrateCapitalProperties(pPlayer, pPlot, oldCapitalPlot)                   -- we migrate capital properties
+        end
+
+        if not iCapitalPlotX then                           -- establish capital
+            pPlayer:SetProperty(sCapitalXPropKey, iPlotX)
+            pPlayer:SetProperty(sCapitalYPropKey, iPlotY)
+            setCapitalProperties(pPlayer, pPlot)
+        end
+
         local pConfig = PlayerConfigurations[playerID]
         if pConfig:GetCivilizationTypeName() == 'SLTH_CIVILIZATION_INFERNAL' then
             Game:SetProperty('InfernalPlot', plotID)
             AdjustArmageddonCount(5)            -- Compact broken
         end
-        local iAlignment = pPlayer:GetProperty('alignment') or 0                                -- set player alignment
-        print('Player ' .. tostring(playerID) .. ' alignment on capital settle was ' .. tostring(iAlignment))
+        local iAlignment = pPlayer:GetProperty('alignment')                                -- set player alignment
+        if not iAlignment then
+            iAlignment = 0
+            print('ERROR COULD NOT FIND PLAYER ALIGNMENT')
+        end
+        print('Player ' .. pConfig:GetLeaderTypeName() .. ' alignment on capital settle was ' ..tAlignmentPropKeys[iAlignment])
 
-        local pPlot = Map.GetPlotByIndex(plotID)
-        pPlot:SetProperty(tAlignmentPropKeys[iAlignment], 1)
-        if tAlignmentPropKeys[iAlignment] then print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment])); end
+
+        for _, sAlignmentPropKey in pairs(tAlignmentPropKeys) do
+            setPlayerPropForRequirementsCapital(pPlayer, pPlot, sAlignmentPropKey, 0)
+        end
+        if tAlignmentPropKeys[iAlignment] then
+            setPlayerPropForRequirementsCapital(pPlayer, pPlot, tAlignmentPropKeys[iAlignment], 1)
+            print('Setting alignment on capital plot ' .. tostring(tAlignmentPropKeys[iAlignment]));
+        end
 
         -- set capital commerce ratios
-        pPlot:SetProperty('CommIntoScience', 0)
-        pPlot:SetProperty('CommIntoGold', 10)
+        if not pPlot:GetProperty('CommIntoGold') then
+            setPlayerPropForRequirementsCapital(pPlayer, pPlot, 'CommIntoGold', 9)
+            setPlayerPropForRequirementsCapital(pPlayer, pPlot, 'CommIntoScience', 1)
+        end
 
         if pConfig:GetCivilizationLevelTypeName() == 'CIVILIZATION_LEVEL_CITY_STATE' then
             print('city is city state level')
@@ -313,6 +352,7 @@ function RespawnerSpawned(playerID, cityID, buildingID, plotID, isOriginalConstr
                 GrantCultureParity(iBasiumPlayerID, playerID)               -- also need to do diplo modifier or alliance.
                 local pPlayer = Players[playerID]
                 pPlayer:GetDiplomacy():SetPermanentAlliance(iBasiumPlayerID)
+                NotifyAllHumans(Locale.Lookup('LOC_MERCURIAN_SPAWNED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_MERCURIAN_SPAWNED_NOTIFICATION_DESCRIPTION'))
             end
         end
         AdjustArmageddonCount(5)            -- Compact broken
@@ -322,8 +362,6 @@ end
 function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
     local iReligion = tReligousCivicTrigger[civicIndex]
     if iReligion then
-        local sReligion = GameInfo.Religions[iReligion].ReligionType
-        local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
         local pPlayer = Players[playerID]
         local pPlayerCities = pPlayer:GetCities()
         local tCityReligionFollowers
@@ -336,7 +374,7 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             local iFollowers = 0
             for i in GameInfo.Religions() do
                 iFollowers = iFollowers + pCity:GetReligion():GetNumFollowers(i.Index)
-                print(iFollowers)
+                -- print(iFollowers)
             end
             if iFollowers == 0 then
                 tCityReligionFollowers = 0
@@ -353,16 +391,6 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             end
         end
         pLeastReligionsCity:GetReligion():AddReligiousPressure(playerID, iReligion, 1000)
-        if bHolyCityEstablished < 1 then
-            Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)            -- like RELIGION_BUDDHISM
-            local pPlot = pLeastReligionsCity:GetPlot()
-            pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
-            pLeastReligionsCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
-            if iReligion == iReligionVeil then
-                AdjustArmageddonCount(5)
-            end
-            NotifyAllHumans(Locale.Lookup('LOC_RELIGION_FOUNDED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_' .. sReligion .. '_FOUNDED_NOTIFICATION_DESCRIPTION'), pPlot:GetX(), pPlot:GetY())
-        end
     end
     -- if we have hyborem and basium disabled, this dont work and causes weirdness.
     if civicIndex == iINFERNAL_PACT_INDEX then
@@ -420,16 +448,50 @@ function GrantReligionFromCivicCompleted(playerID, civicIndex, isCancelled)
             end
         end
         if iInfernalPlot then
-            local pInfernal = Players[iInfernalPlayerId]
+            local pInfernal = Players[iInfernalPlayerId]                                -- check his treasurey...
             local iCityMakeX, iCityMakeY = iInfernalPlot:GetX(), iInfernalPlot:GetY()
             print('creating hyborem at',iCityMakeX ,iCityMakeY)
             local playerUnits = pInfernal:GetUnits()
+            local iLongbowMan = GameInfo.Units['UNIT_SLTH_LONGBOWMAN'].Index
+            local iChampion = GameInfo.Units['UNIT_SLTH_CHAMPION'].Index
+            playerUnits:Create(iLongbowMan, iCityMakeX, iCityMakeY);            -- should have mobility eh
+            playerUnits:Create(iLongbowMan, iCityMakeX, iCityMakeY);
+            playerUnits:Create(iChampion, iCityMakeX, iCityMakeY);
+            playerUnits:Create(iChampion, iCityMakeX, iCityMakeY);
+            playerUnits:Create(GameInfo.Units['UNIT_SLTH_IMP'].Index, iCityMakeX, iCityMakeY);
             playerUnits:Create(GameInfo.Units['UNIT_SETTLER'].Index, iCityMakeX, iCityMakeY);
+            playerUnits:Create(GameInfo.Units['UNIT_BUILDER'].Index, iCityMakeX, iCityMakeY);
+            -- 3 manes: , probably needs done on city settle
+            -- a second settler?
             GrantTechParity(iInfernalPlayerId, playerID)
             GrantCultureParity(iInfernalPlayerId, playerID)
             Game:SetProperty('infernal_spawned', 1)
+            Game:SetProperty('HELL_TERRAIN_BEGUN', 1)
+            NotifyAllHumans(Locale.Lookup('LOC_INFERNAL_SPAWNED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_INFERNAL_SPAWNED_NOTIFICATION_DESCRIPTION'), iCityMakeX, iCityMakeY)
         else
-            print('not yet implemented random city outside of camps')
+            print('not yet implemented random city outside of camps. Infernal Spawn failed. CRITICAL ERROR')
+        end
+    end
+end
+
+function onNewReligion(playerID, cityID, eVisibility, otherCityID)
+    print('new majority religion!')
+    local pCity = CityManager.GetCity(playerID, cityID)
+    local pCityReligion = pCity:GetReligion()
+    local eMajorityReligion = pCityReligion:GetMajorityReligion()
+    if eMajorityReligion and eMajorityReligion > -1 then
+        local sReligion = GameInfo.Religions[eMajorityReligion].ReligionType
+        print('religion is', sReligion)
+        local bHolyCityEstablished = Game:GetProperty(sReligion..'_HOLY_CITY_EXISTS') or 0
+        if bHolyCityEstablished < 1 then
+            Game:SetProperty(sReligion ..'_HOLY_CITY_EXISTS', 1)            -- like RELIGION_BUDDHISM
+            local pPlot = pCity:GetPlot()
+            pPlot:SetProperty(sReligion ..'_HOLY_CITY', 1)
+            pCity:SetProperty(sReligion ..'_HOLY_CITY', 1)
+            if eMajorityReligion == iReligionVeil then
+                AdjustArmageddonCount(5)
+            end
+            NotifyAllHumans(Locale.Lookup('LOC_RELIGION_FOUNDED_NOTIFICATION_TITLE'),Locale.Lookup('LOC_' .. sReligion .. '_FOUNDED_NOTIFICATION_DESCRIPTION'), pPlot:GetX(), pPlot:GetY())
         end
     end
 end
@@ -499,7 +561,6 @@ function FindPlotsAtRange(tCampTiles, aPlayers, iUniqueRange, bIsEquals)
         local iCampX = pPlot:GetX();
         local iCampY = pPlot:GetY();
         for loop, pPlayer in pairs(aPlayers) do
-            local iPlayer = pPlayer:GetID();
             local pPlayerCities = pPlayer:GetCities();
             for i, pLoopCity in pPlayerCities:Members() do
                 local iDistance = Map.GetPlotDistance(iCampX, iCampY, pLoopCity:GetX(), pLoopCity:GetY());
@@ -534,23 +595,24 @@ function countPlotWithinThreeCoast(pPlot)
     return iWaterCount
 end
 function onStart()
-    for iPlayerID, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
+    local tInfernalPlayers = {}
+    for _, pPlayer in pairs(PlayerManager.GetWasEverAliveMajors()) do
         local alignment = pPlayer:GetProperty('alignment')
-        local sLeaderName = PlayerConfigurations[iPlayerID]:GetLeaderTypeName()
+        local sLeaderName = PlayerConfigurations[pPlayer:GetID()]:GetLeaderTypeName()
+        print('looking for alignment for', sLeaderName)
         if not alignment then
             local iLeaderAlignment =  tLeaderAlignmentMap[sLeaderName]
             if iLeaderAlignment then
                 pPlayer:SetProperty('alignment', iLeaderAlignment)
-                print('setting player', iPlayerID, ' alignment to ' .. tostring(iLeaderAlignment))
-            else
-                pPlayer:SetProperty('alignment', -1)                -- to catch errors, remove at production
+                print('setting player', sLeaderName, tAlignmentPropKeys[iLeaderAlignment])
             end
         end
         if sLeaderName == 'LEADER_HYBOREM' then
-            Game:SetProperty('Infernal', iPlayerID)
+            Game:SetProperty('Infernal', pPlayer:GetID())
+            table.insert(tInfernalPlayers,  pPlayer:GetID())
         end
         if sLeaderName == 'LEADER_BASIUM' then
-            Game:SetProperty('Mercurian', iPlayerID)
+            Game:SetProperty('Mercurian', pPlayer:GetID())
         end
     end
     if not Game:GetProperty('ARMAGEDDON') then          -- initalize armageddon
@@ -558,6 +620,9 @@ function onStart()
     end
     if not Game:GetProperty('Infernal') then          -- initalize armageddon
         Game:SetProperty('infernal_spawned',  1)            -- stop infernals spawning if no hyborem
+    end
+    if #tInfernalPlayers > 0 then
+        Game:SetProperty('InfernalPlayers', tInfernalPlayers)
     end
 end
 
@@ -567,3 +632,5 @@ LuaEvents.NewGameInitialized.Add(onStart);
 LuaEvents.NewGameInitialized.Add(InitiateReligions);
 Events.CivicCompleted.Add(GrantReligionFromCivicCompleted)
 GameEvents.PolicyChanged.Add(onReligionSwitch)
+Events.CityReligionChanged.Add(onNewReligion)
+

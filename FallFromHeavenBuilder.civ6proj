@@ -1,0 +1,2697 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
+    <Name>Fall From Heaven: VI Port</Name>
+    <Guid>301d9851-b589-45ca-8c1a-931c8d16ede0</Guid>
+    <ProjectGuid>f1d6e542-03ea-4e6d-bab2-6e3bc6353dda</ProjectGuid>
+    <ModVersion>1.2</ModVersion>
+    <Teaser>Ports Kael's excellent Fall From Heaven mod to Civ VI</Teaser>
+    <Description>Ports Kael's excellent Fall From Heaven mod for Civ IV to Civ VI. Total Conversion mod that redoes the entire tech tree, units, buildings, wonders, Civilizations and Leaders. 20 New Civilizations, 37 New Leaders, 302 Units, 207 Buildings. Most every mechanic has been reverted to Civ IV style, including Commerce, unit and City Maintenance. Notable exclusions are 1 Unit per tile and 3 radius Cities. [NEWLINE][NEWLINE]SailorCat,Fuzzle, WildW and MC for their help on discord with SQL. Leugi, SeelingCat and Sukritact for their great reference mods for Lua. Game-Icons.net for the vast quantity of icons used in UnitFlags. This mod would not have been possible without them. See Attributions in the Attributions.txt in the readme for other 3d models.</Description>
+    <Authors>Slothoth</Authors>
+    <SpecialThanks>MC, WildW, Fuzzle, SailorCat, SeelingCat, Leugi, Sukritact, Game-Icons.net, The Warfare Expanded Team, Deliverator, Andersarts.</SpecialThanks>
+    <AffectsSavedGames>true</AffectsSavedGames>
+    <SupportsSinglePlayer>true</SupportsSinglePlayer>
+    <SupportsMultiplayer>true</SupportsMultiplayer>
+    <SupportsHotSeat>true</SupportsHotSeat>
+    <CompatibleVersions>2.0</CompatibleVersions>
+    <AssociationData><![CDATA[<Associations>
+  <Dependency type="Dlc" title="LOC_EXPANSION1_MOD_TITLE" id="1B28771A-C749-434B-9053-D1380C553DE9" />
+  <Dependency type="Dlc" title="LOC_EXPANSION2_MOD_TITLE" id="4873eb62-8ccc-4574-b784-dda455e74e68" />
+</Associations>]]></AssociationData>
+    <AssemblyName>Keniisus_Civ_Template</AssemblyName>
+    <RootNamespace>Keniisus_Civ_Template</RootNamespace>
+    <FrontEndActionData><![CDATA[<FrontEndActions><UpdateDatabase id="config"><Properties><LoadOrder>500</LoadOrder></Properties><File>Frontend/frontendConfig.sql</File><File>Frontend/leaderConfig.sql</File><File>BarbClans/frontend.sql</File></UpdateDatabase><UpdateText id="UpdateTextFFHFrontend"><Properties><LoadOrder>500</LoadOrder></Properties><File>Localisation/loc_playeritems.sql</File><File>Localisation/loc_buildings.sql</File><File>Localisation/loc_civ_leader.sql</File><File>Localisation/loc_traits.sql</File><File>Localisation/loc_units.sql</File><File>Localisation/loc_menu.sql</File><File>Localisation/loc_terrain_res_terrain_improvements.sql</File><File>Localisation/loc_projects.sql</File></UpdateText><UpdateText id="UpdateTextFFHFrontendOverride"><Properties><LoadOrder>600</LoadOrder></Properties><File>Localisation/loc_frontend_override.sql</File></UpdateText><UpdateArt id="FFHArtFrontend"><File>(Mod Art Dependency File)</File></UpdateArt><UpdateColors id="FFH_UpdateColorsFrontend"><File>Core/UI_DB/Civilization_Colors.sql</File></UpdateColors><UpdateIcons id="Icons"><Properties><LoadOrder>500</LoadOrder></Properties><File>Icons/LeaderIcons.sql</File><File>Icons/Frontend/FrontEndBuildingIcons.sql</File><File>Icons/Frontend/FrontEndImprovementIcons.sql</File><File>Icons/Frontend/FrontEndResourceIcons.sql</File><File>Icons/Frontend/FrontEndProjectIcons.sql</File><File>Icons/Frontend/FrontEndUnitIcons.sql</File><File>Icons/CommandIcons.sql</File><File>Icons/DLCPack/Icons_DLC_FrontEnd.sql</File></UpdateIcons><UpdateAudio id="UpdateAudioFrontend"><Properties><LoadOrder>902</LoadOrder></Properties><File>Platforms/Windows/Audio/FFH_Frontend_Banks.ini</File><File>Platforms/Windows/Audio/FFH_Frontend_Bank.bnk</File><File>Platforms/Windows/Audio/FFH_Frontend_Bank.txt</File><File>Platforms/Windows/Audio/SoundbanksInfo.xml</File></UpdateAudio></FrontEndActions>]]></FrontEndActionData>
+    <InGameActionData><![CDATA[<InGameActions><UpdateArt id="FFHArtGameplay"><File>(Mod Art Dependency File)</File></UpdateArt><UpdateColors id="FFH_UpdateColorsBackend"><File>Core/UI_DB/Civilization_Colors.sql</File></UpdateColors><UpdateDatabase id="Deletes_first"><Properties><LoadOrder>95</LoadOrder></Properties><File>Core/Delete_Update.sql</File><File>Core/Absorb_deletes/AbsorbDeletes.sql</File></UpdateDatabase><UpdateDatabase id="mod_compatPorcelain" criteria="PorcelainTowerNotOn"><Properties><LoadOrder>98</LoadOrder></Properties><File>Core/Absorb_deletes/Porcelain.sql</File></UpdateDatabase><UpdateDatabase id="mod_compatLeaning" criteria="LeaningTowerNotOn"><Properties><LoadOrder>98</LoadOrder></Properties><File>Core/Absorb_deletes/Leaning.sql</File></UpdateDatabase><UpdateDatabase id="Gameplay_first"><Properties><LoadOrder>100</LoadOrder></Properties><File>Core/Civilizations/shared_grant_modifiers.sql</File><File>Core/Units/Racials.sql</File></UpdateDatabase><UpdateDatabase id="Gameplay"><Properties><LoadOrder>105</LoadOrder></Properties><File>Core/Buildings.sql</File><File>Core/Civilizations/Amurites.sql</File><File>Core/Civilizations/Balseraphs.sql</File><File>Core/Civilizations/Bannor.sql</File><File>Core/Civilizations/Calabim.sql</File><File>Core/Civilizations/Elohim.sql</File><File>Core/Civilizations/Grigori.sql</File><File>Core/Civilizations/Hippus.sql</File><File>Core/Civilizations/Infernal.sql</File><File>Core/Civilizations/Kuriotates.sql</File><File>Core/Civilizations/Lanun.sql</File><File>Core/Civilizations/Malakim.sql</File><File>Core/Civilizations/Mercurians.sql</File><File>Core/Civilizations/Sheaim.sql</File><File>Core/Civilizations/Sidar.sql</File><File>Core/Civilizations/Elves/ElfSupport.sql</File><File>Core/Civilizations/Elves/Ljosalfar.sql</File><File>Core/Civilizations/Elves/Svartalfar.sql</File><File>Core/Civilizations/Dwarves/DwarfCivs.sql</File><File>Core/Civilizations/Dwarves/Khazad.sql</File><File>Core/Civilizations/Dwarves/Luchuirp.sql</File><File>Core/Civilizations/Winterborn/Winterborn.sql</File><File>Core/Civilizations/Winterborn/Illians.sql</File><File>Core/Civilizations/Winterborn/Doviello.sql</File><File>Core/Civilizations/BeastRaces/Clan.sql</File><File>Core/Civilizations/BeastRaces/OrcLizardMenSupport.sql</File><File>Core/Civilizations/BeastRaces/Barbarians.sql</File><File>Core/UI_DB/CivPolishing.sql</File><File>Core/Units/Abilities.sql</File><File>Core/Units/AiInfos.sql</File><File>Core/Units/Affinity.sql</File><File>Core/Units/BespokeUpgrades.sql</File><File>Core/Units/CombatBuffs.sql</File><File>Core/Units/ElementalDamage.sql</File><File>Core/Units/Equipment.sql</File><File>Core/Units/HeroBanning.sql</File><File>Core/Units/Magic.sql</File><File>Core/Units/National_Units.sql</File><File>Core/Units/Promotion.sql</File><File>Core/Units/Religions.sql</File><File>Core/Units/UnitCommands.sql</File><File>Core/Units/Units.sql</File><File>Core/Governments.sql</File><File>Core/Resources.sql</File><File>Core/Improvements.sql</File><File>Core/Technologies.sql</File><File>Core/Specialists/Specialists.sql</File><File>Core/Specialists/GreatPersons.sql</File><File>Core/Modifier_Support.sql</File><File>Core/Assets_ingame.sql</File><File>Core/Features.sql</File><File>Core/Globals.sql</File><File>Core/Victories.sql</File><File>Core/ConditionalBuildings.sql</File><File>Core/NaturalWonders.sql</File><File>Core/LeaderTraits.sql</File><File>Core/AI/ai.sql</File><File>Core/AI/ai_trait.sql</File><File>Core/Experimental/Commerce.sql</File><File>Core/Experimental/GPP_FromSpecialists.sql</File><File>Core/Lua_support/WorldSpellSupport.sql</File><File>Core/Lua_support/Tech_dummies.sql</File><File>Core/Audio.sql</File></UpdateDatabase><UpdateDatabase id="Gameplay_addon"><Properties><LoadOrder>110</LoadOrder></Properties><File>Core/Units/ResourceBuffs.sql</File><File>Core/PostEdits.sql</File><File>Core/Specialists/GeneratedGreatPeople.sql</File></UpdateDatabase><UpdateDatabase id="GameplayBuildingPrereqs" criteria="BuildingPrereqParam"><Properties><LoadOrder>105</LoadOrder></Properties><File>Core/Units/Prereq_Format.sql</File></UpdateDatabase><UpdateDatabase id="GameplayBuildingPrereqs" criteria="NotBuildingPrereqParam"><Properties><LoadOrder>105</LoadOrder></Properties><File>Core/Units/BuildingBoostOverPrereq.sql</File></UpdateDatabase><UpdateText id="FFHText" criteria="NotBuildingPrereqParam"><Properties><LoadOrder>550</LoadOrder></Properties><File>Localisation/loc_building_prereqs.sql</File></UpdateText><UpdateDatabase id="AztecFallbackFFH" criteria="AztecNotOn"><File>DLC_Compat/aztec.sql</File></UpdateDatabase><UpdateDatabase id="BabylonFallbackFFH" criteria="BabylonNotOn"><File>DLC_Compat/babylon.sql</File></UpdateDatabase><UpdateDatabase id="EthiopiaFallbackFFH" criteria="EthiopiaNotOn"><File>DLC_Compat/ethiopia.sql</File></UpdateDatabase><UpdateDatabase id="KhmerFallbackFFH" criteria="KhmerNotOn"><File>DLC_Compat/khmer.sql</File></UpdateDatabase><UpdateDatabase id="MayaFallbackFFH" criteria="MayaNotOn"><File>DLC_Compat/maya.sql</File></UpdateDatabase><UpdateDatabase id="NubiaFallbackFFH" criteria="NubiaNotOn"><File>DLC_Compat/nubia.sql</File></UpdateDatabase><UpdateDatabase id="PersiaFallbackFFH" criteria="PersiaNotOn"><File>DLC_Compat/persia.sql</File></UpdateDatabase><UpdateDatabase id="PortugalFallbackFFH" criteria="PortugalNotOn"><File>DLC_Compat/portugal.sql</File></UpdateDatabase><UpdateDatabase id="VietnamFallbackFFH" criteria="VietnamNotOn"><File>DLC_Compat/vietnam.sql</File></UpdateDatabase><UpdateDatabase id="FFHBarbarianClans" criteria="BarbarianClansMode"><File>BarbClans/BarbarianClans.sql</File><File>BarbClans/Lairs.sql</File></UpdateDatabase><UpdateText id="FFHText"><Properties><LoadOrder>500</LoadOrder></Properties><File>Localisation/loc_abilities.sql</File><File>Localisation/loc_barbs.sql</File><File>Localisation/loc_beliefs.sql</File><File>Localisation/loc_buildings.sql</File><File>Localisation/loc_cities_great_people_names.sql</File><File>Localisation/loc_civ_leader.sql</File><File>Localisation/loc_commands.sql</File><File>Localisation/loc_equipment.sql</File><File>Localisation/loc_notifications.sql</File><File>Localisation/loc_pedia.sql</File><File>Localisation/loc_policies.sql</File><File>Localisation/loc_projects.sql</File><File>Localisation/loc_promotions.sql</File><File>Localisation/loc_techs_civics.sql</File><File>Localisation/loc_terrain_res_terrain_improvements.sql</File><File>Localisation/loc_traits.sql</File><File>Localisation/loc_ui.sql</File><File>Localisation/loc_ui_replacements.sql</File><File>Localisation/loc_units.sql</File></UpdateText><AddGameplayScripts id="luaGameplayFFH"><File>Lua/Maintenance.lua</File><File>Lua/ExtraHeroes.lua</File><File>Lua/Gameplay.lua</File><File>Lua/Specialists.lua</File><File>Core/Civilizations/Dwarves/Khazad.lua</File><File>Lua/Promotions.lua</File><File>Lua/Alignment.lua</File><File>Lua/Armageddon.lua</File><File>Lua/Combat.lua</File><File>Lua/WorldSpellSupport.lua</File><File>Lua/RequestOperationSupport.lua</File></AddGameplayScripts><AddUserInterfaces id="UIIngameFFH"><Properties><Context>InGame</Context></Properties><File>UI/ExtraHeroesOperation.xml</File><File>UI/WorldSpell.xml</File></AddUserInterfaces><AddUserInterfaces id="FFHTrackerSliderAttach"><Properties><Context>InGame</Context><LoadOrder>900</LoadOrder></Properties><Items><File>UI/Panels/Slider_Attach_Tracker.xml</File></Items></AddUserInterfaces><ImportFiles id="FFHTrackerSliderImport"><Properties><LoadOrder>900</LoadOrder></Properties><File>UI/Panels/Slider_Attach_Tracker.lua</File><File>UI/Panels/SliderSupport.lua</File></ImportFiles><AddUserInterfaces id="FFHDiploInject"><Properties><Context>InGame</Context><LoadOrder>900</LoadOrder></Properties><Items><File>UI/Replacements/DiplomacyActionViewInjector.xml</File></Items></AddUserInterfaces><ImportFiles id="FFHDiploInjectImport"><Properties><LoadOrder>900</LoadOrder></Properties><File>UI/Replacements/DiplomacyActionViewInjector.lua</File><File>UI/Replacements/DiplomacyActionViewInjector.xml</File></ImportFiles><AddUserInterfaces id="UIMusicFFH"><Properties><Context>InGame</Context></Properties><File>UI/FFH_MusicController.xml</File><File>UI/FFH_MusicController.lua</File></AddUserInterfaces><ReplaceUIScript id="ResearchChooserHideFFH"><Properties><LoadOrder>1100</LoadOrder><LuaContext>ResearchChooser</LuaContext><LuaReplace>UI/ResearchChooser_overrides.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ReplaceUI_TechTree_BaseFFH"><Properties><LoadOrder>10950</LoadOrder><LuaContext>TechTree</LuaContext><LuaReplace>UI/TechTree_overrides.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ReplaceUI_TopPanel_BaseFFH"><Properties><LoadOrder>1100</LoadOrder><LuaContext>TopPanel</LuaContext><LuaReplace>UI/FFH_TopPanel.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ReplaceUI_TopPanel_XP2FFH" criteria="Expansion2"><Properties><LoadOrder>1105</LoadOrder><LuaContext>TopPanel</LuaContext><LuaReplace>UI/FFH_TopPanel_XP2.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ReplaceUI_ModalScreen_PlayerYieldsHelper_FFH"><Properties><LoadOrder>1105</LoadOrder><LuaContext>ModalScreen_PlayerYieldsHelper</LuaContext><LuaReplace>UI/ModalScreen_PlayerYieldsHelper.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ReplaceUI_ReportScreen_FFH"><Properties><LoadOrder>1105</LoadOrder><LuaContext>ReportScreen</LuaContext><LuaReplace>UI/ReportScreen.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ReplaceUI_ToolTipHelper_PlayerYields_FFH"><Properties><LoadOrder>1105</LoadOrder><LuaContext>ToolTipHelper_PlayerYields</LuaContext><LuaReplace>UI/ToolTipHelper_PlayerYields.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ReplaceUI_UnitPanel"><Properties><LoadOrder>1105</LoadOrder><LuaContext>UnitPanel</LuaContext><LuaReplace>UI/UnitPanel_skip_promos.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="XP2WROverride"><Properties><LoadOrder>1001</LoadOrder><LuaContext>WorldRankings</LuaContext><LuaReplace>UI/WorldRankings.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ReplaceUI_CivicsTree_BaseFFH"><Properties><LoadOrder>10950</LoadOrder><LuaContext>CivicsTree</LuaContext><LuaReplace>UI/CivicsTree.lua</LuaReplace></Properties></ReplaceUIScript><ReplaceUIScript id="ProductionPanelOverride"><Properties><LuaContext>ProductionPanel</LuaContext><LuaReplace>UI/Replacements/ProductionQueue.lua</LuaReplace></Properties></ReplaceUIScript><ImportFiles id="ImportUIFiles"><Properties><LoadOrder>901</LoadOrder></Properties><File>UI/Replacements/CityBannerManager_BarbarianClansMode.lua</File><File>UI/Replacements/Civ6Common.lua</File><File>UI/Replacements/InstanceManager.lua</File><File>UI/Replacements/TreatWithTribePopup.lua</File><File>UI/Replacements/TreatWithTribePopup.xml</File><File>UI/CityBannerManager.xml</File><File>UI/CivicsTree.xml</File><File>UI/CivicsTree.lua</File><File>UI/GovernmentScreen_Model.lua</File><File>UI/GovernmentScreen.lua</File><File>UI/GovernmentScreen.xml</File><File>UI/TabSupport.lua</File><File>UI/TechTree.xml</File><File>UI/TechTreeNode.xml</File><File>UI/ToolTipHelper_PlayerYields.lua</File><File>UI/UnitPanelSupportSloth.lua</File><File>UI/UnitPromotionPopup.lua</File><File>UI/UnitPromotionPopup.xml</File><File>Textures/POLICY_JNR_ECONOMIC_01_EMPORIUMS_SCENE.dds</File><File>Textures/POLICY_JNR_ECONOMIC_01_EMPORIUMS_SCENE_SUMERIA.dds</File><File>Textures/POLICY_JNR_ECONOMIC_02_THALASSOCRACY_SCENE.dds</File><File>Textures/POLICY_JNR_ECONOMIC_03_GUILDS_SCENE.dds</File><File>Textures/POLICY_JNR_ECONOMIC_04_PROTECTIONISM_SCENE.dds</File><File>Textures/POLICY_JNR_ECONOMIC_05_FREE_TRADE_SCENE.dds</File><File>Textures/POLICY_JNR_ECONOMIC_06_CENTRAL_PLANNING_SCENE.dds</File><File>Textures/POLICY_JNR_ECONOMIC_07_SUSTAINABILITY_SCENE.dds</File><File>Textures/POLICY_JNR_ECONOMIC_08_FUTURE_SCENE.dds</File><File>Textures/Governments_ActiveCard_Small.dds</File><File>Textures/Governments_AdminCard_Compact.dds</File><File>Textures/Governments_Backing_Card.dds</File><File>Textures/Governments_BackingHover_Card.dds</File><File>Textures/Governments_BackingSelected_Card.dds</File><File>Textures/Governments_BackingDisabled_Card.dds</File><File>Textures/Governments_CardSlot_Vertical.dds</File><File>Textures/Governments_ImageFrame_Small.dds</File><File>Textures/Governments_SelectedCard_Small.dds</File><File>Textures/Governments_DiplomaticCard_Compact.dds</File><File>Textures/Governments_EconomicCard_Compact.dds</File><File>Textures/Governments_GreatPersonCard_Compact.dds</File><File>Textures/Governments_LaborCard_Compact.dds</File><File>Textures/Governments_MilitaryCard_Compact.dds</File><File>Textures/Governments_ReligiousCard_Compact.dds</File><File>Textures/Governments_LockedCard_Compact.dds</File></ImportFiles><ImportFiles id="XP2WRxmlOverride"><Properties><LoadOrder>101</LoadOrder></Properties><File>UI/WorldRankings.xml</File></ImportFiles><UpdateIcons id="Icons"><File>Icons/BuildingIcons.sql</File><File>Icons/CommandIcons.sql</File><File>Icons/ImprovementIcons.sql</File><File>Icons/LeaderIcons.sql</File><File>Icons/MiscIcons.sql</File><File>Icons/ProjectIcons.sql</File><File>Icons/ResourceIcons.sql</File><File>Icons/TechIcons.sql</File><File>Icons/UnitIcons.sql</File></UpdateIcons><UpdateIcons id="AustraliaIconsFFH" criteria="AustraliaOn"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_Australia.sql</File></UpdateIcons><UpdateIcons id="BabylonIconsFFH"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_Babylon.sql</File></UpdateIcons><UpdateIcons id="ByzantineIconsFFH"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_Byzantine.sql</File></UpdateIcons><UpdateIcons id="EthiopiaIconsFFH" criteria="EthiopiaOn"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_Ethiopian.sql</File></UpdateIcons><UpdateIcons id="KhmerIconsFFH" criteria="KhmerOn"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_Khmer.sql</File></UpdateIcons><UpdateIcons id="MayaIconsFFH" criteria="MayaOn"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_Maya.sql</File></UpdateIcons><UpdateIcons id="PersiaIconsFFH" criteria="PersiaOn"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_Persia.sql</File></UpdateIcons><UpdateIcons id="PortugalIconsFFH" criteria="PortugalOn"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_PortugalMode.xml</File></UpdateIcons><UpdateIcons id="VikingsIconsFFH" criteria="VikingsOn"><Properties><LoadOrder>101</LoadOrder></Properties><File>Icons/DLCPack/Icons_Vikings.sql</File></UpdateIcons><ImportFiles id="ErebusMap"><File>Maps/Erebus.lua</File><File>Maps/PythonConversion.lua</File><File>Maps/IO_Fake.lua</File><File>Maps/MapUtilities.lua</File></ImportFiles><ImportFiles id="ImportIncludeScripts"><Properties><LoadOrder>902</LoadOrder></Properties><File>Lua/SpawnSupport.lua</File><File>Lua/Lairs.lua</File></ImportFiles><UpdateAudio id="UpdateAudioIngame"><Properties><LoadOrder>902</LoadOrder></Properties><File>Platforms/Windows/Audio/FFH_Banks.ini</File><File>Platforms/Windows/Audio/FFH_SFX_Bank.bnk</File><File>Platforms/Windows/Audio/FFH_SFX_Bank.txt</File><File>Platforms/Windows/Audio/FFH_Music_Bank.bnk</File><File>Platforms/Windows/Audio/FFH_Music_Bank.txt</File><File>Platforms/Windows/Audio/SoundbanksInfo.xml</File></UpdateAudio></InGameActions>]]></InGameActionData>
+    <ActionCriteriaData><![CDATA[<ActionCriteria><Criteria id="Expansion2"><GameCoreInUse>Expansion2</GameCoreInUse></Criteria><Criteria id="PorcelainTowerNotOn"><ModInUse inverse="1">89a948de-5e48-4608-81a4-c52bd68bc4eb</ModInUse></Criteria><Criteria id="LeaningTowerNotOn"><ModInUse inverse="1">d1c3ef16-00ed-4d72-a468-1e584fdb85ad</ModInUse></Criteria><Criteria id="AztecNotOn"><ModInUse inverse="1">02A8BDDE-67EA-4D38-9540-26E685E3156E</ModInUse></Criteria><Criteria id="BabylonNotOn"><ModInUse inverse="1">8424840C-92EF-4426-A9B4-B4E0CB818049</ModInUse></Criteria><Criteria id="EthiopiaNotOn"><ModInUse inverse="1">1B394FE9-23DC-4868-8F0A-5220CB8FB427</ModInUse></Criteria><Criteria id="KhmerNotOn"><ModInUse inverse="1">1F367231-A040-4793-BDBB-088816853683</ModInUse></Criteria><Criteria id="MayaNotOn"><ModInUse inverse="1">9DE86512-DE1A-400D-8C0A-AB46EBBF76B9</ModInUse></Criteria><Criteria id="NubiaNotOn"><ModInUse inverse="1">643EA320-8E1A-4CF1-A01C-00D88DDD131A</ModInUse></Criteria><Criteria id="PersiaNotOn"><ModInUse inverse="1">E2749E9A-8056-45CD-901B-C368C8E83DEB</ModInUse></Criteria><Criteria id="PortugalNotOn"><ModInUse inverse="1">FFDF4E79-DEE2-47BB-919B-F5739106627A</ModInUse></Criteria><Criteria id="VietnamNotOn"><ModInUse inverse="1">A3F42CD4-6C3E-4F5A-BC81-BE29E0C0B87C</ModInUse></Criteria><Criteria id="AztecOn"><ModInUse>02A8BDDE-67EA-4D38-9540-26E685E3156E</ModInUse></Criteria><Criteria id="AustraliaOn"><ModInUse>E3F53C61-371C-440B-96CE-077D318B36C0</ModInUse></Criteria><Criteria id="BabylonOn"><ModInUse>8424840C-92EF-4426-A9B4-B4E0CB818049</ModInUse></Criteria><Criteria id="ByzantineOn"><ModInUse>A1100FC4-70F2-4129-AC27-2A65A685ED08</ModInUse></Criteria><Criteria id="EthiopiaOn"><ModInUse>1B394FE9-23DC-4868-8F0A-5220CB8FB427</ModInUse></Criteria><Criteria id="KhmerOn"><ModInUse>1F367231-A040-4793-BDBB-088816853683</ModInUse></Criteria><Criteria id="MayaOn"><ModInUse>9DE86512-DE1A-400D-8C0A-AB46EBBF76B9</ModInUse></Criteria><Criteria id="NubiaOn"><ModInUse>643EA320-8E1A-4CF1-A01C-00D88DDD131A</ModInUse></Criteria><Criteria id="PersiaOn"><ModInUse>E2749E9A-8056-45CD-901B-C368C8E83DEB</ModInUse></Criteria><Criteria id="PortugalOn"><ModInUse>FFDF4E79-DEE2-47BB-919B-F5739106627A</ModInUse></Criteria><Criteria id="VietnamOn"><ModInUse>A3F42CD4-6C3E-4F5A-BC81-BE29E0C0B87C</ModInUse></Criteria><Criteria id="VikingsOn"><ModInUse>2F6E858A-28EF-46B3-BEAC-B985E52E9BC1</ModInUse></Criteria><Criteria id="BuildingPrereqParam"><ConfigurationValueMatches><Group>Game</Group><ConfigurationId>GAMEMODE_UNIT_BUILDING_PREREQS</ConfigurationId><Value>1</Value></ConfigurationValueMatches></Criteria><Criteria id="NotBuildingPrereqParam"><ConfigurationValueMatches><Group>Game</Group><ConfigurationId>GAMEMODE_UNIT_BUILDING_PREREQS</ConfigurationId><Value>0</Value></ConfigurationValueMatches></Criteria><Criteria id="BarbarianClansMode"><ConfigurationValueMatches><Group>Game</Group><ConfigurationId>GAMEMODE_BARBARIAN_CLANS</ConfigurationId><Value>1</Value></ConfigurationValueMatches></Criteria></ActionCriteria>]]></ActionCriteriaData>
+    <Homepage>https://github.com/slothoth/Fall-From-Heaven</Homepage>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
+    <OutputPath>.</OutputPath>
+    <KeepRawArtDefs>true</KeepRawArtDefs>
+    <HotloadBuild>true</HotloadBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="ArtDefs\" />
+    <Folder Include="BarbClans\" />
+    <Folder Include="Core\" />
+    <Folder Include="Core\Absorb_deletes\" />
+    <Folder Include="Core\AI\" />
+    <Folder Include="Core\Civilizations\" />
+    <Folder Include="Core\Civilizations\BeastRaces\" />
+    <Folder Include="Core\Civilizations\Dwarves\" />
+    <Folder Include="Core\Civilizations\Elves\" />
+    <Folder Include="Core\Civilizations\Winterborn\" />
+    <Folder Include="Core\Experimental\" />
+    <Folder Include="Core\Lua_support\" />
+    <Folder Include="Core\Specialists\" />
+    <Folder Include="Core\UI_DB\" />
+    <Folder Include="Core\Units\" />
+    <Folder Include="DLC_Compat\" />
+    <Folder Include="Frontend\" />
+    <Folder Include="Geometries\" />
+    <Folder Include="Icons\" />
+    <Folder Include="Icons\DLCPack\" />
+    <Folder Include="Icons\Frontend\" />
+    <Folder Include="Localisation\" />
+    <Folder Include="Lua\" />
+    <Folder Include="Maps\" />
+    <Folder Include="Materials\" />
+    <Folder Include="UI\" />
+    <Folder Include="UI\Panels\" />
+    <Folder Include="UI\Replacements\" />
+    <Folder Include="XLPs" />
+    <Folder Include="Textures" />
+    <Folder Include="Platforms" />
+    <Folder Include="Platforms\Windows" />
+    <Folder Include="Platforms\Windows\Audio" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtDef Include="ArtDefs\Animal_Units.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Animal_Unit_Bins.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Units.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Unit_Bins.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Buildings.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Civilizations.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Clutter.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Cultures.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\FallbackLeaders.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Features.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Improvements.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Landmarks.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Post_Build_Units.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\Resources.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\SLTH_Units.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\SLTH_VFX.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\TerrainStyle.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <ArtDef Include="ArtDefs\WonderMovie.artdef">
+      <SubType>Content</SubType>
+    </ArtDef>
+    <XLP Include="XLPs\FKFX_VFX.xlp">
+      <SubType>Content</SubType>
+    </XLP>
+    <Content Include="Platforms\Windows\Audio\1009244506.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1017820512.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1026088180.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1029173857.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1035815169.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1041184898.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1042087563.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1045771201.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1049129748.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1054416388.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1061815146.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\106951828.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\125078373.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\130055884.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\130679889.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\133912637.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\148494688.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\169280445.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\171580818.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\1819081.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\192765785.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\202606698.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\204331546.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\216067834.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\216246112.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\224382463.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\234041257.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\253281140.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\257229580.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\266431511.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\279596073.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\293764152.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\302177119.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\316276812.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\321486893.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\327221566.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\330940366.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\371764239.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\375609768.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\375832524.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\385228163.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\388849913.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\389728841.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\403085916.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\406109454.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\406381401.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\409589539.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\426064341.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\445226214.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\449595019.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\462251060.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\463965762.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\464562009.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\480902899.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\491851568.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\504040921.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\506365091.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\510329626.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\516028506.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\517872084.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\52269306.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\553146565.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\558110006.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\558139060.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\568128482.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\568351328.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\573192550.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\580847974.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\589894469.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\632960122.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\638811279.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\648473643.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\650260436.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\653107435.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\655933348.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\6870636.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\69789600.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\707036833.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\709143635.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\71309043.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\721965429.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\729116565.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\739850851.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\743348248.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\748782238.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\74985453.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\75019311.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\752353531.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\757015066.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\772944104.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\779247831.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\795745704.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\815539279.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\815767743.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\817594105.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\822016107.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\854229691.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\860168825.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\86436533.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\865245294.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\867313325.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\880849003.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\882168889.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\88913689.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\895705239.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\896006140.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\899083205.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\922243687.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\923903951.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\94007058.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\940528618.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\941904999.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\955497485.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\969847910.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\988532498.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\988909119.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\999209345.wem">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\FFH_Banks.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\FFH_Frontend_Bank.bnk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\FFH_Frontend_Bank.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\FFH_Frontend_Banks.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\FFH_Music_Bank.bnk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\FFH_Music_Bank.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\FFH_SFX_Bank.bnk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\FFH_SFX_Bank.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms\Windows\Audio\SoundbanksInfo.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="BarbClans\BarbarianClans.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="BarbClans\Lairs.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="BarbClans\frontend.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\AI\ai.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\AI\ai_trait.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Absorb_deletes\AbsorbDeletes.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Absorb_deletes\Leaning.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Absorb_deletes\Porcelain.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Assets_ingame.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Audio.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Buildings.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Amurites.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Balseraphs.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Bannor.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\BeastRaces\Barbarians.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\BeastRaces\Clan.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\BeastRaces\OrcLizardMenSupport.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Calabim.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Dwarves\DwarfCivs.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Dwarves\Khazad.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Dwarves\Khazad.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Dwarves\Luchuirp.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Elohim.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Elves\ElfSupport.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Elves\Ljosalfar.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Elves\Svartalfar.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Grigori.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Hippus.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Infernal.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Kuriotates.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Lanun.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Malakim.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Mercurians.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Sheaim.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Sidar.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Winterborn\Doviello.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Winterborn\Illians.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\Winterborn\Winterborn.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Civilizations\shared_grant_modifiers.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\ConditionalBuildings.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Delete_Update.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Experimental\Commerce.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Experimental\GPP_FromSpecialists.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Features.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Globals.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Governments.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Improvements.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\LeaderTraits.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Lua_support\Tech_dummies.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Modifier_Support.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\NaturalWonders.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\PostEdits.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Resources.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Specialists\GeneratedGreatPeople.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Specialists\GreatPersons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Specialists\Specialists.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Technologies.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\UI_DB\CivPolishing.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\UI_DB\Civilization_Colors.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Abilities.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Affinity.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\AiInfos.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\BespokeUpgrades.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\BuildingBoostOverPrereq.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\CombatBuffs.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\ElementalDamage.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Equipment.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\HeroBanning.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Magic.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\National_Units.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Prereq_Format.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Promotion.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Racials.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Religions.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\ResourceBuffs.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\UnitCommands.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Units\Units.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Victories.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\aztec.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\babylon.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\ethiopia.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\khmer.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\maya.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\nubia.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\persia.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\portugal.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="DLC_Compat\vietnam.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Frontend\frontendConfig.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Frontend\leaderConfig.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\BuildingIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\CommandIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_Australia.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_Babylon.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_Byzantine.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_DLC_FrontEnd.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_Ethiopian.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_Khmer.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_Maya.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_Persia.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_PortugalMode.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\DLCPack\Icons_Vikings.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Frontend\FrontEndBuildingIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Frontend\FrontEndImprovementIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Frontend\FrontEndProjectIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Frontend\FrontEndResourceIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Frontend\FrontEndUnitIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\ImprovementIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\LeaderIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\MiscIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\ProjectIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\ResourceIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\TechIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\UnitIcons.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_abilities.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_barbs.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_beliefs.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_building_prereqs.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_buildings.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_cities_great_people_names.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_civ_leader.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_commands.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_equipment.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_frontend_override.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_menu.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_notifications.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_pedia.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_playeritems.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_policies.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_projects.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_promotions.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_techs_civics.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_terrain_res_terrain_improvements.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_traits.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_ui.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_ui_replacements.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localisation\loc_units.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\Alignment.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\Armageddon.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\Combat.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\ExtraHeroes.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\Gameplay.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\Lairs.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\Maintenance.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\Promotions.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\RequestOperationSupport.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\SpawnSupport.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\Specialists.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lua\WorldSpellSupport.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Maps\Erebus.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Maps\IO_Fake.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Maps\MapUtilities.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Maps\PythonConversion.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_ActiveCard_Small.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_AdminCard_Compact.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_BackingDisabled_Card.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_BackingHover_Card.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_BackingSelected_Card.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_Backing_Card.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_CardSlot_Vertical.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_DiplomaticCard_Compact.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_EconomicCard_Compact.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_GreatPersonCard_Compact.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_ImageFrame_Small.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_LaborCard_Compact.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_LockedCard_Compact.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_MilitaryCard_Compact.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_ReligiousCard_Compact.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\Governments_SelectedCard_Small.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_01_EMPORIUMS_SCENE.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_01_EMPORIUMS_SCENE_SUMERIA.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_02_THALASSOCRACY_SCENE.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_03_GUILDS_SCENE.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_04_PROTECTIONISM_SCENE.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_05_FREE_TRADE_SCENE.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_06_CENTRAL_PLANNING_SCENE.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_07_SUSTAINABILITY_SCENE.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Textures\POLICY_JNR_ECONOMIC_08_FUTURE_SCENE.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\CityBannerManager.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\CivicsTree.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\CivicsTree.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ExtraHeroesOperation.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ExtraHeroesOperation.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\FFH_MusicController.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\FFH_MusicController.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\FFH_TopPanel.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\FFH_TopPanel_XP2.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\GovernmentScreen.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\GovernmentScreen.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\GovernmentScreen_Model.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ModalScreen_PlayerYieldsHelper.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Panels\SliderSupport.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Panels\Slider_Attach_Tracker.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Panels\Slider_Attach_Tracker.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Replacements\CityBannerManager_BarbarianClansMode.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Replacements\Civ6Common.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Replacements\DiplomacyActionViewInjector.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Replacements\DiplomacyActionViewInjector.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Replacements\InstanceManager.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Replacements\ProductionQueue.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Replacements\TreatWithTribePopup.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Replacements\TreatWithTribePopup.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ReportScreen.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ResearchChooser_overrides.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\TabSupport.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\TechTree.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\TechTreeNode.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\TechTree_overrides.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\TechTree_support.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ToolTipHelper_PlayerYields.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\UnitPanelSupportSloth.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\UnitPanel_skip_promos.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\UnitPromotionPopup.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\UnitPromotionPopup.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\WorldRankings.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\WorldRankings.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\WorldSpell.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\WorldSpell.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="test_govs.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Core\Lua_support\WorldSpellSupport.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="FallFromHeavenBuilder.Art.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_45.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_45.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_55.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_55.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_64.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_64.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_80.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\ICON_LEADER_ALEXIS_80.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_128.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_128.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_38.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_38.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_80.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_0_80.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_128.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_128.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_38.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_38.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_80.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Buildings_Atlas_1_80.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="XLPs\Shell_Loading.xlp">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="XLPs\Units.xlp">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="XLPs\FireFX.xlp">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_22.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_22.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_38.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_38.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_80.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_0_80.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_22.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_22.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_38.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_38.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_80.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_1_80.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_22.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_22.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_38.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_38.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_80.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_2_80.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_22.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_22.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_38.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_38.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_80.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Units_Atlas_3_80.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_JONAS.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_JONAS.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_JONAS_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_JONAS_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_22.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_22.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_38.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_38.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_64.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_0_64.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_22.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_22.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_256.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_256.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_32.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_32.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_38.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_38.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_50.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_50.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_64.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Slth_Resource_Atlas_fow_0_64.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\DemonHornBack.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\DemonHornBack.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\DemonHornIllidan.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\DemonHornIllidan.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\DemonHornSmallFront.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\DemonHornSmallFront.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\GoatExtra.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\GoatExtra.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\GoatSpearManShoulderLegs.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\GoatSpearManShoulderLegs.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\proper_tusk.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\proper_tusk.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\RamHorn.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\RamHorn.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\SpearmanGoatTwo.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\SpearmanGoatTwo.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Base_Male_Iron_Golem.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\DemonHornBack.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\DemonHornFrontSmall.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\DemonHornIllidan.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Goat_Fur_Material.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Hoof.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RamHorn.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_BLACK.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_Body.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_BROWN.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_DEEPRED.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_FIRE.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_FULLGREY.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_GREY_TRANSPARENT.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_Lime_Green.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_PALEBLUE.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_PALEBLUE_TRANSPARENT.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_WASHED.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\RES_WEAKPURPLE.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="XLPs\Clutter.xlp">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="XLPs\LeaderFallbacks.xlp">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="XLPs\UnitFlags_Resources_Leaders_Civs_Icons.xlp">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\BackHornBaseColor.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\BackHornBaseColor.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\BackHornNormalMap.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\BackHornNormalMap.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\DemonHornFrontSmall_Base.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\DemonHornFrontSmall_Base.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\DemonHornFrontSmall_Normal.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\DemonHornFrontSmall_Normal.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\DemonHornNormalMap.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\DemonHornNormalMap.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_AMELANCHIER.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_AMELANCHIER.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_ARENDEL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_ARENDEL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_ARTURUS.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_ARTURUS.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_AURIC.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_AURIC.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_BASIUM.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_BASIUM.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_BEERI.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_BEERI.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_CAPRIA.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_CAPRIA.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_CARDITH.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_CARDITH.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_CASSIEL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_CASSIEL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_CHARADON.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_CHARADON.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DAIN.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DAIN.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DECIUS.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DECIUS.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DECIUS_BANNOR.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DECIUS_BANNOR.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DECIUS_CALABIM.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DECIUS_CALABIM.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DECIUS_MALAKIM.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_DECIUS_MALAKIM.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_EINION.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_EINION.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_ETHNE.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_ETHNE.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_FAERYL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_FAERYL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_FALAMAR.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_FALAMAR.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_FLAUROS.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_FLAUROS.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_GARRIM.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_GARRIM.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_HANNAH.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_HANNAH.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_HYBOREM.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_HYBOREM.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_KANDROS.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_KANDROS.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_KEELYN.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_KEELYN.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_MAHALA.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_MAHALA.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_OSGABELLA.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_OSGABELLA.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_PERPENTACH.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_PERPENTACH.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_RHOANNA.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_RHOANNA.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_SABATHIEL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_SABATHIEL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_SANDALPHON.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_SANDALPHON.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_SHEELBA.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_SHEELBA.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_TASUNKE.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_TASUNKE.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_TEBRYN.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_TEBRYN.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_THESSA.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_THESSA.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_THESSALONICA.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_THESSALONICA.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_VALLEDIA.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_VALLEDIA.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_VARN.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\FALLBACK_NEUTRAL_LEADER_VARN.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearman.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearman.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanAO.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanAO.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanAOTwo.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanAOTwo.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanNormal.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanNormal.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanNormalTwo.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanNormalTwo.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanTwo.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\GoatFurSpearmanTwo.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofNew.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofNew.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofNewAO.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofNewAO.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofNewMetallic.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofNewMetallic.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofNewNormal.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofNewNormal.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofSpearmanAlbedo.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofSpearmanAlbedo.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofSpearmanAO.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofSpearmanAO.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofSpearmanNormal.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\HoofSpearmanNormal.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\IllidanHornBaseColor.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\IllidanHornBaseColor.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_ALEXIS_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_ALEXIS_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_AMELANCHIER_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_AMELANCHIER_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_ARENDEL_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_ARENDEL_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_ARTURUS_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_ARTURUS_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_AURIC_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_AURIC_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_BASIUM_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_BASIUM_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_BEERI_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_BEERI_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_CAPRIA_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_CAPRIA_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_CARDITH_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_CARDITH_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_CASSIEL_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_CASSIEL_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_CHARADON_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_CHARADON_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_DAIN_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_DAIN_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_DECIUS_BANNOR_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_DECIUS_BANNOR_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_DECIUS_CALABIM_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_DECIUS_CALABIM_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_DECIUS_MALAKIM_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_DECIUS_MALAKIM_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_EINION_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_EINION_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_ETHNE_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_ETHNE_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_FAERYL_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_FAERYL_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_FALAMAR_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_FALAMAR_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_FALLBACK_NEUTRAL_LEADER_ALEXIS_ALT.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_FALLBACK_NEUTRAL_LEADER_ALEXIS_ALT.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_FLAUROS_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_FLAUROS_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_GARRIM_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_GARRIM_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_HANNAH_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_HANNAH_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_HYBOREM_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_HYBOREM_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_KANDROS_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_KANDROS_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_KEELYN_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_KEELYN_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_MAHALA_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_MAHALA_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_OSGABELLA_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_OSGABELLA_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_PERPENTACH_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_PERPENTACH_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_RHOANNA_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_RHOANNA_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_SABATHIEL_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_SABATHIEL_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_SANDALPHON_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_SANDALPHON_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_SHEELBA_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_SHEELBA_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_TASUNKE_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_TASUNKE_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_TEBRYN_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_TEBRYN_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_THESSALONICA_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_THESSALONICA_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_THESSA_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_THESSA_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_VALLEDIA_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_VALLEDIA_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_VARN_NEUTRAL.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\LEADER_VARN_NEUTRAL.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RamHornBaseColor.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RamHornBaseColor.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RamHornNormalMap.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RamHornNormalMap.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_Black.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_Black.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_Body_B.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_Body_B.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_Brown.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_Brown.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_DeepRed.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_DeepRed.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_FIRE_ALT.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_FIRE_ALT.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_FullGrey.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_FullGrey.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_LIME_GREEN.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_LIME_GREEN.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_LowColor.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_LowColor.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_Pale_Blue.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_Pale_Blue.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_WeakPurple.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\RES_WeakPurple.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Hyborem.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Hyborem.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Hyborem_Atlas.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Hyborem_Body.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Hyborem_Legs.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Hyborem_Wing.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Atlas_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Atlas_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Atlas_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Atlas_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Atlas_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Atlas_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Body_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Body_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Body_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Body_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Body_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Body_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Legs_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Legs_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Legs_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Legs_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Legs_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Legs_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Wing_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Wing_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Wing_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Wing_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Wing_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Wing_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Wing_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Hyborem_Wing_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\EarthGolem_Hands.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\EarthGolem_Hands.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\EarthGolem.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\EarthGolem.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\EarthGolem.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_ao.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_ao.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\EarthGolem_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog_Upper.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog_Whip.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog_Upper.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog_Whip.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\SLTH_AngelWings.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\SLTH_AngelWings.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\SLTH_AngelWings_Mat.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_AngelWings_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_AngelWings_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_AngelWings_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_AngelWings_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog_Sword.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Balrog_Sword.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Balrog_Sword.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_ao.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_e.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_ao.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_e.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Sword_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Balrog_Body.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Balrog_Whip.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Balrog_WhipHandle.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_e.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_ao.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_e.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_e.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Body_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_ao.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_WhipHandle_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_e.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Balrog_Whip_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Horse_Skeleton_BodyA.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Horse_Skeleton_BodyA.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Horse_Skeleton.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Horse_Skeleton_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Horse_Skeleton_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Horse_Skeleton_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Horse_Skeleton_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Horse_Skeleton_ao.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Horse_Skeleton_ao.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Wolf_Mount_Body.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\Wolf_Mount_Body.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\Wolf_Mount.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Wolf_Mount_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Wolf_Mount_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Wolf_Mount_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Wolf_Mount_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Wolf_Mount_ao.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\Wolf_Mount_ao.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\SkeletonRider_Body.fgx">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Geometries\SkeletonRider_Body.geo">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Materials\SLTH_Water_Material.mtl">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_a.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_a.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_n.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_n.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_g.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_g.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_t.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_t.tex">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_m.dds">
+      <SubType>Content</SubType>
+    </XLP>
+    <XLP Include="Textures\SLTH_Water_m.tex">
+      <SubType>Content</SubType>
+    </XLP>
+  </ItemGroup>
+  <Import Project="$(MSBuildLocalExtensionPath)Civ6.targets" />
+</Project>

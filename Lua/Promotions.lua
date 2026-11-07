@@ -359,7 +359,7 @@ local tConditionalUnlocks = {
 
 }
 
--- not implemented as reversible
+-- not implemented as reversible, and reversible promotions seemingly not possible. Need to have UI intercept and just accept AI can do it.
 local tPolicyUnlocks ={
     GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ORDER_STATE'].Index ,
     GameInfo.UnitPromotions['PROMOTION_PLAYER_HAS_ARETE'].Index
@@ -377,56 +377,56 @@ local tHasPromoAndUnlocks = {
 -- dwarven driud, earth 1
 -- firebow, channelling 1
 local tUnitFreePromos = {
-    [GameInfo.Units['SLTH_UNIT_ARCANE_BARGE'].Index] = {GameInfo.UnitPromotions['FIRE_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_BRUJAH'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_CRUSADER'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
-    [GameInfo.Units['SLTH_UNIT_DEATH_KNIGHT'].Index] = {GameInfo.UnitPromotions['DEATH_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_DEVOUT'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_DISCIPLE_OF_ACHERON'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index, GameInfo.UnitPromotions['FIRE_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_DRUID'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_DWARVEN_DRUID'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_EIDOLON'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_DISCIPLE'].Index},
-    [GameInfo.Units['SLTH_UNIT_FAWN'].Index] = {GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_RECON'].Index},             -- could be done as modifier
-    [GameInfo.Units['SLTH_UNIT_FIREBOW'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_FLURRY'].Index] = {GameInfo.UnitPromotions['PROMOTION_BLITZ_RANGED'].Index},
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_LIGHTBRINGER'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_DISCIPLE'].Index},            -- modifier?
-    [GameInfo.Units['SLTH_UNIT_MONK'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
-    [GameInfo.Units['SLTH_UNIT_PALADIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
-    [GameInfo.Units['SLTH_UNIT_PARAMANDER'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_PYRE_ZOMBIE'].Index] = {GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_MELEE'].Index},
-    [GameInfo.Units['SLTH_UNIT_RADIANT_GUARD'].Index] = {GameInfo.UnitPromotions['SUN_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_RATHA'].Index] = {GameInfo.UnitPromotions['SUN_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_ROYAL_GUARD'].Index] = {GameInfo.UnitPromotions['SPIRIT_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_SATYR'].Index] = {GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_RECON'].Index},             -- could be done as modifier
-    [GameInfo.Units['SLTH_UNIT_SERAPH'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_SON_OF_THE_INFERNO'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index, GameInfo.UnitPromotions['FIRE_TWO'].Index, GameInfo.UnitPromotions['FIRE_THREE'].Index},
-    [GameInfo.Units['SLTH_UNIT_STYGIAN_GUARD'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_MELEE'].Index},
-    [GameInfo.Units['SLTH_UNIT_SUCCUBUS'].Index] = {GameInfo.UnitPromotions['MIND_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_VAMPIRE'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_VAMPIRE_LORD'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_ABASHI'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
-    [GameInfo.Units['SLTH_UNIT_ACHERON'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},              -- also sentry 2 but diff promo GameInfo.UnitPromotions['class'].Index},
-    [GameInfo.Units['SLTH_UNIT_ARTHENDAIN'].Index] = {GameInfo.UnitPromotions['LIFE_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_BAMBUR'].Index] = {GameInfo.UnitPromotions['ENCHANTMENT_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_DUIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_MAGIC_RESISTANCE_BEAST'].Index},
-    [GameInfo.Units['SLTH_UNIT_BASIUM'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_MELEE'].Index},
-    [GameInfo.Units['SLTH_UNIT_BUBOES'].Index] = {GameInfo.UnitPromotions['PROMOTION_BLITZ_LIGHT_CAVALRY'].Index, GameInfo.UnitPromotions['PROMOTION_FEAR_LIGHT_CAVALRY'].Index},
-    [GameInfo.Units['SLTH_UNIT_CHALID'].Index] = {GameInfo.UnitPromotions['LAW_ONE'].Index, GameInfo.UnitPromotions['SUN_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_SENTRY_DISCIPLE'].Index},
-    [GameInfo.Units['SLTH_UNIT_CORLINDALE'].Index] = {GameInfo.UnitPromotions['EARTH_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index, GameInfo.UnitPromotions['SPIRIT_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_DONAL'].Index] = {GameInfo.UnitPromotions['SPIRIT_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_DRIFA'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
-    [GameInfo.Units['SLTH_UNIT_EURABATRES'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
-    [GameInfo.Units['SLTH_UNIT_HYBOREM'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_MELEE'].Index},
-    [GameInfo.Units['SLTH_UNIT_LOKI'].Index] = {GameInfo.UnitPromotions['CHAOS_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_EXTENSION1_ADEPT'].Index},
-    [GameInfo.Units['SLTH_UNIT_LOSHA'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_MARDERO'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_DISCIPLE'].Index, GameInfo.UnitPromotions['ENTROPY_ONE'].Index},
-    [GameInfo.Units['SLTH_UNIT_MESHABBER'].Index] = {GameInfo.UnitPromotions['FIRE_TWO'].Index},
-    [GameInfo.Units['SLTH_UNIT_SPHENER'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
-    [GameInfo.Units['SLTH_UNIT_VALIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},                             -- technically more like an ability as cav dont get access
-    [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = { GameInfo.UnitPromotions['LIFE_ONE'].Index, GameInfo.UnitPromotions['NATURE_ONE'].Index }
+    [GameInfo.Units['UNIT_SLTH_ARCANE_BARGE'].Index] = {GameInfo.UnitPromotions['FIRE_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_BRUJAH'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_CRUSADER'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['UNIT_SLTH_DEATH_KNIGHT'].Index] = {GameInfo.UnitPromotions['DEATH_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_DEVOUT'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_DISCIPLE_OF_ACHERON'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index, GameInfo.UnitPromotions['FIRE_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_DRUID'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_DWARVEN_DRUID'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_EIDOLON'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_DISCIPLE'].Index},
+    [GameInfo.Units['UNIT_SLTH_FAWN'].Index] = {GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_RECON'].Index},             -- could be done as modifier
+    [GameInfo.Units['UNIT_SLTH_FIREBOW'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_FLURRY'].Index] = {GameInfo.UnitPromotions['PROMOTION_BLITZ_RANGED'].Index},
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_LIGHTBRINGER'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_DISCIPLE'].Index},            -- modifier?
+    [GameInfo.Units['UNIT_SLTH_MONK'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['UNIT_SLTH_PALADIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['UNIT_SLTH_PARAMANDER'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_PYRE_ZOMBIE'].Index] = {GameInfo.UnitPromotions['PROMOTION_FIRE_RESISTANCE_MELEE'].Index},
+    [GameInfo.Units['UNIT_SLTH_RADIANT_GUARD'].Index] = {GameInfo.UnitPromotions['SUN_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_RATHA'].Index] = {GameInfo.UnitPromotions['SUN_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_ROYAL_GUARD'].Index] = {GameInfo.UnitPromotions['SPIRIT_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_WINTER'].Index] = {GameInfo.UnitPromotions['ICE_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_SATYR'].Index] = {GameInfo.UnitPromotions['PROMOTION_WOODSMAN1_RECON'].Index},             -- could be done as modifier
+    [GameInfo.Units['UNIT_SLTH_SERAPH'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_SON_OF_THE_INFERNO'].Index] = {GameInfo.UnitPromotions['FIRE_ONE'].Index, GameInfo.UnitPromotions['FIRE_TWO'].Index, GameInfo.UnitPromotions['FIRE_THREE'].Index},
+    [GameInfo.Units['UNIT_SLTH_STYGIAN_GUARD'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_MELEE'].Index},
+    [GameInfo.Units['UNIT_SLTH_SUCCUBUS'].Index] = {GameInfo.UnitPromotions['MIND_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_VAMPIRE'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_VAMPIRE_LORD'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_ABASHI'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
+    [GameInfo.Units['UNIT_SLTH_ACHERON'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},              -- also sentry 2 but diff promo GameInfo.UnitPromotions['class'].Index},
+    [GameInfo.Units['UNIT_SLTH_ARTHENDAIN'].Index] = {GameInfo.UnitPromotions['LIFE_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_BAMBUR'].Index] = {GameInfo.UnitPromotions['ENCHANTMENT_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_DUIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_MAGIC_RESISTANCE_BEAST'].Index},
+    [GameInfo.Units['UNIT_SLTH_BASIUM'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_MELEE'].Index},
+    [GameInfo.Units['UNIT_SLTH_BUBOES'].Index] = {GameInfo.UnitPromotions['PROMOTION_BLITZ_LIGHT_CAVALRY'].Index, GameInfo.UnitPromotions['PROMOTION_FEAR_LIGHT_CAVALRY'].Index},
+    [GameInfo.Units['UNIT_SLTH_CHALID'].Index] = {GameInfo.UnitPromotions['LAW_ONE'].Index, GameInfo.UnitPromotions['SUN_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_SENTRY_DISCIPLE'].Index},
+    [GameInfo.Units['UNIT_SLTH_CORLINDALE'].Index] = {GameInfo.UnitPromotions['EARTH_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index, GameInfo.UnitPromotions['SPIRIT_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_DONAL'].Index] = {GameInfo.UnitPromotions['SPIRIT_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_DRIFA'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
+    [GameInfo.Units['UNIT_SLTH_EURABATRES'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_BEAST'].Index},
+    [GameInfo.Units['UNIT_SLTH_HYBOREM'].Index] = {GameInfo.UnitPromotions['PROMOTION_SENTRY_MELEE'].Index},
+    [GameInfo.Units['UNIT_SLTH_LOKI'].Index] = {GameInfo.UnitPromotions['CHAOS_ONE'].Index, GameInfo.UnitPromotions['MIND_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_EXTENSION1_ADEPT'].Index},
+    [GameInfo.Units['UNIT_SLTH_LOSHA'].Index] = {GameInfo.UnitPromotions['BODY_ONE'].Index, GameInfo.UnitPromotions['DEATH_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_MARDERO'].Index] = {GameInfo.UnitPromotions['PROMOTION_MARCH_DISCIPLE'].Index, GameInfo.UnitPromotions['ENTROPY_ONE'].Index},
+    [GameInfo.Units['UNIT_SLTH_MESHABBER'].Index] = {GameInfo.UnitPromotions['FIRE_TWO'].Index},
+    [GameInfo.Units['UNIT_SLTH_SPHENER'].Index] = {GameInfo.UnitPromotions['LIFE_ONE'].Index, GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},
+    [GameInfo.Units['UNIT_SLTH_VALIN'].Index] = {GameInfo.UnitPromotions['PROMOTION_DEMON_SLAYING_DISCIPLE'].Index},                             -- technically more like an ability as cav dont get access
+    [GameInfo.Units['UNIT_SLTH_YVAIN'].Index] = { GameInfo.UnitPromotions['LIFE_ONE'].Index, GameInfo.UnitPromotions['NATURE_ONE'].Index }
 }
 
 -- these numbers seem wrong on small and medium to BIG
@@ -445,50 +445,50 @@ local tExperienceAbilities = {GRANT_EXPERIENCE_SMALL_ABILITY_CONQUEST=16, GRANT_
 }
 
 
-local tInherentReligion = { [GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index] = 'RELIGION_BUDDHISM',
-                            [GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = 'RELIGION_BUDDHISM',
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
-                            [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = 'RELIGION_BUDDHISM',
-                            [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
-                            [GameInfo.Units['SLTH_UNIT_ARTHENDAIN'].Index] = 'RELIGION_CONFUCIANISM',
-                            [GameInfo.Units['SLTH_UNIT_BAMBUR'].Index] = 'RELIGION_CONFUCIANISM',
-                            [GameInfo.Units['SLTH_UNIT_MITHRIL_GOLEM'].Index] = 'RELIGION_CONFUCIANISM',
-                            [GameInfo.Units['SLTH_UNIT_PARAMANDER'].Index] = 'RELIGION_CONFUCIANISM',
-                            [GameInfo.Units['SLTH_UNIT_DROWN'].Index] = 'RELIGION_HINDUISM',
-                            [GameInfo.Units['SLTH_UNIT_HEMAH'].Index] = 'RELIGION_HINDUISM',
-                            [GameInfo.Units['SLTH_UNIT_SAVEROUS'].Index] = 'RELIGION_HINDUISM',
-                            [GameInfo.Units['SLTH_UNIT_STYGIAN_GUARD'].Index] = 'RELIGION_HINDUISM',
-                            [GameInfo.Units['SLTH_UNIT_CRUSADER'].Index] = 'RELIGION_PROTESTANTISM',
-                            [GameInfo.Units['SLTH_UNIT_VALIN'].Index] = 'RELIGION_PROTESTANTISM',
-                            [GameInfo.Units['SLTH_UNIT_SPHENER'].Index] = 'RELIGION_PROTESTANTISM',
-                            [GameInfo.Units['SLTH_UNIT_BEAST_OF_AGARES'].Index] = 'RELIGION_BUDDHISM',
-                            [GameInfo.Units['SLTH_UNIT_DISEASED_CORPSE'].Index] = 'RELIGION_BUDDHISM',
-                            [GameInfo.Units['SLTH_UNIT_ROSIER'].Index] = 'RELIGION_BUDDHISM',
-                            [GameInfo.Units['SLTH_UNIT_MARDERO'].Index] = 'RELIGION_BUDDHISM',
-                            [GameInfo.Units['SLTH_UNIT_FAWN'].Index] = 'RELIGION_CATHOLICISM',
-                            [GameInfo.Units['SLTH_UNIT_SATYR'].Index] = 'RELIGION_CATHOLICISM',
-                            [GameInfo.Units['SLTH_UNIT_KITHRA'].Index] = 'RELIGION_CATHOLICISM',
-                            [GameInfo.Units['SLTH_UNIT_YVAIN'].Index] = 'RELIGION_CATHOLICISM',
-                            [GameInfo.Units['SLTH_UNIT_RATHA'].Index] = 'RELIGION_JUDAISM',
-                            [GameInfo.Units['SLTH_UNIT_RADIANT_GUARD'].Index] = 'RELIGION_JUDAISM',
-                            [GameInfo.Units['SLTH_UNIT_CHALID'].Index] = 'RELIGION_JUDAISM',
-                            [GameInfo.Units['SLTH_UNIT_SHADOW'].Index] = 'RELIGION_ISLAM',
-                            [GameInfo.Units['SLTH_UNIT_SHADOWRIDER'].Index] = 'RELIGION_ISLAM',
-                            [GameInfo.Units['SLTH_UNIT_NIGHTWATCH'].Index] = 'RELIGION_ISLAM',
-                            [GameInfo.Units['SLTH_UNIT_GIBBON'].Index] = 'RELIGION_ISLAM'
+local tInherentReligion = { [GameInfo.Units['UNIT_SLTH_DISCIPLE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['UNIT_SLTH_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['UNIT_SLTH_DISCIPLE_OCTOPUS_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['UNIT_SLTH_DISCIPLE_RUNES_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['UNIT_SLTH_DISCIPLE_THE_ASHEN_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['UNIT_SLTH_DISCIPLE_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['UNIT_SLTH_PRIEST_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['UNIT_SLTH_PRIEST_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_KILMORPH'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_ORDER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_VEIL'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_LEAVES'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['UNIT_SLTH_ARTHENDAIN'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['UNIT_SLTH_BAMBUR'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['UNIT_SLTH_MITHRIL_GOLEM'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['UNIT_SLTH_PARAMANDER'].Index] = 'RELIGION_CONFUCIANISM',
+                            [GameInfo.Units['UNIT_SLTH_DROWN'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['UNIT_SLTH_HEMAH'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['UNIT_SLTH_SAVEROUS'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['UNIT_SLTH_STYGIAN_GUARD'].Index] = 'RELIGION_HINDUISM',
+                            [GameInfo.Units['UNIT_SLTH_CRUSADER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['UNIT_SLTH_VALIN'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['UNIT_SLTH_SPHENER'].Index] = 'RELIGION_PROTESTANTISM',
+                            [GameInfo.Units['UNIT_SLTH_BEAST_OF_AGARES'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['UNIT_SLTH_DISEASED_CORPSE'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['UNIT_SLTH_ROSIER'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['UNIT_SLTH_MARDERO'].Index] = 'RELIGION_BUDDHISM',
+                            [GameInfo.Units['UNIT_SLTH_FAWN'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['UNIT_SLTH_SATYR'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['UNIT_SLTH_KITHRA'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['UNIT_SLTH_YVAIN'].Index] = 'RELIGION_CATHOLICISM',
+                            [GameInfo.Units['UNIT_SLTH_RATHA'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['UNIT_SLTH_RADIANT_GUARD'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['UNIT_SLTH_CHALID'].Index] = 'RELIGION_JUDAISM',
+                            [GameInfo.Units['UNIT_SLTH_SHADOW'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['UNIT_SLTH_SHADOWRIDER'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['UNIT_SLTH_NIGHTWATCH'].Index] = 'RELIGION_ISLAM',
+                            [GameInfo.Units['UNIT_SLTH_GIBBON'].Index] = 'RELIGION_ISLAM'
 }
 
 local tReligionAbility = {
@@ -503,6 +503,39 @@ local tReligionAlignment = {
     ['RELIGION_CATHOLICISM']=1,
     ['RELIGION_JUDAISM']=2, ['RELIGION_CONFUCIANISM']=2, ['RELIGION_PROTESTANTISM']=2
 }
+
+local iOrder = GameInfo.Religions["RELIGION_PROTESTANTISM"].Index
+local iEmpyrean = GameInfo.Religions["RELIGION_JUDAISM"].Index
+local iRunes = GameInfo.Religions["RELIGION_CONFUCIANISM"].Index
+local iLeaves = GameInfo.Religions["RELIGION_CATHOLICISM"].Index
+local iOverlords = GameInfo.Religions["RELIGION_HINDUISM"].Index
+local iEsus = GameInfo.Religions["RELIGION_ISLAM"].Index
+local iVeil = GameInfo.Religions["RELIGION_BUDDHISM"].Index
+local tReligionUnits = {
+[GameInfo.Units['UNIT_SLTH_DISCIPLE_THE_ORDER'].Index]= iOrder,
+[GameInfo.Units['UNIT_SLTH_DISCIPLE_EMPYREAN'].Index]=iEmpyrean,
+[GameInfo.Units['UNIT_SLTH_DISCIPLE_RUNES_OF_KILMORPH'].Index]=iRunes,
+[GameInfo.Units['UNIT_SLTH_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index]=iLeaves,
+[GameInfo.Units['UNIT_SLTH_DISCIPLE_OCTOPUS_OVERLORDS'].Index]=iOverlords,
+[GameInfo.Units['UNIT_SLTH_NIGHTWATCH'].Index]=iEsus,
+[GameInfo.Units['UNIT_SLTH_DISCIPLE_THE_ASHEN_VEIL'].Index]=iVeil,
+[GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_ORDER'].Index]=iOrder,
+[GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_EMPYREAN'].Index]=iEmpyrean,
+[GameInfo.Units['UNIT_SLTH_PRIEST_OF_KILMORPH'].Index]=iRunes,
+[GameInfo.Units['UNIT_SLTH_PRIEST_OF_LEAVES'].Index]=iLeaves,
+[GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_OVERLORDS'].Index]=iOverlords,
+[GameInfo.Units['UNIT_SLTH_SHADOWRIDER'].Index]=iEsus,
+[GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_VEIL'].Index]=iVeil,
+[GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_KILMORPH'].Index] = iRunes,
+[GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = iOverlords,
+[GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = iEmpyrean,
+[GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_ORDER'].Index] = iOrder,
+[GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_VEIL'].Index] = iVeil,
+[GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_LEAVES'].Index] = iLeaves
+}
+
+local iGreatGeneral= GameInfo.Units['UNIT_GREAT_GENERAL'].Index
+
 -- TODO why is this not in alignment
 function GrantUnitReligion(pUnit, sReligion)
     local pUnitAbilities = pUnit:GetAbility()
@@ -621,26 +654,46 @@ function onSpawnApplyPromotions(playerID, unitID)
     local sInherentReligion = tInherentReligion[iUnitType]
     if sInherentReligion then
         GrantUnitReligion(pUnit, sInherentReligion)
-        return;
-    end
-    local iX, iY = pUnit:GetLocation()
-    local pPlot = Map.GetPlot(iX, iY)
-    local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
-
-    if pCity then
-        local tiReligions = City:GetReligion():GetReligionsInCity()
-        if tiReligions then
+    else
+        local iX, iY = pUnit:GetLocation()
+        local pPlot = Map.GetPlot(iX, iY)
+        local pCity = Cities.GetPlotPurchaseCity(pPlot:GetIndex())
+        if pCity then
+        local tReligions = pCity:GetReligion():GetReligionsInCity()
+        if tReligions then
             local CHANCE_OF_GRANT_RELIGION = 15                     -- TODO currently this will favour first table entries of religions
-            for idx, val in ipairs(tiReligions) do                  --TODO needs testing to see what this table contains
+            for idx, val in ipairs(tReligions) do                  --TODO needs testing to see what this table contains
                 local iAttempt = math.random(0, 99)
                 if iAttempt > CHANCE_OF_GRANT_RELIGION then
                     GrantUnitReligion(pUnit, val)
-                    return
+                    break
                 end
             end
         end
+        end
     end
+
+    local pReligion = pUnit:GetReligion()                   -- set religion if disciple
+    if pReligion then
+        local iReligionIndex = tReligionUnits[iUnitType]
+        if iReligionIndex then
+            print('found religion of unit')
+            pReligion:SetReligionType(iReligionIndex)
+        end
+    end
+
+    print('is unit great general')
+    if pUnit:GetType() == iGreatGeneral then                    -- grant general
+        print('is great general type')
+        if pUnit:GetGreatPerson():GetClass() == -1 then
+            print('unit doesnt have great person class')
+            pUnitAbilities:AddAbilityCount('GREAT_GENERAL_CUSTOM')
+        end
+    end
+
+    -- cheese
 end
+
 
 function doComplexUnlocks(pUnitExp, pUnitAbilities, pPlayerTechs, pPlayerCulture)
     for iCheckPromo, tPossiblePromos in pairs(tConditionalUnlocks) do
@@ -800,6 +853,7 @@ local function UpdateResourcePromotion(iPlayer, tParameters)
             if pUnitExp:HasPromotion(iLevel1SpherePromo) then
                 print('has tier 2 channeling, and has t1 of the spell, setting t2', iChanTwoGrant)
                 pUnitExp:SetPromotion(iChanTwoGrant)
+                print('adding', iChanTwoGrant)
                 local sName = GameInfo.UnitPromotions[iChanTwoGrant].Name
                 print('allow tier 2 of type' .. sName)
             end

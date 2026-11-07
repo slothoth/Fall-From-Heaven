@@ -1,3 +1,5 @@
+include('SpawnSupport')
+local iW, iH = Map.GetGridSize();
 local sWorldSpellPropKey = 'WorldSpellReady'
 local iNotifType = NotificationTypes.USER_DEFINED_2;
 function NotifyAllHumansAlt(notificationData, iX, iY)
@@ -12,6 +14,7 @@ function Sanctuary(iPlayer, tParameters)
 	-- force out of borders ugh. Maybe there is an easy way to do this, since borders close push out exists.
     -- but dunno how to enforce it continously
 	print('world spell not implemented')
+    local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -30,7 +33,7 @@ function Legends(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_LEGENDS_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_LEGENDS_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -42,7 +45,7 @@ function IntoTheMist(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_INTO_THE_MIST_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_INTO_THE_MIST_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -78,7 +81,6 @@ function RagingSeas(iPlayer, tParameters)
                 local iImprovementOwner = pPlot:GetOwner()
                 if iImprovementOwner ~= iPlayer then
                     if (pPlot:IsWater() or (pPlot:IsCoastalLand())) then
-                        local iPlotX, iPlotY = pPlot:GetX(), pPlot:GetY()
                         if pPlot:GetImprovementType() ~= -1 then                -- does this hold
                             ImprovementBuilder.SetImprovementType(pPlot, -1, iImprovementOwner)     -- todo do chance
                         end
@@ -90,7 +92,7 @@ function RagingSeas(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_RAGING_SEAS_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_RAGING_SEAS_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -99,6 +101,7 @@ function Ardor(iPlayer, tParameters)
 	-- resets the GreatPeopleCount. Makes no sense in civ vi context.
     -- RWORK: Maybe it grants like 80% refund on great people then 70 after getting one and so on down to 0?
 	print('world spell not implemented')
+    local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -122,7 +125,7 @@ function WarCry(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_WARCRY_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_WARCRY_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -143,7 +146,7 @@ function GiftsOfNantosuelta(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_GIFTS_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_GIFTS_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
 
@@ -178,7 +181,7 @@ function WorldBreak(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_WORLDBREAK_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_WORLDBREAK_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -188,7 +191,6 @@ function Stasis(iPlayer, tParameters)
     -- that would be a -100% modifier on culture, science and production.
     -- do this by having a modifier on all player capitals, that needs a plotprop.
     local iNewStasis
-    local iX, iY
     local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
     local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier / 100
     local iDelay = math.floor(20 * iSpeedCostMultiplier)
@@ -201,25 +203,14 @@ function Stasis(iPlayer, tParameters)
     print('setting Stasis to ' .. tostring(iDelay))
     Game:SetProperty('STASIS_COUNTDOWN', iNewStasis)
     for iPlayerID, pPlayer in ipairs(Players) do
-        if pPlayer then
-            local pCities = pPlayer:GetCities()
-            if pCities then
-                local pCapitalCity = pCities:GetCapitalCity()
-                if pCapitalCity then
-                    iX = pCapitalCity:GetX()
-                    iY = pCapitalCity:GetY()
-                    local pCapitalPlot = Map.GetPlot(iX, iY)
-                    pCapitalPlot:SetProperty('InStasis', 1)
-                end
-            end
-        end
+        setPlayerPropForRequirements(iPlayerID, 'InStasis', 1)
     end
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_STASIS_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_STASIS_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
 end
 
 local tDivineRetribution = {DEMON=true, UNDEAD=true}
@@ -246,7 +237,7 @@ function DivineRetribution(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_DIVINE_RETRIBUTION_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_DIVINE_RETRIBUTION_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -261,8 +252,6 @@ function HyboremsWhisper(iPlayer, tParameters)
             if pCities then
                 for _, pCity in pCities:Members() do
                     local pPlot = pCity:GetPlot();
-                    local iX = pPlot:GetX()
-                    local iY = pPlot:GetY()
                     local pCityReligion = pCity:GetReligion()
                     local iNumFollowers = pCityReligion:GetNumFollowers(iVEIL_RELIGION_INDEX)
                     if iNumFollowers > 0 then
@@ -286,7 +275,7 @@ function HyboremsWhisper(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_HYBOREMS_WHISPER_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_HYBOREMS_WHISPER_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end
@@ -308,10 +297,11 @@ function RiverOfBlood(iPlayer, tParameters)
                     local iCityPop = pCity:GetPopulation()
                     local iReduction = 0
                     if iCityPop == 2 then
-                        iReduction = 1
+                        iReduction = -1
                     elseif iCityPop > 2 then
-                        iReduction = 2
+                        iReduction = -2
                     end
+                    pCity:ChangePopulation(iReduction)
                 end
             end
         end
@@ -319,7 +309,7 @@ function RiverOfBlood(iPlayer, tParameters)
     local notificationData = {}
     notificationData[ParameterTypes.MESSAGE] = Locale.Lookup('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_TITLE');
     notificationData[ParameterTypes.SUMMARY] = Locale.Lookup('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_DESCRIPTION');
-    NotifyAllHumans(notificationData)
+    NotifyAllHumansAlt(notificationData)
     local pPlayer = Players[iPlayer]
     pPlayer:SetProperty(sWorldSpellPropKey, 0)
 end

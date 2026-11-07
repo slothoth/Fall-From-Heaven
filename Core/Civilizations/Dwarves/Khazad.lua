@@ -24,7 +24,6 @@ function RecalculateVaults(playerID)
             iVaultLevel =  range.category
         end
     end
-    local pPlot = ''
     for idx, pCity in pPlayerCities:Members() do
         pPlot = pCity:GetPlot();
         pPlot:SetProperty('vault_level', iVaultLevel)

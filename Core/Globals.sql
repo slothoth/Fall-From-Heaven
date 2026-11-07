@@ -3,6 +3,10 @@ UPDATE GlobalParameters SET Value = '5' WHERE Name = 'FORTIFY_TURN_MAX';
 UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_MAX_LEVEL';
 UPDATE GlobalParameters SET Value = '99' WHERE Name = 'INFLUENCE_TOKENS_MINIMUM_FOR_SUZERAIN';
 UPDATE GlobalParameters SET Value = '1000' WHERE Name = 'RELIGION_PANTHEON_MIN_FAITH';
+UPDATE GlobalParameters SET Value = '50' WHERE Name = 'UPGRADE_NET_PRODUCTION_PERCENT_COST';
+
+UPDATE GlobalParameters SET Value = '3' WHERE Name = 'CAPITAL_IDENTITY_PRESSURE_TILE_RADIUS_MAXIUMUM_BASE';
+UPDATE GlobalParameters SET Value = '3' WHERE Name = 'CITIZEN_IDENTITY_PRESSURE_RADIUS_CUTOFF';
 
 UPDATE GlobalParameters SET Value = '99' WHERE Name = 'EXPERIENCE_MAXIMUM_ONE_COMBAT';
 
@@ -20,10 +24,11 @@ INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES ('GLOBAL_PROMOTION
 INSERT INTO GameModifiers(ModifierId) VALUES
 ('GLOBAL_PROMOTION_DOESNT_END_TURN');
 
+UPDATE ModifierArguments SET Value= '5' WHERE ModifierId='STANDARD_DIPLOMATIC_WARMONGER' AND Name='PercentOfGrievances';
 
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_BASE_COST';
 -- UPDATE GlobalParameters SET Value = '0' WHERE Name = 'UPGRADE_MINIMUM_COST';
-
+-- This is only UI stuff I think
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_WORLD_CONGRESS';
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_TOP_PANEL_ENVOYS';
 DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_CITY_STATES_VIEW';
@@ -39,32 +44,36 @@ DELETE FROM GameCapabilities WHERE GameCapability = 'CAPABILITY_GREAT_PEOPLE_REC
 
 -- UPDATE GlobalParameters SET Value = '5' WHERE Name = 'PLOT_UNIT_LIMIT';      - i dont want this but? does it worK?
 
-INSERT INTO GameModifiers(ModifierId) VALUES
-('SLTH_RIVER_GOLD');
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'SLTH_RIVER_FAITH');
 
 INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
-('SLTH_RIVER_GOLD', 'MODIFIER_GAME_ADJUST_PLOT_YIELD', 'RIVER_ADJACENT_AND_NOT_FORESTED_REQS');
+('SLTH_RIVER_FAITH', 'MODIFIER_PLAYER_ADJUST_PLOT_YIELD', 'RIVER_ADJACENT_AND_NOT_FORESTED_REQS');
 
 INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
-('SLTH_RIVER_GOLD', 'YieldType', 'YIELD_FAITH'),
-('SLTH_RIVER_GOLD', 'Amount', '1');
+('SLTH_RIVER_FAITH', 'YieldType', 'YIELD_FAITH'),
+('SLTH_RIVER_FAITH', 'Amount', '1');
 
-INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
-('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS', 'REQUIREMENT_REQUIREMENTSET_IS_MET', '1');
-
-INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
-('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS', 'RequirementSetId', 'SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS');
-
-INSERT OR IGNORE  INTO RequirementSets(RequirementSetId,	RequirementSetType)
-VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',	'REQUIREMENTSET_TEST_ALL'),
-        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',	'REQUIREMENTSET_TEST_ANY');
+INSERT INTO RequirementSets(RequirementSetId,	RequirementSetType)
+VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',	'REQUIREMENTSET_TEST_ALL');
 
 INSERT INTO RequirementSetRequirements
 		(RequirementSetId,								RequirementId)
-VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS'),
+VALUES	('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'REQUIREMENT_NOT_FOREST'),
         ('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'REQUIRES_PLOT_ADJACENT_TO_RIVER'),
-        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',     'PLOT_IS_FOREST_REQUIREMENT'),
-        ('SUBREQSET_HAS_NOT_FOREST_OR_JUNGLE_REQS',     'REQUIRES_PLOT_HAS_JUNGLE');
+        ('RIVER_ADJACENT_AND_NOT_FORESTED_REQS',		'REQUIREMENT_NOT_JUNGLE');
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('REQUIREMENT_NOT_FOREST', 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES', '1');
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('REQUIREMENT_NOT_FOREST', 'FeatureType', 'FEATURE_FOREST');
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('REQUIREMENT_NOT_JUNGLE', 'REQUIREMENT_PLOT_FEATURE_TYPE_MATCHES', '1');
+
+INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
+('REQUIREMENT_NOT_JUNGLE', 'FeatureType', 'FEATURE_JUNGLE');
 
 
 -- Settlers have extra movement and sight when you dont have a capital city
@@ -99,16 +108,28 @@ INSERT INTO RequirementArguments(RequirementId, Name, Value) VALUES
 ('REQUIRES_NO_CAPITAL_CITY', 'CollectionType', 'COLLECTION_PLAYER_CAPITAL_CITY'),
 ('REQUIRES_NO_CAPITAL_CITY', 'Count', '1');
 
--- mohenjo daro everyone has fresh water housing always... its just too snowbally as rivers are now also commerce
+-- mohenjo daro everyone has fresh water housing always... its just too snowbally as rivers are now also commerce. Should change the UI as well likely..
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 ('TRAIT_LEADER_MAJOR_CIV', 'MINOR_CIV_MOHENJO_DARO_CITIES_FRESHWATER_HOUSING_BONUS');
+
+
+INSERT INTO Requirements(RequirementId, RequirementType, Inverse) VALUES
+('SLTH_REQUIRES_CITY_HAS_NOT_PALACE', 'REQUIREMENT_CITY_HAS_BUILDING', '1');
+
+INSERT INTO RequirementArguments(RequirementId, Name, "Value") VALUES
+('SLTH_REQUIRES_CITY_HAS_NOT_PALACE', 'BuildingType', 'BUILDING_PALACE');
+
+INSERT INTO RequirementSetRequirements(RequirementSetId, RequirementId) VALUES
+('SLTH_CITY_IS_NOT_CAPITAL_REQS', 'SLTH_REQUIRES_CITY_HAS_NOT_PALACE');
+
+INSERT INTO RequirementSets(RequirementSetId, RequirementSetType) VALUES ('SLTH_CITY_IS_NOT_CAPITAL_REQS', 'REQUIREMENTSET_TEST_ALL');
 
 -- trade route limit for every city you have
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
 ('TRAIT_LEADER_MAJOR_CIV', 'MOD_TRADE_ROUTE_PER_CITY');
 
-INSERT INTO Modifiers(ModifierId, ModifierType) VALUES
-('MOD_TRADE_ROUTE_PER_CITY', 'MODIFIER_PLAYER_CITIES_ATTACH_MODIFIER');
+INSERT INTO Modifiers(ModifierId, ModifierType, SubjectRequirementSetId) VALUES
+('MOD_TRADE_ROUTE_PER_CITY', 'MODIFIER_PLAYER_CITIES_ATTACH_MODIFIER', 'SLTH_CITY_IS_NOT_CAPITAL_REQS');
 
 INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 ('MOD_TRADE_ROUTE_PER_CITY', 'ModifierId', 'MODIFIER_SLTH_POLICY_FOREIGN_TRADE_ADJUST_TRADE_ROUTE_CAPACITY');
@@ -128,7 +149,21 @@ INSERT INTO ModifierArguments(ModifierId, Name, Value) VALUES
 INSERT INTO GameModifiers(ModifierId) VALUES
 ('START_WITH_COMBAT_FLANKING');
 
+UPDATE Maps SET DefaultPlayers=DefaultPlayers+2;
 
+-- no loyalty
+INSERT INTO Modifiers(ModifierId, ModifierType) VALUES
+('SLTH_LOYALTY_OFF', 'MODIFIER_PLAYER_CITIES_ADJUST_ALWAYS_LOYAL');
+
+INSERT INTO ModifierArguments(ModifierId, Name, "Value") VALUES
+('SLTH_LOYALTY_OFF', 'AlwaysLoyal', '1');
+
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'SLTH_LOYALTY_OFF');
+
+--  for districts, for now.
+INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
+('TRAIT_LEADER_MAJOR_CIV', 'ALL_DISTRICTS_CULTURE_BOMB');
 /*
 
 -- sadly this sejong/moon project modifier just fails outside of a runonce context. Rtried Repeatable, no such luck
@@ -159,5 +194,5 @@ INSERT INTO CivilopediaSectionExcludes(SectionId) VALUES
 ('MOMENTS'),
 ('GOVERNORS');
 
-DELETE FROM GoodyHuts WHERE GoodyHutType = 'GOODYHUT_DIPLOMACY';            -- no envoys, favour, or governors
+DELETE FROM GoodyHuts WHERE GoodyHutType = 'GOODYHUT_DIPLOMACY' OR GoodyHutType='GOODYHUT_FAITH';            -- no envoys, favour, or governors
 DELETE FROM GoodyHutSubTypes WHERE GoodyHut = 'GOODYHUT_MILITARY' AND GoodyHutSubTypes.SubTypeGoodyHut= 'GOODYHUT_RESOURCES';       -- no accumulating resources

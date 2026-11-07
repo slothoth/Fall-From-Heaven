@@ -47,13 +47,13 @@ function RefreshYields()
 
 	---- FAITH ----
 	if GameCapabilities.HasCapability("CAPABILITY_FAITH") and GameCapabilities.HasCapability("CAPABILITY_DISPLAY_TOP_PANEL_YIELDS") then
-		m_FaithYieldButton = m_FaithYieldButton or m_YieldButtonDoubleManager:GetInstance();
+		m_FaithYieldButton = m_FaithYieldButton or m_YieldButtonSingleManager:GetInstance();
 		local playerReligion		:table	= localPlayer:GetReligion();
 		local faithYield			:number = playerReligion:GetFaithYield();
-		local faithBalance			:number = playerReligion:GetFaithBalance();
-		m_FaithYieldButton.YieldBalance:SetText( Locale.ToNumber(0, "#,###.#") );
 		m_FaithYieldButton.YieldPerTurn:SetText( FormatValuePerTurn(faithYield) );
 		m_FaithYieldButton.YieldBacking:SetToolTipString( GetFaithTooltip() );
+		m_FaithYieldButton.YieldPerTurn:SetColorByName("ResFaithLabelCS");
+		m_CultureYieldButton.YieldBacking:SetColor(UI.GetColorValueFromHexLiteral(0x99fe2aec));
 		m_FaithYieldButton.YieldIconString:SetText("[ICON_FaithLarge]");
 		m_FaithYieldButton.YieldButtonStack:CalculateSize();
 	end
@@ -80,9 +80,9 @@ function RefreshYields()
 	end
 
 	---- TOURISM ----
-	if GameCapabilities.HasCapability("CAPABILITY_TOURISM") and GameCapabilities.HasCapability("CAPABILITY_DISPLAY_TOP_PANEL_YIELDS") then
+	if GameCapabilities.HasCapability("CAPABILITY_DISPLAY_TOP_PANEL_YIELDS") then
 		m_TourismYieldButton = m_TourismYieldButton or m_YieldButtonSingleManager:GetInstance();
-		local tourismRate = Round(localPlayer:GetStats():GetTourism(), 1);
+		local tourismRate = Game.GetProperty('ARMAGEDDON') or 0
 		local tourismRateTT:string = Locale.Lookup("LOC_WORLD_RANKINGS_OVERVIEW_CULTURE_TOURISM_RATE", tourismRate);
 		local tourismBreakdown = localPlayer:GetStats():GetTourismToolTip();
 		if(tourismBreakdown and #tourismBreakdown > 0) then
@@ -93,12 +93,8 @@ function RefreshYields()
 		m_TourismYieldButton.YieldBacking:SetToolTipString(tourismRateTT);
 		m_TourismYieldButton.YieldPerTurn:SetColorByName("ResTourismLabelCS");
 		m_TourismYieldButton.YieldBacking:SetColorByName("ResTourismLabelCS");
-		m_TourismYieldButton.YieldIconString:SetText("[ICON_TourismLarge]");
-		if (tourismRate > 0) then
-			m_TourismYieldButton.Top:SetHide(false);
-		else
-			m_TourismYieldButton.Top:SetHide(true);
-		end
+		m_TourismYieldButton.YieldIconString:SetText("[ICON_RESOURCE_MANA_FIRE]");
+		m_TourismYieldButton.Top:SetHide(false);
 	end
 
 	Controls.YieldStack:CalculateSize();

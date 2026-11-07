@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..ParticleEffectInstance>
+	<m_CookParams>
+		<m_Values>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>TEXTURE</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FXt_DustSmoke1_Sheet"/>
+						<m_eObjectType>TEXTURE</m_eObjectType>
+						<m_ParamName text="FXt_DustSmoke1_Sheet"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FXt_Lightning_Arc_01"/>
+						<m_eObjectType>TEXTURE</m_eObjectType>
+						<m_ParamName text="FXt_Lightning_Arc_01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FXt_Shock_Spikes_Sheet_premult"/>
+						<m_eObjectType>TEXTURE</m_eObjectType>
+						<m_ParamName text="FXt_Shock_Spikes_Sheet_premult"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FXt_Tracer_Line_Cnt_01"/>
+						<m_eObjectType>TEXTURE</m_eObjectType>
+						<m_ParamName text="FXt_Tracer_Line_Cnt_01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_BlastRing"/>
+						<m_eObjectType>TEXTURE</m_eObjectType>
+						<m_ParamName text="FX_BlastRing"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_Glow_Lg_01"/>
+						<m_eObjectType>TEXTURE</m_eObjectType>
+						<m_ParamName text="FX_Glow_Lg_01"/>
+					</Element>
+					<Element class="AssetObjects..ObjectValue">
+						<m_ObjectName text="FX_LightSource"/>
+						<m_eObjectType>TEXTURE</m_eObjectType>
+						<m_ParamName text="FX_LightSource"/>
+					</Element>
+				</m_Values>
+				<m_ParamName text="ParticleTextures"/>
+			</Element>
+			<Element class="AssetObjects..CollectionValue">
+				<m_eObjectType>ASSET</m_eObjectType>
+				<m_eValueType>OBJECT</m_eValueType>
+				<m_Values/>
+				<m_ParamName text="ParticleModels"/>
+			</Element>
+		</m_Values>
+	</m_CookParams>
+	<m_Version>
+		<major>3</major>
+		<minor>0</minor>
+		<build>200</build>
+		<revision>628</revision>
+	</m_Version>
+	<m_SourceFilePath text="//civ6/main/ArtDev/Effects/Library/Workspaces/Hit/Meat/FX_Religion_Hit_Meat_01.peb"/>
+	<m_SourceObjectName text=""/>
+	<m_ImportedTime>0</m_ImportedTime>
+	<m_ExportedTime>0</m_ExportedTime>
+	<m_ClassName text="VFXParticle"/>
+	<m_DataFiles>
+		<Element>
+			<m_ID text="PSB"/>
+			<m_RelativePath text="FKFX_Religion_Hit_NoClouds.psb"/>
+		</Element>
+	</m_DataFiles>
+	<m_Name text="FKFX_Religion_Hit_NoClouds"/>
+	<m_Description text=""/>
+	<m_Tags>
+		<Element text="VFXParticle"/>
+	</m_Tags>
+	<m_Groups/>
+</AssetObjects..ParticleEffectInstance>
+

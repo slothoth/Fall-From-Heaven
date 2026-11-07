@@ -145,6 +145,33 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_NOTIFICATION_LAIR_NOTHING_NAME', 'NOTHING', 'en_US'),
 ('LOC_NOTIFICATION_LAIR_GOLDEN_AGE_NAME', 'GOLDEN_AGE', 'en_US'),
 ('LOC_NOTIFICATION_LAIR_TECH', 'Tech', 'en_US'),
+
+('LOC_NOTIFICATION_LAIR_BONUS_MANA_NAME', 'Bonus Mana', 'en_US'),
+('LOC_NOTIFICATION_LAIR_BONUS_MANA_DESCRIPTION', 'The lair was set upon a raw mana node', 'en_US'),
+('LOC_NOTIFICATION_LAIR_POSSESSED_NAME', 'Possessed', 'en_US'),
+('LOC_NOTIFICATION_LAIR_POSSESSED_NAME', 'Though it seems empty, occasional moans echo through the lair. Following them your unit encounters a violent spirit that possesses him.', 'en_US'),
+
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_AMURITES_DESCRIPTION', 'Arcane Lacuna[NEWLINE][NEWLINE] All other players cannot cast spells. Gain experience for all magic units based on the number of Mana you have improved.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_BALSERAPHS_DESCRIPTION', 'Revelry[NEWLINE][NEWLINE]Enter into a Golden Age for twenty times.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_BANNOR_DESCRIPTION', 'Rally[NEWLINE][NEWLINE]Convert each Town Improvement into a Demagog', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_CALABIM_DESCRIPTION', 'Rivers of Blood[NEWLINE][NEWLINE]Reduces the population of all other players cities by 2, and increasing their own by 2.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_CLAN_OF_EMBERS_DESCRIPTION', 'For the Horde![NEWLINE][NEWLINE] Half of the non-animal barbarians become yours.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_DOVIELLO_DESCRIPTION', 'Wild Hunt[NEWLINE][NEWLINE] Gain a Wolf unit for each of your existing Units.', 'en_US'),
+-- SLTH_CIVILIZATION_ELOHIM
+-- SLTH_CIVILIZATION_GRIGORI
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_HIPPUS_DESCRIPTION', 'Warcry[NEWLINE][NEWLINE] All your units move faster, and gain more xp for a period.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_ILLIANS_DESCRIPTION', 'Stasis[NEWLINE][NEWLINE]All non-Illians have no Production, Science or Culture for 20 turns.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_INFERNAL_DESCRIPTION', 'Hyborem''s Whisper[NEWLINE][NEWLINE]Converts the most populous Veil city to you.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_KHAZAD_DESCRIPTION', 'Mother Lode[NEWLINE][NEWLINE] Gains gold for every mine tile and converting 25% of your flatland to Hills.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_KURIOTATES_DESCRIPTION', 'Legends[NEWLINE][NEWLINE]Gaining Culture in every city.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_LANUN_DESCRIPTION', 'Raging Seas[NEWLINE][NEWLINE]All non-Lanun units by the Coast are damaged, and improvements pillaged.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_LJOSALFAR_DESCRIPTION', 'March of the Trees[NEWLINE][NEWLINE]Converting your woodlands to Treants that last 5 turns. On dying, make woods of the Treants.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_LUCHUIRP_DESCRIPTION', 'Gifts of Nantosuelta[NEWLINE][NEWLINE]Gain a Golden Hammer in each city.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_MALAKIM_DESCRIPTION', 'Religious Fervor[NEWLINE][NEWLINE]Gain Priests of your State Religion in each city, getting experience for each city of your state Religion.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_MERCURIANS_DESCRIPTION', 'Divine Retribution[NEWLINE][NEWLINE]Damages all Undead and Demonic units.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_SHEAIM_DESCRIPTION', 'Worldbreak[NEWLINE][NEWLINE]All non-Sheaim units take damage proportional to the Armageddon Counter.', 'en_US'),
+('LOC_WORLDSPELL_SLTH_CIVILIZATION_SIDAR_DESCRIPTION', 'Into the Mist[NEWLINE][NEWLINE] All your greivances have been reset, and all their units become Invisible.', 'en_US'),
+
 ('LOC_ORTHUS_SPAWN_NOTIFICATION_TITLE', 'Orthus Awakens', 'en_US'),
 ('LOC_ORTHUS_SPAWN_NOTIFICATION_DESCRIPTION', 'Orthus, the Barbarian King, has entered the lands. This powerful hero is responsible for the deaths of more empires than any in creation. But the unit that defeats Orthus gains his powerful axe.', 'en_US'),
 ('LOC_WORLDSPELL_LEGENDS_NOTIFICATION_TITLE', 'Legends Cast', 'en_US'),
@@ -156,13 +183,12 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_TITLE', 'March of the Trees cast', 'en_US'),
 ('LOC_WORLDSPELL_MARCH_OF_THE_TREES_NOTIFICATION_DESCRIPTION', 'The Ljolsalfar have cast March of the Trees, converting their woodlands to short-lived Treants.', 'en_US'),
 ('LOC_WORLDSPELL_MOTHER_LODE_NOTIFICATION_TITLE', 'Mother Lode cast', 'en_US'),
-('LOC_WORLDSPELL_MOTHER_LODE_NOTIFICATION_DESCRIPTION', 'The Khazad has cast Mother Lode, Gaining gold for every mine tile and converting 25% of their flatland to Hills.', 'en_US'),
 ('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_TITLE', 'Arcane Lacuna Cast', 'en_US'),
 ('LOC_WORLDSPELL_ARCANE_LACUNA_NOTIFICATION_DESCRIPTION', 'The Amurites have cast Arcane Lacuna. All other players cannot cast spells.', 'en_US'),
 ('LOC_WORLDSPELL_WILD_HUNT_NOTIFICATION_TITLE', 'Wild Hunt Cast', 'en_US'),
 ('LOC_WORLDSPELL_WILD_HUNT_NOTIFICATION_DESCRIPTION', 'The Doviello have cast Wild Hunt, gaining packs of Wolves.', 'en_US'),
 ('LOC_WORLDSPELL_REVELRY_NOTIFICATION_TITLE', 'Revelry Cast', 'en_US'),
-('LOC_WORLDSPELL_REVELRY_NOTIFICATION_DESCRIPTION', 'The Balseraph have cast Revelry.', 'en_US'),
+('LOC_WORLDSPELL_REVELRY_NOTIFICATION_DESCRIPTION', 'The Balseraph have cast Revelry, going into a Golden Age.', 'en_US'),
 ('LOC_WORLDSPELL_FOR_THE_HORDE_NOTIFICATION_TITLE', 'For the Horde Cast', 'en_US'),
 ('LOC_WORLDSPELL_FOR_THE_HORDE_NOTIFICATION_DESCRIPTION', 'The Clan have cast For the Horde! Half of the non-animal barbarians are converted to their cause.', 'en_US'),
 ('LOC_WORLDSPELL_INTO_THE_MIST_NOTIFICATION_TITLE', 'Into the Mist Cast', 'en_US'),
@@ -182,11 +208,8 @@ INSERT OR REPLACE INTO LocalizedText(Tag, Text, Language) VALUES
 ('LOC_WORLDSPELL_HYBOREMS_WHISPER_NOTIFICATION_TITLE', 'Hyborems Whisper Cast', 'en_US'),
 ('LOC_WORLDSPELL_HYBOREMS_WHISPER_NOTIFICATION_DESCRIPTION', 'Dreams of Hyborem have infiltrated the minds of most populous Ashen Veil city, X. Fallen to temptation, those followers opened a portal and welcomed Hell into their city, which is now under Infernal control.', 'en_US'),
 ('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_TITLE', 'Rivers of Blood Cast', 'en_US'),
-('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_DESCRIPTION', 'The Calabim have cast Rivers of Blood, reducing the population of all other players cities by 2, and increasing their own by 2.', 'en_US');
-
-
--- 'The lair was set upon a raw mana node.' RAW_MANA
-
--- POSSESSED 'Though it seems empty, occasional moans echo through the lair. Following them your unit encounters a violent spirit that possesses him.'
-
--- 'Travellers speak of a mighty Dragon, who wants to make %s1_city his lair'
+('LOC_WORLDSPELL_RIVERS_OF_BLOOD_NOTIFICATION_DESCRIPTION', 'The Calabim have cast Rivers of Blood, reducing the population of all other players cities by 2, and increasing their own by 2.', 'en_US'),
+('LOC_ACHERON_SPAWN_NOTIFICATION_TITLE', 'Acheron Awakens', 'en_US'),
+('LOC_ACHERON_SPAWN_NOTIFICATION_DESCRIPTION', 'Travellers speak of a mighty Dragon, who wants to make {1_city} his lair.', 'en_US'),
+('LOC_NOTIFICATION_LAIR_BIGBAD_NAME', 'Very bad outcome.', 'en_US'),
+('LOC_NOTIFICATION_LAIR_BIGBAD_DESCRIPTION', 'You had delved too greedily and too deep. An ancient evil awakens.', 'en_US');

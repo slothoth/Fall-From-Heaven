@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "Lua 5.1",
+  "runtime.pathStrict": true,
+  "workspace.checkThirdParty": false,
+  "workspace.library": [
+    "/workspace/pass_point/mod_companion/library"
+  ],
+  "workspace.ignoreDir": [
+    ".git",
+    ".idea",
+    "Maps/mobdebug.lua"
+  ],
+  "diagnostics.globals": [
+    "include",
+    "Modifiers",
+    "RulesetData",
+    "ExposedMembers"
+  ],
+  "diagnostics.disable": [
+    "lowercase-global",
+    "no-unknown"
+  ],
+  "diagnostics.libraryFiles": "Disable"
+}

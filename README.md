@@ -36,30 +36,21 @@ Here is a list of the features that are implemented:
 - Natural Wonders. Still have some art to do, so some appear to occupy more than one tile, or look like a geothermal vent, for now.
 - Racial abilities. Khazad built units will be Dwarven, with bonuses on hills. Ljosalfar Elven etc. With exceptions on units where ethnicity is specified or not relevant (like say, Hill Giants).
 - Unit and City Maintenance. Unit and City maintenance behaves as it does in civ IV. Cities require more maintenance the more distant they are from the capital, and for the number of cities. Units have a free amount of support, alongside a quarter of your civs population. Exceed that amount of units, and you will pay 1 gold per turn for each. Varies based on difficulty. Units also cost some more if they are in foreign territory.
+- Music. The soundtracks have been ported into the game, and change based on your current religion.
+- Alignment. Civs change alignment on changing State Religions, and start with a default alignment. Druids, Eidolons and Paladins are limited by alignment. There is diplomatic penalties for different alignments.
 ## Partly Implemented
 - Magic Combat Strength. Units have magic combat strength bonuses as they should. However resistance or vulnerability to that combat strength is limited to a unit level. I.e. a Wood Golem is Vulnerable to Fire, so takes more damage from Fire Combat Strength. But there is no way currently to make the Fire Resistance promotion reduce Fire Combat Strength.
 - Commerce and Sliders: Commerce is implemented as the Faith yield. Which is converted in cities to Science, Culture and Gold. Currently its split into thirds, but once I''ve built the UI for it, you can adjust the conversion with sliders.
 - Specialists. VI had far less emphasis on Specialists, and placed them in Districts. To allow the AI to interact with Specialists, I have elected to do the same. As a result, buildings that allow slotting a specialist will be housed in that district. Campus=Sage, Industrial Zone=Engineer, Theatre Square=Bard, Commercial Hub=Merchant, Holy Site=Priest. So to slot a Priest, you would slot a population into that district. Wonders and policies that allow extra specialists are implemented using a script so dont need this.
-- National Units. Units that are only buildable when you have less than 4. Unfortunately, this is not respected for upgrading.
-- Erebus map script. Ported from Python to Lua, with many headaches along the way. It works, but is a bit slow to generate maps, and has a tendency to make the same maps.
-- Tech Tree Disconnects: Some technologies/civics are easier to access, because the prerequisite now lives in the Civic/Tech tree, and cannot be a prerequisite. This is most aggregious with Feral Bond being accessible turn 1. There is a plan to fix this with dummy prerequisites however.
-- Magic promotions on non-magic units, like Vampirism granting up to Death II, Shadow II and Body II. As is, Vampirism just grants Shadow I and Body I and Death I. Similarly, units like the Brujah or Chalid cannot gain promotions with spells. As each would need a custom promotion class.
-- Alignment. Civs change alignment on changing State Religions, and start with a default alignment. Druids, Eidolons and Paladins are limited by alignment. Howver, there is no diplomatic relation loss from differing alignments.
-- Armageddon Counter. Contributions and reductions to the Armageddon Counter all works. However, there is no UI to display it currently. Events from the Armageddon counter should work, however Hell terrain is not yet implemented.
+- Magic promotions on non-magic units, like Vampirism granting up to Death II, Shadow II and Body II. As is, Vampirism just grants Shadow I and Body I and Death I. Similarly, units like the Brujah or Chalid cannot gain promotions with spells. As each would need a custom promotion class. We could just do that tbf.
 - Acheron city spawning. Acheron will spawn, but is not held and will go roam about!
-- Promotion gated upgrades. So for example, Adepts only upgrading to Mages once they are level 4. This is implemented for human players, but the AI bypasses it, otherwise they couldnt ever get it. This would require serious DLL work to fix.
+- Unit SFX: Units have the custom selections from FFH, but not the ones from the base game. I think these were always a bit odd. But Losha and Orcs have their voices! Not currently implemented 3d sound like idle dragon breathing.
 ## Not currently Implemented:
 - First strikes. As a Stop-gap, units get Combat Strength instead.
-- Great People recruitment per city. Currently it is done as a global amount, as in VI.
-- Adaptive and Insane traits. Planned soon.
+- Adaptive trait. Planned soon.
 - World spells. Interface built, but each spell not yet built.
-- Overcouncil/Undercouncil. Currently do not have a way to exclude civs from world congress, or call it earlier. Also was causing CTDs.
-- Music system. Music in VI is implemented on a per civ level, and also requires quite a lot of work to even implement like that. Whereas FFH has different music based on civ alignment, religion, or war status.
-- Illusion units that cannot kill units, only damage them. Seems relatively impossible in VI without DLL work
 - Animal units spawning in the Wilderness, making Dens
 - Events system (like the governor assassinated event)
-- Tolerant Trait of Elohim. While there are some examples of this done like the Civ Conquer mod, that is on a player level, not per city.
-- Doviello scavenging prod for nearby city on killing unit. I thought I needed to do this, but I think this is from a Modmod.
 - Health/Sickness/Happiness. Currently we are using the VI system of Housing/Amenities. Anything that gave Health grants Housing, Sickness now grants negative Housing, and Happiness is Amenities. This isnt perfect. In addition, currently the Health/Sickness from features, i.e Jungle/Floodplains Sickness and Forest health is not implemented.
 - Tech Bulbing. Should be possible, but can't seem to find the full lists of the logic of which techs to grant, and how much.
 ## Makes no Sense in VI
@@ -69,11 +60,43 @@ Here is a list of the features that are implemented:
 ## Little Quirks
 - [ ] We use hidden promotions to allow different spell sphere promotions, or promotions unlocked by techs like Scourge. As a result, the number of promotions your unit has will look a lot higher than it is.
 - [ ] You win a Domination Victory the same way as in VI, by controlling all original capitals. This does raise a problem when Hyborem and Basium have not spawned, as you will need to summon, then conquer Hyborems capital. If you summon Basium, your permanent ally status means you will not need to conquer him.
-## Larger Issues
-- [ ] Building Prereqs, like Swordsman requiring the Training yard, mean when you get Swordsmen, the previous unit, Warriors, are no longer trainable. And if you dont have a training yard, you couldn't train any melee class unit. This is a big problem, and will require DLL level work to fix.
+
 ## Known Bugs
 - Sometimes doesn't release instance correctly on clearing barb camp, so the barb banner stays.
 
+## DLL level stuff:
+- [x] Specialists without Districts
+- [x] Unit Buildability. Units being buildable even if their replacement unit upgrade is buildable. A problem because of unit upgrades only achievable via promoted units. 
+- [x] Elohim Tolerant trait buildable units and buildings on per city basis.
+- [x] Unit upgrades being gated by national unit limit or promotion level.
+- [x] Plural upgrade pathways
+- [x] Tech/Civic Prerequisites from the opposing tree.
+- [x] Tech OR gate for prereqs.
+- [x] True Stealth
+- [x] Privateer hidden nationality.
+- [x] Purchase dependent on Modifiers, for Arete, and other civics. Whipping purchase too?
+- [x] Use food for production.
+- [x] Better banning of buildings/wonders/projects
+- [x] Effect to allow upgrading outside of territory, per unit. Done as unit property that is caught on hook.
+- [x] City work radius by modifier.
+- [x] Peace with Barbarians, turned on/off via property
+- [x] Unrest via Lua? Also modifier to prevent unrest on switching policies.
+- [x] Trade Route yields to either origin or destination, done via property on origin or destination.
+- [x] Trade route collections to allow applying modifiers to origin or destination city
+- Summoning of civs into the game proper, not just the dummy system.
+- [x] Great People recruitment per city. Currently it is done as a global amount, as in VI.
+- [x] Unit Movements, half cost from hills etc, commando for enemy road usage via GameCapability.
+- EFFECT_ATTACH_MODIFIER using a property Key, like how EFFECT_ADJUST_COMBAT does it
+- REQUIREMENTS about opposing units promotion class?
+- REQUIREMENT that unit is full health
+- Over/UnderCouncil working as separate voluntary congresses. Congress working genereally with Hybo/Basium.
+- Illusion units cant kill, just reduce to 1 health.
+- Split animal and other Barbarians
+- Freshwater Irrigation for farms. Farms only placeable next to fresh water, or with tech, other farms.
+- Tech/Civic unlockables as modifiers, like being able to make cottages in forest. This could just be done as improvements tbf.
+- Plot Property based visuals on tile, i.e. a new selectionScript type
+- Resource dependent unit building? Actually might be doable already
+- Player switching, the Basium/Hyborem effect. Cant we just autoplay this?
 ## Some things on the Todo List:
 ### Armageddon Counter:
 - [ ] Hijack Global Warming panel. We probably just steal the UI design of it.  
@@ -87,10 +110,10 @@ Here is a list of the features that are implemented:
 - [ ] Culture Bomb, big grant of culture, and border expansion
 - [ ] Bulbing techs.
 - [ ] Dark elf kidnapping superSpecialist ( apply a modifier  with the reverse values of a superspecialist) and spawn a great person. 
-- [ ] Puppets, inheriting from summoner
+- [x] Puppets, inheriting from summoner
 - [ ] Resurrection System  For Hero level, Use pPlayer:SetProperty() on UnitRemovedFromMap (assuming thats the death event). Then on casting Resurrection, check unit's owner for that hero dead property. Much harder I think for the Phoenix promotion, there is the CanRetreatWhenCaptured that vampires use. But how can I hook into that temporarily? UnitCaptured is an Event, but that trigger on units being killed, somehow works for Vampires. 
 - [ ] Switch player midgame              very hard
-- [ ] Birthright regained (world spell back)
+- [x] Birthright regained (world spell back)
 - [ ] Blood of the Phoenix (let all current units be able to respawn in cap once) probably cant do as modifier sadly as no ability to respawn
 - [ ] Genesis (upgrade terrain in civ)
 - [ ] Rites of Oghma (new mana resources spawn)
@@ -100,15 +123,15 @@ Here is a list of the features that are implemented:
 ### Hard but minor:
 - [ ] Blizzard weather, (implement like GS blizzard but gives snow)
 - [ ] Hall of Mirrors clone spawning
-- [ ] Hidden nationality units
+- [x] Hidden nationality units
 
 ### Trait System:
 - [ ] Implement Barbarian trait
-- [ ] Implement Perpentach insanity and ui indicator
+- [x] Implement Perpentach insanity and ui indicator
 - [ ] Implement Cassiel adaptive and ui selector
 - [ ] Implement Commando roads stuff
 - [ ] implement diplo effects for each trait?
-- [ ] Infernal no amenity cost? as they get no unhappiness. (+2 amenities per 2 pop to balance out cost?)
+- [x] Infernal no amenity affects
 - [ ] Diplo modifiers to hate on those close to victory
 
 ### Cultures Todo
@@ -169,10 +192,10 @@ Here is a list of the features that are implemented:
 - [ ] Valkyrie
 - [ ] Einherjar (alpha channel variant. impossible)
 - [ ] Imp
-- [L] Balor
+- [X] Balor
 - [ ] Chaos Marauder
 - [ ] Mardero
-- [L] Meshabber
+- [X] Meshabber
 - [L] Ogre
 - [L] Ogre Warchief
 - [ ] Yvain
@@ -187,7 +210,7 @@ Here is a list of the features that are implemented:
 - [ ] Buboes
 - [ ] Yersinia
 - [ ] Ars Moriendi
-- [ ] Hyborem
+- [X] Hyborem
 - [ ] Dwarven Druid
 #### Custom Model
 - [ ] Hawk
@@ -218,13 +241,13 @@ Here is a list of the features that are implemented:
 - [L] Orc
 - [ ] Goblin
 - [ ] Frostling
-- [ ] Angel
-- [ ] Liquid (Tar demon, Water Elemental)
+- [L] Angel
+- [L] Liquid (Tar demon, Water Elemental)
 #### VFX
 - [L] Mistform
 #### Partial VFX
 - [ ] Ira
-- [ ] SandLion
+- [X] SandLion
 - [ ] Shade
 - [L] Pyre Zombie
 #### Unsure
@@ -235,14 +258,25 @@ Here is a list of the features that are implemented:
 - [ ] We are making districts easy to get but not worth anything. How to fix trade routes sucking? Also how do we make sure district sonly unlock whena building needs them, but with multiple techs/civics
 
 ### Bugs
-- [L] use MODIFIER_PLAYER_UNITS_GRANT_PROMOTION instead of promotion lua grant system? THIS WILL NEVER WORK, PROMOS HAVE TO BE IN RIGHT CLASS AND IMMEDIATELY AVAILABLE
-- [ ] Both PLAYER_BAN_UNIT_PRODUCTION and reverse PLAYER_ALLOW_UNIT (nihang) dont seem to stop upgrading into next unit tier. More fuel for custom upgrade system
-- [ ] Upgrade system also takes precedence in removing obsolete units even if the replacement is not buildable due to a no BuildingPrereq for example
-- [ ] Use CanTrain = 0 for only upgradable-to-units (todo Immortal?, Eater of Dreams, probably more)
+- [X] Both PLAYER_BAN_UNIT_PRODUCTION and reverse PLAYER_ALLOW_UNIT (nihang) dont seem to stop upgrading into next unit tier. More fuel for custom upgrade system
+- [X] Upgrade system also takes precedence in removing obsolete units even if the replacement is not buildable due to a no BuildingPrereq for example
+- [X] Use CanTrain = 0 for only upgradable-to-units (todo Immortal?, Eater of Dreams, probably more)
 
+### Leader Art Polish Todos
+- [ ] Smoothing of outlines so not so cut-out
+- [ ] Check to see if we can have different frontend versus in game art.
+- [ ] Amelanchier, too bald on arrows, fuzz in arm hole
+- [ ] Cardith Lorda, too small?
+- [ ] Beeri, facing wrong direction
+- [ ] Faeryl, Never upscaled, though looks good. Problem with elements outside of frame.
+- [ ] Garrim, section of purple arm over top of regular, needs blending. Section under left arm is not cut background.
+- [ ] Sheelba, right eye are a bit messed up, some fuzz and white bits around outline
+- [ ] Tebryn, section of cloak rags should be transparent.
+- [ ] Thessa, facing wrong direction
+- [ ] Valledia, weird repeated hand.
+- [ ] Never upscaled: Kandros, Arturus, Auric, Cardith Lorda, Cassiel, Charadon, Dain, Decius, Flauros, Tasunke, Perpentach, Sabathiel, Hannah, Sandalphon, 
 
+### Audio Polish Todos
+- [ ] Svartalfar music too short, same with clan of embers.
 # Attributions:
-Many icons used from Game-Icons.net
-Lava and Ice material from https://ambientcg.com
-Deliverator animal and T rex models from Wildlife mod.
-Skeleton model from SailorCat, IronicGame
+Many models used with permission or open licensing. See ATTRIBUTIONS.txt for details

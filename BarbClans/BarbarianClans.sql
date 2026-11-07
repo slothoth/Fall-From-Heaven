@@ -18,17 +18,19 @@ UPDATE Improvements SET TilesPerGoody = 64, GoodyRange = 3, TraitType=NULL WHERE
 -- UPDATE TypeProperties SET Value='200' WHERE Name='BRIBE_INTERVAL_STANDARD';                 -- closest thing to peace with barbs
 -- UPDATE TypeProperties SET Value='0' WHERE Name='BRIBE_BASE_COST';                           -- need a way to constantly reapply this. But only on orc ones and lizards
 
-UPDATE TypeProperties SET Value='10' WHERE Name='RAID_CONVERSION_POINTS_CHANGE';            -- so more orc cities if Clan are instructing them
+UPDATE TypeProperties SET Value='10' WHERE Name='RAID_CONVERSION_POINTS_CHANGE';            -- so more orc cities if Clan are instructing them.. but disabled for now
 
 UPDATE GlobalParameters SET Value='0' WHERE Name='BARBARIAN_CLANS_RANSOM_COST_SCALAR';
-UPDATE GlobalParameters SET Value='0' WHERE Name='BARBARIAN_CLANS_BRIBE_COST_PER_CITY';
+UPDATE GlobalParameters SET Value='10000' WHERE Name='BARBARIAN_CLANS_BRIBE_COST_PER_CITY';             -- make it nearly impossible to bribe, for AI
 UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_BARB_SOFT_CAP';               -- no cap on barb combat
 UPDATE GlobalParameters SET Value = '30' WHERE Name = 'EXPERIENCE_MAX_BARB_LEVEL';
--- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'BARBARIAN_CLANS_CIV_CONVERSION_INCREMENT_CHANCE';         -- this does literally nothing
 UPDATE GlobalParameters SET Value = '999' WHERE Name = 'BARBARIAN_CLANS_CIV_CONVERSION_POINTS_STANDARD';
 
 -- no new camps
-UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING';           -- this seems to not work
+UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CAMP_MAX_PER_MAJOR_CIV';
+
+--UPDATE GlobalParameters SET Value='0' WHERE Name= 'BARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING';           -- this seems to not work
+-- UPDATE GlobalParameters SET Value = '1' WHERE Name = 'BARBARIAN_CLANS_CIV_CONVERSION_INCREMENT_CHANCE';         -- this does literally nothing
 
 -- delete the single minor civ needed to spawn in
 INSERT INTO TraitModifiers(TraitType, ModifierId) VALUES
@@ -66,9 +68,9 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_WARRIOR', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_GOBLIN', 'CLASS_GOBLIN'),
+('UNIT_SLTH_GOBLIN', 'CLASS_GOBLIN'),
 ('UNIT_WARRIOR' , 'CLASS_WARRIOR'),
-('SLTH_UNIT_ARCHER', 'CLASS_GOBLIN_RANGED');
+('UNIT_SLTH_ARCHER', 'CLASS_GOBLIN_RANGED');
 
 
 INSERT INTO BarbarianTribe_MapConditionSets(MapConditionSetType, TribeType, Test, Priority) VALUES
@@ -147,7 +149,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_NULL', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_SKELETON', 'CLASS_SKELETON');
+('UNIT_SLTH_SKELETON', 'CLASS_SKELETON');
 
 
 INSERT INTO BarbarianTribe_MapConditionSets(MapConditionSetType, TribeType, Test, Priority) VALUES
@@ -208,7 +210,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_LIZARDMEN', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_LIZARDMAN', 'CLASS_LIZARDMEN');
+('UNIT_SLTH_LIZARDMAN', 'CLASS_LIZARDMEN');
 
 
 INSERT INTO BarbarianTribe_MapConditionSets(MapConditionSetType, TribeType, Test, Priority) VALUES
@@ -326,7 +328,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_BEAR', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_BEAR', 'CLASS_BEAR');
+('UNIT_SLTH_BEAR', 'CLASS_BEAR');
 -- Bears cant spawn for some reason
 
 
@@ -372,7 +374,7 @@ INSERT INTO Tags(Tag, Vocabulary) VALUES
 ('CLASS_LION', 'ABILITY_CLASS');
 
 INSERT INTO TypeTags(Type, Tag) VALUES
-('SLTH_UNIT_LION', 'CLASS_LION');
+('UNIT_SLTH_LION', 'CLASS_LION');
 
 
 INSERT INTO BarbarianTribe_MapConditions(MapConditionSetType, TerrainType, FeatureType, ResourceType, Range, Invert) VALUES

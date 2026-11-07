@@ -1,24 +1,25 @@
 include "SpawnSupport"
-local transientBuffKeys = {
-        BUFF_HASTE = 0, BUFF_DANCE_OF_BLADES = 0, BUFF_CHARMED = 80, BUFF_SLOW = 70,
-        BUFF_BLUR = 50, BUFF_SHADOWWALK = 75, BUFF_FAIR_WINDS = 95, BUFF_BURNING_BLOOD = 90,
-        BUFF_FATIGUED = 50, BUFF_CROWN_OF_BRILLIANCE = 80, BUFF_MORALE = 90, BUFF_WARCRY = 95
-    }
+local iGreatProphet = GameInfo.Units['UNIT_GREAT_PROPHET'].Index
+local iGreatEngineer = GameInfo.Units['UNIT_GREAT_ENGINEER'].Index
+local iGreatSage =     GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index
+local iGreatArtist =   GameInfo.Units['UNIT_GREAT_ARTIST'].Index
+local iGreatMerchant = GameInfo.Units['UNIT_GREAT_MERCHANT'].Index
+local iGreatCommander = GameInfo.Units['UNIT_GREAT_GENERAL'].Index
 
-local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
+local tSuperSpecialistModifiers = {[iGreatProphet]={
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
 	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
-	[GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]={
+	[iGreatEngineer]={
 	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_SCIENCE', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION',
 	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_SIDAR', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_GUILD_OF_HAMMERS'},
-	[GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]={
+	[iGreatSage]={
 		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_PROD', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE',
 		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_SIDAR', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_GREAT_LIB'},
-	[GameInfo.Units['UNIT_GREAT_ARTIST'].Index]={
+	[iGreatArtist]={
 		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_GOLD',
 		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_SIDAR', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_THEATRE_OF_DREAMS'},
-	[GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]={
+	[iGreatMerchant]={
 		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
 		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
 }
@@ -28,18 +29,21 @@ local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTUR
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
 									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
 
+local tGreatPeople = { [iGreatProphet]=true, [iGreatEngineer]=true, [iGreatSage]=true, [iGreatArtist]=true,
+                       [iGreatMerchant]=true, [iGreatCommander]=true,
 
+}
+
+local iSnowTerrain = GameInfo.Terrains['TERRAIN_SNOW'].Index
+local iSnowTerrainHills = GameInfo.Terrains['TERRAIN_SNOW_HILLS'].Index
 
 local function SetCapitalProperty(iPlayer, tParameters)
     local sPropKey = tParameters.sPropKey;
     local iPropValue = tParameters.iPropValue;
-    local pPlayer = Players[iPlayer];
-    local pCapitalCity = pPlayer:GetCities():GetCapitalCity()
-    local pCapitalPlot = pCapitalCity:GetPlot()
-    pCapitalPlot:SetProperty(sPropKey, iPropValue)
+    setPlayerPropForRequirements(iPlayer, sPropKey, iPropValue)
 end
 
-local function SetPlayerProperty(iPlayer, tParameters)
+local function SetPlayerProperty(iPlayer, tParameters)          -- used for commerce using manual sliders
     local sPropKey = tParameters.sPropKey;
     local iPropValue = tParameters.iPropValue;
     local pPlayer = Players[iPlayer];
@@ -62,6 +66,14 @@ local function SlthSetResource(iPlayer, tParameters)
     local pPlot = Map.GetPlotByIndex(iPlotIndex)
     ResourceBuilder.SetResourceType(pPlot, iResourceType, 1)
     print('set terrain plot '.. iPlotIndex .. 'to have resource ' .. iResourceType)
+end
+
+local function SlthGrantYield(iPlayer, tParameters)
+    local iYieldAmount = tParameters.iYieldAmount;
+    local iYieldIndex = tParameters.iYieldIndex;
+    local pPlayer = Players[iPlayer]
+    pPlayer:GrantYield(iYieldIndex, iYieldAmount);
+    print('granting yield type', iYieldIndex, 'with amount', iYieldAmount, 'to player', iPlayer)
 end
 
 local function OnSummon(iPlayer, tParameters)
@@ -328,14 +340,28 @@ local function GrantGoldenAge(iPlayer, tParameters)
     -- t_iUnits[1] = tParameters.iCastingUnit                      -- set to just the owner for now
     local iBar = pPlayer:GetProperty('GreatPeopleGoldenRequirement') or 1
     local iGpAmount = 0
+    local tReserveCommanders = {}               -- we dont wanna sacrifice commanders, as they have ongoing effects, unless we HAVE to
 	for iUnitID, pPlayerUnit in pPlayer:GetUnits():Members() do			-- gather great people
         if iGpAmount < iBar then
-            if pPlayerUnit:GetGreatPerson():GetClass() > -1 then
-                iGpAmount = iGpAmount + 1
-                table.insert(t_iUnits, pPlayerUnit)
+            local iUnitIndex = pPlayerUnit:GetType()
+            if tGreatPeople[iUnitIndex] then
+                if iUnitIndex == iGreatCommander then
+                    table.insert(tReserveCommanders, pPlayerUnit)
+                else
+                    iGpAmount = iGpAmount + 1
+                    table.insert(t_iUnits, pPlayerUnit)
+                end
             end
         end
 	end
+    if iGpAmount < iBar then
+        for _, pGreatGeneralUnit in ipairs(tReserveCommanders) do
+            if iGpAmount < iBar then
+                iGpAmount = iGpAmount + 1
+                table.insert(t_iUnits, pGreatGeneralUnit)
+            end
+        end
+    end
     for iUnitType, pUnit in pairs(t_iUnits) do
         if pUnit then
             print('killing unit...')
@@ -347,38 +373,11 @@ local function GrantGoldenAge(iPlayer, tParameters)
     local eGameSpeed = GameConfiguration.GetGameSpeedType()            -- this is actually a hash not a string return. But cant find the enum for it
     -- local iSpeedCostMultiplier = GameInfo.GameSpeeds[eGameSpeed].CostMultiplier
     -- local iGoldenAgeLength = math.floor(20 * iSpeedCostMultiplier)
-    GoldenAgeGrant(pPlayer, 10)                                                             -- should scale by speed
+    GoldenAgeGrant(iPlayer, 10)                                                             -- should scale by speed
     pPlayer:SetProperty('GreatPeopleGoldenRequirement', iUniqueGreatPeopleRequirement + 1)
 end
 
-
-local function ApplyAttributes(tNewUnits, tPromos, tAbilities, iHealth)
-    print('applying attributes')
-    for _, pNewUnit in pairs(tNewUnits) do
-        print('new unit!')
-        pNewUnit:SetDamage(iHealth)
-        local pUnitExp = pNewUnit:GetExperience()
-        local pUnitAbilities = pNewUnit:GetAbility()
-        print('granting promos')
-        for _, iUnitPromotionIndex in ipairs(tPromos) do
-            if not pUnitExp:HasPromotion(iUnitPromotionIndex) then
-                pUnitExp:SetPromotion(iUnitPromotionIndex)
-                print('grant promo', GameInfo.UnitPromotions[iUnitPromotionIndex].UnitPromotionType)
-            end
-            print('iter promo')
-        end
-        print('granting abilitiees')
-        for _, sAbility in ipairs(tAbilities) do
-            if not pUnitAbilities:HasAbility(sAbility) then
-                pUnitAbilities:AddAbilityCount(sAbility)
-                print('grant ability', sAbility)
-            end
-            print('iter ability')
-        end
-    end
-end
-
-local tBuildingGrantModiferMap = {
+local tBuildingGrantModifierMap = {
     ['SLTH_BUILDING_CODE_OF_JUNIL'] = 'SLTH_MODIFIER_GRANT_CODE_OF_JUNIL',
     ['BUILDING_ANGKOR_WAT'] = 'SLTH_MODIFIER_GRANT_DIES_DEI',
     ['SLTH_BUILDING_TABLETS_OF_BAMBUR'] = 'SLTH_MODIFIER_GRANT_TABLETS_OF_BAMBUR',
@@ -398,7 +397,16 @@ local tBuildingGrantModiferMap = {
     ['SLTH_BUILDING_DWARF_CAGE'] = 'SLTH_MODIFIER_GRANT_DWARF_CAGE',
     ['SLTH_BUILDING_ELF_CAGE'] = 'SLTH_MODIFIER_GRANT_ELF_CAGE',
     ['SLTH_BUILDING_HUMAN_CAGE'] = 'SLTH_MODIFIER_GRANT_HUMAN_CAGE',
-    ['SLTH_BUILDING_ORC_CAGE'] = 'SLTH_MODIFIER_GRANT_ORC_CAGE'
+    ['SLTH_BUILDING_ORC_CAGE'] = 'SLTH_MODIFIER_GRANT_ORC_CAGE',
+
+    ['SLTH_BUILDING_AQUEDUCT'] = 'SLTH_MODIFIER_GRANT_AQUEDUCT',
+    ['SLTH_BUILDING_ARCHERY_RANGE'] = 'SLTH_MODIFIER_GRANT_ARCHERY_RANGE',
+    ['SLTH_BUILDING_HUNTING_LODGE'] = 'SLTH_MODIFIER_GRANT_HUNTING_LODGE',
+    ['BUILDING_LIBRARY'] = 'SLTH_MODIFIER_GRANT_LIBRARY',
+    ['BUILDING_WALLS'] = 'SLTH_MODIFIER_GRANT_WALLS',
+    ['BUILDING_STABLE'] = 'SLTH_MODIFIER_GRANT_STABLE',
+    ['BUILDING_BARRACKS'] = 'SLTH_MODIFIER_GRANT_TRAINING_YARD'
+
 }
 
 
@@ -406,7 +414,7 @@ local function GrantBuildingFunction(iPlayer, tParameters)
     local iUnit = tParameters.iCastingUnit
     local sUnitOperationType =  tParameters.UnitOperationType
     local OperationInfo = GameInfo.CustomOperations[sUnitOperationType]
-    local sModifierGrant = tBuildingGrantModiferMap[OperationInfo.SimpleText]
+    local sModifierGrant = tBuildingGrantModifierMap[OperationInfo.SimpleText]
     if not sModifierGrant then print('building didnt have a modifier grant mapping, returning..'); return; end
     print(sModifierGrant)
     local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
@@ -576,9 +584,10 @@ local tEquipmentAbilities = {
 
 local function ConsumeEquipment(iPlayer, tParameters)
     local hasEquipment
-    local iEquipmentAbilityToGrant
     local iUnitID = tParameters.iCastingUnit
     local consumeUnitID = tParameters.iTargetID
+    local iEquipmentAbilityToGrant = tParameters.iAbilityToGrant
+    print('equipment ability index', iEquipmentAbilityToGrant)
     local pUnit = UnitManager.GetUnit(iPlayer, iUnitID);
     local pUnitAbilityManager = pUnit:GetAbility()
     local pConsumeUnit = UnitManager.GetUnit(iPlayer, consumeUnitID);			-- assumes consume unit is owned by same
@@ -593,14 +602,8 @@ local function ConsumeEquipment(iPlayer, tParameters)
         end
     else
         local pConsumeUnitAbilityManager = pConsumeUnit:GetAbility()
-        for _, equipAbilityAb in ipairs(tEquipmentAbilities) do
-            hasEquipment = pConsumeUnitAbilityManager:HasAbility(equipAbilityAb)
-            if hasEquipment then
-                iEquipmentAbilityToGrant = equipAbilityAb
-                break
-            end
-        end
-        if iEquipmentAbilityToGrant then
+        -- second check to make sure has ability
+        if pConsumeUnitAbilityManager:HasAbility(iEquipmentAbilityToGrant) then
             if not pUnitAbilityManager:HasAbility(iEquipmentAbilityToGrant) then
                 pUnitAbilityManager:AddAbilityCount(iEquipmentAbilityToGrant)
                 print('Added ability to unit')
@@ -719,11 +722,58 @@ local function HealTileUnits( iPlayer, tParameters)
     pUnitToHeal:ChangeDamage(iCurrentHealth);
 end
 
+local tChestOptions = {ITEM_HEALING_SALVE=GameInfo.Units['SLTH_EQUIPMENT_HEALING_SALVE'].Index,
+                       ITEM_JADE_TORC=GameInfo.Units['SLTH_EQUIPMENT_JADE_TORC'].Index,
+                       ITEM_ROD_OF_WINDS=GameInfo.Units['SLTH_EQUIPMENT_ROD_OF_WINDS'].Index,
+                       ITEM_TIMOR_MASK=GameInfo.Units['SLTH_EQUIPMENT_TIMOR_MASK'].Index}
+
+local tFuncs = {HIGH_GOLD='HIGH_GOLD', TECH='TECH'}
+-- adjacent to friendly chest.
+local function OnOpenChest(iPlayer, tParameters)
+    local pUnit = UnitManager.GetUnit(iPlayer, tParameters.iCastingUnit);
+    local pPlayer = Players[iPlayer]
+    if math.random(100) < 25 then
+        local sTrap = chooseRandomIndexed({ 'POISON', 'FIRE', 'SPORES' })
+        if sTrap == 'POISON' then
+            local iDamage = math.random(25, 90)
+            pUnit:ChangeDamage(iDamage)
+            local pUnitAbilities = pUnit:GetAbility()
+            pUnitAbilities:AddAbilityCount('POISONED')
+        -- 25 -> 90 damage poison then grant poisoned ability
+        elseif sTrap == 'FIRE' then
+            local iDamage = math.random(50, 90)
+            pUnit:ChangeDamage(iDamage)
+            -- 50 -> 90 damage fire. ring of flames effect?
+        else
+            print('immobilize unit somehow')
+            -- make immobile for 3 turns.
+        end
+    else
+        local lList = { 'EMPTY', 'HIGH_GOLD', 'ITEM_HEALING_SALVE', 'ITEM_JADE_TORC', 'ITEM_ROD_OF_WINDS', 'ITEM_TIMOR_MASK', 'TECH' }
+        local sGoody = chooseRandomIndexed(lList)
+        if tChestOptions[sGoody] then
+            local tNewUnits = BaseSummon(pUnit, iPlayer, tChestOptions[sGoody])
+        elseif tFuncs[sGoody] then
+            if tFuncs[sGoody] == 'HIGH_GOLD' then
+                pPlayer:GetTreasury():ChangeGoldBalance(200)
+            elseif tFuncs[sGoody] == 'TECH' then
+                print('TODO TECH')
+                -- grant tech? or progress towards
+            end
+        end
+    end
+end
+
+local function OnBespokeSpell(iPlayer, tParameters)
+    print('some bespoke spell that is yet to be implemented!')
+end
+
 -- UnitOperation Works
 GameEvents.SlthSetCapitalProperty.Add(SetCapitalProperty);
 GameEvents.SlthSetPlayerProperty.Add(SetPlayerProperty);
 GameEvents.SlthSetPlotProperty.Add(SetPlotProperty);
 GameEvents.SlthOnSetResource.Add(SlthSetResource);
+GameEvents.SlthOnGrantYield.Add(SlthGrantYield);
 
 
 
@@ -752,3 +802,5 @@ GameEvents.SlthOnTeleportToCapital.Add(TeleportUnitToCapital)
 GameEvents.SlthOnForcePeace.Add(ForcePeace)
 GameEvents.SlthOnHealSelf.Add(HealSelf)
 GameEvents.SlthOnHealTargeted.Add(HealTileUnits)
+
+GameEvents.SlthOnOpenChest.Add(OnOpenChest)

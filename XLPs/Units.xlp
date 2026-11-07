@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="Unit"/>
+	<m_PackageName text="units/units"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="StygianBody"/>
+			<m_ObjectName text="StygianBody"/>
+		</Element>
+		<Element>
+			<m_EntryID text="T_RexHead"/>
+			<m_ObjectName text="T_RexHead"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SpearmanGoatTwo"/>
+			<m_ObjectName text="SpearmanGoatTwo"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Orc_Tusk"/>
+			<m_ObjectName text="Orc_Tusk"/>
+		</Element>
+		<Element>
+			<m_EntryID text="RamHorn"/>
+			<m_ObjectName text="RamHorn"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Male_Cauc_Head_01_Iron_Golem"/>
+			<m_ObjectName text="Male_Cauc_Head_01_Iron_Golem"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Male_Asian_Head_03_Wood_Golem"/>
+			<m_ObjectName text="Male_Asian_Head_03_Wood_Golem"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FullBuffMaleA_Wood_Golem"/>
+			<m_ObjectName text="FullBuffMaleA_Wood_Golem"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FullBuffMaleA_Iron_Golem"/>
+			<m_ObjectName text="FullBuffMaleA_Iron_Golem"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FullBuffMaleA_Gargoyle"/>
+			<m_ObjectName text="FullBuffMaleA_Gargoyle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="DemonHornBack"/>
+			<m_ObjectName text="DemonHornBack"/>
+		</Element>
+		<Element>
+			<m_EntryID text="DemonHornFrontSmall"/>
+			<m_ObjectName text="DemonHornFrontSmall"/>
+		</Element>
+		<Element>
+			<m_EntryID text="DemonHornIllidan"/>
+			<m_ObjectName text="DemonHornIllidan"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Antler"/>
+			<m_ObjectName text="Antler"/>
+		</Element>
+		<Element>
+			<m_EntryID text="CentaurArms"/>
+			<m_ObjectName text="CentaurArms"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Lizardman"/>
+			<m_ObjectName text="Lizardman"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Torso_Arms"/>
+			<m_ObjectName text="Torso_Arms"/>
+		</Element>
+		<Element>
+			<m_EntryID text="NakedSpearmanV2"/>
+			<m_ObjectName text="NakedSpearmanV2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Warrior_Armor_01_Golem_Naked"/>
+			<m_ObjectName text="Warrior_Armor_01_Golem_Naked"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Trex_V2"/>
+			<m_ObjectName text="Trex_V2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Medieval_longsword_01"/>
+			<m_ObjectName text="Medieval_longsword_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Medieval_warhammer_01"/>
+			<m_ObjectName text="Medieval_warhammer_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Cowl_helmet_large"/>
+			<m_ObjectName text="Cowl_helmet_large"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Cowl_helmet_large_cloth"/>
+			<m_ObjectName text="Cowl_helmet_large_cloth"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Zweihander_West_European_Armor_02"/>
+			<m_ObjectName text="Zweihander_West_European_Armor_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Zweihander_Mediterranean_Armor_02"/>
+			<m_ObjectName text="Zweihander_Mediterranean_Armor_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="yeoman_crossbow_armor_B_padded"/>
+			<m_ObjectName text="yeoman_crossbow_armor_B_padded"/>
+		</Element>
+		<Element>
+			<m_EntryID text="yeoman_crossbow_armor_B_padded_Firebow"/>
+			<m_ObjectName text="yeoman_crossbow_armor_B_padded_Firebow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Composite_Bow_European_Armor_A"/>
+			<m_ObjectName text="Composite_Bow_European_Armor_A"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Composite_Bow_Asian_Armor"/>
+			<m_ObjectName text="Composite_Bow_Asian_Armor"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Bowman_Bow"/>
+			<m_ObjectName text="Bowman_Bow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Bowman_Armor"/>
+			<m_ObjectName text="Bowman_Armor"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Male_Cauc_Head_01_Gargoyle"/>
+			<m_ObjectName text="Male_Cauc_Head_01_Gargoyle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Yeoman_archer_armor_european_03_studded"/>
+			<m_ObjectName text="Yeoman_archer_armor_european_03_studded"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Celtic_classical_helm_02_horned"/>
+			<m_ObjectName text="Celtic_classical_helm_02_horned"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Celtic_ceremonial_shield"/>
+			<m_ObjectName text="Celtic_ceremonial_shield"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Late_Byzantine_face_helmet_01"/>
+			<m_ObjectName text="Late_Byzantine_face_helmet_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Berserker_HelmA"/>
+			<m_ObjectName text="Berserker_HelmA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="European_Medieval_Great_Helm_02_aragonese"/>
+			<m_ObjectName text="European_Medieval_Great_Helm_02_aragonese"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Briton_Helmet"/>
+			<m_ObjectName text="Briton_Helmet"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Crusader_Helmet_F"/>
+			<m_ObjectName text="Crusader_Helmet_F"/>
+		</Element>
+		<Element>
+			<m_EntryID text="African_Axe_A"/>
+			<m_ObjectName text="African_Axe_A"/>
+		</Element>
+		<Element>
+			<m_EntryID text="PyreZombie"/>
+			<m_ObjectName text="PyreZombie"/>
+		</Element>
+		<Element>
+			<m_EntryID text="AirElemental"/>
+			<m_ObjectName text="AirElemental"/>
+		</Element>
+		<Element>
+			<m_EntryID text="IceElemental"/>
+			<m_ObjectName text="IceElemental"/>
+		</Element>
+		<Element>
+			<m_EntryID text="IceElementalHead"/>
+			<m_ObjectName text="IceElementalHead"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Hoplite_Ice"/>
+			<m_ObjectName text="Hoplite_Ice"/>
+		</Element>
+		<Element>
+			<m_EntryID text="PyreZombieHead"/>
+			<m_ObjectName text="PyreZombieHead"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Fireball"/>
+			<m_ObjectName text="Fireball"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LightningElemental"/>
+			<m_ObjectName text="LightningElemental"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SandLion"/>
+			<m_ObjectName text="SandLion"/>
+		</Element>
+		<Element>
+			<m_EntryID text="CHEST"/>
+			<m_ObjectName text="CHEST"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Male_Head_01_Wood_Golem_Dark"/>
+			<m_ObjectName text="Male_Head_01_Wood_Golem_Dark"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WildElephant"/>
+			<m_ObjectName text="WildElephant"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SuccubusArmor"/>
+			<m_ObjectName text="SuccubusArmor"/>
+		</Element>
+		<Element>
+			<m_EntryID text="CourtesanArmor"/>
+			<m_ObjectName text="CourtesanArmor"/>
+		</Element>
+		<Element>
+			<m_EntryID text="MistForm"/>
+			<m_ObjectName text="MistForm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Meshabber"/>
+			<m_ObjectName text="Meshabber"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EmptyHorseArmor"/>
+			<m_ObjectName text="EmptyHorseArmor"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EmptyHorsemanArmor"/>
+			<m_ObjectName text="EmptyHorsemanArmor"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Rhinoceros"/>
+			<m_ObjectName text="Rhinoceros"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SnowLeopard"/>
+			<m_ObjectName text="SnowLeopard"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EmptyHorseArcherArmor"/>
+			<m_ObjectName text="EmptyHorseArcherArmor"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Wood_Golem_Meshy_Dark_Body"/>
+			<m_ObjectName text="Wood_Golem_Meshy_Dark_Body"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Wood_Golem_Meshy_Light_Body"/>
+			<m_ObjectName text="Wood_Golem_Meshy_Light_Body"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Cauc_Head_01_Wood_Dark_Meshy"/>
+			<m_ObjectName text="Cauc_Head_01_Wood_Dark_Meshy"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Cauc_Head_01_Wood_Light_Meshy"/>
+			<m_ObjectName text="Cauc_Head_01_Wood_Light_Meshy"/>
+		</Element>
+		<Element>
+			<m_EntryID text="skeleton"/>
+			<m_ObjectName text="skeleton"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Hyborem"/>
+			<m_ObjectName text="Hyborem"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Balrog"/>
+			<m_ObjectName text="Balrog"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Balrog_Upper"/>
+			<m_ObjectName text="Balrog_Upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Balrog_Whip"/>
+			<m_ObjectName text="Balrog_Whip"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EarthGolem"/>
+			<m_ObjectName text="EarthGolem"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EarthGolem_Hands"/>
+			<m_ObjectName text="EarthGolem_Hands"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EarthGolem_Knuckles"/>
+			<m_ObjectName text="EarthGolem_Knuckles"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EarthGolem_Knuckles_Hands"/>
+			<m_ObjectName text="EarthGolem_Knuckles_Hands"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Balrog_Sword"/>
+			<m_ObjectName text="Balrog_Sword"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Horse_Skeleton_BodyA"/>
+			<m_ObjectName text="Horse_Skeleton_BodyA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="EmptyHorseArmor_Wolf"/>
+			<m_ObjectName text="EmptyHorseArmor_Wolf"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Wolf_Mount_Body"/>
+			<m_ObjectName text="Wolf_Mount_Body"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SkeletonRider_Body"/>
+			<m_ObjectName text="SkeletonRider_Body"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Archer_Arrow_Fire"/>
+			<m_ObjectName text="Archer_Arrow_Fire"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_SandLion"/>
+			<m_ObjectName text="SLTH_SandLion"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_TestSphere"/>
+			<m_ObjectName text="SLTH_TestSphere"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_TestSphereFX"/>
+			<m_ObjectName text="SLTH_TestSphereFX"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_TestSphereBoth"/>
+			<m_ObjectName text="SLTH_TestSphereBoth"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_SandLionDust"/>
+			<m_ObjectName text="SLTH_SandLionDust"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_SandLionFull"/>
+			<m_ObjectName text="SLTH_SandLionFull"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_SpectreBodyDust"/>
+			<m_ObjectName text="SLTH_SpectreBodyDust"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_SpectreHeadDust"/>
+			<m_ObjectName text="SLTH_SpectreHeadDust"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_SpectreBodySmog"/>
+			<m_ObjectName text="SLTH_SpectreBodySmog"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_SpectreHeadSmog"/>
+			<m_ObjectName text="SLTH_SpectreHeadSmog"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_Carrier_Warrior"/>
+			<m_ObjectName text="SLTH_Carrier_Warrior"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_Carrier_LightningCaster"/>
+			<m_ObjectName text="SLTH_Carrier_LightningCaster"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_Swordsman_Armor_Winged"/>
+			<m_ObjectName text="SLTH_Swordsman_Armor_Winged"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_Meshabber"/>
+			<m_ObjectName text="SLTH_Meshabber"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_Meshabber_BoneWreath"/>
+			<m_ObjectName text="SLTH_Meshabber_BoneWreath"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_FireElemental"/>
+			<m_ObjectName text="SLTH_FireElemental"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_FireElementalTorso"/>
+			<m_ObjectName text="SLTH_FireElementalTorso"/>
+		</Element>
+		<Element>
+			<m_EntryID text="SLTH_WaterElemental"/>
+			<m_ObjectName text="SLTH_WaterElemental"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WaterElementalHead"/>
+			<m_ObjectName text="WaterElementalHead"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+		<Element>LINUX</Element>
+		<Element>XBONE</Element>
+		<Element>PS4</Element>
+		<Element>SWITCH</Element>
+		<Element>STADIA</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

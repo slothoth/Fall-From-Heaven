@@ -1,11 +1,6 @@
--- [ ] Hijack Global Warming panel. We probably just steal the UI design of it.
--- [ ] actions that happen once counter reaches certain value     Lua: Event : PlayerTurnStarted check if some property has reached a point. Actually where would I store state, there is no Game:SetProperty()
- --[ ]  Attach some Projects when armageddon hits 70. To do not unlock, need it to be pPlot:SetProperty() on capital
-
 include('SpawnSupport')
 
-tArmageddonEvents = {[10]=fWarning,[30]=Blight, [40]=ArmaSummonSteph, [50]=ArmaSummonBuboes, [60]=ArmaSummonYersinia,
-                     [70]=ArmaSummonArs,  [90]=ArmaSpawnWrath, [100]=ArmaKillHalf}
+
 -- helper
 function reverse_table(t)
     local reversed = {}
@@ -15,28 +10,32 @@ function reverse_table(t)
     return reversed
 end
 
+local tArmageddonBuildings = {[GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index]=4,
+                              [GameInfo.Buildings['SLTH_BUILDING_STIGMATA_ON_THE_UNBORN'].Index]=5}
+
+
 
 function AdjustArmageddonCount(iAmount)
     local iArmageddonCount = Game.GetProperty('ARMAGEDDON')
     if iArmageddonCount then
         local iNewArmageddonCount = iArmageddonCount + iAmount
+        if iAmount > 0 then
+            print('Play_ArmageddonDecrease')
+        end
         Game.SetProperty('ARMAGEDDON', iNewArmageddonCount)
-        local iArmaEventTracker = Game.GetProperty('ARMAGEDDON_event_count') or 0
-        local doEvent = 0
-        for idx, fEvent in ipairs(tArmageddonEvents) do
-            if doEvent > 0 then
-                Game.SetProperty('ARMAGEDDON_event_count', idx)
-                fEvent()
-                break
-            end
-            if idx < iArmageddonCount and iNewArmageddonCount > idx then
-                if idx > iArmaEventTracker then
-                    doEvent = 1
+        for iArmaRequired, tEventInfo in pairs(tArmageddonEvents) do
+            if iNewArmageddonCount > iArmaRequired then
+                local bEventFiredBefore = Game.GetProperty(tEventInfo.propkey)
+                if not bEventFiredBefore then
+                    local eventFunc = tEventInfo.ifunc
+                    eventFunc()
+                    NotifyAllHumans(tEventInfo.notif_title, tEventInfo.notif_descrip)
+                    Game.SetProperty(tEventInfo.propkey, true)
                 end
             end
         end
         if (iArmageddonCount < 70) and (iNewArmageddonCount >= 70) then
-            local pFirstPlayer = next(PlayerManager.GetAliveMajors())
+            local _, pFirstPlayer = next(PlayerManager.GetAliveMajors())
             local iHasHitSeventy = pFirstPlayer:GetProperty('ArmageddonAboveSeventy')
             if not iHasHitSeventy then
                 for _, pPlayer in ipairs(PlayerManager.GetAliveMajors()) do
@@ -69,7 +68,7 @@ function OnCityRaze(playerID, districtID, icityID, idistrictX, idistrictY, iDist
 		else -- has already been removed this turn
 			print ("city removed for the second(!) time this turn!")
             local bConquerChecker = true
-            local tUnitsInTile = Units.GetUnitsInPlotLayerID(idistrictX, idistrictY, mapLayerAny)
+            local tUnitsInTile = Units.GetUnitsInPlotLayerID(idistrictX, idistrictY, MapLayers.ANY)
             if tUnitsInTile then
                 for k, pUnit in ipairs(tUnitsInTile) do
                     if pUnit:GetType() then
@@ -110,42 +109,64 @@ end
 
 -- unit tracker, create increase armageddon, delete decrease
 -- not doing 'BASIUM:5', 'HYBOREM:5' as covered in spawning civ
-local tArmageddonUnits = {['SLTH_UNIT_BEAST_OF_AGARES']=1, ['SLTH_UNIT_ROSIER']=2, ['SLTH_UNIT_EIDOLON']=1,
-                    ['SLTH_UNIT_WRATH']=3,  ['SLTH_UNIT_MARDERO']=3, ['SLTH_UNIT_MESHABBER']=3,
-                    ['SLTH_UNIT_SPHENER']=-3, ['SLTH_UNIT_VALIN']=-2}
+local tArmageddonUnits = {['UNIT_SLTH_BEAST_OF_AGARES']=1, ['UNIT_SLTH_ROSIER']=2, ['UNIT_SLTH_EIDOLON']=1,
+                    ['UNIT_SLTH_WRATH']=3,  ['UNIT_SLTH_MARDERO']=3, ['UNIT_SLTH_MESHABBER']=3,
+                    ['UNIT_SLTH_SPHENER']=-3, ['UNIT_SLTH_VALIN']=-2}
 function ArmageddonUnitSpawning(playerID, unitID)
+    print('unit spawned, is it armageddon?')
     local pUnit = UnitManager.GetUnit(playerID, unitID);
-    local sUnitType = pUnit:GetUnitType()
-    local iArmageddonCountRaise = tArmageddonUnits[sUnitType]
-    if iArmageddonCountRaise then
-        AdjustArmageddonCount(iArmageddonCountRaise)
-    end
-    local bHasProphecyMark = pUnit:GetAbility():HasAbility('ABILITY_PROPHECY_MARK')
-    if bHasProphecyMark then
-        AdjustArmageddonCount(1)
+    if pUnit then
+        local sUnitType = pUnit:GetType()
+        local iArmageddonCountRaise = tArmageddonUnits[sUnitType]
+        if iArmageddonCountRaise then
+            AdjustArmageddonCount(iArmageddonCountRaise)
+            local pPlayer = Players[playerID]
+            local tArmaUnits = pPlayer:GetProperty('ArmageddonIncreaserUnits') or {}
+            tArmaUnits[unitID] = iArmageddonCountRaise
+            pPlayer:SetProperty('ProphecyMarkUnits', tArmaUnits)
+        end
     end
 end
 
 function ArmageddonUnitDied(killedPlayerID, killedUnitID, playerID, unitID)
-    local pUnit = UnitManager.GetUnit(killedPlayerID, killedUnitID);
-    local bHasProphecyMark = pUnit:GetAbility():HasAbility('ABILITY_PROPHECY_MARK')
-    if bHasProphecyMark then
-        AdjustArmageddonCount(-1)
+    local pPlayer = Players[killedPlayerID]
+    local tProphecyUnits = pPlayer:GetProperty('ProphecyMarkUnits')
+    if tProphecyUnits then
+        local bHasProphecyMark = tProphecyUnits[killedUnitID]
+        if bHasProphecyMark then
+            AdjustArmageddonCount(-1)
+            tProphecyUnits[killedUnitID] = nil
+            pPlayer:SetProperty('ProphecyMarkUnits', tProphecyUnits)
+        end
+        local tArmaUnits = pPlayer:GetProperty('ArmageddonIncreaserUnits') or {}
+        if tArmaUnits[unitID]  then
+            AdjustArmageddonCount(tArmaUnits[unitID])
+            tArmaUnits[unitID] = nil
+            pPlayer:SetProperty('ProphecyMarkUnits', tArmaUnits)
+        end
+    end
+end
+
+local iProphecyMarkAbility = GameInfo.UnitAbilities['ABILITY_PROPHECY_MARK'].Index
+function onProphecyMarkGainedCheck(playerID, unitID, unitAbilityIndex)
+    print('is it armageddon', unitAbilityIndex)          -- also do the
+    if unitAbilityIndex == iProphecyMarkAbility then
+        print('added prophecy mark unit')
+        AdjustArmageddonCount(1)
+        local pPlayer = Players[playerID]
+        local tProphecyUnits = pPlayer:GetProperty('ProphecyMarkUnits') or {}
+        tProphecyUnits[unitID] = true
+        pPlayer:SetProperty('ProphecyMarkUnits', tProphecyUnits)
     end
 end
 -- building tracker, create increase armageddon, delete decrease
-local tArmageddonBuildings = {[GameInfo.Buildings['BUILDING_CHICHEN_ITZA'].Index]=4,
-                        [GameInfo.Buildings['STIGMATA_FROM_UNBORN'].Index]=5}
-
-function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)
-    -- buildingID is hopefully Buildings.Index?
+function ArmageddonBuildingMade(playerID, cityID, buildingID, plotID, isOriginalConstruction)       -- buildingID is hopefully Buildings.Index?
     local iArmaggeddonChange = tArmageddonBuildings[buildingID]
     if iArmaggeddonChange then
         AdjustArmageddonCount(iArmaggeddonChange)
     end
 end
 -- covered destroyed buildings in city raze logic
-
 
 function customFunc(playerID, cityID, projectID, buildingIndex, x, y)
     print('in custom project action UNIMPLEMENTED')
@@ -173,16 +194,15 @@ function selectPercentage(sourceTable, percentage)
 end
 
 local iSamhainUnitSpawnPercent = 10
-local iFROSTLING_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING'].Index
-local iFROSTLING_ARCHER_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING_ARCHER'].Index
-local iFROSTLING_RIDER_INDEX = GameInfo.Units['SLTH_UNIT_FROSTLING_WOLF_RIDER'].Index
+local iFROSTLING_INDEX = GameInfo.Units['UNIT_SLTH_FROSTLING'].Index
+local iFROSTLING_ARCHER_INDEX = GameInfo.Units['UNIT_SLTH_FROSTLING_ARCHER'].Index
+local iFROSTLING_RIDER_INDEX = GameInfo.Units['UNIT_SLTH_FROSTLING_WOLF_RIDER'].Index
 local tFrostlingProportions = {iFROSTLING_INDEX, iFROSTLING_ARCHER_INDEX, iFROSTLING_RIDER_INDEX, iFROSTLING_INDEX}
 function Samhain(playerID, cityID, projectID, buildingIndex, x, y)
     -- get number of units to spawn based on viable plots
     local tEligiblePlots = ViableWildernessPlots(true)
 
-    local tUsedPlots = selectPercentage(tEligiblePlots, iSamhainUnitSpawnPercent)
-    tUsedPlots = SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_MOKKA'].Index, tEligiblePlots)
+    tUsedPlots = SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_MOKKA'].Index, tEligiblePlots)
     local iLoopIterations = math.floor(#tUsedPlots / # tFrostlingProportions)
     for var=0, iLoopIterations do
         for _, iUnitToSpawnIndex in ipairs(tFrostlingProportions) do
@@ -239,13 +259,13 @@ function Deepening(playerID, cityID, projectID, buildingIndex, x, y)
             end
         end
     end
-    local tPlotsToChange, iNewTerrainIndex, pPlot
-    for idx, tPlotTable in ipairs(tPlotConversionDeepeningMap) do
+    local tPlotsToChange, pPlot
+    for iInitPlotTerrain, iPostPlotTerrain in pairs(tPlotConversionDeepeningMap) do
+        local tPlotTable = tPlotsByTerrainType[iInitPlotTerrain]
         tPlotsToChange = selectPercentage(tPlotTable, iPlotProportionChanged)
-        iNewTerrainIndex = tPlotConversionDeepeningMap[idx]
         for _, iPlotIndex in ipairs(tPlotsToChange) do
             pPlot = Map.GetPlotByIndex(iPlotIndex)
-            TerrainBuilder.SetTerrainType(pPlot, iNewTerrainIndex)
+            TerrainBuilder.SetTerrainType(pPlot, iPostPlotTerrain)
         end
     end
     -- When it is completed, the entire world will be cooled down - changing some of the deserts to plains,
@@ -291,18 +311,18 @@ function Ascension(playerID, cityID, projectID, buildingIndex, x, y)
 end
 
 local tBaneDivineMap = {
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index,
-    [GameInfo.Units['SLTH_UNIT_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_RUNES_OF_KILMORPH'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_EMPYREAN'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['SLTH_UNIT_DISCIPLE_THE_ORDER'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_THE_ASHEN_VEIL'].Index,
-    [GameInfo.Units['SLTH_UNIT_HIGH_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['SLTH_UNIT_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_RUNES_OF_KILMORPH'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['UNIT_SLTH_DISCIPLE_THE_ORDER'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_THE_ASHEN_VEIL'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index,
+    [GameInfo.Units['UNIT_SLTH_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_EMPYREAN'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_KILMORPH'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_RUNES_OF_KILMORPH'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_OVERLORDS'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_OCTOPUS_OVERLORDS'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_EMPYREAN'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_EMPYREAN'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_ORDER'].Index] = GameInfo .Units['UNIT_SLTH_DISCIPLE_THE_ORDER'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_THE_VEIL'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_THE_ASHEN_VEIL'].Index,
+    [GameInfo.Units['UNIT_SLTH_HIGH_PRIEST_OF_LEAVES'].Index] = GameInfo.Units['UNIT_SLTH_DISCIPLE_FELLOWSHIP_OF_LEAVES'].Index
 }     -- All Disciple Units in the world are replaced with Tier 1 Disciples of the same religion
 function BaneDivine(playerID, cityID, projectID, buildingIndex, x, y)
     local pPlayer = Players[playerID]
@@ -357,49 +377,49 @@ function Genesis(playerID, cityID, projectID, buildingIndex, x, y)
     --
 end
 
-local iBEAR_INDEX = GameInfo.Units['SLTH_UNIT_BEAR'].Index
-local iWOLF_INDEX = GameInfo.Units['SLTH_UNIT_WOLF'].Index
-local iLION_INDEX = GameInfo.Units['SLTH_UNIT_LION'].Index
-local iTIGER_INDEX = GameInfo.Units['SLTH_UNIT_TIGER'].Index
+local iBEAR_INDEX = GameInfo.Units['UNIT_SLTH_BEAR'].Index
+local iWOLF_INDEX = GameInfo.Units['UNIT_SLTH_WOLF'].Index
+local iLION_INDEX = GameInfo.Units['UNIT_SLTH_LION'].Index
+local iTIGER_INDEX = GameInfo.Units['UNIT_SLTH_TIGER'].Index
 local tBarbarianAnimalMap = {[GameInfo.Units['UNIT_BUILDER'].Index] = iWOLF_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_GOBLIN'].Index] = iLION_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_ARCHER'].Index] = iLION_INDEX,
+                             [GameInfo.Units['UNIT_SLTH_GOBLIN'].Index] = iLION_INDEX,
+                             [GameInfo.Units['UNIT_SLTH_ARCHER'].Index] = iLION_INDEX,
                              [GameInfo.Units['UNIT_WARRIOR'].Index] = iLION_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_LIZARDMAN'].Index] = iTIGER_INDEX,
-                             [GameInfo.Units['SLTH_UNIT_SWORDSMAN'].Index] = iBEAR_INDEX
+                             [GameInfo.Units['UNIT_SLTH_LIZARDMAN'].Index] = iTIGER_INDEX,
+                             [GameInfo.Units['UNIT_SLTH_SWORDSMAN'].Index] = iBEAR_INDEX
     }
 local tAnimals = {
-    [GameInfo.Units['SLTH_UNIT_BABY_SPIDER'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_BABY_SPIDER'].Index] = true,
     [iBEAR_INDEX] = true,
-    [GameInfo.Units['SLTH_UNIT_POLAR_BEAR'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_ELEPHANT'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GIANT_SPIDER'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GIANT_TORTOISE'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GORILLA'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_GRIFFON'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_POLAR_BEAR'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_ELEPHANT'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GIANT_SPIDER'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GIANT_TORTOISE'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GORILLA'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_GRIFFON'].Index] = true,
     [iLION_INDEX] = true,
-    [GameInfo.Units['SLTH_UNIT_SEA_SERPENT'].Index] = true,
-    [GameInfo.Units['SLTH_UNIT_SCORPION'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_SEA_SERPENT'].Index] = true,
+    [GameInfo.Units['UNIT_SLTH_SCORPION'].Index] = true,
     [iWOLF_INDEX] = true,
     [iTIGER_INDEX] = true
 }
 
 local tExclusionList = {
-                            [GameInfo.Units['SLTH_UNIT_ACHERON'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_ARS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_BUBOES'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_STEPHANOS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_GURID'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_KRAKEN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_LEVIATHAN'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_MARGALARD'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_MANTICORE'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_MOKKA'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_ORTHUS'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_TUMTUM'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_WRATH'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_YERSINIA'].Index] = true,
-                            [GameInfo.Units['SLTH_UNIT_AZER'].Index] = true
+                            [GameInfo.Units['UNIT_SLTH_ACHERON'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_ARS'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_BUBOES'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_STEPHANOS'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_GURID'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_KRAKEN'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_LEVIATHAN'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_MARGALARD'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_MANTICORE'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_MOKKA'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_ORTHUS'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_TUMTUM'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_WRATH'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_YERSINIA'].Index] = true,
+                            [GameInfo.Units['UNIT_SLTH_AZER'].Index] = true
 }
                                     -- we also need to apply this to city states that are actually barbarians
 local tAnimalPromotions = {[1] = GameInfo.UnitPromotions['PROMOTION_HEROIC_STRENGTH_ANIMAL'].Index,
@@ -506,8 +526,8 @@ function RitesOghma(playerID, cityID, projectID, buildingIndex, x, y)
     local tValidResourcePlots = {}
     for iX = 0, iW - 1 do
         for iY = 0, iH - 1 do
-            local i = iY * iW + iX;
-            pPlot = Map.GetPlotByIndex(i);
+            local iPlotIndex = iY * iW + iX;
+            pPlot = Map.GetPlotByIndex(iPlotIndex);
             if (pPlot ~= nil) then
                 if (pPlot:IsMountain() == false) and (pPlot:IsWater() == false) and (pPlot:IsNaturalWonder() == false) and (pPlot:IsImpassable() == false) and (pPlot:IsCity() == false) then
                     tValidResourcePlots[iPlotIndex] = true
@@ -590,7 +610,7 @@ local tProjectFunctions = {
     [GameInfo.Projects['PROJECT_NATURES_REVOLT'].Index]   = NaturesRevolt,
     [GameInfo.Projects['PROJECT_RITES_OGHMA'].Index]   = RitesOghma,
     [GameInfo.Projects['PROJECT_PURGE_THE_UNFAITHFUL'].Index]   = PurgeUnfaithful,
-    [GameInfo.Projects['PROJECT_PHOENIX'].Index]   = BloodOfThePhoenix
+    -- [GameInfo.Projects['PROJECT_PHOENIX'].Index]   = BloodOfThePhoenix
 }
 
 function ArmaProjectComplete(playerID, cityID, projectID, buildingIndex, x, y, isCancelled)
@@ -619,23 +639,28 @@ end
 
 function ArmaSummonSteph ()
     local tEligiblePlots = ViableWildernessPlots()
-    SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_STEPHANOS'].Index, tEligiblePlots)
+    SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_STEPHANOS'].Index, tEligiblePlots)
 end
 
 function ArmaSummonBuboes()
     local tEligiblePlots = ViableWildernessPlots()
-    SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_BUBOES'].Index, tEligiblePlots)
+    SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_BUBOES'].Index, tEligiblePlots)
     -- hell terrain now spreads in all Evil civ terrain
 end
 
 function ArmaSummonYersinia ()
     local tEligiblePlots = ViableWildernessPlots()
-    SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_YERSINIA'].Index, tEligiblePlots)
+    SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_YERSINIA'].Index, tEligiblePlots)
 end
 
 function ArmaSummonArs ()
     local tEligiblePlots = ViableWildernessPlots()
-    SpawnUnitInWilderness(GameInfo.Units['SLTH_UNIT_ARS'].Index, tEligiblePlots)
+    SpawnUnitInWilderness(GameInfo.Units['UNIT_SLTH_ARS'].Index, tEligiblePlots)
+end
+
+function ArmaHellFire ()
+    -- Hellfire nodes spawn randomly on the map. Hellfires can spawn powerful barbarian Demon units, or if in Infernal held lands, spawn Demon Champions.
+    -- continously?
 end
 
 function ArmaSpawnWrath ()
@@ -647,6 +672,17 @@ function ArmaKillHalf ()
     -- lose half of ALL units, half of all city pop
 end
 
+tArmageddonEvents = {[10]= { ifunc=fWarning, propkey='ArmaWarning', notif_title='LOC_ARMAGEDDON_WARNING_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_WARNING_NOTIFICATION_DESCRIPTION'},
+                     [30]= { ifunc=Blight, propkey='ArmaBlight', notif_title='LOC_ARMAGEDDON_BLIGHT_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_BLIGHT_NOTIFICATION_DESCRIPTION'},
+                     [40]= { ifunc=ArmaSummonSteph, propkey='ArmaStephanos', notif_title='LOC_ARMAGEDDON_STEPHANOS_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_STEPHANOS_NOTIFICATION_DESCRIPTION' },
+                     [50]= { ifunc=ArmaSummonBuboes, propkey='ArmaBuboes', notif_title='LOC_ARMAGEDDON_BUBOES_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_BUBOES_NOTIFICATION_DESCRIPTION'},
+                     [60]= { ifunc=ArmaSummonYersinia, propkey='ArmaYersinia', notif_title='LOC_ARMAGEDDON_YERSINIA_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_YERSINIA_NOTIFICATION_DESCRIPTION'},
+                     [70]= { ifunc=ArmaSummonArs, propkey='ArmaArs', notif_title='LOC_ARMAGEDDON_ARS_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_ARS_NOTIFICATION_DESCRIPTION' },
+                     [80]= { ifunc=ArmaHellFire, propkey='ArmaHellFire', notif_title='LOC_ARMAGEDDON_HELLFIRE_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_HELLFIRE_NOTIFICATION_DESCRIPTION' },
+
+                     [90]= { ifunc=ArmaSpawnWrath , propkey='ArmaWrath', notif_title='LOC_ARMAGEDDON_WRATH_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_WRATH_NOTIFICATION_DESCRIPTION'},
+                     [100]= { ifunc=ArmaKillHalf, propkey='ArmaKillHalf', notif_title='LOC_ARMAGEDDON_SNAP_NOTIFICATION_TITLE', notif_descrip='LOC_ARMAGEDDON_SNAP_NOTIFICATION_DESCRIPTION' }}
+
 local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true,
                         [GameInfo.Terrains['TERRAIN_TUNDRA_HILLS'].Index] = true,
                         [GameInfo.Terrains['TERRAIN_SNOW'].Index]         = true,
@@ -657,7 +693,6 @@ local tColdTerrain = {  [GameInfo.Terrains['TERRAIN_TUNDRA'].Index]       = true
 function ViableWildernessPlots(bOnlyTundraOrSnow)
     local tNewTable = {}
     local iCount = 1
-    local bViablePlot
     local iW, iH = Map.GetGridSize();
     for x = 0, iW - 1 do
         for y = 0, iH - 1 do
@@ -697,7 +732,7 @@ end
 
 -- nicked from Leugi Wildlife++
 function SpawnUnitInWilderness(iUnitToSpawn, eligiblePlots)
-    local iNumEligiblePlots = table.Count(eligiblePlots)
+    local iNumEligiblePlots = table.count(eligiblePlots)
     if iNumEligiblePlots > 0 then
         local iRandomEligiblePlotsPosition = Game.GetRandNum((iNumEligiblePlots + 1) - 1, 'RNG_barb_placement') + 1
         local spawnPlot = eligiblePlots[iRandomEligiblePlotsPosition]
@@ -707,29 +742,24 @@ function SpawnUnitInWilderness(iUnitToSpawn, eligiblePlots)
     return eligiblePlots
 end
 
---[[WIKI: The plot counter is what determines if a tile is hell or not. It has a range from 0 to 100, and anything over 10 is hell. Infernal lands are set to 100 every turn. Tiles that are eligible (good civs' lands are never eligible, nor or neutral or non-AV evil lands when the AC is low enough) have their plot counter increased by 1 each turn if they are adjacent to a tile with a plot counter greater than 10; otherwise, the counter decreases by 1 each turn.
---Whether an individual tile is in hell or not depends on that tile's plot counter - which is different than the AC. If the plot counter is over 10, then it is hell. Most tiles change to a different "Hellish" terrain at this point, and change back when the counter dips below 10 (it used to be 20, but the code clearly says 10 now). There are some terrains, like tundras and water, that currently have no different version for hell.
+--[[WIKI: The plot counter is what determines if a tile is hell or not. It has a range from 0 to 100, and anything over 10 is hell. Infernal lands are set to 100 every turn.
+ Tiles that are eligible (good civs' lands are never eligible, nor or neutral or non-AV evil lands when the AC is low enough) have their plot counter increased by 1 each turn
+ if they are adjacent to a tile with a plot counter greater than 10; otherwise, the counter decreases by 1 each turn.
+--Whether an individual tile is in hell or not depends on that tile's plot counter - which is different than the AC. If the plot counter is over 10, then it is hell. Most tiles
+ change to a different "Hellish" terrain at this point, and change back when the counter dips below 10 (it used to be 20, but the code clearly says 10 now). There are some terrains,
+  like tundras and water, that currently have no different version for hell.
 --Each tile is updated once per turn. All tiles owned by the Infernals have their plot counters set to 100. The Mercurian lands had their counters slowly dimished (in previous version it was set to zero).
---Any tile belonging to an Ashen Veil civ regardless of the AC, to any Evil civ at an AC of 25 or greater, or any Neutral civ at an AC of 75 or greater that borders a tile with an plot counter of at least 10 will have its plot counter increased by one each turn. Good Civs are never effected. Unowned tiles likewise have their plot counter increased by 1 each turn if they border a tile with a counter of 10+, if the AC is at least 25 (I could have sworn that non-AV evil lands turned to hell before unowned lands, but thats not what the code seems to say.) Tiles with positive plot counters that haven't been increased will have theirs decreased.
---Note that while changing the plot counter immediately changes the terrain (e.g., the sanctify spell sets the plot counter of the surrounding tiles to 0, and immediately reclaims the hell terrain, temporarily), the resources aren't updated but once per turn.
+--Any tile belonging to an Ashen Veil civ regardless of the AC, to any Evil civ at an AC of 25 or greater, or any Neutral civ at an AC of 75 or greater that borders a tile with an plot
+ counter of at least 10 will have its plot counter increased by one each turn. Good Civs are never effected. Unowned tiles likewise have their plot counter increased by 1 each turn if
+ they border a tile with a counter of 10+, if the AC is at least 25 (I could have sworn that non-AV evil lands turned to hell before unowned lands, but thats not what the code seems to say.)
+ Tiles with positive plot counters that haven't been increased will have theirs decreased.
+--Note that while changing the plot counter immediately changes the terrain (e.g., the sanctify spell sets the plot counter of the surrounding tiles to 0, and immediately reclaims the hell
+ terrain, temporarily), the resources aren't updated but once per turn.
 ]]
 -- not implemented as different, [80]=HellFireCanSpawn, need to do as barb tribe?
 -- big performance concerns on this as getting every land tile, checking terrain, then checking adjacent tiles. every turn
 -- need some initial starting plots, as otherwise it cant spread. Also needs some plots on each landmass, down to a min size. Apparently this last point wasnt in og
 -- Infernal cities alywas convert their terrain to hell equivalent. Thats the seed. Also HellFire improvement but we'll cross that bridge when we come to it
-local tHellTerrains = {[GameInfo.Terrains['TERRAIN_BURNING_SANDS'].Index]=1,          -- cba with mountains
-                 [GameInfo.Terrains["TERRAIN_BURNING_SANDS_HILLS"].Index]=1,
-                 [GameInfo.Terrains['TERRAIN_BROKEN_LANDS'].Index]=1,
-                 [GameInfo.Terrains["TERRAIN_BROKEN_LANDS_HILLS"].Index]=1,
-                 [GameInfo.Terrains['TERRAIN_FIELDS_OF_PERDITION'].Index]=1,
-                 [GameInfo.Terrains["TERRAIN_FIELDS_OF_PERDITION_HILLS"].Index]=1}
-
-local tHellTransforms = { [GameInfo.Terrains['TERRAIN_DESERT'].Index]=GameInfo.Terrains['TERRAIN_BURNING_SANDS'].Index,
-                    [GameInfo.Terrains["TERRAIN_BURNING_SANDS_HILLS"].Index]=GameInfo.Terrains["TERRAIN_DESERT_HILLS"].Index,
-                    [GameInfo.Terrains['TERRAIN_BROKEN_LANDS'].Index]=GameInfo.Terrains['TERRAIN_GRASS'].Index,
-                    [GameInfo.Terrains["TERRAIN_BROKEN_LANDS_HILLS"].Index]=GameInfo.Terrains["TERRAIN_GRASS_HILLS"].Index,
-                    [GameInfo.Terrains['TERRAIN_FIELDS_OF_PERDITION'].Index]=GameInfo.Terrains['TERRAIN_PLAINS'].Index,
-                    [GameInfo.Terrains["TERRAIN_FIELDS_OF_PERDITION_HILLS"].Index]=GameInfo.Terrains["TERRAIN_PLAINS_HILLS"].Index}
 
 local tResourceTransform = {  [GameInfo.Resources['RESOURCE_TRUFFLES'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
                         [GameInfo.Resources['RESOURCE_SHEEP'].Index]=GameInfo.Resources['RESOURCE_TOAD'].Index,
@@ -739,157 +769,238 @@ local tResourceTransform = {  [GameInfo.Resources['RESOURCE_TRUFFLES'].Index]=Ga
                         [GameInfo.Resources['RESOURCE_BANANAS'].Index]=GameInfo.Resources['RESOURCE_TOBACCO'].Index,
                         [GameInfo.Resources['RESOURCE_SUGAR'].Index]=GameInfo.Resources['RESOURCE_TOBACCO'].Index,
                         [GameInfo.Resources['RESOURCE_SILK'].Index]=GameInfo.Resources['RESOURCE_OLIVES'].Index,
-                        [GameInfo.Resources['RESOURCE_COTTON'].Index]=GameInfo.Resources['RESOURCE_OLIVES'].Index}
-
-local tResourceReverse = {  [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo.Resources['RESOURCE_SHEEP'].Index,
+                        [GameInfo.Resources['RESOURCE_COTTON'].Index]=GameInfo.Resources['RESOURCE_OLIVES'].Index,
+                        [GameInfo.Resources['RESOURCE_TOAD'].Index]=GameInfo.Resources['RESOURCE_SHEEP'].Index,
                         [GameInfo.Resources['RESOURCE_NIGHTMARE'].Index]=GameInfo.Resources['RESOURCE_HORSES'].Index,
                         [GameInfo.Resources['RESOURCE_JADE'].Index]=GameInfo.Resources['RESOURCE_MARBLE'].Index,
                         [GameInfo.Resources['RESOURCE_TOBACCO'].Index]=GameInfo.Resources['RESOURCE_SUGAR'].Index,
-                        [GameInfo.Resources['RESOURCE_OLIVES'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index}
+                        [GameInfo.Resources['RESOURCE_OLIVES'].Index]=GameInfo.Resources['RESOURCE_SILK'].Index
+}
 
-local tHellReverse = reverse_table(tHellTransforms)
-function HellSpread()
-    local pPlot
-    local iTerrainType
-    local tAdjacentPlots
-    local bIsOwned
-    local iAdjPlotID
-    local bIncludeTile
-    local HellConversion
-    local NewHellConversion
-    local tCurrentHellTiles = {}
-    local tPotentialHellTiles = {}
-    local tCoveredTiles = {}
-    local iArmageddonCount = Game.GetProperty('ARMAGEDDON') or 0
-    for idx, plotID in tLandTiles do
-        pPlot = Map.GetPlotByIndex(plotID)
-        iTerrainType = pPlot:GetTerrainType()
-        if tHellTerrains[iTerrainType] then
-            tCurrentHellTiles[plotID] = 1
+function hellTerrainResourceSwap(pPlot)
+    local iCurrentResource = pPlot:GetResourceType()
+    if iCurrentResource then
+        local iNewResource =  tResourceTransform[iCurrentResource]
+        if iNewResource then
+            ResourceBuilder.SetResourceType(pPlot, iNewResource, 1)
         end
     end
-    -- get potential hell tiles
-    for iPlotID, _ in pairs(tCurrentHellTiles) do
-        pPlot = Map.GetPlotByIndex(iPlotID)
-        -- not implemented yet, state religion Veil.
-        tAdjacentPlots = Map.GetAdjacentPlots(pPlot:GetX(), pPlot:GetY())       -- Plots?
-        for idx, pAdjPlot in ipairs(tAdjacentPlots) do
-            iAdjPlotID = pAdjPlot:GetIndex()                    -- maybe the idx is in tAdjacentPlots? then dont need this line
-            if not tCoveredTiles[iAdjPlotID] then
-                if tTransformableTiles[iAdjPlotID] then         -- is on list of tiles possible
-                    bIsOwned = pAdjPlot:IsOwned()
-                    if bIsOwned then
-                        local owner = pAdjPlot:GetOwner()       -- no idea on typing, is it player, or city?
-                        local pPlayer = Players[owner]
-                        local sCivName = PlayerConfigurations[owner]:GetCivilizationTypeName()
-                        if sCivName == 'SLTH_CIVILIZATION_INFERNAL' then
-                            HellConversion =  pAdjPlot:GetProperty('HellConversion') or 0
-                            pAdjPlot:SetProperty('HellConversion', 100)
-                            if HellConversion < 10 then
-                                ConvertTerrain(pAdjPlot, tHellTransforms, tResourceTransform)
-                            end
-                        else
-                            -- todo do some logic to get state religion and then allow if is veil
-                            local iAlignment = pPlayer:GetProperty('alignment')
-                            if iAlignment then
-                                if iAlignment == 0 and iArmageddonCount > 49 then
-                                    bIncludeTile = 1                                 -- evil player spread
-                                end
-                                if iAlignment == 1 and iArmageddonCount > 74 then
-                                    bIncludeTile = 1             -- neutral player spread
-                                end
-                            else
-                                print('ERROR NO alignment on owner of owned tile')          -- wait what about city states
-                            end
-                        end
-                    else
-                        if iArmageddonCount > 24 then
-                            bIncludeTile = 1
-                        end
+end
+
+-- Simulation constants
+local HELL_THRESHOLD = 10
+local MAX_HELL = 100
+local MIN_HELL = 0
+local g_iW, g_iH = Map.GetGridSize()
+
+-- Store map dimensions globally within this script's context for helper functions
+
+--- Checks if a tile is able to be infected.
+function possibleHellTerrain(pPlot)
+    return not pPlot:IsWater() and not pPlot:IsMountain()
+end
+
+function canSetHellTerrain(sCivName, pPlayer, iArmageddonCounter)
+    if sCivName == 'SLTH_CIVILIZATION_MERCURIANS' then
+        return false
+    end
+    if pPlayer then
+        local iAlignment = pPlayer:GetProperty('alignment') -- 0 evil, 1 neutral, 2 good
+        if iArmageddonCounter > 74 then
+            if iAlignment < 2 then          -- check the player is not good
+                return true
+            end
+        end
+        if iArmageddonCounter > 24 then
+            if iAlignment < 2 then          -- check the player is evil
+                return true
+            end
+            -- check the player is not evil
+        end
+        local sStateReligion = pPlayer:GetProperty('STATE_RELIGION')
+        if sStateReligion == 'VEIL_STATE_REL' then
+            return true
+        end
+    end
+    if iArmageddonCounter > 74 then
+        return true                         -- no pPlayer, so unowned territory
+    end
+    print('should only get here if armageddon counter is below 25, and the player hasnt state veil religion', iArmageddonCounter)
+end
+
+
+-- =============================================
+--            SIMULATION CORE LOGIC
+-- =============================================
+local iFeatureDesertFloodPlains = GameInfo.Features['FEATURE_FLOODPLAINS'].Index
+local iFeatureObsidianPlains = GameInfo.Features['FEATURE_OBSIDIAN_PLAINS'].Index
+local iFeatureBurningSands = GameInfo.Features['FEATURE_BURNING_SANDS'].Index
+local iFeatureBurningFlame = GameInfo.Features['FEATURE_BURNING_FLAME_SANDS'].Index
+local iFeatureBrokenLands = GameInfo.Features['FEATURE_BROKEN_LANDS'].Index
+local iFeatureFieldsOfPerdition = GameInfo.Features['FEATURE_FIELDS_OF_PERDITION'].Index
+local tHellFeatureTransform = {[iGRASSLAND]=iFeatureBrokenLands,[iGRASSLAND_HILLS]=iFeatureBrokenLands,
+                               [iPLAINS]=iFeatureFieldsOfPerdition,[iPLAINS_HILLS]=iFeatureFieldsOfPerdition,
+                               [iDESERT]=iFeatureBurningSands,[iDESERT_HILLS]=iFeatureBurningSands,
+}
+
+function SetHellTerrain(pPlot)
+    local iCurrentFeature = pPlot:GetFeatureType()
+    if iCurrentFeature == iFeatureDesertFloodPlains then
+        TerrainBuilder.SetFeatureType(pPlot, iFeatureObsidianPlains)-- change feature
+    else
+        local iCurrentTerrain = pPlot:GetTerrainType()
+        local iNewFeatureIndex = tHellFeatureTransform[iCurrentTerrain]
+        print('old terrain, ', iCurrentTerrain, iNewFeatureIndex)
+        if iNewFeatureIndex then
+            TerrainBuilder.SetFeatureType(pPlot, iNewFeatureIndex)
+        end
+    end
+    print('setting plot to hell terrain: ', pPlot:GetX(), pPlot:GetY())
+    hellTerrainResourceSwap(pPlot)
+end
+
+function getPlayerPlots(pPlayer)
+    local iCityRadius = 3
+    local tPlayerPlots = {}
+    for _, pCity in pPlayer:GetCities():Members() do
+        if pCity ~= nil then
+            local iCityOwner = pCity:GetOwner()
+            local iCityX, iCityY = pCity:GetX(), pCity:GetY()
+            for dx = (iCityRadius * -1), iCityRadius do
+                for dy = (iCityRadius * -1), iCityRadius do
+                    local pPlot = Map.GetPlotXYWithRangeCheck(iCityX, iCityY, dx, dy, iCityRadius);
+                    if pPlot and (pPlot:GetOwner() == iCityOwner) then
+                        tPlayerPlots[pPlot:GetIndex()] = true
                     end
-                    if bIncludeTile then
-                        tPotentialHellTiles[iAdjPlotID] = pAdjPlot
-                    end
-                    tCoveredTiles[iAdjPlotID] = pAdjPlot
                 end
             end
         end
     end
-    for iPotentialHellPlotID, pAdjPlot in pairs(tPotentialHellTiles) do
-        HellConversion = pAdjPlot:GetProperty('HellConversion') or 0
-        NewHellConversion = HellConversion + 1
-        if NewHellConversion < 101 then
-            pAdjPlot:SetProperty('HellConversion', NewHellConversion)
-        end
-        if NewHellConversion == 10 then                                 -- think we can assume only increments of 1
-            ConvertTerrain(pAdjPlot, tHellTransforms, tResourceTransform)
-        end
-    end
-    for idx, iPlotID in tLandTiles do
-        if not tPotentialHellTiles[iPlotID] then                        -- filter non hell adjacent tiles
-            pPlot = Map.GetPlotByIndex(iPlotID)
-            HellConversion = pPlot:GetProperty('HellConversion') or 0
-            NewHellConversion = HellConversion -1
-            if HellConversion > -1 then
-                pPlot:SetProperty('HellConversion', HellConversion - 1)
-            end
-            if NewHellConversion == 9 then                                  -- reverse hell terrain
-                ConvertTerrain(pPlot, tHellReverse, tResourceReverse)
-            end
-        end
-    end
+    return tPlayerPlots
 end
 
-function ConvertTerrain(pPlot, tTerrainConverter, tResourceConverter)
-    local iCurrentResource
-    local iCurrentTerrain
-    local iNewResource
-    local iNewTerrain
-    iCurrentTerrain = pPlot:GetTerrainType()                 -- does this return indexof terrain?
-    iNewTerrain = tTerrainConverter[iCurrentTerrain]
-    if iNewTerrain then
-        TerrainBuilder.SetTerrainType(pPlot, iNewTerrain);           -- unsure if needed index of terrain
-        iCurrentResource = pPlot:GetResourceType()
-        if iCurrentResource then
-            iNewResource =  tResourceConverter[iCurrentResource]
-            if iNewResource then
-                ResourceBuilder.SetResourceType(pPlot, iNewResource, 1)
-                -- TerrainBuilder.SetResourceType(pPlot, iNewResource, 1)       -- what does amount do
+--- Advances the simulation by one game turn. This is the main callback function.
+function HellSpread()
+    print("Starting infection simulation for new turn.")
+    local original_state = {}
+    local iArmageddonCounter = Game:GetProperty('ARMAGEDDON') or 0
+    local bHasHellTerrainStarted = Game:GetProperty('HELL_TERRAIN_BEGUN')       -- infernals have spawned.
+    print('has hell terrain started', bHasHellTerrainStarted)
+    -- find all infernal plots
+    local tInfernalPlayers = Game:GetProperty('InfernalPlayers')
+    local tInfernalPlots = {}
+    if tInfernalPlayers then                            -- Get all infernal plots. They are always hell terrain
+        for _, playerID in ipairs(tInfernalPlayers) do
+            local pInfernalPlayer = Players[playerID]
+            tInfernalPlots = getPlayerPlots(pInfernalPlayer)
+        end
+    end
+    if not bHasHellTerrainStarted then
+        return
+    end
+    -- Step 1: Read the state of the entire grid BEFORE making changes.
+    -- This prevents a change in one tile from affecting another in the same turn.
+    for i, j in pairs(tCachedHellPossiblePlots) do
+        if tInfernalPlots[i] then
+            original_state[i] = {
+                isInfected = true
+            }
+            print('hell tile', i)
+            SetHellTerrain(Map.GetPlotByIndex(i))
+        else
+            local pPlot = Map.GetPlotByIndex(i)
+            if pPlot then
+                local infection_level = pPlot:GetProperty("Infected") or 0
+                original_state[i] = {
+                    isInfected = (infection_level > HELL_THRESHOLD)
+                }
             end
         end
     end
+
+    -- Step 2: Calculate and apply changes based on the original state.
+    for i, j in pairs(tCachedHellPossiblePlots) do
+        local pPlot = Map.GetPlotByIndex(i)
+        if pPlot and possibleHellTerrain(pPlot) then
+            local is_adjacent_to_infected = false
+            local neighbors = get_neighbors(i)
+            for _, neighbor_index in ipairs(neighbors) do
+                if original_state[neighbor_index] and original_state[neighbor_index].isInfected then
+                    is_adjacent_to_infected = true
+                    break
+                end
+            end
+            local sCivName
+            local change = 0
+            local isProtected = pPlot:GetProperty("IsProtected")
+            local iOwner = pPlot:GetOwner()
+            local pConfig = PlayerConfigurations[iOwner]
+            if pConfig then
+                sCivName = pConfig:GetCivilizationTypeName()
+            end
+            if is_adjacent_to_infected and not isProtected then
+                change = 1
+            elseif sCivName ~= 'SLTH_CIVILIZATION_INFERNAL' then
+                change = -1
+            end
+
+            if change ~= 0 then
+                print('change existed')
+                local current_infection = pPlot:GetProperty("Infected") or 0
+                local new_infection = current_infection + change
+                -- Clamp the value
+                new_infection = math.max(MIN_HELL, math.min(MAX_HELL, new_infection))
+                pPlot:SetProperty("Infected", new_infection)
+                local pPlayer = Players[iOwner]
+                if current_infection < 10 and new_infection > 9 then
+                    if canSetHellTerrain(sCivName, pPlayer, iArmageddonCounter) then
+                        SetHellTerrain(pPlot)
+                    end
+                elseif current_infection > 9 and new_infection < 10 then
+                    local iCurrentFeature = pPlot:GetFeatureType()
+                    if iCurrentFeature == iFeatureObsidianPlains then
+                        TerrainBuilder.SetFeatureType(pPlot, iFeatureDesertFloodPlains)-- change feature
+                    else
+                        TerrainBuilder.SetFeatureType(pPlot, -1)                    -- remove hell feature
+                    end
+                    hellTerrainResourceSwap(pPlot)
+                end
+            end
+        end
+    end
+    print("Infection simulation turn complete.")
 end
 
-local tTransformableTiles = {}
-local tLandTiles = {}
+tCachedHellPossiblePlots = {}
 function OnStart()
-    local iW, iH = Map.GetGridSize();
-
-    for x = 0, iW - 1 do
-        for y = 0, iH - 1 do
-            local i = y * iW + x;
-            local pPlot = Map.GetPlotByIndex(i);
-            if not pPlot:IsWater() then
-                tLandTiles[i] = pPlot
+    print("Setting up Hell plots properties on all plots...")
+    tCachedHellPossiblePlots = Game:GetProperty('TABLE_HELL_PLOTS_POSSIBLE') or {}
+    if #tCachedHellPossiblePlots < 1 then
+        local total_plots = g_iW * g_iH
+        local tHellTerrainPossible = {}
+        for i = 0, total_plots - 1 do
+            local pPlot = Map.GetPlotByIndex(i)
+            if pPlot then
+                if pPlot and possibleHellTerrain(pPlot) then
+                    tCachedHellPossiblePlots[i] = true
+                    print('setting plot to be possible hell terrain', i)
+                end
             end
         end
+        Game:SetProperty("TABLE_HELL_PLOTS_POSSIBLE", tHellTerrainPossible)
     end
-    local tType
-    for iPlotID, pLandPlot in pairs(tLandTiles) do
-        tType = pLandPlot:GetTerrainType()
-        if tHellTransforms[tType] then
-            tTransformableTiles[iPlotID] = 1
-        end
-    end
+    print("Infection property setup complete.")
 end
+
 
 -- Events.CityReligionFollowersChanged.Add(religionLostCity)            -- or CityReligionChanged? We would use this to track religions present in a civ with plotProps, so we can do a collection_PLAYER_CITIES and COLLECTIONCOUNT_ANY to allow that religion.
 Events.DistrictRemovedFromMap.Add(OnCityRaze)
-Events.UnitAddedToMap.Add(ArmageddonUnitSpawning)
+GameEvents.UnitCreated.Add(ArmageddonUnitSpawning)           --
 Events.UnitKilledInCombat.Add(ArmageddonUnitDied)
 GameEvents.BuildingConstructed.Add(ArmageddonBuildingMade)
 Events.CityProjectCompleted.Add(ArmaProjectComplete)
 
+Events.UnitAbilityGained.Add(onProphecyMarkGainedCheck)
 -- hell terrain spread
 GameEvents.OnGameTurnStarted.Add(HellSpread)
 

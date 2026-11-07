@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="FireFX"/>
+	<m_PackageName text="FireFX"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="FireFX_Hurricane_Cat4_Slth"/>
+			<m_ObjectName text="FireFX_Hurricane_Cat4_Slth"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FireFX_Volcano_Eruption_Colossal_Slth"/>
+			<m_ObjectName text="FireFX_Volcano_Eruption_Colossal_Slth"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FireFX_SmokeAura"/>
+			<m_ObjectName text="FireFX_SmokeAura"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BoneProbe"/>
+			<m_ObjectName text="FKFX_BoneProbe"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_root"/>
+			<m_ObjectName text="FKFX_SandLion_root"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_pelvis"/>
+			<m_ObjectName text="FKFX_SandLion_pelvis"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_lefthip"/>
+			<m_ObjectName text="FKFX_SandLion_lefthip"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_lowerback"/>
+			<m_ObjectName text="FKFX_SandLion_lowerback"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_righthip"/>
+			<m_ObjectName text="FKFX_SandLion_righthip"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_tail01"/>
+			<m_ObjectName text="FKFX_SandLion_tail01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_chest"/>
+			<m_ObjectName text="FKFX_SandLion_chest"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_leftknee"/>
+			<m_ObjectName text="FKFX_SandLion_leftknee"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_rightknee"/>
+			<m_ObjectName text="FKFX_SandLion_rightknee"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_tail02"/>
+			<m_ObjectName text="FKFX_SandLion_tail02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_chest1"/>
+			<m_ObjectName text="FKFX_SandLion_chest1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_leftankle"/>
+			<m_ObjectName text="FKFX_SandLion_leftankle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_rightankle"/>
+			<m_ObjectName text="FKFX_SandLion_rightankle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_tail03"/>
+			<m_ObjectName text="FKFX_SandLion_tail03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_chest2"/>
+			<m_ObjectName text="FKFX_SandLion_chest2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_lefttoe01"/>
+			<m_ObjectName text="FKFX_SandLion_lefttoe01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_righttoe01"/>
+			<m_ObjectName text="FKFX_SandLion_righttoe01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_spine01"/>
+			<m_ObjectName text="FKFX_SandLion_spine01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_tail05"/>
+			<m_ObjectName text="FKFX_SandLion_tail05"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_leftcollar"/>
+			<m_ObjectName text="FKFX_SandLion_leftcollar"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_neck"/>
+			<m_ObjectName text="FKFX_SandLion_neck"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_rightcollar"/>
+			<m_ObjectName text="FKFX_SandLion_rightcollar"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_tail06"/>
+			<m_ObjectName text="FKFX_SandLion_tail06"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_leftshoulder"/>
+			<m_ObjectName text="FKFX_SandLion_leftshoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_neck01"/>
+			<m_ObjectName text="FKFX_SandLion_neck01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_rightshoulder"/>
+			<m_ObjectName text="FKFX_SandLion_rightshoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_head"/>
+			<m_ObjectName text="FKFX_SandLion_head"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_leftelbow"/>
+			<m_ObjectName text="FKFX_SandLion_leftelbow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_rightelbow"/>
+			<m_ObjectName text="FKFX_SandLion_rightelbow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_rightwrist"/>
+			<m_ObjectName text="FKFX_SandLion_rightwrist"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_jaw02"/>
+			<m_ObjectName text="FKFX_SandLion_jaw02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_leftfinger01"/>
+			<m_ObjectName text="FKFX_SandLion_leftfinger01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_rightfinger01"/>
+			<m_ObjectName text="FKFX_SandLion_rightfinger01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLion_tongue01"/>
+			<m_ObjectName text="FKFX_SandLion_tongue01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_TestSphere_lower"/>
+			<m_ObjectName text="FKFX_TestSphere_lower"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_TestSphere_middle"/>
+			<m_ObjectName text="FKFX_TestSphere_middle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_TestSphere_upper"/>
+			<m_ObjectName text="FKFX_TestSphere_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_root"/>
+			<m_ObjectName text="FKFX_SandLionDust_root"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_pelvis"/>
+			<m_ObjectName text="FKFX_SandLionDust_pelvis"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_lefthip"/>
+			<m_ObjectName text="FKFX_SandLionDust_lefthip"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_lowerback"/>
+			<m_ObjectName text="FKFX_SandLionDust_lowerback"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_righthip"/>
+			<m_ObjectName text="FKFX_SandLionDust_righthip"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_tail01"/>
+			<m_ObjectName text="FKFX_SandLionDust_tail01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_chest"/>
+			<m_ObjectName text="FKFX_SandLionDust_chest"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_leftknee"/>
+			<m_ObjectName text="FKFX_SandLionDust_leftknee"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_rightknee"/>
+			<m_ObjectName text="FKFX_SandLionDust_rightknee"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_tail02"/>
+			<m_ObjectName text="FKFX_SandLionDust_tail02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_chest1"/>
+			<m_ObjectName text="FKFX_SandLionDust_chest1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_leftankle"/>
+			<m_ObjectName text="FKFX_SandLionDust_leftankle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_rightankle"/>
+			<m_ObjectName text="FKFX_SandLionDust_rightankle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_tail03"/>
+			<m_ObjectName text="FKFX_SandLionDust_tail03"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_chest2"/>
+			<m_ObjectName text="FKFX_SandLionDust_chest2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_lefttoe01"/>
+			<m_ObjectName text="FKFX_SandLionDust_lefttoe01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_righttoe01"/>
+			<m_ObjectName text="FKFX_SandLionDust_righttoe01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_spine01"/>
+			<m_ObjectName text="FKFX_SandLionDust_spine01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_tail05"/>
+			<m_ObjectName text="FKFX_SandLionDust_tail05"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_leftcollar"/>
+			<m_ObjectName text="FKFX_SandLionDust_leftcollar"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_neck"/>
+			<m_ObjectName text="FKFX_SandLionDust_neck"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_rightcollar"/>
+			<m_ObjectName text="FKFX_SandLionDust_rightcollar"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_tail06"/>
+			<m_ObjectName text="FKFX_SandLionDust_tail06"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_leftshoulder"/>
+			<m_ObjectName text="FKFX_SandLionDust_leftshoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_neck01"/>
+			<m_ObjectName text="FKFX_SandLionDust_neck01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_rightshoulder"/>
+			<m_ObjectName text="FKFX_SandLionDust_rightshoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_head"/>
+			<m_ObjectName text="FKFX_SandLionDust_head"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_leftelbow"/>
+			<m_ObjectName text="FKFX_SandLionDust_leftelbow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_rightelbow"/>
+			<m_ObjectName text="FKFX_SandLionDust_rightelbow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_rightwrist"/>
+			<m_ObjectName text="FKFX_SandLionDust_rightwrist"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_jaw02"/>
+			<m_ObjectName text="FKFX_SandLionDust_jaw02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_leftfinger01"/>
+			<m_ObjectName text="FKFX_SandLionDust_leftfinger01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_rightfinger01"/>
+			<m_ObjectName text="FKFX_SandLionDust_rightfinger01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SandLionDust_tongue01"/>
+			<m_ObjectName text="FKFX_SandLionDust_tongue01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_Pelvis"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_Pelvis"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_Spine1"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_Spine1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_Ribcage"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_Ribcage"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LShoulder"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LShoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LArm"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LArm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LForearm"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LForearm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LHand"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LHand"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RShoulder"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RShoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RArm"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RArm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RForearm"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RForearm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RHand"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RHand"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LForearmTwist01"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LForearmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LArmTwist01"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LArmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RForearmTwist02"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RForearmTwist02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RForearmTwist01"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RForearmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RArmTwist01"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RArmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_Neck"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_Neck"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LFinger31"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LFinger31"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RFinger31"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RFinger31"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RFinger11"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RFinger11"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LFinger11"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LFinger11"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LFinger32"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LFinger32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RFinger32"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RFinger32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_LFinger22"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_LFinger22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodyDust_RFinger22"/>
+			<m_ObjectName text="FKFX_SpectreBodyDust_RFinger22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreHeadDust_Ribcage"/>
+			<m_ObjectName text="FKFX_SpectreHeadDust_Ribcage"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreHeadDust_Neck"/>
+			<m_ObjectName text="FKFX_SpectreHeadDust_Neck"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreHeadDust_Head"/>
+			<m_ObjectName text="FKFX_SpectreHeadDust_Head"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_Pelvis"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_Pelvis"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_Spine1"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_Spine1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_Ribcage"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_Ribcage"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LShoulder"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LShoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LArm"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LArm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LForearm"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LForearm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LHand"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LHand"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RShoulder"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RShoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RArm"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RArm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RForearm"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RForearm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RHand"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RHand"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LForearmTwist01"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LForearmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LArmTwist01"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LArmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RForearmTwist02"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RForearmTwist02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RForearmTwist01"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RForearmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RArmTwist01"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RArmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_Neck"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_Neck"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LFinger31"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LFinger31"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RFinger31"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RFinger31"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RFinger11"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RFinger11"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LFinger11"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LFinger11"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LFinger32"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LFinger32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RFinger32"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RFinger32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_LFinger22"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_LFinger22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreBodySmog_RFinger22"/>
+			<m_ObjectName text="FKFX_SpectreBodySmog_RFinger22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreHeadSmog_Ribcage"/>
+			<m_ObjectName text="FKFX_SpectreHeadSmog_Ribcage"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreHeadSmog_Neck"/>
+			<m_ObjectName text="FKFX_SpectreHeadSmog_Neck"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_SpectreHeadSmog_Head"/>
+			<m_ObjectName text="FKFX_SpectreHeadSmog_Head"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogRift_spine_upper"/>
+			<m_ObjectName text="FKFX_BalrogRift_spine_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogSurge_spine_upper"/>
+			<m_ObjectName text="FKFX_BalrogSurge_spine_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogRift_head_neck_lower"/>
+			<m_ObjectName text="FKFX_BalrogRift_head_neck_lower"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogSurge_head_neck_lower"/>
+			<m_ObjectName text="FKFX_BalrogSurge_head_neck_lower"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogRift_head_neck_middle"/>
+			<m_ObjectName text="FKFX_BalrogRift_head_neck_middle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogSurge_head_neck_middle"/>
+			<m_ObjectName text="FKFX_BalrogSurge_head_neck_middle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogRift_head_neck_upper"/>
+			<m_ObjectName text="FKFX_BalrogRift_head_neck_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogSurge_head_neck_upper"/>
+			<m_ObjectName text="FKFX_BalrogSurge_head_neck_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_pelvis"/>
+			<m_ObjectName text="FKFX_BalrogFlare_pelvis"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_leg_right_thigh"/>
+			<m_ObjectName text="FKFX_BalrogFlare_leg_right_thigh"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_spine_upper"/>
+			<m_ObjectName text="FKFX_BalrogFlare_spine_upper"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_leg_left_thigh"/>
+			<m_ObjectName text="FKFX_BalrogFlare_leg_left_thigh"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_leg_right_knee"/>
+			<m_ObjectName text="FKFX_BalrogFlare_leg_right_knee"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_leg_left_knee"/>
+			<m_ObjectName text="FKFX_BalrogFlare_leg_left_knee"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_head_neck_middle"/>
+			<m_ObjectName text="FKFX_BalrogFlare_head_neck_middle"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_right_shoulder_2"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_right_shoulder_2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_left_elbow"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_left_elbow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_right_wrist"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_right_wrist"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_right_elbow"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_right_elbow"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_left_wrist"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_left_wrist"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_head_neck_lower"/>
+			<m_ObjectName text="FKFX_BalrogFlare_head_neck_lower"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_BalrogFlare_arm_left_shoulder_2"/>
+			<m_ObjectName text="FKFX_BalrogFlare_arm_left_shoulder_2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_DarkWreath_Large"/>
+			<m_ObjectName text="FKFX_DarkWreath_Large"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_DarkWreath_Small"/>
+			<m_ObjectName text="FKFX_DarkWreath_Small"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_DarkAura"/>
+			<m_ObjectName text="FKFX_DarkAura"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireVortex"/>
+			<m_ObjectName text="FKFX_FireVortex"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_Pelvis"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_Pelvis"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_Spine1"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_Spine1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_Ribcage"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_Ribcage"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LShoulder"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LShoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LArm"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LArm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LForearm"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LForearm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LHand"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LHand"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RShoulder"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RShoulder"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RArm"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RArm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RForearm"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RForearm"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RHand"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RHand"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LForearmTwist01"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LForearmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LArmTwist01"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LArmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RForearmTwist02"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RForearmTwist02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RForearmTwist01"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RForearmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RArmTwist01"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RArmTwist01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_Neck"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_Neck"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LFinger31"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LFinger31"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RFinger31"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RFinger31"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RFinger11"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RFinger11"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LFinger11"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LFinger11"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LFinger32"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LFinger32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RFinger32"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RFinger32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_LFinger22"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_LFinger22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FKFX_FireElementalTorso_RFinger22"/>
+			<m_ObjectName text="FKFX_FireElementalTorso_RFinger22"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+		<Element>LINUX</Element>
+		<Element>XBONE</Element>
+		<Element>PS4</Element>
+		<Element>SWITCH</Element>
+		<Element>STADIA</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

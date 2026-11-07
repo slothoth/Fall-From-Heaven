@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="UITexture"/>
+	<m_PackageName text="UI/Icons"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="LEADER_ALEXIS_NEUTRAL"/>
+			<m_ObjectName text="LEADER_ALEXIS_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_ARTURUS_NEUTRAL"/>
+			<m_ObjectName text="LEADER_ARTURUS_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_AURIC_NEUTRAL"/>
+			<m_ObjectName text="LEADER_AURIC_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_BASIUM_NEUTRAL"/>
+			<m_ObjectName text="LEADER_BASIUM_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_CARDITH_NEUTRAL"/>
+			<m_ObjectName text="LEADER_CARDITH_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_CASSIEL_NEUTRAL"/>
+			<m_ObjectName text="LEADER_CASSIEL_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_CHARADON_NEUTRAL"/>
+			<m_ObjectName text="LEADER_CHARADON_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_DAIN_NEUTRAL"/>
+			<m_ObjectName text="LEADER_DAIN_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_DECIUS_BANNOR_NEUTRAL"/>
+			<m_ObjectName text="LEADER_DECIUS_BANNOR_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_DECIUS_CALABIM_NEUTRAL"/>
+			<m_ObjectName text="LEADER_DECIUS_CALABIM_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_DECIUS_MALAKIM_NEUTRAL"/>
+			<m_ObjectName text="LEADER_DECIUS_MALAKIM_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_EINION_NEUTRAL"/>
+			<m_ObjectName text="LEADER_EINION_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_FAERYL_NEUTRAL"/>
+			<m_ObjectName text="LEADER_FAERYL_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_FLAUROS_NEUTRAL"/>
+			<m_ObjectName text="LEADER_FLAUROS_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_HANNAH_NEUTRAL"/>
+			<m_ObjectName text="LEADER_HANNAH_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_HYBOREM_NEUTRAL"/>
+			<m_ObjectName text="LEADER_HYBOREM_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_KANDROS_NEUTRAL"/>
+			<m_ObjectName text="LEADER_KANDROS_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_PERPENTACH_NEUTRAL"/>
+			<m_ObjectName text="LEADER_PERPENTACH_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_SABATHIEL_NEUTRAL"/>
+			<m_ObjectName text="LEADER_SABATHIEL_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_SANDALPHON_NEUTRAL"/>
+			<m_ObjectName text="LEADER_SANDALPHON_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_TASUNKE_NEUTRAL"/>
+			<m_ObjectName text="LEADER_TASUNKE_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_THESSALONICA_NEUTRAL"/>
+			<m_ObjectName text="LEADER_THESSALONICA_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Leader_Atlas_0_256"/>
+			<m_ObjectName text="Slth_Leader_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Leader_Atlas_0_32"/>
+			<m_ObjectName text="Slth_Leader_Atlas_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Leader_Atlas_0_45"/>
+			<m_ObjectName text="Slth_Leader_Atlas_0_45"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Leader_Atlas_0_48"/>
+			<m_ObjectName text="Slth_Leader_Atlas_0_48"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Leader_Atlas_0_50"/>
+			<m_ObjectName text="Slth_Leader_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Leader_Atlas_0_55"/>
+			<m_ObjectName text="Slth_Leader_Atlas_0_55"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Leader_Atlas_0_64"/>
+			<m_ObjectName text="Slth_Leader_Atlas_0_64"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Leader_Atlas_0_80"/>
+			<m_ObjectName text="Slth_Leader_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_128"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_128"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_200"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_200"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_22"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_256"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_30"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_30"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_36"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_36"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_44"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_44"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_48"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_48"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_50"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_64"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_64"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Civ_Atlas_0_80"/>
+			<m_ObjectName text="Slth_Civ_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_0_22"/>
+			<m_ObjectName text="Slth_Resource_Atlas_0_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_0_256"/>
+			<m_ObjectName text="Slth_Resource_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_0_32"/>
+			<m_ObjectName text="Slth_Resource_Atlas_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_0_38"/>
+			<m_ObjectName text="Slth_Resource_Atlas_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_0_50"/>
+			<m_ObjectName text="Slth_Resource_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_0_64"/>
+			<m_ObjectName text="Slth_Resource_Atlas_0_64"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_fow_0_22"/>
+			<m_ObjectName text="Slth_Resource_Atlas_fow_0_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_fow_0_256"/>
+			<m_ObjectName text="Slth_Resource_Atlas_fow_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_fow_0_32"/>
+			<m_ObjectName text="Slth_Resource_Atlas_fow_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_fow_0_38"/>
+			<m_ObjectName text="Slth_Resource_Atlas_fow_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_fow_0_50"/>
+			<m_ObjectName text="Slth_Resource_Atlas_fow_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Resource_Atlas_fow_0_64"/>
+			<m_ObjectName text="Slth_Resource_Atlas_fow_0_64"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_ARENDEL_NEUTRAL"/>
+			<m_ObjectName text="LEADER_ARENDEL_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_BEERI_NEUTRAL"/>
+			<m_ObjectName text="LEADER_BEERI_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_CAPRIA_NEUTRAL"/>
+			<m_ObjectName text="LEADER_CAPRIA_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_ETHNE_NEUTRAL"/>
+			<m_ObjectName text="LEADER_ETHNE_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_FALAMAR_NEUTRAL"/>
+			<m_ObjectName text="LEADER_FALAMAR_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_GARRIM_NEUTRAL"/>
+			<m_ObjectName text="LEADER_GARRIM_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_JONAS_NEUTRAL"/>
+			<m_ObjectName text="LEADER_JONAS_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_KEELYN_NEUTRAL"/>
+			<m_ObjectName text="LEADER_KEELYN_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_OSGABELLA_NEUTRAL"/>
+			<m_ObjectName text="LEADER_OSGABELLA_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_RHOANNA_NEUTRAL"/>
+			<m_ObjectName text="LEADER_RHOANNA_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_SHEELBA_NEUTRAL"/>
+			<m_ObjectName text="LEADER_SHEELBA_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_TEBRYN_NEUTRAL"/>
+			<m_ObjectName text="LEADER_TEBRYN_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_THESSA_NEUTRAL"/>
+			<m_ObjectName text="LEADER_THESSA_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_VALLEDIA_NEUTRAL"/>
+			<m_ObjectName text="LEADER_VALLEDIA_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_VARN_NEUTRAL"/>
+			<m_ObjectName text="LEADER_VARN_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_AMELANCHIER_NEUTRAL"/>
+			<m_ObjectName text="LEADER_AMELANCHIER_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="LEADER_MAHALA_NEUTRAL"/>
+			<m_ObjectName text="LEADER_MAHALA_NEUTRAL"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_22"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_256"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_32"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_38"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_50"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_80"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_22"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_256"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_32"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_38"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_50"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_80"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_22"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_256"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_32"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_38"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_50"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_80"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_22"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_256"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_32"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_38"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_50"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_80"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_221"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_2561"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_321"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_381"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_501"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_801"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_221"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_2561"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_321"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_381"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_501"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_801"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_221"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_2561"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_321"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_381"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_501"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_801"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_221"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_2561"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_321"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_381"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_501"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_801"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_222"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_2562"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_322"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_382"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_502"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_802"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_222"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_2562"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_322"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_382"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_502"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_802"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_222"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_2562"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_322"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_382"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_502"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_802"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_222"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_2562"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_322"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_382"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_502"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_802"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_223"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_2563"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_323"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_383"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_503"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_0_803"/>
+			<m_ObjectName text="Slth_Units_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_223"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_2563"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_323"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_383"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_503"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_1_803"/>
+			<m_ObjectName text="Slth_Units_Atlas_1_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_223"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_2563"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_323"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_383"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_503"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_2_803"/>
+			<m_ObjectName text="Slth_Units_Atlas_2_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_223"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_2563"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_323"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_383"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_503"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Units_Atlas_3_803"/>
+			<m_ObjectName text="Slth_Units_Atlas_3_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_128"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_128"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_256"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_32"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_38"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_50"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_80"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_128"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_128"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_256"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_32"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_38"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_50"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_80"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALAMAR_4"/>
+			<m_ObjectName text="FALAMAR_4"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FALAMAR_1"/>
+			<m_ObjectName text="FALAMAR_1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_1281"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_128"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_2561"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_321"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_381"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_501"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_0_801"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_1281"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_128"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_2561"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_321"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_381"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_501"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Buildings_Atlas_1_801"/>
+			<m_ObjectName text="Slth_Buildings_Atlas_1_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Operation_Atlas_0_256"/>
+			<m_ObjectName text="Slth_Operation_Atlas_0_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Operation_Atlas_0_38"/>
+			<m_ObjectName text="Slth_Operation_Atlas_0_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Operation_Atlas_0_50"/>
+			<m_ObjectName text="Slth_Operation_Atlas_0_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Operation_Atlas_0_80"/>
+			<m_ObjectName text="Slth_Operation_Atlas_0_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Operation_Atlas_1_256"/>
+			<m_ObjectName text="Slth_Operation_Atlas_1_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Operation_Atlas_1_38"/>
+			<m_ObjectName text="Slth_Operation_Atlas_1_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Operation_Atlas_1_50"/>
+			<m_ObjectName text="Slth_Operation_Atlas_1_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Slth_Operation_Atlas_1_80"/>
+			<m_ObjectName text="Slth_Operation_Atlas_1_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="ICON_LEADER_ALEXIS_256"/>
+			<m_ObjectName text="ICON_LEADER_ALEXIS_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="ICON_LEADER_ALEXIS_32"/>
+			<m_ObjectName text="ICON_LEADER_ALEXIS_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="ICON_LEADER_ALEXIS_45"/>
+			<m_ObjectName text="ICON_LEADER_ALEXIS_45"/>
+		</Element>
+		<Element>
+			<m_EntryID text="ICON_LEADER_ALEXIS_50"/>
+			<m_ObjectName text="ICON_LEADER_ALEXIS_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="ICON_LEADER_ALEXIS_55"/>
+			<m_ObjectName text="ICON_LEADER_ALEXIS_55"/>
+		</Element>
+		<Element>
+			<m_EntryID text="ICON_LEADER_ALEXIS_64"/>
+			<m_ObjectName text="ICON_LEADER_ALEXIS_64"/>
+		</Element>
+		<Element>
+			<m_EntryID text="ICON_LEADER_ALEXIS_80"/>
+			<m_ObjectName text="ICON_LEADER_ALEXIS_80"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+		<Element>LINUX</Element>
+		<Element>XBONE</Element>
+		<Element>PS4</Element>
+		<Element>SWITCH</Element>
+		<Element>STADIA</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

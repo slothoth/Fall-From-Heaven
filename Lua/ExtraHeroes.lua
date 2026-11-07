@@ -1,28 +1,3 @@
--- ExtraHeroes
--- Original Author: Flactine --
--- Altered by: Slothoth --
---------------------------------------------------------------
-local tSuperSpecialistModifiers = {[GameInfo.Units['UNIT_GREAT_PROPHET'].Index]={
-	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_GOLD',
-	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_BLESSED', 'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_DIVINE',
-	'MODIFIER_SLTH_GREAT_PROPHET_ADD_PROD_FINAL'},
-	[GameInfo.Units['UNIT_GREAT_ENGINEER'].Index]={
-	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_SCIENCE', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION',
-	'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_SIDAR', 'MODIFIER_SLTH_GREAT_ENGINEER_ADD_PRODUCTION_GUILD_OF_HAMMERS'},
-	[GameInfo.Units['UNIT_GREAT_SCIENTIST'].Index]={
-		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_PROD', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE',
-		'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_SIDAR', 'MODIFIER_SLTH_GREAT_SCIENTIST_ADD_SCIENCE_GREAT_LIB'},
-	[GameInfo.Units['UNIT_GREAT_ARTIST'].Index]={
-		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_GOLD',
-		'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_SIDAR', 'MODIFIER_SLTH_GREAT_ARTIST_ADD_CULTURE_THEATRE_OF_DREAMS'},
-	[GameInfo.Units['UNIT_GREAT_MERCHANT'].Index]={
-		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_FOOD', 'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD',
-		'MODIFIER_SLTH_GREAT_MERCHANT_ADD_GOLD_SIDAR'}
-}
-local tSuperSpecialistGenericModifiers = {'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_HALL_OF_KINGS',
-									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_CASTE_SYSTEM',
-									'MODIFIER_SLTH_GREAT_PERSON_ADD_CULTURE_CASTE_SYSTEM',
-									'MODIFIER_SLTH_GREAT_PERSON_ADD_SCIENCE_SCHOLARSHIP'}
 
 local tEquipmentUnits = {
 	[GameInfo.Units['SLTH_EQUIPMENT_ATHAME'].Index] = GameInfo.UnitAbilities['SLTH_EQUIPMENT_ATHAME_ABILITY'].Index,
@@ -157,9 +132,6 @@ function Initialize()
 	if ExposedMembers.ExtraHeroes == nil then
 		ExposedMembers.ExtraHeroes = {}
 	end
-	ExposedMembers.ExtraHeroes.GrantBuildingFunction = GrantBuildingFunction;
-	ExposedMembers.ExtraHeroes.GrantSuperSpecialist = GrantSuperSpecialist;
-	ExposedMembers.ExtraHeroes.GrantGoldenAge = GrantGoldenAge
 	ExposedMembers.ExtraHeroes.ConsumeEquipment = ConsumeEquipment
 	tTimers = {GoldenAges = { sProperty = 'GoldenAgeDuration', callback = FlushGoldenAge}}
 end
